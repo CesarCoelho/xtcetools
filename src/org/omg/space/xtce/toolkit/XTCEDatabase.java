@@ -149,9 +149,27 @@ public class XTCEDatabase {
         databaseChanged = changedFlag;
     }
 
+    /** Retrieve the XTCE schema document that is applicable for this loaded
+     * file.
+     *
+     * TODO: This only returns the default right now, need to work that.
+     *
+     * @return String containing the file and path to the schema document.
+     *
+     */
+
     public String getSchemaFromDocument() {
         return schemaLocation;
     }
+
+    /** Retrieve the XTCE namespace that is applicable to the document that is
+     * loaded.
+     *
+     * TODO: This only returns the default right now, need to work that.
+     *
+     * @return String containing the namespace.
+     *
+     */
 
     public String getNamespaceFromDocument() {
         /// @todo work on this document namespace
@@ -172,6 +190,17 @@ public class XTCEDatabase {
     public XTCESpaceSystemMetrics getMetrics() {
         return new XTCESpaceSystemMetrics( this );
     }
+
+    /** Function to save the currently loaded database file.
+     *
+     * @param dbFile File object containing the file and path for which to save
+     * the file containing the XTCE document.
+     *
+     * @throws XTCEDatabaseException thrown in the event that the file cannot
+     * be saved.  The caller should inspect the message inside the exception
+     * for more specific details on the cause of this error.
+     *
+     */
 
     public void saveDatabase( File dbFile ) throws XTCEDatabaseException {
         
@@ -209,6 +238,17 @@ public class XTCEDatabase {
         
     }
 
+    /** Retrieve an arbitrary SpaceSystem wrapped element from the document.
+     *
+     * @param fullPath String containing the full path to the XTCE SpaceSystem
+     * element using the fully qualified UNIX style path rules of an XTCE
+     * reference.
+     *
+     * @return XTCESpaceSystem object containing the SpaceSystem and also some
+     * helper functions.
+     *
+     */
+
     public XTCESpaceSystem getSpaceSystem( String fullPath ) {
 
         ArrayList<XTCESpaceSystem> spaceSystems = getSpaceSystemTree();
@@ -222,6 +262,14 @@ public class XTCEDatabase {
 
     }
 
+    /** Retrieve an XTCESpaceSystem object that represents the root SpaceSystem
+     * element of this XTCE document.
+     *
+     * @return XTCESpaceSystem representing the root SpaceSystem, which for any
+     * valid document can never be null.
+     *
+     */
+
     public XTCESpaceSystem getRootSpaceSystem() {
 
         return new XTCESpaceSystem( "/" + topLevelSpaceSystem.getName(),
@@ -230,11 +278,20 @@ public class XTCEDatabase {
 
     }
 
+    /** Retrieve a list of all the SpaceSystem elements in this XTCE document,
+     * wrapped inside XTCESpaceSystem objects.
+     *
+     * @return ArrayList of XTCESpaceSystem objects that are created from the
+     * structure of the XTCE document.
+     *
+     */
+
     public ArrayList<XTCESpaceSystem> getSpaceSystemTree() {
 
         /// @todo make this efficient with a cache or something
 
-        ArrayList<XTCESpaceSystem> spaceSystems = new ArrayList<XTCESpaceSystem>();
+        ArrayList<XTCESpaceSystem> spaceSystems =
+            new ArrayList<XTCESpaceSystem>();
 
         XTCESpaceSystem rootSpaceSystem =
             new XTCESpaceSystem( "/" + topLevelSpaceSystem.getName(),
@@ -248,7 +305,22 @@ public class XTCEDatabase {
         
     }
 
-    public void addSpaceSystem( String name, String path ) throws XTCEDatabaseException {
+    /** Function to add a new Space System element to the XTCE document
+     * structure.
+     *
+     * @param name String containing the name of the Space System to add.
+     *
+     * @param path String containing the fully qualified XTCE UNIX style path
+     * to the new Space System in the hierarchy.
+     *
+     * @throws XTCEDatabaseException thrown in the event that this add method
+     * is called for a root SpaceSystem element or the desired name conflicts
+     * with another SpaceSystem element that already exists.
+     *
+     */
+
+    public void addSpaceSystem( String name,
+                                String path ) throws XTCEDatabaseException {
 
         ArrayList<XTCESpaceSystem> spaceSystems = getSpaceSystemTree();
 
@@ -274,6 +346,19 @@ public class XTCEDatabase {
         setChanged( true );
 
     }
+
+    /** Deletes a SpaceSystem element from the current XTCE document.
+     *
+     * @param ssPath String containing the fully qualified path to the XTCE
+     * SpaceSystem element that should be removed from the data model
+     * structure.
+     *
+     * @throws XTCEDatabaseException thrown in the event that this method is
+     * called to remove the root SpaceSystem or the SpaceSystem element to be
+     * removed cannot be located (as in, it does not exist).
+     *
+     */
+
     public void deleteSpaceSystem( String ssPath ) throws XTCEDatabaseException {
 
         ArrayList<XTCESpaceSystem> spaceSystems = getSpaceSystemTree();
@@ -305,6 +390,19 @@ public class XTCEDatabase {
 
     }
 
+    /** Function to retrieve all of the Telemetry Parameters that are defined
+     * in the XTCE document.
+     *
+     * Similar functions exist on the XTCESpaceSystem objects.  This one is
+     * intended to return the entire contents of the XTCE database file.
+     *
+     * @return ArrayList of XTCEParameter objects that exist in the entirety
+     * of the file.  The list can possibly be empty if there are no telemetry
+     * parameters, which is likely only to happen on a newly created database
+     * file.
+     *
+     */
+
     public ArrayList<XTCEParameter> getTelemetryParameters( ) {
 
         ArrayList<XTCESpaceSystem> spaceSystems = getSpaceSystemTree();
@@ -316,6 +414,19 @@ public class XTCEDatabase {
 
     }
 
+    /** Function to retrieve all of the Telecommand Parameters that are defined
+     * in the XTCE document.
+     *
+     * Similar functions exist on the XTCESpaceSystem objects.  This one is
+     * intended to return the entire contents of the XTCE database file.
+     *
+     * @return ArrayList of XTCEParameter objects that exist in the entirety
+     * of the file.  The list can possibly be empty if there are no telecommand
+     * parameters, which is likely only to happen on a newly created database
+     * file.
+     *
+     */
+
     public ArrayList<XTCEParameter> getTelecommandParameters( ) {
 
         ArrayList<XTCESpaceSystem> spaceSystems = getSpaceSystemTree();
@@ -326,7 +437,20 @@ public class XTCEDatabase {
         return list;
 
     }
-    
+
+    /** Function to retrieve all of the Parameters that are defined in the XTCE
+     * document.
+     *
+     * Similar functions exist on the XTCESpaceSystem objects.  This one is
+     * intended to return the entire contents of the XTCE database file.
+     *
+     * @return ArrayList of XTCEParameter objects that exist in the entirety
+     * of the file.  The list can possibly be empty if there are no
+     * parameters, which is likely only to happen on a newly created database
+     * file.
+     *
+     */
+
     public ArrayList<XTCEParameter> getParameters( ) {
 
         ArrayList<XTCESpaceSystem> spaceSystems = getSpaceSystemTree();
@@ -337,6 +461,19 @@ public class XTCEDatabase {
         return list;
 
     }
+
+    /** Function to retrieve all of the Telemetry Containers that are defined
+     * in the XTCEdocument.
+     *
+     * Similar functions exist on the XTCESpaceSystem objects.  This one is
+     * intended to return the entire contents of the XTCE database file.
+     *
+     * @return ArrayList of XTCETMContainer objects that exist in the entirety
+     * of the file.  The list can possibly be empty if there are no
+     * containers, which is likely only to happen on a newly created database
+     * file.
+     *
+     */
 
     public ArrayList<XTCETMContainer> getContainers() {
 
@@ -375,6 +512,18 @@ public class XTCEDatabase {
 
     }
 
+    /** Retrieve the type reference from the JAXB generated objects for a
+     * particular TM Parameter fully qualified type object path in the XTCE
+     * data model.
+     *
+     * @param typePath String containing the UNIX style fully qualified path
+     * to the TM Parameter type object.
+     *
+     * @return NameDescriptionType base class for the type object found, or a
+     * null object reference in the event that it is not found.
+     *
+     */
+
     public NameDescriptionType getParameterTypeReference( String typePath ) {
         
         if ( parameterTypes.containsKey( typePath ) == true ) {
@@ -385,6 +534,18 @@ public class XTCEDatabase {
 
     }
 
+    /** Retrieve the type reference from the JAXB generated objects for a
+     * particular TC Argument fully qualified type object path in the XTCE
+     * data model.
+     *
+     * @param typePath String containing the UNIX style fully qualified path
+     * to the TC Argument type object.
+     *
+     * @return NameDescriptionType base class for the type object found, or a
+     * null object reference in the event that it is not found.
+     *
+     */
+
     public NameDescriptionType getArgumentTypeReference( String typePath ) {
 
         if ( argumentTypes.containsKey( typePath ) == true ) {
@@ -394,6 +555,17 @@ public class XTCEDatabase {
         }
 
     }
+
+    /** Private function to recursively locate SpaceSystem elements from the
+     * XTCE data model.
+     *
+     * @param currentSpaceSystem XTCESpaceSystem object to start the recursion
+     * from.
+     *
+     * @param spaceSystemList ArrayList of XTCESpaceSystem objects that will
+     * be populated for the caller.
+     *
+     */
 
     private void recurseSpaceSystems( XTCESpaceSystem            currentSpaceSystem,
                                       ArrayList<XTCESpaceSystem> spaceSystemList ) {
@@ -465,7 +637,24 @@ public class XTCEDatabase {
         }
         
     }
-    
+
+    /** Private method to perform XML Schema Description (XSD) verification on
+     * the XTCE document that has been loaded.
+     *
+     * At present, this function is somewhat inefficient because it needs to
+     * do a separate loading and verification prior to the unmarshal operation
+     * of the JAXB data model.  It would be nice if this could be combined.
+     *
+     * @param dbFile File object containing the fully qualified filesystem path
+     * to the XTCE document to be loaded and verified.
+     *
+     * @throws XTCEDatabaseException thrown in the event that the document does
+     * not pass validation.  The specific messages in the exception will
+     * reflect the issues.  The application may de-stabilize if an document is
+     * used that does not pass validation against the schema document.
+     *
+     */
+
     private void validateInputDocument( File dbFile ) throws XTCEDatabaseException {
         
         try {
@@ -498,6 +687,15 @@ public class XTCEDatabase {
         }
         
     }
+
+    /** Private method to capture the Parameter Type paths with mapping to a
+     * reference to the Argument Type itself, as generically represented by a
+     * NameDescriptionType in the inheritance tree.
+     *
+     * The mapping is kept in a HashMap, which a private data member of this
+     * object.
+     *
+     */
 
     private void cacheParameterTypes() {
 
@@ -544,6 +742,15 @@ public class XTCEDatabase {
         }
 
     }
+
+    /** Private method to capture the Argument Type paths with mapping to a
+     * reference to the Argument Type itself, as generically represented by a
+     * NameDescriptionType in the inheritance tree.
+     *
+     * The mapping is kept in a HashMap, which a private data member of this
+     * object.
+     *
+     */
 
     private void cacheArgumentTypes() {
 
