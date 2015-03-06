@@ -53,8 +53,8 @@ public abstract class XTCETypedObject extends XTCENamedObject {
      * @param name String containing the object name as referenced from the
      * getName() method on the JAXB generated object.
      *
-     * @param path String containing the Space System path leading to this
-     * object in the XTCE data model, but without the object name.
+     * @param spaceSystemPath String containing the Space System path leading
+     * to this object in the XTCE data model, but without the object name.
      *
      * @param obj AliasSetType object from the JAXB generated classes.
      *
@@ -63,12 +63,18 @@ public abstract class XTCETypedObject extends XTCENamedObject {
      *
      */
 
-    XTCETypedObject( String name, String path, AliasSetType obj, NameDescriptionType typeObj ) {
-        super( name, path, obj );
+    XTCETypedObject( String              name,
+                     String              spaceSystemPath,
+                     AliasSetType        obj,
+                     NameDescriptionType typeObj ) {
+
+        super( name, spaceSystemPath, obj );
+
         typeObj_ = typeObj;
         if ( typeObj_ != null ) {
             populateAliasListFromReference( typeObj_.getAliasSet() );
         }
+
     }
 
     /** Accessor to retrieve a reference to the Parameter or Argument Type
@@ -755,6 +761,8 @@ public abstract class XTCETypedObject extends XTCENamedObject {
                  ( typeObj_.getClass() == RelativeTimeDataType.class )      );
 
     }
+
+    // Private Data Members
 
     private NameDescriptionType typeObj_ = null;
 
