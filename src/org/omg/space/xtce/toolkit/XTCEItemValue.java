@@ -12,6 +12,7 @@ import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.HashMap;
 import java.util.List;
 import org.omg.space.xtce.database.ArgumentTypeSetType.FloatArgumentType;
 import org.omg.space.xtce.database.ArgumentTypeSetType.IntegerArgumentType;
@@ -93,6 +94,18 @@ public class XTCEItemValue {
         setEnumerationList( item );
         setDefaultCalibrator( item );
 
+    }
+
+    /** Retrieves the item name of the Parameter or Argument that is the basis
+     * for this item value encode()/decode() object.
+     *
+     * @return String containing the name used when this object was
+     * constructed.
+     *
+     */
+
+    public String getItemName() {
+        return itemName_;
     }
 
     /** Retrieves the validity flag from this item value encode/decode.
@@ -184,7 +197,7 @@ public class XTCEItemValue {
 
         BigInteger calNumericValue   = null;
         BigInteger uncalNumericValue = null;
-        BitSet     rawValue          = null;
+        BitSet     rawValue          = new BitSet( rawSizeInBits_ );
         if ( euTypeName_.equals( "BOOLEAN" ) == true ) {
             calNumericValue   = numberFromBoolean( Long.toString( euValue ) );
             uncalNumericValue = encodeNumber( calNumericValue );
@@ -205,6 +218,21 @@ public class XTCEItemValue {
         } else if ( euTypeName_.equals( "UNSIGNED" ) == true ) {
             uncalNumericValue = encodeNumber( BigInteger.valueOf( euValue ) );
             rawValue          = encodeRawBits( uncalNumericValue );
+        } else if ( euTypeName_.equals( "SIGNED" ) == true ) {
+            // TODO Add SIGNED Type
+        } else if ( euTypeName_.equals( "TIME" ) == true ) {
+            // TODO Add TIME Type
+            warnings_.add( "Absolute Time Type Not Yet Supported for " +
+                           itemName_ );
+        } else if ( euTypeName_.equals( "DURATION" ) == true ) {
+            // TODO Add DURATION Type
+            warnings_.add( "Relative Time Type Not Yet Supported for " +
+                           itemName_ );
+        } else {
+            warnings_.add( "AGGREGATE and ARRAY types for item " +
+                           itemName_ +
+                           " cannot directly be encoded." + 
+                           "  Use their children instead" );
         }
 
         return rawValue;
@@ -215,7 +243,7 @@ public class XTCEItemValue {
 
         BigInteger calNumericValue   = null;
         BigInteger uncalNumericValue = null;
-        BitSet     rawValue          = null;
+        BitSet     rawValue          = new BitSet( rawSizeInBits_ );
         if ( euTypeName_.equals( "BOOLEAN" ) == true ) {
             long numericValue = Double.valueOf( euValue ).longValue();
             calNumericValue   = numberFromBoolean( Long.toString( numericValue ) );
@@ -229,26 +257,41 @@ public class XTCEItemValue {
             uncalNumericValue = encodeDecimal( BigDecimal.valueOf( euValue ) );
             rawValue          = encodeRawBits( uncalNumericValue );
         } else if ( euTypeName_.equals( "BINARY" ) == true ) {
-            warnings_.add( "Invalid binary value for " +
-                           itemName_ +
-                           " Value Provided: " +
-                           Double.toString( euValue ) );
+            warnings_.add( itemName_ +
+                           " Invalid EU Binary value of '" +
+                           Double.toString( euValue ) +
+                           "'" );
             rawValue = new BitSet( rawSizeInBits_ );
         } else if ( euTypeName_.startsWith( "FLOAT" ) == true ) {
             uncalNumericValue = encodeDecimal( BigDecimal.valueOf( euValue ) );
             rawValue          = encodeRawBits( uncalNumericValue );
         } else if ( euTypeName_.equals( "UNSIGNED" ) == true ) {
             if ( ( euValue % 1 ) != 0 ) {
-                warnings_.add( "Invalid unsigned integer value for " +
-                               itemName_ +
-                               " Value Provided: " +
-                               Double.toString( euValue ) );
+                warnings_.add( itemName_ +
+                               " Invalid EU unsigned integer value of '" +
+                               Double.toString( euValue ) +
+                               "'" );
                 rawValue = new BitSet( rawSizeInBits_ );
                 return rawValue;
             }
             long number = Double.valueOf( euValue ).longValue();
             uncalNumericValue = encodeNumber( BigInteger.valueOf( number ) );
             rawValue          = encodeRawBits( uncalNumericValue );
+        } else if ( euTypeName_.equals( "SIGNED" ) == true ) {
+            // TODO Add SIGNED Type
+        } else if ( euTypeName_.equals( "TIME" ) == true ) {
+            // TODO Add TIME Type
+            warnings_.add( "Absolute Time Type Not Yet Supported for " +
+                           itemName_ );
+        } else if ( euTypeName_.equals( "DURATION" ) == true ) {
+            // TODO Add DURATION Type
+            warnings_.add( "Relative Time Type Not Yet Supported for " +
+                           itemName_ );
+        } else {
+            warnings_.add( "AGGREGATE and ARRAY types for item " +
+                           itemName_ +
+                           " cannot directly be encoded." + 
+                           "  Use their children instead" );
         }
 
         return rawValue;
@@ -259,7 +302,7 @@ public class XTCEItemValue {
 
         BigInteger calNumericValue   = null;
         BigInteger uncalNumericValue = null;
-        BitSet     rawValue          = null;
+        BitSet     rawValue          = new BitSet( rawSizeInBits_ );
         if ( euTypeName_.equals( "BOOLEAN" ) == true ) {
             long numericValue = Float.valueOf( euValue ).longValue();
             calNumericValue   = numberFromBoolean( Long.toString( numericValue ) );
@@ -273,26 +316,41 @@ public class XTCEItemValue {
             uncalNumericValue = encodeDecimal( BigDecimal.valueOf( euValue ) );
             rawValue          = encodeRawBits( uncalNumericValue );
         } else if ( euTypeName_.equals( "BINARY" ) == true ) {
-            warnings_.add( "Invalid binary value for " +
-                           itemName_ +
-                           " Value Provided: " +
-                           Float.toString( euValue ) );
+            warnings_.add( itemName_ +
+                           " Invalid EU Binary value of '" +
+                           Double.toString( euValue ) +
+                           "'" );
             rawValue = new BitSet( rawSizeInBits_ );
         } else if ( euTypeName_.startsWith( "FLOAT" ) == true ) {
             uncalNumericValue = encodeDecimal( BigDecimal.valueOf( euValue ) );
             rawValue          = encodeRawBits( uncalNumericValue );
         } else if ( euTypeName_.equals( "UNSIGNED" ) == true ) {
             if ( ( euValue % 1 ) != 0 ) {
-                warnings_.add( "Invalid unsigned integer value for " +
-                               itemName_ +
-                               " Value Provided: " +
-                               Float.toString( euValue ) );
+                warnings_.add( itemName_ +
+                               " Invalid EU unsigned integer value of '" +
+                               Float.toString( euValue ) +
+                               "'" );
                 rawValue = new BitSet( rawSizeInBits_ );
                 return rawValue;
             }
             long number = Float.valueOf( euValue ).longValue();
             uncalNumericValue = encodeNumber( BigInteger.valueOf( number ) );
             rawValue          = encodeRawBits( uncalNumericValue );
+        } else if ( euTypeName_.equals( "SIGNED" ) == true ) {
+            // TODO Add SIGNED Type
+        } else if ( euTypeName_.equals( "TIME" ) == true ) {
+            // TODO Add TIME Type
+            warnings_.add( "Absolute Time Type Not Yet Supported for " +
+                           itemName_ );
+        } else if ( euTypeName_.equals( "DURATION" ) == true ) {
+            // TODO Add DURATION Type
+            warnings_.add( "Relative Time Type Not Yet Supported for " +
+                           itemName_ );
+        } else {
+            warnings_.add( "AGGREGATE and ARRAY types for item " +
+                           itemName_ +
+                           " cannot directly be encoded." + 
+                           "  Use their children instead" );
         }
 
         return rawValue;
@@ -324,10 +382,11 @@ public class XTCEItemValue {
         } else if ( euValue.equals( booleanOneString_ ) == true ) {
             return BigInteger.ONE;
         } else {
-            warnings_.add( "Invalid Boolean value for " +
-                           itemName_ +
-                           " Value Provided: " +
-                           euValue );
+            warnings_.add( itemName_ +
+                           " Invalid EU Boolean value of " +
+                           "'" +
+                           euValue +
+                           "'" );
         }
 
         return BigInteger.ZERO;
@@ -364,25 +423,25 @@ public class XTCEItemValue {
             }
 
             if ( enumItem.getMaxValue() != null ) {
-                warnings_.add( "Enumeration label " +
+                warnings_.add( "Enumeration label '" +
                                enumItem.getLabel() +
-                               " for " +
+                               "' for " +
                                itemName_ +
-                               " has values " +
+                               " has values '" +
                                enumItem.getValue().toString() +
-                               " through " +
+                               "' through '" +
                                enumItem.getMaxValue().toString() +
-                               ", using lowest possible value" );
+                               "', using lowest possible value" );
             }
 
             return enumItem.getValue();
 
         }
 
-        warnings_.add( "No enumeration value found for " +
-                       itemName_ +
-                       " label: " +
-                       euValue );
+        warnings_.add( itemName_ +
+                       " Invalid EU Enumeration value of '" +
+                       euValue +
+                       "'" );
 
         return BigInteger.ZERO;
 
@@ -413,28 +472,11 @@ public class XTCEItemValue {
     private BigInteger encodeNumber( BigInteger calValue ) {
 
         if ( rawTypeName_.equals( "unsigned" ) == true ) {
-            if ( calValue.max( BigInteger.ZERO ) == BigInteger.ZERO ) {
-                warnings_.add( "Unsigned value for item " +
-                               itemName_ +
-                               " is " +
-                               calValue.toString() +
-                               " which cannot be negative" );
+            BigInteger uncalValue = integerEncodingUncalibrate( calValue );
+            if ( isIntegerRawValueReasonable( uncalValue ) == false ) {
                 return BigInteger.ZERO;
             }
-            // TODO uncalibrate
-            BigInteger maxValue = new BigInteger( "2" ).pow( rawSizeInBits_ ).subtract( new BigInteger( "1" ) );
-            if ( calValue.max( maxValue ) == calValue ) {
-                warnings_.add( "Unsigned value for encoding item " +
-                               itemName_ +
-                               " is " +
-                               calValue.toString() +
-                               " which exceeds fixed length max of " +
-                               maxValue.toString() +
-                               " using " +
-                               Long.toString( rawSizeInBits_ ) +
-                               " bits" );
-            }
-            return calValue;
+            return uncalValue;
         } else if ( rawTypeName_.equals( "signMagnitude" ) == true ) {
             // TODO uncalibrate
             // TODO handle BigInteger twosComplement with signMagnitude
@@ -449,10 +491,14 @@ public class XTCEItemValue {
         } else if ( rawTypeName_.equals( "binary" ) == true ) {
             return calValue;
         } else if ( rawTypeName_.equals( "IEEE754_1985" ) == true ) {
+            BigDecimal reasCalValue = new BigDecimal( calValue );
+            if ( isFloatRawValueReasonable( reasCalValue.doubleValue() ) == false ) {
+                reasCalValue = BigDecimal.ZERO;
+            }
             if ( rawSizeInBits_ == 32 ) {
-                return BigInteger.valueOf( Float.floatToRawIntBits( calValue.floatValue() ) );
+                return BigInteger.valueOf( Float.floatToRawIntBits( reasCalValue.floatValue() ) );
             } else if ( rawSizeInBits_ == 64 ) {
-                return BigInteger.valueOf( Double.doubleToRawLongBits( calValue.doubleValue() ) );
+                return BigInteger.valueOf( Double.doubleToRawLongBits( reasCalValue.doubleValue() ) );
             } else if ( rawSizeInBits_ == 128 ) {
                 warnings_.add( "Unsupported encoding type for " +
                                itemName_ +
@@ -467,33 +513,14 @@ public class XTCEItemValue {
         } else if ( rawTypeName_.equals( "UTF-8" ) == true ) {
             String chars = calValue.toString();
             BigInteger retValue = new BigInteger( chars.getBytes( StandardCharsets.UTF_8 ) );
-            long bitLength = retValue.toByteArray().length * 8;
-            if ( bitLength > rawSizeInBits_ ) {
-                warnings_.add( "String length for encoding " +
-                               rawTypeName_ +
-                               " item " +
-                               itemName_ +
-                               " is " +
-                               Long.toString( bitLength ) +
-                               " which exceeds fixed length size of " +
-                               Long.toString( rawSizeInBits_) );
-            }
-            return retValue;
+            return encodeUtfString( retValue );
         } else if ( rawTypeName_.equals( "UTF-16" ) == true ) {
             String chars = calValue.toString();
             BigInteger retValue = new BigInteger( chars.getBytes( StandardCharsets.UTF_16 ) );
-            long bitLength = retValue.toByteArray().length * 8;
-            if ( bitLength > rawSizeInBits_ ) {
-                warnings_.add( "String length for encoding " +
-                               rawTypeName_ +
-                               " item " +
-                               itemName_ +
-                               " is " +
-                               Long.toString( bitLength ) +
-                               " which exceeds fixed length size of " +
-                               Long.toString( rawSizeInBits_) );
+            if ( retValue.equals( BigInteger.ZERO ) == true ) {
+                retValue = new BigInteger( utf16_ );
             }
-            return retValue;
+            return encodeUtfString( retValue );
         } else {
             warnings_.add( "Unrecognized encoding type for " +
                            itemName_ +
@@ -508,7 +535,11 @@ public class XTCEItemValue {
     private BigInteger encodeDecimal( BigDecimal calValue ) {
 
         if ( rawTypeName_.equals( "unsigned" ) == true ) {
-            
+            BigInteger uncalValue = integerEncodingUncalibrate( calValue );
+            if ( isIntegerRawValueReasonable( uncalValue ) == false ) {
+                return BigInteger.ZERO;
+            }
+            return uncalValue;
         } else if ( rawTypeName_.equals( "signMagnitude" ) == true ) {
             
         } else if ( rawTypeName_.equals( "twosComplement" ) == true ) {
@@ -521,10 +552,14 @@ public class XTCEItemValue {
                            " Encoding: " +
                            rawTypeName_ );
         } else if ( rawTypeName_.equals( "IEEE754_1985" ) == true ) {
+            BigDecimal reasCalValue = calValue;
+            if ( isFloatRawValueReasonable( reasCalValue.doubleValue() ) == false ) {
+                reasCalValue = BigDecimal.ZERO;
+            }
             if ( rawSizeInBits_ == 32 ) {
-                return BigInteger.valueOf( Float.floatToRawIntBits( calValue.floatValue() ) );
+                return BigInteger.valueOf( Float.floatToRawIntBits( reasCalValue.floatValue() ) );
             } else if ( rawSizeInBits_ == 64 ) {
-                return BigInteger.valueOf( Double.doubleToRawLongBits( calValue.doubleValue() ) );
+                return BigInteger.valueOf( Double.doubleToRawLongBits( reasCalValue.doubleValue() ) );
             } else if ( rawSizeInBits_ == 128 ) {
                 warnings_.add( "Unsupported encoding type for " +
                                itemName_ +
@@ -539,33 +574,14 @@ public class XTCEItemValue {
         } else if ( rawTypeName_.equals( "UTF-8" ) == true ) {
             String chars = calValue.toString();
             BigInteger retValue = new BigInteger( chars.getBytes( StandardCharsets.UTF_8 ) );
-            long bitLength = retValue.toByteArray().length * 8;
-            if ( bitLength > rawSizeInBits_ ) {
-                warnings_.add( "String length for encoding " +
-                               rawTypeName_ +
-                               " item " +
-                               itemName_ +
-                               " is " +
-                               Long.toString( bitLength ) +
-                               " which exceeds fixed length size of " +
-                               Long.toString( rawSizeInBits_) );
-            }
-            return retValue;
+            return encodeUtfString( retValue );
         } else if ( rawTypeName_.equals( "UTF-16" ) == true ) {
             String chars = calValue.toString();
             BigInteger retValue = new BigInteger( chars.getBytes( StandardCharsets.UTF_16 ) );
-            long bitLength = retValue.toByteArray().length * 8;
-            if ( bitLength > rawSizeInBits_ ) {
-                warnings_.add( "String length for encoding " +
-                               rawTypeName_ +
-                               " item " +
-                               itemName_ +
-                               " is " +
-                               Long.toString( bitLength ) +
-                               " which exceeds fixed length size of " +
-                               Long.toString( rawSizeInBits_) );
+            if ( retValue.equals( BigInteger.ZERO ) == true ) {
+                retValue = new BigInteger( utf16_ );
             }
-            return retValue;
+            return encodeUtfString( retValue );
         } else {
             warnings_.add( "Unrecognized encoding type for " +
                            itemName_ +
@@ -582,53 +598,21 @@ public class XTCEItemValue {
         try {
 
             if ( rawTypeName_.equals( "unsigned" ) == true ) {
-                calValue = calValue.toLowerCase();
-                if ( calValue.startsWith( "0x" ) == true ) {
-                    BigInteger retValue = new BigInteger( calValue.replaceFirst( "0x", "" ), 16 );
-                    BigInteger maxValue = new BigInteger( "2" ).pow( rawSizeInBits_ ).subtract( new BigInteger( "1" ) );
-                    if ( retValue.max( BigInteger.ZERO ) == BigInteger.ZERO ) {
-                        warnings_.add( "Unsigned value for item " +
-                                       itemName_ +
-                                       " is " +
-                                       retValue.toString() +
-                                       " which cannot be negative" );
+                String lowerCalValue = calValue.toLowerCase();
+                if ( lowerCalValue.startsWith( "0x" ) == true ) {
+                    BigInteger retValue = new BigInteger( lowerCalValue.replaceFirst( "0x", "" ), 16 );
+                    BigInteger uncalValue = integerEncodingUncalibrate( retValue );
+                    if ( isIntegerRawValueReasonable( uncalValue ) == false ) {
                         return BigInteger.ZERO;
                     }
-                    if ( retValue.max( maxValue ) == retValue ) {
-                        warnings_.add( "Unsigned value for encoding item " +
-                                       itemName_ +
-                                       " is " +
-                                       retValue.toString() +
-                                       " which exceeds fixed length max of " +
-                                       maxValue.toString() +
-                                       " using " +
-                                       Long.toString( rawSizeInBits_ ) +
-                                       " bits" );
-                    }
-                    return retValue;
+                    return uncalValue;
                 } else {
-                    BigInteger retValue = new BigInteger( calValue );
-                    BigInteger maxValue = new BigInteger( "2" ).pow( rawSizeInBits_ ).subtract( new BigInteger( "1" ) );
-                    if ( retValue.max( BigInteger.ZERO ) == BigInteger.ZERO ) {
-                        warnings_.add( "Unsigned value for item " +
-                                       itemName_ +
-                                       " is " +
-                                       retValue.toString() +
-                                       " which cannot be negative" );
+                    BigDecimal retValue = new BigDecimal( lowerCalValue );
+                    BigInteger uncalValue = integerEncodingUncalibrate( retValue );
+                    if ( isIntegerRawValueReasonable( uncalValue ) == false ) {
                         return BigInteger.ZERO;
                     }
-                    if ( retValue.max( maxValue ) == retValue ) {
-                        warnings_.add( "Unsigned value for encoding item " +
-                                       itemName_ +
-                                       " is " +
-                                       retValue.toString() +
-                                       " which exceeds fixed length max of " +
-                                       maxValue.toString() +
-                                       " using " +
-                                       Long.toString( rawSizeInBits_ ) +
-                                       " bits" );
-                    }
-                    return retValue;
+                    return uncalValue;
                 }
             } else if ( rawTypeName_.equals( "signMagnitude" ) == true ) {
             
@@ -637,17 +621,21 @@ public class XTCEItemValue {
             } else if ( rawTypeName_.equals( "onesComplement" ) == true ) {
             
             } else if ( rawTypeName_.equals( "binary" ) == true ) {
-                calValue = calValue.toLowerCase();
-                if ( calValue.startsWith( "0x" ) == true ) {
-                    return new BigInteger( calValue.replaceFirst( "0x", "" ), 16 );
+                String lowerCalValue = calValue.toLowerCase();
+                if ( lowerCalValue.startsWith( "0x" ) == true ) {
+                    return new BigInteger( lowerCalValue.replaceFirst( "0x", "" ), 16 );
                 } else {
-                    return new BigInteger( calValue );
+                    return new BigInteger( lowerCalValue );
                 }
             } else if ( rawTypeName_.equals( "IEEE754_1985" ) == true ) {
+                String reasCalValue = calValue;
+                if ( isFloatRawValueReasonable( Double.valueOf( calValue ) ) == false ) {
+                    reasCalValue = "0.0";
+                }
                 if ( rawSizeInBits_ == 32 ) {
-                    return BigInteger.valueOf( Float.floatToRawIntBits( Float.parseFloat( calValue ) ) );
+                    return BigInteger.valueOf( Float.floatToRawIntBits( Float.parseFloat( reasCalValue ) ) );
                 } else if ( rawSizeInBits_ == 64 ) {
-                    return BigInteger.valueOf( Double.doubleToRawLongBits( Double.parseDouble( calValue ) ) );
+                    return BigInteger.valueOf( Double.doubleToRawLongBits( Double.parseDouble( reasCalValue ) ) );
                 } else if ( rawSizeInBits_ == 128 ) {
                     warnings_.add( "Unsupported encoding type for " +
                                    itemName_ +
@@ -660,33 +648,20 @@ public class XTCEItemValue {
                                " Encoding: " +
                                rawTypeName_ );
             } else if ( rawTypeName_.equals( "UTF-8" ) == true ) {
-                BigInteger retValue = new BigInteger( calValue.getBytes( StandardCharsets.UTF_8 ) );
-                long bitLength = retValue.toByteArray().length * 8;
-                if ( bitLength > rawSizeInBits_ ) {
-                    warnings_.add( "String length for encoding " +
-                                   rawTypeName_ +
-                                   " item " +
-                                   itemName_ +
-                                   " is " +
-                                   Long.toString( bitLength ) +
-                                   " which exceeds fixed length size of " +
-                                   Long.toString( rawSizeInBits_) );
+                BigInteger retValue = BigInteger.ZERO;
+                if ( calValue.isEmpty() == false ) {
+                    retValue = new BigInteger( calValue.getBytes( StandardCharsets.UTF_8 ) );
                 }
-                return retValue;
+                return encodeUtfString( retValue );
             } else if ( rawTypeName_.equals( "UTF-16" ) == true ) {
-                BigInteger retValue = new BigInteger( calValue.getBytes( StandardCharsets.UTF_16 ) );
-                long bitLength = retValue.toByteArray().length * 8;
-                if ( bitLength > rawSizeInBits_ ) {
-                    warnings_.add( "String length for encoding " +
-                                   rawTypeName_ +
-                                   " item " +
-                                   itemName_ +
-                                   " is " +
-                                   Long.toString( bitLength ) +
-                                   " which exceeds fixed length size of " +
-                                   Long.toString( rawSizeInBits_) );
+                BigInteger retValue = BigInteger.ZERO;
+                if ( calValue.isEmpty() == false ) {
+                    retValue = new BigInteger( calValue.getBytes( StandardCharsets.UTF_16 ) );
                 }
-                return retValue;
+                if ( retValue.equals( BigInteger.ZERO ) == true ) {
+                    retValue = new BigInteger( utf16_ );
+                }
+                return encodeUtfString( retValue );
             } else {
                 warnings_.add( "Unrecognized encoding type for " +
                                itemName_ +
@@ -695,15 +670,40 @@ public class XTCEItemValue {
             }
 
         } catch ( NumberFormatException ex ) {
-            warnings_.add( "Invalid value for " +
-                           itemName_ +
-                           " encoding: " +
+            warnings_.add( itemName_ +
+                           " Invalid String value for encoding " +
                            rawTypeName_ +
-                           " value: " +
-                           calValue );
+                           " of '" +
+                           calValue +
+                           "'" );
         }
 
         return BigInteger.ZERO;
+
+    }
+
+    private BigInteger encodeUtfString( BigInteger retValue ) {
+
+        long bitLength = retValue.toByteArray().length * 8;
+        if ( bitLength > rawSizeInBits_ ) {
+            warnings_.add( "String length for encoding " +
+                           rawTypeName_ +
+                           " item " +
+                           itemName_ +
+                           " is " +
+                           Long.toString( bitLength ) +
+                           " which exceeds fixed length size of " +
+                           Long.toString( rawSizeInBits_) );
+        }
+        if ( retValue.equals( BigInteger.ZERO ) == true ) {
+            return retValue;
+        }
+        while ( bitLength < rawSizeInBits_ ) {
+            retValue = retValue.shiftLeft( 8 );
+            bitLength = retValue.toByteArray().length * 8;
+            //retValue = retValue.add(  ); for termination char
+        }
+        return retValue;
 
     }
 
@@ -987,17 +987,70 @@ public class XTCEItemValue {
     private BigInteger integerEncodingUncalibrate( BigDecimal calValue ) {
 
         if ( defCal_ == null ) {
-            long value = calValue.longValue();
+            long value = Math.round( calValue.doubleValue() );
             return new BigInteger( Long.toString( value ) );
         }
 
         PolynomialType polyCal = defCal_.getPolynomialCalibrator();
         if ( polyCal != null ) {
-            //BigInteger retValue = BigInteger.ZERO;
-            //List<PolynomialType.Term> terms = polyCal.getTerm();
-            //for ( PolynomialType.Term term : terms ) {
-            //    
-            //}
+            HashMap<BigInteger, BigDecimal> terms =
+                new HashMap<BigInteger, BigDecimal>();
+            List<PolynomialType.Term> xtceTerms = polyCal.getTerm();
+            long maxExponent = 0;
+            for ( PolynomialType.Term term : xtceTerms ) {
+                if ( term.getCoefficient() != 0.0 ) {
+                    terms.put( term.getExponent(), new BigDecimal( term.getCoefficient() ) );
+                    if ( term.getExponent().longValue() > maxExponent ) {
+                        maxExponent = term.getExponent().longValue();
+                    }
+                }
+            }
+            if ( maxExponent <= 1 ) {
+                double value = calValue.doubleValue();
+                if ( terms.containsKey( BigInteger.ZERO ) == true ) {
+                    value = value - terms.get( BigInteger.ZERO ).doubleValue();
+                }
+                if ( terms.containsKey( BigInteger.ONE ) == true ) {
+                    value = value / terms.get( BigInteger.ONE ).doubleValue();
+                }
+                return BigInteger.valueOf( Double.valueOf( value ).longValue() );
+            } else if ( maxExponent == 2 ) {
+                final BigInteger inttwo = new BigInteger( "2" );
+                // evaluate b^2 -4ac to determine if roots exist
+                double aaa = 0.0;
+                double bbb = 0.0;
+                double ccc = -1.0 * calValue.doubleValue();
+                if ( terms.containsKey( BigInteger.ZERO ) == true ) {
+                    ccc += terms.get( BigInteger.ZERO ).doubleValue();
+                }
+                if ( terms.containsKey( BigInteger.ONE ) == true ) {
+                    bbb = terms.get( BigInteger.ONE ).doubleValue();
+                }
+                if ( terms.containsKey( inttwo ) == true ) {
+                    aaa = terms.get( inttwo ).doubleValue();
+                }
+                double discriminant = Math.pow( bbb, 2 ) - ( 4.0 * aaa * ccc );
+                if ( discriminant < 0 ) {
+                    warnings_.add( "Polynomial Calibrator for " +
+                                   itemName_ +
+                                   " has no real roots for EU value " +
+                                   calValue.toString() );
+                    return BigInteger.ZERO;
+                }
+                double posroot = Math.sqrt( discriminant );
+                double root1   = ( ( bbb * -1.0 ) - posroot ) / ( 2.0 * aaa );
+                double root2   = ( ( bbb * -1.0 ) + posroot ) / ( 2.0 * aaa );
+                System.out.println( "Root1 = " + Double.toString( root1 ) + " Root2 = " + Double.toString( root2 ) );
+                double bestPick = findBestRoot( root1, root2 );
+                return BigInteger.valueOf( Math.round( bestPick ) );
+            } else {
+                warnings_.add( "Polynomial Calibrator for " +
+                               itemName_ +
+                               " contains exponent power as high as " +
+                               Long.toString( maxExponent ) +
+                               ".  Not supported by this toolkit." );
+                return BigInteger.ZERO;
+            }
         }
 
         SplineCalibrator splineCal = defCal_.getSplineCalibrator();
@@ -1024,7 +1077,8 @@ public class XTCEItemValue {
             return calValue;
         }
 
-        return calValue;
+        // TODO customize this version of the function later
+        return integerEncodingUncalibrate( new BigDecimal( calValue ) );
 
     }
 
@@ -1051,210 +1105,291 @@ public class XTCEItemValue {
         defCal_ = item.getDefaultCalibrator();
     }
 
-    /** Main function to facilitate quick testing of this class without the
-     * overhead of creating another tool or using the graphical interface.
+    /** Check for reasonableness of the raw value to encode to an integer type
+     * encoding.
      *
-     * @param args the command line arguments
+     * This method first figures out the range of possible values based on the
+     * size in bits and the signed state.  It then checks if the value should
+     * be restricted further by a possibly present ValidRange element.  It
+     * applies those limits if they are intended for the raw value.
+     *
+     * @param rawValue BigInteger containing the raw value that will be encoded
+     * if it turns out to be reasonable.
+     *
+     * @return boolean indicating if this function thinks the value is
+     * reasonable to fit in the allowable size and range.
      *
      */
 
-    public static void main( String args[] ) {
+    private boolean isIntegerRawValueReasonable( BigInteger rawValue ) {
 
-        System.out.println( "Testing XTCEItemValue Class" );
+        // first find the general size applicable to the bit length
+        boolean minInclusive = true;
+        boolean maxInclusive = true;
+        long    minValue     = 0;
+        long    maxValue     = (long)Math.pow( 2, rawSizeInBits_ ) - 1;
 
-        System.out.println( "Loading the BogusSat-1.xml demo database" );
-
-        String file = "src/org/omg/space/xtce/database/BogusSat-1.xml";
-
-        try {
-
-            XTCEDatabase db =
-                new XTCEDatabase( new File( file ), false, null );
-
-            System.out.println( "Testing boolean/unsigned no Calibrator" );
-
-            XTCEParameter p1 = db.getSpaceSystem( "/BogusSAT/SC001/BusElectronics" )
-                                 .getTelemetryParameter( "Battery_Charge_Mode" );
-
-            XTCEItemValue v1 = new XTCEItemValue( p1 );
-            if ( v1.isValid() == false ) {
-                throw new XTCEDatabaseException( "Parameter " +
-                                                 p1.getName() +
-                                                 " missing encoding information" );
-            }
-
-            BitSet r1 = v1.encode( "CHARGE" );
-            System.out.println( "CHARGE = " + v1.bitSetToHex( r1 ) + " (" + v1.bitSetToBinary( r1 ) + ")" );
-            BitSet r2 = v1.encode( "DISCHARGE" );
-            System.out.println( "DISCHARGE = " + v1.bitSetToHex( r2 ) + " (" + v1.bitSetToBinary( r2 ) + ")" );
-            BitSet r3 = v1.encode( "FOOBAR" );
-            System.out.println( "FOOBAR = " + v1.bitSetToHex( r3 ) + " (" + v1.bitSetToBinary( r3 ) + ")" );
-            BitSet r4 = null;
-            BitSet r5 = null;
-            BitSet r6 = null;
-            BitSet r7 = null;
-            BitSet r8 = null;
-            BitSet r9 = null;
-            BitSet r10 = null;
-            for ( String warn : v1.getWarnings() ) {
-                System.out.println( warn );
-            }
-            v1.clearWarnings();
-            System.out.println( "" );
-
-            p1 = db.getSpaceSystem( "/BogusSAT/SC001/Payload1" )
-                   .getTelemetryParameter( "Payload_1_Phase" );
-
-            v1 = new XTCEItemValue( p1 );
-            if ( v1.isValid() == false ) {
-                throw new XTCEDatabaseException( "Parameter " +
-                                                 p1.getName() +
-                                                 " missing encoding information" );
-            }
-
-            r1 = v1.encode( "STANDBY" );
-            System.out.println( "STANDBY = " + v1.bitSetToHex( r1 ) + " (" + v1.bitSetToBinary( r1 ) + ")" );
-            r2 = v1.encode( "FAILED" );
-            System.out.println( "FAILED = " + v1.bitSetToHex( r2 ) + " (" + v1.bitSetToBinary( r2 ) + ")" );
-            r3 = v1.encode( "FOOBAR" );
-            System.out.println( "FOOBAR = " + v1.bitSetToHex( r3 ) + " (" + v1.bitSetToBinary( r3 ) + ")" );
-            for ( String warn : v1.getWarnings() ) {
-                System.out.println( warn );
-            }
-            v1.clearWarnings();
-            System.out.println( "" );
-
-            p1 = db.getSpaceSystem( "/BogusSAT/SC001/Payload1" )
-                   .getTelemetryParameter( "Payload_MD5" );
-
-            v1 = new XTCEItemValue( p1 );
-            if ( v1.isValid() == false ) {
-                throw new XTCEDatabaseException( "Parameter " +
-                                                 p1.getName() +
-                                                 " missing encoding information" );
-            }
-
-            r1 = v1.encode( "0xa567e0660841dc13346047aa5ac2b5c7" );
-            System.out.println( "0xa567e0660841dc13346047aa5ac2b5c7 = " + v1.bitSetToHex( r1 ) + " (" + v1.bitSetToBinary( r1 ) + ")" );
-            r2 = v1.encode( "0xaaaabbbb" );
-            System.out.println( "aaaabbbb = " + v1.bitSetToHex( r2 ) + " (" + v1.bitSetToBinary( r2 ) + ")" );
-            r3 = v1.encode( "12345678" );
-            System.out.println( "12345678 = " + v1.bitSetToHex( r3 ) + " (" + v1.bitSetToBinary( r3 ) + ")" );
-            r4 = v1.encode( 12345678 );
-            System.out.println( "12345678 = " + v1.bitSetToHex( r4 ) + " (" + v1.bitSetToBinary( r4 ) + ")" );
-            r5 = v1.encode( 12345678.0 );
-            System.out.println( "12345678.0 = " + v1.bitSetToHex( r5 ) + " (" + v1.bitSetToBinary( r5 ) + ")" );
-            r6 = v1.encode( "FOOBAR" );
-            System.out.println( "FOOBAR = " + v1.bitSetToHex( r6 ) + " (" + v1.bitSetToBinary( r6 ) + ")" );
-            for ( String warn : v1.getWarnings() ) {
-                System.out.println( warn );
-            }
-            v1.clearWarnings();
-            System.out.println( "" );
-
-            p1 = db.getSpaceSystem( "/BogusSAT/SC001/BusElectronics" )
-                   .getTelemetryParameter( "Battery_Voltage" );
-
-            v1 = new XTCEItemValue( p1 );
-            if ( v1.isValid() == false ) {
-                throw new XTCEDatabaseException( "Parameter " +
-                                                 p1.getName() +
-                                                 " missing encoding information" );
-            }
-
-            r1 = v1.encode( "1.25" );
-            System.out.println( "1.25 = " + v1.bitSetToHex( r1 ) + " (" + v1.bitSetToBinary( r1 ) + ")" );
-            r2 = v1.encode( "99.5" );
-            System.out.println( "99.5 = " + v1.bitSetToHex( r2 ) + " (" + v1.bitSetToBinary( r2 ) + ")" );
-            r3 = v1.encode( "12.1" );
-            System.out.println( "12.1 = " + v1.bitSetToHex( r3 ) + " (" + v1.bitSetToBinary( r3 ) + ")" );
-            r4 = v1.encode( 5 );
-            System.out.println( "5 = " + v1.bitSetToHex( r4 ) + " (" + v1.bitSetToBinary( r4 ) + ")" );
-            r5 = v1.encode( 1.25 );
-            System.out.println( "1.25 = " + v1.bitSetToHex( r5 ) + " (" + v1.bitSetToBinary( r5 ) + ")" );
-            r6 = v1.encode( "FOOBAR" );
-            System.out.println( "FOOBAR = " + v1.bitSetToHex( r6 ) + " (" + v1.bitSetToBinary( r6 ) + ")" );
-            for ( String warn : v1.getWarnings() ) {
-                System.out.println( warn );
-            }
-            v1.clearWarnings();
-            System.out.println( "" );
-
-            p1 = db.getSpaceSystem( "/BogusSAT/SC001/BusElectronics" )
-                   .getTelemetryParameter( "Bus_Fault_Message" );
-
-            v1 = new XTCEItemValue( p1 );
-            if ( v1.isValid() == false ) {
-                throw new XTCEDatabaseException( "Parameter " +
-                                                 p1.getName() +
-                                                 " missing encoding information" );
-            }
-
-            r1 = v1.encode( "This is a test" );
-            System.out.println( "This is a test = " + v1.bitSetToHex( r1 ) + " (" + v1.bitSetToBinary( r1 ) + ")" );
-            r2 = v1.encode( "" );
-            System.out.println( "[empty string] = " + v1.bitSetToHex( r2 ) + " (" + v1.bitSetToBinary( r2 ) + ")" );
-            r3 = v1.encode( "12345678901234567890" );
-            System.out.println( "12345678901234567890 = " + v1.bitSetToHex( r3 ) + " (" + v1.bitSetToBinary( r3 ) + ")" );
-            r4 = v1.encode( 5 );
-            System.out.println( "5 = " + v1.bitSetToHex( r4 ) + " (" + v1.bitSetToBinary( r4 ) + ")" );
-            r5 = v1.encode( 1.25 );
-            System.out.println( "1.25 = " + v1.bitSetToHex( r5 ) + " (" + v1.bitSetToBinary( r5 ) + ")" );
-            r6 = v1.encode( "FOOBAR" );
-            System.out.println( "FOOBAR = " + v1.bitSetToHex( r6 ) + " (" + v1.bitSetToBinary( r6 ) + ")" );
-            for ( String warn : v1.getWarnings() ) {
-                System.out.println( warn );
-            }
-            v1.clearWarnings();
-            System.out.println( "" );
-
-            p1 = db.getSpaceSystem( "/BogusSAT" )
-                   .getTelemetryParameter( "CCSDSAPID" );
-
-            v1 = new XTCEItemValue( p1 );
-            if ( v1.isValid() == false ) {
-                throw new XTCEDatabaseException( "Parameter " +
-                                                 p1.getName() +
-                                                 " missing encoding information" );
-            }
-
-            r1 = v1.encode( "15" );
-            System.out.println( "15 = " + v1.bitSetToHex( r1 ) + " (" + v1.bitSetToBinary( r1 ) + ")" );
-            r2 = v1.encode( "1" );
-            System.out.println( "1 = " + v1.bitSetToHex( r2 ) + " (" + v1.bitSetToBinary( r2 ) + ")" );
-            r3 = v1.encode( "2047" );
-            System.out.println( "2047 = " + v1.bitSetToHex( r3 ) + " (" + v1.bitSetToBinary( r3 ) + ")" );
-            r4 = v1.encode( 5 );
-            System.out.println( "5 = " + v1.bitSetToHex( r4 ) + " (" + v1.bitSetToBinary( r4 ) + ")" );
-            r5 = v1.encode( 1.25 );
-            System.out.println( "1.25 = " + v1.bitSetToHex( r5 ) + " (" + v1.bitSetToBinary( r5 ) + ")" );
-            r6 = v1.encode( "FOOBAR" );
-            System.out.println( "FOOBAR = " + v1.bitSetToHex( r6 ) + " (" + v1.bitSetToBinary( r6 ) + ")" );
-            r7 = v1.encode( "0xff" );
-            System.out.println( "0xff = " + v1.bitSetToHex( r7 ) + " (" + v1.bitSetToBinary( r7 ) + ")" );
-            r8 = v1.encode( "0xffff" );
-            System.out.println( "0xffff = " + v1.bitSetToHex( r8 ) + " (" + v1.bitSetToBinary( r8 ) + ")" );
-            r9 = v1.encode( -2 );
-            System.out.println( "-2 = " + v1.bitSetToHex( r9 ) + " (" + v1.bitSetToBinary( r9 ) + ")" );
-            r10 = v1.encode( "-1" );
-            System.out.println( "-1 = " + v1.bitSetToHex( r10 ) + " (" + v1.bitSetToBinary( r10 ) + ")" );
-            for ( String warn : v1.getWarnings() ) {
-                System.out.println( warn );
-            }
-            v1.clearWarnings();
-            System.out.println( "" );
-
-            System.out.println( "Done" );
-
-        } catch ( Exception ex ) {
-
-            System.out.println( "Exception: " + ex.getLocalizedMessage() );
-            ex.printStackTrace();
-
+        // if it is signed, then correct that range
+        if ( ( rawTypeName_.equals( "signMagnitude" ) == true ) ||
+             ( rawTypeName_.equals( "onesComplement" ) == true ) ||
+             ( rawTypeName_.equals( "twosComplement" ) == true ) ) {
+            minValue = -1 * (long)Math.pow( 2, ( rawSizeInBits_ - 1 ) );
+            maxValue = (long)Math.pow( 2, ( rawSizeInBits_ - 1 ) ) - 1;
         }
+
+        // if a ValidRange element exists then we want to filter the min and
+        // max through that, but only if it applies to RAW
+        if ( validRangeExists_ == true ) {
+            if ( lowAppliesToCalibrated_ == false ) {
+                minValue = Math.round( Double.parseDouble( lowValidValue_ ) );
+                if ( lowValidValueInclusive_ == false ) {
+                    minInclusive = false;
+                }
+            }
+            if ( highAppliesToCalibrated_ == false ) {
+                maxValue = Math.round( Double.parseDouble( highValidValue_ ) );
+                if ( highValidValueInclusive_ == false ) {
+                    maxInclusive = false;
+                }
+            }
+        }
+
+        // check the special negative case first
+        if ( rawTypeName_.equals( "unsigned" ) == true ) {
+            if ( rawValue.longValue() < 0 ) {
+                warnings_.add( "Unsigned value for item " +
+                               itemName_ +
+                               " is " +
+                               rawValue.toString() +
+                               " which cannot be negative" );
+                return false;
+            }
+        }
+
+        // check for the boundary conditions with the minimum first
+        if ( minInclusive == false ) {
+            if ( minValue >= rawValue.longValue() ) {
+                warnings_.add( rawTypeName_ +
+                               " encoding value for item " +
+                               itemName_ +
+                               " is " +
+                               rawValue.toString() +
+                               ", which is less than or equal to the " +
+                               "minimum value " +
+                               Long.toString( minValue ) );
+                return false;
+            }
+        } else {
+            if ( minValue > rawValue.longValue() ) {
+                warnings_.add( rawTypeName_ +
+                               " encoding value for item " +
+                               itemName_ +
+                               " is " +
+                               rawValue.toString() +
+                               ", which is less than the " +
+                               "minimum value " +
+                               Long.toString( minValue ) );
+                return false;
+            }
+        }
+
+        // check for the boundary conditions with the maximum
+        if ( maxInclusive == false ) {
+            if ( maxValue <= rawValue.longValue() ) {
+                warnings_.add( rawTypeName_ +
+                               " encoding value for item " +
+                               itemName_ +
+                               " is " +
+                               rawValue.toString() +
+                               ", which is greater than or equal to the " +
+                               "maximum value " +
+                               Long.toString( maxValue ) );
+                return false;
+            }
+        } else {
+            if ( maxValue < rawValue.longValue() ) {
+                warnings_.add( rawTypeName_ +
+                               " encoding value for item " +
+                               itemName_ +
+                               " is " +
+                               rawValue.toString() +
+                               ", which is greater than the " +
+                               "maximum value " +
+                               Long.toString( maxValue ) );
+                return false;
+            }
+        }
+
+        return true;
 
     }
 
+    private boolean isFloatRawValueReasonable( double rawValue ) {
+
+        // first find the general size applicable to the bit length
+        boolean minInclusive = true;
+        boolean maxInclusive = true;
+        double  minValue     = -Double.MAX_VALUE;
+        double  maxValue     = Double.MAX_VALUE;
+
+        // if a ValidRange element exists then we want to filter the min and
+        // max through that, but only if it applies to RAW
+        if ( validRangeExists_ == true ) {
+            if ( lowAppliesToCalibrated_ == false ) {
+                minValue = Math.round( Double.parseDouble( lowValidValue_ ) );
+                if ( lowValidValueInclusive_ == false ) {
+                    minInclusive = false;
+                }
+            }
+            if ( highAppliesToCalibrated_ == false ) {
+                maxValue = Math.round( Double.parseDouble( highValidValue_ ) );
+                if ( highValidValueInclusive_ == false ) {
+                    maxInclusive = false;
+                }
+            }
+        }
+
+        // check for the boundary conditions with the minimum first
+        if ( minInclusive == false ) {
+            if ( minValue >= rawValue ) {
+                warnings_.add( rawTypeName_ +
+                               " encoding value for item " +
+                               itemName_ +
+                               " is " +
+                               Double.toString( rawValue ) +
+                               ", which is less than or equal to the " +
+                               "minimum value " +
+                               Double.toString( minValue ) );
+                return false;
+            }
+        } else {
+            if ( minValue > rawValue ) {
+                warnings_.add( rawTypeName_ +
+                               " encoding value for item " +
+                               itemName_ +
+                               " is " +
+                               Double.toString( rawValue ) +
+                               ", which is less than the " +
+                               "minimum value " +
+                               Double.toString( minValue ) );
+                return false;
+            }
+        }
+
+        // check for the boundary conditions with the maximum
+        if ( maxInclusive == false ) {
+            if ( maxValue <= rawValue ) {
+                warnings_.add( rawTypeName_ +
+                               " encoding value for item " +
+                               itemName_ +
+                               " is " +
+                               Double.toString( rawValue ) +
+                               ", which is greater than or equal to the " +
+                               "maximum value " +
+                               Double.toString( maxValue ) );
+                return false;
+            }
+        } else {
+            if ( maxValue < rawValue ) {
+                warnings_.add( rawTypeName_ +
+                               " encoding value for item " +
+                               itemName_ +
+                               " is " +
+                               Double.toString( rawValue ) +
+                               ", which is greater than the " +
+                               "maximum value " +
+                               Double.toString( maxValue ) );
+                return false;
+            }
+        }
+
+        return true;
+
+    }
+
+    private double findBestRoot( double root1, double root2 ) {
+
+        // function is never called if BOTH are invalid since we checked the
+        // discriminant earlier.
+        if ( ( root1 == Double.NaN               ) ||
+             ( root1 == Double.POSITIVE_INFINITY ) ||
+             ( root1 == Double.NEGATIVE_INFINITY ) ) {
+            root1 = root2;
+        }
+        if ( ( root2 == Double.NaN               ) ||
+             ( root2 == Double.POSITIVE_INFINITY ) ||
+             ( root2 == Double.NEGATIVE_INFINITY ) ) {
+            root2 = root1;
+        }
+
+        if ( rawTypeName_.equals( "unsigned" ) == true ) {
+            // TODO worry about inclusive versus exclusive
+            long minValue = 0;
+            long maxValue = (long)Math.pow( 2, rawSizeInBits_  ) - 1;
+            if ( ( validRangeExists_       == true  ) &&
+                 ( lowAppliesToCalibrated_ == false ) ) {
+                minValue = Math.round( Double.parseDouble( lowValidValue_ ) );
+            }
+            if ( ( validRangeExists_        == true  ) &&
+                 ( highAppliesToCalibrated_ == false ) ) {
+                maxValue = Math.round( Double.parseDouble( highValidValue_ ) );
+            }
+            if ( ( root1 >= minValue ) && ( root1 <= maxValue ) ) {
+                return root1;
+            } else if ( ( root2 >= minValue ) && ( root2 <= maxValue ) ) {
+                return root2;
+            } else {
+                warnings_.add( "Polynomial Calibrator for " +
+                               itemName_ +
+                               " contains roots of " +
+                               Double.toString( root1 ) +
+                               " and " +
+                               Double.toString( root2 ) +
+                               ", neither of which are in the range of " +
+                               Long.toString( minValue ) +
+                               " to " +
+                               Long.toString( maxValue ) +
+                               " for encoding " +
+                               rawTypeName_ );
+                return 0.0;
+            }
+        } else if ( ( rawTypeName_.equals( "signMagnitude" ) == true ) ||
+                    ( rawTypeName_.equals( "onesComplement" ) == true ) ||
+                    ( rawTypeName_.equals( "twosComplement" ) == true ) ) {
+            // TODO worry about inclusive versus exclusive
+            long minValue = -1 * (long)Math.pow( 2, ( rawSizeInBits_ - 1 ) );
+            long maxValue = (long)Math.pow( 2, ( rawSizeInBits_ - 1 ) ) - 1;
+            if ( ( validRangeExists_       == true  ) &&
+                 ( lowAppliesToCalibrated_ == false ) ) {
+                minValue = Math.round( Double.parseDouble( lowValidValue_ ) );
+            }
+            if ( ( validRangeExists_        == true  ) &&
+                 ( highAppliesToCalibrated_ == false ) ) {
+                maxValue = Math.round( Double.parseDouble( highValidValue_ ) );
+            }
+            if ( ( root1 >= minValue ) && ( root1 <= maxValue ) ) {
+                return root1;
+            } else if ( ( root2 >= minValue ) && ( root2 <= maxValue ) ) {
+                return root2;
+            } else {
+                warnings_.add( "Polynomial Calibrator for " +
+                               itemName_ +
+                               " contains roots of " +
+                               Double.toString( root1 ) +
+                               " and " +
+                               Double.toString( root2 ) +
+                               ", neither of which are in the range of " +
+                               Long.toString( minValue ) +
+                               " to " +
+                               Long.toString( maxValue ) +
+                               " for encoding " +
+                               rawTypeName_ );
+                return 0.0;
+            }
+        }
+        return root1;
+
+    }
 
 
     // Private Data Members
@@ -1279,5 +1414,7 @@ public class XTCEItemValue {
     private ArrayList<String>          warnings_ = new ArrayList<String>();
     private List<ValueEnumerationType> enums_    = null;
     private CalibratorType             defCal_   = null;
+
+    private static final byte[] utf16_ = new byte[] { (byte)0xfe, (byte)0xff };
 
 }
