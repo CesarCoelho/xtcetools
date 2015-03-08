@@ -554,6 +554,10 @@
 						<xtce:UnitSet/>
 						<xtce:IntegerDataEncoding bitOrder="mostSignificantBitFirst" encoding="twosComplement" sizeInBits="32" changeThreshold="1"/>
 					</xtce:IntegerParameterType>
+					<xtce:IntegerParameterType name="Basic_int32_onescomp_Type" signed="true" sizeInBits="32" shortDescription="Generic signed 32 bit number with ones complement encoding">
+						<xtce:UnitSet/>
+						<xtce:IntegerDataEncoding bitOrder="mostSignificantBitFirst" encoding="onesComplement" sizeInBits="32" changeThreshold="1"/>
+					</xtce:IntegerParameterType>
 				</xtce:ParameterTypeSet>
 				<xtce:ParameterSet>
 					<xtce:Parameter name="Payload_1_State" parameterTypeRef="Payload_1_State_Type">
@@ -607,6 +611,11 @@
 						</xtce:ParameterProperties>
 					</xtce:Parameter>
 					<xtce:Parameter name="Basic_int32_twoscomp" parameterTypeRef="Basic_int32_twoscomp_Type">
+						<xtce:ParameterProperties dataSource="telemetered" readOnly="true">
+							<xtce:SystemName>CPU</xtce:SystemName>
+						</xtce:ParameterProperties>
+					</xtce:Parameter>
+					<xtce:Parameter name="Basic_int32_onescomp" parameterTypeRef="Basic_int32_onescomp_Type">
 						<xtce:ParameterProperties dataSource="telemetered" readOnly="true">
 							<xtce:SystemName>CPU</xtce:SystemName>
 						</xtce:ParameterProperties>

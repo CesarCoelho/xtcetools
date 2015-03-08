@@ -432,6 +432,12 @@ public abstract class XTCETypedObject extends XTCENamedObject {
      * twosComplement - Signed Integer using twos complement formula
      * </li>
      * <li>
+     * BCD - Binary Coded Data
+     * </li>
+     * <li>
+     * packedBCD - Packed Binary Coded Data
+     * </li>
+     * <li>
      * binary - Plain binary data field
      * </li>
      * <li>

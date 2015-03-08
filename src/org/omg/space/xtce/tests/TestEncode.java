@@ -350,6 +350,258 @@ public class TestEncode {
 
         System.out.println( "" );
 
+        System.out.println( "Testing EU SignedInteger Raw signMagnitude no Calibrator" );
+
+        getParameterItemValueObj( "/BogusSAT/SC001/Payload1",
+                                  "Basic_int32_signmag" );
+
+        errors += check( "0",
+                         "0x00000000",
+                         "00000000000000000000000000000000" );
+
+        errors += check( 0,
+                         "0x00000000",
+                         "00000000000000000000000000000000" );
+
+        errors += check( 0.0,
+                         "0x00000000",
+                         "00000000000000000000000000000000" );
+
+        errors += check( "1",
+                         "0x00000001",
+                         "00000000000000000000000000000001" );
+
+        errors += check( 1,
+                         "0x00000001",
+                         "00000000000000000000000000000001" );
+
+        errors += check( 1.0,
+                         "0x00000001",
+                         "00000000000000000000000000000001" );
+
+        errors += check( (float)1.0,
+                         "0x00000001",
+                         "00000000000000000000000000000001" );
+
+        errors += check( "2047",
+                         "0x000007ff",
+                         "00000000000000000000011111111111" );
+
+        errors += check( 5,
+                         "0x00000005",
+                         "00000000000000000000000000000101" );
+
+        errors += check( (float)1.25,
+                         "Basic_int32_signmag Invalid EU signed integer value of '1.25'" );
+
+        errors += check( "0x0a",
+                         "0x0000000a",
+                         "00000000000000000000000000001010" );
+
+        errors += check( 10.0,
+                         "0x0000000a",
+                         "00000000000000000000000000001010" );
+
+        errors += check( -1024.5,
+                         "Basic_int32_signmag Invalid EU signed integer value of '-1024.5'" );
+
+        errors += check( "-1",
+                         "0x80000001",
+                         "10000000000000000000000000000001" );
+
+        errors += check( -1,
+                         "0x80000001",
+                         "10000000000000000000000000000001" );
+
+        errors += check( -1.0,
+                         "0x80000001",
+                         "10000000000000000000000000000001" );
+
+        errors += check( -6,
+                         "0x80000006",
+                         "10000000000000000000000000000110" );
+
+        errors += check( -6.0,
+                         "0x80000006",
+                         "10000000000000000000000000000110" );
+
+        errors += check( 0xff,
+                         "0x000000ff",
+                         "00000000000000000000000011111111" );
+
+        errors += check( "FOOBAR",
+                         "Basic_int32_signmag Invalid String value for encoding signMagnitude of 'FOOBAR'" );
+
+        System.out.println( "" );
+
+        System.out.println( "Testing EU SignedInteger Raw twosComplement no Calibrator" );
+
+        getParameterItemValueObj( "/BogusSAT/SC001/Payload1",
+                                  "Basic_int32_twoscomp" );
+
+        errors += check( "0",
+                         "0x00000000",
+                         "00000000000000000000000000000000" );
+
+        errors += check( 0,
+                         "0x00000000",
+                         "00000000000000000000000000000000" );
+
+        errors += check( 0.0,
+                         "0x00000000",
+                         "00000000000000000000000000000000" );
+
+        errors += check( "1",
+                         "0x00000001",
+                         "00000000000000000000000000000001" );
+
+        errors += check( 1,
+                         "0x00000001",
+                         "00000000000000000000000000000001" );
+
+        errors += check( 1.0,
+                         "0x00000001",
+                         "00000000000000000000000000000001" );
+
+        errors += check( (float)1.0,
+                         "0x00000001",
+                         "00000000000000000000000000000001" );
+
+        errors += check( "2047",
+                         "0x000007ff",
+                         "00000000000000000000011111111111" );
+
+        errors += check( 5,
+                         "0x00000005",
+                         "00000000000000000000000000000101" );
+
+        errors += check( (float)1.25,
+                         "Basic_int32_twoscomp Invalid EU signed integer value of '1.25'" );
+
+        errors += check( "0x0a",
+                         "0x0000000a",
+                         "00000000000000000000000000001010" );
+
+        errors += check( 10.0,
+                         "0x0000000a",
+                         "00000000000000000000000000001010" );
+
+        errors += check( -1024.5,
+                         "Basic_int32_twoscomp Invalid EU signed integer value of '-1024.5'" );
+
+        errors += check( "-1",
+                         "0xffffffff",
+                         "11111111111111111111111111111111" );
+
+        errors += check( -1,
+                         "0xffffffff",
+                         "11111111111111111111111111111111" );
+
+        errors += check( -1.0,
+                         "0xffffffff",
+                         "11111111111111111111111111111111" );
+
+        errors += check( -6,
+                         "0xfffffffa",
+                         "11111111111111111111111111111010" );
+
+        errors += check( -6.0,
+                         "0xfffffffa",
+                         "11111111111111111111111111111010" );
+
+        errors += check( 0xff,
+                         "0x000000ff",
+                         "00000000000000000000000011111111" );
+
+        errors += check( "FOOBAR",
+                         "Basic_int32_twoscomp Invalid String value for encoding twosComplement of 'FOOBAR'" );
+
+        System.out.println( "" );
+
+        System.out.println( "Testing EU SignedInteger Raw onesComplement no Calibrator" );
+
+        getParameterItemValueObj( "/BogusSAT/SC001/Payload1",
+                                  "Basic_int32_onescomp" );
+
+        errors += check( "0",
+                         "0x00000000",
+                         "00000000000000000000000000000000" );
+
+        errors += check( 0,
+                         "0x00000000",
+                         "00000000000000000000000000000000" );
+
+        errors += check( 0.0,
+                         "0x00000000",
+                         "00000000000000000000000000000000" );
+
+        errors += check( "1",
+                         "0x00000001",
+                         "00000000000000000000000000000001" );
+
+        errors += check( 1,
+                         "0x00000001",
+                         "00000000000000000000000000000001" );
+
+        errors += check( 1.0,
+                         "0x00000001",
+                         "00000000000000000000000000000001" );
+
+        errors += check( (float)1.0,
+                         "0x00000001",
+                         "00000000000000000000000000000001" );
+
+        errors += check( "2047",
+                         "0x000007ff",
+                         "00000000000000000000011111111111" );
+
+        errors += check( 5,
+                         "0x00000005",
+                         "00000000000000000000000000000101" );
+
+        errors += check( (float)1.25,
+                         "Basic_int32_onescomp Invalid EU signed integer value of '1.25'" );
+
+        errors += check( "0x0a",
+                         "0x0000000a",
+                         "00000000000000000000000000001010" );
+
+        errors += check( 10.0,
+                         "0x0000000a",
+                         "00000000000000000000000000001010" );
+
+        errors += check( -1024.5,
+                         "Basic_int32_onescomp Invalid EU signed integer value of '-1024.5'" );
+
+        errors += check( "-1",
+                         "0xfffffffe",
+                         "11111111111111111111111111111110" );
+
+        errors += check( -1,
+                         "0xfffffffe",
+                         "11111111111111111111111111111110" );
+
+        errors += check( -1.0,
+                         "0xfffffffe",
+                         "11111111111111111111111111111110" );
+
+        errors += check( -6,
+                         "0xfffffff9",
+                         "11111111111111111111111111111001" );
+
+        errors += check( -6.0,
+                         "0xfffffff9",
+                         "11111111111111111111111111111001" );
+
+        errors += check( 0xff,
+                         "0x000000ff",
+                         "00000000000000000000000011111111" );
+
+        errors += check( "FOOBAR",
+                         "Basic_int32_onescomp Invalid String value for encoding onesComplement of 'FOOBAR'" );
+
+        System.out.println( "" );
+
         return errors;
 
     }
