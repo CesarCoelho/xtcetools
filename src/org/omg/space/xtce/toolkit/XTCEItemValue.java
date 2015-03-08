@@ -491,14 +491,14 @@ public class XTCEItemValue {
         } else if ( rawTypeName_.equals( "binary" ) == true ) {
             return calValue;
         } else if ( rawTypeName_.equals( "IEEE754_1985" ) == true ) {
-            BigDecimal reasCalValue = new BigDecimal( calValue );
-            if ( isFloatRawValueReasonable( reasCalValue.doubleValue() ) == false ) {
-                reasCalValue = BigDecimal.ZERO;
+            BigDecimal uncalValue = floatEncodingUncalibrate( new BigDecimal( calValue ) );
+            if ( isFloatRawValueReasonable( uncalValue.doubleValue() ) == false ) {
+                uncalValue = BigDecimal.ZERO;
             }
             if ( rawSizeInBits_ == 32 ) {
-                return BigInteger.valueOf( Float.floatToRawIntBits( reasCalValue.floatValue() ) );
+                return BigInteger.valueOf( Float.floatToRawIntBits( uncalValue.floatValue() ) );
             } else if ( rawSizeInBits_ == 64 ) {
-                return BigInteger.valueOf( Double.doubleToRawLongBits( reasCalValue.doubleValue() ) );
+                return BigInteger.valueOf( Double.doubleToRawLongBits( uncalValue.doubleValue() ) );
             } else if ( rawSizeInBits_ == 128 ) {
                 warnings_.add( "Unsupported encoding type for " +
                                itemName_ +
@@ -552,14 +552,14 @@ public class XTCEItemValue {
                            " Encoding: " +
                            rawTypeName_ );
         } else if ( rawTypeName_.equals( "IEEE754_1985" ) == true ) {
-            BigDecimal reasCalValue = calValue;
-            if ( isFloatRawValueReasonable( reasCalValue.doubleValue() ) == false ) {
-                reasCalValue = BigDecimal.ZERO;
+            BigDecimal uncalValue = floatEncodingUncalibrate( calValue );
+            if ( isFloatRawValueReasonable( uncalValue.doubleValue() ) == false ) {
+                uncalValue = BigDecimal.ZERO;
             }
             if ( rawSizeInBits_ == 32 ) {
-                return BigInteger.valueOf( Float.floatToRawIntBits( reasCalValue.floatValue() ) );
+                return BigInteger.valueOf( Float.floatToRawIntBits( uncalValue.floatValue() ) );
             } else if ( rawSizeInBits_ == 64 ) {
-                return BigInteger.valueOf( Double.doubleToRawLongBits( reasCalValue.doubleValue() ) );
+                return BigInteger.valueOf( Double.doubleToRawLongBits( uncalValue.doubleValue() ) );
             } else if ( rawSizeInBits_ == 128 ) {
                 warnings_.add( "Unsupported encoding type for " +
                                itemName_ +
@@ -628,14 +628,20 @@ public class XTCEItemValue {
                     return new BigInteger( lowerCalValue );
                 }
             } else if ( rawTypeName_.equals( "IEEE754_1985" ) == true ) {
-                String reasCalValue = calValue;
-                if ( isFloatRawValueReasonable( Double.valueOf( calValue ) ) == false ) {
-                    reasCalValue = "0.0";
+                String reasCalValue = calValue.toLowerCase();
+                if ( reasCalValue.startsWith( "0x" ) == true ) {
+                    BigInteger retValue = new BigInteger( reasCalValue.replaceFirst( "0x", "" ), 16 );
+                    reasCalValue = retValue.toString();
                 }
+                BigDecimal uncalValue = floatEncodingUncalibrate( new BigDecimal( reasCalValue ) );
+                if ( isFloatRawValueReasonable( uncalValue.doubleValue() ) == false ) {
+                    uncalValue = BigDecimal.ZERO;
+                }
+                System.out.println( "Raw Uncal " + uncalValue.toString() );
                 if ( rawSizeInBits_ == 32 ) {
-                    return BigInteger.valueOf( Float.floatToRawIntBits( Float.parseFloat( reasCalValue ) ) );
+                    return BigInteger.valueOf( Float.floatToRawIntBits( uncalValue.floatValue() ) );
                 } else if ( rawSizeInBits_ == 64 ) {
-                    return BigInteger.valueOf( Double.doubleToRawLongBits( Double.parseDouble( reasCalValue ) ) );
+                    return BigInteger.valueOf( Double.doubleToRawLongBits( uncalValue.doubleValue() ) );
                 } else if ( rawSizeInBits_ == 128 ) {
                     warnings_.add( "Unsupported encoding type for " +
                                    itemName_ +
@@ -970,6 +976,81 @@ public class XTCEItemValue {
             return calValue;
         }
 
+        PolynomialType polyCal = defCal_.getPolynomialCalibrator();
+        if ( polyCal != null ) {
+            HashMap<BigInteger, BigDecimal> terms =
+                new HashMap<BigInteger, BigDecimal>();
+            List<PolynomialType.Term> xtceTerms = polyCal.getTerm();
+            long maxExponent = 0;
+            for ( PolynomialType.Term term : xtceTerms ) {
+                if ( term.getCoefficient() != 0.0 ) {
+                    terms.put( term.getExponent(), new BigDecimal( term.getCoefficient() ) );
+                    if ( term.getExponent().longValue() > maxExponent ) {
+                        maxExponent = term.getExponent().longValue();
+                    }
+                }
+            }
+            if ( maxExponent <= 1 ) {
+                BigDecimal value = calValue;
+                if ( terms.containsKey( BigInteger.ZERO ) == true ) {
+                    value = value.subtract( terms.get( BigInteger.ZERO ) );
+                }
+                if ( terms.containsKey( BigInteger.ONE ) == true ) {
+                    value = value.divide( terms.get( BigInteger.ONE ) );
+                }
+                return value;
+            } else if ( maxExponent == 2 ) {
+                final BigInteger inttwo = new BigInteger( "2" );
+                // evaluate b^2 -4ac to determine if roots exist
+                double aaa = 0.0;
+                double bbb = 0.0;
+                double ccc = -1.0 * calValue.doubleValue();
+                if ( terms.containsKey( BigInteger.ZERO ) == true ) {
+                    ccc += terms.get( BigInteger.ZERO ).doubleValue();
+                }
+                if ( terms.containsKey( BigInteger.ONE ) == true ) {
+                    bbb = terms.get( BigInteger.ONE ).doubleValue();
+                }
+                if ( terms.containsKey( inttwo ) == true ) {
+                    aaa = terms.get( inttwo ).doubleValue();
+                }
+                double discriminant = Math.pow( bbb, 2 ) - ( 4.0 * aaa * ccc );
+                if ( discriminant < 0 ) {
+                    warnings_.add( "Polynomial Calibrator for " +
+                                   itemName_ +
+                                   " has no real roots for EU value " +
+                                   calValue.toString() );
+                    return BigDecimal.ZERO;
+                }
+                double posroot = Math.sqrt( discriminant );
+                double root1   = ( ( bbb * -1.0 ) - posroot ) / ( 2.0 * aaa );
+                double root2   = ( ( bbb * -1.0 ) + posroot ) / ( 2.0 * aaa );
+                System.out.println( "Root1 = " + Double.toString( root1 ) + " Root2 = " + Double.toString( root2 ) );
+                double bestPick = findBestRoot( root1, root2 );
+                return new BigDecimal( bestPick );
+            } else {
+                warnings_.add( "Polynomial Calibrator for " +
+                               itemName_ +
+                               " contains exponent power as high as " +
+                               Long.toString( maxExponent ) +
+                               ".  Not supported by this toolkit." );
+                return BigDecimal.ZERO;
+            }
+        }
+
+        SplineCalibrator splineCal = defCal_.getSplineCalibrator();
+        if ( splineCal != null ) {
+            
+        }
+
+        MathOperationCalibrator mathCal = defCal_.getMathOperationCalibrator();
+        if ( mathCal != null ) {
+            warnings_.add( "MathOperationCalibrator for " +
+                           itemName_ +
+                           " not supported" );
+            return BigDecimal.ZERO;
+        }
+
         return calValue;
 
     }
@@ -980,7 +1061,7 @@ public class XTCEItemValue {
             return new BigDecimal( calValue );
         }
 
-        return new BigDecimal( calValue );
+        return floatEncodingUncalibrate( new BigDecimal( calValue ) );
 
     }
 

@@ -286,7 +286,7 @@
 					<xtce:FloatParameterType name="Quadratic_Demo_Type" sizeInBits="64" shortDescription="This is an analog parameter with a simple quadratic encoding">
 						<xtce:UnitSet/>
 						<xtce:IntegerDataEncoding bitOrder="mostSignificantBitFirst" encoding="unsigned" sizeInBits="16" changeThreshold="1">
-							<xtce:DefaultCalibrator>
+							<xtce:DefaultCalibrator shortDescription="this is y = x^2 + 2x - 8">
 								<xtce:PolynomialCalibrator>
 									<xtce:Term exponent="0" coefficient="-8"/>
 									<xtce:Term exponent="1" coefficient="2"/>
@@ -300,6 +300,45 @@
 								<xtce:CriticalRange minInclusive="-100.0" maxInclusive="100.0"/>
 							</xtce:StaticAlarmRanges>
 						</xtce:DefaultAlarm>
+					</xtce:FloatParameterType>
+					<xtce:FloatParameterType name="Quadratic_Demo_SingleRoot_Type" sizeInBits="32" shortDescription="This is a float parameter with a float quadratic encoding">
+						<xtce:UnitSet/>
+						<xtce:FloatDataEncoding bitOrder="mostSignificantBitFirst" encoding="IEEE754_1985" sizeInBits="32">
+							<xtce:DefaultCalibrator shortDescription="this is y = x^2 + 1">
+								<xtce:PolynomialCalibrator>
+									<xtce:Term exponent="0" coefficient="1"/>
+									<xtce:Term exponent="2" coefficient="1"/>
+								</xtce:PolynomialCalibrator>
+							</xtce:DefaultCalibrator>
+						</xtce:FloatDataEncoding>
+						<xtce:ValidRange minInclusive="-10.00" maxInclusive="10.00" rangeAppliesToCalibrated="false"/>
+					</xtce:FloatParameterType>
+					<xtce:FloatParameterType name="Quadratic_Demo_SingleRoot2_Type" sizeInBits="32" shortDescription="This is a float parameter with a float quadratic encoding">
+						<xtce:UnitSet/>
+						<xtce:FloatDataEncoding bitOrder="mostSignificantBitFirst" encoding="IEEE754_1985" sizeInBits="32">
+							<xtce:DefaultCalibrator shortDescription="this is y = x^2 - 4x + 4">
+								<xtce:PolynomialCalibrator>
+									<xtce:Term exponent="0" coefficient="4.0"/>
+									<xtce:Term exponent="1" coefficient="-4.0"/>
+									<xtce:Term exponent="2" coefficient="1"/>
+								</xtce:PolynomialCalibrator>
+							</xtce:DefaultCalibrator>
+						</xtce:FloatDataEncoding>
+					</xtce:FloatParameterType>
+					<xtce:FloatParameterType name="Spline_Demo_Type" sizeInBits="64" shortDescription="This is a float parameter with a float spline encoding">
+						<xtce:UnitSet/>
+						<xtce:FloatDataEncoding bitOrder="mostSignificantBitFirst" encoding="IEEE754_1985" sizeInBits="64">
+							<xtce:DefaultCalibrator>
+								<xtce:SplineCalibrator order="1" extrapolate="false">
+									<xtce:SplinePoint raw="-6.0" calibrated="1.0"/>
+									<xtce:SplinePoint raw="-3.0" calibrated="2.0"/>
+									<xtce:SplinePoint raw="-1.0" calibrated="3.0"/>
+									<xtce:SplinePoint raw="1.0" calibrated="3.0"/>
+									<xtce:SplinePoint raw="3.0" calibrated="2.0"/>
+									<xtce:SplinePoint raw="6.0" calibrated="1.0"/>
+								</xtce:SplineCalibrator>
+							</xtce:DefaultCalibrator>
+						</xtce:FloatDataEncoding>
 					</xtce:FloatParameterType>
 					<xtce:BooleanParameterType name="Solar_Array_Voltage_State_Type" initialValue="OFF" zeroStringValue="OFF" oneStringValue="ON" shortDescription="The operational state of the solar array voltage sensor">
 						<xtce:UnitSet/>
@@ -338,6 +377,21 @@
 						</xtce:ParameterProperties>
 					</xtce:Parameter>
 					<xtce:Parameter name="Quadratic_Demo" parameterTypeRef="Quadratic_Demo_Type">
+						<xtce:ParameterProperties dataSource="telemetered" readOnly="true">
+							<xtce:SystemName>NONE</xtce:SystemName>
+						</xtce:ParameterProperties>
+					</xtce:Parameter>
+					<xtce:Parameter name="Quadratic_Demo_SingleRoot" parameterTypeRef="Quadratic_Demo_SingleRoot_Type">
+						<xtce:ParameterProperties dataSource="telemetered" readOnly="true">
+							<xtce:SystemName>NONE</xtce:SystemName>
+						</xtce:ParameterProperties>
+					</xtce:Parameter>
+					<xtce:Parameter name="Quadratic_Demo_SingleRoot2" parameterTypeRef="Quadratic_Demo_SingleRoot2_Type">
+						<xtce:ParameterProperties dataSource="telemetered" readOnly="true">
+							<xtce:SystemName>NONE</xtce:SystemName>
+						</xtce:ParameterProperties>
+					</xtce:Parameter>
+					<xtce:Parameter name="Spline_Demo" parameterTypeRef="Spline_Demo_Type">
 						<xtce:ParameterProperties dataSource="telemetered" readOnly="true">
 							<xtce:SystemName>NONE</xtce:SystemName>
 						</xtce:ParameterProperties>

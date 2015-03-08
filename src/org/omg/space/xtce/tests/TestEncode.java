@@ -445,6 +445,94 @@ public class TestEncode {
                          "0000000000000010" );
 
         System.out.println( "" );
+
+        System.out.println( "Testing EU Float Raw float Quadratic Single Root Calibrator" );
+
+        getParameterItemValueObj( "/BogusSAT/SC001/BusElectronics",
+                                  "Quadratic_Demo_SingleRoot" );
+
+        errors += check( "0",
+                         "Polynomial Calibrator for Quadratic_Demo_SingleRoot has no real roots for EU value 0" );
+
+        errors += check( -1,
+                         "Polynomial Calibrator for Quadratic_Demo_SingleRoot has no real roots for EU value -1" );
+
+        errors += check( 0.0,
+                         "Polynomial Calibrator for Quadratic_Demo_SingleRoot has no real roots for EU value 0.0" );
+
+        errors += check( (float)0.0,
+                         "Polynomial Calibrator for Quadratic_Demo_SingleRoot has no real roots for EU value 0.0" );
+
+        errors += check( 1,
+                         "0x00000000",
+                         "00000000000000000000000000000000" );
+
+        errors += check( "2",
+                         "0xbf800000",
+                         "10111111100000000000000000000000" );
+
+        errors += check( 3.0,
+                         "0xbfb504f3",
+                         "10111111101101010000010011110011" );
+
+        errors += check( -5.0,
+                         "Polynomial Calibrator for Quadratic_Demo_SingleRoot has no real roots for EU value -5.0" );
+
+        errors += check( (float)5.0,
+                         "0xc0000000",
+                         "11000000000000000000000000000000" );
+
+        errors += check( "0x0a",
+                         "0xc0400000",
+                         "11000000010000000000000000000000" );
+
+        errors += check( "10.0",
+                         "0xc0400000",
+                         "11000000010000000000000000000000" );
+
+        errors += check( "20.0",
+                         "0xc08b7c1a",
+                         "11000000100010110111110000011010" );
+
+        errors += check( 102,
+                         "IEEE754_1985 encoding value for item Quadratic_Demo_SingleRoot is -10.04987562112089, which is less than the minimum value -10.0" );
+
+        System.out.println( "" );
+
+        System.out.println( "Testing EU Float Raw float Quadratic Single Root2 Calibrator" );
+
+        getParameterItemValueObj( "/BogusSAT/SC001/BusElectronics",
+                                  "Quadratic_Demo_SingleRoot2" );
+
+        errors += check( "0",
+                         "0x40000000",
+                         "01000000000000000000000000000000" );
+
+        errors += check( 0.0,
+                         "0x40000000",
+                         "01000000000000000000000000000000" );
+
+        errors += check( (float)0.0,
+                         "0x40000000",
+                         "01000000000000000000000000000000" );
+
+        errors += check( 16,
+                         "0xc0000000",
+                         "11000000000000000000000000000000" );
+
+        errors += check( "16",
+                         "0xc0000000",
+                         "11000000000000000000000000000000" );
+
+        errors += check( 16.0,
+                         "0xc0000000",
+                         "11000000000000000000000000000000" );
+
+        errors += check( -2.0,
+                         "Polynomial Calibrator for Quadratic_Demo_SingleRoot2 has no real roots for EU value -2.0" );
+
+        System.out.println( "" );
+
         return errors;
 
     }
