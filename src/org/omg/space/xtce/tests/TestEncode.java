@@ -533,6 +533,43 @@ public class TestEncode {
 
         System.out.println( "" );
 
+        System.out.println( "Testing EU Float Raw float Spline Calibrator" );
+
+        getParameterItemValueObj( "/BogusSAT/SC001/BusElectronics",
+                                  "Spline_Demo" );
+
+        errors += check( "0",
+                         "Spline Calibrator for Spline_Demo does not bound calibrated value 0 and extrapolate is false" );
+
+        errors += check( 0.0,
+                         "Spline Calibrator for Spline_Demo does not bound calibrated value 0.0 and extrapolate is false" );
+
+        errors += check( (float)0.0,
+                         "Spline Calibrator for Spline_Demo does not bound calibrated value 0.0 and extrapolate is false" );
+
+        errors += check( 2,
+                         "0xc008000000000000",
+                         "1100000000001000000000000000000000000000000000000000000000000000" );
+
+        errors += check( "-2",
+                         "Spline Calibrator for Spline_Demo does not bound calibrated value -2 and extrapolate is false" );
+
+        errors += check( 3.0,
+                         "0xbff0000000000000",
+                         "1011111111110000000000000000000000000000000000000000000000000000" );
+
+        errors += check( 2.5,
+                         "0xc000000000000000",
+                         "1100000000000000000000000000000000000000000000000000000000000000" );
+
+        errors += check( -4.0,
+                         "Spline Calibrator for Spline_Demo does not bound calibrated value -4.0 and extrapolate is false" );
+
+        errors += check( 5.0,
+                         "Spline Calibrator for Spline_Demo does not bound calibrated value 5.0 and extrapolate is false" );
+
+        System.out.println( "" );
+
         return errors;
 
     }

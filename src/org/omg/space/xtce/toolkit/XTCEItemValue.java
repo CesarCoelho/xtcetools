@@ -9,11 +9,16 @@ package org.omg.space.xtce.toolkit;
 import java.io.File;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import org.omg.space.xtce.database.ArgumentTypeSetType.FloatArgumentType;
 import org.omg.space.xtce.database.ArgumentTypeSetType.IntegerArgumentType;
 import org.omg.space.xtce.database.BooleanDataType;
@@ -29,6 +34,7 @@ import org.omg.space.xtce.database.ParameterTypeSetType.EnumeratedParameterType;
 import org.omg.space.xtce.database.ParameterTypeSetType.FloatParameterType;
 import org.omg.space.xtce.database.ParameterTypeSetType.IntegerParameterType;
 import org.omg.space.xtce.database.PolynomialType;
+import org.omg.space.xtce.database.SplinePointType;
 import org.omg.space.xtce.database.ValueEnumerationType;
 
 /** This class captures the attributes needed to encode or decode a raw value
@@ -637,7 +643,7 @@ public class XTCEItemValue {
                 if ( isFloatRawValueReasonable( uncalValue.doubleValue() ) == false ) {
                     uncalValue = BigDecimal.ZERO;
                 }
-                System.out.println( "Raw Uncal " + uncalValue.toString() );
+                //System.out.println( "Raw Uncal " + uncalValue.toString() );
                 if ( rawSizeInBits_ == 32 ) {
                     return BigInteger.valueOf( Float.floatToRawIntBits( uncalValue.floatValue() ) );
                 } else if ( rawSizeInBits_ == 64 ) {
@@ -991,14 +997,14 @@ public class XTCEItemValue {
                 }
             }
             if ( maxExponent <= 1 ) {
-                BigDecimal value = calValue;
+                double value = calValue.doubleValue();
                 if ( terms.containsKey( BigInteger.ZERO ) == true ) {
-                    value = value.subtract( terms.get( BigInteger.ZERO ) );
+                    value = value - terms.get( BigInteger.ZERO ).doubleValue();
                 }
                 if ( terms.containsKey( BigInteger.ONE ) == true ) {
-                    value = value.divide( terms.get( BigInteger.ONE ) );
+                    value = value / terms.get( BigInteger.ONE ).doubleValue();
                 }
-                return value;
+                return new BigDecimal( value );
             } else if ( maxExponent == 2 ) {
                 final BigInteger inttwo = new BigInteger( "2" );
                 // evaluate b^2 -4ac to determine if roots exist
@@ -1025,7 +1031,7 @@ public class XTCEItemValue {
                 double posroot = Math.sqrt( discriminant );
                 double root1   = ( ( bbb * -1.0 ) - posroot ) / ( 2.0 * aaa );
                 double root2   = ( ( bbb * -1.0 ) + posroot ) / ( 2.0 * aaa );
-                System.out.println( "Root1 = " + Double.toString( root1 ) + " Root2 = " + Double.toString( root2 ) );
+                //System.out.println( "Root1 = " + Double.toString( root1 ) + " Root2 = " + Double.toString( root2 ) );
                 double bestPick = findBestRoot( root1, root2 );
                 return new BigDecimal( bestPick );
             } else {
@@ -1040,7 +1046,98 @@ public class XTCEItemValue {
 
         SplineCalibrator splineCal = defCal_.getSplineCalibrator();
         if ( splineCal != null ) {
-            
+            long    interpolateOrder = splineCal.getOrder().longValue();
+            boolean extrapolate      = splineCal.isExtrapolate();
+            List<SplinePointType> points = splineCal.getSplinePoint();
+            ArrayList<BigDecimal> calList = new ArrayList<BigDecimal>();
+            ArrayList<BigDecimal> rawList = new ArrayList<BigDecimal>();
+            for ( SplinePointType point : points ) {
+                calList.add( new BigDecimal( point.getCalibrated() ) );
+                rawList.add( new BigDecimal( point.getRaw() ) );
+            }
+            BigDecimal minCalValue = calList.get( 0 );
+            BigDecimal maxCalValue = calList.get( calList.size() - 1);
+            for ( BigDecimal cal : calList ) {
+                if ( cal.min( minCalValue ) == cal ) {
+                    minCalValue = cal;
+                }
+                if ( cal.max( maxCalValue ) == cal ) {
+                    maxCalValue = cal;
+                }
+            }
+            if ( extrapolate == false ) {
+                if ( ( calValue.compareTo( minCalValue ) < 0 ) ||
+                     ( calValue.compareTo( maxCalValue ) > 0 ) ) {
+                    warnings_.add( "Spline Calibrator for " +
+                                   itemName_ +
+                                   " does not bound calibrated value " +
+                                   calValue.toString() +
+                                   " and extrapolate is false" );
+                    return BigDecimal.ZERO;
+                }
+            }
+            BigDecimal rawValue1 = null;
+            BigDecimal rawValue2 = null;
+            BigDecimal calValue1 = null;
+            BigDecimal calValue2 = null;
+            Iterator<BigDecimal> calitr = calList.iterator();
+            Iterator<BigDecimal> rawitr = rawList.iterator();
+            if ( calitr.hasNext() == true ) {
+                calValue1 = calitr.next();
+                rawValue1 = rawitr.next();
+            }
+            while ( calitr.hasNext() == true ) {
+                if ( calValue2 != null ) {
+                    calValue1 = calValue2;
+                    rawValue1 = rawValue2;
+                }
+                calValue2 = calitr.next();
+                rawValue2 = rawitr.next();
+                //System.out.println( "Cals: cal1 = " + calValue1.toString() +
+                //                    " cal2 = " + calValue2.toString() );
+                if ( ( calValue1.compareTo( calValue ) <= 0 ) &&
+                     ( calValue2.compareTo( calValue ) >= 0 ) ) {
+                    if ( calValue.equals( calValue1 ) == true ) {
+                        return rawValue1;
+                    } else if ( calValue.equals( calValue2 ) == true ) {
+                        return rawValue2;
+                    }
+                    break;
+                }
+            }
+            if ( rawValue1 == null || rawValue2 == null ) {
+                warnings_.add( "Spline Calibrator for " +
+                               itemName_ +
+                               " does not bound calibrated value " +
+                               calValue.toString() );
+                return BigDecimal.ZERO;
+            }
+            //System.out.println( calValue.toString() +
+            //                    " Order = " + Long.toString( interpolateOrder ) +
+            //                    " y2 = " + calValue2.toString() +
+            //                    " y1 = " + calValue1.toString() +
+            //                    " x2 = " + rawValue2.toString() +
+            //                    " x1 = " + rawValue2.toString() );
+            double y2 = calValue2.doubleValue();
+            double y1 = calValue1.doubleValue();
+            double x2 = rawValue2.doubleValue();
+            double x1 = rawValue1.doubleValue();
+            if ( interpolateOrder == 0 ) {
+                return new BigDecimal( ( x1 + x2 ) / 2.0 );
+            } else if ( interpolateOrder == 1 ) {
+                double slope = ( y2 - y1 ) / ( x2 - x1 );
+                //System.out.println( "Slope = " + Double.toString( slope ) );
+                double rawValue = ( calValue.doubleValue() - y1 ) / slope + x1;
+                //System.out.println( "Raw = " + Double.toString( rawValue ) );
+                return new BigDecimal( rawValue );
+            } else {
+                warnings_.add( "Spline Calibrator for " +
+                               itemName_ +
+                               " contains interpolate order of " +
+                               Long.toString( interpolateOrder ) +
+                               ".  Not supported by this toolkit." );
+                return BigDecimal.ZERO;
+            }
         }
 
         MathOperationCalibrator mathCal = defCal_.getMathOperationCalibrator();
@@ -1121,7 +1218,7 @@ public class XTCEItemValue {
                 double posroot = Math.sqrt( discriminant );
                 double root1   = ( ( bbb * -1.0 ) - posroot ) / ( 2.0 * aaa );
                 double root2   = ( ( bbb * -1.0 ) + posroot ) / ( 2.0 * aaa );
-                System.out.println( "Root1 = " + Double.toString( root1 ) + " Root2 = " + Double.toString( root2 ) );
+                //System.out.println( "Root1 = " + Double.toString( root1 ) + " Root2 = " + Double.toString( root2 ) );
                 double bestPick = findBestRoot( root1, root2 );
                 return BigInteger.valueOf( Math.round( bestPick ) );
             } else {
@@ -1202,7 +1299,7 @@ public class XTCEItemValue {
      *
      */
 
-    private boolean isIntegerRawValueReasonable( BigInteger rawValue ) {
+    public boolean isIntegerRawValueReasonable( BigInteger rawValue ) {
 
         // first find the general size applicable to the bit length
         boolean minInclusive = true;
@@ -1305,7 +1402,24 @@ public class XTCEItemValue {
 
     }
 
-    private boolean isFloatRawValueReasonable( double rawValue ) {
+    /** Check for reasonableness of the raw value to encode to a float type
+     * encoding.
+     *
+     * This method first figures out the range of possible values based on the
+     * size in bits of the floating point range.  This is generally not very
+     * useful because the range is very wide.  It then checks if the value
+     * should be restricted further by a possibly present ValidRange element.
+     * It applies those limits if they are intended for the raw value.
+     *
+     * @param rawValue double containing the raw value that will be encoded
+     * if it turns out to be reasonable.
+     *
+     * @return boolean indicating if this function thinks the value is
+     * reasonable to fit in the allowable size and range.
+     *
+     */
+
+    public boolean isFloatRawValueReasonable( double rawValue ) {
 
         // first find the general size applicable to the bit length
         boolean minInclusive = true;
