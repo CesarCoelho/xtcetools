@@ -76,8 +76,9 @@ public class XTCEItemValue {
         } catch ( NumberFormatException ex ) {
             warnings_.add( "Cannot encode/decode item " +
                            itemName_ +
-                           " without a numeric raw size in bits.  Valud provided: " +
-                           rawSizeInBits_ );
+                           " without a numeric raw size in bits.  Size is '" +
+                           rawSizeInBits_ +
+                           "'" );
             validObject_ = false;
         }
 
