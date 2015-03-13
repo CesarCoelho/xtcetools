@@ -319,6 +319,11 @@ public class XTCEViewerParameterFindDialog extends javax.swing.JFrame {
             searchTextComboBox.addItem( "" );
         }
         for ( String searchItem : itemList ) {
+            if ( setEmptyRow == false ) {
+                if ( searchItem.isEmpty() == true ) {
+                    continue;
+                }
+            }
             searchTextComboBox.addItem( searchItem );
         }
         searchTextComboBox.setSelectedIndex( 0 );

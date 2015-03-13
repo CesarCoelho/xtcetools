@@ -3288,21 +3288,24 @@ public class XTCEViewer extends javax.swing.JFrame {
         for ( int iii = 0; iii < tm.getRowCount(); ++iii ) {
             if ( findByName == true ) {
                 if ( ((String)tm.getValueAt( iii, 0 )).equals( searchString ) == true ) {
-                    table.setRowSelectionInterval( iii, iii );
-                    table.scrollRectToVisible( new Rectangle( table.getCellRect( iii, 0, true ) ) );
+                    int viewportRow = table.getRowSorter().convertRowIndexToView( iii );
+                    table.setRowSelectionInterval( viewportRow, viewportRow );
+                    table.scrollRectToVisible( new Rectangle( table.getCellRect( viewportRow, 0, true ) ) );
                     return true;
                 }
             } else {
                 if ( ( preferredNamespace.isEmpty() == false ) && ( showAliasNamespaces == false ) ) {
                     if ( ((String)tm.getValueAt( iii, 1 )).equals( searchString ) == true ) {
-                        table.setRowSelectionInterval( iii, iii );
-                        table.scrollRectToVisible( new Rectangle( table.getCellRect( iii, 0, true ) ) );
+                        int viewportRow = table.getRowSorter().convertRowIndexToView( iii );
+                        table.setRowSelectionInterval( viewportRow, viewportRow );
+                        table.scrollRectToVisible( new Rectangle( table.getCellRect( viewportRow, 0, true ) ) );
                         return true;
                     }
                 } else if ( ( preferredNamespace.isEmpty() == false ) && ( showAliasNamespaces == true ) ) {
                     if ( ((String)tm.getValueAt( iii, 1 )).endsWith( "::" + searchString ) == true ) {
-                        table.setRowSelectionInterval( iii, iii );
-                        table.scrollRectToVisible( new Rectangle( table.getCellRect( iii, 0, true ) ) );
+                        int viewportRow = table.getRowSorter().convertRowIndexToView( iii );
+                        table.setRowSelectionInterval( viewportRow, viewportRow );
+                        table.scrollRectToVisible( new Rectangle( table.getCellRect( viewportRow, 0, true ) ) );
                         return true;
                     }
                 } else {
@@ -3311,14 +3314,16 @@ public class XTCEViewer extends javax.swing.JFrame {
                     for ( String field : fields ) {
                         if ( showAliasNamespaces == true ) {
                             if ( field.endsWith( "::" + searchString ) == true ) {
-                                table.setRowSelectionInterval( iii, iii );
-                                table.scrollRectToVisible( new Rectangle( table.getCellRect( iii, 0, true ) ) );
+                                int viewportRow = table.getRowSorter().convertRowIndexToView( iii );
+                                table.setRowSelectionInterval( viewportRow, viewportRow );
+                                table.scrollRectToVisible( new Rectangle( table.getCellRect( viewportRow, 0, true ) ) );
                                 return true;
                             }
                         } else {
                             if ( field.equals( searchString ) == true ) {
-                                table.setRowSelectionInterval( iii, iii );
-                                table.scrollRectToVisible( new Rectangle( table.getCellRect( iii, 0, true ) ) );
+                                int viewportRow = table.getRowSorter().convertRowIndexToView( iii );
+                                table.setRowSelectionInterval( viewportRow, viewportRow );
+                                table.scrollRectToVisible( new Rectangle( table.getCellRect( viewportRow, 0, true ) ) );
                                 return true;
                             }
                         }

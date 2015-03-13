@@ -881,7 +881,7 @@ public class XTCEItemValue {
      *
      */
 
-    private BitSet encodeRawBits( BigInteger uncalValue ) {
+    public BitSet encodeRawBits( BigInteger uncalValue ) {
 
         // TODO Handle Byte order element ByteOrderList in the encoding
 

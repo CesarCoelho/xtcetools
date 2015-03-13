@@ -7,6 +7,7 @@
 package org.omg.space.xtce.ui;
 
 import java.awt.event.WindowEvent;
+import java.math.BigInteger;
 import java.util.BitSet;
 import org.omg.space.xtce.toolkit.XTCEItemValue;
 import org.omg.space.xtce.toolkit.XTCEParameter;
@@ -227,12 +228,33 @@ public class XTCEViewerEncodeDecodeItemDialog extends javax.swing.JDialog {
             warningsText.append( warning );
         }
         rawValueField.setText( rawValue );
+        uncalibratedValueField.setText( "" );
         binaryValueField.setText( binValue );
 
     }//GEN-LAST:event_makeRawButtonActionPerformed
 
     private void makeCalibratedButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_makeCalibratedButtonActionPerformed
-        // TODO add your handling code here:
+
+        itemValueObj_.clearWarnings();
+        BigInteger uncalValue = BigInteger.ZERO;
+        String     rawValue   = (String)rawValueField.getText();
+        rawValue = rawValue.toLowerCase();
+        if ( rawValue.startsWith( "0x" ) == true ) {
+            uncalValue = new BigInteger( rawValue.replaceFirst( "0x", "" ), 16 );
+        } else {
+            uncalValue = new BigInteger( rawValue );
+        }
+        BitSet bits     = itemValueObj_.encodeRawBits( uncalValue );
+        String calValue = itemValueObj_.decode( bits );
+        String binValue = itemValueObj_.bitSetToBinary( bits );
+        warningsText.setText( "" );
+        for ( String warning : itemValueObj_.getWarnings() ) {
+            warningsText.append( warning );
+        }
+        calibratedValueField.setText( calValue );
+        uncalibratedValueField.setText( uncalValue.toString() );
+        binaryValueField.setText( binValue );
+
     }//GEN-LAST:event_makeCalibratedButtonActionPerformed
 
 
