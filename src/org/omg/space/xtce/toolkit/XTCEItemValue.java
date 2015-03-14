@@ -552,6 +552,40 @@ public class XTCEItemValue {
 
     }
 
+    private BigDecimal decodeBitSet( BitSet rawValue ) {
+
+        if ( rawTypeName_.equals( "unsigned" ) == true ) {
+            
+        } else if ( rawTypeName_.equals( "signMagnitude" ) == true ) {
+            
+        } else if ( rawTypeName_.equals( "twosComplement" ) == true ) {
+            
+        } else if ( rawTypeName_.equals( "onesComplement" ) == true ) {
+            
+        } else if ( rawTypeName_.equals( "binary" ) == true ) {
+            
+        } else if ( rawTypeName_.equals( "IEEE754_1985" ) == true ) {
+            
+        } else if ( rawTypeName_.equals( "MILSTD_1750A" ) == true ) {
+            warnings_.add( "Unsupported encoding type for " +
+                           itemName_ +
+                           " Encoding: " +
+                           rawTypeName_ );
+        } else if ( rawTypeName_.equals( "UTF-8" ) == true ) {
+            
+        } else if ( rawTypeName_.equals( "UTF-16" ) == true ) {
+            
+        } else {
+            warnings_.add( "Unrecognized encoding type for " +
+                           itemName_ +
+                           " Encoding: " +
+                           rawTypeName_ );
+        }
+
+        return BigDecimal.ZERO;
+
+    }
+
     private BigInteger encodeNumber( BigInteger calValue ) {
 
         if ( rawTypeName_.equals( "unsigned" ) == true ) {

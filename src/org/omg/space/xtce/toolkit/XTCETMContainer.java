@@ -62,6 +62,10 @@ public class XTCETMContainer extends XTCENamedObject {
 
     /** Retrieve the inheritance path for this SequenceContainer.
      *
+     * The "inheritance path" is different from the SpaceSystem locating path
+     * in that it represents the parent SequenceContainer elements leading to
+     * this element through the BaseContainer element in the XTCE data model.
+     *
      * @return String containing the inheritance path to this container.
      *
      */
