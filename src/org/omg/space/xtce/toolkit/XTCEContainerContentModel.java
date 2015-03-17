@@ -59,6 +59,7 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
      * entry.
      *
      * @throws XTCEDatabaseException 
+     *
      */
 
     public final long processContainer() throws XTCEDatabaseException {
@@ -139,7 +140,7 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
 
         }
 
-        System.out.println( "Applying Current Container " + currentContainer.getName() + " with starting bit position " + Long.toString( containerStartBit ) );
+        //System.out.println( "Applying Current Container " + currentContainer.getName() + " with starting bit position " + Long.toString( containerStartBit ) );
         applyCurrentContainer( currentContainer,
                                currentStartBit,
                                containerStartBit,
@@ -241,12 +242,12 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
                                ArrayList<XTCEContainerEntryValue> includedConditionsList ) throws XTCEDatabaseException {
 
         String nameRef = entry.getContainerRef();
-        System.out.println( "Identified Container " +
-                            nameRef +
-                            " cur start bit " +
-                            Long.toString( currentStartBit.get() ) +
-                            " cont start bit " +
-                            Long.toString( containerStartBit ) );
+        //System.out.println( "Identified Container " +
+        //                    nameRef +
+        //                    " cur start bit " +
+        //                    Long.toString( currentStartBit.get() ) +
+        //                    " cont start bit " +
+        //                    Long.toString( containerStartBit ) );
         XTCETMContainer nextIncludedContainer =
             findContainer( nameRef, holdingContainer );
 
@@ -309,12 +310,12 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
                                ArrayList<XTCEContainerEntryValue> includedConditionsList ) throws XTCEDatabaseException {
 
         String nameRef = pRefEntry.getParameterRef();
-        System.out.println( "Identified Parameter " +
-                            nameRef +
-                            " cur start bit " +
-                            Long.toString( currentStartBit.get() ) +
-                            " cont start bit " +
-                            Long.toString( containerStartBit ) );
+        //System.out.println( "Identified Parameter " +
+        //                    nameRef +
+        //                    " cur start bit " +
+        //                    Long.toString( currentStartBit.get() ) +
+        //                    " cont start bit " +
+        //                    Long.toString( containerStartBit ) );
 
         XTCEParameter pObj = findParameter( nameRef, container );
         XTCEContainerContentEntry content =

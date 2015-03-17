@@ -16,7 +16,6 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.namespace.QName;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import javax.xml.stream.XMLOutputFactory;
@@ -488,6 +487,36 @@ public class XTCEDatabase {
 
     }
 
+    /** Function to decompose an XTCETMContainer object into a simple array of
+     * entries that an application can iterate over without the need to
+     * resolve XTCE data model references, included additional containers,
+     * base containers, and conditional processing.
+     *
+     * @param container XTCETMContainer object containing the container/packet
+     * that the caller wishes to decompose.
+     *
+     * @param userValues ArrayList of XTCEContainerEntryValue objects that
+     * represent desired setpoints for parameters in the container.  This
+     * permits the caller to decompose a specific packet instance from a
+     * container by specifying values for parameters that satisfy include
+     * conditions for variable content.  Restriction values for Base Container
+     * portions are automatically applied and do not need to be supplied by
+     * the caller.
+     *
+     * @param showAllConditions boolean indicating if the returned content
+     * model should provide an array of entry results that include information
+     * only rows.  These information only rows consist of rows to announce the
+     * start of a new Container or a new Aggregate.  If false, only those rows
+     * will be returned for which a concrete start bit and length exist.
+     *
+     * @return XTCEContainerContentModel representing this XTCETMContainer.
+     *
+     * @throws XTCEDatabaseException thrown in the event that it is not
+     * possible to decompose the container completely due to bad references in
+     * the XTCE document.
+     *
+     */
+
     public XTCEContainerContentModel processContainer( XTCETMContainer                    container,
                                                        ArrayList<XTCEContainerEntryValue> userValues,
                                                        boolean                            showAllConditions )
@@ -499,6 +528,36 @@ public class XTCEDatabase {
                                               showAllConditions );
 
     }
+
+    /** Function to decompose an XTCETelecommand object into a simple array of
+     * entries that an application can iterate over without the need to
+     * resolve XTCE data model references, included additional containers,
+     * base containers, and conditional processing.
+     *
+     * @param tcObject XTCETelecommand object containing the telecommand
+     * that the caller wishes to decompose.
+     *
+     * @param userValues ArrayList of XTCEContainerEntryValue objects that
+     * represent desired setpoints for arguments and/or parameters in the
+     * telecommand container.  This permits the caller to decompose a specific
+     * telecommand instance from a more general telecommand by specifying
+     * values for parameters that satisfy include conditions for variable
+     * content.  Restriction values for Base MetaComamand portions are
+     * automatically applied and do not need to be supplied by the caller.
+     *
+     * @param showAllConditions boolean indicating if the returned content
+     * model should provide an array of entry results that include information
+     * only rows.  These information only rows consist of rows to announce the
+     * start of a new Container or a new Aggregate.  If false, only those rows
+     * will be returned for which a concrete start bit and length exist.
+     *
+     * @return XTCEContainerContentModel representing this XTCETelecommand.
+     *
+     * @throws XTCEDatabaseException thrown in the event that it is not
+     * possible to decompose the container completely due to bad references in
+     * the XTCE document.
+     *
+     */
 
     public XTCETelecommandContentModel processTelecommand( XTCETelecommand                    tcObject,
                                                            ArrayList<XTCEContainerEntryValue> userValues,
@@ -586,7 +645,27 @@ public class XTCEDatabase {
             }
         }
     }
-    
+
+    /** Private method to read an XTCE XML document and populate the internal
+     * indexes for this object.
+     *
+     * @param dbFile File object containing the XTCE XML document to load.
+     *
+     * @param listener XTCEProgressListener currently unused as the progress
+     * bar portion of the graphical user interface has not been completed or
+     * even well conceived at this point.  A null object is currently used.
+     *
+     * @param validate boolean to indicate if the XML document should be
+     * validated through the XML Schema Description (XSD) document that is
+     * configured for the XTCEDatabase object.  In the future this will be more
+     * flexible.
+     *
+     * @throws XTCEDatabaseException thrown in the event that the document
+     * cannot be read or is not sufficiently valid to complete construction of
+     * the internal data model.
+     *
+     */
+
     private void populateDataModel( File                 dbFile,
                                     XTCEProgressListener listener,
                                     boolean              validate ) throws XTCEDatabaseException {
@@ -777,6 +856,20 @@ public class XTCEDatabase {
         }
 
     }
+
+    /** Private method to update a progress bar object.
+     *
+     * Currently not used for anything as the passed reference is always null.
+     *
+     * @param listener XTCEProgressListener object or a null reference if none
+     * is being used by the calling application.
+     *
+     * @param percentComplete int containing the current estimation of percent
+     * complete, from 0-100.
+     *
+     * @param currentStep String containing the name of the current step.
+     *
+     */
 
     private void updateLoadProgress( XTCEProgressListener listener,
                                      int                  percentComplete,

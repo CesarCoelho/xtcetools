@@ -315,6 +315,17 @@ public abstract class XTCETypedObject extends XTCENamedObject {
 
     }
 
+    /** Accessor to retrieve the ValidRange element information from this
+     * named and typed object in the XTCE data model.
+     *
+     * @return XTCEValidRange containing the information gathered.
+     *
+     */
+
+    public XTCEValidRange getValidRange() {
+        return new XTCEValidRange( typeObj_ );
+    }
+
     /** Accessor to return a descriptive name for the Engineering or Operator
      * type of this Parameter, Argument, or Member represented by this object.
      *

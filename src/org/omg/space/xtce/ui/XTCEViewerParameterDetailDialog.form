@@ -590,7 +590,7 @@
         <Component class="javax.swing.JComboBox" name="encodingTypeComboField">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="11">
+              <StringArray count="12">
                 <StringItem index="0" value="binary"/>
                 <StringItem index="1" value="unsigned"/>
                 <StringItem index="2" value="twosComplement"/>
@@ -602,6 +602,7 @@
                 <StringItem index="8" value="packedBCD"/>
                 <StringItem index="9" value="UTF-8"/>
                 <StringItem index="10" value="UTF-16"/>
+                <StringItem index="11" value=""/>
               </StringArray>
             </Property>
           </Properties>
@@ -613,9 +614,10 @@
         <Component class="javax.swing.JComboBox" name="bitOrderComboField">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="2">
+              <StringArray count="3">
                 <StringItem index="0" value="mostSignificantBitFirst"/>
                 <StringItem index="1" value="leastSignificantBitFirst"/>
+                <StringItem index="2" value=""/>
               </StringArray>
             </Property>
           </Properties>
@@ -631,9 +633,10 @@
         <Component class="javax.swing.JComboBox" name="rangeAppliesToComboBox">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="2">
+              <StringArray count="3">
                 <StringItem index="0" value="Uncalibrated"/>
                 <StringItem index="1" value="Calibrated"/>
+                <StringItem index="2" value=""/>
               </StringArray>
             </Property>
           </Properties>

@@ -8,6 +8,7 @@ package org.omg.space.xtce.ui;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import org.omg.space.xtce.toolkit.XTCETelecommand;
+import org.omg.space.xtce.toolkit.XTCETelecommandContentModel;
 
 /** This class assists the graphical interface application by providing a
  * path and reference to the JTree objects that keep a list of the XTCE
@@ -82,25 +83,25 @@ public class XTCEViewerTelecommandTreeNode extends DefaultMutableTreeNode {
     /** Accessor to retrieve a reference to the evaluated container content for
      * this tree node, or null if it has not been evaluated before.
      *
-     * @return XTCEContainerContentModel reference to the container contents.
+     * @return XTCETelecommandContentModel reference to the container contents.
      *
      */
 
-    //public XTCEContainerContentModel getContentModel() {
-    //    return contentModel_;
-    //}
+    public XTCETelecommandContentModel getContentModel() {
+        return contentModel_;
+    }
 
     /** Setter to update the internal container model object when the container
      * for this tree node is evaluated.
      *
-     * @param contentModel The XTCEContainerContentModel object that was
+     * @param contentModel The XTCETelecommandContentModel object that was
      * created for this container tree node.
      *
      */
 
-    //public void setContentModel( XTCEContainerContentModel contentModel ) {
-    //    contentModel_ = contentModel;
-    //}
+    public void setContentModel( XTCETelecommandContentModel contentModel ) {
+        contentModel_ = contentModel;
+    }
 
     /// The reference object held by the instance of this class
 
@@ -110,6 +111,6 @@ public class XTCEViewerTelecommandTreeNode extends DefaultMutableTreeNode {
     /// that it can be retrieved on click events without re-evaluating.  This
     /// is only loaded when a container is selected and evaluated.
 
-    //private XTCEContainerContentModel contentModel_ = null;{
+    private XTCETelecommandContentModel contentModel_ = null;
     
 }

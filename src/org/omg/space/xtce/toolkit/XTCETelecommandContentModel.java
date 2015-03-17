@@ -3,6 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package org.omg.space.xtce.toolkit;
 
 import java.util.ArrayList;
@@ -22,10 +23,13 @@ import org.omg.space.xtce.database.SequenceEntryType;
 import org.omg.space.xtce.database.StreamSegmentEntryType;
 import org.omg.space.xtce.toolkit.XTCEContainerContentEntry.FieldType;
 
-/**
+/** The telecommand content model class encapsulates the pre-processing of an
+ * XTCE MetaCommand/BlockMetaCommand into a series of rows suitable for a
+ * simple iterator.
  *
  * @author b1053583
  */
+
 public class XTCETelecommandContentModel extends XTCEContainerContentModelBase {
 
     XTCETelecommandContentModel( XTCETelecommand                    tcObject,
@@ -33,7 +37,7 @@ public class XTCETelecommandContentModel extends XTCEContainerContentModelBase {
                                  ArrayList<XTCEContainerEntryValue> userValues,
                                  boolean                            showAllConditions ) throws XTCEDatabaseException {
 
-        super( spaceSystems, userValues, showAllConditions ); // add the conditional stuff
+        super( spaceSystems, userValues, showAllConditions );
         telecommand_        = tcObject;
         totalContainerSize_ = processTelecommand();
 
@@ -68,6 +72,7 @@ public class XTCETelecommandContentModel extends XTCEContainerContentModelBase {
      * entry.
      *
      * @throws XTCEDatabaseException 
+     *
      */
 
     public final long processTelecommand() throws XTCEDatabaseException {
@@ -80,11 +85,14 @@ public class XTCETelecommandContentModel extends XTCEContainerContentModelBase {
 
         applyCompleteContainer( getTelecommandReference(),
                                 totalSize,
+                                0,
                                 null,
                                 null,
                                 null );
 
         reorderItemsByStartBit();
+
+        checkForOverlaps();
 
         long estimatedTime = System.currentTimeMillis() - startTime;
 
@@ -97,21 +105,20 @@ public class XTCETelecommandContentModel extends XTCEContainerContentModelBase {
 
     private void applyCompleteContainer(  XTCETelecommand           currentTelecommand,
                                           RunningStartBit           currentStartBit,
+                                          long                      containerStartBit,
                                           MatchCriteriaType         parentRestrictions,
                                           String                    parentSpaceSystem,
                                           XTCEContainerContentEntry includedContainer ) throws XTCEDatabaseException {
 
-        long containerStartBit = currentStartBit.get();
-
-        long containerStartIndex = contentList_.size();
+        long containerStartIndex = contentList_.size() - 1;
 
         applyBaseTelecommand( currentTelecommand,
-                             currentStartBit,
-                             containerStartBit,
-                             null,
-                             null,
-                             null,
-                             includedContainer );
+                              currentStartBit,
+                              containerStartBit,
+                              null,
+                              null,
+                              null,
+                              includedContainer );
 
         processEndOfContainer( currentStartBit, containerStartBit, containerStartIndex );
 

@@ -26,6 +26,7 @@ import org.omg.space.xtce.database.PolynomialType;
 import org.omg.space.xtce.database.SplinePointType;
 import org.omg.space.xtce.database.ValueEnumerationType;
 import org.omg.space.xtce.toolkit.XTCEFunctions;
+import org.omg.space.xtce.toolkit.XTCEValidRange;
 //import org.scilab.forge.jlatexmath.TeXConstants;
 //import org.scilab.forge.jlatexmath.TeXFormula;
 //import org.scilab.forge.jlatexmath.TeXIcon;
@@ -66,10 +67,19 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
         shortDescriptionField.setText( parameter.getShortDescription() );
         longDescriptionField.setText( parameter.getLongDescription() );
         engineeringTypeComboField.setSelectedItem( parameter.getEngineeringType() );
-        encodingTypeComboField.setSelectedItem( parameter.getRawType() );
-        rawSizeTextField.setText( parameter.getRawSizeInBits() );
+        if ( parameter.getRawType().isEmpty() == true ) {
+            encodingTypeComboField.setSelectedItem( "" );
+            encodingTypeComboField.setEnabled( false );
+            rawSizeTextField.setEnabled( false );
+            bitOrderComboField.setSelectedItem( "" );
+            bitOrderComboField.setEnabled( false );
+            
+        } else {
+            encodingTypeComboField.setSelectedItem( parameter.getRawType() );
+            rawSizeTextField.setText( parameter.getRawSizeInBits() );
+            bitOrderComboField.setSelectedItem( parameter.getRawBitOrder() );
+        }
         xtceTypeNameTextField.setText( parameter.getTypeReference().getName() );
-        bitOrderComboField.setSelectedItem( parameter.getRawBitOrder() );
         defaultValueTextField.setText( parameter.getInitialValue() );
         if ( parameter.getTypeReference() != null ) {
             parameterTypeReferenceText.setText( parameter.getTypeReferenceFullPath() );
@@ -79,6 +89,7 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
         writeEnumerationTable( hexCheckbox.isSelected() );
         writePolynomials();
         writeSplines();
+        writeValidRange();
         pack();
         setLocationRelativeTo( parent );
     }
@@ -325,6 +336,30 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
 
         System.out.println( "Spline Order: " + splineCal.getOrder().toString() );
         System.out.println( "Spline Extrapolate: " + ( splineCal.isExtrapolate() ? "true" : "false" ) );
+
+    }
+
+    private void writeValidRange() {
+
+        XTCEValidRange rangeObj = parameter_.getValidRange();
+        if ( rangeObj.isValidRangeApplied() == true ) {
+            rangeLowTextField.setText( rangeObj.getLowValue() );
+            rangeHighTextField.setText( rangeObj.getHighValue() );
+            rangeLowInclusiveCheckbox.setSelected( rangeObj.isLowValueInclusive() );
+            rangeHighInclusiveCheckbox.setSelected( rangeObj.isHighValueInclusive() );
+            if ( rangeObj.isLowValueCalibrated() == true ) {
+                rangeAppliesToComboBox.setSelectedItem( "Calibrated" );
+            } else {
+                rangeAppliesToComboBox.setSelectedItem( "Uncalibrated" );
+            }
+        } else {
+            rangeLowTextField.setEnabled( false );
+            rangeHighTextField.setEnabled( false );
+            rangeLowInclusiveCheckbox.setEnabled( false );
+            rangeHighInclusiveCheckbox.setEnabled( false );
+            rangeAppliesToComboBox.setSelectedItem( "" );
+            rangeAppliesToComboBox.setEnabled( false );
+        }
 
     }
 
@@ -615,11 +650,11 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
 
         engineeringTypeComboField.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "ENUMERATED", "SIGNED", "UNSIGNED", "FLOAT32", "FLOAT64", "FLOAT128", "STRUCTURE", "BINARY", "BOOLEAN", "STRING", "TIME", "DURATION", "ARRAY" }));
 
-        encodingTypeComboField.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "binary", "unsigned", "twosComplement", "onesComplement", "signMagnitude", "IEEE754_1985", "MILSTD_1750A", "BCD", "packedBCD", "UTF-8", "UTF-16" }));
+        encodingTypeComboField.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "binary", "unsigned", "twosComplement", "onesComplement", "signMagnitude", "IEEE754_1985", "MILSTD_1750A", "BCD", "packedBCD", "UTF-8", "UTF-16", "" }));
 
-        bitOrderComboField.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "mostSignificantBitFirst", "leastSignificantBitFirst" }));
+        bitOrderComboField.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "mostSignificantBitFirst", "leastSignificantBitFirst", "" }));
 
-        rangeAppliesToComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Uncalibrated", "Calibrated" }));
+        rangeAppliesToComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Uncalibrated", "Calibrated", "" }));
 
         jLabel17.setText("Range Low");
 

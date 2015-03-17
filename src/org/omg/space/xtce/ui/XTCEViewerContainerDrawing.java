@@ -134,11 +134,20 @@ public class XTCEViewerContainerDrawing extends JPanel {
     @Override
     public void paintComponent( Graphics ggg ) {
         super.paintComponent( ggg );
+
+        // short circuit this if there are no applicable entries
+        if ( entriesInUse_.isEmpty() == true ) {
+            return;
+        }
+
+        // create the drawing if it has not already been drawn since the
+        // content last updated on the table
         if ( drawingDone_ == false ) {
             createDrawing( ggg );
         } else {
             drawingDone_ = true;
         }
+
     }
 
     /** Method to change the orientation flag to a new setting, either

@@ -523,14 +523,14 @@ public class XTCEContainerContentModelBase {
 
         if ( refLocation.equals( "previousEntry" ) == true ) {
             long start = currentStartBit.get() + offsetInBitsLong;
-            System.out.println( "previousEntry offset resolved to " + Long.toString( start ) );
+            //System.out.println( "previousEntry offset resolved to " + Long.toString( start ) );
             if ( isEntryNeedingStartBit( contentEntry ) == true ) {
                 contentEntry.setStartBit( start );
             }
             currentStartBit.set( start + rawSizeInBitsLong );
         } else if ( refLocation.equals( "containerStart" ) == true ) {
             long start = containerStartBit + offsetInBitsLong;
-            System.out.println( "containerStart offset resolved to " + Long.toString( start ) );
+            //System.out.println( "containerStart offset resolved to " + Long.toString( start ) );
             if ( isEntryNeedingStartBit( contentEntry ) == true ) {
                 contentEntry.setStartBit( start );
             }
@@ -551,10 +551,10 @@ public class XTCEContainerContentModelBase {
                                           long            containerStartBit,
                                           long            containerStartIndex ) {
 
-        System.out.println( "entering process end cur start bit " +
-                            Long.toString( currentStartBit.get() ) +
-                            " cont start bit " +
-                            Long.toString( containerStartBit ) );
+        //System.out.println( "entering process end cur start bit " +
+        //                    Long.toString( currentStartBit.get() ) +
+        //                    " cont start bit " +
+        //                    Long.toString( containerStartBit ) );
         // correct the running start bit in case the container was out of order
         // in the containerStart reference locations.
 
@@ -574,14 +574,14 @@ public class XTCEContainerContentModelBase {
         if ( currentStartBit.get() < containerEndBit ) {
             currentStartBit.set( containerEndBit );
         }
-        System.out.println( "Set next start bit in end of container to " + Long.toString( currentStartBit.get() ) );
+        //System.out.println( "Set next start bit in end of container to " + Long.toString( currentStartBit.get() ) );
         ArrayList<XTCEContainerContentEntry> endList =
             new ArrayList<XTCEContainerContentEntry>();
 
         // walk backwards through the content removing entries that are for the
         // containerEnd and add those to a temporary list.
 
-        System.out.println( "Processing end from index " + Long.toString( containerStartIndex + 1 ) + " to " + Long.toString( contentList_.size() - 1 ) );
+        //System.out.println( "Processing end from index " + Long.toString( containerStartIndex + 1 ) + " to " + Long.toString( contentList_.size() - 1 ) );
 
         for ( int iii = contentList_.size() - 1; iii > containerStartIndex; --iii ) {
             if ( contentList_.get( iii ).getStartBit().startsWith( "E" ) == true ) {
@@ -601,7 +601,7 @@ public class XTCEContainerContentModelBase {
             if ( currentStartBit.get() < ( containerEndBit - offset + rawsize ) ) {
                 currentStartBit.set( containerEndBit - offset + rawsize );
             }
-            System.out.println( "Set next start bit for end item " + Long.toString( currentStartBit.get() ) );
+            //System.out.println( "Set next start bit for end item " + Long.toString( currentStartBit.get() ) );
             contentList_.add( entry );
         }
 

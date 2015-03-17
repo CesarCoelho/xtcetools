@@ -2249,7 +2249,7 @@ public class XTCEViewer extends javax.swing.JFrame {
     }//GEN-LAST:event_mainWindowLocaleMenuItemActionPerformed
 
     private void tcTreeValueChanged(javax.swing.event.TreeSelectionEvent evt) {//GEN-FIRST:event_tcTreeValueChanged
-        drawTelecommandContentTable();
+        drawTelecommandContentTable( null );
     }//GEN-LAST:event_tcTreeValueChanged
 
     private void mainWindowShowAllConditionalsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mainWindowShowAllConditionalsMenuItemActionPerformed
@@ -2267,6 +2267,20 @@ public class XTCEViewer extends javax.swing.JFrame {
                 drawContainerContentTable( values );
             } else {
                 drawContainerContentTable( null );
+            }
+        }
+
+        XTCEViewerTelecommandTreeNode node2 =
+            (XTCEViewerTelecommandTreeNode)tcTree.getLastSelectedPathComponent();
+
+        if ( node2 != null ) {
+            XTCETelecommandContentModel model = node2.getContentModel();
+            if ( model != null ) {
+                model.setShowAllConditionals( mainWindowShowAllConditionalsMenuItem.getState() );
+                ArrayList<XTCEContainerEntryValue> values = model.getUserValues();
+                drawTelecommandContentTable( values );
+            } else {
+                drawTelecommandContentTable( null );
             }
         }
 
@@ -2986,21 +3000,67 @@ public class XTCEViewer extends javax.swing.JFrame {
         }
     }
 
-    private void drawTelecommandContentTable() {
+    private void drawTelecommandContentTable( ArrayList<XTCEContainerEntryValue> values ) {
+
         XTCEViewerTelecommandTreeNode node =
             (XTCEViewerTelecommandTreeNode)tcTree.getLastSelectedPathComponent();
+
         if ( ( node != null ) && ( node.getTelecommandReference() != null ) ) {
+
             System.out.println( "Selected TC " + node.getTelecommandPath() );
-            XTCETelecommand tcObject = node.getTelecommandReference();
-            //try {
+            XTCETelecommand tcObject  = node.getTelecommandReference();
+
+            boolean showAllConditionals =
+                prefs.getShowAllContainerConditionalsOption();
+
+            try {
                 // @todo this might be eligible to short circuit
-                //XTCETelecommandContentModel containerModel = xtceDatabaseFile.processTelecommand( tcObject, null );
-                //updateTelecommandTable( containerModel );
-                //node.setContentModel( containerModel );
-            //} catch ( XTCEDatabaseException ex ) {
-            //    logMsg( XTCEFunctions.generalErrorPrefix() + ex.getLocalizedMessage() );
-            //}
+                XTCETelecommandContentModel containerModel =
+                    xtceDatabaseFile.processTelecommand( tcObject,
+                                                         values,
+                                                         showAllConditionals );
+                updateTelecommandTable( containerModel );
+                node.setContentModel( containerModel );
+
+                String orientationOption =
+                    prefs.getContainerOrientationOption();
+
+                //XTCEViewerContainerDrawing.Orientation orientDrawingFlag;
+                //if ( orientationOption.equals( "LEFT_TO_RIGHT" ) == true ) {
+                //    orientDrawingFlag = Orientation.LEFT_TO_RIGHT;
+                //} else if ( orientationOption.equals( "TOP_TO_BOTTOM" ) == true ) {
+                //    orientDrawingFlag = Orientation.TOP_TO_BOTTOM;
+                //} else {
+                //    orientDrawingFlag = Orientation.LEFT_TO_RIGHT;
+                //}
+
+                //boolean showAllNamespaces   = prefs.getShowAllAliasNamespacesOption();
+                //boolean showAliasNamespaces = prefs.getShowAliasNamespacesOption();
+                //String  preferredNamespace  = prefs.getPreferredAliasNamespaceOption();
+
+                //XTCEViewerContainerDrawing drawing =
+                //    new XTCEViewerContainerDrawing( containerModel,
+                //                                    orientDrawingFlag,
+                //                                    showAllNamespaces,
+                //                                    showAliasNamespaces,
+                //                                    preferredNamespace );
+         
+                //tcContentDrawingScrollPane.setViewportView( drawing );
+
+                logMsg( "Processed Telecommand " +
+                        containerModel.getContainerReference().getName() +
+                        " contains " +
+                        Long.toString( containerModel.getContentList().size() ) +
+                        " rows occupying " +
+                        Long.toString( containerModel.getTotalSize() ) +
+                        " bits" );
+
+            } catch ( XTCEDatabaseException ex ) {
+                logMsg( XTCEFunctions.generalErrorPrefix() + ex.getLocalizedMessage() );
+            }
+
         }
+
     }
 
     private void updateParameterTable( JTable table, ArrayList<XTCEParameter> parameters, XTCESpaceSystem spaceSystem ) {

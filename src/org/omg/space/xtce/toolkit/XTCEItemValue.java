@@ -14,20 +14,12 @@ import java.util.BitSet;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import org.omg.space.xtce.database.ArgumentTypeSetType.FloatArgumentType;
-import org.omg.space.xtce.database.ArgumentTypeSetType.IntegerArgumentType;
 import org.omg.space.xtce.database.BooleanDataType;
 import org.omg.space.xtce.database.CalibratorType;
 import org.omg.space.xtce.database.CalibratorType.MathOperationCalibrator;
 import org.omg.space.xtce.database.CalibratorType.SplineCalibrator;
-import org.omg.space.xtce.database.EnumeratedDataType;
-import org.omg.space.xtce.database.FloatDataType;
-import org.omg.space.xtce.database.IntegerDataType;
 import org.omg.space.xtce.database.NameDescriptionType;
 import org.omg.space.xtce.database.ParameterTypeSetType.BooleanParameterType;
-import org.omg.space.xtce.database.ParameterTypeSetType.EnumeratedParameterType;
-import org.omg.space.xtce.database.ParameterTypeSetType.FloatParameterType;
-import org.omg.space.xtce.database.ParameterTypeSetType.IntegerParameterType;
 import org.omg.space.xtce.database.PolynomialType;
 import org.omg.space.xtce.database.SplinePointType;
 import org.omg.space.xtce.database.ValueEnumerationType;
@@ -92,7 +84,7 @@ public class XTCEItemValue {
         }
 
         // gather the extended attributes that are needed for specific types
-        setValidRangeAttributes( typeObj );
+        setValidRangeAttributes( item );
         setEnumerationList( item );
         setDefaultCalibrator( item );
 
@@ -944,57 +936,6 @@ public class XTCEItemValue {
 
     }
 
-    /** Sets ranging information for item value validity.
-     *
-     * Ranging information is optional and will be ignored if it has not been
-     * setup by this method.  This is generally invoked from the function
-     * setValidRangeAttributes().  The reason it is separated is so that some
-     * platform specific versions of this class can be generated, although they
-     * will not be a part of this toolkit.
-     *
-     * @param lowValidValue String containing the minimum valid value.  See the
-     * other arguments for modifiers of this.
-     *
-     * @param highValidValue String containing the maximum valid value.  See
-     * the other arguments for modifiers of this.
-     *
-     * @param lowValidValueInclusive boolean indicating if the minimum valid
-     * value should be inclusive (if true) or exclusive (if false).  This
-     * changes the behavior to &gt; or equal to in the case of true and just
-     * &gt; in the event of false.
-     *
-     * @param highValidValueInclusive boolean indicating if the minimum valid
-     * value should be inclusive (if true) or exclusive (if false).  This
-     * changes the behavior to &lt; or equal to in the case of true and just
-     * &lt; in the event of false.
-     *
-     * @param lowAppliesToCalibrated boolean indicating of the valid values are
-     * to be applied to the raw/uncalibrated or EU/calibrated value when doing
-     * the encode/decode operations.
-     *
-     * @param highAppliesToCalibrated boolean indicating of the valid values are
-     * to be applied to the raw/uncalibrated or EU/calibrated value when doing
-     * the encode/decode operations.
-     *
-     */
-
-    protected void setValidRange( String  lowValidValue,
-                                  String  highValidValue,
-                                  boolean lowValidValueInclusive,
-                                  boolean highValidValueInclusive,
-                                  boolean lowAppliesToCalibrated,
-                                  boolean highAppliesToCalibrated ) {
-
-        lowValidValue_           = lowValidValue;
-        highValidValue_          = highValidValue;
-        lowValidValueInclusive_  = lowValidValueInclusive;
-        highValidValueInclusive_ = highValidValueInclusive;
-        lowAppliesToCalibrated_  = lowAppliesToCalibrated;
-        highAppliesToCalibrated_ = highAppliesToCalibrated;
-        validRangeExists_        = true;
-
-    }
-
     /** Sets the Valid Range attributes of this object based on a general
      * type specification from the XTCE data model, which all inherit from the
      * NameDescriptionType.
@@ -1004,98 +945,18 @@ public class XTCEItemValue {
      *
      */
 
-    private void setValidRangeAttributes( NameDescriptionType typeObj ) {
+    private void setValidRangeAttributes( XTCETypedObject item ) {
+
+        NameDescriptionType typeObj = item.getTypeReference();
 
         if ( typeObj.getClass() == BooleanParameterType.class ) {
-            setValidRange( "0", "1", true, true, false, false );
             booleanZeroString_ = ((BooleanParameterType)typeObj).getZeroStringValue();
             booleanOneString_  = ((BooleanParameterType)typeObj).getOneStringValue();
         } else if ( typeObj.getClass() == BooleanDataType.class ) {
             booleanZeroString_ = ((BooleanDataType)typeObj).getZeroStringValue();
             booleanOneString_  = ((BooleanDataType)typeObj).getOneStringValue();
-        } else if ( typeObj.getClass() == IntegerParameterType.class ) {
-            IntegerDataType.ValidRange rangeElement = ((IntegerParameterType)typeObj).getValidRange();
-            if ( rangeElement != null ) {
-                setValidRange( rangeElement.getMinInclusive(),
-                               rangeElement.getMaxInclusive(),
-                               true,
-                               true,
-                               rangeElement.isValidRangeAppliesToCalibrated(),
-                               rangeElement.isValidRangeAppliesToCalibrated() );
-            }
-        } else if ( typeObj.getClass() == IntegerArgumentType.class ) {
-            IntegerDataType.ValidRange rangeElement = ((IntegerArgumentType)typeObj).getValidRange();
-            if ( rangeElement != null ) {
-                setValidRange( rangeElement.getMinInclusive(),
-                               rangeElement.getMaxInclusive(),
-                               true,
-                               true,
-                               rangeElement.isValidRangeAppliesToCalibrated(),
-                               rangeElement.isValidRangeAppliesToCalibrated() );
-            }
-        } else if ( typeObj.getClass() == FloatParameterType.class ) {
-            FloatDataType.ValidRange rangeElement = ((FloatParameterType)typeObj).getValidRange();
-            if ( rangeElement != null ) {
-                setFloatValidRange( rangeElement );
-            }
-        } else if ( typeObj.getClass() == FloatArgumentType.class ) {
-            FloatDataType.ValidRange rangeElement = ((FloatArgumentType)typeObj).getValidRange();
-            if ( rangeElement != null ) {
-                setFloatValidRange( rangeElement );
-            }
         }
-
-    }
-
-    /** Sets the Valid Range attributes of this object based on those that are
-     * provided with a Floating Point Encoding value.
-     *
-     * @param rangeElement A FloatDataType.ValidRange element from the XTCE
-     * data model.
-     *
-     */
-
-    private void setFloatValidRange( FloatDataType.ValidRange rangeElement ) {
-
-        // first evaluate the minimum value, if it exists, and determine if
-        // it is inclusive or exclusive.  We leave it an empty string if it is
-        // not applicable to this item.
-        boolean minInclusive = true;
-        String  minValue     = "";
-        Double  min          = rangeElement.getMinInclusive();
-        if ( min == null ) {
-            min = rangeElement.getMinExclusive();
-            if ( min != null ) {
-                minInclusive = false;
-            }
-        }
-        if ( min != null ) {
-            minValue = min.toString();
-        }
-
-        // next evaluated the maximum value, if it exists, and determine if
-        // it is inclusive or exclusive.  We leave it an empty string if it is
-        // not applicable to this item.
-        boolean maxInclusive = true;
-        String  maxValue     = "";
-        Double  max          = rangeElement.getMaxInclusive();
-        if ( max == null ) {
-            max = rangeElement.getMinExclusive();
-            if ( max != null ) {
-                maxInclusive = false;
-            }
-        }
-        if ( max != null ) {
-            maxValue = max.toString();
-        }
-
-        // set the valid range information from the more generic setter method
-        setValidRange( minValue,
-                       maxValue,
-                       minInclusive,
-                       maxInclusive,
-                       rangeElement.isValidRangeAppliesToCalibrated(),
-                       rangeElement.isValidRangeAppliesToCalibrated() );
+        validRange_ = item.getValidRange();
 
     }
 
@@ -1502,16 +1363,16 @@ public class XTCEItemValue {
 
         // if a ValidRange element exists then we want to filter the min and
         // max through that, but only if it applies to RAW
-        if ( validRangeExists_ == true ) {
-            if ( lowAppliesToCalibrated_ == false ) {
-                minValue = Math.round( Double.parseDouble( lowValidValue_ ) );
-                if ( lowValidValueInclusive_ == false ) {
+        if ( validRange_.isValidRangeApplied() == true ) {
+            if ( validRange_.isLowValueCalibrated() == false ) {
+                minValue = Math.round( Double.parseDouble( validRange_.getLowValue() ) );
+                if ( validRange_.isLowValueInclusive() == false ) {
                     minInclusive = false;
                 }
             }
-            if ( highAppliesToCalibrated_ == false ) {
-                maxValue = Math.round( Double.parseDouble( highValidValue_ ) );
-                if ( highValidValueInclusive_ == false ) {
+            if ( validRange_.isHighValueCalibrated() == false ) {
+                maxValue = Math.round( Double.parseDouble( validRange_.getHighValue() ) );
+                if ( validRange_.isHighValueInclusive() == false ) {
                     maxInclusive = false;
                 }
             }
@@ -1614,16 +1475,16 @@ public class XTCEItemValue {
 
         // if a ValidRange element exists then we want to filter the min and
         // max through that, but only if it applies to RAW
-        if ( validRangeExists_ == true ) {
-            if ( lowAppliesToCalibrated_ == false ) {
-                minValue = Math.round( Double.parseDouble( lowValidValue_ ) );
-                if ( lowValidValueInclusive_ == false ) {
+        if ( validRange_.isValidRangeApplied() == true ) {
+            if ( validRange_.isLowValueCalibrated() == false ) {
+                minValue = Math.round( Double.parseDouble( validRange_.getLowValue() ) );
+                if ( validRange_.isLowValueInclusive() == false ) {
                     minInclusive = false;
                 }
             }
-            if ( highAppliesToCalibrated_ == false ) {
-                maxValue = Math.round( Double.parseDouble( highValidValue_ ) );
-                if ( highValidValueInclusive_ == false ) {
+            if ( validRange_.isHighValueCalibrated() == false ) {
+                maxValue = Math.round( Double.parseDouble( validRange_.getHighValue() ) );
+                if ( validRange_.isHighValueInclusive() == false ) {
                     maxInclusive = false;
                 }
             }
@@ -1706,13 +1567,13 @@ public class XTCEItemValue {
             // TODO worry about inclusive versus exclusive
             long minValue = 0;
             long maxValue = (long)Math.pow( 2, rawSizeInBits_  ) - 1;
-            if ( ( validRangeExists_       == true  ) &&
-                 ( lowAppliesToCalibrated_ == false ) ) {
-                minValue = Math.round( Double.parseDouble( lowValidValue_ ) );
+            if ( ( validRange_.isValidRangeApplied()  == true  ) &&
+                 ( validRange_.isLowValueCalibrated() == false ) ) {
+                minValue = Math.round( Double.parseDouble( validRange_.getLowValue() ) );
             }
-            if ( ( validRangeExists_        == true  ) &&
-                 ( highAppliesToCalibrated_ == false ) ) {
-                maxValue = Math.round( Double.parseDouble( highValidValue_ ) );
+            if ( ( validRange_.isValidRangeApplied()   == true  ) &&
+                 ( validRange_.isHighValueCalibrated() == false ) ) {
+                maxValue = Math.round( Double.parseDouble( validRange_.getHighValue() ) );
             }
             if ( ( root1 >= minValue ) && ( root1 <= maxValue ) ) {
                 return root1;
@@ -1739,13 +1600,13 @@ public class XTCEItemValue {
             // TODO worry about inclusive versus exclusive
             long minValue = -1 * (long)Math.pow( 2, ( rawSizeInBits_ - 1 ) );
             long maxValue = (long)Math.pow( 2, ( rawSizeInBits_ - 1 ) ) - 1;
-            if ( ( validRangeExists_       == true  ) &&
-                 ( lowAppliesToCalibrated_ == false ) ) {
-                minValue = Math.round( Double.parseDouble( lowValidValue_ ) );
+            if ( ( validRange_.isValidRangeApplied()  == true  ) &&
+                 ( validRange_.isLowValueCalibrated() == false ) ) {
+                minValue = Math.round( Double.parseDouble( validRange_.getLowValue() ) );
             }
-            if ( ( validRangeExists_        == true  ) &&
-                 ( highAppliesToCalibrated_ == false ) ) {
-                maxValue = Math.round( Double.parseDouble( highValidValue_ ) );
+            if ( ( validRange_.isValidRangeApplied()   == true  ) &&
+                 ( validRange_.isHighValueCalibrated() == false ) ) {
+                maxValue = Math.round( Double.parseDouble( validRange_.getHighValue() ) );
             }
             if ( ( root1 >= minValue ) && ( root1 <= maxValue ) ) {
                 return root1;
@@ -1779,21 +1640,14 @@ public class XTCEItemValue {
     private String  rawTypeName_;
     private int     rawSizeInBits_;
     private String  rawBitOrder_;
-    private String  lowValidValue_;
-    private String  highValidValue_;
-    private boolean lowValidValueInclusive_;
-    private boolean highValidValueInclusive_;
-    private boolean lowAppliesToCalibrated_;
-    private boolean highAppliesToCalibrated_;
-    private boolean validRangeExists_;
     private boolean validObject_;
-
     private String  booleanZeroString_;
     private String  booleanOneString_;
 
-    private ArrayList<String>          warnings_ = new ArrayList<String>();
-    private List<ValueEnumerationType> enums_    = null;
-    private CalibratorType             defCal_   = null;
+    private ArrayList<String>          warnings_   = new ArrayList<String>();
+    private List<ValueEnumerationType> enums_      = null;
+    private CalibratorType             defCal_     = null;
+    private XTCEValidRange             validRange_ = null;
 
     private static final byte[] utf16_ = new byte[] { (byte)0xfe, (byte)0xff };
 
