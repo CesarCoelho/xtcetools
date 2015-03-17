@@ -145,12 +145,12 @@ public class XTCEValidRange {
      *
      */
 
-    protected void setValidRange( String  lowValidValue,
-                                  String  highValidValue,
-                                  boolean lowValidValueInclusive,
-                                  boolean highValidValueInclusive,
-                                  boolean lowAppliesToCalibrated,
-                                  boolean highAppliesToCalibrated ) {
+    private void setValidRange( String  lowValidValue,
+                                String  highValidValue,
+                                boolean lowValidValueInclusive,
+                                boolean highValidValueInclusive,
+                                boolean lowAppliesToCalibrated,
+                                boolean highAppliesToCalibrated ) {
 
         lowValidValue_           = lowValidValue;
         highValidValue_          = highValidValue;
