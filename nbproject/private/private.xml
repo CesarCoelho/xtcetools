@@ -3,12 +3,19 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/GitRepositories/XTCETools/src/org/omg/space/xtce/toolkit/XTCETMContainer.java</file>
-            <file>file:/C:/GitRepositories/XTCETools/src/org/omg/space/xtce/toolkit/XTCEContainerContentModel.java</file>
+            <file>file:/C:/GitRepositories/XTCETools/src/org/omg/space/xtce/toolkit/XTCETelecommand.java</file>
             <file>file:/C:/GitRepositories/XTCETools/src/org/omg/space/xtce/toolkit/XTCEParameter.java</file>
             <file>file:/C:/GitRepositories/XTCETools/src/org/omg/space/xtce/toolkit/XTCENamedObject.java</file>
+            <file>file:/C:/GitRepositories/XTCETools/src/org/omg/space/xtce/toolkit/XTCETMContainer.java</file>
             <file>file:/C:/GitRepositories/XTCETools/src/org/omg/space/xtce/toolkit/XTCETelecommandContentModel.java</file>
-            <file>file:/C:/GitRepositories/XTCETools/src/org/omg/space/xtce/toolkit/XTCETelecommand.java</file>
+            <file>file:/C:/GitRepositories/XTCETools/src/org/omg/space/xtce/toolkit/XTCEContainerContentModel.java</file>
+            <file>file:/C:/GitRepositories/XTCETools/src/org/omg/space/xtce/ui/XTCEViewerContainerDrawing.java</file>
+            <file>file:/C:/GitRepositories/XTCETools/src/org/omg/space/xtce/toolkit/XTCEContainerContentModelBase.java</file>
+            <file>file:/C:/GitRepositories/XTCETools/src/org/omg/space/xtce/ui/XTCEViewer.java</file>
+            <file>file:/C:/GitRepositories/XTCETools/src/org/omg/space/xtce/ui/XTCEViewerParameterDetailDialog.java</file>
+            <file>file:/C:/GitRepositories/XTCETools/src/org/omg/space/xtce/toolkit/XTCETypedObject.java</file>
+            <file>file:/C:/GitRepositories/XTCETools/src/org/omg/space/xtce/toolkit/XTCEValidRange.java</file>
+            <file>file:/C:/GitRepositories/XTCETools/src/org/omg/space/xtce/toolkit/XTCEItemValue.java</file>
         </group>
     </open-files>
 </project-private>

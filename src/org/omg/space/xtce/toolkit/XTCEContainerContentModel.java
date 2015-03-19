@@ -327,7 +327,7 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
         addIncludeConditions( pRefEntry, container, content );
         applyUserValues( content );
         evaluateIncludeConditions( content );
-        if ( isEntryConditionSatisfied( content ) == true ) {
+        if ( content.isCurrentlyInUse() == true ) {
             addStartBit( pRefEntry, content, currentStartBit, containerStartBit );
         }
 

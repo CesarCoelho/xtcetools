@@ -128,28 +128,15 @@ public class XTCEContainerContentModelBase {
         FieldType entryType = entry.getEntryType();
         long      satisfied = 0;
 
-        ArrayList<XTCEContainerEntryValue> conditions = entry.getConditionList();
+        final ArrayList<XTCEContainerEntryValue> conditions = entry.getConditionList();
 
-        for ( XTCEContainerEntryValue condition : conditions ) {
-            for ( XTCEContainerContentEntry listEntry : contentList_ ) {
-                //if ( listEntry.getEntryType() != entryType ) {
-                //    continue;
-                //}
-                //if ( listEntry.getValue().isEmpty() == true ) {
-                //    continue;
-                //}
-                //if ( entryType == FieldType.PARAMETER ) {
-                //    if ( condition.getItemFullPath().equals( listEntry.getParameter().getFullPath() ) == false ) {
-                //        continue;
-                //    }
-                //} else if ( entryType == FieldType.ARGUMENT ) {
-                //    if ( condition.getItemFullPath().equals( listEntry.getArgument().getFullPath() ) == false ) {
-                //        continue;
-                //    }
-                //}
-                //System.out.println( "Comparing List Entry " + listEntry.getValue() );
-                //System.out.println( "Comparing Entry Item " + condition.toStringWithoutParameter() );
-                if ( listEntry.getValue().equals( condition.toStringWithoutParameter() ) == true ) {
+        for ( final XTCEContainerEntryValue condition : conditions ) {
+            for ( final XTCEContainerContentEntry listEntry : contentList_ ) {
+                final String entryValue = listEntry.getValue();
+                if ( ( entryValue == null ) || ( entryValue.isEmpty() == true ) ) {
+                    continue;
+                }
+                if ( entryValue.equals( condition.toStringWithoutParameter() ) == true ) {
                     ++satisfied;
                 }
             }

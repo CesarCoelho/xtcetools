@@ -576,19 +576,20 @@ public class XTCEContainerContentEntry implements Comparable {
 
     public XTCEContainerContentEntry deepCopy() {
         XTCEContainerContentEntry newOne = new XTCEContainerContentEntry();
-        newOne.itemName        = itemName;
-        newOne.fieldType       = fieldType;
-        newOne.startBit        = startBit;
-        newOne.fixedSize       = fixedSize;
-        newOne.entryValue      = entryValue;
-        newOne.conditions      = conditions;
-        newOne.repeatParameter = repeatParameter;
-        newOne.pReference      = pReference;
-        newOne.tmContReference = tmContReference;
-        newOne.hContainer      = hContainer;
-        newOne.aReference      = aReference;
-        newOne.tcContReference = tcContReference;
-        newOne.telecommand     = telecommand;
+        newOne.itemName           = itemName;
+        newOne.fieldType          = fieldType;
+        newOne.startBit           = startBit;
+        newOne.fixedSize          = fixedSize;
+        newOne.entryValue         = entryValue;
+        newOne.conditions         = conditions;
+        newOne.repeatParameter    = repeatParameter;
+        newOne.pReference         = pReference;
+        newOne.tmContReference    = tmContReference;
+        newOne.hContainer         = hContainer;
+        newOne.aReference         = aReference;
+        newOne.tcContReference    = tcContReference;
+        newOne.telecommand        = telecommand;
+        newOne.isCurrentlyApplied = isCurrentlyApplied;
         return newOne;
         
     }

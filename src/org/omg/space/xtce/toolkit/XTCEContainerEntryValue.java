@@ -6,7 +6,8 @@
 
 package org.omg.space.xtce.toolkit;
 
-/** This class represents a value of an entry in the container model.
+/** This class represents the value of an entry in the container model when
+ * processing a specific Container in the XTCE data model.
  *
  * @author Melanie Laub
  *
@@ -35,10 +36,12 @@ public class XTCEContainerEntryValue {
                              String        operator,
                              String        form ) {
 
-        name_     = parameter.getFullPath();
-        value_    = value;
-        operator_ = operator;
-        form_     = form;
+        name_                     = parameter.getFullPath();
+        value_                    = value;
+        operator_                 = operator;
+        form_                     = form;
+        toStringWithoutParameter_ = operator_ + value_ +
+            ( form_.equals( "Calibrated" ) == true ? "{cal}" : "{uncal}" );
 
     }
 
@@ -63,10 +66,12 @@ public class XTCEContainerEntryValue {
                              String       operator,
                              String       form ) {
 
-        name_     = argument.getName();
-        value_    = value;
-        operator_ = operator;
-        form_     = form;
+        name_                     = argument.getName();
+        value_                    = value;
+        operator_                 = operator;
+        form_                     = form;
+        toStringWithoutParameter_ = operator_ + value_ +
+            ( form_.equals( "Calibrated" ) == true ? "{cal}" : "{uncal}" );
 
     }
 
@@ -84,10 +89,11 @@ public class XTCEContainerEntryValue {
 
     XTCEContainerEntryValue( String value ) {
 
-        name_     = "";
-        value_    = value;
-        operator_ = "==";
-        form_     = "Uncalibrated";
+        name_                     = "";
+        value_                    = value;
+        operator_                 = "==";
+        form_                     = "Uncalibrated";
+        toStringWithoutParameter_ = operator_ + value_ + "{uncal}";
 
     }
 
@@ -195,9 +201,7 @@ public class XTCEContainerEntryValue {
     @Override
     public String toString() {
         return XTCEFunctions.getNameFromPathReferenceString( name_ ) +
-               getOperator() +
-               getValue() +
-               ( getComparisonForm().equals( "Calibrated" ) == true ? "{cal}" : "{uncal}" );
+               toStringWithoutParameter_;
     }
 
     /** Retrieve a string representation of the entry value that this object
@@ -209,9 +213,7 @@ public class XTCEContainerEntryValue {
      */
 
     public String toStringWithoutParameter() {
-        return getOperator() +
-               getValue() +
-               ( getComparisonForm().equals( "Calibrated" ) == true ? "{cal}" : "{uncal}" );
+        return toStringWithoutParameter_;
     }
 
     // Private Data Members
@@ -234,5 +236,9 @@ public class XTCEContainerEntryValue {
     /// is in Calibrated or Uncalibrated form.
 
     private String form_ = null;
+
+    /// Prebuilt string for the toStringWithoutParameter method
+
+    private String toStringWithoutParameter_ = null;
 
 }
