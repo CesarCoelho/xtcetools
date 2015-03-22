@@ -821,15 +821,28 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
     private ArrayList<XTCEParameter> addParameters( List<Object> parameters ) {
 
+        // TODO Deal with the errors on this better so that we can send warning
+        // back without a completely empty list on a SpaceSystem when there is
+        // 1 or more errors.
+
         ArrayList<XTCEParameter> list = new ArrayList<XTCEParameter>();
 
         for ( int iii = 0; iii < parameters.size(); ++iii ) {
 
             if ( parameters.get( iii ).getClass() == Parameter.class ) {
 
-                Parameter parameter      = (Parameter)parameters.get( iii );
-                String    path           = XTCEFunctions.resolvePathReference( getFullPath(), parameter.getParameterTypeRef() );
-                NameDescriptionType type = databaseReference_.getParameterTypeReference( path );
+                Parameter parameter = (Parameter)parameters.get( iii );
+                String    path      = "";
+
+                try {
+                    path = XTCEFunctions.resolvePathReference( getFullPath(),
+                                                               parameter.getParameterTypeRef() );
+                } catch ( NullPointerException ex ) {
+                    // this is a bad type, we leave the XTCEParameter invalid
+                }
+
+                NameDescriptionType type =
+                    databaseReference_.getParameterTypeReference( path );
 
                 list.add( new XTCEParameter( parameter.getName(),
                                              getFullPath(),
@@ -854,9 +867,18 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
         for ( Member member : members ) {
 
-            String mpath              = XTCEFunctions.resolvePathReference( getFullPath(), member.getTypeRef() );
-            String newbasename        = basename + "." + member.getName();
-            NameDescriptionType mtype = databaseReference_.getParameterTypeReference( mpath );
+            String mpath = "";
+
+            try {
+                mpath = XTCEFunctions.resolvePathReference( getFullPath(),
+                                                            member.getTypeRef() );
+            } catch ( NullPointerException ex ) {
+                // this is invalid type, we leave the XTCEParameter invalid
+            }
+
+            String newbasename = basename + "." + member.getName();
+            NameDescriptionType mtype =
+                databaseReference_.getParameterTypeReference( mpath );
             
             list.add( new XTCEParameter( newbasename,
                                          getFullPath(),

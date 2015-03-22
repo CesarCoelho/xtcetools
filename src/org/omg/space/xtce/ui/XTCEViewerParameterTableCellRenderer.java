@@ -9,20 +9,20 @@ package org.omg.space.xtce.ui;
 import java.awt.Color;
 import java.awt.Component;
 import java.util.ArrayList;
+import javax.swing.JComponent;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
-import org.omg.space.xtce.toolkit.XTCEContainerContentEntry;
-import org.omg.space.xtce.toolkit.XTCEContainerContentEntry.FieldType;
+import org.omg.space.xtce.toolkit.XTCEParameter;
 
 /**
  *
  * @author b1053583
  */
 
-public class XTCEViewerContainerTableCellRenderer extends DefaultTableCellRenderer {
+public class XTCEViewerParameterTableCellRenderer extends DefaultTableCellRenderer {
 
-    XTCEViewerContainerTableCellRenderer( ArrayList<XTCEContainerContentEntry> entries ) {
-        entries_ = entries;
+    XTCEViewerParameterTableCellRenderer( ArrayList<XTCEParameter> parameters ) {
+        parameters_ = parameters;
     }
 
     @Override
@@ -40,15 +40,12 @@ public class XTCEViewerContainerTableCellRenderer extends DefaultTableCellRender
                                                              row,
                                                              column );
 
-        if ( ( entries_ != null ) && ( entries_.size() > row ) ) {
-            if ( entries_.get( row ).getEntryType() == FieldType.PARAMETER ) {
-                if ( entries_.get( row ).getParameter().isValid() == false ) {
-                    ccc.setForeground( Color.RED );
-                    return ccc;
+        if ( ( parameters_ != null ) && ( parameters_.size() > row ) ) {
+            if ( parameters_.get( row ).isValid() == false ) {
+                if ( ccc instanceof JComponent ) {
+                    ((JComponent)ccc).setToolTipText( "Invalid type definition" );
                 }
-            }
-            if ( entries_.get( row ).isCurrentlyInUse() == false ) {
-                ccc.setForeground( Color.ORANGE );
+                ccc.setForeground( Color.RED );
                 return ccc;
             }
         }
@@ -62,7 +59,7 @@ public class XTCEViewerContainerTableCellRenderer extends DefaultTableCellRender
 
     }
 
-    private ArrayList<XTCEContainerContentEntry> entries_ = null;
+    private ArrayList<XTCEParameter> parameters_ = null;
 
     private DefaultTableCellRenderer defaultRenderer =
         new DefaultTableCellRenderer();

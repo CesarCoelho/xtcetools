@@ -22,6 +22,7 @@ import javax.swing.JLabel;
 import javax.swing.table.DefaultTableModel;
 import org.omg.space.xtce.database.CalibratorType;
 import org.omg.space.xtce.database.CalibratorType.SplineCalibrator;
+import org.omg.space.xtce.database.ParameterTypeSetType.BooleanParameterType;
 import org.omg.space.xtce.database.PolynomialType;
 import org.omg.space.xtce.database.SplinePointType;
 import org.omg.space.xtce.database.ValueEnumerationType;
@@ -79,17 +80,18 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
             rawSizeTextField.setText( parameter.getRawSizeInBits() );
             bitOrderComboField.setSelectedItem( parameter.getRawBitOrder() );
         }
-        xtceTypeNameTextField.setText( parameter.getTypeReference().getName() );
         defaultValueTextField.setText( parameter.getInitialValue() );
         if ( parameter.getTypeReference() != null ) {
             parameterTypeReferenceText.setText( parameter.getTypeReferenceFullPath() );
+            xtceTypeNameTextField.setText( parameter.getTypeReference().getName() );
+            writeEnumerationTable( hexCheckbox.isSelected() );
+            writePolynomials();
+            writeSplines();
+            writeValidRange();
         } else {
             parameterTypeReferenceText.setText( "Parameter ERROR: Broken Reference: " + parameter.getTypeReferenceFullPath() );
+            xtceTypeNameTextField.setText( "INVALID" );
         }
-        writeEnumerationTable( hexCheckbox.isSelected() );
-        writePolynomials();
-        writeSplines();
-        writeValidRange();
         pack();
         setLocationRelativeTo( parent );
     }
@@ -117,6 +119,23 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
                 Object rowData[] = { valueEnum.getLabel(),
                                      value,
                                      valueEnum.getShortDescription() };
+                tableModel.addRow( rowData );
+            }
+        } else if ( parameter_.getEngineeringType().equals( "BOOLEAN" ) == true ) {
+            DefaultTableModel tableModel = (DefaultTableModel)enumerationTable.getModel();
+            tableModel.setRowCount( 0 );
+            String values[] = { ((BooleanParameterType)parameter_.getTypeReference()).getZeroStringValue(),
+                                ((BooleanParameterType)parameter_.getTypeReference()).getOneStringValue() };
+            for ( int iii = 0; iii < 2; ++iii ) {
+                String value = "";
+                if ( hex == true ) {
+                    value = "0x" + Integer.toString( iii, 16 );
+                } else {
+                    value = Integer.toString( iii );
+                }
+                Object rowData[] = { values[iii],
+                                     value,
+                                     "Boolean" };
                 tableModel.addRow( rowData );
             }
         } else {

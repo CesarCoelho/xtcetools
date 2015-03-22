@@ -211,6 +211,7 @@ public class XTCEViewer extends javax.swing.JFrame {
         mainWindowFindTelecommandMenuItem = new javax.swing.JMenuItem();
         mainWindowShowMenu = new javax.swing.JMenu();
         mainWindowExpandAllSpaceSystemTreeMenuItem = new javax.swing.JMenuItem();
+        mainWindowExpandContainerTreeMenuItem = new javax.swing.JMenuItem();
         mainWindowMessagesDialogMenuItem = new javax.swing.JMenuItem();
         mainWindowShowMetricsMenuItem = new javax.swing.JMenuItem();
         mainWindowExportMenu = new javax.swing.JMenu();
@@ -319,26 +320,26 @@ public class XTCEViewer extends javax.swing.JFrame {
         containerDrawingPopupMenu.add(cloneContainerDrawingMenuItem);
 
         exportParametersLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        exportParametersLabel.setText("Export Parameters");
+        exportParametersLabel.setText(bundle.getString("dialog_export_parameters_options_title")); // NOI18N
         exportParametersLabel.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
 
         exportParametersButtonGroup.add(exportParametersCsvRadioButton);
         exportParametersCsvRadioButton.setSelected(true);
-        exportParametersCsvRadioButton.setText("Comma Separated Values (.csv)");
+        exportParametersCsvRadioButton.setText(bundle.getString("dialog_export_parameters_options_csv_text")); // NOI18N
 
         exportParametersButtonGroup.add(exportParametersCppRadioButton);
-        exportParametersCppRadioButton.setText("C/C++ Header File (.h)");
+        exportParametersCppRadioButton.setText(bundle.getString("dialog_export_parameters_options_cxx_text")); // NOI18N
 
         exportParametersButtonGroup.add(exportParametersInControlRadioButton);
-        exportParametersInControlRadioButton.setText("L-3 InControl \"lrv_database\" (.xml)");
+        exportParametersInControlRadioButton.setText(bundle.getString("dialog_export_parameters_options_incng_text")); // NOI18N
 
         exportParametersButtonGroup.add(exportParametersCometRadioButton);
-        exportParametersCometRadioButton.setText("Harris OS/COmet Symbol Definitions (.def)");
+        exportParametersCometRadioButton.setText(bundle.getString("dialog_export_parameters_options_osc_text")); // NOI18N
 
         exportParametersIncludeHeaderRowCheckbox.setSelected(true);
-        exportParametersIncludeHeaderRowCheckbox.setText("Include Header Row (csv/xlsx)");
+        exportParametersIncludeHeaderRowCheckbox.setText(bundle.getString("dialog_export_parameters_options_header_row_text")); // NOI18N
 
-        exportParametersUseNamespacesCheckbox.setText("Each Space System Is Namespace (h/def)");
+        exportParametersUseNamespacesCheckbox.setText(bundle.getString("dialog_export_parameters_options_ss_2_ns_text")); // NOI18N
 
         javax.swing.GroupLayout parameterExportPanelLayout = new javax.swing.GroupLayout(parameterExportPanel);
         parameterExportPanel.setLayout(parameterExportPanelLayout);
@@ -1196,6 +1197,14 @@ public class XTCEViewer extends javax.swing.JFrame {
             }
         });
         mainWindowShowMenu.add(mainWindowExpandAllSpaceSystemTreeMenuItem);
+
+        mainWindowExpandContainerTreeMenuItem.setText(bundle.getString("show_menu_expand_container_tree_label")); // NOI18N
+        mainWindowExpandContainerTreeMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mainWindowExpandContainerTreeMenuItemActionPerformed(evt);
+            }
+        });
+        mainWindowShowMenu.add(mainWindowExpandContainerTreeMenuItem);
 
         mainWindowMessagesDialogMenuItem.setText(bundle.getString("show_menu_messages_label")); // NOI18N
         mainWindowMessagesDialogMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -2648,6 +2657,16 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     }//GEN-LAST:event_showEncodeDecodeDialogMenuItemActionPerformed
 
+    private void mainWindowExpandContainerTreeMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mainWindowExpandContainerTreeMenuItemActionPerformed
+
+        if ( tmContainerTree != null ) {
+            for ( int iii = 0; iii < tmContainerTree.getRowCount(); iii++ ) {
+                tmContainerTree.expandRow(iii);
+            }
+        }
+
+    }//GEN-LAST:event_mainWindowExpandContainerTreeMenuItemActionPerformed
+
     public void goToParameter( String  parameterName,
                                String  spaceSystemName,
                                boolean isTelemetryParameter ) {
@@ -3072,6 +3091,9 @@ public class XTCEViewer extends javax.swing.JFrame {
             return;
         }
 
+        table.setDefaultRenderer( String.class,
+                                  new XTCEViewerParameterTableCellRenderer( parameters ) );
+
         boolean showAllNamespaces   = prefs.getShowAllAliasNamespacesOption();
         boolean showAliasNamespaces = prefs.getShowAliasNamespacesOption();
         String  preferredNamespace  = prefs.getPreferredAliasNamespaceOption();
@@ -3098,7 +3120,11 @@ public class XTCEViewer extends javax.swing.JFrame {
             tableModel.addRow( rowData );
 
             if ( parameter.isValid() == false ) {
-                logMsg( "Parameter " + parameter.getName() + " in Space System " + spaceSystem.getFullPath() + " does not have a valid type" );
+                logMsg( "ERROR: Parameter " +
+                        parameter.getName() +
+                        " in Space System " +
+                        spaceSystem.getFullPath() +
+                        " does not have a valid type" );
             }
 
         }
@@ -3556,6 +3582,7 @@ public class XTCEViewer extends javax.swing.JFrame {
     private javax.swing.JMenu mainWindowEditMenu;
     private javax.swing.JMenuItem mainWindowExitMenuItem;
     private javax.swing.JMenuItem mainWindowExpandAllSpaceSystemTreeMenuItem;
+    private javax.swing.JMenuItem mainWindowExpandContainerTreeMenuItem;
     private javax.swing.JMenu mainWindowExportMenu;
     private javax.swing.JMenuItem mainWindowExportParametersMenuItem;
     private javax.swing.JMenu mainWindowFileMenu;

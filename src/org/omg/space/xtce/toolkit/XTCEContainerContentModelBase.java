@@ -131,6 +131,33 @@ public class XTCEContainerContentModelBase {
         final ArrayList<XTCEContainerEntryValue> conditions = entry.getConditionList();
 
         for ( final XTCEContainerEntryValue condition : conditions ) {
+
+            // TODO Make this so constant parameters will evaluate even if they are
+            // not on the table.
+
+            //String ref  = condition.getItemFullPath();
+            //String name = XTCEFunctions.getNameFromPathReferenceString( ref );
+            //String path = XTCEFunctions.getPathNameFromReferenceString( ref );
+
+            //XTCESpaceSystem spaceSystem = spaceSystemsHashTable_.get( path );
+            //if ( spaceSystem != null ) {
+            //    if ( spaceSystem.isTelemetryParameter( name ) == true ) {
+            //        try {
+            //            XTCEParameter parameter = spaceSystem.getTelemetryParameter( name );
+            //            if ( parameter.getDataSource().equals( "constant" ) == true ) {
+            //                XTCEContainerEntryValue val =
+            //                    new XTCEContainerEntryValue( parameter, parameter.getInitialValue(), "==", "Calibrated" );
+            //                if ( val.toStringWithoutParameter().equals( condition.toStringWithoutParameter() ) == true ) {
+            //                    ++satisfied;
+            //                    continue;
+            //                }
+            //            }
+            //        } catch ( XTCEDatabaseException ex ) {
+            //            // this can't happen because if the true test above
+            //        }
+            //    }
+            //}
+
             for ( final XTCEContainerContentEntry listEntry : contentList_ ) {
                 final String entryValue = listEntry.getValue();
                 if ( ( entryValue == null ) || ( entryValue.isEmpty() == true ) ) {
@@ -253,13 +280,13 @@ public class XTCEContainerContentModelBase {
             List<ComparisonType> list = restrictions.getComparisonList().getComparison();
             for ( ComparisonType compare : list ) {
                 applyRestriction( compare,
-                                  parentSpaceSystemPath );
+                                  container );
             }
 
         } else if ( restrictions.getComparison() != null ) {
 
             applyRestriction( restrictions.getComparison(),
-                              parentSpaceSystemPath );
+                              container );
 
         } else if ( restrictions.getBooleanExpression() != null ) {
 
@@ -283,30 +310,35 @@ public class XTCEContainerContentModelBase {
 
     }
 
-    protected void applyRestriction( ComparisonType compare,
-                                     String         parentSpaceSystemPath ) {
+    protected void applyRestriction( ComparisonType  compare,
+                                     XTCENamedObject container ) {
 
-        String paramRef      = compare.getParameterRef();
-        String parameterPath = XTCEFunctions.resolvePathReference( parentSpaceSystemPath,
-                                                                   paramRef );
+        try {
 
-        boolean found = false;
+            XTCEParameter compareParameter = findParameter( compare.getParameterRef(),
+                                                            container );
 
-        for ( XTCEContainerContentEntry entry : contentList_ ) {
-            if ( entry.getEntryType() == FieldType.PARAMETER ) {
-                if ( entry.getParameter().getFullPath().equals( parameterPath ) == true ) {
-                    entry.setValue( compare );
-                    found = true;
+            boolean found = false;
+
+            for ( XTCEContainerContentEntry entry : contentList_ ) {
+                if ( entry.getEntryType() == FieldType.PARAMETER ) {
+                    if ( entry.getParameter().getFullPath().equals( compareParameter.getFullPath() ) == true ) {
+                        entry.setValue( compare );
+                        found = true;
+                    }
                 }
             }
-            //System.out.println( "Applying restriction to item " + entry.itemName );
-        }
 
-        if ( found == false ) {
+            if ( found == false ) {
+                throw new XTCEDatabaseException( "Parameter does not appear in container" );
+            }
 
-            warnings_.add( "Restriction on value of " +
-                           parameterPath +
-                           " failed to find the Parameter in the container inheritance" );
+        } catch ( XTCEDatabaseException ex ) {
+
+            warnings_.add( "Adding Restriction failed for " +
+                compare.getParameterRef() +
+                " Reason: " +
+                ex.getLocalizedMessage() );
 
         }
 
@@ -367,8 +399,10 @@ public class XTCEContainerContentModelBase {
 
         } catch ( XTCEDatabaseException ex ) {
 
-            warnings_.add( "Adding Include Condition failed: " + ex.getLocalizedMessage() );
-            System.out.println( "Gratuitous Exception? " + ex.getLocalizedMessage() );
+            warnings_.add( "Adding Include Condition failed for " +
+                compare.getParameterRef() +
+                " Reason: " +
+                ex.getLocalizedMessage() );
 
         }
 

@@ -31,6 +31,11 @@ public class XTCEViewerEncodeDecodeItemDialog extends javax.swing.JDialog {
         initComponents();
         itemValueObj_ = new XTCEItemValue( item );
         setTitle( item.getName() );
+        if ( item.isValid() == false ) {
+            warningsText.setText( "ERROR: Invalid Type For This Item" );
+            makeCalibratedButton.setEnabled( false );
+            makeRawButton.setEnabled( false );
+        }
         setVisible( true );
     }
 

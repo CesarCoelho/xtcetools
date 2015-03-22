@@ -398,7 +398,9 @@ public class XTCEParameter extends XTCETypedObject {
     public String typeToXml() throws XTCEDatabaseException {
 
         if ( getTypeReference() == null ) {
-            throw new XTCEDatabaseException( "Parameter " + getName() + "has not type defined" );
+            throw new XTCEDatabaseException( "Parameter " +
+                                             getName() +
+                                             " has no type defined" );
         }
 
         try {
