@@ -70,4 +70,5 @@
     nbproject/build-impl.xml file. 
 
     -->
+    <target name="-pre-jar" depends="javadoc" description="add javadoc to distribution for help viewer in gui"/>
 </project>

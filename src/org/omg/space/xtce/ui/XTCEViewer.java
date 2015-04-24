@@ -24,12 +24,15 @@ import java.io.File;
 import javax.swing.JFileChooser;
 import java.awt.event.WindowEvent;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Locale;
 import java.util.Properties;
 import javax.swing.JButton;
+import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
@@ -229,6 +232,11 @@ public class XTCEViewer extends javax.swing.JFrame {
         containerDrawingTopToBottom = new javax.swing.JRadioButtonMenuItem();
         mainWindowEditDocumentMenuItem = new javax.swing.JCheckBoxMenuItem();
         mainWindowHelpMenu = new javax.swing.JMenu();
+        mainWindowHelpSchemaMenuItem = new javax.swing.JMenuItem();
+        mainWindowHelpApiMenuItem = new javax.swing.JMenuItem();
+        mainWindowHelpToolMenuItem = new javax.swing.JMenuItem();
+        mainWindowHelpCurrentMenuItem = new javax.swing.JMenuItem();
+        mainWindowHelpAboutMenuItem = new javax.swing.JMenuItem();
 
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/omg/space/xtce/toolkit/MessagesBundle"); // NOI18N
         addSpaceSystemMenuItem.setText(bundle.getString("options_popup_add_spacesystem")); // NOI18N
@@ -1332,6 +1340,47 @@ public class XTCEViewer extends javax.swing.JFrame {
         mainWindowMenuBar.add(mainWindowOptionsMenu);
 
         mainWindowHelpMenu.setText(bundle.getString("help_menu_label")); // NOI18N
+
+        mainWindowHelpSchemaMenuItem.setText(bundle.getString("help_menu_schema")); // NOI18N
+        mainWindowHelpSchemaMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mainWindowHelpSchemaMenuItemActionPerformed(evt);
+            }
+        });
+        mainWindowHelpMenu.add(mainWindowHelpSchemaMenuItem);
+
+        mainWindowHelpApiMenuItem.setText(bundle.getString("help_menu_toolkit")); // NOI18N
+        mainWindowHelpApiMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mainWindowHelpApiMenuItemActionPerformed(evt);
+            }
+        });
+        mainWindowHelpMenu.add(mainWindowHelpApiMenuItem);
+
+        mainWindowHelpToolMenuItem.setText(bundle.getString("help_menu_tool")); // NOI18N
+        mainWindowHelpToolMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mainWindowHelpToolMenuItemActionPerformed(evt);
+            }
+        });
+        mainWindowHelpMenu.add(mainWindowHelpToolMenuItem);
+
+        mainWindowHelpCurrentMenuItem.setText(bundle.getString("help_menu_current")); // NOI18N
+        mainWindowHelpCurrentMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mainWindowHelpCurrentMenuItemActionPerformed(evt);
+            }
+        });
+        mainWindowHelpMenu.add(mainWindowHelpCurrentMenuItem);
+
+        mainWindowHelpAboutMenuItem.setText(bundle.getString("help_menu_about")); // NOI18N
+        mainWindowHelpAboutMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mainWindowHelpAboutMenuItemActionPerformed(evt);
+            }
+        });
+        mainWindowHelpMenu.add(mainWindowHelpAboutMenuItem);
+
         mainWindowMenuBar.add(mainWindowHelpMenu);
 
         setJMenuBar(mainWindowMenuBar);
@@ -2667,6 +2716,65 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     }//GEN-LAST:event_mainWindowExpandContainerTreeMenuItemActionPerformed
 
+    private void mainWindowHelpSchemaMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mainWindowHelpSchemaMenuItemActionPerformed
+
+        final String filename = "org/omg/space/xtce/schema/doc/SpaceSystemV1.2-27Feb2014-mods.html";
+
+        URL helpURL = ClassLoader.getSystemResource( filename );
+        if ( helpURL != null ) {
+            //XTCEViewerHelpDialog dialog =
+            //    new XTCEViewerHelpDialog( this, false, helpURL );
+            XTCEViewerHelpBrowserDialog dialog =
+                  new XTCEViewerHelpBrowserDialog( this, false, helpURL );
+        } else {
+            logMsg( XTCEFunctions.generalErrorPrefix() +
+                    XTCEFunctions.getText( "dialog_unabletoload_text" ) +
+                    ": " +
+                    filename );
+        }
+
+    }//GEN-LAST:event_mainWindowHelpSchemaMenuItemActionPerformed
+
+    private void mainWindowHelpApiMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mainWindowHelpApiMenuItemActionPerformed
+
+        final String filename = "org/omg/space/xtce/toolkit/doc/index.html";
+
+        URL helpURL = ClassLoader.getSystemResource( filename );
+        if ( helpURL != null ) {
+            //XTCEViewerHelpDialog dialog =
+            //    new XTCEViewerHelpDialog( this, false, helpURL );
+            XTCEViewerHelpBrowserDialog dialog =
+                  new XTCEViewerHelpBrowserDialog( this, false, helpURL );
+        } else {
+            logMsg( XTCEFunctions.generalErrorPrefix() +
+                    XTCEFunctions.getText( "dialog_unabletoload_text" ) +
+                    ": " +
+                    filename );
+        }
+
+    }//GEN-LAST:event_mainWindowHelpApiMenuItemActionPerformed
+
+    private void mainWindowHelpToolMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mainWindowHelpToolMenuItemActionPerformed
+
+        logMsg( XTCEFunctions.generalWarningPrefix() +
+                XTCEFunctions.getText( "general_not_implemented" ) );
+
+    }//GEN-LAST:event_mainWindowHelpToolMenuItemActionPerformed
+
+    private void mainWindowHelpCurrentMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mainWindowHelpCurrentMenuItemActionPerformed
+
+        logMsg( XTCEFunctions.generalWarningPrefix() +
+                XTCEFunctions.getText( "general_not_implemented" ) );
+
+    }//GEN-LAST:event_mainWindowHelpCurrentMenuItemActionPerformed
+
+    private void mainWindowHelpAboutMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mainWindowHelpAboutMenuItemActionPerformed
+
+        logMsg( XTCEFunctions.getText( "general_warning" ) +
+                XTCEFunctions.getText( "general_not_implemented" ) );
+
+    }//GEN-LAST:event_mainWindowHelpAboutMenuItemActionPerformed
+
     public void goToParameter( String  parameterName,
                                String  spaceSystemName,
                                boolean isTelemetryParameter ) {
@@ -3591,7 +3699,12 @@ public class XTCEViewer extends javax.swing.JFrame {
     private javax.swing.JMenuItem mainWindowFindParameterMenuItem;
     private javax.swing.JMenuItem mainWindowFindSpaceSystemMenuItem;
     private javax.swing.JMenuItem mainWindowFindTelecommandMenuItem;
+    private javax.swing.JMenuItem mainWindowHelpAboutMenuItem;
+    private javax.swing.JMenuItem mainWindowHelpApiMenuItem;
+    private javax.swing.JMenuItem mainWindowHelpCurrentMenuItem;
     private javax.swing.JMenu mainWindowHelpMenu;
+    private javax.swing.JMenuItem mainWindowHelpSchemaMenuItem;
+    private javax.swing.JMenuItem mainWindowHelpToolMenuItem;
     private javax.swing.JMenuItem mainWindowLocaleMenuItem;
     private javax.swing.JMenuBar mainWindowMenuBar;
     private javax.swing.JScrollPane mainWindowMessageScrollingPane;
