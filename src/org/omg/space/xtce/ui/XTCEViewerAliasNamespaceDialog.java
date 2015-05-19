@@ -19,6 +19,7 @@ public class XTCEViewerAliasNamespaceDialog extends javax.swing.JDialog {
     public XTCEViewerAliasNamespaceDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        setupFieldStates();
         pack();
         setLocationRelativeTo( parent );
     }
@@ -197,20 +198,26 @@ public class XTCEViewerAliasNamespaceDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     private void showAllCheckboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showAllCheckboxActionPerformed
-        if ( showAllCheckbox.isSelected() == true ) {
-            nameSpaceField.setText( "" );
-            nameSpaceField.setEnabled( false );
-        } else {
-            nameSpaceField.setEnabled( true );
-        }
+        setupFieldStates();
     }//GEN-LAST:event_showAllCheckboxActionPerformed
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
         showAllFlag = showAllCheckbox.isSelected();
         preferredNamespace = nameSpaceField.getText();
         modified = true;
-        this.dispatchEvent( new WindowEvent(this, WindowEvent.WINDOW_CLOSING) );
+        this.dispatchEvent( new WindowEvent( this, WindowEvent.WINDOW_CLOSING ) );
     }//GEN-LAST:event_okButtonActionPerformed
+
+    public void setupFieldStates() {
+        if ( showAllCheckbox.isSelected() == true ) {
+            nameSpaceField.setText( "" );
+            nameSpaceField.setEnabled( false );
+            nameSpaceField.setEditable( false );
+        } else {
+            nameSpaceField.setEnabled( true );
+            nameSpaceField.setEditable( true );
+        }
+    }
 
     public boolean getModified() {
         return modified;

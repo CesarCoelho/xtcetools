@@ -673,7 +673,9 @@ public class XTCEViewer extends javax.swing.JFrame {
         });
         tmParametersTableScrollPane.setViewportView(tmParametersTable);
         if (tmParametersTable.getColumnModel().getColumnCount() > 0) {
+            tmParametersTable.getColumnModel().getColumn(0).setPreferredWidth(150);
             tmParametersTable.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("table_parameters_name_col_label")); // NOI18N
+            tmParametersTable.getColumnModel().getColumn(1).setPreferredWidth(100);
             tmParametersTable.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("table_parameters_aliases_col_label")); // NOI18N
             tmParametersTable.getColumnModel().getColumn(2).setMinWidth(0);
             tmParametersTable.getColumnModel().getColumn(2).setPreferredWidth(100);
@@ -699,6 +701,7 @@ public class XTCEViewer extends javax.swing.JFrame {
             tmParametersTable.getColumnModel().getColumn(8).setMinWidth(0);
             tmParametersTable.getColumnModel().getColumn(8).setPreferredWidth(120);
             tmParametersTable.getColumnModel().getColumn(8).setHeaderValue(bundle.getString("table_parameters_defaultvalue_col_label")); // NOI18N
+            tmParametersTable.getColumnModel().getColumn(9).setPreferredWidth(250);
             tmParametersTable.getColumnModel().getColumn(9).setHeaderValue(bundle.getString("table_parameters_desc_col_label")); // NOI18N
         }
 
@@ -778,7 +781,9 @@ public class XTCEViewer extends javax.swing.JFrame {
         });
         tcParametersTableScrollPane.setViewportView(tcParametersTable);
         if (tcParametersTable.getColumnModel().getColumnCount() > 0) {
+            tcParametersTable.getColumnModel().getColumn(0).setPreferredWidth(150);
             tcParametersTable.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("table_parameters_name_col_label")); // NOI18N
+            tcParametersTable.getColumnModel().getColumn(1).setPreferredWidth(100);
             tcParametersTable.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("table_parameters_aliases_col_label")); // NOI18N
             tcParametersTable.getColumnModel().getColumn(2).setMinWidth(0);
             tcParametersTable.getColumnModel().getColumn(2).setPreferredWidth(100);
@@ -804,6 +809,7 @@ public class XTCEViewer extends javax.swing.JFrame {
             tcParametersTable.getColumnModel().getColumn(8).setMinWidth(0);
             tcParametersTable.getColumnModel().getColumn(8).setPreferredWidth(120);
             tcParametersTable.getColumnModel().getColumn(8).setHeaderValue(bundle.getString("table_parameters_defaultvalue_col_label")); // NOI18N
+            tcParametersTable.getColumnModel().getColumn(9).setPreferredWidth(250);
             tcParametersTable.getColumnModel().getColumn(9).setHeaderValue(bundle.getString("table_parameters_desc_col_label")); // NOI18N
         }
 
@@ -1623,6 +1629,7 @@ public class XTCEViewer extends javax.swing.JFrame {
         XTCEViewerAliasNamespaceDialog dialog = new XTCEViewerAliasNamespaceDialog( this, true );
         dialog.setShowAll( prefs.getShowAllAliasNamespacesOption() );
         dialog.setPreferredNamespace( prefs.getPreferredAliasNamespaceOption() );
+        dialog.setupFieldStates();
         dialog.setVisible( true );
         if ( dialog.getModified() == true ) {
             prefs.setShowAllAliasNamespacesOption( dialog.getShowAll() );

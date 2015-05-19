@@ -122,7 +122,7 @@ public class XTCEDatabaseException extends Exception {
     private static String extractMessage( Exception ex ) {
         if ( ex.getLocalizedMessage() == null ) {
             if ( ex.getMessage() == null ) {
-                return "Empty Exception Message - Check Software Code";
+                return XTCEFunctions.getText( "general_lastresort_exception" ); // NOI18N
             } else {
                 return ex.getMessage();
             }

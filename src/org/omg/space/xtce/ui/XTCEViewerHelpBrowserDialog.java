@@ -17,6 +17,7 @@ import javafx.scene.web.WebView;
 import javafx.scene.web.WebEngine;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
 /** This class is a dialog implementation that leverages an internal JFXPanel
@@ -51,18 +52,16 @@ public class XTCEViewerHelpBrowserDialog extends JDialog {
 
         super(parent, modal);
 
-        panel_ = new JFXPanel();
-        Platform.runLater( new Runnable() {
-            @Override
-            public void run() {
-                initialiseJavaFXScene( pageUrl );
-            }
-        } );
+        panel_         = new JFXPanel();
         dismissButton_ = new JButton();
 
         setTitle( "Help" );
 
-        setDefaultCloseOperation( WindowConstants.DISPOSE_ON_CLOSE );
+        // For using JavaFX Panel here, we need to HIDE_ON_CLOSE otherwise it
+        // will call Platform.exit and the app will not be able to open another
+        // FX window.
+
+        setDefaultCloseOperation( WindowConstants.HIDE_ON_CLOSE );
         setMinimumSize( new Dimension( 640, 480 ) );
         setPreferredSize( new Dimension( 1024, 768 ) );
 
@@ -92,9 +91,21 @@ public class XTCEViewerHelpBrowserDialog extends JDialog {
                 .addComponent(dismissButton_))
         );
 
-        pack();
         setLocationRelativeTo( parent );
-        setVisible( true );
+
+        Platform.runLater( new Runnable() {
+            @Override
+            public void run() {
+                initialiseJavaFXScene( pageUrl );
+                SwingUtilities.invokeLater( new Runnable() {
+                    @Override
+                    public void run() {
+                        pack();
+                        setVisible( true );
+                    }
+                } );
+            }
+        } );
 
     }
 

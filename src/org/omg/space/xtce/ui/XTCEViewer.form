@@ -1296,14 +1296,14 @@
                         </Property>
                         <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
                           <TableColumnModel selectionModel="0">
-                            <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                            <Column maxWidth="-1" minWidth="-1" prefWidth="150" resizable="true">
                               <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                                 <ResourceString bundle="org/omg/space/xtce/toolkit/MessagesBundle.properties" key="table_parameters_name_col_label" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                               </Title>
                               <Editor/>
                               <Renderer/>
                             </Column>
-                            <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                            <Column maxWidth="-1" minWidth="-1" prefWidth="100" resizable="true">
                               <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                                 <ResourceString bundle="org/omg/space/xtce/toolkit/MessagesBundle.properties" key="table_parameters_aliases_col_label" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                               </Title>
@@ -1359,7 +1359,7 @@
                               <Editor/>
                               <Renderer/>
                             </Column>
-                            <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                            <Column maxWidth="-1" minWidth="-1" prefWidth="250" resizable="true">
                               <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                                 <ResourceString bundle="org/omg/space/xtce/toolkit/MessagesBundle.properties" key="table_parameters_desc_col_label" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                               </Title>
@@ -1494,14 +1494,14 @@
                         </Property>
                         <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
                           <TableColumnModel selectionModel="0">
-                            <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                            <Column maxWidth="-1" minWidth="-1" prefWidth="150" resizable="true">
                               <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                                 <ResourceString bundle="org/omg/space/xtce/toolkit/MessagesBundle.properties" key="table_parameters_name_col_label" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                               </Title>
                               <Editor/>
                               <Renderer/>
                             </Column>
-                            <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                            <Column maxWidth="-1" minWidth="-1" prefWidth="100" resizable="true">
                               <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                                 <ResourceString bundle="org/omg/space/xtce/toolkit/MessagesBundle.properties" key="table_parameters_aliases_col_label" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                               </Title>
@@ -1557,7 +1557,7 @@
                               <Editor/>
                               <Renderer/>
                             </Column>
-                            <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                            <Column maxWidth="-1" minWidth="-1" prefWidth="250" resizable="true">
                               <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                                 <ResourceString bundle="org/omg/space/xtce/toolkit/MessagesBundle.properties" key="table_parameters_desc_col_label" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                               </Title>
