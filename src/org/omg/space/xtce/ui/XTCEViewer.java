@@ -77,6 +77,7 @@ public class XTCEViewer extends javax.swing.JFrame {
         buildSpaceSystemTrees();
         prefs.setParentWindow( this );
         prefs.updateRecentFilesList( mainWindowOpenRecentMenu, null );
+        prefs.updateExampleFilesList( mainWindowOpenExampleMenu );
         mainWindowEditDocumentMenuItemActionPerformed( null );
 
     }
@@ -201,6 +202,7 @@ public class XTCEViewer extends javax.swing.JFrame {
         mainWindowFileMenu = new javax.swing.JMenu();
         mainWindowOpenFileMenuItem = new javax.swing.JMenuItem();
         mainWindowOpenRecentMenu = new javax.swing.JMenu();
+        mainWindowOpenExampleMenu = new javax.swing.JMenu();
         mainWindowSaveFileMenuItem = new javax.swing.JMenuItem();
         mainWindowCloseFileMenuItem = new javax.swing.JMenuItem();
         mainWindowCreateFileMenuItem = new javax.swing.JMenuItem();
@@ -1119,6 +1121,9 @@ public class XTCEViewer extends javax.swing.JFrame {
 
         mainWindowOpenRecentMenu.setText(bundle.getString("file_menu_open_recent_database_label")); // NOI18N
         mainWindowFileMenu.add(mainWindowOpenRecentMenu);
+
+        mainWindowOpenExampleMenu.setText(bundle.getString("file_menu_open_example_label")); // NOI18N
+        mainWindowFileMenu.add(mainWindowOpenExampleMenu);
 
         mainWindowSaveFileMenuItem.setText(bundle.getString("file_menu_save_database_label")); // NOI18N
         mainWindowSaveFileMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -3716,6 +3721,7 @@ public class XTCEViewer extends javax.swing.JFrame {
     private javax.swing.JMenuBar mainWindowMenuBar;
     private javax.swing.JScrollPane mainWindowMessageScrollingPane;
     private javax.swing.JMenuItem mainWindowMessagesDialogMenuItem;
+    private javax.swing.JMenu mainWindowOpenExampleMenu;
     private javax.swing.JMenuItem mainWindowOpenFileMenuItem;
     private javax.swing.JMenu mainWindowOpenRecentMenu;
     private javax.swing.JMenu mainWindowOptionsMenu;

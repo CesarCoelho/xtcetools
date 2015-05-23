@@ -157,7 +157,7 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
                                         long                      containerStartBit,
                                         XTCEContainerContentEntry includedContainer ) throws XTCEDatabaseException {
 
-        //System.out.println( "Processing " + container.getInheritancePath() );
+        System.out.println( "Processing " + container.getInheritancePath() );
 
         // do not make a second row for the included container
         //if ( ( includedContainer != null ) && ( includedContainer.getContainer().getFullPath().equals( container.getFullPath() ) == false ) ) {

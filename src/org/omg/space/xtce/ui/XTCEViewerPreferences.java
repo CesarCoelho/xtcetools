@@ -13,6 +13,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.prefs.BackingStoreException;
@@ -328,6 +330,7 @@ public class XTCEViewerPreferences {
             JMenuItem item = new JMenuItem( files.get( iii ) );
             final File actionFile = new File ( files.get( iii ) );
             item.addActionListener( new ActionListener() {
+                @Override
                 public void actionPerformed( ActionEvent evt ) {
                     viewer.openFile( actionFile );
                 }
@@ -337,6 +340,55 @@ public class XTCEViewerPreferences {
 
         putObject( "RecentFilesList", files );
         save();
+
+    }
+
+    /** Method to initialize/update the example databases list from the
+     * internal database package directory included with the toolkit.
+     *
+     * Note that these files are loaded using the system resource classpath,
+     * which may be inside the distributed jar file and not directly visible
+     * on the filesystem.  Also, this method presently only selects the files
+     * in the org.omg.space.xtce.database package/folder with names of "*.xml".
+     *
+     * @param exampleItemsMenu JMenu item on the File Menu that contains the
+     * list of example databases.
+     *
+     */
+
+    public void updateExampleFilesList( JMenu exampleItemsMenu ) {
+
+
+        ArrayList<File> files = new ArrayList<>();
+
+        URL dbFilesDirectoryUrl =
+            getClass().getResource( "/org/omg/space/xtce/database/" );
+        if ( dbFilesDirectoryUrl != null ) {
+            try {
+                File dir = new File( dbFilesDirectoryUrl.toURI() );
+                for ( File nextFile : dir.listFiles() ) {
+                    if ( ( nextFile.isFile()                     == true ) &&
+                         ( nextFile.getName().endsWith( ".xml" ) == true ) ) {
+                        files.add( nextFile );
+                    }
+                }
+            } catch ( URISyntaxException ex ) {
+                // skip it, do nothing for now
+            }
+        }
+
+        exampleItemsMenu.removeAll();
+        for ( int iii = ( files.size() - 1 ); iii >= 0; --iii ) {
+            JMenuItem item = new JMenuItem( files.get( iii ).getName() );
+            final File actionFile = files.get( iii );
+            item.addActionListener( new ActionListener() {
+                @Override
+                public void actionPerformed( ActionEvent evt ) {
+                    viewer.openFile( actionFile );
+                }
+            });
+            exampleItemsMenu.add( item );
+        }
 
     }
 

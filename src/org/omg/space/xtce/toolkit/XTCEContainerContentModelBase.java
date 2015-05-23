@@ -119,16 +119,16 @@ public class XTCEContainerContentModelBase {
 
     protected boolean isEntryConditionSatisfied( XTCEContainerContentEntry entry ) {
 
+        final ArrayList<XTCEContainerEntryValue> conditions = entry.getConditionList();
+
         // short circuit if there are no conditionals to evaluate
 
-        if ( entry.getConditionList().isEmpty() == true ) {
+        if ( conditions.isEmpty() == true ) {
             return true;
         }
 
         FieldType entryType = entry.getEntryType();
         long      satisfied = 0;
-
-        final ArrayList<XTCEContainerEntryValue> conditions = entry.getConditionList();
 
         for ( final XTCEContainerEntryValue condition : conditions ) {
 
