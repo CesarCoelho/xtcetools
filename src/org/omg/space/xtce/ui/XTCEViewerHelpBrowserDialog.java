@@ -11,14 +11,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
 import java.net.URL;
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
 import javafx.scene.web.WebView;
 import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebHistory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
+import org.omg.space.xtce.toolkit.XTCEFunctions;
+
 
 /** This class is a dialog implementation that leverages an internal JFXPanel
  * so that it can use the Java FX Web Browser Component.
@@ -54,8 +58,10 @@ public class XTCEViewerHelpBrowserDialog extends JDialog {
 
         panel_         = new JFXPanel();
         dismissButton_ = new JButton();
+        backButton_    = new JButton();
+        forwardButton_ = new JButton();
 
-        setTitle( "Help" );
+        setTitle( XTCEFunctions.getText( "help_menu_label" ) );
 
         // For using JavaFX Panel here, we need to HIDE_ON_CLOSE otherwise it
         // will call Platform.exit and the app will not be able to open another
@@ -67,9 +73,32 @@ public class XTCEViewerHelpBrowserDialog extends JDialog {
 
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/omg/space/xtce/toolkit/MessagesBundle"); // NOI18N
         dismissButton_.setText(bundle.getString("general_dismiss_text")); // NOI18N
+        dismissButton_.setMaximumSize(new java.awt.Dimension(90, 25));
+        dismissButton_.setMinimumSize(new java.awt.Dimension(90, 25));
+        dismissButton_.setPreferredSize(new java.awt.Dimension(90, 25));
         dismissButton_.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 dismissButtonActionPerformed(evt);
+            }
+        });
+
+        backButton_.setText(bundle.getString("general_back")); // NOI18N
+        backButton_.setMaximumSize(new java.awt.Dimension(90, 25));
+        backButton_.setMinimumSize(new java.awt.Dimension(90, 25));
+        backButton_.setPreferredSize(new java.awt.Dimension(90, 25));
+        backButton_.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backButtonActionPerformed(evt);
+            }
+        });
+
+        forwardButton_.setText(bundle.getString("general_forward")); // NOI18N
+        forwardButton_.setMaximumSize(new java.awt.Dimension(90, 25));
+        forwardButton_.setMinimumSize(new java.awt.Dimension(90, 25));
+        forwardButton_.setPreferredSize(new java.awt.Dimension(90, 25));
+        forwardButton_.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                forwardButtonActionPerformed(evt);
             }
         });
 
@@ -79,16 +108,23 @@ public class XTCEViewerHelpBrowserDialog extends JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(panel_)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(154, Short.MAX_VALUE)
+                .addContainerGap(57, Short.MAX_VALUE)
+                .addComponent(backButton_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(dismissButton_, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(154, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(forwardButton_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(57, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(panel_, javax.swing.GroupLayout.DEFAULT_SIZE, 268, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(dismissButton_))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(dismissButton_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(backButton_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(forwardButton_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         setLocationRelativeTo( parent );
@@ -120,6 +156,54 @@ public class XTCEViewerHelpBrowserDialog extends JDialog {
         dispatchEvent( new WindowEvent( this, WindowEvent.WINDOW_CLOSING ) );
     }
 
+    /** Action performed when the "back" button is pressed
+     *
+     * @param evt ActionEvent containing the action performed, which is not
+     * needed for this implementation.
+     *
+     */
+
+    private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {                                           
+
+        final WebHistory history = webEngine_.getHistory();
+        ObservableList<WebHistory.Entry> entryList = history.getEntries();
+        int currentIndex = history.getCurrentIndex();
+        Platform.runLater( new Runnable() {
+            public void run() {
+                try {
+                    history.go( -1 );
+                } catch ( IndexOutOfBoundsException ex ) {
+                    // ignore it
+                }
+            }
+        });
+
+    }                                          
+
+    /** Action performed when the "forward" button is pressed
+     *
+     * @param evt ActionEvent containing the action performed, which is not
+     * needed for this implementation.
+     *
+     */
+
+    private void forwardButtonActionPerformed(java.awt.event.ActionEvent evt) {                                              
+
+        final WebHistory history = webEngine_.getHistory();
+        ObservableList<WebHistory.Entry> entryList = history.getEntries();
+        int currentIndex = history.getCurrentIndex();
+        Platform.runLater( new Runnable() {
+            public void run() {
+                try {
+                    history.go( 1 );
+                } catch ( IndexOutOfBoundsException ex ) {
+                    // ignore it
+                }
+            }
+        });
+
+    }   
+
     /** Method to draw the web page URL.
      *
      * @param pageUrl URL to the page to open initially when the dialog starts.
@@ -139,10 +223,12 @@ public class XTCEViewerHelpBrowserDialog extends JDialog {
 
     // Private Data Members
 
-    private JButton   dismissButton_ = null;
-    private JFXPanel  panel_         = null;
-    private WebView   webView_       = null;
-    private WebEngine webEngine_     = null;
+    private JButton        dismissButton_ = null;
+    private JButton        backButton_    = null;
+    private JButton        forwardButton_ = null;
+    private JFXPanel       panel_         = null;
+    private WebView        webView_       = null;
+    private WebEngine      webEngine_     = null;
 
 }
 

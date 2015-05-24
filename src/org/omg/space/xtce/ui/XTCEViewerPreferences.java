@@ -362,7 +362,7 @@ public class XTCEViewerPreferences {
         ArrayList<File> files = new ArrayList<>();
 
         URL dbFilesDirectoryUrl =
-            getClass().getResource( "/org/omg/space/xtce/database/" );
+            ClassLoader.getSystemResource( "org/omg/space/xtce/database" );
         if ( dbFilesDirectoryUrl != null ) {
             try {
                 File dir = new File( dbFilesDirectoryUrl.toURI() );
@@ -373,6 +373,8 @@ public class XTCEViewerPreferences {
                     }
                 }
             } catch ( URISyntaxException ex ) {
+                // skip it, do nothing for now
+            } catch ( IllegalArgumentException ex ) {
                 // skip it, do nothing for now
             }
         }

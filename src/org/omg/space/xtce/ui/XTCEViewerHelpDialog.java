@@ -41,6 +41,9 @@ public class XTCEViewerHelpDialog extends javax.swing.JDialog {
                                   ex.getLocalizedMessage() );
         }
 
+        backButton.setEnabled( false );
+        forwardButton.setEnabled( false );
+
         pack();
         setLocationRelativeTo( parent );
         setVisible( true );
@@ -59,6 +62,8 @@ public class XTCEViewerHelpDialog extends javax.swing.JDialog {
         editorScrollPane = new javax.swing.JScrollPane();
         jEditorPane1 = new javax.swing.JEditorPane();
         dismissButton = new javax.swing.JButton();
+        backButton = new javax.swing.JButton();
+        forwardButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(640, 480));
@@ -68,9 +73,32 @@ public class XTCEViewerHelpDialog extends javax.swing.JDialog {
 
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/omg/space/xtce/toolkit/MessagesBundle"); // NOI18N
         dismissButton.setText(bundle.getString("general_dismiss_text")); // NOI18N
+        dismissButton.setMaximumSize(new java.awt.Dimension(90, 25));
+        dismissButton.setMinimumSize(new java.awt.Dimension(90, 25));
+        dismissButton.setPreferredSize(new java.awt.Dimension(90, 25));
         dismissButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 dismissButtonActionPerformed(evt);
+            }
+        });
+
+        backButton.setText(bundle.getString("general_back")); // NOI18N
+        backButton.setMaximumSize(new java.awt.Dimension(90, 25));
+        backButton.setMinimumSize(new java.awt.Dimension(90, 25));
+        backButton.setPreferredSize(new java.awt.Dimension(90, 25));
+        backButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backButtonActionPerformed(evt);
+            }
+        });
+
+        forwardButton.setText(bundle.getString("general_forward")); // NOI18N
+        forwardButton.setMaximumSize(new java.awt.Dimension(90, 25));
+        forwardButton.setMinimumSize(new java.awt.Dimension(90, 25));
+        forwardButton.setPreferredSize(new java.awt.Dimension(90, 25));
+        forwardButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                forwardButtonActionPerformed(evt);
             }
         });
 
@@ -80,16 +108,23 @@ public class XTCEViewerHelpDialog extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(editorScrollPane)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(154, Short.MAX_VALUE)
+                .addContainerGap(57, Short.MAX_VALUE)
+                .addComponent(backButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(dismissButton, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(154, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(forwardButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(57, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(editorScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 268, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(dismissButton))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(dismissButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(backButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(forwardButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         pack();
@@ -98,6 +133,14 @@ public class XTCEViewerHelpDialog extends javax.swing.JDialog {
     private void dismissButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dismissButtonActionPerformed
         this.dispatchEvent( new WindowEvent(this, WindowEvent.WINDOW_CLOSING) );
     }//GEN-LAST:event_dismissButtonActionPerformed
+
+    private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_backButtonActionPerformed
+
+    private void forwardButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_forwardButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_forwardButtonActionPerformed
 
     class ActivatedHyperlinkListener implements HyperlinkListener {
 
@@ -129,8 +172,10 @@ public class XTCEViewerHelpDialog extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton backButton;
     private javax.swing.JButton dismissButton;
     private javax.swing.JScrollPane editorScrollPane;
+    private javax.swing.JButton forwardButton;
     private javax.swing.JEditorPane jEditorPane1;
     // End of variables declaration//GEN-END:variables
 }

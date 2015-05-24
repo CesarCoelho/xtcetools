@@ -2749,6 +2749,12 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     private void mainWindowHelpApiMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mainWindowHelpApiMenuItemActionPerformed
 
+        // this method no longer uses the XTCEViewerHelpDialog class in favor
+        // of a version that uses a Java FX Panel that does a nicer job at the
+        // html rendering.  the old class is kept around so that I can edit the
+        // form to add things and copy the generated code over to the new class
+        // since NetBeans is not configured for FX in this project right now.
+
         final String filename = "org/omg/space/xtce/toolkit/doc/index.html";
 
         URL helpURL = ClassLoader.getSystemResource( filename );
@@ -2782,7 +2788,7 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     private void mainWindowHelpAboutMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mainWindowHelpAboutMenuItemActionPerformed
 
-        logMsg( XTCEFunctions.getText( "general_warning" ) +
+        logMsg( XTCEFunctions.generalWarningPrefix() +
                 XTCEFunctions.getText( "general_not_implemented" ) );
 
     }//GEN-LAST:event_mainWindowHelpAboutMenuItemActionPerformed
