@@ -31,10 +31,13 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Locale;
 import java.util.Properties;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTree;
@@ -214,6 +217,7 @@ public class XTCEViewer extends javax.swing.JFrame {
         mainWindowFindParameterMenuItem = new javax.swing.JMenuItem();
         mainWindowFindContainerMenuItem = new javax.swing.JMenuItem();
         mainWindowFindTelecommandMenuItem = new javax.swing.JMenuItem();
+        mainWindowFindByXPathMenuItem = new javax.swing.JMenuItem();
         mainWindowShowMenu = new javax.swing.JMenu();
         mainWindowExpandAllSpaceSystemTreeMenuItem = new javax.swing.JMenuItem();
         mainWindowExpandContainerTreeMenuItem = new javax.swing.JMenuItem();
@@ -227,6 +231,7 @@ public class XTCEViewer extends javax.swing.JFrame {
         mainWindowPreferredNamespaceMenuItem = new javax.swing.JMenuItem();
         mainWindowRecentFilesMaxMenuItem = new javax.swing.JMenuItem();
         mainWindowClearRecentFilesMenuItem = new javax.swing.JMenuItem();
+        mainWindowUseXincludeMenuItem = new javax.swing.JCheckBoxMenuItem();
         mainWindowLocaleMenuItem = new javax.swing.JMenuItem();
         mainWindowShowAllConditionalsMenuItem = new javax.swing.JCheckBoxMenuItem();
         containerDrawingOrientationMenu = new javax.swing.JMenu();
@@ -1205,6 +1210,14 @@ public class XTCEViewer extends javax.swing.JFrame {
         });
         mainWindowFindMenu.add(mainWindowFindTelecommandMenuItem);
 
+        mainWindowFindByXPathMenuItem.setText(bundle.getString("find_menu_xpath_label")); // NOI18N
+        mainWindowFindByXPathMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mainWindowFindByXPathMenuItemActionPerformed(evt);
+            }
+        });
+        mainWindowFindMenu.add(mainWindowFindByXPathMenuItem);
+
         mainWindowMenuBar.add(mainWindowFindMenu);
 
         mainWindowShowMenu.setText(bundle.getString("show_menu_label")); // NOI18N
@@ -1299,6 +1312,15 @@ public class XTCEViewer extends javax.swing.JFrame {
             }
         });
         mainWindowOptionsMenu.add(mainWindowClearRecentFilesMenuItem);
+
+        mainWindowUseXincludeMenuItem.setSelected(prefs.getUseXIncludeOption());
+        mainWindowUseXincludeMenuItem.setText(bundle.getString("file_chooser_xinclude_text")); // NOI18N
+        mainWindowUseXincludeMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mainWindowUseXincludeMenuItemActionPerformed(evt);
+            }
+        });
+        mainWindowOptionsMenu.add(mainWindowUseXincludeMenuItem);
 
         mainWindowLocaleMenuItem.setText(bundle.getString("options_menu_locale_label")); // NOI18N
         mainWindowLocaleMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -1431,6 +1453,13 @@ public class XTCEViewer extends javax.swing.JFrame {
     private void mainWindowOpenFileMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mainWindowOpenFileMenuItemActionPerformed
 
         JFileChooser chooser = new JFileChooser( "." ); // NOI18N
+        JCheckBox field1 = new JCheckBox( XTCEFunctions.getText( "file_chooser_xinclude_text" ) ); // NOI18N
+        JPanel accessory = new JPanel();
+        accessory.setLayout( new BoxLayout( accessory, BoxLayout.PAGE_AXIS ) );
+        accessory.add( field1 );
+        chooser.setAccessory( accessory );
+        field1.setSelected( prefs.getUseXIncludeOption() );
+
         FileFilter fileFilter =
             new FileNameExtensionFilter( XTCEFunctions.getText( "file_chooser_xtcexml_text" ), // NOI18N
                                          "xml" ); // NOI18N
@@ -1442,7 +1471,7 @@ public class XTCEViewer extends javax.swing.JFrame {
         int status = chooser.showOpenDialog( this );
         if (status == JFileChooser.APPROVE_OPTION) {
            File dbFile = chooser.getSelectedFile();
-           openFile( dbFile );
+           openFile( dbFile, field1.isSelected() );
         }
 
     }//GEN-LAST:event_mainWindowOpenFileMenuItemActionPerformed
@@ -1473,6 +1502,16 @@ public class XTCEViewer extends javax.swing.JFrame {
                     return;
                 }
             }
+        }
+
+        if ( xpathDialog != null ) {
+            xpathDialog.dispatchEvent( new WindowEvent( this, WindowEvent.WINDOW_CLOSING ) );
+            xpathDialog = null;
+        }
+
+        if ( findParameterDialog != null ) {
+            findParameterDialog.dispatchEvent( new WindowEvent( this, WindowEvent.WINDOW_CLOSING ) );
+            findParameterDialog = null;
         }
 
         xtceDatabaseFile = null;
@@ -1594,7 +1633,7 @@ public class XTCEViewer extends javax.swing.JFrame {
             } catch ( XTCEDatabaseException ex ) {
 
                 logMsg( XTCEFunctions.generalErrorPrefix() +
-                        XTCEFunctions.getText( "file_save_error_message" ) +
+                        XTCEFunctions.getText( "file_save_error_message" ) + // NOI18N
                         " " +
                         dbFile.getAbsolutePath() );
                 logMsg( XTCEFunctions.generalErrorPrefix() +
@@ -1699,7 +1738,8 @@ public class XTCEViewer extends javax.swing.JFrame {
         XTCEViewerSpaceSystemTreeNode node =
             (XTCEViewerSpaceSystemTreeNode)detailSpaceSystemTree.getLastSelectedPathComponent();
         if ( node == null ) {
-            logMsg( XTCEFunctions.generalErrorPrefix() + XTCEFunctions.getText( "dialog_nospacesystemtoadd_text" ));
+            logMsg( XTCEFunctions.generalErrorPrefix() +
+                    XTCEFunctions.getText( "dialog_nospacesystemtoadd_text" )); // NOI18N
             return;
         }
 
@@ -1723,15 +1763,15 @@ public class XTCEViewer extends javax.swing.JFrame {
                                         dialog.getClassificationInstructions(),
                                         dialog.getValidationStatus() );
                 resetAllDisplays();
-                logMsg( XTCEFunctions.getText( "dialog_addedspacesystem_text" ) +
-                        ": " +
+                logMsg( XTCEFunctions.getText( "dialog_addedspacesystem_text" ) + // NOI18N
+                        ": " + // NOI18N
                         node.getFullPath() +
-                        "/" +
+                        "/" + // NOI18N
                         dialog.getSpaceSystemName() );
             } catch ( XTCEDatabaseException ex ) {
                 logMsg( XTCEFunctions.generalErrorPrefix() +
-                        XTCEFunctions.getText( "dialog_failedtoaddspacesystem_text" ) +
-                        ": " +
+                        XTCEFunctions.getText( "dialog_failedtoaddspacesystem_text" ) + // NOI18N
+                        ": " + // NOI18N
                         ex.getLocalizedMessage() );
             }
 
@@ -1745,25 +1785,25 @@ public class XTCEViewer extends javax.swing.JFrame {
             (XTCEViewerSpaceSystemTreeNode)detailSpaceSystemTree.getLastSelectedPathComponent();
         if ( node == null ) {
             logMsg( XTCEFunctions.generalErrorPrefix() +
-                    XTCEFunctions.getText( "dialog_nospacesystemtodelete_text" ) );
+                    XTCEFunctions.getText( "dialog_nospacesystemtodelete_text" ) ); // NOI18N
             return;
         }
 
         int response = JOptionPane.showConfirmDialog( this,
-                                                      XTCEFunctions.getText( "dialog_confirmdelete_yoursure_text" ),
-                                                      XTCEFunctions.getText( "dialog_confirmdelete_spacesystem_text" ),
+                                                      XTCEFunctions.getText( "dialog_confirmdelete_yoursure_text" ), // NOI18N
+                                                      XTCEFunctions.getText( "dialog_confirmdelete_spacesystem_text" ), // NOI18N
                                                       JOptionPane.YES_NO_OPTION );
         if ( response == JOptionPane.YES_OPTION ) {
             try {
                 xtceDatabaseFile.deleteSpaceSystem( node.getFullPath() );
                 resetAllDisplays();
-                logMsg( XTCEFunctions.getText( "spacesystem_remove_message" ) +
+                logMsg( XTCEFunctions.getText( "spacesystem_remove_message" ) + // NOI18N
                         " " +
                         node.getFullPath() );
             } catch ( XTCEDatabaseException ex ) {
                 logMsg( XTCEFunctions.generalErrorPrefix() +
-                        XTCEFunctions.getText( "spacesystem_remove_error_message" ) +
-                        " " +
+                        XTCEFunctions.getText( "spacesystem_remove_error_message" ) + // NOI18N
+                        " " + // NOI18N
                         ex.getLocalizedMessage() );
             }
         }
@@ -1805,7 +1845,7 @@ public class XTCEViewer extends javax.swing.JFrame {
                 (XTCEViewerSpaceSystemTreeNode)tmParameterSpaceSystemTree.getLastSelectedPathComponent();
             if ( node == null ) {
                 logMsg( XTCEFunctions.generalErrorPrefix() +
-                        XTCEFunctions.getText( "rightclick_xml_no_tm_spacesystem_error_message" ) );
+                        XTCEFunctions.getText( "rightclick_xml_no_tm_spacesystem_error_message" ) ); // NOI18N
                 return;
             }
             row = tmParametersTable.getSelectedRow();
@@ -1826,7 +1866,7 @@ public class XTCEViewer extends javax.swing.JFrame {
                 (XTCEViewerSpaceSystemTreeNode)tcParameterSpaceSystemTree.getLastSelectedPathComponent();
             if ( node == null ) {
                 logMsg( XTCEFunctions.generalErrorPrefix() +
-                        XTCEFunctions.getText( "rightclick_xml_no_tc_spacesystem_error_message" ) );
+                        XTCEFunctions.getText( "rightclick_xml_no_tc_spacesystem_error_message" ) ); // NOI18N
                 return;
             }
             row = tcParametersTable.getSelectedRow();
@@ -1847,7 +1887,7 @@ public class XTCEViewer extends javax.swing.JFrame {
                 (XTCEViewerContainerTreeNode)tmContainerTree.getLastSelectedPathComponent();
             if ( node == null ) {
                 logMsg( XTCEFunctions.generalErrorPrefix() +
-                        XTCEFunctions.getText( "rightclick_xml_no_tm_container_error_message" ) );
+                        XTCEFunctions.getText( "rightclick_xml_no_tm_container_error_message" ) ); // NOI18N
                 return;
             }
             row = tmContainerTable.getSelectedRow();
@@ -1863,15 +1903,15 @@ public class XTCEViewer extends javax.swing.JFrame {
                         dialog.setVisible( true );
                     } else {
                         logMsg( XTCEFunctions.generalErrorPrefix() +
-                                XTCEFunctions.getText( "rightclick_container_table_error_message" ) );
+                                XTCEFunctions.getText( "rightclick_container_table_error_message" ) ); // NOI18N
                     }
                 } catch ( XTCEDatabaseException ex ) {
                     logMsg( XTCEFunctions.generalErrorPrefix() + ex.getLocalizedMessage() );
                     return;
                 } catch ( NullPointerException ex ) {
                     JOptionPane.showMessageDialog( this,
-                                                   XTCEFunctions.getText( "rightclick_container_table_null_error_message" ),
-                                                   XTCEFunctions.getText( "general_error" ),
+                                                   XTCEFunctions.getText( "rightclick_container_table_null_error_message" ), // NOI18N
+                                                   XTCEFunctions.getText( "general_error" ), // NOI18N
                                                    JOptionPane.ERROR_MESSAGE);
                 }
             }
@@ -1888,7 +1928,7 @@ public class XTCEViewer extends javax.swing.JFrame {
                 (XTCEViewerSpaceSystemTreeNode)tmParameterSpaceSystemTree.getLastSelectedPathComponent();
             if ( node == null ) {
                 logMsg( XTCEFunctions.generalErrorPrefix() +
-                        XTCEFunctions.getText( "rightclick_xml_no_tm_spacesystem_error_message" ) );
+                        XTCEFunctions.getText( "rightclick_xml_no_tm_spacesystem_error_message" ) ); // NOI18N
                 return;
             }
             row = tmParametersTable.getSelectedRow();
@@ -1909,7 +1949,7 @@ public class XTCEViewer extends javax.swing.JFrame {
                 (XTCEViewerSpaceSystemTreeNode)tcParameterSpaceSystemTree.getLastSelectedPathComponent();
             if ( node == null ) {
                 logMsg( XTCEFunctions.generalErrorPrefix() +
-                        XTCEFunctions.getText( "rightclick_xml_no_tc_spacesystem_error_message" ) );
+                        XTCEFunctions.getText( "rightclick_xml_no_tc_spacesystem_error_message" ) ); // NOI18N
                 return;
             }
             row = tcParametersTable.getSelectedRow();
@@ -1930,7 +1970,7 @@ public class XTCEViewer extends javax.swing.JFrame {
                 (XTCEViewerContainerTreeNode)tmContainerTree.getLastSelectedPathComponent();
             if ( node == null ) {
                 logMsg( XTCEFunctions.generalErrorPrefix() +
-                        XTCEFunctions.getText( "rightclick_xml_no_tm_container_error_message" ) );
+                        XTCEFunctions.getText( "rightclick_xml_no_tm_container_error_message" ) ); // NOI18N
                 return;
             }
             row = tmContainerTable.getSelectedRow();
@@ -1944,8 +1984,8 @@ public class XTCEViewer extends javax.swing.JFrame {
                     return;
                 } catch ( NullPointerException ex ) {
                     JOptionPane.showMessageDialog( this,
-                                                   XTCEFunctions.getText( "rightclick_container_table_null_error_message" ),
-                                                   XTCEFunctions.getText( "general_error" ),
+                                                   XTCEFunctions.getText( "rightclick_container_table_null_error_message" ), // NOI18N
+                                                   XTCEFunctions.getText( "general_error" ), // NOI18N
                                                    JOptionPane.ERROR_MESSAGE);
                 }
             }
@@ -1957,14 +1997,14 @@ public class XTCEViewer extends javax.swing.JFrame {
 
         if ( xtceDatabaseFile == null ) {
             JOptionPane.showMessageDialog( this,
-                                           XTCEFunctions.getText( "dialog_nofileisopen_text" ),
-                                           XTCEFunctions.getText( "general_error" ),
+                                           XTCEFunctions.getText( "dialog_nofileisopen_text" ), // NOI18N
+                                           XTCEFunctions.getText( "general_error" ), // NOI18N
                                            JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         String name = JOptionPane.showInputDialog( this,
-                                                   XTCEFunctions.getText( "ss_name_text" ) );
+                                                   XTCEFunctions.getText( "ss_name_text" ) ); // NOI18N
         if ( name == null ) {
             return;
         }
@@ -1979,8 +2019,8 @@ public class XTCEViewer extends javax.swing.JFrame {
         }
 
         JOptionPane.showMessageDialog( this,
-                                       XTCEFunctions.getText( "dialog_nolocatespacesystem_text" ) + ":\n" + name,
-                                       XTCEFunctions.getText( "general_error" ),
+                                       XTCEFunctions.getText( "dialog_nolocatespacesystem_text" ) + ":\n" + name, // NOI18N
+                                       XTCEFunctions.getText( "general_error" ), // NOI18N
                                        JOptionPane.ERROR_MESSAGE);
 
     }//GEN-LAST:event_mainWindowFindSpaceSystemMenuItemActionPerformed
@@ -1989,14 +2029,20 @@ public class XTCEViewer extends javax.swing.JFrame {
 
         if ( xtceDatabaseFile == null ) {
             JOptionPane.showMessageDialog( this,
-                                           XTCEFunctions.getText( "dialog_nofileisopen_text" ),
-                                           XTCEFunctions.getText( "general_error" ),
+                                           XTCEFunctions.getText( "dialog_nofileisopen_text" ), // NOI18N
+                                           XTCEFunctions.getText( "general_error" ), // NOI18N
                                            JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        XTCEViewerParameterFindDialog findDialog =
-            new XTCEViewerParameterFindDialog( this, prefs, xtceDatabaseFile );
+        if ( findParameterDialog == null ) {
+            findParameterDialog = new XTCEViewerParameterFindDialog( this,
+                                                                     prefs,
+                                                                     xtceDatabaseFile );
+        } else {
+            findParameterDialog.setVisible( true );
+            findParameterDialog.toFront();
+        }
 
     }//GEN-LAST:event_mainWindowFindParameterMenuItemActionPerformed
 
@@ -2027,33 +2073,33 @@ public class XTCEViewer extends javax.swing.JFrame {
 
         if ( xtceDatabaseFile == null ) {
             JOptionPane.showMessageDialog( this,
-                                           XTCEFunctions.getText( "dialog_nofileisopen_text" ),
-                                           XTCEFunctions.getText( "general_error" ),
+                                           XTCEFunctions.getText( "dialog_nofileisopen_text" ), // NOI18N
+                                           XTCEFunctions.getText( "general_error" ), // NOI18N
                                            JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         int value = JOptionPane.showConfirmDialog( this,
                                                    parameterExportPanel,
-                                                   XTCEFunctions.getText( "dialog_exportparameters_text" ),
+                                                   XTCEFunctions.getText( "dialog_exportparameters_text" ), // NOI18N
                                                    JOptionPane.OK_CANCEL_OPTION );
         if ( value == JOptionPane.CANCEL_OPTION ) {
             return;
         }
 
-        String fileExtensionDescription = XTCEFunctions.getText( "file_chooser_csv_text" );
-        String fileExtensionPattern     = "csv";
+        String fileExtensionDescription = XTCEFunctions.getText( "file_chooser_csv_text" ); // NOI18N
+        String fileExtensionPattern     = "csv"; // NOI18N
         if ( exportParametersCppRadioButton.isSelected() == true ) {
-            fileExtensionDescription = XTCEFunctions.getText( "file_chooser_cpp_text" );
-            fileExtensionPattern     = "h";
+            fileExtensionDescription = XTCEFunctions.getText( "file_chooser_cpp_text" ); // NOI18N
+            fileExtensionPattern     = "h"; // NOI18N
         } else if ( exportParametersCometRadioButton.isSelected() == true ) {
-            fileExtensionDescription = XTCEFunctions.getText( "file_chooser_oscomet_text" );
-            fileExtensionPattern     = "def";
+            fileExtensionDescription = XTCEFunctions.getText( "file_chooser_oscomet_text" ); // NOI18N
+            fileExtensionPattern     = "def"; // NOI18N
         } else if ( exportParametersInControlRadioButton.isSelected() == true ) {
-            fileExtensionDescription = XTCEFunctions.getText( "file_chooser_incontrol_text" );
-            fileExtensionPattern     = "xml";
+            fileExtensionDescription = XTCEFunctions.getText( "file_chooser_incontrol_text" ); // NOI18N
+            fileExtensionPattern     = "xml"; // NOI18N
         }
-        JFileChooser chooser = new JFileChooser( "." );
+        JFileChooser chooser = new JFileChooser( "." ); // NOI18N
         FileFilter fileFilter = new FileNameExtensionFilter( fileExtensionDescription,
                                                              fileExtensionPattern );
         chooser.addChoosableFileFilter( fileFilter );
@@ -2062,55 +2108,55 @@ public class XTCEViewer extends javax.swing.JFrame {
         if (status == JFileChooser.APPROVE_OPTION) {
             File exportFile = chooser.getSelectedFile();
             if ( exportParametersCsvRadioButton.isSelected() == true ) {
-                if ( exportFile.getName().endsWith( ".csv" ) == false ) {
-                    exportFile = new File( exportFile.getAbsolutePath() + ".csv" );
+                if ( exportFile.getName().endsWith( ".csv" ) == false ) { // NOI18N
+                    exportFile = new File( exportFile.getAbsolutePath() + ".csv" ); // NOI18N
                 }
             } else if ( exportParametersCppRadioButton.isSelected() == true ) {
-                if ( exportFile.getName().endsWith( ".h" ) == false ) {
-                    exportFile = new File( exportFile.getAbsolutePath() + ".h" );
+                if ( exportFile.getName().endsWith( ".h" ) == false ) { // NOI18N
+                    exportFile = new File( exportFile.getAbsolutePath() + ".h" ); // NOI18N
                 }
             } else if ( exportParametersCometRadioButton.isSelected() == true ) {
-                if ( exportFile.getName().endsWith( ".def" ) == false ) {
-                    exportFile = new File( exportFile.getAbsolutePath() + ".def" );
+                if ( exportFile.getName().endsWith( ".def" ) == false ) { // NOI18N
+                    exportFile = new File( exportFile.getAbsolutePath() + ".def" ); // NOI18N
                 }
             } else if ( exportParametersInControlRadioButton.isSelected() == true ) {
-                if ( exportFile.getName().endsWith( ".xml" ) == false ) {
-                    exportFile = new File( exportFile.getAbsolutePath() + ".xml" );
+                if ( exportFile.getName().endsWith( ".xml" ) == false ) { // NOI18N
+                    exportFile = new File( exportFile.getAbsolutePath() + ".xml" ); // NOI18N
                 }
             }
             logMsg( "Exporting " + fileExtensionDescription + " to file " + exportFile.getName() );
             Properties configProperties = new Properties();
-            configProperties.setProperty( "file_extension_description", fileExtensionDescription );
-            configProperties.setProperty( "file_extension_pattern", fileExtensionPattern );
-            configProperties.setProperty( "use_header_row", ( exportParametersIncludeHeaderRowCheckbox.isSelected() == true ? "true" : "false" ) );
-            configProperties.setProperty( "use_namespaces", ( exportParametersUseNamespacesCheckbox.isSelected() == true ? "true" : "false" ) );
+            configProperties.setProperty( "file_extension_description", fileExtensionDescription ); // NOI18N
+            configProperties.setProperty( "file_extension_pattern", fileExtensionPattern ); // NOI18N
+            configProperties.setProperty( "use_header_row", ( exportParametersIncludeHeaderRowCheckbox.isSelected() == true ? "true" : "false" ) ); // NOI18N
+            configProperties.setProperty( "use_namespaces", ( exportParametersUseNamespacesCheckbox.isSelected() == true ? "true" : "false" ) ); // NOI18N
             try {
                 XTCEDatabaseExporter dbExport = null;
                 if ( exportParametersCsvRadioButton.isSelected() == true ) {
                     dbExport = new XTCEDatabaseExporterCsv( xtceDatabaseFile, configProperties );
                     dbExport.exportParameters( exportFile );
                 } else if ( exportParametersCppRadioButton.isSelected() == true ) {
-                    logMsg( XTCEFunctions.getText( "general_warning" ) +
-                            XTCEFunctions.getText( "dialog_export_notyetimplemented_text" ) +
-                            " " +
+                    logMsg( XTCEFunctions.getText( "general_warning" ) + // NOI18N
+                            XTCEFunctions.getText( "dialog_export_notyetimplemented_text" ) + // NOI18N
+                            " " + // NOI18N
                             fileExtensionDescription );
                 } else if ( exportParametersCometRadioButton.isSelected() == true ) {
-                    logMsg( XTCEFunctions.getText( "general_warning" ) +
-                            XTCEFunctions.getText( "dialog_export_notyetimplemented_text" ) +
-                            " " +
+                    logMsg( XTCEFunctions.getText( "general_warning" ) + // NOI18N
+                            XTCEFunctions.getText( "dialog_export_notyetimplemented_text" ) + // NOI18N
+                            " " + // NOI18N
                             fileExtensionDescription );
                 } else if ( exportParametersInControlRadioButton.isSelected() == true ) {
-                    logMsg( XTCEFunctions.getText( "general_warning" ) +
-                            XTCEFunctions.getText( "dialog_export_notyetimplemented_text" ) +
-                            " " +
+                    logMsg( XTCEFunctions.getText( "general_warning" ) + // NOI18N
+                            XTCEFunctions.getText( "dialog_export_notyetimplemented_text" ) + // NOI18N
+                            " " + // NOI18N
                             fileExtensionDescription );
                 }
             } catch ( XTCEDatabaseException ex ) {
                 logMsg( XTCEFunctions.generalErrorPrefix() +
-                        XTCEFunctions.getText( "dialog_export_exporting_text" ) +
-                        " " +
+                        XTCEFunctions.getText( "dialog_export_exporting_text" ) + // NOI18N
+                        " " + // NOI18N
                         fileExtensionDescription +
-                        ": " +
+                        ": " + // NOI18N
                         ex.getLocalizedMessage() );
             }
         }
@@ -2121,33 +2167,33 @@ public class XTCEViewer extends javax.swing.JFrame {
 
         if ( xtceDatabaseFile == null ) {
             JOptionPane.showMessageDialog( this,
-                                           XTCEFunctions.getText( "dialog_nofileisopen_text" ),
-                                           XTCEFunctions.getText( "general_error" ),
+                                           XTCEFunctions.getText( "dialog_nofileisopen_text" ), // NOI18N
+                                           XTCEFunctions.getText( "general_error" ), // NOI18N
                                            JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        Object[] selectionValues = { XTCEFunctions.getText( "general_save_text" ),
-                                     XTCEFunctions.getText( "general_dismiss_text" ) };
+        Object[] selectionValues = { XTCEFunctions.getText( "general_save_text" ), // NOI18N
+                                     XTCEFunctions.getText( "general_dismiss_text" ) }; // NOI18N
         messagesDialogText.setText( messagesText.getText() );
         int value = JOptionPane.showOptionDialog( this,
                                                   messagesDialogPanel,
-                                                  XTCEFunctions.getText( "dialog_messageslist_text" ),
+                                                  XTCEFunctions.getText( "dialog_messageslist_text" ), // NOI18N
                                                   JOptionPane.PLAIN_MESSAGE,
                                                   JOptionPane.DEFAULT_OPTION,
                                                   null,
                                                   selectionValues,
-                                                  XTCEFunctions.getText( "general_dismiss_text" ) );
+                                                  XTCEFunctions.getText( "general_dismiss_text" ) ); // NOI18N
 
         if ( value == 0 ) {
 
-            JFileChooser chooser = new JFileChooser( "." );
+            JFileChooser chooser = new JFileChooser( "." ); // NOI18N
             FileFilter fileFilter =
-                new FileNameExtensionFilter( XTCEFunctions.getText( "file_chooser_text_text" ),
-                                             "txt" );
+                new FileNameExtensionFilter( XTCEFunctions.getText( "file_chooser_text_text" ), // NOI18N
+                                             "txt" ); // NOI18N
             chooser.addChoosableFileFilter( fileFilter );
             chooser.setFileFilter( fileFilter );
-            chooser.setSelectedFile( new File( "messages.txt" ) );
+            chooser.setSelectedFile( new File( "messages.txt" ) ); // NOI18N
             int status = chooser.showSaveDialog( this );
             if (status == JFileChooser.APPROVE_OPTION) {
                 try {
@@ -2156,8 +2202,8 @@ public class XTCEViewer extends javax.swing.JFrame {
                     stream.write( messagesDialogText.getText().getBytes() );
                 } catch ( Exception ex ) {
                     logMsg( XTCEFunctions.generalErrorPrefix() +
-                            XTCEFunctions.getText( "dialog_export_error_writing" ) +
-                            " " +
+                            XTCEFunctions.getText( "dialog_export_error_writing" ) + // NOI18N
+                            " " + // NOI18N
                             chooser.getSelectedFile() );
                 }
             }
@@ -2204,8 +2250,8 @@ public class XTCEViewer extends javax.swing.JFrame {
                 logMsg( XTCEFunctions.generalErrorPrefix() + ex.getLocalizedMessage() );
             } catch ( NullPointerException ex ) {
                 JOptionPane.showMessageDialog( this,
-                                               XTCEFunctions.getText( "dialog_selectedrownocontainer_text" ),
-                                               XTCEFunctions.getText( "general_error" ),
+                                               XTCEFunctions.getText( "dialog_selectedrownocontainer_text" ), // NOI18N
+                                               XTCEFunctions.getText( "general_error" ), // NOI18N
                                                JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -2215,10 +2261,10 @@ public class XTCEViewer extends javax.swing.JFrame {
     private void mainWindowRecentFilesMaxMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mainWindowRecentFilesMaxMenuItemActionPerformed
 
         String current  = new Integer( prefs.getRecentFilesMaxCountOption() ).toString();
-        Object message  = XTCEFunctions.getText( "dialog_entermaxfiles_text" );
+        Object message  = XTCEFunctions.getText( "dialog_entermaxfiles_text" ); // NOI18N
         String response = (String)JOptionPane.showInputDialog( this,
                                                                message,
-                                                               XTCEFunctions.getText( "dialog_recentfilesmax_text" ),
+                                                               XTCEFunctions.getText( "dialog_recentfilesmax_text" ), // NOI18N
                                                                JOptionPane.INFORMATION_MESSAGE,
                                                                null,
                                                                null,
@@ -2229,12 +2275,12 @@ public class XTCEViewer extends javax.swing.JFrame {
                 if ( value >= 0 ) {
                     prefs.setRecentFilesMaxCountOption( value );
                 } else {
-                    throw new NumberFormatException( XTCEFunctions.getText( "dialog_nonegativenumber_text" ) );
+                    throw new NumberFormatException( XTCEFunctions.getText( "dialog_nonegativenumber_text" ) ); // NOI18N
                 }
             } catch ( NumberFormatException ex ) {
                 JOptionPane.showMessageDialog( this,
-                                               XTCEFunctions.getText( "dialog_invalidinteger_text" ),
-                                               XTCEFunctions.getText( "general_error" ),
+                                               XTCEFunctions.getText( "dialog_invalidinteger_text" ), // NOI18N
+                                               XTCEFunctions.getText( "general_error" ), // NOI18N
                                                JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -2249,8 +2295,8 @@ public class XTCEViewer extends javax.swing.JFrame {
 
         if ( xtceDatabaseFile == null ) {
             JOptionPane.showMessageDialog( this,
-                                           XTCEFunctions.getText( "dialog_nofileisopen_text" ),
-                                           XTCEFunctions.getText( "general_error" ),
+                                           XTCEFunctions.getText( "dialog_nofileisopen_text" ), // NOI18N
+                                           XTCEFunctions.getText( "general_error" ), // NOI18N
                                            JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -2273,7 +2319,7 @@ public class XTCEViewer extends javax.swing.JFrame {
 
         JOptionPane.showMessageDialog( this,
                                        databaseMetricsPanel,
-                                       XTCEFunctions.getText( "dialog_totals_text" ),
+                                       XTCEFunctions.getText( "dialog_totals_text" ), // NOI18N
                                        JOptionPane.PLAIN_MESSAGE);
 
     }//GEN-LAST:event_mainWindowShowMetricsMenuItemActionPerformed
@@ -2282,7 +2328,7 @@ public class XTCEViewer extends javax.swing.JFrame {
 
         Locale currentLocale = prefs.getLanguagePreference();
         //Locale[] locales = Locale.getAvailableLocales();
-        Locale[] locales = { new Locale( "en", "US"), new Locale( "fr", "FR" ) };
+        Locale[] locales = { new Locale( "en", "US"), new Locale( "fr", "FR" ) }; // NOI18N
         ArrayList<Locale> xtceViewerLocales = new ArrayList<Locale>();
         for ( int iii = 0; iii < locales.length; ++iii ) {
             if ( XTCEFunctions.checkLocaleAvailable( locales[iii] ) == true ) {
@@ -2294,8 +2340,8 @@ public class XTCEViewer extends javax.swing.JFrame {
             options[iii] = xtceViewerLocales.get( iii ).getDisplayName( currentLocale );
         }
         Object selected = JOptionPane.showInputDialog( this,
-                                                       XTCEFunctions.getText( "dialog_chooselocale_text" ),
-                                                       XTCEFunctions.getText( "dialog_intlpreference_text" ),
+                                                       XTCEFunctions.getText( "dialog_chooselocale_text" ), // NOI18N
+                                                       XTCEFunctions.getText( "dialog_intlpreference_text" ), // NOI18N
                                                        JOptionPane.INFORMATION_MESSAGE,
                                                        null,
                                                        options,
@@ -2309,8 +2355,8 @@ public class XTCEViewer extends javax.swing.JFrame {
                 XTCEFunctions.setLocalePreference( xtceViewerLocales.get( iii ) );
                 prefs.setLanguagePreference( xtceViewerLocales.get( iii ) );
                 JOptionPane.showMessageDialog( this,
-                                               XTCEFunctions.getText( "dialog_intlprefchange_text" ),
-                                               XTCEFunctions.getText( "dialog_restartrequired_text" ),
+                                               XTCEFunctions.getText( "dialog_intlprefchange_text" ), // NOI18N
+                                               XTCEFunctions.getText( "dialog_restartrequired_text" ), // NOI18N
                                                JOptionPane.WARNING_MESSAGE);
                 return;
             }
@@ -2362,7 +2408,7 @@ public class XTCEViewer extends javax.swing.JFrame {
             (XTCEViewerContainerTreeNode)tmContainerTree.getLastSelectedPathComponent();
         if ( node == null ) {
             logMsg( XTCEFunctions.generalErrorPrefix() +
-                    XTCEFunctions.getText( "rightclick_xml_no_tm_container_error_message" ) );
+                    XTCEFunctions.getText( "rightclick_xml_no_tm_container_error_message" ) ); // NOI18N
             return;
         }
 
@@ -2382,14 +2428,14 @@ public class XTCEViewer extends javax.swing.JFrame {
                 dialog.setVisible( true );
             } else {
                 logMsg( XTCEFunctions.generalErrorPrefix() +
-                        XTCEFunctions.getText( "rightclick_container_table_error_message" ) );
+                        XTCEFunctions.getText( "rightclick_container_table_error_message" ) ); // NOI18N
             }
         } catch ( XTCEDatabaseException ex ) {
             logMsg( XTCEFunctions.generalErrorPrefix() + ex.getLocalizedMessage() );
         } catch ( NullPointerException ex ) {
             JOptionPane.showMessageDialog( this,
-                                           XTCEFunctions.getText( "rightclick_container_table_null_error_message" ),
-                                           XTCEFunctions.getText( "general_error" ),
+                                           XTCEFunctions.getText( "rightclick_container_table_null_error_message" ), // NOI18N
+                                           XTCEFunctions.getText( "general_error" ), // NOI18N
                                            JOptionPane.ERROR_MESSAGE);
         }
 
@@ -2401,7 +2447,7 @@ public class XTCEViewer extends javax.swing.JFrame {
             (XTCEViewerContainerTreeNode)tmContainerTree.getLastSelectedPathComponent();
         if ( node == null ) {
             logMsg( XTCEFunctions.generalErrorPrefix() +
-                    XTCEFunctions.getText( "rightclick_xml_no_tm_container_error_message" ) );
+                    XTCEFunctions.getText( "rightclick_xml_no_tm_container_error_message" ) ); // NOI18N
             return;
         }
 
@@ -2429,12 +2475,12 @@ public class XTCEViewer extends javax.swing.JFrame {
                                           true );
             } else {
                 logMsg( XTCEFunctions.generalErrorPrefix() +
-                        XTCEFunctions.getText( "rightclick_container_table_error_message" ) );
+                        XTCEFunctions.getText( "rightclick_container_table_error_message" ) ); // NOI18N
             }
         } catch ( NullPointerException ex ) {
             JOptionPane.showMessageDialog( this,
-                                           XTCEFunctions.getText( "rightclick_container_table_null_error_message" ),
-                                           XTCEFunctions.getText( "general_error" ),
+                                           XTCEFunctions.getText( "rightclick_container_table_null_error_message" ), // NOI18N
+                                           XTCEFunctions.getText( "general_error" ), // NOI18N
                                            JOptionPane.ERROR_MESSAGE);
         }
 
@@ -2446,7 +2492,7 @@ public class XTCEViewer extends javax.swing.JFrame {
             (XTCEViewerContainerTreeNode)tmContainerTree.getLastSelectedPathComponent();
         if ( node == null ) {
             logMsg( XTCEFunctions.generalErrorPrefix() +
-                    XTCEFunctions.getText( "rightclick_xml_no_tm_container_error_message" ) );
+                    XTCEFunctions.getText( "rightclick_xml_no_tm_container_error_message" ) ); // NOI18N
             return;
         }
 
@@ -2457,8 +2503,8 @@ public class XTCEViewer extends javax.swing.JFrame {
 
         if ( node.getContentModel().getContentList().get( row ).getConditionList().isEmpty() == true ) {
             JOptionPane.showMessageDialog( this,
-                                           "No conditions on this row to set true",
-                                           XTCEFunctions.getText( "general_error" ),
+                                           XTCEFunctions.getText( "rightclick_container_table_noconditions_message" ), // NOI18N
+                                           XTCEFunctions.getText( "general_error" ), // NOI18N
                                            JOptionPane.ERROR_MESSAGE);
         }
 
@@ -2489,7 +2535,7 @@ public class XTCEViewer extends javax.swing.JFrame {
     }//GEN-LAST:event_setConditionTrueMenuItemActionPerformed
 
     private void containerDrawingLeftToRightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_containerDrawingLeftToRightActionPerformed
-        prefs.setContainerOrientationOption( "LEFT_TO_RIGHT" );
+        prefs.setContainerOrientationOption( "LEFT_TO_RIGHT" ); // NOI18N
         containerDrawingLeftToRight.setSelected( true );
         containerDrawingTopToBottom.setSelected( false );
         if ( tmContainerDrawingScrollPane.getViewport() != null ) {
@@ -2501,7 +2547,7 @@ public class XTCEViewer extends javax.swing.JFrame {
     }//GEN-LAST:event_containerDrawingLeftToRightActionPerformed
 
     private void containerDrawingTopToBottomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_containerDrawingTopToBottomActionPerformed
-        prefs.setContainerOrientationOption( "TOP_TO_BOTTOM" );
+        prefs.setContainerOrientationOption( "TOP_TO_BOTTOM" ); // NOI18N
         containerDrawingLeftToRight.setSelected( false );
         containerDrawingTopToBottom.setSelected( true );
         if ( tmContainerDrawingScrollPane.getViewport() != null ) {
@@ -2526,8 +2572,8 @@ public class XTCEViewer extends javax.swing.JFrame {
 
         if ( tmContainerDrawingScrollPane.getViewport().getView() == null ) {
             JOptionPane.showMessageDialog( this,
-                                           "No Container Selected",
-                                           XTCEFunctions.getText( "general_error" ),
+                                           XTCEFunctions.getText( "rightclick_container_noselection_message" ), // NOI18N
+                                           XTCEFunctions.getText( "general_error" ), // NOI18N
                                            JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -2540,17 +2586,17 @@ public class XTCEViewer extends javax.swing.JFrame {
 
         XTCENamedObject container = node.getContainerReference();
 
-        JFileChooser chooser = new JFileChooser( "." );
+        JFileChooser chooser = new JFileChooser( "." ); // NOI18N
 
         FileFilter fileFilter =
             new FileNameExtensionFilter( "Portable Network Graphics (png)", "png" ); // NOI18N
         chooser.addChoosableFileFilter( fileFilter );
-        chooser.addChoosableFileFilter( new FileNameExtensionFilter( "Windows Bitmap (bmp)", "bmp" ) );
-        chooser.addChoosableFileFilter( new FileNameExtensionFilter( "Joint Photographic Experts Group (jpg)", "jpg" ) );
-        chooser.addChoosableFileFilter( new FileNameExtensionFilter( "Joint Photographic Experts Group (jpeg)", "jpeg" ) );
-        chooser.addChoosableFileFilter( new FileNameExtensionFilter( "Graphics Interchange Format (gif)", "gif" ) );
+        chooser.addChoosableFileFilter( new FileNameExtensionFilter( "Windows Bitmap (bmp)", "bmp" ) ); // NOI18N
+        chooser.addChoosableFileFilter( new FileNameExtensionFilter( "Joint Photographic Experts Group (jpg)", "jpg" ) ); // NOI18N
+        chooser.addChoosableFileFilter( new FileNameExtensionFilter( "Joint Photographic Experts Group (jpeg)", "jpeg" ) ); // NOI18N
+        chooser.addChoosableFileFilter( new FileNameExtensionFilter( "Graphics Interchange Format (gif)", "gif" ) ); // NOI18N
         chooser.setFileFilter( fileFilter );
-        chooser.setSelectedFile( new File ( container.getName() + ".png" ) );
+        chooser.setSelectedFile( new File ( container.getName() + ".png" ) ); // NOI18N
         chooser.setCurrentDirectory( new File( prefs.getCurrentWorkingDirectory() ) );
 
         int status = chooser.showSaveDialog( this );
@@ -2560,7 +2606,7 @@ public class XTCEViewer extends javax.swing.JFrame {
             } catch ( Exception ex ) {
                 JOptionPane.showMessageDialog( this,
                                                ex.getLocalizedMessage(),
-                                               XTCEFunctions.getText( "general_error" ),
+                                               XTCEFunctions.getText( "general_error" ), // NOI18N
                                                JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -2572,7 +2618,7 @@ public class XTCEViewer extends javax.swing.JFrame {
         if ( tmContainerDrawingScrollPane.getViewport().getView() == null ) {
             JOptionPane.showMessageDialog( this,
                                            "No Container Selected",
-                                           XTCEFunctions.getText( "general_error" ),
+                                           XTCEFunctions.getText( "general_error" ), // NOI18N
                                            JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -2591,7 +2637,7 @@ public class XTCEViewer extends javax.swing.JFrame {
         JScrollPane graphScrollPane = new JScrollPane();
         graphScrollPane.setViewportView( newDrawing );
         newWindow.getContentPane().add( graphScrollPane, BorderLayout.CENTER );
-        JButton dismissButton = new JButton( XTCEFunctions.getText( "general_dismiss_text" ) );
+        JButton dismissButton = new JButton( XTCEFunctions.getText( "general_dismiss_text" ) ); // NOI18N
         dismissButton.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed( ActionEvent evt ) {
@@ -2608,8 +2654,8 @@ public class XTCEViewer extends javax.swing.JFrame {
 
         if ( xtceDatabaseFile == null ) {
             JOptionPane.showMessageDialog( this,
-                                           XTCEFunctions.getText( "dialog_nofileisopen_text" ),
-                                           XTCEFunctions.getText( "general_error" ),
+                                           XTCEFunctions.getText( "dialog_nofileisopen_text" ), // NOI18N
+                                           XTCEFunctions.getText( "general_error" ), // NOI18N
                                            JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -2623,8 +2669,8 @@ public class XTCEViewer extends javax.swing.JFrame {
 
         if ( xtceDatabaseFile == null ) {
             JOptionPane.showMessageDialog( this,
-                                           XTCEFunctions.getText( "dialog_nofileisopen_text" ),
-                                           XTCEFunctions.getText( "general_error" ),
+                                           XTCEFunctions.getText( "dialog_nofileisopen_text" ), // NOI18N
+                                           XTCEFunctions.getText( "general_error" ), // NOI18N
                                            JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -2677,7 +2723,7 @@ public class XTCEViewer extends javax.swing.JFrame {
                 (XTCEViewerSpaceSystemTreeNode)tmParameterSpaceSystemTree.getLastSelectedPathComponent();
             if ( node == null ) {
                 logMsg( XTCEFunctions.generalErrorPrefix() +
-                        XTCEFunctions.getText( "rightclick_xml_no_tm_spacesystem_error_message" ) );
+                        XTCEFunctions.getText( "rightclick_xml_no_tm_spacesystem_error_message" ) ); // NOI18N
                 return;
             }
             row = tmParametersTable.getSelectedRow();
@@ -2698,7 +2744,7 @@ public class XTCEViewer extends javax.swing.JFrame {
                 (XTCEViewerSpaceSystemTreeNode)tcParameterSpaceSystemTree.getLastSelectedPathComponent();
             if ( node == null ) {
                 logMsg( XTCEFunctions.generalErrorPrefix() +
-                        XTCEFunctions.getText( "rightclick_xml_no_tc_spacesystem_error_message" ) );
+                        XTCEFunctions.getText( "rightclick_xml_no_tc_spacesystem_error_message" ) ); // NOI18N
                 return;
             }
             row = tcParametersTable.getSelectedRow();
@@ -2730,7 +2776,7 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     private void mainWindowHelpSchemaMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mainWindowHelpSchemaMenuItemActionPerformed
 
-        final String filename = "org/omg/space/xtce/schema/doc/SpaceSystemV1.2-27Feb2014-mods.html";
+        final String filename = "org/omg/space/xtce/schema/doc/SpaceSystemV1.2-27Feb2014-mods.html"; // NOI18N
 
         URL helpURL = ClassLoader.getSystemResource( filename );
         if ( helpURL != null ) {
@@ -2740,7 +2786,7 @@ public class XTCEViewer extends javax.swing.JFrame {
                   new XTCEViewerHelpBrowserDialog( this, false, helpURL );
         } else {
             logMsg( XTCEFunctions.generalErrorPrefix() +
-                    XTCEFunctions.getText( "dialog_unabletoload_text" ) +
+                    XTCEFunctions.getText( "dialog_unabletoload_text" ) + // NOI18N
                     ": " +
                     filename );
         }
@@ -2755,7 +2801,7 @@ public class XTCEViewer extends javax.swing.JFrame {
         // form to add things and copy the generated code over to the new class
         // since NetBeans is not configured for FX in this project right now.
 
-        final String filename = "org/omg/space/xtce/toolkit/doc/index.html";
+        final String filename = "org/omg/space/xtce/toolkit/doc/index.html"; // NOI18N
 
         URL helpURL = ClassLoader.getSystemResource( filename );
         if ( helpURL != null ) {
@@ -2765,7 +2811,7 @@ public class XTCEViewer extends javax.swing.JFrame {
                   new XTCEViewerHelpBrowserDialog( this, false, helpURL );
         } else {
             logMsg( XTCEFunctions.generalErrorPrefix() +
-                    XTCEFunctions.getText( "dialog_unabletoload_text" ) +
+                    XTCEFunctions.getText( "dialog_unabletoload_text" ) + // NOI18N
                     ": " +
                     filename );
         }
@@ -2775,23 +2821,49 @@ public class XTCEViewer extends javax.swing.JFrame {
     private void mainWindowHelpToolMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mainWindowHelpToolMenuItemActionPerformed
 
         logMsg( XTCEFunctions.generalWarningPrefix() +
-                XTCEFunctions.getText( "general_not_implemented" ) );
+                XTCEFunctions.getText( "general_not_implemented" ) ); // NOI18N
 
     }//GEN-LAST:event_mainWindowHelpToolMenuItemActionPerformed
 
     private void mainWindowHelpCurrentMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mainWindowHelpCurrentMenuItemActionPerformed
 
         logMsg( XTCEFunctions.generalWarningPrefix() +
-                XTCEFunctions.getText( "general_not_implemented" ) );
+                XTCEFunctions.getText( "general_not_implemented" ) ); // NOI18N
 
     }//GEN-LAST:event_mainWindowHelpCurrentMenuItemActionPerformed
 
     private void mainWindowHelpAboutMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mainWindowHelpAboutMenuItemActionPerformed
 
         logMsg( XTCEFunctions.generalWarningPrefix() +
-                XTCEFunctions.getText( "general_not_implemented" ) );
+                XTCEFunctions.getText( "general_not_implemented" ) ); // NOI18N
 
     }//GEN-LAST:event_mainWindowHelpAboutMenuItemActionPerformed
+
+    private void mainWindowUseXincludeMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mainWindowUseXincludeMenuItemActionPerformed
+
+        prefs.setUseXIncludeOption( mainWindowUseXincludeMenuItem.isSelected() );
+
+    }//GEN-LAST:event_mainWindowUseXincludeMenuItemActionPerformed
+
+    private void mainWindowFindByXPathMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mainWindowFindByXPathMenuItemActionPerformed
+
+        if ( xtceDatabaseFile == null ) {
+            JOptionPane.showMessageDialog( this,
+                                           XTCEFunctions.getText( "dialog_nofileisopen_text" ), // NOI18N
+                                           XTCEFunctions.getText( "general_error" ), // NOI18N
+                                           JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if ( xpathDialog == null ) {
+            xpathDialog = new XTCEViewerXpathQueryDialog( prefs,
+                                                          xtceDatabaseFile );
+        } else {
+            xpathDialog.setVisible( true );
+            xpathDialog.toFront();
+        }
+
+    }//GEN-LAST:event_mainWindowFindByXPathMenuItemActionPerformed
 
     public void goToParameter( String  parameterName,
                                String  spaceSystemName,
@@ -2892,7 +2964,7 @@ public class XTCEViewer extends javax.swing.JFrame {
         Collections.sort( containers );
 
         XTCEViewerContainerTreeNode rootObj =
-            new XTCEViewerContainerTreeNode( XTCEFunctions.getText( "general_containers" ),
+            new XTCEViewerContainerTreeNode( XTCEFunctions.getText( "general_containers" ), // NOI18N
                                              null );
         tmodel.setRoot( rootObj );
 
@@ -3029,7 +3101,7 @@ public class XTCEViewer extends javax.swing.JFrame {
                                                   preferredNamespace );
         String telecommandLabel = null;
         if ( aliasString.isEmpty() == false ) {
-            telecommandLabel = telecommand.getName() + " (" + aliasString + ")";
+            telecommandLabel = telecommand.getName() + " (" + aliasString + ")"; // NOI18N
         } else {
             telecommandLabel = telecommand.getName();
         }
@@ -3094,9 +3166,9 @@ public class XTCEViewer extends javax.swing.JFrame {
                     prefs.getContainerOrientationOption();
 
                 XTCEViewerContainerDrawing.Orientation orientDrawingFlag;
-                if ( orientationOption.equals( "LEFT_TO_RIGHT" ) == true ) {
+                if ( orientationOption.equals( "LEFT_TO_RIGHT" ) == true ) { // NOI18N
                     orientDrawingFlag = Orientation.LEFT_TO_RIGHT;
-                } else if ( orientationOption.equals( "TOP_TO_BOTTOM" ) == true ) {
+                } else if ( orientationOption.equals( "TOP_TO_BOTTOM" ) == true ) { // NOI18N
                     orientDrawingFlag = Orientation.TOP_TO_BOTTOM;
                 } else {
                     orientDrawingFlag = Orientation.LEFT_TO_RIGHT;
@@ -3152,7 +3224,7 @@ public class XTCEViewer extends javax.swing.JFrame {
 
         if ( ( node != null ) && ( node.getTelecommandReference() != null ) ) {
 
-            System.out.println( "Selected TC " + node.getTelecommandPath() );
+            //System.out.println( "Selected TC " + node.getTelecommandPath() );
             XTCETelecommand tcObject  = node.getTelecommandReference();
 
             boolean showAllConditionals =
@@ -3246,11 +3318,14 @@ public class XTCEViewer extends javax.swing.JFrame {
             tableModel.addRow( rowData );
 
             if ( parameter.isValid() == false ) {
-                logMsg( "ERROR: Parameter " +
+                logMsg( XTCEFunctions.getText( "error_invalid_parametertype" ) + // NOI18N
+                        " '" + // NOI18N
                         parameter.getName() +
-                        " in Space System " +
+                        "' (" + // NOI18N
+                        XTCEFunctions.getText( "find_menu_spacesystem_label" ) + // NOI18N
+                        " " + // NOI18N
                         spaceSystem.getFullPath() +
-                        " does not have a valid type" );
+                        ")" ); // NOI18N
             }
 
         }
@@ -3269,7 +3344,7 @@ public class XTCEViewer extends javax.swing.JFrame {
 
         ArrayList<String> warnings = containerModel.getWarnings();
         for ( String warning : warnings ) {
-            logMsg( XTCEFunctions.getText( "general_warning" ) +  ": " + warning );
+            logMsg( XTCEFunctions.getText( "general_warning" ) +  ": " + warning ); // NOI18N
         }
 
         ArrayList<XTCEContainerContentEntry> entries = containerModel.getContentList();
@@ -3300,7 +3375,7 @@ public class XTCEViewer extends javax.swing.JFrame {
             } else if ( entry.getEntryType() == FieldType.CONTAINER ) {
                 containerName = entry.getTelemetryContainer().getName();
             } else {
-                containerName = "UNDEFINED";
+                containerName = "UNDEFINED"; // NOI18N
             }
 
             Object rowData[] = { containerName,
@@ -3350,7 +3425,7 @@ public class XTCEViewer extends javax.swing.JFrame {
         Collections.sort( telecommands );
 
         XTCEViewerTelecommandTreeNode rootObj =
-            new XTCEViewerTelecommandTreeNode( XTCEFunctions.getText( "dialog_metrics_telecommands_text" ),
+            new XTCEViewerTelecommandTreeNode( XTCEFunctions.getText( "dialog_metrics_telecommands_text" ), // NOI18N
                                                null );
         tmodel.setRoot( rootObj );
 
@@ -3548,7 +3623,7 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     }
 
-    public void openFile( File dbFile ) {
+    public void openFile( File dbFile, boolean applyXInclude ) {
 
         if ( xtceDatabaseFile != null ) {
             mainWindowCloseFileMenuItemActionPerformed( null );
@@ -3559,13 +3634,19 @@ public class XTCEViewer extends javax.swing.JFrame {
 
         try {
 
+            logMsg( XTCEFunctions.getMemoryUsageStatistics() );
+
             long    startTime      = System.currentTimeMillis();
             boolean validateOnLoad = prefs.getValidateOnLoadOption();
 
             //XTCEViewerProgressMonitor progressDialog = new XTCEViewerProgressMonitor( this, true );
             //XTCEViewerProgressListener listener = new XTCEViewerProgressListener( progressDialog );
 
-            xtceDatabaseFile = new XTCEDatabase( dbFile, validateOnLoad, null );
+            xtceDatabaseFile = new XTCEDatabase( dbFile,
+                                                 validateOnLoad,
+                                                 applyXInclude,
+                                                 null );
+
             loadedFilenameLabel.setText( dbFile.getAbsolutePath() );
 
             if ( validateOnLoad == true ) {
@@ -3586,14 +3667,20 @@ public class XTCEViewer extends javax.swing.JFrame {
 
             long estimatedTime = System.currentTimeMillis() - startTime;
 
-            logMsg( "Loaded file in approximately " +
-                Long.toString( estimatedTime / 1000 ) + " seconds" +
-                ( validateOnLoad == true ? "" : " (Warning: Schema Validation Disabled)" ) );
+            logMsg( XTCEFunctions.getText( "file_chooser_load_time_text" ) + // NOI18N
+                " " + // NOI18N
+                Long.toString( estimatedTime / 1000 ) +
+                " " + // NOI18N
+                XTCEFunctions.getText( "file_chooser_load_time_unit_text" ) + // NOI18N
+                " " + // NOI18N
+                ( validateOnLoad == true ? "" : " " + XTCEFunctions.getText( "file_chooser_schema_disable_text" ) ) ); // NOI18N
+
+            logMsg( XTCEFunctions.getMemoryUsageStatistics() );
 
         } catch ( XTCEDatabaseException ex ) {
 
             logMsg( XTCEFunctions.generalErrorPrefix() +
-                    XTCEFunctions.getText( "dialog_unabletoload_text" ) +
+                    XTCEFunctions.getText( "dialog_unabletoload_text" ) + // NOI18N
                     " " +
                     dbFile.getAbsolutePath() );
             logMsg( XTCEFunctions.generalErrorPrefix() +
@@ -3605,10 +3692,10 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     private void logMsg( String msg ) {
         
-        if ( messagesText.getText().equals( XTCEFunctions.getText( "no_messages_text" ) ) == true ) {
-            messagesText.setText( "" );
+        if ( messagesText.getText().equals( XTCEFunctions.getText( "no_messages_text" ) ) == true ) { // NOI18N
+            messagesText.setText( "" ); // NOI18N
         }
-        messagesText.append( msg + "\n" );
+        messagesText.append( msg + "\n" ); // NOI18N
         
     }
 
@@ -3648,9 +3735,11 @@ public class XTCEViewer extends javax.swing.JFrame {
         });
     }
 
-    private XTCEViewerPreferences        prefs            = null;
-    private XTCEDatabase                 xtceDatabaseFile = null;
-    private ArrayList<XTCESpaceSystem>   spaceSystems     = null;
+    private XTCEViewerPreferences         prefs            = null;
+    private XTCEDatabase                  xtceDatabaseFile = null;
+    private ArrayList<XTCESpaceSystem>    spaceSystems     = null;
+    private XTCEViewerXpathQueryDialog    xpathDialog      = null;
+    private XTCEViewerParameterFindDialog findParameterDialog = null;
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -3712,6 +3801,7 @@ public class XTCEViewer extends javax.swing.JFrame {
     private javax.swing.JMenu mainWindowExportMenu;
     private javax.swing.JMenuItem mainWindowExportParametersMenuItem;
     private javax.swing.JMenu mainWindowFileMenu;
+    private javax.swing.JMenuItem mainWindowFindByXPathMenuItem;
     private javax.swing.JMenuItem mainWindowFindContainerMenuItem;
     private javax.swing.JMenu mainWindowFindMenu;
     private javax.swing.JMenuItem mainWindowFindParameterMenuItem;
@@ -3739,6 +3829,7 @@ public class XTCEViewer extends javax.swing.JFrame {
     private javax.swing.JCheckBoxMenuItem mainWindowShowAllConditionalsMenuItem;
     private javax.swing.JMenu mainWindowShowMenu;
     private javax.swing.JMenuItem mainWindowShowMetricsMenuItem;
+    private javax.swing.JCheckBoxMenuItem mainWindowUseXincludeMenuItem;
     private javax.swing.JCheckBoxMenuItem mainWindowValidateOnLoadMenuItem;
     private javax.swing.JScrollPane messagesDialogPanel;
     private javax.swing.JTextArea messagesDialogText;

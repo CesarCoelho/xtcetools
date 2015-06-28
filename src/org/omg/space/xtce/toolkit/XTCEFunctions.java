@@ -6,6 +6,7 @@
 
 package org.omg.space.xtce.toolkit;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.MissingResourceException;
@@ -305,6 +306,41 @@ public class XTCEFunctions {
 
     public static String generalWarningPrefix() {
         return getText( "general_warning" ) + ": ";
+    }
+
+    /** Creates a string with the current memory usage statistics from the
+     * Java Virtual Machine.
+     *
+     * @return String containing a memory usage description suitable for a log
+     * line.
+     *
+     */
+
+    public static String getMemoryUsageStatistics() {
+
+        // this function is basically the contents from a thread on
+        // stackoverflow.com with the output tweaked.
+
+        Runtime       runtime         = Runtime.getRuntime();
+        NumberFormat  format          = NumberFormat.getInstance();
+        StringBuilder sb              = new StringBuilder();
+        long          maxMemory       = runtime.maxMemory();
+        long          allocatedMemory = runtime.totalMemory();
+        long          freeMemory      = runtime.freeMemory();
+        long          freeAlloc       = maxMemory - allocatedMemory;
+
+        sb.append( "free memory: " );
+        sb.append( format.format( freeMemory / 1024 ) );
+        sb.append( "K allocated memory: " );
+        sb.append( format.format( allocatedMemory / 1024 ) );
+        sb.append( "K max memory: " );
+        sb.append( format.format( maxMemory / 1024 ) );
+        sb.append( "K total free memory: " );
+        sb.append( format.format( ( freeMemory + ( freeAlloc ) ) / 1024 ) );
+        sb.append( "K" );
+
+        return sb.toString();
+
     }
 
     private static ResourceBundle messages      = null;

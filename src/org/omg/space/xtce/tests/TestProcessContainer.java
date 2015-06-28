@@ -54,12 +54,12 @@ public class TestProcessContainer {
 
         String file = "src/org/omg/space/xtce/database/BogusSat-1.xml";
 
-        db_ = new XTCEDatabase( new File( file ), false, null );
+        db_ = new XTCEDatabase( new File( file ), false, false, null );
 
     }
 
     // Private Data Members
 
-    private XTCEDatabase  db_  = null;
+    private XTCEDatabase db_ = null;
 
 }

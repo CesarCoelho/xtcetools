@@ -2,16 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/C:/GitRepositories/XTCETools/src/org/omg/space/xtce/tests/TestDumpParameterList.java</file>
-            <file>file:/C:/GitRepositories/XTCETools/src/org/omg/space/xtce/ui/XTCEViewerHelpBrowserDialog.java</file>
-            <file>file:/C:/GitRepositories/XTCETools/src/org/omg/space/xtce/toolkit/XTCEContainerContentModel.java</file>
-            <file>file:/C:/GitRepositories/XTCETools/src/org/omg/space/xtce/ui/XTCEViewer.java</file>
-            <file>file:/C:/GitRepositories/XTCETools/src/org/omg/space/xtce/ui/XTCEViewerHelpDialog.java</file>
-            <file>file:/C:/GitRepositories/XTCETools/src/org/omg/space/xtce/toolkit/XTCEContainerContentModelBase.java</file>
-            <file>file:/C:/GitRepositories/XTCETools/src/org/omg/space/xtce/toolkit/XTCEContainerContentEntry.java</file>
-            <file>file:/C:/GitRepositories/XTCETools/src/org/omg/space/xtce/ui/XTCEViewerPreferences.java</file>
-            <file>file:/C:/GitRepositories/XTCETools/src/org/omg/space/xtce/toolkit/XTCEContainerEntryValue.java</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

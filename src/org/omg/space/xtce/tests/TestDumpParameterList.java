@@ -43,7 +43,7 @@ public class TestDumpParameterList {
                                 " database file" );
 
             XTCEDatabase db =
-                new XTCEDatabase( new File( args[0] ), false, null );
+                new XTCEDatabase( new File( args[0] ), false, false, null );
 
             ArrayList<XTCEParameter> parameters = db.getTelemetryParameters();
 

@@ -11,21 +11,38 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import javax.xml.bind.Binder;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.namespace.NamespaceContext;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamWriter;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.sax.SAXSource;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathException;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathFactory;
 import org.omg.space.xtce.database.NameDescriptionType;
 import org.omg.space.xtce.database.ObjectFactory;
 import org.xml.sax.XMLReader;
 import org.xml.sax.InputSource;
 import org.omg.space.xtce.database.SpaceSystemType;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /** The XTCEDatabase class is the first core object to be used by a client
  * that is working with an XTCE Database File.
@@ -48,6 +65,9 @@ public class XTCEDatabase {
      * @param validateOnLoad boolean indicating if the XSD validation should be
      * performed during the loading.
      *
+     * @param applyXIncludes boolean indicating if the XInclude processing for
+     * the loaded file should be applied or ignored.
+     *
      * @param listener Hold on to this.
      *
      * @throws XTCEDatabaseException in the event that the file could not be
@@ -59,7 +79,15 @@ public class XTCEDatabase {
 
     public XTCEDatabase( File                 dbFile,
                          boolean              validateOnLoad,
+                         boolean              applyXIncludes,
                          XTCEProgressListener listener ) throws XTCEDatabaseException {
+
+        if ( dbFile.isFile() == false || dbFile.canRead() == false ) {
+            throw new XTCEDatabaseException(
+                XTCEFunctions.getText( "file_chooser_noload_text" ) +
+                " " +
+                dbFile.toString() );
+        }
 
         String currentDir = System.getProperty( "user.dir" );
 
@@ -72,7 +100,10 @@ public class XTCEDatabase {
             } else {
                 updateLoadProgress( listener, 25, "Validation Disabled (WARNING: Viewer May Be De-Stabilized)" );
             }
-            populateDataModel( dbFile, listener, validateOnLoad );
+            populateDataModel( dbFile,
+                               listener,
+                               validateOnLoad,
+                               applyXIncludes );
             xtceFilename = dbFile;
             updateLoadProgress( listener, 100, "Completed" );
         } catch ( Exception ex ) {
@@ -190,6 +221,37 @@ public class XTCEDatabase {
         return new XTCESpaceSystemMetrics( this );
     }
 
+    /** Evaluate an arbitrary XPath Query Expression and return a generic
+     * NodeList object back or an exception with an error message.
+     *
+     * @param query String containing the XPath expression.
+     *
+     * @return NodeList containing 0 or more nodes that were located by the
+     * query.
+     *
+     * @throws XTCEDatabaseException in the event that the query contains an
+     * error or cannot otherwise be evaluated against the DOM tree.
+     *
+     */
+
+    public NodeList evaluateXPathQuery( String query ) throws XTCEDatabaseException {
+
+        XPath xpath = XPathFactory.newInstance().newXPath();
+        xpath.setNamespaceContext( new XTCENamespaceContext() );
+
+        try {
+
+            XPathExpression expr = xpath.compile( query );
+            NodeList nnn = (NodeList)expr.evaluate( domDocumentRoot.getDocumentElement(),
+                                                    XPathConstants.NODESET );
+            return nnn;
+
+        } catch ( XPathException ex ) {
+            throw new XTCEDatabaseException( ex );
+        }
+
+    }
+
     /** Function to save the currently loaded database file.
      *
      * @param dbFile File object containing the file and path for which to save
@@ -205,27 +267,40 @@ public class XTCEDatabase {
         
         try {
 
-            Marshaller mmm = jaxbContext.createMarshaller();
+            // thinking about this update, maybe it should be done when nodes
+            // are edited to keep in sync for xpath
 
-            mmm.setProperty( Marshaller.JAXB_FORMATTED_OUTPUT, true );
-            mmm.setProperty( Marshaller.JAXB_SCHEMA_LOCATION,
-                             XTCEConstants.XTCE_NAMESPACE +
-                             " " +
-                             XTCEConstants.DEFAULT_SCHEMA_FILE );
+            if ( getChanged() == true ) {
+                domBinder.updateXML( jaxbElementRoot );
+            }
 
-            XMLOutputFactory xof = XMLOutputFactory.newInstance();
-            FileOutputStream stream = new FileOutputStream( dbFile );
-            XMLStreamWriter writer = xof.createXMLStreamWriter( stream );
+            TransformerFactory tf = TransformerFactory.newInstance();
+            Transformer        t  = tf.newTransformer();
+
+            t.transform( new DOMSource( domDocumentRoot ),
+                         new StreamResult( dbFile ) );
+
+            //Marshaller mmm = jaxbContext.createMarshaller();
+
+            //mmm.setProperty( Marshaller.JAXB_FORMATTED_OUTPUT, true );
+            //mmm.setProperty( Marshaller.JAXB_SCHEMA_LOCATION,
+            //                 XTCEConstants.XTCE_NAMESPACE +
+            //                 " " +
+            //                 XTCEConstants.DEFAULT_SCHEMA_FILE );
+
+            //XMLOutputFactory xof = XMLOutputFactory.newInstance();
+            //FileOutputStream stream = new FileOutputStream( dbFile );
+            //XMLStreamWriter writer = xof.createXMLStreamWriter( stream );
             // TODO: not sure how to manipulate if xtce: prefix is present
-            writer.setDefaultNamespace( XTCEConstants.XTCE_NAMESPACE );
-            writer.setPrefix( "", XTCEConstants.XTCE_NAMESPACE );
-            writer.setPrefix( "xtce", XTCEConstants.XTCE_NAMESPACE );
+            //writer.setDefaultNamespace( XTCEConstants.XTCE_NAMESPACE );
+            //writer.setPrefix( "", XTCEConstants.XTCE_NAMESPACE );
+            //writer.setPrefix( "xtce", XTCEConstants.XTCE_NAMESPACE );
 
-            mmm.marshal( jaxbElementRoot, stream );
+            //mmm.marshal( jaxbElementRoot, stream );
 
             xtceFilename = dbFile;
 
-            stream.close();
+            //stream.close();
 
             setChanged( false );
 
@@ -660,6 +735,9 @@ public class XTCEDatabase {
      * configured for the XTCEDatabase object.  In the future this will be more
      * flexible.
      *
+     * @param applyXIncludes boolean indicating if the XInclude processing for
+     * the loaded file should be applied or ignored.
+     *
      * @throws XTCEDatabaseException thrown in the event that the document
      * cannot be read or is not sufficiently valid to complete construction of
      * the internal data model.
@@ -668,33 +746,47 @@ public class XTCEDatabase {
 
     private void populateDataModel( File                 dbFile,
                                     XTCEProgressListener listener,
-                                    boolean              validate ) throws XTCEDatabaseException {
+                                    boolean              validate,
+                                    boolean              applyXIncludes ) throws XTCEDatabaseException {
         
         try {
 
             updateLoadProgress( listener, 30, "Loading File" );
 
-            Unmarshaller     um  = jaxbContext.createUnmarshaller();
-            SAXParserFactory spf = SAXParserFactory.newInstance();
+            domBinder = jaxbContext.createBinder();
 
-            spf.setXIncludeAware( true );
-	    spf.setNamespaceAware( true );
-            spf.setValidating( validate );
+            //Unmarshaller     um  = jaxbContext.createUnmarshaller();
+            //SAXParserFactory spf = SAXParserFactory.newInstance();
 
-            SAXParser parser = spf.newSAXParser();
-            parser.setProperty( "http://java.sun.com/xml/jaxp/properties/schemaLanguage",
-                                "http://www.w3.org/2001/XMLSchema" );
+            //spf.setXIncludeAware( applyXIncludes );
+	    //spf.setNamespaceAware( true );
+            //spf.setValidating( validate );
 
-            XMLReader              reader  = parser.getXMLReader();
+            //SAXParser parser = spf.newSAXParser();
+            //parser.setProperty( "http://java.sun.com/xml/jaxp/properties/schemaLanguage",
+            //                    "http://www.w3.org/2001/XMLSchema" );
+
+            //XMLReader              reader  = parser.getXMLReader();
             XTCESchemaErrorHandler handler = new XTCESchemaErrorHandler();
 
-            reader.setErrorHandler( handler );
+            //reader.setErrorHandler( handler );
 
-            FileInputStream stream = new FileInputStream( dbFile );
+            //FileInputStream stream = new FileInputStream( dbFile );
 
-            SAXSource source = new SAXSource( reader, new InputSource( stream ) );
+            //SAXSource source = new SAXSource( reader, new InputSource( stream ) );
 
-            jaxbElementRoot = (JAXBElement)um.unmarshal( source );
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+
+            dbf.setXIncludeAware( applyXIncludes );
+            dbf.setNamespaceAware( true );
+            dbf.setValidating( validate );
+
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            db.setErrorHandler( handler );
+
+            domDocumentRoot = db.parse( dbFile );
+
+            jaxbElementRoot = (JAXBElement)domBinder.unmarshal( domDocumentRoot );
             
             Object candidate = jaxbElementRoot.getValue();
 
@@ -894,6 +986,8 @@ public class XTCEDatabase {
     private JAXBElement     jaxbElementRoot     = null;
     private boolean         databaseChanged     = false;
     private String          schemaLocation      = XTCEConstants.DEFAULT_SCHEMA_FILE;
+    private Document        domDocumentRoot     = null;
+    private Binder<Node>    domBinder           = null;
 
     private HashMap<String, NameDescriptionType> parameterTypes = null;
     private HashMap<String, NameDescriptionType> argumentTypes  = null;

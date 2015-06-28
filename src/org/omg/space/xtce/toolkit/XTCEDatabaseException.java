@@ -8,6 +8,7 @@ package org.omg.space.xtce.toolkit;
 
 import javax.xml.bind.MarshalException;
 import java.util.ArrayList;
+import javax.xml.xpath.XPathException;
 
 /** The XTCEDatabaseException class serves to simplify management of exceptions
  * in the toolkit by distinguishing toolkit exceptions from unhandled system
@@ -75,6 +76,19 @@ public class XTCEDatabaseException extends Exception {
         super( ex.getCause() );
     }
 
+    /** Constructor to initialize an XTCEDatabaseException from an XPath
+     * Exception, which needs to be handled via the getCause() instead
+     * of the more common getLocalizedMessage(), so this converts the text from
+     * the cause to the localized message accessor.
+     *
+     * @param ex XPathException thrown by the XPath evaluate function.
+     *
+     */
+
+    public XTCEDatabaseException( XPathException ex ) {
+        super( ex.getCause() );
+    }
+
     /** Constructor to initialize an XTCEDatabaseException from a list of
      * collected messages.
      *
@@ -122,7 +136,11 @@ public class XTCEDatabaseException extends Exception {
     private static String extractMessage( Exception ex ) {
         if ( ex.getLocalizedMessage() == null ) {
             if ( ex.getMessage() == null ) {
-                return XTCEFunctions.getText( "general_lastresort_exception" ); // NOI18N
+                String msg =
+                    XTCEFunctions.getText( "general_lastresort_exception" ) + // NOI18N
+                    " from " + // NOI18N
+                    ex.getClass().toString();
+                return msg;
             } else {
                 return ex.getMessage();
             }

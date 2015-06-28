@@ -184,6 +184,31 @@ public class XTCEViewerPreferences {
         save();
     }
 
+    /** Retrieve the user preference for using the XInclude XML feature when
+     * loading a database document.
+     *
+     * @return boolean indicating if new documents loaded will have XInclude
+     * applied when it exists in the document.
+     *
+     */
+
+    public boolean getUseXIncludeOption() {
+        return prefs.getBoolean( "UseXInclude", true );
+    }
+
+    /** Sets the user preference for using the XInclude XML feature when
+     * loading a database document.
+     *
+     * @param flag boolean indicating if future documents should have the XML
+     * XInclude feature observed.
+     *
+     */
+
+    public void setUseXIncludeOption( boolean flag ) {
+        prefs.putBoolean( "UseXInclude", flag );
+        save();
+    }
+
     /** Retrieve the user preference for which namespace to show Aliases for on
      * XTCEViewer displays.
      *
@@ -332,7 +357,7 @@ public class XTCEViewerPreferences {
             item.addActionListener( new ActionListener() {
                 @Override
                 public void actionPerformed( ActionEvent evt ) {
-                    viewer.openFile( actionFile );
+                    viewer.openFile( actionFile, getUseXIncludeOption() );
                 }
             });
             recentItemsMenu.add( item );
@@ -386,7 +411,7 @@ public class XTCEViewerPreferences {
             item.addActionListener( new ActionListener() {
                 @Override
                 public void actionPerformed( ActionEvent evt ) {
-                    viewer.openFile( actionFile );
+                    viewer.openFile( actionFile, true );
                 }
             });
             exampleItemsMenu.add( item );
@@ -404,6 +429,43 @@ public class XTCEViewerPreferences {
         putObject( "RecentFilesList", null );
         recentItemsMenu.removeAll();
         save();
+    }
+
+    /** Retrieve the list of stored XPath Query items to display in the combo
+     * box for user convenience.
+     *
+     * @return ArrayList of Strings in order from most recent to least recent
+     * with a limit of up to 25 previous searches.
+     *
+     */
+
+    public ArrayList<String> getSavedXPathQueries() {
+        return getObject( "XPathQueries" );
+    }
+
+    /** Adds another XPath Query item to the saved cache with a limit of 25
+     * non-duplicate items, with the most recent being the first on the list.
+     *
+     * @param searchItem String containing the user text string to add.
+     *
+     */
+
+    public void addSavedXPathQuerySearch( String searchItem ) {
+        addFindSearch( searchItem,
+                       "XPathQueries",
+                       getSavedXPathQueries() );
+    }
+
+    /** Removes an XPath Query item from the saved cache.
+     *
+     * @param searchItem String containing the user text string to remove.
+     *
+     */
+
+    public void removeSavedXPathQuerySearch( String searchItem ) {
+        removeFindSearch( searchItem,
+                          "XPathQueries",
+                          getSavedXPathQueries() );
     }
 
     /** Retrieve the list of recent Find Parameter Search Text items to display
@@ -614,6 +676,7 @@ public class XTCEViewerPreferences {
         ArrayList<String> searches = new ArrayList<String>();
         searches.add( searchItem );
         searches.addAll( recentSearches );
+
         for ( int iii = searches.size() - 1; iii >= 1; --iii ) {
             if ( ( searches.get( iii )                      == null ) ||
                  ( searches.get( iii ).equals( searchItem ) == true ) ||
@@ -621,10 +684,40 @@ public class XTCEViewerPreferences {
                 searches.remove( iii );
             }
         }
+
         while ( searches.size() > 25 ) {
             searches.remove( searches.size() - 1 );
         }
+
         putObject( keyName, searches );
+        save();
+
+    }
+
+    /** Method to handle removing a search text item to the list of saved
+     * search text items.
+     *
+     * @param searchItem String containing the user search text to add.
+     *
+     * @param keyName String containing the key in the preferences store that
+     * contains the search list.
+     *
+     * @param recentSearches ArrayList of Strings containing the recent
+     * searches retrieved for the keyName list.
+     *
+     */
+
+    private void removeFindSearch( String            searchItem,
+                                   String            keyName,
+                                   ArrayList<String> recentSearches ) {
+
+        for ( int iii = recentSearches.size() - 1; iii >= 0; --iii ) {
+            if ( recentSearches.get( iii ).equals( searchItem ) == true ) {
+                recentSearches.remove( iii );
+            }
+        }
+
+        putObject( keyName, recentSearches );
         save();
 
     }
