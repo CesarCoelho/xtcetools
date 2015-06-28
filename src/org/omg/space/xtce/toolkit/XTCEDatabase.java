@@ -84,12 +84,12 @@ public class XTCEDatabase {
 
         if ( dbFile.isFile() == false || dbFile.canRead() == false ) {
             throw new XTCEDatabaseException(
-                XTCEFunctions.getText( "file_chooser_noload_text" ) +
+                XTCEFunctions.getText( "file_chooser_noload_text" ) + // NOI18N
                 " " +
                 dbFile.toString() );
         }
 
-        String currentDir = System.getProperty( "user.dir" );
+        String currentDir = System.getProperty( "user.dir" ); // NOI18N
 
         try {
             updateLoadProgress( listener, 0, "Loading File" );
@@ -109,7 +109,7 @@ public class XTCEDatabase {
         } catch ( Exception ex ) {
             throw new XTCEDatabaseException( ex );
         } finally {
-            System.setProperty( "user.dir", currentDir );
+            System.setProperty( "user.dir", currentDir ); // NOI18N
         }
 
     }
@@ -399,7 +399,7 @@ public class XTCEDatabase {
         ArrayList<XTCESpaceSystem> spaceSystems = getSpaceSystemTree();
 
         if ( path == null || path.isEmpty() == true ) {
-            throw new XTCEDatabaseException( "Root SpaceSystem is made with Create Database Menu Item" );
+            throw new XTCEDatabaseException( XTCEFunctions.getText( "error_addrootss" ) ); // NOI18N
         }
 
         for ( int iii = 0; iii < spaceSystems.size(); ++iii ) {
@@ -408,7 +408,14 @@ public class XTCEDatabase {
                 List<SpaceSystemType> list = parentSpaceSystem.getReference().getSpaceSystem();
                 for ( int jjj = 0; jjj < list.size(); ++jjj ) {
                     if ( list.get( jjj ).getName().equals( name ) == true ) {
-                        throw new XTCEDatabaseException( "Space System named " + name + " already exist in " + path );
+                        throw new XTCEDatabaseException(
+                            XTCEFunctions.getText( "ss_name_text" ) + // NOI18N
+                            " " + // NOI18N
+                            name +
+                            " " + // NOI18N
+                            XTCEFunctions.getText( "error_ssexists" ) + // NOI18N
+                            " " + // NOI18N
+                            path );
                     }
                 }
                 SpaceSystemType newSpaceSystem = new SpaceSystemType();
@@ -442,7 +449,7 @@ public class XTCEDatabase {
         String nameOnly = ssPath.substring( lastSlashIndex + 1 );
 
         if ( pathOnly == null || pathOnly.isEmpty() == true ) {
-            throw new XTCEDatabaseException( "Root SpaceSystem cannot be deleted" );
+            throw new XTCEDatabaseException( XTCEFunctions.getText( "error_rootssnodelete" ) ); // NOI18N
         }
 
         for ( int iii = 0; iii < spaceSystems.size(); ++iii ) {
@@ -460,7 +467,7 @@ public class XTCEDatabase {
             }
         }
 
-        throw new XTCEDatabaseException( "Space System " + ssPath + " not found" );
+        throw new XTCEDatabaseException( XTCEFunctions.getText( "error_ssnotfound" ) + ": " + ssPath ); // NOI18N
 
     }
 
@@ -791,7 +798,7 @@ public class XTCEDatabase {
             Object candidate = jaxbElementRoot.getValue();
 
             if ( candidate.getClass().equals( SpaceSystemType.class ) == false ) {
-                throw new XTCEDatabaseException( "Requested XML Document is not an XTCE Document" );
+                throw new XTCEDatabaseException( XTCEFunctions.getText( "error_invalidxmlfile" ) ); // NOI18N
             }
             
             topLevelSpaceSystem = (SpaceSystemType)candidate;
@@ -836,8 +843,8 @@ public class XTCEDatabase {
             spf.setValidating( true );
             
             SAXParser parser = spf.newSAXParser();
-            parser.setProperty( "http://java.sun.com/xml/jaxp/properties/schemaLanguage",
-                                "http://www.w3.org/2001/XMLSchema" );
+            parser.setProperty( "http://java.sun.com/xml/jaxp/properties/schemaLanguage", // NOI18N
+                                "http://www.w3.org/2001/XMLSchema" ); // NOI18N
 
             FileInputStream stream = new FileInputStream( dbFile );
             
