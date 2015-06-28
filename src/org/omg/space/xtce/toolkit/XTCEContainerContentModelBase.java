@@ -19,7 +19,7 @@ import org.omg.space.xtce.toolkit.XTCEContainerContentEntry.FieldType;
 /** The base class for the XTCE Container Content models captures the common
  * elements when processing both TM and TC containers.
  *
- * @author b1053583
+ * @author David Overeem
  *
  */
 

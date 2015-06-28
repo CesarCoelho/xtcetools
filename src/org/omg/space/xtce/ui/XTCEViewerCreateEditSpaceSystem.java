@@ -17,8 +17,10 @@ import org.omg.space.xtce.database.HeaderType;
 
 /**
  *
- * @author Melanie Laub
+ * @author David Overeem
+ *
  */
+
 public class XTCEViewerCreateEditSpaceSystem extends javax.swing.JDialog {
 
     /**

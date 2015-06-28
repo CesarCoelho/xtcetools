@@ -14,7 +14,7 @@ import org.omg.space.xtce.database.DescriptionType;
 /** The XTCENamedObject class serves to capture the common elements to XTCE
  * Parameters, Arguments, Containers, and Streams.
  *
- * @author b1053583
+ * @author David Overeem
  *
  */
 

@@ -15,7 +15,8 @@ import org.omg.space.xtce.toolkit.XTCESpaceSystem;
  * path and reference to the JTree objects that keep a list of the XTCE
  * SequenceContainer element that represents this node on the tree.
  *
- * @author Melanie Laub
+ * @author David Overeem
+ *
  */
 
 public class XTCEViewerContainerTreeNode extends DefaultMutableTreeNode {

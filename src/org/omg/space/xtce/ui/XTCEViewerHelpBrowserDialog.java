@@ -32,7 +32,7 @@ import org.omg.space.xtce.toolkit.XTCEFunctions;
  * XTCEViewerHelpDialog, which uses a basic Swing component for the rendering
  * of HTML.
  *
- * @author b1053583
+ * @author David Overeem
  *
  */
 

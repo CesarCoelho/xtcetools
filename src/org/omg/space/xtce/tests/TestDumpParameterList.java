@@ -15,7 +15,8 @@ import org.omg.space.xtce.toolkit.XTCEParameter;
 /** This class is an executable main that loads an XTCE database file and dumps
  * the parameters to STDOUT.
  *
- * @author b1053583
+ * @author David Overeem
+ *
  */
 
 public class TestDumpParameterList {

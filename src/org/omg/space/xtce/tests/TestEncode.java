@@ -17,7 +17,8 @@ import org.omg.space.xtce.toolkit.XTCEParameter;
 /** This class exercises the XTCEItemValue class to demonstrate the encode()
  * methods work with the sample BogusSAT-1.xml XTCE file.
  *
- * @author b1053583
+ * @author David Overeem
+ *
  */
 
 public class TestEncode {

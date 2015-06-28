@@ -17,7 +17,7 @@ import org.omg.space.xtce.toolkit.XTCEFunctions;
  * graphical user interface from crashing or dropping unintelligible text to
  * STDOUT.
  *
- * @author Melanie Laub
+ * @author David Overeem
  *
  */
 

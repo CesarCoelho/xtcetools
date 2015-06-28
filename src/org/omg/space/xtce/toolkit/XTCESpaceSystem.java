@@ -24,7 +24,8 @@ import org.omg.space.xtce.database.SpaceSystemType;
  * data model and provides convenient accessors that abstract some of the XTCE
  * processing rules from the application developer.
  *
- * @author Melanie Laub
+ * @author David Overeem
+ *
  */
 
 public class XTCESpaceSystem extends XTCENamedObject {

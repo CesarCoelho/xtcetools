@@ -13,8 +13,10 @@ import javax.swing.tree.DefaultMutableTreeNode;
  * path and reference to the JTree objects that keep a list of the XTCE Space
  * Systems.
  *
- * @author Melanie Laub
+ * @author David Overeem
+ *
  */
+
 public class XTCEViewerSpaceSystemTreeNode extends DefaultMutableTreeNode {
 
     /** Constructor

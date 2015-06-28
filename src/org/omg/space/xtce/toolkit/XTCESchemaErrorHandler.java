@@ -13,7 +13,8 @@ import java.util.ArrayList;
 /** A class for instantiating an error handler to catch the warnings and errors
  * that are returned by the SAX XML parser.
  *
- * @author Melanie Laub
+ * @author David Overeem
+ *
  */
 
 public class XTCESchemaErrorHandler implements ErrorHandler {

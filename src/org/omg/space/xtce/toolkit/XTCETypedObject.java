@@ -39,7 +39,7 @@ import org.omg.space.xtce.database.ValueEnumerationType;
  * by capturing the named objects that have specific type element associated
  * with them, such as Parameter, Arguments, and Members.
  *
- * @author b1053583
+ * @author David Overeem
  *
  */
 

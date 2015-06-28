@@ -3,12 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package org.omg.space.xtce.ui;
 
 /**
  *
- * @author b1053583
+ * @author David Overeem
+ *
  */
+
 public class XTCEViewerHistory extends javax.swing.JPanel {
 
     /**

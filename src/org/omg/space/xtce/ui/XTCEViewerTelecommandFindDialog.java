@@ -18,7 +18,8 @@ import org.omg.space.xtce.toolkit.XTCETelecommand;
 
 /**
  *
- * @author b1053583
+ * @author David Overeem
+ *
  */
 
 public class XTCEViewerTelecommandFindDialog extends javax.swing.JFrame {

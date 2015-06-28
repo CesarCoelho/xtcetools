@@ -9,7 +9,7 @@ package org.omg.space.xtce.toolkit;
 /** This class represents the value of an entry in the container model when
  * processing a specific Container in the XTCE data model.
  *
- * @author Melanie Laub
+ * @author David Overeem
  *
  */
 

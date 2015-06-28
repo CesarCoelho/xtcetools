@@ -11,7 +11,7 @@ import org.omg.space.xtce.database.CommandContainerType;
 /** The XTCETCContainer class models the XTCE CommandContainer element by
  * simplifying the usage by pre-modeling the relationships. 
  *
- * @author Melanie Laub
+ * @author David Overeem
  *
  */
 

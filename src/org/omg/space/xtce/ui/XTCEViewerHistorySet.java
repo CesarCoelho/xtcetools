@@ -3,6 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package org.omg.space.xtce.ui;
 
 import java.awt.Component;
@@ -16,8 +17,10 @@ import org.omg.space.xtce.toolkit.XTCESpaceSystem;
 
 /**
  *
- * @author b1053583
+ * @author David Overeem
+ *
  */
+
 public class XTCEViewerHistorySet extends javax.swing.JPanel {
 
     /**

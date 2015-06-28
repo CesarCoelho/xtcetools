@@ -9,7 +9,7 @@ package org.omg.space.xtce.toolkit;
 /** This class contains several static constants for use throughout the XTCE
  * Toolkit and User Interface.
  *
- * @author Melanie Laub
+ * @author David Overeem
  *
  */
 

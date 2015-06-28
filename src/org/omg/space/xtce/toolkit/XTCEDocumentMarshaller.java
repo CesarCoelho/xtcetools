@@ -33,7 +33,8 @@ import javax.xml.stream.XMLStreamWriter;
 
 /**
  *
- * @author Melanie Laub
+ * @author David Overeem
+ *
  */
 
 public class XTCEDocumentMarshaller {

@@ -27,7 +27,8 @@ import org.omg.space.xtce.toolkit.XTCEContainerContentEntry.FieldType;
  * XTCE MetaCommand/BlockMetaCommand into a series of rows suitable for a
  * simple iterator.
  *
- * @author b1053583
+ * @author David Overeem
+ *
  */
 
 public class XTCETelecommandContentModel extends XTCEContainerContentModelBase {

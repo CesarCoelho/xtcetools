@@ -17,7 +17,7 @@ import java.util.ResourceBundle;
  *
  * This class is not meant to be constructed, since the functions are static.
  *
- * @author Melanie Laub
+ * @author David Overeem
  *
  */
 

@@ -9,8 +9,10 @@ import org.omg.space.xtce.toolkit.XTCEProgressListener;
 
 /**
  *
- * @author Melanie Laub
+ * @author David Overeem
+ *
  */
+
 public class XTCEViewerProgressListener implements XTCEProgressListener {
     
     XTCEViewerProgressListener( XTCEViewerProgressMonitor progressDialog ) {

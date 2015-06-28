@@ -7,8 +7,10 @@ package org.omg.space.xtce.toolkit;
 
 /**
  *
- * @author Melanie Laub
+ * @author David Overeem
+ *
  */
+
 public interface XTCEProgressListener {
     
     void updateProgress( int percentComplete, String currentStep );

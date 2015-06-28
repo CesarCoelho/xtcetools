@@ -6,22 +6,38 @@
 
 package org.omg.space.xtce.ui;
 
+import java.awt.Frame;
 import org.omg.space.xtce.toolkit.XTCEDatabaseException;
 import org.omg.space.xtce.toolkit.XTCEParameter;
 import java.awt.event.WindowEvent;
 
-/**
+/** Dialog window to display the raw XML contents of a Parameter, where
+ * both the type element and the Parameter element are shown for the user.
  *
- * @author Melanie Laub
+ * @author David Overeem
  */
 
 public class XTCEViewerParameterXmlDialog extends javax.swing.JDialog {
 
-    /**
-     * Creates new form XTCEViewerParameterXmlDialog
+    /** Constructor to create a new XML output dialog for a Parameter in an
+     * XTCE document.
+     *
+     * @param parent Frame object containing a reference to the parent window.
+     *
+     * @param modal Boolean indicating if this dialog should block access to
+     * the parent window while it is open.
+     *
+     * @param parameter XTCEParameter object from the XTCE data model.
+     *
+     * @throws XTCEDatabaseException Thrown in the event that the XML cannot
+     * be extracted from the XTCEParameter object provided.
+     *
      */
 
-    public XTCEViewerParameterXmlDialog(java.awt.Frame parent, boolean modal, XTCEParameter parameter ) throws XTCEDatabaseException {
+    public XTCEViewerParameterXmlDialog( Frame         parent,
+                                         boolean       modal,
+                                         XTCEParameter parameter ) throws XTCEDatabaseException {
+
         super(parent, modal);
         initComponents();
         if ( parameter == null ) {
@@ -31,6 +47,7 @@ public class XTCEViewerParameterXmlDialog extends javax.swing.JDialog {
         parameterTypeDefinitionText.setText( parameter.typeToXml() );
         pack();
         setLocationRelativeTo( parent );
+
     }
 
     /**
@@ -72,9 +89,9 @@ public class XTCEViewerParameterXmlDialog extends javax.swing.JDialog {
         buttonPanel.setMinimumSize(new java.awt.Dimension(0, 47));
 
         acceptButton.setLabel("Accept");
-        acceptButton.setMaximumSize(new java.awt.Dimension(75, 25));
-        acceptButton.setMinimumSize(new java.awt.Dimension(75, 25));
-        acceptButton.setPreferredSize(new java.awt.Dimension(75, 25));
+        acceptButton.setMaximumSize(new java.awt.Dimension(100, 25));
+        acceptButton.setMinimumSize(new java.awt.Dimension(100, 25));
+        acceptButton.setPreferredSize(new java.awt.Dimension(100, 25));
         acceptButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 acceptButtonActionPerformed(evt);
@@ -82,9 +99,9 @@ public class XTCEViewerParameterXmlDialog extends javax.swing.JDialog {
         });
 
         dismissButton.setLabel("Dismiss");
-        dismissButton.setMaximumSize(new java.awt.Dimension(75, 25));
-        dismissButton.setMinimumSize(new java.awt.Dimension(75, 25));
-        dismissButton.setPreferredSize(new java.awt.Dimension(75, 25));
+        dismissButton.setMaximumSize(new java.awt.Dimension(100, 25));
+        dismissButton.setMinimumSize(new java.awt.Dimension(100, 25));
+        dismissButton.setPreferredSize(new java.awt.Dimension(100, 25));
         dismissButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 dismissButtonActionPerformed(evt);
@@ -96,11 +113,11 @@ public class XTCEViewerParameterXmlDialog extends javax.swing.JDialog {
         buttonPanelLayout.setHorizontalGroup(
             buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(buttonPanelLayout.createSequentialGroup()
-                .addContainerGap(88, Short.MAX_VALUE)
+                .addContainerGap(132, Short.MAX_VALUE)
                 .addComponent(acceptButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(40, 40, 40)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(dismissButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(102, Short.MAX_VALUE))
+                .addContainerGap(144, Short.MAX_VALUE))
         );
         buttonPanelLayout.setVerticalGroup(
             buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -119,16 +136,18 @@ public class XTCEViewerParameterXmlDialog extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(buttonPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(parameterTypeLabel)
                             .addComponent(parameterLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1))
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -136,14 +155,13 @@ public class XTCEViewerParameterXmlDialog extends javax.swing.JDialog {
                 .addContainerGap()
                 .addComponent(parameterTypeLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(parameterLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(buttonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addComponent(buttonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
@@ -158,51 +176,6 @@ public class XTCEViewerParameterXmlDialog extends javax.swing.JDialog {
         this.dispatchEvent( new WindowEvent(this, WindowEvent.WINDOW_CLOSING) );
     }//GEN-LAST:event_acceptButtonActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(XTCEViewerParameterXmlDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(XTCEViewerParameterXmlDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(XTCEViewerParameterXmlDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(XTCEViewerParameterXmlDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    XTCEViewerParameterXmlDialog dialog = new XTCEViewerParameterXmlDialog(new javax.swing.JFrame(), true, null);
-                    dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                        @Override
-                        public void windowClosing(java.awt.event.WindowEvent e) {
-                            System.exit(0);
-                        }
-                    });
-                    dialog.setVisible(true);
-                } catch ( XTCEDatabaseException ex ) {
-                    System.out.println( "Exception: " + ex.getLocalizedMessage() );
-                }
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton acceptButton;

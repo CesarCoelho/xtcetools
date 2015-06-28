@@ -15,7 +15,8 @@ import javax.swing.tree.DefaultTreeCellRenderer;
  * abstract containers in italic font, based on whichever font is currently
  * being used.
  *
- * @author b1053583
+ * @author David Overeem
+ *
  */
 
 public class XTCEViewerContainerTreeCellRenderer extends DefaultTreeCellRenderer {

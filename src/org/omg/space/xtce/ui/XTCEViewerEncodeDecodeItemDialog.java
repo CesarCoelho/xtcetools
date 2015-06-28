@@ -15,7 +15,8 @@ import org.omg.space.xtce.toolkit.XTCETypedObject;
 
 /**
  *
- * @author b1053583
+ * @author David Overeem
+ *
  */
 
 public class XTCEViewerEncodeDecodeItemDialog extends javax.swing.JDialog {

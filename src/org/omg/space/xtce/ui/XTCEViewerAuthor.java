@@ -7,8 +7,10 @@ package org.omg.space.xtce.ui;
 
 /**
  *
- * @author b1053583
+ * @author David Overeem
+ *
  */
+
 public class XTCEViewerAuthor extends javax.swing.JPanel {
 
     /**

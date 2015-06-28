@@ -17,7 +17,7 @@ import org.omg.space.xtce.database.ParameterTypeSetType;
  * XTCEParameter or XTCEArgument while abstracting the user away from the
  * type differences.
  *
- * @author b1053583
+ * @author David Overeem
  *
  */
 

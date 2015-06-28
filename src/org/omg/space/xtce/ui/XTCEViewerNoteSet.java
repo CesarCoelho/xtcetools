@@ -17,8 +17,10 @@ import org.omg.space.xtce.toolkit.XTCESpaceSystem;
 
 /**
  *
- * @author b1053583
+ * @author David Overeem
+ *
  */
+
 public class XTCEViewerNoteSet extends javax.swing.JPanel {
 
     /**

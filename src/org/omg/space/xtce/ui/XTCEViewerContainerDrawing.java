@@ -28,7 +28,7 @@ import org.omg.space.xtce.toolkit.XTCEFunctions;
 /** The Container/Telecommand drawing class that serves as a JPanel, which
  * extends JComponent in Java Swing.
  *
- * @author b1053583
+ * @author David Overeem
  *
  */
 

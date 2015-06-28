@@ -20,7 +20,7 @@ import javax.xml.xpath.XPathException;
  * those exceptions, in order to add more descriptive information than
  * otherwise would be provided by the general system exceptions.
  *
- * @author Melanie Laub
+ * @author David Overeem
  *
  */
 

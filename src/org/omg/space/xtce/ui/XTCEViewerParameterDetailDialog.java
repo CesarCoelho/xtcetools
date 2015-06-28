@@ -34,8 +34,10 @@ import org.omg.space.xtce.toolkit.XTCEValidRange;
 
 /**
  *
- * @author Melanie Laub
+ * @author David Overeem
+ *
  */
+
 public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
 
     /**

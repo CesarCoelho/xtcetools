@@ -3,6 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package org.omg.space.xtce.ui;
 
 import org.omg.space.xtce.database.HeaderType;
@@ -10,8 +11,10 @@ import org.omg.space.xtce.toolkit.XTCESpaceSystem;
 
 /**
  *
- * @author b1053583
+ * @author David Overeem
+ *
  */
+
 public class XTCEViewerSpaceSystemAttributes extends javax.swing.JPanel {
 
     /**

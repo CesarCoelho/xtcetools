@@ -9,8 +9,10 @@ import javax.swing.ProgressMonitor;
 
 /**
  *
- * @author Melanie Laub
+ * @author David Overeem
+ *
  */
+
 public class XTCEViewerProgressMonitor extends javax.swing.JDialog {
 
     /**

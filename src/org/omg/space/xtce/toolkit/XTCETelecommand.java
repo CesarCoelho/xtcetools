@@ -36,7 +36,7 @@ import org.omg.space.xtce.database.NameDescriptionType;
  * At present, Aliases do not apply through the inheritance chain.  The author
  * is not sure if they should or not.
  *
- * @author Melanie Laub
+ * @author David Overeem
  *
  */
 

@@ -10,7 +10,7 @@ package org.omg.space.xtce.toolkit;
  * in the XTCE data model, which is represented as an XTCENamedObject in the
  * toolkit.
  *
- * @author Melanie Laub
+ * @author David Overeem
  *
  */
 

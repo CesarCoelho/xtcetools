@@ -25,7 +25,8 @@ import org.omg.space.xtce.database.StreamSegmentEntryType;
 /** The container content model class encapsulates the pre-processing of an
  * XTCE SequenceContainer into a series of rows suitable for a simple iterator.
  *
- * @author Melanie Laub
+ * @author David Overeem
+ *
  */
 
 public class XTCEContainerContentModel extends XTCEContainerContentModelBase {

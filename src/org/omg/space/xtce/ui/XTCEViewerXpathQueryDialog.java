@@ -8,7 +8,6 @@ package org.omg.space.xtce.ui;
 
 import java.awt.event.WindowEvent;
 import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import javax.xml.transform.OutputKeys;
@@ -33,7 +32,7 @@ import org.w3c.dom.NodeList;
  * Context awareness in Document Object Model (DOM).  This is common to both
  * Perl and Java implementations of the DOM and XPath standards.
  *
- * @author b1053583
+ * @author David Overeem
  *
  */
 

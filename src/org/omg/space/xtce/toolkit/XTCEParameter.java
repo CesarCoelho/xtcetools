@@ -25,7 +25,7 @@ import org.omg.space.xtce.database.ParameterSetType.Parameter;
  * information.  If aliases are not used on the project, then this will have
  * minimal to no impact on the processing times.
  *
- * @author Melanie Laub
+ * @author David Overeem
  *
  */
 

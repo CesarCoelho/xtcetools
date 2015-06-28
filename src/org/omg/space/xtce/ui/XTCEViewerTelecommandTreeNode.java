@@ -14,7 +14,8 @@ import org.omg.space.xtce.toolkit.XTCETelecommandContentModel;
  * path and reference to the JTree objects that keep a list of the XTCE
  * MetaCommand element that represents this node on the tree.
  *
- * @author Melanie Laub
+ * @author David Overeem
+ *
  */
 
 public class XTCEViewerTelecommandTreeNode extends DefaultMutableTreeNode {

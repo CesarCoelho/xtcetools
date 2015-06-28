@@ -40,7 +40,7 @@ import org.omg.space.xtce.database.ValueEnumerationType;
  * used for specific cots products.  Those extended implementations are not
  * included in this toolkit.
  *
- * @author b1053583
+ * @author David Overeem
  *
  */
 

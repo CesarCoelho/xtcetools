@@ -12,7 +12,7 @@ import javax.xml.namespace.NamespaceContext;
 /** The XTCE Namespace Context class is used to support XPath Queries by
  * mapping the "xtce" prefix to the URI in the XTCEConstants class.
  *
- * @author b1053583
+ * @author David Overeem
  *
  */
 

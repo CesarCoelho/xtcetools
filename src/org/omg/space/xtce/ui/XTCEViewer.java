@@ -24,7 +24,6 @@ import java.io.File;
 import javax.swing.JFileChooser;
 import java.awt.event.WindowEvent;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,7 +33,6 @@ import java.util.Properties;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -61,7 +59,8 @@ import org.omg.space.xtce.ui.XTCEViewerContainerDrawing.Orientation;
 /** This class contains the XTCEViewer application with an executable main()
  * function.
  *
- * @author Melanie Laub
+ * @author David Overeem
+ *
  */
 
 public class XTCEViewer extends javax.swing.JFrame {
@@ -77,7 +76,7 @@ public class XTCEViewer extends javax.swing.JFrame {
         XTCEFunctions.setLocalePreference( prefs.getLanguagePreference() );
         initComponents();
         Thread.setDefaultUncaughtExceptionHandler( new XTCEViewerUncaughtExceptionHandler( this ) );
-        buildSpaceSystemTrees();
+        buildSpaceSystemTrees(); // clears NetBeans defaults in the trees
         prefs.setParentWindow( this );
         prefs.updateRecentFilesList( mainWindowOpenRecentMenu, null );
         prefs.updateExampleFilesList( mainWindowOpenExampleMenu );
@@ -1525,11 +1524,15 @@ public class XTCEViewer extends javax.swing.JFrame {
     }//GEN-LAST:event_mainWindowCloseFileMenuItemActionPerformed
 
     private void mainWindowClearMessagesMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mainWindowClearMessagesMenuItemActionPerformed
+
         messagesText.setText( XTCEFunctions.getText( "no_messages_text" ) ); // NOI18N
+
     }//GEN-LAST:event_mainWindowClearMessagesMenuItemActionPerformed
 
     private void mainWindowValidateOnLoadMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mainWindowValidateOnLoadMenuItemActionPerformed
+
         prefs.setValidateOnLoadOption( mainWindowValidateOnLoadMenuItem.getState() );
+
     }//GEN-LAST:event_mainWindowValidateOnLoadMenuItemActionPerformed
 
     private void detailSpaceSystemTreeMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_detailSpaceSystemTreeMousePressed
@@ -1698,18 +1701,34 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     private void mainWindowCreateFileMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mainWindowCreateFileMenuItemActionPerformed
 
+        // in the event that a file is already open, we should attempt to
+        // close the file before creating a new database.
+
         if ( xtceDatabaseFile != null ) {
             mainWindowCloseFileMenuItemActionPerformed( evt );
         }
+
+        // this extra test captures the case where a file is open and the user
+        // chose to cancel the save and close, leaving the original file open.
+
         if ( xtceDatabaseFile != null ) {
             return;
         }
+
+        // the following dialog allows the user to create a new SpaceSystem or
+        // just cancel, and in that case is it "not accepted", so we just
+        // return and do nothing.
+
         XTCEViewerCreateEditSpaceSystem dialog =
             new XTCEViewerCreateEditSpaceSystem( this, true, null );
         dialog.setVisible( true );
         if ( dialog.isAccepted() == false ) {
             return;
         }
+
+        // Create the new minimum SpaceSystem element with an empty file as it
+        // has not yet been saved.
+
         try {
             xtceDatabaseFile = new XTCEDatabase( dialog.getSpaceSystemName() );
             loadedFilenameLabel.setText( dialog.getSpaceSystemName() );
@@ -1995,13 +2014,7 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     private void mainWindowFindSpaceSystemMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mainWindowFindSpaceSystemMenuItemActionPerformed
 
-        if ( xtceDatabaseFile == null ) {
-            JOptionPane.showMessageDialog( this,
-                                           XTCEFunctions.getText( "dialog_nofileisopen_text" ), // NOI18N
-                                           XTCEFunctions.getText( "general_error" ), // NOI18N
-                                           JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+        if ( fileOpenWarning() == true ) return;
 
         String name = JOptionPane.showInputDialog( this,
                                                    XTCEFunctions.getText( "ss_name_text" ) ); // NOI18N
@@ -2027,13 +2040,7 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     private void mainWindowFindParameterMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mainWindowFindParameterMenuItemActionPerformed
 
-        if ( xtceDatabaseFile == null ) {
-            JOptionPane.showMessageDialog( this,
-                                           XTCEFunctions.getText( "dialog_nofileisopen_text" ), // NOI18N
-                                           XTCEFunctions.getText( "general_error" ), // NOI18N
-                                           JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+        if ( fileOpenWarning() == true ) return;
 
         if ( findParameterDialog == null ) {
             findParameterDialog = new XTCEViewerParameterFindDialog( this,
@@ -2047,15 +2054,21 @@ public class XTCEViewer extends javax.swing.JFrame {
     }//GEN-LAST:event_mainWindowFindParameterMenuItemActionPerformed
 
     private void tmParameterSpaceSystemTreeValueChanged(javax.swing.event.TreeSelectionEvent evt) {//GEN-FIRST:event_tmParameterSpaceSystemTreeValueChanged
+
         drawTelemetryParameterTable();
+
     }//GEN-LAST:event_tmParameterSpaceSystemTreeValueChanged
 
     private void tcParameterSpaceSystemTreeValueChanged(javax.swing.event.TreeSelectionEvent evt) {//GEN-FIRST:event_tcParameterSpaceSystemTreeValueChanged
+
         drawTelecommandParameterTable();
+
     }//GEN-LAST:event_tcParameterSpaceSystemTreeValueChanged
 
     private void tmContainerTreeValueChanged(javax.swing.event.TreeSelectionEvent evt) {//GEN-FIRST:event_tmContainerTreeValueChanged
+
         drawContainerContentTable( null );
+
     }//GEN-LAST:event_tmContainerTreeValueChanged
 
     private void mainWindowExpandAllSpaceSystemTreeMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mainWindowExpandAllSpaceSystemTreeMenuItemActionPerformed
@@ -2071,13 +2084,7 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     private void mainWindowExportParametersMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mainWindowExportParametersMenuItemActionPerformed
 
-        if ( xtceDatabaseFile == null ) {
-            JOptionPane.showMessageDialog( this,
-                                           XTCEFunctions.getText( "dialog_nofileisopen_text" ), // NOI18N
-                                           XTCEFunctions.getText( "general_error" ), // NOI18N
-                                           JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+        if ( fileOpenWarning() == true ) return;
 
         int value = JOptionPane.showConfirmDialog( this,
                                                    parameterExportPanel,
@@ -2165,13 +2172,7 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     private void mainWindowMessagesDialogMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mainWindowMessagesDialogMenuItemActionPerformed
 
-        if ( xtceDatabaseFile == null ) {
-            JOptionPane.showMessageDialog( this,
-                                           XTCEFunctions.getText( "dialog_nofileisopen_text" ), // NOI18N
-                                           XTCEFunctions.getText( "general_error" ), // NOI18N
-                                           JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+        if ( fileOpenWarning() == true ) return;
 
         Object[] selectionValues = { XTCEFunctions.getText( "general_save_text" ), // NOI18N
                                      XTCEFunctions.getText( "general_dismiss_text" ) }; // NOI18N
@@ -2213,7 +2214,9 @@ public class XTCEViewer extends javax.swing.JFrame {
     }//GEN-LAST:event_mainWindowMessagesDialogMenuItemActionPerformed
 
     private void tcDefinitionsSpaceSystemTreeValueChanged(javax.swing.event.TreeSelectionEvent evt) {//GEN-FIRST:event_tcDefinitionsSpaceSystemTreeValueChanged
+
         drawTelecommandTree();
+
     }//GEN-LAST:event_tcDefinitionsSpaceSystemTreeValueChanged
 
     private void tcDefinitionsSpaceSystemTreeMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tcDefinitionsSpaceSystemTreeMousePressed
@@ -2260,7 +2263,7 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     private void mainWindowRecentFilesMaxMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mainWindowRecentFilesMaxMenuItemActionPerformed
 
-        String current  = new Integer( prefs.getRecentFilesMaxCountOption() ).toString();
+        String current  = Integer.toString(prefs.getRecentFilesMaxCountOption() );
         Object message  = XTCEFunctions.getText( "dialog_entermaxfiles_text" ); // NOI18N
         String response = (String)JOptionPane.showInputDialog( this,
                                                                message,
@@ -2288,18 +2291,14 @@ public class XTCEViewer extends javax.swing.JFrame {
     }//GEN-LAST:event_mainWindowRecentFilesMaxMenuItemActionPerformed
 
     private void mainWindowClearRecentFilesMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mainWindowClearRecentFilesMenuItemActionPerformed
+
         prefs.clearRecentFilesList( mainWindowOpenRecentMenu );
+
     }//GEN-LAST:event_mainWindowClearRecentFilesMenuItemActionPerformed
 
     private void mainWindowShowMetricsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mainWindowShowMetricsMenuItemActionPerformed
 
-        if ( xtceDatabaseFile == null ) {
-            JOptionPane.showMessageDialog( this,
-                                           XTCEFunctions.getText( "dialog_nofileisopen_text" ), // NOI18N
-                                           XTCEFunctions.getText( "general_error" ), // NOI18N
-                                           JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+        if ( fileOpenWarning() == true ) return;
 
         XTCESpaceSystemMetrics metrics = xtceDatabaseFile.getMetrics();
 
@@ -2365,7 +2364,9 @@ public class XTCEViewer extends javax.swing.JFrame {
     }//GEN-LAST:event_mainWindowLocaleMenuItemActionPerformed
 
     private void tcTreeValueChanged(javax.swing.event.TreeSelectionEvent evt) {//GEN-FIRST:event_tcTreeValueChanged
+
         drawTelecommandContentTable( null );
+
     }//GEN-LAST:event_tcTreeValueChanged
 
     private void mainWindowShowAllConditionalsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mainWindowShowAllConditionalsMenuItemActionPerformed
@@ -2535,6 +2536,7 @@ public class XTCEViewer extends javax.swing.JFrame {
     }//GEN-LAST:event_setConditionTrueMenuItemActionPerformed
 
     private void containerDrawingLeftToRightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_containerDrawingLeftToRightActionPerformed
+
         prefs.setContainerOrientationOption( "LEFT_TO_RIGHT" ); // NOI18N
         containerDrawingLeftToRight.setSelected( true );
         containerDrawingTopToBottom.setSelected( false );
@@ -2544,9 +2546,11 @@ public class XTCEViewer extends javax.swing.JFrame {
             drawing.reOrient( Orientation.LEFT_TO_RIGHT );
             drawing.repaint();
         }
+
     }//GEN-LAST:event_containerDrawingLeftToRightActionPerformed
 
     private void containerDrawingTopToBottomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_containerDrawingTopToBottomActionPerformed
+
         prefs.setContainerOrientationOption( "TOP_TO_BOTTOM" ); // NOI18N
         containerDrawingLeftToRight.setSelected( false );
         containerDrawingTopToBottom.setSelected( true );
@@ -2556,6 +2560,7 @@ public class XTCEViewer extends javax.swing.JFrame {
             drawing.reOrient( Orientation.TOP_TO_BOTTOM );
             drawing.repaint();
         }
+
     }//GEN-LAST:event_containerDrawingTopToBottomActionPerformed
 
     private void tmContainerDrawingScrollPaneMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tmContainerDrawingScrollPaneMousePressed
@@ -2652,13 +2657,7 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     private void mainWindowFindContainerMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mainWindowFindContainerMenuItemActionPerformed
 
-        if ( xtceDatabaseFile == null ) {
-            JOptionPane.showMessageDialog( this,
-                                           XTCEFunctions.getText( "dialog_nofileisopen_text" ), // NOI18N
-                                           XTCEFunctions.getText( "general_error" ), // NOI18N
-                                           JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+        if ( fileOpenWarning() == true ) return;
 
         XTCEViewerContainerFindDialog findDialog =
             new XTCEViewerContainerFindDialog( this, prefs, xtceDatabaseFile );
@@ -2667,13 +2666,7 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     private void mainWindowFindTelecommandMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mainWindowFindTelecommandMenuItemActionPerformed
 
-        if ( xtceDatabaseFile == null ) {
-            JOptionPane.showMessageDialog( this,
-                                           XTCEFunctions.getText( "dialog_nofileisopen_text" ), // NOI18N
-                                           XTCEFunctions.getText( "general_error" ), // NOI18N
-                                           JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+        if ( fileOpenWarning() == true ) return;
 
         XTCEViewerTelecommandFindDialog findDialog =
             new XTCEViewerTelecommandFindDialog( this, prefs, xtceDatabaseFile );
@@ -2776,45 +2769,13 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     private void mainWindowHelpSchemaMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mainWindowHelpSchemaMenuItemActionPerformed
 
-        final String filename = "org/omg/space/xtce/schema/doc/SpaceSystemV1.2-27Feb2014-mods.html"; // NOI18N
-
-        URL helpURL = ClassLoader.getSystemResource( filename );
-        if ( helpURL != null ) {
-            //XTCEViewerHelpDialog dialog =
-            //    new XTCEViewerHelpDialog( this, false, helpURL );
-            XTCEViewerHelpBrowserDialog dialog =
-                  new XTCEViewerHelpBrowserDialog( this, false, helpURL );
-        } else {
-            logMsg( XTCEFunctions.generalErrorPrefix() +
-                    XTCEFunctions.getText( "dialog_unabletoload_text" ) + // NOI18N
-                    ": " +
-                    filename );
-        }
+        openHelp( "org/omg/space/xtce/schema/doc/SpaceSystemV1.2-27Feb2014-mods.html" ); // NOI18N)
 
     }//GEN-LAST:event_mainWindowHelpSchemaMenuItemActionPerformed
 
     private void mainWindowHelpApiMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mainWindowHelpApiMenuItemActionPerformed
 
-        // this method no longer uses the XTCEViewerHelpDialog class in favor
-        // of a version that uses a Java FX Panel that does a nicer job at the
-        // html rendering.  the old class is kept around so that I can edit the
-        // form to add things and copy the generated code over to the new class
-        // since NetBeans is not configured for FX in this project right now.
-
-        final String filename = "org/omg/space/xtce/toolkit/doc/index.html"; // NOI18N
-
-        URL helpURL = ClassLoader.getSystemResource( filename );
-        if ( helpURL != null ) {
-            //XTCEViewerHelpDialog dialog =
-            //    new XTCEViewerHelpDialog( this, false, helpURL );
-            XTCEViewerHelpBrowserDialog dialog =
-                  new XTCEViewerHelpBrowserDialog( this, false, helpURL );
-        } else {
-            logMsg( XTCEFunctions.generalErrorPrefix() +
-                    XTCEFunctions.getText( "dialog_unabletoload_text" ) + // NOI18N
-                    ": " +
-                    filename );
-        }
+        openHelp( "org/omg/space/xtce/toolkit/doc/index.html" ); // NOI18
 
     }//GEN-LAST:event_mainWindowHelpApiMenuItemActionPerformed
 
@@ -2847,13 +2808,7 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     private void mainWindowFindByXPathMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mainWindowFindByXPathMenuItemActionPerformed
 
-        if ( xtceDatabaseFile == null ) {
-            JOptionPane.showMessageDialog( this,
-                                           XTCEFunctions.getText( "dialog_nofileisopen_text" ), // NOI18N
-                                           XTCEFunctions.getText( "general_error" ), // NOI18N
-                                           JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+        if ( fileOpenWarning() == true ) return;
 
         if ( xpathDialog == null ) {
             xpathDialog = new XTCEViewerXpathQueryDialog( prefs,
@@ -2971,7 +2926,7 @@ public class XTCEViewer extends javax.swing.JFrame {
         tmContainerTree.setCellRenderer( new XTCEViewerContainerTreeCellRenderer() );
 
         for ( XTCETMContainer container : containers ) {
-            String[] fields = container.getInheritancePath().split( "/" );
+            String[] fields = container.getInheritancePath().split( "/" ); // NOI18N
             XTCEViewerContainerTreeNode obj = rootObj;
             for ( int jjj = 1; jjj < fields.length; ++jjj ) {
                 obj = setContainerTreeNode( obj, container );
@@ -2990,6 +2945,16 @@ public class XTCEViewer extends javax.swing.JFrame {
         buildSpaceSystemTrees();
 
     }
+
+    /** Private method to clear/erase the contents of a JTree Swing widget.
+     *
+     * This is apparently complex enough to justify having its own function and
+     * is used throughout the GUI code.
+     *
+     * @param tree JTree to clear/erase.
+     *
+     */
+
     private void clearTree( JTree tree ) {
         
         DefaultTreeModel tmodel = (DefaultTreeModel)tree.getModel();
@@ -3031,7 +2996,7 @@ public class XTCEViewer extends javax.swing.JFrame {
                 //System.out.println( "matched " + spaceSystem.getFullPath() );
                 return child;
             } else {
-                existingPath += "/";
+                existingPath += "/"; // NOI18N
                 if ( spaceSystem.getFullPath().startsWith( existingPath ) == true ) {
                     //System.out.println( "matched starts " + spaceSystem.getFullPath() );
                     return child;
@@ -3082,7 +3047,7 @@ public class XTCEViewer extends javax.swing.JFrame {
                 //System.out.println( "matched " + existingPath );
                 return child;
             } else {
-                existingPath += "/";
+                existingPath += "/"; // NOI18N
                 if ( telecommand.getInheritancePath().startsWith( existingPath ) == true ) {
                     //System.out.println( "matched starts " + existingPath );
                     return child;
@@ -3358,8 +3323,8 @@ public class XTCEViewer extends javax.swing.JFrame {
 
         for ( XTCEContainerContentEntry entry : entries ) {
 
-            String aliasString = "";
-            String name        = "";
+            String aliasString = ""; // NOI18N
+            String name        = ""; // NOI18N
             if ( entry.getEntryType() == FieldType.PARAMETER ) {
                 aliasString =
                     XTCEFunctions.makeAliasDisplayString( entry.getParameter(),
@@ -3402,7 +3367,7 @@ public class XTCEViewer extends javax.swing.JFrame {
         if ( containerModel == null ) {
             return;
         } else {
-            System.out.println("Telecommand Table Not Yet Implemented" );
+            System.out.println( "Telecommand Table Not Yet Implemented" );
         }
 
         //ArrayList<String> warnings = containerModel.getWarnings();
@@ -3461,6 +3426,18 @@ public class XTCEViewer extends javax.swing.JFrame {
         tmodel.reload();
 
     }
+
+    /** Private method to retrieve the JTree for the SpaceSystem that is in the
+     * current working tab on the GUI screen.
+     *
+     * This function is useful because several tabs have some similar menu
+     * items, such as to expand all the Space Systems in the tree.  This makes
+     * a single implementation generic to all tabs.
+     *
+     * @return JTree from the current working tab, or null if there is no
+     * SpaceSystem tree on the current tab.
+     *
+     */
 
     private JTree getCurrentSpaceSystemTree() {
 
@@ -3623,11 +3600,29 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     }
 
+    /** Method to load a new XTCE database file, taking into account that one
+     * might already be loaded and offering the user an opportunity to save
+     * this or cancel before closing an already open file.
+     *
+     * @param dbFile File object in Java to use to open the file.
+     *
+     * @param applyXInclude Boolean indicating if the file should be opened
+     * with XInclude processing enabled.
+     *
+     */
+
     public void openFile( File dbFile, boolean applyXInclude ) {
+
+        // in the event that a file is already open, we should attempt to
+        // close the file before creating a new database.
 
         if ( xtceDatabaseFile != null ) {
             mainWindowCloseFileMenuItemActionPerformed( null );
         }
+
+        // this extra test captures the case where a file is open and the user
+        // chose to cancel the save and close, leaving the original file open.
+
         if ( xtceDatabaseFile != null ) {
             return;
         }
@@ -3690,18 +3685,95 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     }
 
+    /** Private method to open a help dialog browser.
+     *
+     * The help dialog browser is not limited to just having a single one open
+     * for each case, unlike some other dialogs that are kept track of by this
+     * GUI class.  As a result, it is possible to open several of the same help
+     * type screen.  This can be convenient for the user.  In addition, this
+     * is not blocked by whether or not a database file is loaded.  Help
+     * browsers are independent of the data.
+     *
+     * @param helpFile String containing the system resource file path to use
+     * for the browser root.
+     *
+     */
+
+    private void openHelp( String helpFile ) {
+
+        // this method no longer uses the XTCEViewerHelpDialog class in favor
+        // of a version that uses a Java FX Panel that does a nicer job at the
+        // html rendering.  the old class is kept around so that I can edit the
+        // form to add things and copy the generated code over to the new class
+        // since NetBeans is not configured for FX in this project right now.
+
+        URL helpURL = ClassLoader.getSystemResource( helpFile );
+
+        if ( helpURL != null ) {
+            //XTCEViewerHelpDialog dialog =
+            //    new XTCEViewerHelpDialog( this, false, helpURL );
+            XTCEViewerHelpBrowserDialog dialog =
+                  new XTCEViewerHelpBrowserDialog( this, false, helpURL );
+        } else {
+            logMsg( XTCEFunctions.generalErrorPrefix() +
+                    XTCEFunctions.getText( "dialog_unabletoload_text" ) + // NOI18N
+                    ": " + // NOI18N
+                    helpFile );
+        }
+
+    }
+
+    /** Private method to test if a database file is loaded in memory and
+     * return true if the warning dialog was displayed to the user.
+     *
+     * This method is used to shortcut selections of menu items that cannot
+     * reasonably be used when there is no file loaded.  Callbacks use this to
+     * return prematurely when the return value is true.
+     *
+     * @return boolean indicating if the user was warned that there is not a
+     * file open.
+     *
+     */
+
+    private boolean fileOpenWarning() {
+
+        if ( xtceDatabaseFile == null ) {
+            JOptionPane.showMessageDialog(
+                this,
+                XTCEFunctions.getText( "dialog_nofileisopen_text" ), // NOI18N
+                XTCEFunctions.getText( "general_error" ), // NOI18N
+                JOptionPane.ERROR_MESSAGE );
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
+    /** Private method to append a log message to the Messages portion of the
+     * GUI main window.
+     *
+     * @param msg String containing the message to append.
+     *
+     */
+
     private void logMsg( String msg ) {
         
         if ( messagesText.getText().equals( XTCEFunctions.getText( "no_messages_text" ) ) == true ) { // NOI18N
             messagesText.setText( "" ); // NOI18N
         }
         messagesText.append( msg + "\n" ); // NOI18N
-        
+
     }
 
-    /**
-     * @param args the command line arguments
+    /** This is the main function that launches the XTCE Viewer/Browser/Editor
+     * application.
+     *
+     * @param args the command line arguments, of which none are used for this
+     * application.
+     *
      */
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -3734,6 +3806,8 @@ public class XTCEViewer extends javax.swing.JFrame {
             }
         });
     }
+
+    // Private Data Members
 
     private XTCEViewerPreferences         prefs            = null;
     private XTCEDatabase                  xtceDatabaseFile = null;

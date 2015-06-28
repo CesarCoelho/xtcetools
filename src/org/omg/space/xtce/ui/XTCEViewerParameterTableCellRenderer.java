@@ -16,7 +16,8 @@ import org.omg.space.xtce.toolkit.XTCEParameter;
 
 /**
  *
- * @author b1053583
+ * @author David Overeem
+ *
  */
 
 public class XTCEViewerParameterTableCellRenderer extends DefaultTableCellRenderer {

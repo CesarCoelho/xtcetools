@@ -12,7 +12,8 @@ import org.omg.space.xtce.toolkit.XTCETMContainer;
 
 /**
  *
- * @author Melanie Laub
+ * @author David Overeem
+ *
  */
 
 public class XTCEViewerContainerXmlDialog extends javax.swing.JDialog {

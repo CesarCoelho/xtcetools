@@ -34,7 +34,7 @@ import org.omg.space.xtce.toolkit.XTCEFunctions;
  * The design pattern for this singleton resembles the recommendation by
  * "Bill Pugh", of the Java community.
  *
- * @author Melanie Laub
+ * @author David Overeem
  *
  */
 

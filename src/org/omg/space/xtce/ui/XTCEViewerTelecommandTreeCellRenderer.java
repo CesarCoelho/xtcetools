@@ -15,7 +15,7 @@ import javax.swing.tree.DefaultTreeCellRenderer;
  * abstract telecommands in italic font, based on whichever font is currently
  * being used.
  *
- * @author b1053583
+ * @author David Overeem
  *
  */
 

@@ -13,7 +13,7 @@ import org.omg.space.xtce.database.SequenceContainerType;
 /** The XTCETMContainer class models the XTCE SequenceContainer element by
  * simplifying the usage by pre-modeling the relationships. 
  *
- * @author Melanie Laub
+ * @author David Overeem
  *
  */
 

@@ -9,13 +9,16 @@ import java.awt.event.WindowEvent;
 
 /**
  *
- * @author Melanie Laub
+ * @author David Overeem
+ *
  */
+
 public class XTCEViewerAliasNamespaceDialog extends javax.swing.JDialog {
 
     /**
      * Creates new form XTCEAliasNamespaceDialog
      */
+
     public XTCEViewerAliasNamespaceDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();

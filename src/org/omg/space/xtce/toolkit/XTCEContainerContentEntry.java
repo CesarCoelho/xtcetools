@@ -13,7 +13,7 @@ import org.omg.space.xtce.database.MetaCommandType.BaseMetaCommand.ArgumentAssig
 /** This class represents a single data entry resolved from an XTCETMContainer,
  * which represents a SequenceContainer in the XTCE data model.
  *
- * @author Melanie Laub
+ * @author David Overeem
  *
  */
 

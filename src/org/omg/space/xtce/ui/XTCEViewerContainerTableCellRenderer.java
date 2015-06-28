@@ -16,7 +16,8 @@ import org.omg.space.xtce.toolkit.XTCEContainerContentEntry.FieldType;
 
 /**
  *
- * @author b1053583
+ * @author David Overeem
+ *
  */
 
 public class XTCEViewerContainerTableCellRenderer extends DefaultTableCellRenderer {

@@ -17,7 +17,8 @@ import org.omg.space.xtce.toolkit.XTCETMContainer;
 
 /**
  *
- * @author b1053583
+ * @author David Overeem
+ *
  */
 
 public class XTCEViewerContainerFindDialog extends javax.swing.JFrame {

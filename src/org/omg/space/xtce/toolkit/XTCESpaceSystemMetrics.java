@@ -18,7 +18,7 @@ import org.omg.space.xtce.database.MetaCommandType;
  * constructed with an XTCEDatabase object and is shallow reflecting only
  * one Space System when constructed using an XTCESpaceSystem object.
  *
- * @author Melanie Laub
+ * @author David Overeem
  *
  */
 
