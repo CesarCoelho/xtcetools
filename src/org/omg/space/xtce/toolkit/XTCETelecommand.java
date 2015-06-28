@@ -326,10 +326,10 @@ public class XTCETelecommand extends XTCENamedObject {
 
             }
 
-            return mmm.marshalToXml( xmlElement );
+            return XTCEFunctions.xmlPrettyPrint( mmm.marshalToXml( xmlElement ) );
 
         } catch ( Exception ex ) {
-            throw new XTCEDatabaseException( "Failed to create XML from Parameter Object: " + ex.getCause() );
+            throw new XTCEDatabaseException( "Failed to create XML from MetaCommand Object: " + ex.getCause() );
         }
 
     }

@@ -298,13 +298,13 @@ public class XTCEArgument extends XTCETypedObject {
                                                           Member.class,
                                                           memberReference_ );
                 XTCEDocumentMarshaller mmm = new XTCEDocumentMarshaller( Member.class, true );
-                return mmm.marshalToXml( xmlElement );
+                return XTCEFunctions.xmlPrettyPrint( mmm.marshalToXml( xmlElement ) );
             } else {
                 JAXBElement xmlElement = new JAXBElement( new QName(Argument.class.getSimpleName()),
                                                           Argument.class,
                                                           reference_ );
                 XTCEDocumentMarshaller mmm = new XTCEDocumentMarshaller( Argument.class, true );
-                return mmm.marshalToXml( xmlElement );
+                return XTCEFunctions.xmlPrettyPrint( mmm.marshalToXml( xmlElement ) );
             }
 
         } catch ( Exception ex ) {
@@ -336,7 +336,7 @@ public class XTCEArgument extends XTCETypedObject {
                                                       getTypeReference().getClass(),
                                                       getTypeReference() );
             XTCEDocumentMarshaller mmm = new XTCEDocumentMarshaller( getTypeReference().getClass(), true );
-            return mmm.marshalToXml( xmlElement );
+            return XTCEFunctions.xmlPrettyPrint( mmm.marshalToXml( xmlElement ) );
 
         } catch ( Exception ex ) {
             throw new XTCEDatabaseException( "Failed to create XML from Argument Object: " + ex.getCause() );

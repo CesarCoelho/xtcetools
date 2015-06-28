@@ -157,7 +157,7 @@ public class XTCETMContainer extends XTCENamedObject {
 
             XTCEDocumentMarshaller mmm = new XTCEDocumentMarshaller( SequenceContainerType.class, true );
 
-            return mmm.marshalToXml( xmlElement );
+            return XTCEFunctions.xmlPrettyPrint( mmm.marshalToXml( xmlElement ) );
 
         } catch ( Exception ex ) {
             throw new XTCEDatabaseException( "Failed to create XML from Parameter Object: " + ex.getCause() );

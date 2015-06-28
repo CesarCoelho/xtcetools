@@ -263,44 +263,25 @@ public class XTCEViewerXpathQueryDialog extends javax.swing.JFrame {
 
     private void executeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_executeButtonActionPerformed
 
-        resultsText.setText( "" );
-
-        InputStream stream = ClassLoader.getSystemResourceAsStream(
-            "org/omg/space/xtce/toolkit/prettyprint.xsl" );
-
         try {
 
             NodeList nodes =
                 xtcedb_.evaluateXPathQuery( queryTextField.getText() );
+
             resultsCountLabel.setText( Integer.toString( nodes.getLength() ) +
                                        " " +
                                        XTCEFunctions.getText( "dialog_xpathquery_results" ) );
 
-            Transformer transformer =
-                TransformerFactory.newInstance()
-                                  .newTransformer( new StreamSource( stream ) );
-            transformer.setOutputProperty( OutputKeys.OMIT_XML_DECLARATION,
-                                           "yes" );
-            
-            for ( int iii = 0; iii < nodes.getLength(); ++iii ) {
-                ByteArrayOutputStream out = new ByteArrayOutputStream();
-                Source source = new DOMSource( nodes.item( iii ) );
-                Result target = new StreamResult( out );
-                transformer.transform( source, target );
-                resultsText.append( out.toString() );
-                resultsText.append( "\n" );
-            }
+            resultsText.setText( XTCEFunctions.xmlPrettyPrint( nodes ) );
             lastQueryString_ = queryTextField.getText();
             saveButton.setEnabled( true );
 
         } catch ( XTCEDatabaseException ex ) {
+
             resultsText.setText( ex.getLocalizedMessage() );
             lastQueryString_ = "";
             saveButton.setEnabled( false );
-        } catch ( TransformerException ex ) {
-            resultsText.setText( ex.getLocalizedMessage() );
-            lastQueryString_ = "";
-            saveButton.setEnabled( false );
+
         }
 
     }//GEN-LAST:event_executeButtonActionPerformed

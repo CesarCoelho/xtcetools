@@ -6,11 +6,25 @@
 
 package org.omg.space.xtce.toolkit;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /** This class is a container to capture some common static functions that are
  * applicable throughout the toolkit.
@@ -306,6 +320,97 @@ public class XTCEFunctions {
 
     public static String generalWarningPrefix() {
         return getText( "general_warning" ) + ": ";
+    }
+
+    /** Method to format and "beautify" the XML text from a provided DOM
+     * NodeList object.
+     *
+     * This function passes the nodes through the DOM Transformer using a
+     * stylesheet embedded in this package to format the output.
+     *
+     * @param nodes NodeList containing XML nodes to format into ASCII text.
+     *
+     * @return String containing the text.
+     *
+     * @throws XTCEDatabaseException thrown in the event that the Transformer
+     * cannot convert the NodeList to XML text.
+     *
+     */
+
+    public static String xmlPrettyPrint( NodeList nodes ) throws XTCEDatabaseException {
+
+        InputStream stream = ClassLoader.getSystemResourceAsStream(
+            "org/omg/space/xtce/toolkit/prettyprint.xsl" );
+
+        try {
+
+            StringBuilder resultsText = new StringBuilder();
+
+            Transformer transformer =
+                TransformerFactory.newInstance()
+                                  .newTransformer( new StreamSource( stream ) );
+            transformer.setOutputProperty( OutputKeys.OMIT_XML_DECLARATION,
+                                           "yes" );
+
+            for ( int iii = 0; iii < nodes.getLength(); ++iii ) {
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
+                Source source = new DOMSource( nodes.item( iii ) );
+                Result target = new StreamResult( out );
+                transformer.transform( source, target );
+                resultsText.append( out.toString() );
+                resultsText.append( "\n" );
+            }
+
+            return resultsText.toString();
+
+        } catch ( TransformerException ex ) {
+            throw new XTCEDatabaseException( ex );
+        }
+
+    }
+
+    /** Method to format and "beautify" the XML text from a provided String
+     * object containing XML ASCII text.
+     *
+     * This function passes the nodes through the DOM Transformer using a
+     * stylesheet embedded in this package to format the output.
+     *
+     * @param xmlText String containing XML text.
+     *
+     * @return String containing the text passed through the transformer.
+     *
+     * @throws XTCEDatabaseException thrown in the event that the Transformer
+     * cannot convert the convert the ASCII text.
+     *
+     */
+
+    public static String xmlPrettyPrint( String xmlText ) throws XTCEDatabaseException {
+
+        InputStream stream = ClassLoader.getSystemResourceAsStream(
+            "org/omg/space/xtce/toolkit/prettyprint.xsl" );
+
+        try {
+
+            StringBuilder resultsText = new StringBuilder();
+
+            Transformer transformer =
+                TransformerFactory.newInstance()
+                                  .newTransformer( new StreamSource( stream ) );
+            transformer.setOutputProperty( OutputKeys.OMIT_XML_DECLARATION,
+                                           "yes" );
+
+            ByteArrayInputStream  inStream  = new ByteArrayInputStream( xmlText.getBytes() );
+            ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+            Source source = new StreamSource( inStream );
+            Result target = new StreamResult( outStream );
+            transformer.transform( source, target );
+
+            return outStream.toString();
+
+        } catch ( TransformerException ex ) {
+            throw new XTCEDatabaseException( ex );
+        }
+
     }
 
     /** Creates a string with the current memory usage statistics from the
