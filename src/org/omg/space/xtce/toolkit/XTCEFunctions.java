@@ -322,24 +322,55 @@ public class XTCEFunctions {
         // stackoverflow.com with the output tweaked.
 
         Runtime       runtime         = Runtime.getRuntime();
-        NumberFormat  format          = NumberFormat.getInstance();
         StringBuilder sb              = new StringBuilder();
         long          maxMemory       = runtime.maxMemory();
         long          allocatedMemory = runtime.totalMemory();
         long          freeMemory      = runtime.freeMemory();
         long          freeAlloc       = maxMemory - allocatedMemory;
 
-        sb.append( "free memory: " );
-        sb.append( format.format( freeMemory / 1024 ) );
-        sb.append( "K allocated memory: " );
-        sb.append( format.format( allocatedMemory / 1024 ) );
-        sb.append( "K max memory: " );
-        sb.append( format.format( maxMemory / 1024 ) );
-        sb.append( "K total free memory: " );
-        sb.append( format.format( ( freeMemory + ( freeAlloc ) ) / 1024 ) );
-        sb.append( "K" );
+        sb.append( "MemStats: free memory: " );
+        sb.append( formatMemoryQuantity( freeMemory ) );
+        sb.append( " allocated memory: " );
+        sb.append( formatMemoryQuantity( allocatedMemory ) );
+        sb.append( " max memory: " );
+        sb.append( formatMemoryQuantity( maxMemory ) );
+        sb.append( " total free memory: " );
+        sb.append( formatMemoryQuantity( freeMemory + freeAlloc ) );
 
         return sb.toString();
+
+    }
+
+    /** Private method to format the amount of memory provided in bytes to an
+     * output that used K, M, or G depending on the size of the amount.
+     *
+     * This function considers 1024 of each amount to be the cutoff to jump to
+     * a higher unit.  In other words, 1024K will be 1M, 1024M will be 1G.
+     *
+     * @param amount long containing the number of bytes.
+     *
+     * @return String in the format of a decimal number followed by the letter
+     * K, M, or G depending on the size of the number of bytes provided.
+     *
+     */
+
+    private static String formatMemoryQuantity( long amount ) {
+
+        String unit = "K";
+        double quantity = amount / 1024.0;
+
+        if ( quantity > 1024 ) {
+            unit = "M";
+            quantity = quantity / 1024.0;
+        }
+        if ( quantity > 1024 ) {
+            unit = "G";
+            quantity = quantity / 1024.0;
+        }
+
+        NumberFormat format = NumberFormat.getInstance();
+
+        return format.format( quantity ) + unit;
 
     }
 
