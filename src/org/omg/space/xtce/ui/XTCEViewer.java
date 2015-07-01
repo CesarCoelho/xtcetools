@@ -9,6 +9,9 @@ package org.omg.space.xtce.ui;
 import java.awt.BorderLayout;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import org.omg.space.xtce.toolkit.XTCEDatabaseException;
@@ -100,12 +103,14 @@ public class XTCEViewer extends javax.swing.JFrame {
         showXmlElementsMenuItem = new javax.swing.JMenuItem();
         showParameterDetailsMenuItem = new javax.swing.JMenuItem();
         showEncodeDecodeDialogMenuItem = new javax.swing.JMenuItem();
+        copyParameterCellMenuItem = new javax.swing.JMenuItem();
         containerDetailPopupMenu = new javax.swing.JPopupMenu();
         showContainerXmlMenuItem = new javax.swing.JMenuItem();
         containerTablePopupMenu = new javax.swing.JPopupMenu();
         showItemXmlElementsMenuItem = new javax.swing.JMenuItem();
         goToEntryMenuItem = new javax.swing.JMenuItem();
         setConditionTrueMenuItem = new javax.swing.JMenuItem();
+        copyContainerCellMenuItem = new javax.swing.JMenuItem();
         containerDrawingPopupMenu = new javax.swing.JPopupMenu();
         saveContainerDrawingMenuItem = new javax.swing.JMenuItem();
         cloneContainerDrawingMenuItem = new javax.swing.JMenuItem();
@@ -285,6 +290,14 @@ public class XTCEViewer extends javax.swing.JFrame {
         });
         parameterDetailPopupMenu.add(showEncodeDecodeDialogMenuItem);
 
+        copyParameterCellMenuItem.setText(bundle.getString("general_copy_cell")); // NOI18N
+        copyParameterCellMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                copyParameterCellMenuItemActionPerformed(evt);
+            }
+        });
+        parameterDetailPopupMenu.add(copyParameterCellMenuItem);
+
         showContainerXmlMenuItem.setText(bundle.getString("options_popup_showcontainerxml")); // NOI18N
         showContainerXmlMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -316,6 +329,14 @@ public class XTCEViewer extends javax.swing.JFrame {
             }
         });
         containerTablePopupMenu.add(setConditionTrueMenuItem);
+
+        copyContainerCellMenuItem.setText(bundle.getString("general_copy_cell")); // NOI18N
+        copyContainerCellMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                copyContainerCellMenuItemActionPerformed(evt);
+            }
+        });
+        containerTablePopupMenu.add(copyContainerCellMenuItem);
 
         saveContainerDrawingMenuItem.setText(bundle.getString("options_popup_savedrawing")); // NOI18N
         saveContainerDrawingMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -1833,7 +1854,7 @@ public class XTCEViewer extends javax.swing.JFrame {
 
         if ( SwingUtilities.isRightMouseButton( evt ) == true ) {
             if ( xtceDatabaseFile != null ) {
-                Point mouseLocation = evt.getPoint();
+                mouseLocation = evt.getPoint();
                 int row = tmParametersTable.rowAtPoint( mouseLocation );
                 tmParametersTable.getSelectionModel().setSelectionInterval( row, row );
                 parameterDetailPopupMenu.show( tmParametersTable, evt.getX(), evt.getY() );
@@ -1846,7 +1867,7 @@ public class XTCEViewer extends javax.swing.JFrame {
 
         if ( SwingUtilities.isRightMouseButton( evt ) == true ) {
             if ( xtceDatabaseFile != null ) {
-                Point mouseLocation = evt.getPoint();
+                mouseLocation = evt.getPoint();
                 int row = tcParametersTable.rowAtPoint( mouseLocation );
                 tcParametersTable.getSelectionModel().setSelectionInterval( row, row );
                 parameterDetailPopupMenu.show( tcParametersTable, evt.getX(), evt.getY() );
@@ -2231,7 +2252,7 @@ public class XTCEViewer extends javax.swing.JFrame {
 
         if ( SwingUtilities.isRightMouseButton( evt ) == true ) {
             if ( xtceDatabaseFile != null ) {
-                Point mouseLocation = evt.getPoint();
+                mouseLocation = evt.getPoint();
                 int row = tmContainerTable.rowAtPoint( mouseLocation );
                 tmContainerTable.getSelectionModel().setSelectionInterval( row, row );
                 containerTablePopupMenu.show( tmContainerTable, evt.getX(), evt.getY() );
@@ -2819,6 +2840,24 @@ public class XTCEViewer extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_mainWindowFindByXPathMenuItemActionPerformed
+
+    private void copyContainerCellMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_copyContainerCellMenuItemActionPerformed
+
+        copyCell( tmContainerTable );
+
+    }//GEN-LAST:event_copyContainerCellMenuItemActionPerformed
+
+    private void copyParameterCellMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_copyParameterCellMenuItemActionPerformed
+
+        int idx = mainWindowPrimaryWorkspace.getSelectedIndex();
+
+        if ( idx == 1 ) {
+            copyCell( tmParametersTable );
+        } else if ( idx == 2 ) {
+            copyCell( tcParametersTable );
+        }
+
+    }//GEN-LAST:event_copyParameterCellMenuItemActionPerformed
 
     public void goToParameter( String  parameterName,
                                String  spaceSystemName,
@@ -3600,6 +3639,38 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     }
 
+    /** Helper function to implement copying contents of a table cell to the
+     * System Clipboard for pasting in other applications.
+     *
+     * @param table JTable object to query for the cell contents and copy
+     *
+     */
+
+    public void copyCell( JTable table ) {
+
+        if ( xtceDatabaseFile == null ) {
+            return;
+        }
+
+        int row = table.rowAtPoint( mouseLocation );
+        int col = table.columnAtPoint( mouseLocation );
+
+        if ( ( row == -1 ) || ( col == -1 ) ) {
+            return;
+        }
+
+        TableModel tm = table.getModel();
+        String text = (String)tm.getValueAt( row, col );
+
+        if ( text == null ) {
+            return;
+        }
+
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clipboard.setContents( new StringSelection( text ), null );
+
+    }
+
     /** Method to load a new XTCE database file, taking into account that one
      * might already be loaded and offering the user an opportunity to save
      * this or cancel before closing an already open file.
@@ -3809,6 +3880,7 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     // Private Data Members
 
+    private Point                         mouseLocation    = null;
     private XTCEViewerPreferences         prefs            = null;
     private XTCEDatabase                  xtceDatabaseFile = null;
     private ArrayList<XTCESpaceSystem>    spaceSystems     = null;
@@ -3828,6 +3900,8 @@ public class XTCEViewer extends javax.swing.JFrame {
     private javax.swing.JRadioButtonMenuItem containerDrawingTopToBottom;
     private javax.swing.JPopupMenu containerTablePopupMenu;
     private javax.swing.JTextField containersTotal;
+    private javax.swing.JMenuItem copyContainerCellMenuItem;
+    private javax.swing.JMenuItem copyParameterCellMenuItem;
     private javax.swing.JPanel databaseMetricsPanel;
     private javax.swing.JMenuItem deleteSpaceSystemMenuItem;
     private javax.swing.JScrollPane detailSpaceSystemPanelScrollPane;
