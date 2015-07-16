@@ -7,6 +7,7 @@
 package org.omg.space.xtce.toolkit;
 
 import java.util.ArrayList;
+import java.util.BitSet;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -27,12 +28,16 @@ public class XTCEContainerContentModelBase {
 
     XTCEContainerContentModelBase( ArrayList<XTCESpaceSystem>         spaceSystems,
                                    ArrayList<XTCEContainerEntryValue> userValues,
+                                   BitSet                             binaryValues,
                                    boolean                            showAllConditions ) {
 
         spaceSystems_      = spaceSystems;
         showAllConditions_ = showAllConditions;
         if ( userValues != null ) {
             userValues_ = userValues;
+        }
+        if ( binaryValues != null ) {
+            binaryValues_ = binaryValues;
         }
         for ( XTCESpaceSystem spaceSystem : spaceSystems_ ) {
             spaceSystemsHashTable_.put( spaceSystem.getFullPath(),
@@ -493,10 +498,20 @@ public class XTCEContainerContentModelBase {
 
     }
 
+    protected void applyBinaryValues( XTCEContainerContentEntry entry ) {
+
+        if ( binaryValues_ == null ) {
+            return;
+        }
+
+    }
+
     protected void applyUserValues( XTCEContainerContentEntry entry ) {
+
         if ( userValues_.isEmpty() == true ) {
             return;
         }
+
         if ( entry.getEntryType() == FieldType.PARAMETER ) {
             for ( XTCEContainerEntryValue value : userValues_ ) {
                 if ( value.getItemFullPath().equals( entry.getParameter().getFullPath() ) == true ) {
@@ -512,6 +527,7 @@ public class XTCEContainerContentModelBase {
                 }
             }
         }
+
         return;
 
     }
@@ -657,6 +673,10 @@ public class XTCEContainerContentModelBase {
     /// List of warning messages collected when processing this container.
 
     protected ArrayList<String> warnings_ = new ArrayList<String>();
+
+    /// If a binary container was provided then it is captured here
+
+    private BitSet binaryValues_ = null;
 
     /// The list of userChosenValues to apply to the model built from the
     /// provided container.

@@ -9,6 +9,7 @@ package org.omg.space.xtce.toolkit;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
+import java.util.BitSet;
 import java.util.HashMap;
 import java.util.List;
 import javax.xml.bind.Binder;
@@ -600,6 +601,36 @@ public class XTCEDatabase {
                                               getSpaceSystemTree(),
                                               userValues,
                                               showAllConditions );
+
+    }
+
+    /** Function to decompose an XTCETMContainer object into a simple array of
+     * entries that an application can iterate over without the need to
+     * resolve XTCE data model references, included additional containers,
+     * base containers, and conditional processing.
+     *
+     * @param container XTCETMContainer object containing the container/packet
+     * that the caller wishes to decompose.
+     *
+     * @param binaryData BitSet containing the container binary encoded data
+     * so that the output object contains entries with actual values from a
+     * real binary image.
+     *
+     * @return XTCEContainerContentModel representing this XTCETMContainer.
+     *
+     * @throws XTCEDatabaseException thrown in the event that it is not
+     * possible to decompose the container completely due to bad references in
+     * the XTCE document.
+     *
+     */
+
+    public XTCEContainerContentModel processContainer( XTCETMContainer container,
+                                                       BitSet          binaryData )
+        throws XTCEDatabaseException {
+
+        return new XTCEContainerContentModel( container,
+                                              getSpaceSystemTree(),
+                                              binaryData );
 
     }
 

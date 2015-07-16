@@ -3739,7 +3739,7 @@ public class XTCEViewer extends javax.swing.JFrame {
                 " " + // NOI18N
                 XTCEFunctions.getText( "file_chooser_load_time_unit_text" ) + // NOI18N
                 " " + // NOI18N
-                ( validateOnLoad == true ? "" : " " + XTCEFunctions.getText( "file_chooser_schema_disable_text" ) ) ); // NOI18N
+                ( validateOnLoad == true ? "" : " (" + XTCEFunctions.getText( "file_chooser_schema_disable_text" ) + ")" ) ); // NOI18N
 
             logMsg( XTCEFunctions.getMemoryUsageStatistics() );
 

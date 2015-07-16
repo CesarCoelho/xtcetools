@@ -7,6 +7,7 @@
 package org.omg.space.xtce.toolkit;
 
 import java.util.ArrayList;
+import java.util.BitSet;
 import java.util.List;
 import org.omg.space.xtce.database.AggregateDataType;
 import org.omg.space.xtce.database.AggregateDataType.MemberList.Member;
@@ -18,7 +19,6 @@ import org.omg.space.xtce.database.MatchCriteriaType;
 import org.omg.space.xtce.database.ParameterRefEntryType;
 import org.omg.space.xtce.database.ParameterSegmentRefEntryType;
 import org.omg.space.xtce.database.SequenceContainerType.BaseContainer;
-import org.omg.space.xtce.database.SequenceContainerType.BaseContainer.RestrictionCriteria;
 import org.omg.space.xtce.database.SequenceEntryType;
 import org.omg.space.xtce.database.StreamSegmentEntryType;
 
@@ -31,12 +31,66 @@ import org.omg.space.xtce.database.StreamSegmentEntryType;
 
 public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
 
+    /** Constructor
+     *
+     * This constructor creates the container content model object with some
+     * optional user values provided in a list.
+     *
+     * @param container XTCETMContainer from the database object that contains
+     * all the needed entry list items.
+     *
+     * @param spaceSystems ArrayList of XTCESpaceSystem objects to search for
+     * entries on the entry list.
+     *
+     * @param userValues ArrayList of XTCEContainerEntryValue objects for TM
+     * Parameters that are within the container.
+     *
+     * @param showAllConditions boolean indicating if unsatisfied conditional
+     * includes should be pursued at depth.  This can be a performance hit if
+     * there are a large number of conditionals nested.
+     *
+     * @throws XTCEDatabaseException in the event that the container cannot
+     * be completely processed.
+     *
+     */
+
     XTCEContainerContentModel( XTCETMContainer                    container,
                                ArrayList<XTCESpaceSystem>         spaceSystems,
                                ArrayList<XTCEContainerEntryValue> userValues,
                                boolean                            showAllConditions ) throws XTCEDatabaseException {
 
-        super( spaceSystems, userValues, showAllConditions );
+        super( spaceSystems, userValues, null, showAllConditions );
+        container_          = container;
+        totalContainerSize_ = processContainer();
+
+    }
+
+    /** Constructor
+     *
+     * This constructor creates the container content model object with TM
+     * parameter values evaluated from the binary provided in a BitSet.
+     *
+     * @param container XTCETMContainer from the database object that contains
+     * all the needed entry list items.
+     *
+     * @param spaceSystems ArrayList of XTCESpaceSystem objects to search for
+     * entries on the entry list.
+     *
+     * @param binaryData BitSet containing a map of the binary data that makes
+     * up a binary instance of the container.  The first bit in the set should
+     * be the zeroth bit of the container binary (start bit 0) and may be short
+     * in the event that there are trailing zeros.
+     *
+     * @throws XTCEDatabaseException in the event that the container cannot
+     * be completely processed.
+     *
+     */
+
+    XTCEContainerContentModel( XTCETMContainer                    container,
+                               ArrayList<XTCESpaceSystem>         spaceSystems,
+                               BitSet                             binaryData ) throws XTCEDatabaseException {
+
+        super( spaceSystems, null, binaryData, false );
         container_          = container;
         totalContainerSize_ = processContainer();
 
@@ -330,6 +384,7 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
         evaluateIncludeConditions( content );
         if ( content.isCurrentlyInUse() == true ) {
             addStartBit( pRefEntry, content, currentStartBit, containerStartBit );
+            applyBinaryValues( content );
         }
 
         long repeatCount = addRepeatEntryDescription( pRefEntry, content );

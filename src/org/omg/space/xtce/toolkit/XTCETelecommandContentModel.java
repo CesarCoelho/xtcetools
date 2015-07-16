@@ -38,7 +38,7 @@ public class XTCETelecommandContentModel extends XTCEContainerContentModelBase {
                                  ArrayList<XTCEContainerEntryValue> userValues,
                                  boolean                            showAllConditions ) throws XTCEDatabaseException {
 
-        super( spaceSystems, userValues, showAllConditions );
+        super( spaceSystems, userValues, null, showAllConditions );
         telecommand_        = tcObject;
         totalContainerSize_ = processTelecommand();
 

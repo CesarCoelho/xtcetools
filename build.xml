@@ -71,4 +71,8 @@
 
     -->
     <target name="-pre-jar" depends="javadoc" description="add javadoc to distribution for help viewer in gui"/>
+    <target name="-post-jar" description="put the shell scripts into the delivery">
+        <copy file="xtceview.sh" todir="${dist.dir}"/>
+        <copy file="xtceview.bat" todir="${dist.dir}"/>
+    </target>
 </project>
