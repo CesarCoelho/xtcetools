@@ -6,11 +6,13 @@
 
 package org.omg.space.xtce.toolkit;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Vector;
 import org.omg.space.xtce.database.ComparisonType;
 import org.omg.space.xtce.database.MatchCriteriaType;
 import org.omg.space.xtce.database.RepeatType;
@@ -24,21 +26,55 @@ import org.omg.space.xtce.toolkit.XTCEContainerContentEntry.FieldType;
  *
  */
 
-public class XTCEContainerContentModelBase {
+public abstract class XTCEContainerContentModelBase {
+
+    /** Constructor
+     *
+     * This base constructor creates the container content model object with
+     * the common content for both TM and TC container processing.
+     *
+     * @param container XTCETMContainer from the database object that contains
+     * all the needed entry list items.
+     *
+     * @param spaceSystems ArrayList of XTCESpaceSystem objects to search for
+     * entries on the entry list.
+     *
+     * @param userValues ArrayList of XTCEContainerEntryValue objects for TM
+     * Parameters that are within the container.
+     *
+     * @param binaryData BitSet containing a map of the binary data that makes
+     * up a binary instance of the container.  The first bit in the set should
+     * be the zeroth bit of the container binary (start bit 0) and may be short
+     * in the event that there are trailing zeros.
+     *
+     * @param showAllConditions boolean indicating if unsatisfied conditional
+     * includes should be pursued at depth.  This can be a performance hit if
+     * there are a large number of conditionals nested.
+     *
+     * @throws XTCEDatabaseException in the event that the container cannot
+     * be completely processed.
+     *
+     */
 
     XTCEContainerContentModelBase( ArrayList<XTCESpaceSystem>         spaceSystems,
                                    ArrayList<XTCEContainerEntryValue> userValues,
-                                   BitSet                             binaryValues,
+                                   byte[]                             binaryValues,
                                    boolean                            showAllConditions ) {
 
         spaceSystems_      = spaceSystems;
         showAllConditions_ = showAllConditions;
+
+        // the user values arraylist is never null in this object
         if ( userValues != null ) {
             userValues_ = userValues;
         }
+
+        // the binary data object can be null in this object
         if ( binaryValues != null ) {
             binaryValues_ = binaryValues;
         }
+
+        // create a fast lookup table for Space System paths
         for ( XTCESpaceSystem spaceSystem : spaceSystems_ ) {
             spaceSystemsHashTable_.put( spaceSystem.getFullPath(),
                                         spaceSystem );
@@ -98,6 +134,81 @@ public class XTCEContainerContentModelBase {
 
     public void setShowAllConditionals( boolean flag ) {
         showAllConditions_ = flag;
+    }
+
+    /** Extracts the raw binary value from a container where the binary of the
+     * container has been provided to this object.
+     *
+     * @param currentEntry XTCEContainerContentEntry representing the item
+     * that is desired for extraction on this object.
+     *
+     * @return BigInteger which is always positive because it is intended to
+     * represent the raw bits in numeric form.  Conversion to the proper
+     * encoding type is applied in the transition from raw->uncalibrated.
+     *
+     * @throws XTCEDatabaseException thrown in the event one of three things
+     * occurs.  First, the binary is not provided to this object so nothing can
+     * be extracted.  Second, in the event that the calculated starting bit
+     * for this item exceeds the length of the binary provided.  Third if the
+     * length of the item exceeds the length of the binary provided.
+     *
+     */
+
+    public BigInteger extractRawValue( XTCEContainerContentEntry currentEntry ) throws XTCEDatabaseException {
+
+        BigInteger result = BigInteger.ZERO;
+        if ( binaryValues_ == null ) {
+            return result;
+        }
+
+        long availBits          = binaryValues_.length * 8;
+        long availBitsLastIndex = availBits - 1;
+
+        try {
+
+            long startBit = Long.parseLong( currentEntry.getStartBit() );
+            if ( startBit > availBitsLastIndex ) {
+                throw new XTCEDatabaseException( "Binary too small to " +
+                    "extract " + currentEntry.itemName + " (size " +
+                    Long.toString( availBits ) + " with start bit of " +
+                    Long.toString( startBit ) + ")" );
+            }
+
+            long bitLength = Long.parseLong( currentEntry.getRawSizeInBits() );
+            if ( ( startBit + bitLength ) > availBitsLastIndex ) {
+                throw new XTCEDatabaseException( "Binary too small to " +
+                    "extract " + currentEntry.itemName + " (size " +
+                    Long.toString( availBits ) + " with entry size of " +
+                    Long.toString( startBit + bitLength ) + ")" );
+            }
+
+            long startByte = startBit / 8;
+            long numBytes  = bitLength / 8 + ( bitLength % 8 == 0 ? 0 : 1 );
+            byte[] dataBytes = new byte[(int)numBytes];
+            for ( long iii = startByte; iii < ( startByte + numBytes ); ++iii ) {
+                long index = iii - startByte;
+                dataBytes[(int)index] = binaryValues_[(int)iii];
+            }
+
+            int mask = 0xff;
+            for ( int jjj = 0; jjj < ( startBit % 8 ); ++jjj ) {
+                mask = mask ^ ( 1 << ( 7 - jjj ) );
+            }
+            dataBytes[0] = (byte)( dataBytes[0] & (byte)mask );
+
+            result = new BigInteger( 1, dataBytes );
+            long shiftOutBits = ( ( startBit % 8 ) + bitLength ) % 8;
+            if ( shiftOutBits != 0 ) {
+                result = result.shiftRight( (int)shiftOutBits );
+            }
+
+        } catch ( NumberFormatException ex ) {
+            throw new XTCEDatabaseException( "Raw value not applicable or " +
+                "has not been set for " + currentEntry.itemName );
+        }
+
+        return result;
+
     }
 
     protected boolean isEntryNeedingStartBit( XTCEContainerContentEntry currentEntry ) {
@@ -498,15 +609,34 @@ public class XTCEContainerContentModelBase {
 
     }
 
-    protected void applyBinaryValues( XTCEContainerContentEntry entry ) {
+    protected void applyBinaryValue( XTCEContainerContentEntry entry ) {
 
         if ( binaryValues_ == null ) {
             return;
         }
 
+        try {
+
+            BigInteger rawValue = extractRawValue( entry );
+            String uncalValue = null;
+            if ( entry.getEntryType() == FieldType.PARAMETER ) {
+                uncalValue = entry.getParameter()
+                                  .getUncalibratedFromRaw( rawValue );
+            } else if ( entry.getEntryType() == FieldType.ARGUMENT ) {
+                uncalValue = entry.getArgument()
+                                  .getUncalibratedFromRaw( rawValue );
+            } else {
+                // do any of the others make sense?
+                return;
+            }
+
+        } catch ( XTCEDatabaseException ex ) {
+            warnings_.add( ex.getLocalizedMessage() );
+        }
+
     }
 
-    protected void applyUserValues( XTCEContainerContentEntry entry ) {
+    protected void applyUserValue( XTCEContainerContentEntry entry ) {
 
         if ( userValues_.isEmpty() == true ) {
             return;
@@ -676,7 +806,7 @@ public class XTCEContainerContentModelBase {
 
     /// If a binary container was provided then it is captured here
 
-    private BitSet binaryValues_ = null;
+    private byte[] binaryValues_ = null;
 
     /// The list of userChosenValues to apply to the model built from the
     /// provided container.

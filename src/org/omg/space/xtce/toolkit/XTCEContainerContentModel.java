@@ -7,7 +7,6 @@
 package org.omg.space.xtce.toolkit;
 
 import java.util.ArrayList;
-import java.util.BitSet;
 import java.util.List;
 import org.omg.space.xtce.database.AggregateDataType;
 import org.omg.space.xtce.database.AggregateDataType.MemberList.Member;
@@ -76,7 +75,7 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
      * @param spaceSystems ArrayList of XTCESpaceSystem objects to search for
      * entries on the entry list.
      *
-     * @param binaryData BitSet containing a map of the binary data that makes
+     * @param binaryData byte[] containing a map of the binary data that makes
      * up a binary instance of the container.  The first bit in the set should
      * be the zeroth bit of the container binary (start bit 0) and may be short
      * in the event that there are trailing zeros.
@@ -88,7 +87,7 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
 
     XTCEContainerContentModel( XTCETMContainer                    container,
                                ArrayList<XTCESpaceSystem>         spaceSystems,
-                               BitSet                             binaryData ) throws XTCEDatabaseException {
+                               byte[]                             binaryData ) throws XTCEDatabaseException {
 
         super( spaceSystems, null, binaryData, false );
         container_          = container;
@@ -380,11 +379,11 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
             content.setConditionList( includedConditionsList, false );
         }
         addIncludeConditions( pRefEntry, container, content );
-        applyUserValues( content );
+        applyUserValue( content );
         evaluateIncludeConditions( content );
         if ( content.isCurrentlyInUse() == true ) {
             addStartBit( pRefEntry, content, currentStartBit, containerStartBit );
-            applyBinaryValues( content );
+            applyBinaryValue( content );
         }
 
         long repeatCount = addRepeatEntryDescription( pRefEntry, content );
@@ -448,7 +447,7 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
             mcontent.setConditionList( parentContentEntry.getConditionList(),
                                        parentContentEntry.isCurrentlyInUse() );
 
-            applyUserValues( mcontent );
+            applyUserValue( mcontent );
 
             if ( parentContentEntry.getRepeatParameterInfo().isEmpty() == false ) {
                 mcontent.setRepeatparameterInfo( parentContentEntry.getRepeatParameterInfo() );
@@ -460,6 +459,7 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
             if ( isEntryNeedingStartBit( mcontent ) == true ) {
                 mcontent.setStartBit( currentStartBit.get() );
                 currentStartBit.add( Long.parseLong( mcontent.getRawSizeInBits() ) );
+                applyBinaryValue( mcontent );
             }
 
             contentList_.add( mcontent );

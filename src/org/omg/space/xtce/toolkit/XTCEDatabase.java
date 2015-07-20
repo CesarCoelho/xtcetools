@@ -612,7 +612,7 @@ public class XTCEDatabase {
      * @param container XTCETMContainer object containing the container/packet
      * that the caller wishes to decompose.
      *
-     * @param binaryData BitSet containing the container binary encoded data
+     * @param binaryData byte[] containing the container binary encoded data
      * so that the output object contains entries with actual values from a
      * real binary image.
      *
@@ -625,7 +625,7 @@ public class XTCEDatabase {
      */
 
     public XTCEContainerContentModel processContainer( XTCETMContainer container,
-                                                       BitSet          binaryData )
+                                                       byte[]          binaryData )
         throws XTCEDatabaseException {
 
         return new XTCEContainerContentModel( container,

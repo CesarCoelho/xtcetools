@@ -6,6 +6,9 @@
 
 package org.omg.space.xtce.toolkit;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import org.omg.space.xtce.database.AbsoluteTimeDataType;
@@ -19,7 +22,9 @@ import org.omg.space.xtce.database.BaseTimeDataType;
 import org.omg.space.xtce.database.BinaryDataType;
 import org.omg.space.xtce.database.BooleanDataType;
 import org.omg.space.xtce.database.CalibratorType;
+import org.omg.space.xtce.database.CalibratorType.SplineCalibrator;
 import org.omg.space.xtce.database.EnumeratedDataType;
+import org.omg.space.xtce.database.EnumeratedDataType.EnumerationList;
 import org.omg.space.xtce.database.IntegerValueType;
 import org.omg.space.xtce.database.NameDescriptionType;
 import org.omg.space.xtce.database.ParameterTypeSetType.BinaryParameterType;
@@ -29,7 +34,10 @@ import org.omg.space.xtce.database.ParameterTypeSetType.FloatParameterType;
 import org.omg.space.xtce.database.ParameterTypeSetType.IntegerParameterType;
 import org.omg.space.xtce.database.ParameterTypeSetType.RelativeTimeParameterType;
 import org.omg.space.xtce.database.ParameterTypeSetType.StringParameterType;
+import org.omg.space.xtce.database.PolynomialType;
+import org.omg.space.xtce.database.PolynomialType.Term;
 import org.omg.space.xtce.database.RelativeTimeDataType;
+import org.omg.space.xtce.database.SplinePointType;
 import org.omg.space.xtce.database.StringDataEncodingType;
 import org.omg.space.xtce.database.StringDataType;
 import org.omg.space.xtce.database.UnitType;
@@ -736,6 +744,341 @@ public abstract class XTCETypedObject extends XTCENamedObject {
 
         return null;
 
+    }
+
+    /** Retrieve the uncalibrated value of this typed object item when given
+     * the raw binary value.
+     *
+     * The raw value is provided as a Java BigInteger to account for an
+     * arbitrary size of the raw value binary.  The output of this function
+     * takes into account the encoding type to interpret the raw binary in the
+     * proper type and alignment.
+     *
+     * @param rawValue BigInteger containing the raw binary value that would
+     * be encoded on the wire or bitfield.  The raw binary is always expected
+     * to be in the order read from the stream.
+     *
+     * @return String containing the proper uncalibrated representation of the
+     * raw encoded value provided by the caller.
+     *
+     * @throws XTCEDatabaseException thrown in the event that the type is not
+     * supported by this function.
+     *
+     */
+
+    public String getUncalibratedFromRaw( BigInteger rawValue ) throws XTCEDatabaseException {
+
+        String rawTypeName = getRawType();
+        String rawBitOrder = getRawBitOrder();
+
+        if ( rawBitOrder.equals( "mostSignificantBitFirst" ) == false ) {
+            throw new XTCEDatabaseException( "Raw encoding " + rawBitOrder +
+                " not supported for item type " + typeObj_.getName() );
+        }
+
+        if ( rawTypeName.equals( "unsigned" ) == true ) {
+            return rawValue.toString();
+        } else if ( rawTypeName.equals( "signMagnitude" ) == true ) {
+            int sizeInBits = Integer.parseInt( getRawSizeInBits() );
+            if ( rawValue.testBit( sizeInBits - 1 ) == true ) {
+                return rawValue.negate().toString();
+            }
+            return rawValue.toString();
+        } else if ( rawTypeName.equals( "twosComplement" ) == true ) {
+            byte[] dataValues = rawValue.toByteArray();
+            BigInteger retValue = new BigInteger( dataValues );
+            return retValue.toString();
+        } else if ( rawTypeName.equals( "onesComplement" ) == true ) {
+            // TODO not sure that this is correct
+            BigInteger onesValue = rawValue.subtract( BigInteger.ONE );
+            byte[] dataValues = onesValue.toByteArray();
+            BigInteger retValue = new BigInteger( dataValues );
+            return retValue.toString();
+        } else if ( rawTypeName.equals( "IEEE754_1985" ) == true ) {
+            int sizeInBits = Integer.parseInt( getRawSizeInBits() );
+            if ( sizeInBits == 32 ) {
+                return Float.toString( rawValue.floatValue() );
+            } else if ( sizeInBits == 64 ) {
+                return Double.toString( rawValue.doubleValue() );
+            } else {
+                throw new XTCEDatabaseException( "Raw encoding " +
+                    rawTypeName + " using " + getRawSizeInBits() + " bits " +
+                    "is not supported for item type " + typeObj_.getName() );
+            }
+        } else if ( rawTypeName.equals( "binary" ) == true ) {
+            return "0x" + rawValue.toString( 16 );
+        } else if ( rawTypeName.equals( "UTF-8" ) == true ) {
+            return new String( rawValue.toByteArray(),
+                               Charset.forName( "UTF-8" ) );
+        } else if ( rawTypeName.equals( "UTF-16" ) == true ) {
+            return new String( rawValue.toByteArray(),
+                               Charset.forName( "UTF-16" ) );
+        }
+
+        // not supported MILSTD_1750A, BCD, packedBCD
+        throw new XTCEDatabaseException( "Raw encoding type " + rawTypeName +
+            " not supported for item type " + typeObj_.getName() );
+
+    }
+
+    public String getCalibratedFromUncalibrated( String uncalValue ) throws XTCEDatabaseException {
+
+        String rawTypeName = getRawType();
+        String engTypeName = getEngineeringType();
+        String calValue    = applyCalibrator( uncalValue );
+
+        if ( ( engTypeName.equals( "UNSIGNED" ) == true ) ||
+             ( engTypeName.equals( "SIGNED" )   == true ) ) {
+            long retLongValue = Double.valueOf( calValue ).longValue();
+            return Long.toString( retLongValue );
+        } else if ( ( engTypeName.equals( "FLOAT32" )  == true ) ||
+                    ( engTypeName.equals( "FLOAT64" )  == true ) ||
+                    ( engTypeName.equals( "FLOAT128" ) == true ) ) {
+            return calValue;
+        } else if ( engTypeName.equals( "FLOAT32" )  == true ) {
+            return "0x" + new BigInteger( calValue ).toString( 16 );
+        } else if ( engTypeName.equals( "BOOLEAN" )  == true ) {
+            long retLongValue = Double.valueOf( calValue ).longValue();
+            Class typeImplClass = getTypeReference().getClass();
+            if ( typeImplClass == BooleanParameterType.class ) {
+                BooleanParameterType bt = (BooleanParameterType)getTypeReference();
+                String zeroString = bt.getZeroStringValue();
+                String oneString  = bt.getOneStringValue();
+                if ( retLongValue == 0 ) {
+                    return zeroString;
+                } else if ( retLongValue == 1 ) {
+                    return oneString;
+                } else {
+                    throw new XTCEDatabaseException( "Boolean type is not " +
+                        "zero or one (it is " + calValue + ")" );
+                }
+            } else if ( typeImplClass == BooleanDataType.class ) {
+                BooleanDataType bt = (BooleanDataType)getTypeReference();
+                String zeroString = bt.getZeroStringValue();
+                String oneString  = bt.getOneStringValue();
+                if ( retLongValue == 0 ) {
+                    return zeroString;
+                } else if ( retLongValue == 1 ) {
+                    return oneString;
+                } else {
+                    throw new XTCEDatabaseException( "Boolean type is not " +
+                        "zero or one (it is " + calValue + ")" );
+                }
+            }
+        } else if ( engTypeName.equals( "ENUMERATED" )  == true ) {
+            long retLongValue = Double.valueOf( calValue ).longValue();
+            Class typeImplClass = getTypeReference().getClass();
+            if ( typeImplClass == EnumeratedParameterType.class ) {
+                EnumeratedParameterType type = (EnumeratedParameterType)getTypeReference();
+                List<ValueEnumerationType> list = type.getEnumerationList().getEnumeration();
+                for ( ValueEnumerationType entry : list ) {
+                    //if ( entry.getValue().compareTo( new BigInteger( retLongValue ) ) == 0 ) {
+                    //    
+                    //}
+                }
+            } else if ( typeImplClass == EnumeratedDataType.class ) {
+                EnumeratedDataType type = (EnumeratedDataType)getTypeReference();
+                List<ValueEnumerationType> list = type.getEnumerationList().getEnumeration();
+                for ( ValueEnumerationType entry : list ) {
+                    //if ( entry.getValue().compareTo( new BigInteger( retLongValue ) ) == 0 ) {
+                    //    
+                    //}
+                }
+            }
+        } else if ( engTypeName.equals( "STRING" )  == true ) {
+            return calValue;
+        } else if ( engTypeName.equals( "TIME" )  == true ) {
+            
+        } else if ( engTypeName.equals( "DURATION" )  == true ) {
+            
+        }
+
+        return calValue;
+
+    }
+
+    /** Retrieve the Calibrated/Engineering value of this typed object when
+     * given the raw binary value.
+     *
+     * This method is a shortcut to calling both the getUncalibratedFromRaw()
+     * and getCalibratedFromUncalibrated() functions.  Those functions contain
+     * additional details for the reader concerning the nature of the data
+     * and what is being performed.
+     *
+     * @param rawValue BigInteger containing the raw binary value that would
+     * be encoded on the wire or bitfield.  The raw binary is always expected
+     * to be in the order read from the stream.
+     *
+     * @return String containing the proper Calibrated/Engineering
+     * representation of the raw encoded value provided by the caller.
+     *
+     * @throws XTCEDatabaseException thrown in the event that the type is not
+     * supported by this function.
+     * 
+     */
+
+    public String getCalibratedFromRaw( BigInteger rawValue ) throws XTCEDatabaseException {
+        return getCalibratedFromUncalibrated( getUncalibratedFromRaw( rawValue ) );
+    }
+
+    /** Private method to calculate and apply the calibrator to the
+     * uncalibrated value.
+     *
+     * This method does not support ContextCalibrator and
+     * MathOperationCalibrator elements.  ContextCalibrators are quietly
+     * ignored.
+     *
+     * @param uncalValue String containing the uncalibrated value derived from
+     * the raw binary value in the stream.
+     *
+     * @return String containing the value as calibrated, or a quick return of
+     * the original value if no calibrator exists to act on.
+     *
+     * @throws XTCEDatabaseException thrown in the event that the calibrator
+     * configuration contains a MathOperationCalibrator.
+     *
+     */
+
+    private String applyCalibrator( String uncalValue ) throws XTCEDatabaseException {
+
+        CalibratorType calNode = getDefaultCalibrator();
+        if ( calNode == null ) {
+            return uncalValue;
+        }
+
+        BigDecimal yValue = null;
+        BigDecimal xValue = new BigDecimal( uncalValue );
+
+        if ( calNode.getPolynomialCalibrator() != null ) {
+            PolynomialType polyCalNode = calNode.getPolynomialCalibrator();
+            List<Term> terms = polyCalNode.getTerm();
+            yValue = applyPolynomial( xValue, terms );
+        } else if ( calNode.getSplineCalibrator() != null ) {
+            SplineCalibrator      splineNode  = calNode.getSplineCalibrator();
+            BigInteger            order       = splineNode.getOrder();
+            boolean               extrapolate = splineNode.isExtrapolate();
+            List<SplinePointType> points      = splineNode.getSplinePoint();
+            yValue = applySpline( xValue, order, extrapolate, points );
+        } else {
+            throw new XTCEDatabaseException( "Unsupported calibrator on " +
+                typeObj_.getName() );
+        }
+
+        return yValue.toString();
+
+    }
+
+    /** Private method to apply a Polynomial Calibrator to an uncalibrated
+     * value.
+     *
+     * This method doesn't care which order the coefficient/exponent terms
+     * appears because of the commutative property of addition, so any
+     * sequence of terms may be specified in XTCE and this function will apply
+     * them as they are specified.
+     *
+     * This function is not concerned with the encoding type (integer or float)
+     * when performing the calculation.  The calculation is always done in the
+     * floating point space and if the engineering type is integer, then it
+     * will be later rounded back.  This could be a point of controversy.
+     *
+     * @param xValue BigDecimal containing the uncalibrated value.
+     *
+     * @param terms List of the Term elements in the XTCE Polynomial Calibrator
+     * element.
+     *
+     * @return BigDecimal containing the results.
+     *
+     */
+
+    private BigDecimal applyPolynomial( BigDecimal xValue,
+                                        List<Term> terms ) {
+
+        BigDecimal yValue = BigDecimal.ZERO;
+        for ( Term term : terms ) {
+            BigDecimal coeff    = new BigDecimal( term.getCoefficient() );
+            BigInteger exponent = term.getExponent();
+            BigDecimal part1    = xValue.pow( exponent.intValue() );
+            yValue = yValue.add( coeff.multiply( part1 ) );
+        }
+        return yValue;
+
+    }
+
+    /** Private method to apply a Spline Calibrator, otherwise known as a
+     * "piecewise function", to an uncalibrated raw value.
+     *
+     * The Spline Point pairs in XTCE are expected to be in sequential order
+     * from lowest to highest raw value.  The first two points are mandatory
+     * and subsequent points are made by adding one new point and dropping the
+     * previous low point.  This assures that the evaluation is continuous.  It
+     * is also assumed that they are in order from lowest raw value to highest
+     * raw value.
+     *
+     * @param xValue BigDecimal containing the uncalibrated value.
+     *
+     * @param order BigInteger indicating the order of interpolation between
+     * the points.  This can be 0, which is a flat line from the low point to
+     * the high point, 1 for a linear interpolation, and 2 for a quadratic
+     * interpolation.  In the event that the value is exactly at the high
+     * point of the pair of points, then the value is evaluated when the next
+     * pair occurs and the value is at the low point.
+     *
+     * @param extrapolate boolean indicating if the value should be
+     * extrapolated when outside of the spline point pairs based on the curve
+     * from the first or last spline point set, respectively.
+     *
+     * @param points List of SplinePointType objects from the SplinePoint
+     * elements in the XTCE SplineCalibrator element.  Two more more of these
+     * will always exist per the XTCE schema definition.
+     *
+     * @return BigDecimal containing the results.
+     *
+     * @throws XTCEDatabaseException thrown in the event that the order of
+     * approximation between the points of outside of the capabilities of this
+     * toolkit library.
+     *
+     */
+
+    private BigDecimal applySpline( BigDecimal            xValue,
+                                    BigInteger            order,
+                                    boolean               extrapolate,
+                                    List<SplinePointType> points ) throws XTCEDatabaseException {
+
+        // TODO: Support quadratics because I did it on the other side
+
+        if ( order.intValue() > 1 ) {
+            throw new XTCEDatabaseException( "Unsupported Spline " +
+                "order of approximation " + order.toString() +
+                ", only flat, linear, and quadratic (0, 1, 2) are " +
+                "supported by this toolkit." );
+        }
+
+        BigDecimal yValue = BigDecimal.ZERO;
+        double rawVal  = xValue.doubleValue();
+        double rawLow  = points.get( 0 ).getRaw();
+        double calLow  = points.get( 0 ).getCalibrated();
+        for ( int iii = 1; iii < points.size(); iii += 2 ) {
+            double rawHigh = points.get( iii + 1 ).getRaw();
+            double calHigh = points.get( iii + 1 ).getCalibrated();
+            if ( ( rawVal >= rawLow ) && ( rawVal <= rawHigh ) ) {
+                if ( order.intValue() == 0 ) {
+                    // if it equals rawHigh, then take the next one as there is
+                    // a discontinuity and this is how I handled it
+                    if ( rawVal < rawHigh ) {
+                        yValue = new BigDecimal( calLow );
+                        return yValue;
+                    }
+                } else if ( order.intValue() == 1 ) {
+                    double slope = ( rawHigh - rawLow ) / ( calHigh - calLow );
+                    double yyy   = slope * xValue.doubleValue() + calLow;
+                    yValue = new BigDecimal( yyy );
+                    return yValue;
+                }
+            }
+            rawLow = rawHigh;
+            calLow = calHigh;
+        }
+        return xValue;
     }
 
     /** Private method to determine if the type is a BaseDataType in the XTCE
