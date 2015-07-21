@@ -2743,11 +2743,12 @@ public class XTCEViewer extends javax.swing.JFrame {
             row = tmParametersTable.getSelectedRow();
             if ( row != -1 ) {
                 String pname = (String)tmParametersTable.getValueAt( row, 0 );
+                String alias = (String)tmParametersTable.getValueAt( row, 1 );
                 XTCESpaceSystem ss = node.getSpaceSystemReference();
                 try {
                     XTCEParameter parameter = ss.getTelemetryParameter( pname );
                     XTCEViewerEncodeDecodeItemDialog dialog =
-                        new XTCEViewerEncodeDecodeItemDialog( this, false, parameter );
+                        new XTCEViewerEncodeDecodeItemDialog( this, false, parameter, alias );
                 } catch ( XTCEDatabaseException ex ) {
                     logMsg( XTCEFunctions.generalErrorPrefix() + ex.getLocalizedMessage() );
                     return;
@@ -2764,11 +2765,12 @@ public class XTCEViewer extends javax.swing.JFrame {
             row = tcParametersTable.getSelectedRow();
             if ( row != -1 ) {
                 String pname = (String)tcParametersTable.getValueAt( row, 0 );
+                String alias = (String)tcParametersTable.getValueAt( row, 1 );
                 XTCESpaceSystem ss = node.getSpaceSystemReference();
                 try {
                     XTCEParameter parameter = ss.getTelecommandParameter( pname );
                     XTCEViewerEncodeDecodeItemDialog dialog =
-                        new XTCEViewerEncodeDecodeItemDialog( this, false, parameter );
+                        new XTCEViewerEncodeDecodeItemDialog( this, false, parameter, alias );
                 } catch ( XTCEDatabaseException ex ) {
                     logMsg( XTCEFunctions.generalErrorPrefix() + ex.getLocalizedMessage() );
                     return;

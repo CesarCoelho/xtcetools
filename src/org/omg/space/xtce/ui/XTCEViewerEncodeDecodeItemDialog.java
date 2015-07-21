@@ -29,21 +29,32 @@ public class XTCEViewerEncodeDecodeItemDialog extends javax.swing.JDialog {
      *
      * @param item XTCETypedObject item to evaluate.
      *
+     * @param aliases String containing the aliases generated on the table
+     * based on the user preferences.  These are used for the title bar of the
+     * dialog.
+     *
      */
 
-    public XTCEViewerEncodeDecodeItemDialog( java.awt.Frame   parent,
-                                             boolean          modal,
-                                             XTCETypedObject  item ) {
+    public XTCEViewerEncodeDecodeItemDialog( java.awt.Frame  parent,
+                                             boolean         modal,
+                                             XTCETypedObject item,
+                                             String          aliases ) {
+
         super( parent, modal );
         initComponents();
         itemValueObj_ = new XTCEItemValue( item );
-        setTitle( item.getName() );
+        if ( aliases.isEmpty() == false ) {
+            setTitle( item.getName() + " (" + aliases + ")" );
+        } else {
+            setTitle( item.getName() );
+        }
         if ( item.isValid() == false ) {
             warningsText.setText( "ERROR: Invalid Type For This Item" );
             makeCalibratedButton.setEnabled( false );
             makeRawButton.setEnabled( false );
         }
         setVisible( true );
+
     }
 
     /**
