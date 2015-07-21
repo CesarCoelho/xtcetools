@@ -8,11 +8,9 @@ package org.omg.space.xtce.toolkit;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.BitSet;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Vector;
 import org.omg.space.xtce.database.ComparisonType;
 import org.omg.space.xtce.database.MatchCriteriaType;
 import org.omg.space.xtce.database.RepeatType;

@@ -2995,9 +2995,9 @@ public class XTCEViewer extends javax.swing.JFrame {
      */
 
     private void clearTree( JTree tree ) {
-        
-        DefaultTreeModel tmodel = (DefaultTreeModel)tree.getModel();
-        tmodel.setRoot( null );
+
+        DefaultTreeModel tmodel = new DefaultTreeModel( null );
+        tree.setModel( tmodel );
         tree.setPreferredSize( null ); 
         tmodel.reload();
         
@@ -3013,6 +3013,7 @@ public class XTCEViewer extends javax.swing.JFrame {
         clearTree( tcTree );
         
         if ( xtceDatabaseFile == null ) {
+            spaceSystems = null;
             return;
         } else {
             spaceSystems = xtceDatabaseFile.getSpaceSystemTree();

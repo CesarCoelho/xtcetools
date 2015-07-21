@@ -829,71 +829,27 @@ public abstract class XTCETypedObject extends XTCENamedObject {
 
         if ( ( engTypeName.equals( "UNSIGNED" ) == true ) ||
              ( engTypeName.equals( "SIGNED" )   == true ) ) {
-            long retLongValue = Double.valueOf( calValue ).longValue();
-            return Long.toString( retLongValue );
+            return getCalibratedFromIntegerString( calValue );
         } else if ( ( engTypeName.equals( "FLOAT32" )  == true ) ||
                     ( engTypeName.equals( "FLOAT64" )  == true ) ||
                     ( engTypeName.equals( "FLOAT128" ) == true ) ) {
-            return calValue;
-        } else if ( engTypeName.equals( "FLOAT32" )  == true ) {
-            return "0x" + new BigInteger( calValue ).toString( 16 );
+            return getCalibratedFromFloatString( calValue );
         } else if ( engTypeName.equals( "BOOLEAN" )  == true ) {
-            long retLongValue = Double.valueOf( calValue ).longValue();
-            Class typeImplClass = getTypeReference().getClass();
-            if ( typeImplClass == BooleanParameterType.class ) {
-                BooleanParameterType bt = (BooleanParameterType)getTypeReference();
-                String zeroString = bt.getZeroStringValue();
-                String oneString  = bt.getOneStringValue();
-                if ( retLongValue == 0 ) {
-                    return zeroString;
-                } else if ( retLongValue == 1 ) {
-                    return oneString;
-                } else {
-                    throw new XTCEDatabaseException( "Boolean type is not " +
-                        "zero or one (it is " + calValue + ")" );
-                }
-            } else if ( typeImplClass == BooleanDataType.class ) {
-                BooleanDataType bt = (BooleanDataType)getTypeReference();
-                String zeroString = bt.getZeroStringValue();
-                String oneString  = bt.getOneStringValue();
-                if ( retLongValue == 0 ) {
-                    return zeroString;
-                } else if ( retLongValue == 1 ) {
-                    return oneString;
-                } else {
-                    throw new XTCEDatabaseException( "Boolean type is not " +
-                        "zero or one (it is " + calValue + ")" );
-                }
-            }
+            return getCalibratedFromBooleanNumericString( calValue );
         } else if ( engTypeName.equals( "ENUMERATED" )  == true ) {
-            long retLongValue = Double.valueOf( calValue ).longValue();
-            Class typeImplClass = getTypeReference().getClass();
-            if ( typeImplClass == EnumeratedParameterType.class ) {
-                EnumeratedParameterType type = (EnumeratedParameterType)getTypeReference();
-                List<ValueEnumerationType> list = type.getEnumerationList().getEnumeration();
-                for ( ValueEnumerationType entry : list ) {
-                    //if ( entry.getValue().compareTo( new BigInteger( retLongValue ) ) == 0 ) {
-                    //    
-                    //}
-                }
-            } else if ( typeImplClass == EnumeratedDataType.class ) {
-                EnumeratedDataType type = (EnumeratedDataType)getTypeReference();
-                List<ValueEnumerationType> list = type.getEnumerationList().getEnumeration();
-                for ( ValueEnumerationType entry : list ) {
-                    //if ( entry.getValue().compareTo( new BigInteger( retLongValue ) ) == 0 ) {
-                    //    
-                    //}
-                }
-            }
+            return getCalibratedValueFromEnumeratedNumericString( calValue );
         } else if ( engTypeName.equals( "STRING" )  == true ) {
             return calValue;
         } else if ( engTypeName.equals( "TIME" )  == true ) {
-            
+            throw new XTCEDatabaseException( "Absolute Time Type is not " +
+                "yet supported by the toolkit" );
         } else if ( engTypeName.equals( "DURATION" )  == true ) {
-            
+            throw new XTCEDatabaseException( "Relative Time Type is not " +
+                "yet supported by the toolkit" );
+        } else {
+            throw new XTCEDatabaseException( "Type '" + engTypeName +
+                "' is not yet supported by the toolkit" );
         }
-
-        return calValue;
 
     }
 
@@ -919,6 +875,125 @@ public abstract class XTCETypedObject extends XTCENamedObject {
 
     public String getCalibratedFromRaw( BigInteger rawValue ) throws XTCEDatabaseException {
         return getCalibratedFromUncalibrated( getUncalibratedFromRaw( rawValue ) );
+    }
+
+    private String getCalibratedFromIntegerString( String calValue ) throws XTCEDatabaseException {
+
+        try {
+            BigInteger retValue = new BigInteger( calValue );
+            return retValue.toString();
+        } catch ( NumberFormatException ex ) {
+            throw new XTCEDatabaseException( "Calibrated value '" +
+                calValue + "' is not representative of an integer" );
+        }
+
+    }
+
+    private String getCalibratedFromFloatString( String calValue ) throws XTCEDatabaseException {
+
+        try {
+            BigDecimal retValue = new BigDecimal( calValue );
+            return retValue.toString();
+        } catch ( NumberFormatException ex ) {
+            throw new XTCEDatabaseException( "Calibrated value '" +
+                calValue + "' is not representative of a floating " +
+                "point number" );
+        }
+
+    }
+
+    private String getCalibratedFromBooleanNumericString( String calValue ) throws XTCEDatabaseException {
+
+        try {
+
+            BigInteger retValue = new BigInteger( calValue );
+            Class typeImplClass = getTypeReference().getClass();
+            if ( typeImplClass == BooleanParameterType.class ) {
+                BooleanParameterType bt = (BooleanParameterType)getTypeReference();
+                String zeroString = bt.getZeroStringValue();
+                String oneString  = bt.getOneStringValue();
+                if ( retValue.compareTo( BigInteger.ZERO ) == 0 ) {
+                    return zeroString;
+                } else if ( retValue.compareTo( BigInteger.ONE ) == 0 ) {
+                    return oneString;
+                } else {
+                    throw new XTCEDatabaseException( "Calibrated value '" +
+                        calValue + "' is not representative of a 0 or 1 " +
+                        "boolean type" );
+                }
+            } else if ( typeImplClass == BooleanDataType.class ) {
+                BooleanDataType bt = (BooleanDataType)getTypeReference();
+                String zeroString = bt.getZeroStringValue();
+                String oneString  = bt.getOneStringValue();
+                if ( retValue.compareTo( BigInteger.ZERO ) == 0 ) {
+                    return zeroString;
+                } else if ( retValue.compareTo( BigInteger.ONE ) == 0 ) {
+                    return oneString;
+                } else {
+                    throw new XTCEDatabaseException( "Calibrated value '" +
+                        calValue + "' is not representative of a 0 or 1 " +
+                        "boolean type" );
+                }
+            } else {
+                throw new XTCEDatabaseException( "Unknown Boolean class" );
+            }
+
+        } catch ( NumberFormatException ex ) {
+            throw new XTCEDatabaseException( "Calibrated value '" +
+                calValue + "' is not representative of a 0 or 1 " +
+                "boolean type" );
+        }
+
+    }
+
+    private String getCalibratedValueFromEnumeratedNumericString( String calValue ) throws XTCEDatabaseException {
+
+        try {
+
+            BigInteger retValue = new BigInteger( calValue );
+            Class typeImplClass = getTypeReference().getClass();
+            if ( typeImplClass == EnumeratedParameterType.class ) {
+                EnumeratedParameterType type = (EnumeratedParameterType)getTypeReference();
+                List<ValueEnumerationType> list = type.getEnumerationList().getEnumeration();
+                for ( ValueEnumerationType entry : list ) {
+                    if ( entry.getValue().compareTo( retValue ) == 0 ) {
+                        return entry.getLabel();
+                    } else if ( entry.getMaxValue() != null ) {
+                        BigInteger maxValue = entry.getMaxValue();
+                        if ( ( entry.getValue().compareTo( retValue ) >= 0 ) &&
+                             ( entry.getValue().compareTo( maxValue ) <= 0 ) ) {
+                            return entry.getLabel();
+                        }
+                    }
+                }
+                throw new XTCEDatabaseException( "Enumeration undefined for " +
+                    "value '" + calValue + "'" );
+            } else if ( typeImplClass == EnumeratedDataType.class ) {
+                EnumeratedDataType type = (EnumeratedDataType)getTypeReference();
+                List<ValueEnumerationType> list = type.getEnumerationList().getEnumeration();
+                for ( ValueEnumerationType entry : list ) {
+                    if ( entry.getValue().compareTo( retValue ) == 0 ) {
+                        return entry.getLabel();
+                    } else if ( entry.getMaxValue() != null ) {
+                        BigInteger maxValue = entry.getMaxValue();
+                        if ( ( entry.getValue().compareTo( retValue ) >= 0 ) &&
+                             ( entry.getValue().compareTo( maxValue ) <= 0 ) ) {
+                            return entry.getLabel();
+                        }
+                    }
+                }
+                throw new XTCEDatabaseException( "Enumeration undefined for " +
+                    "value '" + calValue + "'" );
+            } else {
+                throw new XTCEDatabaseException( "Unknown Enumeration class" );
+            }
+
+        } catch ( NumberFormatException ex ) {
+            throw new XTCEDatabaseException( "Calibrated value '" +
+                calValue + "' is not an integer number needed for an " +
+                "enumerated type label " );
+        }
+
     }
 
     /** Private method to calculate and apply the calibrator to the

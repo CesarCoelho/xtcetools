@@ -10,7 +10,6 @@ import java.awt.event.WindowEvent;
 import java.math.BigInteger;
 import java.util.BitSet;
 import org.omg.space.xtce.toolkit.XTCEItemValue;
-import org.omg.space.xtce.toolkit.XTCEParameter;
 import org.omg.space.xtce.toolkit.XTCETypedObject;
 
 /**
@@ -21,8 +20,15 @@ import org.omg.space.xtce.toolkit.XTCETypedObject;
 
 public class XTCEViewerEncodeDecodeItemDialog extends javax.swing.JDialog {
 
-    /**
-     * Creates new form XTCEViewerEncodeDecodeItemDialog
+    /** Constructor
+     *
+     * @param parent Frame object that owns this dialog box.
+     *
+     * @param modal Modality of the dialog box, which can be true if it blocks
+     * all other window operations or false if this dialog can stand alone.
+     *
+     * @param item XTCETypedObject item to evaluate.
+     *
      */
 
     public XTCEViewerEncodeDecodeItemDialog( java.awt.Frame   parent,
