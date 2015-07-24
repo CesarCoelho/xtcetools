@@ -14,8 +14,6 @@ import java.util.List;
 import org.omg.space.xtce.database.AbsoluteTimeDataType;
 import org.omg.space.xtce.database.AggregateDataType;
 import org.omg.space.xtce.database.AliasSetType;
-import org.omg.space.xtce.database.ArgumentTypeSetType.FloatArgumentType;
-import org.omg.space.xtce.database.ArgumentTypeSetType.IntegerArgumentType;
 import org.omg.space.xtce.database.ArrayDataTypeType;
 import org.omg.space.xtce.database.BaseDataType;
 import org.omg.space.xtce.database.BaseTimeDataType;
@@ -24,16 +22,10 @@ import org.omg.space.xtce.database.BooleanDataType;
 import org.omg.space.xtce.database.CalibratorType;
 import org.omg.space.xtce.database.CalibratorType.SplineCalibrator;
 import org.omg.space.xtce.database.EnumeratedDataType;
-import org.omg.space.xtce.database.EnumeratedDataType.EnumerationList;
+import org.omg.space.xtce.database.FloatDataType;
+import org.omg.space.xtce.database.IntegerDataType;
 import org.omg.space.xtce.database.IntegerValueType;
 import org.omg.space.xtce.database.NameDescriptionType;
-import org.omg.space.xtce.database.ParameterTypeSetType.BinaryParameterType;
-import org.omg.space.xtce.database.ParameterTypeSetType.BooleanParameterType;
-import org.omg.space.xtce.database.ParameterTypeSetType.EnumeratedParameterType;
-import org.omg.space.xtce.database.ParameterTypeSetType.FloatParameterType;
-import org.omg.space.xtce.database.ParameterTypeSetType.IntegerParameterType;
-import org.omg.space.xtce.database.ParameterTypeSetType.RelativeTimeParameterType;
-import org.omg.space.xtce.database.ParameterTypeSetType.StringParameterType;
 import org.omg.space.xtce.database.PolynomialType;
 import org.omg.space.xtce.database.PolynomialType.Term;
 import org.omg.space.xtce.database.RelativeTimeDataType;
@@ -169,63 +161,22 @@ public abstract class XTCETypedObject extends XTCENamedObject {
     protected String getInitialValue() {
 
         if ( typeObj_ != null ) {
-            if ( typeObj_.getClass() == EnumeratedParameterType.class ) {
-                EnumeratedParameterType tRef = (EnumeratedParameterType)typeObj_;
-                if ( tRef.getInitialValue() != null ) {
-                    return tRef.getInitialValue();
-                }
-            } else if ( typeObj_.getClass() == IntegerParameterType.class ) {
-                IntegerParameterType tRef = (IntegerParameterType)typeObj_;
-                if ( tRef.getInitialValue() != null ) {
-                    return tRef.getInitialValue();
-                }
-            } else if ( typeObj_.getClass() == FloatParameterType.class ) {
-                FloatParameterType tRef = (FloatParameterType)typeObj_;
-                if ( tRef.getInitialValue() != null ) {
-                    return tRef.getInitialValue().toString();
-                }
-            } else if ( typeObj_.getClass() == BinaryParameterType.class ) {
-                BinaryParameterType tRef = (BinaryParameterType)typeObj_;
-                if ( tRef.getInitialValue() != null ) {
-                    byte[] bytes = tRef.getInitialValue();
-                    StringBuilder out = new StringBuilder( "0x" );
-                    for ( byte singleByte : bytes ) {
-                        out.append( String.format( "%02x", singleByte ) );
-                    }
-                    return out.toString();
-                }
-            } else if ( typeObj_.getClass() == BooleanParameterType.class ) {
-                BooleanParameterType tRef = (BooleanParameterType)typeObj_;
-                if ( tRef.getInitialValue() != null ) {
-                    return tRef.getInitialValue();
-                }
-            } else if ( typeObj_.getClass() == StringParameterType.class ) {
-                StringParameterType tRef = (StringParameterType)typeObj_;
-                if ( tRef.getInitialValue() != null ) {
-                    return tRef.getInitialValue();
-                }
-            }  else if ( typeObj_.getClass() == RelativeTimeParameterType.class ) {
-                RelativeTimeParameterType tRef = (RelativeTimeParameterType)typeObj_;
-                if ( tRef.getInitialValue() != null ) {
-                    return tRef.getInitialValue().toString();
-                }
-
-            } else if ( typeObj_.getClass() == EnumeratedDataType.class ) {
+            if ( typeObj_ instanceof EnumeratedDataType ) {
                 EnumeratedDataType tRef = (EnumeratedDataType)typeObj_;
                 if ( tRef.getInitialValue() != null ) {
                     return tRef.getInitialValue();
                 }
-            } else if ( typeObj_.getClass() == IntegerArgumentType.class ) {
-                IntegerArgumentType tRef = (IntegerArgumentType)typeObj_;
+            } else if ( typeObj_ instanceof IntegerDataType ) {
+                IntegerDataType tRef = (IntegerDataType)typeObj_;
                 if ( tRef.getInitialValue() != null ) {
                     return tRef.getInitialValue();
                 }
-            } else if ( typeObj_.getClass() == FloatArgumentType.class ) {
-                FloatArgumentType tRef = (FloatArgumentType)typeObj_;
+            } else if ( typeObj_ instanceof FloatDataType ) {
+                FloatDataType tRef = (FloatDataType)typeObj_;
                 if ( tRef.getInitialValue() != null ) {
                     return tRef.getInitialValue().toString();
                 }
-            } else if ( typeObj_.getClass() == BinaryDataType.class ) {
+            } else if ( typeObj_ instanceof BinaryDataType ) {
                 BinaryDataType tRef = (BinaryDataType)typeObj_;
                 if ( tRef.getInitialValue() != null ) {
                     byte[] bytes = tRef.getInitialValue();
@@ -235,23 +186,22 @@ public abstract class XTCETypedObject extends XTCENamedObject {
                     }
                     return out.toString();
                 }
-            } else if ( typeObj_.getClass() == BooleanDataType.class ) {
+            } else if ( typeObj_ instanceof BooleanDataType ) {
                 BooleanDataType tRef = (BooleanDataType)typeObj_;
                 if ( tRef.getInitialValue() != null ) {
                     return tRef.getInitialValue();
                 }
-            } else if ( typeObj_.getClass() == StringDataType.class ) {
+            } else if ( typeObj_ instanceof StringDataType ) {
                 StringDataType tRef = (StringDataType)typeObj_;
                 if ( tRef.getInitialValue() != null ) {
                     return tRef.getInitialValue();
                 }
-
-            } else if ( typeObj_.getClass() == AbsoluteTimeDataType.class ) {
+            } else if ( typeObj_ instanceof AbsoluteTimeDataType ) {
                 AbsoluteTimeDataType tRef = (AbsoluteTimeDataType)typeObj_;
                 if ( tRef.getInitialValue() != null ) {
                     return tRef.getInitialValue().toString();
                 }
-            } else if ( typeObj_.getClass() == RelativeTimeDataType.class ) {
+            } else if ( typeObj_ instanceof RelativeTimeDataType ) {
                 RelativeTimeDataType tRef = (RelativeTimeDataType)typeObj_;
                 if ( tRef.getInitialValue() != null ) {
                     return tRef.getInitialValue().toString();
@@ -392,38 +342,27 @@ public abstract class XTCETypedObject extends XTCENamedObject {
     public String getEngineeringType() {
 
         if ( typeObj_ != null ) {
-            if ( ( typeObj_.getClass() == EnumeratedParameterType.class ) ||
-                 ( typeObj_.getClass() == EnumeratedDataType.class )      ) {
+            if ( typeObj_ instanceof EnumeratedDataType ) {
                 return "ENUMERATED";
-            } else if ( typeObj_.getClass() == IntegerParameterType.class ) {
-                IntegerParameterType tRef = (IntegerParameterType)typeObj_;
+            } else if ( typeObj_ instanceof IntegerDataType ) {
+                IntegerDataType tRef = (IntegerDataType)typeObj_;
                 return ( tRef.isSigned() == true ? "SIGNED" : "UNSIGNED" );
-            } else if ( typeObj_.getClass() == IntegerArgumentType.class ) {
-                IntegerArgumentType tRef = (IntegerArgumentType)typeObj_;
-                return ( tRef.isSigned() == true ? "SIGNED" : "UNSIGNED" );
-            } else if ( typeObj_.getClass() == FloatParameterType.class ) {
-                FloatParameterType tRef = (FloatParameterType)typeObj_;
-                return "FLOAT" + tRef.getSizeInBits().toString();
-            } else if ( typeObj_.getClass() == FloatArgumentType.class ) {
-                FloatArgumentType tRef = (FloatArgumentType)typeObj_;
+            } else if ( typeObj_ instanceof FloatDataType ) {
+                FloatDataType tRef = (FloatDataType)typeObj_;
                 return "FLOAT" + tRef.getSizeInBits().toString();
             } else if ( typeObj_.getClass() == AggregateDataType.class ) {
                 return "STRUCTURE";
-            } else if ( ( typeObj_.getClass() == BinaryParameterType.class ) ||
-                        ( typeObj_.getClass() == BinaryDataType.class )      ) {
+            } else if ( typeObj_ instanceof BinaryDataType ) {
                 return "BINARY";
-            } else if ( ( typeObj_.getClass() == BooleanParameterType.class ) ||
-                        ( typeObj_.getClass() == BooleanDataType.class )      ) {
+            } else if ( typeObj_ instanceof BooleanDataType ) {
                 return "BOOLEAN";
-            } else if ( ( typeObj_.getClass() == StringParameterType.class ) ||
-                        ( typeObj_.getClass() == StringDataType.class )      ) {
+            } else if ( typeObj_ instanceof StringDataType ) {
                 return "STRING";
-            } else if ( typeObj_.getClass() == AbsoluteTimeDataType.class ) {
+            } else if ( typeObj_ instanceof AbsoluteTimeDataType ) {
                 return "TIME";
-            } else if ( ( typeObj_.getClass() == RelativeTimeParameterType.class ) ||
-                        ( typeObj_.getClass() == RelativeTimeDataType.class )      ) {
+            } else if ( typeObj_ instanceof RelativeTimeDataType ) {
                 return "DURATION";
-            } else if ( typeObj_.getClass() == ArrayDataTypeType.class ) {
+            } else if ( typeObj_ instanceof ArrayDataTypeType ) {
                 return "ARRAY";
             }
         }
@@ -691,12 +630,12 @@ public abstract class XTCETypedObject extends XTCENamedObject {
 
         if ( typeObj_ == null ) {
             return null;
-        } else if ( typeObj_.getClass() == EnumeratedParameterType.class ) {
-            return ((EnumeratedParameterType)typeObj_).getEnumerationList().getEnumeration();
-        } else if ( typeObj_.getClass() == EnumeratedDataType.class ) {
-            return ((EnumeratedDataType)typeObj_).getEnumerationList().getEnumeration();
+        } else if ( typeObj_ instanceof EnumeratedDataType ) {
+            return ((EnumeratedDataType)typeObj_).getEnumerationList()
+                                                 .getEnumeration();
         }
-        return new ArrayList<ValueEnumerationType>();
+
+        return new ArrayList<>();
 
     }
 
@@ -907,21 +846,8 @@ public abstract class XTCETypedObject extends XTCENamedObject {
         try {
 
             BigInteger retValue = new BigInteger( calValue );
-            Class typeImplClass = getTypeReference().getClass();
-            if ( typeImplClass == BooleanParameterType.class ) {
-                BooleanParameterType bt = (BooleanParameterType)getTypeReference();
-                String zeroString = bt.getZeroStringValue();
-                String oneString  = bt.getOneStringValue();
-                if ( retValue.compareTo( BigInteger.ZERO ) == 0 ) {
-                    return zeroString;
-                } else if ( retValue.compareTo( BigInteger.ONE ) == 0 ) {
-                    return oneString;
-                } else {
-                    throw new XTCEDatabaseException( "Calibrated value '" +
-                        calValue + "' is not representative of a 0 or 1 " +
-                        "boolean type" );
-                }
-            } else if ( typeImplClass == BooleanDataType.class ) {
+
+            if ( getTypeReference() instanceof BooleanDataType ) {
                 BooleanDataType bt = (BooleanDataType)getTypeReference();
                 String zeroString = bt.getZeroStringValue();
                 String oneString  = bt.getOneStringValue();
@@ -951,24 +877,8 @@ public abstract class XTCETypedObject extends XTCENamedObject {
         try {
 
             BigInteger retValue = new BigInteger( calValue );
-            Class typeImplClass = getTypeReference().getClass();
-            if ( typeImplClass == EnumeratedParameterType.class ) {
-                EnumeratedParameterType type = (EnumeratedParameterType)getTypeReference();
-                List<ValueEnumerationType> list = type.getEnumerationList().getEnumeration();
-                for ( ValueEnumerationType entry : list ) {
-                    if ( entry.getValue().compareTo( retValue ) == 0 ) {
-                        return entry.getLabel();
-                    } else if ( entry.getMaxValue() != null ) {
-                        BigInteger maxValue = entry.getMaxValue();
-                        if ( ( entry.getValue().compareTo( retValue ) >= 0 ) &&
-                             ( entry.getValue().compareTo( maxValue ) <= 0 ) ) {
-                            return entry.getLabel();
-                        }
-                    }
-                }
-                throw new XTCEDatabaseException( "Enumeration undefined for " +
-                    "value '" + calValue + "'" );
-            } else if ( typeImplClass == EnumeratedDataType.class ) {
+
+            if ( getTypeReference() instanceof EnumeratedDataType ) {
                 EnumeratedDataType type = (EnumeratedDataType)getTypeReference();
                 List<ValueEnumerationType> list = type.getEnumerationList().getEnumeration();
                 for ( ValueEnumerationType entry : list ) {
@@ -1166,18 +1076,12 @@ public abstract class XTCETypedObject extends XTCENamedObject {
 
     private boolean isBaseDataType() {
 
-        return ( ( typeObj_.getClass() == IntegerParameterType.class )    ||
-                 ( typeObj_.getClass() == EnumeratedParameterType.class ) ||
-                 ( typeObj_.getClass() == FloatParameterType.class )      ||
-                 ( typeObj_.getClass() == BinaryParameterType.class )     ||
-                 ( typeObj_.getClass() == BooleanParameterType.class )    ||
-                 ( typeObj_.getClass() == StringParameterType.class )     ||
-                 ( typeObj_.getClass() == IntegerArgumentType.class )     ||
-                 ( typeObj_.getClass() == EnumeratedDataType.class )      ||
-                 ( typeObj_.getClass() == FloatArgumentType.class )       ||
-                 ( typeObj_.getClass() == BinaryDataType.class )          ||
-                 ( typeObj_.getClass() == BooleanDataType.class )         ||
-                 ( typeObj_.getClass() == StringDataType.class )          );
+        return ( ( typeObj_ instanceof IntegerDataType    ) ||
+                 ( typeObj_ instanceof EnumeratedDataType ) ||
+                 ( typeObj_ instanceof FloatDataType      ) ||
+                 ( typeObj_ instanceof BinaryDataType     ) ||
+                 ( typeObj_ instanceof BooleanDataType    ) ||
+                 ( typeObj_ instanceof StringDataType     ) );
 
     }
 
@@ -1191,9 +1095,8 @@ public abstract class XTCETypedObject extends XTCENamedObject {
 
     private boolean isBaseTimeDataType() {
 
-        return ( ( typeObj_.getClass() == AbsoluteTimeDataType.class )      ||
-                 ( typeObj_.getClass() == RelativeTimeParameterType.class ) ||
-                 ( typeObj_.getClass() == RelativeTimeDataType.class )      );
+        return ( ( typeObj_ instanceof AbsoluteTimeDataType ) ||
+                 ( typeObj_ instanceof RelativeTimeDataType ) );
 
     }
 

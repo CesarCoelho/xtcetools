@@ -60,7 +60,7 @@ public class XTCEViewerContainerTreeCellRenderer extends DefaultTreeCellRenderer
 
     }
 
-    private DefaultTreeCellRenderer defaultRenderer =
+    private final DefaultTreeCellRenderer defaultRenderer =
         new DefaultTreeCellRenderer();
 
 }

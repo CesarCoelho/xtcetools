@@ -65,7 +65,7 @@ public class XTCEViewerContainerTableCellRenderer extends DefaultTableCellRender
 
     private ArrayList<XTCEContainerContentEntry> entries_ = null;
 
-    private DefaultTableCellRenderer defaultRenderer =
+    private final DefaultTableCellRenderer defaultRenderer =
         new DefaultTableCellRenderer();
 
 }

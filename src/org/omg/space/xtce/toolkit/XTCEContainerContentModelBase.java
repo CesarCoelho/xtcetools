@@ -190,7 +190,7 @@ public abstract class XTCEContainerContentModelBase {
 
             int mask = 0xff;
             for ( int jjj = 0; jjj < ( startBit % 8 ); ++jjj ) {
-                mask = mask ^ ( 1 << ( 7 - jjj ) );
+                mask ^= ( 1 << ( 7 - jjj ) );
             }
             dataBytes[0] = (byte)( dataBytes[0] & (byte)mask );
 
@@ -625,7 +625,7 @@ public abstract class XTCEContainerContentModelBase {
                                   .getUncalibratedFromRaw( rawValue );
             } else {
                 // do any of the others make sense?
-                return;
+
             }
 
         } catch ( XTCEDatabaseException ex ) {
@@ -656,7 +656,6 @@ public abstract class XTCEContainerContentModelBase {
             }
         }
 
-        return;
 
     }
 

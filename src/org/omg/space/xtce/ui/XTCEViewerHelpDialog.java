@@ -147,7 +147,7 @@ public class XTCEViewerHelpDialog extends javax.swing.JDialog {
 
     class ActivatedHyperlinkListener implements HyperlinkListener {
 
-        public ActivatedHyperlinkListener( JEditorPane editorPane ) {
+        ActivatedHyperlinkListener( JEditorPane editorPane ) {
             this.editorPane = editorPane;
         }
 

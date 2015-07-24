@@ -19,7 +19,6 @@ import org.omg.space.xtce.database.CalibratorType;
 import org.omg.space.xtce.database.CalibratorType.MathOperationCalibrator;
 import org.omg.space.xtce.database.CalibratorType.SplineCalibrator;
 import org.omg.space.xtce.database.NameDescriptionType;
-import org.omg.space.xtce.database.ParameterTypeSetType.BooleanParameterType;
 import org.omg.space.xtce.database.PolynomialType;
 import org.omg.space.xtce.database.SplinePointType;
 import org.omg.space.xtce.database.ValueEnumerationType;
@@ -949,13 +948,11 @@ public class XTCEItemValue {
 
         NameDescriptionType typeObj = item.getTypeReference();
 
-        if ( typeObj.getClass() == BooleanParameterType.class ) {
-            booleanZeroString_ = ((BooleanParameterType)typeObj).getZeroStringValue();
-            booleanOneString_  = ((BooleanParameterType)typeObj).getOneStringValue();
-        } else if ( typeObj.getClass() == BooleanDataType.class ) {
+        if ( typeObj instanceof BooleanDataType ) {
             booleanZeroString_ = ((BooleanDataType)typeObj).getZeroStringValue();
             booleanOneString_  = ((BooleanDataType)typeObj).getOneStringValue();
         }
+
         validRange_ = item.getValidRange();
 
     }
@@ -1045,10 +1042,10 @@ public class XTCEItemValue {
             if ( maxExponent <= 1 ) {
                 double value = calValue.doubleValue();
                 if ( terms.containsKey( BigInteger.ZERO ) == true ) {
-                    value = value - terms.get( BigInteger.ZERO ).doubleValue();
+                    value -= terms.get( BigInteger.ZERO ).doubleValue();
                 }
                 if ( terms.containsKey( BigInteger.ONE ) == true ) {
-                    value = value / terms.get( BigInteger.ONE ).doubleValue();
+                    value /= terms.get( BigInteger.ONE ).doubleValue();
                 }
                 return new BigDecimal( value );
             } else if ( maxExponent == 2 ) {
@@ -1232,10 +1229,10 @@ public class XTCEItemValue {
             if ( maxExponent <= 1 ) {
                 double value = calValue.doubleValue();
                 if ( terms.containsKey( BigInteger.ZERO ) == true ) {
-                    value = value - terms.get( BigInteger.ZERO ).doubleValue();
+                    value -= terms.get( BigInteger.ZERO ).doubleValue();
                 }
                 if ( terms.containsKey( BigInteger.ONE ) == true ) {
-                    value = value / terms.get( BigInteger.ONE ).doubleValue();
+                    value /= terms.get( BigInteger.ONE ).doubleValue();
                 }
                 return BigInteger.valueOf( Double.valueOf( value ).longValue() );
             } else if ( maxExponent == 2 ) {

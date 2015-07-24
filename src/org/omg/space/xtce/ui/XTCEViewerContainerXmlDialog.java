@@ -6,6 +6,7 @@
 
 package org.omg.space.xtce.ui;
 
+import java.awt.Frame;
 import org.omg.space.xtce.toolkit.XTCEDatabaseException;
 import java.awt.event.WindowEvent;
 import org.omg.space.xtce.toolkit.XTCETMContainer;
@@ -18,11 +19,25 @@ import org.omg.space.xtce.toolkit.XTCETMContainer;
 
 public class XTCEViewerContainerXmlDialog extends javax.swing.JDialog {
 
-    /**
-     * Creates new form XTCEViewerParameterXmlDialog
+    /** Constructor
+     *
+     * Creates new dialog window for showing the XTCE SequenceContainer element
+     * XML contents.
+     *
+     * @param parent Frame containing the parent window.
+     *
+     * @param modal Boolean indicating if this dialog should block the parent
+     * window interactions until dismissed.
+     *
+     * @param container XTCETMContainer object that will be used to extract the
+     * raw XML ASCII for display to the user in the dialog.
+     *
      */
 
-    public XTCEViewerContainerXmlDialog(java.awt.Frame parent, boolean modal, XTCETMContainer container ) throws XTCEDatabaseException {
+    XTCEViewerContainerXmlDialog( Frame           parent,
+                                  boolean         modal,
+                                  XTCETMContainer container ) throws XTCEDatabaseException {
+
         super(parent, modal);
         initComponents();
         if ( container == null ) {
@@ -31,6 +46,7 @@ public class XTCEViewerContainerXmlDialog extends javax.swing.JDialog {
         containerDefinitionText.setText( container.toXml() );
         pack();
         setLocationRelativeTo( parent );
+
     }
 
     /**

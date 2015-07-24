@@ -12,7 +12,6 @@ import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import org.omg.space.xtce.database.AliasSetType;
 import org.omg.space.xtce.database.AliasSetType.Alias;
-import org.omg.space.xtce.database.HeaderType;
 import org.omg.space.xtce.toolkit.XTCESpaceSystem;
 
 /**

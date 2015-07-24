@@ -34,9 +34,9 @@ public class XTCEViewerParameterXmlDialog extends javax.swing.JDialog {
      *
      */
 
-    public XTCEViewerParameterXmlDialog( Frame         parent,
-                                         boolean       modal,
-                                         XTCEParameter parameter ) throws XTCEDatabaseException {
+    XTCEViewerParameterXmlDialog( Frame         parent,
+                                  boolean       modal,
+                                  XTCEParameter parameter ) throws XTCEDatabaseException {
 
         super(parent, modal);
         initComponents();

@@ -239,7 +239,7 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
         }
 
         List<PolynomialType.Term> terms = polyCal.getTerm();
-        if ( terms.size() == 0 ) {
+        if ( terms.isEmpty() ) {
             coefficient0Text.setText( "0" );
             coefficient1Text.setText( "1" );
             coefficient2Text.setText( "" );

@@ -50,9 +50,9 @@ public class XTCEViewerHelpBrowserDialog extends JDialog {
      *
      */
 
-    public XTCEViewerHelpBrowserDialog( java.awt.Frame parent,
-                                        final boolean  modal,
-                                        final URL      pageUrl ) {
+    XTCEViewerHelpBrowserDialog( java.awt.Frame parent,
+                                 final boolean  modal,
+                                 final URL      pageUrl ) {
 
         super(parent, modal);
 

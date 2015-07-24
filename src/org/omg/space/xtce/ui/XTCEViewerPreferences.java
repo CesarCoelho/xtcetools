@@ -16,6 +16,7 @@ import java.io.ObjectOutputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
@@ -61,6 +62,9 @@ public class XTCEViewerPreferences {
         /// XTCEViewerPreferences.
 
         private static final XTCEViewerPreferences instance = new XTCEViewerPreferences();
+
+        private LazyHolder() {
+        }
     }
 
     /** The instance accessor to retrieve the singleton reference to the
@@ -357,7 +361,9 @@ public class XTCEViewerPreferences {
             item.addActionListener( new ActionListener() {
                 @Override
                 public void actionPerformed( ActionEvent evt ) {
-                    viewer.openFile( actionFile, getUseXIncludeOption() );
+                    viewer.openFile( actionFile,
+                                     getUseXIncludeOption(),
+                                     getValidateOnLoadOption() );
                 }
             });
             recentItemsMenu.add( item );
@@ -411,7 +417,7 @@ public class XTCEViewerPreferences {
             item.addActionListener( new ActionListener() {
                 @Override
                 public void actionPerformed( ActionEvent evt ) {
-                    viewer.openFile( actionFile, true );
+                    viewer.openFile( actionFile, true, true );
                 }
             });
             exampleItemsMenu.add( item );
@@ -841,11 +847,9 @@ public class XTCEViewerPreferences {
             Preferences child  = prefs.node( key );
             String[]    keys   = child.keys();
             ArrayList<String> keyList = new ArrayList<String>();
-            for ( String value : keys ) {
-                keyList.add( value );
-            }
+            keyList.addAll(Arrays.asList(keys));
             int iii = 0;
-            while ( keyList.contains( new Integer( iii ).toString() ) == true ) {
+            while ( keyList.contains(Integer.toString(iii) ) == true ) {
                 ++iii;
             }
             if ( iii == 0 ) {
@@ -894,7 +898,7 @@ public class XTCEViewerPreferences {
             Preferences child = prefs.node( key );
             child.clear();
 
-            if ( ( list == null ) || ( list.size() == 0 ) ) {
+            if ( ( list == null ) || ( list.isEmpty() ) ) {
                 return;
             }
 

@@ -47,6 +47,7 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
@@ -55,6 +56,7 @@ import org.omg.space.xtce.toolkit.XTCEContainerEntryValue;
 import org.omg.space.xtce.toolkit.XTCEFunctions;
 import org.omg.space.xtce.toolkit.XTCENamedObject;
 import org.omg.space.xtce.toolkit.XTCESpaceSystemMetrics;
+import org.omg.space.xtce.toolkit.XTCETMStream;
 import org.omg.space.xtce.toolkit.XTCETelecommand;
 import org.omg.space.xtce.toolkit.XTCETelecommandContentModel;
 import org.omg.space.xtce.ui.XTCEViewerContainerDrawing.Orientation;
@@ -200,6 +202,11 @@ public class XTCEViewer extends javax.swing.JFrame {
         tcContentTable = new javax.swing.JTable();
         tcContentDrawingScrollPane = new javax.swing.JScrollPane();
         tmStreamsPanel = new javax.swing.JPanel();
+        tmStreamDetailsLabel = new javax.swing.JLabel();
+        jSplitPane5 = new javax.swing.JSplitPane();
+        tmStreamTreeScrollPane = new javax.swing.JScrollPane();
+        tmStreamTree = new javax.swing.JTree();
+        jScrollPane1 = new javax.swing.JScrollPane();
         tmTypesPanel = new javax.swing.JPanel();
         tcTypesPanel = new javax.swing.JPanel();
         mainWindowMessageScrollingPane = new javax.swing.JScrollPane();
@@ -634,14 +641,14 @@ public class XTCEViewer extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(spaceSystemOverviewLabel)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 817, Short.MAX_VALUE)
+            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1003, Short.MAX_VALUE)
         );
         spaceSystemOverviewPanelLayout.setVerticalGroup(
             spaceSystemOverviewPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(spaceSystemOverviewPanelLayout.createSequentialGroup()
                 .addComponent(spaceSystemOverviewLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 509, Short.MAX_VALUE))
+                .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 510, Short.MAX_VALUE))
         );
 
         mainWindowPrimaryWorkspace.addTab(bundle.getString("tab_spacesystems_label"), spaceSystemOverviewPanel); // NOI18N
@@ -742,14 +749,14 @@ public class XTCEViewer extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(tmParametersOverviewLabel)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(jSplitPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 817, Short.MAX_VALUE)
+            .addComponent(jSplitPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1003, Short.MAX_VALUE)
         );
         tmParametersPanelLayout.setVerticalGroup(
             tmParametersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(tmParametersPanelLayout.createSequentialGroup()
                 .addComponent(tmParametersOverviewLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSplitPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 509, Short.MAX_VALUE))
+                .addComponent(jSplitPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 510, Short.MAX_VALUE))
         );
 
         mainWindowPrimaryWorkspace.addTab(bundle.getString("tab_tmparameters_label"), tmParametersPanel); // NOI18N
@@ -850,14 +857,14 @@ public class XTCEViewer extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(tcParametersOverviewLabel)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(jSplitPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 817, Short.MAX_VALUE)
+            .addComponent(jSplitPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 1003, Short.MAX_VALUE)
         );
         tcParametersPanelLayout.setVerticalGroup(
             tcParametersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(tcParametersPanelLayout.createSequentialGroup()
                 .addComponent(tcParametersOverviewLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSplitPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 509, Short.MAX_VALUE))
+                .addComponent(jSplitPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 510, Short.MAX_VALUE))
         );
 
         mainWindowPrimaryWorkspace.addTab(bundle.getString("tab_tcparameters_label"), tcParametersPanel); // NOI18N
@@ -964,7 +971,7 @@ public class XTCEViewer extends javax.swing.JFrame {
             .addGroup(tmContainersPanelLayout.createSequentialGroup()
                 .addComponent(tmContainerDetailsLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSplitPane4))
+                .addComponent(jSplitPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 510, Short.MAX_VALUE))
         );
 
         mainWindowPrimaryWorkspace.addTab(bundle.getString("tab_tmcontainers_label"), tmContainersPanel); // NOI18N
@@ -1084,15 +1091,55 @@ public class XTCEViewer extends javax.swing.JFrame {
 
         mainWindowPrimaryWorkspace.addTab(bundle.getString("tab_tcdefinitions_label"), tcDefinitionsPanel); // NOI18N
 
+        tmStreamDetailsLabel.setText(bundle.getString("tab_desc_tmstreams_label")); // NOI18N
+
+        tmStreamTreeScrollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        tmStreamTreeScrollPane.setMinimumSize(new java.awt.Dimension(100, 0));
+        tmStreamTreeScrollPane.setPreferredSize(new java.awt.Dimension(200, 0));
+
+        tmStreamTree.setMaximumSize(new java.awt.Dimension(32767, 32767));
+        tmStreamTree.setMinimumSize(new java.awt.Dimension(100, 0));
+        tmStreamTree.setPreferredSize(new java.awt.Dimension(100, 0));
+        tmStreamTree.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                tmStreamTreeMousePressed(evt);
+            }
+        });
+        tmStreamTree.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
+            public void valueChanged(javax.swing.event.TreeSelectionEvent evt) {
+                tmStreamTreeValueChanged(evt);
+            }
+        });
+        tmStreamTreeScrollPane.setViewportView(tmStreamTree);
+
+        jSplitPane5.setLeftComponent(tmStreamTreeScrollPane);
+
+        jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        jSplitPane5.setRightComponent(jScrollPane1);
+
         javax.swing.GroupLayout tmStreamsPanelLayout = new javax.swing.GroupLayout(tmStreamsPanel);
         tmStreamsPanel.setLayout(tmStreamsPanelLayout);
         tmStreamsPanelLayout.setHorizontalGroup(
             tmStreamsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 817, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tmStreamsPanelLayout.createSequentialGroup()
+                .addContainerGap(415, Short.MAX_VALUE)
+                .addComponent(tmStreamDetailsLabel)
+                .addContainerGap(405, Short.MAX_VALUE))
+            .addGroup(tmStreamsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(tmStreamsPanelLayout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(jSplitPane5)
+                    .addContainerGap()))
         );
         tmStreamsPanelLayout.setVerticalGroup(
             tmStreamsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 529, Short.MAX_VALUE)
+            .addGroup(tmStreamsPanelLayout.createSequentialGroup()
+                .addComponent(tmStreamDetailsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+            .addGroup(tmStreamsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tmStreamsPanelLayout.createSequentialGroup()
+                    .addGap(23, 23, 23)
+                    .addComponent(jSplitPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 509, Short.MAX_VALUE)))
         );
 
         mainWindowPrimaryWorkspace.addTab(bundle.getString("tab_tmstreams_label"), tmStreamsPanel); // NOI18N
@@ -1101,11 +1148,11 @@ public class XTCEViewer extends javax.swing.JFrame {
         tmTypesPanel.setLayout(tmTypesPanelLayout);
         tmTypesPanelLayout.setHorizontalGroup(
             tmTypesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 817, Short.MAX_VALUE)
+            .addGap(0, 1003, Short.MAX_VALUE)
         );
         tmTypesPanelLayout.setVerticalGroup(
             tmTypesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 529, Short.MAX_VALUE)
+            .addGap(0, 532, Short.MAX_VALUE)
         );
 
         mainWindowPrimaryWorkspace.addTab(bundle.getString("tab_tmtypes_label"), tmTypesPanel); // NOI18N
@@ -1114,11 +1161,11 @@ public class XTCEViewer extends javax.swing.JFrame {
         tcTypesPanel.setLayout(tcTypesPanelLayout);
         tcTypesPanelLayout.setHorizontalGroup(
             tcTypesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 817, Short.MAX_VALUE)
+            .addGap(0, 1003, Short.MAX_VALUE)
         );
         tcTypesPanelLayout.setVerticalGroup(
             tcTypesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 529, Short.MAX_VALUE)
+            .addGap(0, 532, Short.MAX_VALUE)
         );
 
         mainWindowPrimaryWorkspace.addTab(bundle.getString("tab_tctypes_label"), tcTypesPanel); // NOI18N
@@ -1458,7 +1505,7 @@ public class XTCEViewer extends javax.swing.JFrame {
                 .addGap(2, 2, 2)
                 .addComponent(loadedSchemaLabel)
                 .addGap(1, 1, 1)
-                .addComponent(mainWindowPrimaryWorkspace)
+                .addComponent(mainWindowPrimaryWorkspace, javax.swing.GroupLayout.DEFAULT_SIZE, 578, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(messagesOutputLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1474,11 +1521,14 @@ public class XTCEViewer extends javax.swing.JFrame {
 
         JFileChooser chooser = new JFileChooser( "." ); // NOI18N
         JCheckBox field1 = new JCheckBox( XTCEFunctions.getText( "file_chooser_xinclude_text" ) ); // NOI18N
+        JCheckBox field2 = new JCheckBox( XTCEFunctions.getText( "file_chooser_validate_text" ) ); // NOI18N
         JPanel accessory = new JPanel();
         accessory.setLayout( new BoxLayout( accessory, BoxLayout.PAGE_AXIS ) );
         accessory.add( field1 );
+        accessory.add( field2 );
         chooser.setAccessory( accessory );
         field1.setSelected( prefs.getUseXIncludeOption() );
+        field1.setSelected( prefs.getValidateOnLoadOption() );
 
         FileFilter fileFilter =
             new FileNameExtensionFilter( XTCEFunctions.getText( "file_chooser_xtcexml_text" ), // NOI18N
@@ -1491,7 +1541,7 @@ public class XTCEViewer extends javax.swing.JFrame {
         int status = chooser.showOpenDialog( this );
         if (status == JFileChooser.APPROVE_OPTION) {
            File dbFile = chooser.getSelectedFile();
-           openFile( dbFile, field1.isSelected() );
+           openFile( dbFile, field1.isSelected(), field2.isSelected() );
         }
 
     }//GEN-LAST:event_mainWindowOpenFileMenuItemActionPerformed
@@ -1541,6 +1591,8 @@ public class XTCEViewer extends javax.swing.JFrame {
         mainWindowClearMessagesMenuItemActionPerformed( evt );
         loadedFilenameLabel.setText( XTCEFunctions.getText( "openfile_default_text_label" ) ); // NOI18N
         loadedSchemaLabel.setText( XTCEFunctions.getText( "openfile_default_schema_label" ) ); // NOI18N
+
+        System.gc();
 
     }//GEN-LAST:event_mainWindowCloseFileMenuItemActionPerformed
 
@@ -1898,7 +1950,6 @@ public class XTCEViewer extends javax.swing.JFrame {
                     dialog.setVisible( true );
                 } catch ( XTCEDatabaseException ex ) {
                     logMsg( XTCEFunctions.generalErrorPrefix() + ex.getLocalizedMessage() );
-                    return;
                 }
             }
         } else if ( idx == 2 ) { // telecommand parameters
@@ -1919,7 +1970,6 @@ public class XTCEViewer extends javax.swing.JFrame {
                     dialog.setVisible( true );
                 } catch ( XTCEDatabaseException ex ) {
                     logMsg( XTCEFunctions.generalErrorPrefix() + ex.getLocalizedMessage() );
-                    return;
                 }
             }
         } else if ( idx == 3 ) {
@@ -1947,7 +1997,6 @@ public class XTCEViewer extends javax.swing.JFrame {
                     }
                 } catch ( XTCEDatabaseException ex ) {
                     logMsg( XTCEFunctions.generalErrorPrefix() + ex.getLocalizedMessage() );
-                    return;
                 } catch ( NullPointerException ex ) {
                     JOptionPane.showMessageDialog( this,
                                                    XTCEFunctions.getText( "rightclick_container_table_null_error_message" ), // NOI18N
@@ -1981,7 +2030,6 @@ public class XTCEViewer extends javax.swing.JFrame {
                     dialog.setVisible( true );
                 } catch ( XTCEDatabaseException ex ) {
                     logMsg( XTCEFunctions.generalErrorPrefix() + ex.getLocalizedMessage() );
-                    return;
                 }
             }
         } else if ( idx == 2 ) { // telecommand parameters
@@ -2002,7 +2050,6 @@ public class XTCEViewer extends javax.swing.JFrame {
                     dialog.setVisible( true );
                 } catch ( XTCEDatabaseException ex ) {
                     logMsg( XTCEFunctions.generalErrorPrefix() + ex.getLocalizedMessage() );
-                    return;
                 }
             }
         } else if ( idx == 3 ) {
@@ -2021,7 +2068,6 @@ public class XTCEViewer extends javax.swing.JFrame {
                     dialog.setVisible( true );
                 } catch ( XTCEDatabaseException ex ) {
                     logMsg( XTCEFunctions.generalErrorPrefix() + ex.getLocalizedMessage() );
-                    return;
                 } catch ( NullPointerException ex ) {
                     JOptionPane.showMessageDialog( this,
                                                    XTCEFunctions.getText( "rightclick_container_table_null_error_message" ), // NOI18N
@@ -2371,7 +2417,7 @@ public class XTCEViewer extends javax.swing.JFrame {
         }
 
         for ( int iii = 0; iii < xtceViewerLocales.size(); ++iii ) {
-            if ( xtceViewerLocales.get( iii ).getDisplayName( currentLocale ).equals( (String)selected ) == true ) {
+            if ( xtceViewerLocales.get( iii ).getDisplayName( currentLocale ).equals(selected) == true ) {
                 XTCEFunctions.setLocalePreference( xtceViewerLocales.get( iii ) );
                 prefs.setLanguagePreference( xtceViewerLocales.get( iii ) );
                 JOptionPane.showMessageDialog( this,
@@ -2751,7 +2797,6 @@ public class XTCEViewer extends javax.swing.JFrame {
                         new XTCEViewerEncodeDecodeItemDialog( this, false, parameter, alias );
                 } catch ( XTCEDatabaseException ex ) {
                     logMsg( XTCEFunctions.generalErrorPrefix() + ex.getLocalizedMessage() );
-                    return;
                 }
             }
         } else if ( idx == 2 ) { // telecommand parameters
@@ -2773,7 +2818,6 @@ public class XTCEViewer extends javax.swing.JFrame {
                         new XTCEViewerEncodeDecodeItemDialog( this, false, parameter, alias );
                 } catch ( XTCEDatabaseException ex ) {
                     logMsg( XTCEFunctions.generalErrorPrefix() + ex.getLocalizedMessage() );
-                    return;
                 }
             }
         }
@@ -2860,6 +2904,14 @@ public class XTCEViewer extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_copyParameterCellMenuItemActionPerformed
+
+    private void tmStreamTreeMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tmStreamTreeMousePressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tmStreamTreeMousePressed
+
+    private void tmStreamTreeValueChanged(javax.swing.event.TreeSelectionEvent evt) {//GEN-FIRST:event_tmStreamTreeValueChanged
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tmStreamTreeValueChanged
 
     public void goToParameter( String  parameterName,
                                String  spaceSystemName,
@@ -2978,6 +3030,25 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     }
 
+    private void buildStreamTree() {
+
+        DefaultTreeModel tmodel = (DefaultTreeModel)tmStreamTree.getModel();
+
+        ArrayList<XTCETMStream> streams = xtceDatabaseFile.getStreams();
+
+        DefaultMutableTreeNode rootObj =
+            new DefaultMutableTreeNode( XTCEFunctions.getText( "general_streams" ) ); // NOI18N
+        tmodel.setRoot( rootObj );
+
+        for ( XTCETMStream stream : streams ) {
+            DefaultMutableTreeNode node = new DefaultMutableTreeNode( stream.getName() );
+            rootObj.add( node );
+        }
+
+        tmodel.reload();
+
+    }
+
     private void resetAllDisplays() {
 
         updateParameterTable( tmParametersTable, null, null );
@@ -3013,6 +3084,7 @@ public class XTCEViewer extends javax.swing.JFrame {
         clearTree( tcDefinitionsSpaceSystemTree );
         clearTree( tmContainerTree );
         clearTree( tcTree );
+        clearTree( tmStreamTree );
         
         if ( xtceDatabaseFile == null ) {
             spaceSystems = null;
@@ -3026,6 +3098,7 @@ public class XTCEViewer extends javax.swing.JFrame {
         buildSpaceSystemTree( tcParameterSpaceSystemTree,   spaceSystems );
         buildSpaceSystemTree( tcDefinitionsSpaceSystemTree, spaceSystems );
         buildContainerTree();
+        buildStreamTree();
 
     }
     
@@ -3683,9 +3756,12 @@ public class XTCEViewer extends javax.swing.JFrame {
      * @param applyXInclude Boolean indicating if the file should be opened
      * with XInclude processing enabled.
      *
+     * @param validateOnLoad Boolean indicating if the file should be validated
+     * against schema on load.
+     *
      */
 
-    public void openFile( File dbFile, boolean applyXInclude ) {
+    public void openFile( File dbFile, boolean applyXInclude, boolean validateOnLoad ) {
 
         // in the event that a file is already open, we should attempt to
         // close the file before creating a new database.
@@ -3706,7 +3782,6 @@ public class XTCEViewer extends javax.swing.JFrame {
             logMsg( XTCEFunctions.getMemoryUsageStatistics() );
 
             long    startTime      = System.currentTimeMillis();
-            boolean validateOnLoad = prefs.getValidateOnLoadOption();
 
             //XTCEViewerProgressMonitor progressDialog = new XTCEViewerProgressMonitor( this, true );
             //XTCEViewerProgressListener listener = new XTCEViewerProgressListener( progressDialog );
@@ -3933,10 +4008,12 @@ public class XTCEViewer extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JSplitPane jSplitPane2;
     private javax.swing.JSplitPane jSplitPane3;
     private javax.swing.JSplitPane jSplitPane4;
+    private javax.swing.JSplitPane jSplitPane5;
     private javax.swing.JSplitPane jSplitPane6;
     private javax.swing.JLabel loadedFilenameLabel;
     private javax.swing.JLabel loadedSchemaLabel;
@@ -4042,6 +4119,9 @@ public class XTCEViewer extends javax.swing.JFrame {
     private javax.swing.JTable tmParametersTable;
     private javax.swing.JScrollPane tmParametersTableScrollPane;
     private javax.swing.JTextField tmParametersTotal;
+    private javax.swing.JLabel tmStreamDetailsLabel;
+    private javax.swing.JTree tmStreamTree;
+    private javax.swing.JScrollPane tmStreamTreeScrollPane;
     private javax.swing.JPanel tmStreamsPanel;
     private javax.swing.JPanel tmTypesPanel;
     // End of variables declaration//GEN-END:variables

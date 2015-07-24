@@ -44,7 +44,7 @@ import org.w3c.dom.NodeList;
  *
  */
 
-public class XTCEDatabase {
+public final class XTCEDatabase {
 
     /** Constructor for use with an XTCE database file on the filesystem.
      *
@@ -124,7 +124,7 @@ public class XTCEDatabase {
 
             ObjectFactory factory = new ObjectFactory();
             jaxbContext         = JAXBContext.newInstance( XTCEConstants.XTCE_PACKAGE );
-            topLevelSpaceSystem = (SpaceSystemType)( factory.createSpaceSystemType() );
+            topLevelSpaceSystem = ( factory.createSpaceSystemType() );
             jaxbElementRoot     = factory.createSpaceSystem( topLevelSpaceSystem );
             topLevelSpaceSystem.setName( topLevelSpaceSystemName );
             xtceFilename = new File( "" );
@@ -436,7 +436,7 @@ public class XTCEDatabase {
 
         ArrayList<XTCESpaceSystem> spaceSystems = getSpaceSystemTree();
 
-        int lastSlashIndex = ssPath.lastIndexOf( "/" );
+        int lastSlashIndex = ssPath.lastIndexOf('/');
         String pathOnly = ssPath.substring( 0, lastSlashIndex );
         String nameOnly = ssPath.substring( lastSlashIndex + 1 );
 
@@ -551,13 +551,39 @@ public class XTCEDatabase {
     public ArrayList<XTCETMContainer> getContainers() {
 
        ArrayList<XTCESpaceSystem> spaceSystems = getSpaceSystemTree();
-       ArrayList<XTCETMContainer> containers   = new ArrayList<XTCETMContainer>();
+       ArrayList<XTCETMContainer> containers   = new ArrayList<>();
 
        for ( XTCESpaceSystem spaceSystem : spaceSystems ) {
            containers.addAll( spaceSystem.getContainers() );
        }
        
        return containers;
+
+    }
+
+    /** Function to retrieve all of the Telemetry Streams that are defined
+     * in the XTCEdocument.
+     *
+     * Similar functions exist on the XTCESpaceSystem objects.  This one is
+     * intended to return the entire contents of the XTCE database file.
+     *
+     * @return ArrayList of XTCETMStream objects that exist in the entirety
+     * of the file.  The list can possibly be empty if there are no
+     * containers, which is likely only to happen on a newly created database
+     * file.
+     *
+     */
+
+    public ArrayList<XTCETMStream> getStreams() {
+
+       ArrayList<XTCESpaceSystem> spaceSystems = getSpaceSystemTree();
+       ArrayList<XTCETMStream>    streams      = new ArrayList<>();
+
+       for ( XTCESpaceSystem spaceSystem : spaceSystems ) {
+           streams.addAll( spaceSystem.getStreams() );
+       }
+       
+       return streams;
 
     }
 

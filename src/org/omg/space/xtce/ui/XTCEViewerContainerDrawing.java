@@ -208,7 +208,7 @@ public class XTCEViewerContainerDrawing extends JPanel {
             // cheesy - but make sure we have a file extension so that we can
             // pass the correct type to the write method.
 
-            int lastPeriodIndex = fileName.getName().lastIndexOf( "." );
+            int lastPeriodIndex = fileName.getName().lastIndexOf('.');
             if ( lastPeriodIndex == -1 ) {
                 throw new XTCEDatabaseException( "Missing File Extension" );
             }
@@ -468,7 +468,7 @@ public class XTCEViewerContainerDrawing extends JPanel {
 
             String bits = itemSize + " bit";
             if ( itemSizeInt > 1 ) {
-                bits = bits + "s";
+                bits += "s";
             }
             int posX = leftTopX - scale( 5 );
             int posY = leftTopY + ( height / 2 );

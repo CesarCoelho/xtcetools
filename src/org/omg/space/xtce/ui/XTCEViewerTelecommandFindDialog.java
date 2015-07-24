@@ -13,7 +13,6 @@ import org.omg.space.xtce.toolkit.XTCEAlias;
 import org.omg.space.xtce.toolkit.XTCEDatabase;
 import org.omg.space.xtce.toolkit.XTCEFunctions;
 import org.omg.space.xtce.toolkit.XTCESpaceSystem;
-import org.omg.space.xtce.toolkit.XTCETMContainer;
 import org.omg.space.xtce.toolkit.XTCETelecommand;
 
 /**

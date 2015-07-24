@@ -16,6 +16,7 @@ import org.omg.space.xtce.database.CommandMetaDataType.MetaCommandSet.BlockMetaC
 import org.omg.space.xtce.database.HeaderType;
 import org.omg.space.xtce.database.MetaCommandType;
 import org.omg.space.xtce.database.NameDescriptionType;
+import org.omg.space.xtce.database.PCMStreamType;
 import org.omg.space.xtce.database.ParameterSetType.Parameter;
 import org.omg.space.xtce.database.SequenceContainerType;
 import org.omg.space.xtce.database.SpaceSystemType;
@@ -49,11 +50,14 @@ public class XTCESpaceSystem extends XTCENamedObject {
      */
 
     XTCESpaceSystem( String path, SpaceSystemType ssRef, XTCEDatabase dbRef ) {
+
         super( ssRef.getName(),
                XTCEFunctions.getPathNameFromReferenceString( path ),
                ssRef.getAliasSet() );
+
         reference_         = ssRef;
         databaseReference_ = dbRef;
+
     }
 
     /** Retrieve a reference to the JAXB object that represents this
@@ -99,7 +103,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
     /** Retrieve the long description element content of this Space System.
      *
      * @return String containing the long description or an empty string.
-     * This accessor, unlike the underlying JAXB reference, can never be null.
+     * This value, unlike the underlying JAXB reference, can never be null.
      *
      */
 
@@ -577,7 +581,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
     public ArrayList<XTCETMContainer> getContainers() {
 
-        ArrayList<XTCETMContainer> list = new ArrayList<XTCETMContainer>();
+        ArrayList<XTCETMContainer> list = new ArrayList<>();
 
         try {
 
@@ -587,6 +591,49 @@ public class XTCESpaceSystem extends XTCENamedObject {
                     list.add(new XTCETMContainer( getFullPath(),
                                                   makeContainerInheritanceString( container ),
                                                   container ) );
+                } catch ( XTCEDatabaseException ex ) {
+                    System.out.println( ex.getLocalizedMessage() );
+                    // need to make an error message
+                }
+            }
+
+        } catch ( NullPointerException ex ) {
+            // this is okay, the SpaceSystem may not have any TM parameters
+        }
+
+        return list;
+
+    }
+
+    /** Retrieve an ArrayList of Streams that are locally defined in this
+     * Space System, modeled as XTCETMStream objects.
+     *
+     * Note that Custom Stream elements are not yet supported and will not be
+     * included in the final list.
+     *
+     * @return ArrayList of XTCETMStream objects representing the streams
+     * that are modeled by this Space System or an empty list if the Space
+     * System does not locally define any elements in a StreamSet.
+     *
+     */
+
+    public ArrayList<XTCETMStream> getStreams() {
+
+        ArrayList<XTCETMStream> list = new ArrayList<>();
+
+        try {
+
+            List<PCMStreamType> streams =
+                getReference().
+                getTelemetryMetaData().
+                getStreamSet().
+                getFixedFrameStreamOrVariableFrameStreamOrCustomStream();
+
+            for ( PCMStreamType stream : streams ) {
+                try {
+                    list.add( new XTCETMStream( stream,
+                                                this,
+                                                stream.getAliasSet() ) );
                 } catch ( XTCEDatabaseException ex ) {
                     System.out.println( ex.getLocalizedMessage() );
                     // need to make an error message
@@ -630,17 +677,27 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
         String name = XTCEFunctions.getNameFromPathReferenceString( nameOrPath );
 
-        List<Object> metacommands = getReference().getCommandMetaData().getMetaCommandSet().getMetaCommandOrMetaCommandRefOrBlockMetaCommand();
+        List<Object> metacommands =
+            getReference().
+            getCommandMetaData().
+            getMetaCommandSet().
+            getMetaCommandOrMetaCommandRefOrBlockMetaCommand();
+
         for ( Object metacommand : metacommands ) {
             String foundName = null;
             if ( metacommand.getClass() == MetaCommandType.class ) {
-                foundName = ((MetaCommandType)metacommand).getName();
+                foundName = ((NameDescriptionType)metacommand).getName();
             } else if ( metacommand.getClass() == BlockMetaCommand.class ) {
-                foundName = ((BlockMetaCommand)metacommand).getName();
+                foundName = ((NameDescriptionType)metacommand).getName();
             } else {
                 continue;
             }
-            System.out.println( "Search Space System " + getFullPath() + " for " + nameOrPath + " with " + name );
+            //System.out.println( "Search Space System " +
+            //                    getFullPath() +
+            //                    " for " +
+            //                    nameOrPath +
+            //                    " with " +
+            //                    name );
             if ( foundName.equals( name ) == true ) {
                 return new XTCETelecommand( getFullPath(),
                                             makeTelecommandInheritanceString( metacommand ),
@@ -649,7 +706,8 @@ public class XTCESpaceSystem extends XTCENamedObject {
             }
         }
 
-        throw new XTCEDatabaseException( "Telecommand " + nameOrPath + " does not exist in Space System " + getFullPath() );
+        throw new XTCEDatabaseException( "Telecommand " +
+            nameOrPath + " does not exist in Space System " + getFullPath() );
 
     }
 
@@ -672,12 +730,17 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
         try {
 
-            List<Object> metacommands = getReference().getCommandMetaData().getMetaCommandSet().getMetaCommandOrMetaCommandRefOrBlockMetaCommand();
+            List<Object> metacommands =
+                getReference().
+                getCommandMetaData().
+                getMetaCommandSet().
+                getMetaCommandOrMetaCommandRefOrBlockMetaCommand();
+
             for ( Object metacommand : metacommands ) {
                 try {
                     if ( ( metacommand.getClass() == MetaCommandType.class  ) ||
                          ( metacommand.getClass() == BlockMetaCommand.class ) ) {
-                        System.out.println( "Loading " + ((MetaCommandType)metacommand).getName() );
+                        System.out.println( "Loading " + ((NameDescriptionType)metacommand).getName() );
                         list.add( new XTCETelecommand( getFullPath(),
                                                        makeTelecommandInheritanceString( metacommand ),
                                                        metacommand,
@@ -708,8 +771,8 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
     private HashMap<String, XTCEParameter> ensureHashTable( ArrayList<XTCEParameter> list ) {
 
-        System.out.println( "Creating Hash Table in " + getFullPath() );
-        HashMap<String, XTCEParameter> table = new HashMap<String, XTCEParameter>( list.size() );
+        //System.out.println( "Creating Hash Table in " + getFullPath() );
+        HashMap<String, XTCEParameter> table = new HashMap<>( list.size() );
         for ( XTCEParameter parameter : list ) {
             table.put( parameter.getName(), parameter );
         }
@@ -719,7 +782,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
     private String makeContainerInheritanceString( SequenceContainerType container ) throws XTCEDatabaseException {
 
-        LinkedList<String> cpathList = new LinkedList<String>();
+        LinkedList<String> cpathList = new LinkedList<>();
         SequenceContainerType currentContainer = container;
         cpathList.addFirst( container.getName() );
         String currentSpaceSystemPath = getFullPath();
@@ -749,7 +812,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
             return "";
         }
 
-        LinkedList<String> cpathList = new LinkedList<String>();
+        LinkedList<String> cpathList = new LinkedList<>();
         MetaCommandType currentMetaCommand = (MetaCommandType)metacommand;
         cpathList.addFirst( currentMetaCommand.getName() );
         String currentSpaceSystemPath = getFullPath();
@@ -780,7 +843,11 @@ public class XTCESpaceSystem extends XTCENamedObject {
         ArrayList<XTCESpaceSystem> spaceSystems = databaseReference_.getSpaceSystemTree();
         for ( XTCESpaceSystem spaceSystem : spaceSystems ) {
             if ( spaceSystem.getFullPath().equals( path ) == true ) {
-                List<SequenceContainerType> containers = spaceSystem.getReference().getTelemetryMetaData().getContainerSet().getSequenceContainer();
+                List<SequenceContainerType> containers =
+                    spaceSystem.getReference()
+                               .getTelemetryMetaData()
+                               .getContainerSet()
+                               .getSequenceContainer();
                 for ( SequenceContainerType container : containers ) {
                     if ( container.getName().equals( name ) == true ) {
                         return container;
@@ -802,7 +869,11 @@ public class XTCESpaceSystem extends XTCENamedObject {
         for ( XTCESpaceSystem spaceSystem : spaceSystems ) {
             System.out.println( "Checking in Space System " + spaceSystem.getFullPath() );
             if ( spaceSystem.getFullPath().equals( path ) == true ) {
-                List<Object> metacommands = spaceSystem.getReference().getCommandMetaData().getMetaCommandSet().getMetaCommandOrMetaCommandRefOrBlockMetaCommand();
+                List<Object> metacommands =
+                    spaceSystem.getReference()
+                               .getCommandMetaData()
+                               .getMetaCommandSet()
+                               .getMetaCommandOrMetaCommandRefOrBlockMetaCommand();
                 System.out.println( "Found " + Integer.toString( metacommands.size() ) + " MetaCommands" );
                 for ( Object metacommand : metacommands ) {
                     if ( metacommand.getClass() == MetaCommandType.class ) {
@@ -851,7 +922,9 @@ public class XTCESpaceSystem extends XTCENamedObject {
                                              type ) );
 
                 if ( ( type != null ) && ( type.getClass() == AggregateDataType.class ) ) {
-                    addMembers( parameter.getName(), (AggregateDataType)type, list );
+                    addMembers( parameter.getName(),
+                                (AggregateDataType)type,
+                                list );
                 }
 
             }
@@ -893,6 +966,8 @@ public class XTCESpaceSystem extends XTCENamedObject {
         }
 
     }
+
+    // Private Data Members
 
     private SpaceSystemType                reference_            = null;
     private XTCEDatabase                   databaseReference_    = null;

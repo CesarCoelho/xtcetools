@@ -62,7 +62,7 @@ public class XTCEViewerParameterTableCellRenderer extends DefaultTableCellRender
 
     private ArrayList<XTCEParameter> parameters_ = null;
 
-    private DefaultTableCellRenderer defaultRenderer =
+    private final DefaultTableCellRenderer defaultRenderer =
         new DefaultTableCellRenderer();
 
 }

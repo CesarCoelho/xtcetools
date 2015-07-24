@@ -348,9 +348,9 @@ public class XTCETelecommand extends XTCENamedObject {
 
     private static String getNameFromProperElement( Object element ) throws XTCEDatabaseException {
         if ( element.getClass() == MetaCommandType.class ) {
-            return ((MetaCommandType)element).getName();
+            return ((NameDescriptionType)element).getName();
         } else if ( element.getClass() == BlockMetaCommand.class ) {
-            return ((BlockMetaCommand)element).getName();
+            return ((NameDescriptionType)element).getName();
         } else {
             throw new XTCEDatabaseException( "Unknown telecommand object type" );
         }
@@ -578,7 +578,7 @@ public class XTCETelecommand extends XTCENamedObject {
                     for ( Object metacommand : metacommands ) {
                         if ( metacommand.getClass() == MetaCommandType.class ) {
                             if ( ((MetaCommandType)metacommand).getCommandContainer().getName().equals( name ) == true ) {
-                                return (CommandContainerType)(((MetaCommandType)metacommand).getCommandContainer());
+                                return (((MetaCommandType)metacommand).getCommandContainer());
                             }
                         }
                     }

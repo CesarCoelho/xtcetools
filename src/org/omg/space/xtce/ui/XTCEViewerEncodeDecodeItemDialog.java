@@ -242,7 +242,7 @@ public class XTCEViewerEncodeDecodeItemDialog extends javax.swing.JDialog {
     private void makeRawButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_makeRawButtonActionPerformed
 
         itemValueObj_.clearWarnings();
-        String calValue = (String)calibratedValueField.getText();
+        String calValue = calibratedValueField.getText();
         BitSet bits     = itemValueObj_.encode( calValue );
         String rawValue = itemValueObj_.bitSetToHex( bits );
         String binValue = itemValueObj_.bitSetToBinary( bits );
@@ -260,7 +260,7 @@ public class XTCEViewerEncodeDecodeItemDialog extends javax.swing.JDialog {
 
         itemValueObj_.clearWarnings();
         BigInteger uncalValue = BigInteger.ZERO;
-        String     rawValue   = (String)rawValueField.getText();
+        String     rawValue   = rawValueField.getText();
         rawValue = rawValue.toLowerCase();
         if ( rawValue.startsWith( "0x" ) == true ) {
             uncalValue = new BigInteger( rawValue.replaceFirst( "0x", "" ), 16 );

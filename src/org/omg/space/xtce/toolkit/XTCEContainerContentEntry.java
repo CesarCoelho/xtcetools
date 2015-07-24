@@ -447,7 +447,7 @@ public class XTCEContainerContentEntry implements Comparable {
 
     public String getConditions() {
 
-        if ( ( conditions == null ) || ( conditions.size() == 0 ) ) {
+        if ( ( conditions == null ) || ( conditions.isEmpty() ) ) {
             return "";
         }
 

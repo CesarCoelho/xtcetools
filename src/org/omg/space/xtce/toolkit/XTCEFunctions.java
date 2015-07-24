@@ -23,7 +23,6 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /** This class is a container to capture some common static functions that are
@@ -466,11 +465,11 @@ public class XTCEFunctions {
 
         if ( quantity > 1024 ) {
             unit = "M";
-            quantity = quantity / 1024.0;
+            quantity /= 1024.0;
         }
         if ( quantity > 1024 ) {
             unit = "G";
-            quantity = quantity / 1024.0;
+            quantity /= 1024.0;
         }
 
         NumberFormat format = NumberFormat.getInstance();

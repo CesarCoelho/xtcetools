@@ -9,7 +9,6 @@ package org.omg.space.xtce.ui;
 import javax.swing.tree.DefaultMutableTreeNode;
 import org.omg.space.xtce.toolkit.XTCETMContainer;
 import org.omg.space.xtce.toolkit.XTCEContainerContentModel;
-import org.omg.space.xtce.toolkit.XTCESpaceSystem;
 
 /** This class assists the graphical interface application by providing a
  * path and reference to the JTree objects that keep a list of the XTCE

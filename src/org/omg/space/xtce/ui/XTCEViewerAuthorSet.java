@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import org.omg.space.xtce.database.HeaderType;
 import org.omg.space.xtce.toolkit.XTCESpaceSystem;
 

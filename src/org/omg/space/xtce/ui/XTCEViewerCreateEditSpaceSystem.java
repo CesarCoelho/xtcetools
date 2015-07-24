@@ -9,9 +9,7 @@ import org.omg.space.xtce.toolkit.XTCESpaceSystem;
 import java.awt.event.WindowEvent;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import org.omg.space.xtce.database.HeaderType;
 

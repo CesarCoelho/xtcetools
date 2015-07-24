@@ -7,18 +7,7 @@
 package org.omg.space.xtce.ui;
 
 import java.awt.event.WindowEvent;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Result;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
 import org.omg.space.xtce.toolkit.XTCEDatabase;
 import org.omg.space.xtce.toolkit.XTCEDatabaseException;
 import org.omg.space.xtce.toolkit.XTCEFunctions;
@@ -48,8 +37,8 @@ public class XTCEViewerXpathQueryDialog extends javax.swing.JFrame {
      *
      */
 
-    public XTCEViewerXpathQueryDialog( XTCEViewerPreferences prefs,
-                                       XTCEDatabase          dbFile ) {
+    XTCEViewerXpathQueryDialog( XTCEViewerPreferences prefs,
+                                XTCEDatabase          dbFile ) {
 
         prefs_  = prefs;
         xtcedb_ = dbFile;
@@ -336,6 +325,8 @@ public class XTCEViewerXpathQueryDialog extends javax.swing.JFrame {
         queriesListBox.setSelectedIndex( 0 );
 
     }
+
+    // Private Data Members
 
     private XTCEViewerPreferences prefs_           = null;
     private XTCEDatabase          xtcedb_          = null;

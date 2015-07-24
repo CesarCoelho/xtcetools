@@ -6,12 +6,10 @@
 
 package org.omg.space.xtce.toolkit;
 
-import org.omg.space.xtce.database.ArgumentTypeSetType;
 import org.omg.space.xtce.database.BooleanDataType;
 import org.omg.space.xtce.database.FloatDataType;
 import org.omg.space.xtce.database.IntegerDataType;
 import org.omg.space.xtce.database.NameDescriptionType;
-import org.omg.space.xtce.database.ParameterTypeSetType;
 
 /** This class provides a simple accessor to the ValidRange element on an
  * XTCEParameter or XTCEArgument while abstracting the user away from the
@@ -173,12 +171,8 @@ public class XTCEValidRange {
 
     private void setValidRangeAttributes( NameDescriptionType typeObj ) {
 
-        if ( typeObj.getClass() == ParameterTypeSetType.BooleanParameterType.class ) {
-            setValidRange( "0", "1", true, true, false, false );
-        } else if ( typeObj.getClass() == BooleanDataType.class ) {
-            setValidRange( "0", "1", true, true, false, false );
-        } else if ( typeObj.getClass() == ParameterTypeSetType.IntegerParameterType.class ) {
-            IntegerDataType.ValidRange rangeElement = ((ParameterTypeSetType.IntegerParameterType)typeObj).getValidRange();
+        if ( typeObj instanceof IntegerDataType ) {
+            IntegerDataType.ValidRange rangeElement = ((IntegerDataType)typeObj).getValidRange();
             if ( rangeElement != null ) {
                 setValidRange( rangeElement.getMinInclusive(),
                                rangeElement.getMaxInclusive(),
@@ -187,26 +181,13 @@ public class XTCEValidRange {
                                rangeElement.isValidRangeAppliesToCalibrated(),
                                rangeElement.isValidRangeAppliesToCalibrated() );
             }
-        } else if ( typeObj.getClass() == ArgumentTypeSetType.IntegerArgumentType.class ) {
-            IntegerDataType.ValidRange rangeElement = ((ArgumentTypeSetType.IntegerArgumentType)typeObj).getValidRange();
-            if ( rangeElement != null ) {
-                setValidRange( rangeElement.getMinInclusive(),
-                               rangeElement.getMaxInclusive(),
-                               true,
-                               true,
-                               rangeElement.isValidRangeAppliesToCalibrated(),
-                               rangeElement.isValidRangeAppliesToCalibrated() );
-            }
-        } else if ( typeObj.getClass() == ParameterTypeSetType.FloatParameterType.class ) {
-            FloatDataType.ValidRange rangeElement = ((ParameterTypeSetType.FloatParameterType)typeObj).getValidRange();
+        } else if ( typeObj instanceof FloatDataType ) {
+            FloatDataType.ValidRange rangeElement = ((FloatDataType)typeObj).getValidRange();
             if ( rangeElement != null ) {
                 setFloatValidRange( rangeElement );
             }
-        } else if ( typeObj.getClass() == ArgumentTypeSetType.FloatArgumentType.class ) {
-            FloatDataType.ValidRange rangeElement = ((ArgumentTypeSetType.FloatArgumentType)typeObj).getValidRange();
-            if ( rangeElement != null ) {
-                setFloatValidRange( rangeElement );
-            }
+        } else if ( typeObj instanceof BooleanDataType ) {
+            setValidRange( "0", "1", true, true, false, false );
         }
 
     }

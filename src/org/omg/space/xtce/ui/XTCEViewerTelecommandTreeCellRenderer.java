@@ -60,7 +60,7 @@ public class XTCEViewerTelecommandTreeCellRenderer extends DefaultTreeCellRender
 
     }
 
-    private DefaultTreeCellRenderer defaultRenderer =
+    private final DefaultTreeCellRenderer defaultRenderer =
         new DefaultTreeCellRenderer();
 
 }
