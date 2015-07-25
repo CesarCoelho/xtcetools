@@ -11,8 +11,8 @@ import org.omg.space.xtce.toolkit.XTCETMContainer;
 import org.omg.space.xtce.toolkit.XTCEContainerContentModel;
 
 /** This class assists the graphical interface application by providing a
- * path and reference to the JTree objects that keep a list of the XTCE
- * SequenceContainer element that represents this node on the tree.
+ * path and reference to JTree objects so that the tree node can easily
+ * reference a container.
  *
  * @author David Overeem
  *
@@ -26,7 +26,7 @@ public class XTCEViewerContainerTreeNode extends DefaultMutableTreeNode {
      * object gets attached to.
      *
      * @param containerObject A reference to the XTCETMContainer object that
- this tree node is linked to in the internal data model.
+     * this tree node is linked to in the internal data model.
      *
      */
 
@@ -71,7 +71,7 @@ public class XTCEViewerContainerTreeNode extends DefaultMutableTreeNode {
     }
 
     /** Accessor to retrieve a reference to the XTCETMContainer object that is
- represented by this node in the tree of containers.
+     * represented by this node in the tree of containers.
      *
      * @return XTCETMContainer pointed to by this tree node.
      *

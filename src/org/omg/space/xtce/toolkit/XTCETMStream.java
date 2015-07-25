@@ -60,7 +60,7 @@ public class XTCETMStream extends XTCENamedObject {
         }
 
         sPath_ = XTCEFunctions.resolvePathReference( spaceSystem.getFullPath(),
-                                                    ref );
+                                                     ref );
 
     }
 
@@ -72,7 +72,7 @@ public class XTCETMStream extends XTCENamedObject {
      *
      */
 
-    public String getStreamContainer() {
+    public String getStreamContainerPath() {
         return sPath_;
     }
 
@@ -89,7 +89,7 @@ public class XTCETMStream extends XTCENamedObject {
 
     // Private Data Members
 
-    private PCMStreamType stream_ = null;
-    private String        sPath_  = null;
+    private PCMStreamType   stream_    = null;
+    private String          sPath_     = null;
 
 }

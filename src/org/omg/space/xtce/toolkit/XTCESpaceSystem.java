@@ -479,7 +479,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
         } catch ( NullPointerException ex ) {
             // this is okay, the SpaceSystem may not have any TM parameters
         }
-        return new ArrayList<XTCEParameter>();
+        return new ArrayList<>();
 
     }
 
@@ -508,7 +508,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
         } catch ( NullPointerException ex ) {
             // this is okay, the SpaceSystem may not have any TM parameters
         }
-        return new ArrayList<XTCEParameter>();
+        return new ArrayList<>();
 
     }
 
@@ -531,7 +531,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
     public ArrayList<XTCEParameter> getParameters() {
 
-        ArrayList<XTCEParameter> list = new ArrayList<XTCEParameter>();
+        ArrayList<XTCEParameter> list = new ArrayList<>();
         list.addAll( getTelemetryParameters() );
         list.addAll( getTelecommandParameters() );
         return list;

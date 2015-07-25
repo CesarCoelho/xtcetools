@@ -61,10 +61,12 @@ public class XTCEViewerPreferences {
         /// Static data member to contain the reference to the instance of
         /// XTCEViewerPreferences.
 
-        private static final XTCEViewerPreferences instance = new XTCEViewerPreferences();
+        private static final XTCEViewerPreferences instance =
+            new XTCEViewerPreferences();
 
         private LazyHolder() {
         }
+
     }
 
     /** The instance accessor to retrieve the singleton reference to the

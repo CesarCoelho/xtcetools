@@ -47,7 +47,6 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
-import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
@@ -207,6 +206,8 @@ public class XTCEViewer extends javax.swing.JFrame {
         tmStreamTreeScrollPane = new javax.swing.JScrollPane();
         tmStreamTree = new javax.swing.JTree();
         jScrollPane1 = new javax.swing.JScrollPane();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tmStreamContentTree = new javax.swing.JTree();
         tmTypesPanel = new javax.swing.JPanel();
         tcTypesPanel = new javax.swing.JPanel();
         mainWindowMessageScrollingPane = new javax.swing.JScrollPane();
@@ -597,7 +598,6 @@ public class XTCEViewer extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("xtceview");
         setMinimumSize(new java.awt.Dimension(800, 600));
-        setPreferredSize(new java.awt.Dimension(1024, 768));
 
         loadedFilenameLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         loadedFilenameLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -1117,6 +1117,15 @@ public class XTCEViewer extends javax.swing.JFrame {
         jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         jSplitPane5.setRightComponent(jScrollPane1);
 
+        tmStreamContentTree.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tmStreamContentTreeMouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(tmStreamContentTree);
+
+        jSplitPane5.setRightComponent(jScrollPane2);
+
         javax.swing.GroupLayout tmStreamsPanelLayout = new javax.swing.GroupLayout(tmStreamsPanel);
         tmStreamsPanel.setLayout(tmStreamsPanelLayout);
         tmStreamsPanelLayout.setHorizontalGroup(
@@ -1505,7 +1514,7 @@ public class XTCEViewer extends javax.swing.JFrame {
                 .addGap(2, 2, 2)
                 .addComponent(loadedSchemaLabel)
                 .addGap(1, 1, 1)
-                .addComponent(mainWindowPrimaryWorkspace, javax.swing.GroupLayout.DEFAULT_SIZE, 578, Short.MAX_VALUE)
+                .addComponent(mainWindowPrimaryWorkspace)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(messagesOutputLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -2395,7 +2404,7 @@ public class XTCEViewer extends javax.swing.JFrame {
         Locale currentLocale = prefs.getLanguagePreference();
         //Locale[] locales = Locale.getAvailableLocales();
         Locale[] locales = { new Locale( "en", "US"), new Locale( "fr", "FR" ) }; // NOI18N
-        ArrayList<Locale> xtceViewerLocales = new ArrayList<Locale>();
+        ArrayList<Locale> xtceViewerLocales = new ArrayList<>();
         for ( int iii = 0; iii < locales.length; ++iii ) {
             if ( XTCEFunctions.checkLocaleAvailable( locales[iii] ) == true ) {
                 xtceViewerLocales.add( locales[iii] );
@@ -2836,7 +2845,7 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     private void mainWindowHelpSchemaMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mainWindowHelpSchemaMenuItemActionPerformed
 
-        openHelp( "org/omg/space/xtce/schema/doc/SpaceSystemV1.2-27Feb2014-mods.html" ); // NOI18N)
+        openHelp( "org/omg/space/xtce/schema/doc/SpaceSystemV1.2-27Feb2014-mods.html" ); // NOI18N
 
     }//GEN-LAST:event_mainWindowHelpSchemaMenuItemActionPerformed
 
@@ -2910,8 +2919,39 @@ public class XTCEViewer extends javax.swing.JFrame {
     }//GEN-LAST:event_tmStreamTreeMousePressed
 
     private void tmStreamTreeValueChanged(javax.swing.event.TreeSelectionEvent evt) {//GEN-FIRST:event_tmStreamTreeValueChanged
-        // TODO add your handling code here:
+
+        drawStreamContentTree();
+
     }//GEN-LAST:event_tmStreamTreeValueChanged
+
+    private void tmStreamContentTreeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tmStreamContentTreeMouseClicked
+
+        if ( ( evt.getClickCount() == 2 ) && ( xtceDatabaseFile != null ) ) {
+
+            XTCEViewerContainerTreeNode selectedNode =
+                (XTCEViewerContainerTreeNode)tmStreamContentTree.getLastSelectedPathComponent();
+
+            if ( selectedNode == null ) {
+                return;
+            }
+
+            XTCETMContainer container = selectedNode.getContainerReference();
+
+            if ( container == null ) {
+                return;
+            }
+
+            String completePath  = container.getFullPath();
+            String containerName =
+                XTCEFunctions.getNameFromPathReferenceString( completePath );
+            String containerPath =
+                XTCEFunctions.getPathNameFromReferenceString( completePath );
+
+            goToContainer( containerName, containerPath );
+
+        }
+
+    }//GEN-LAST:event_tmStreamContentTreeMouseClicked
 
     public void goToParameter( String  parameterName,
                                String  spaceSystemName,
@@ -2925,7 +2965,7 @@ public class XTCEViewer extends javax.swing.JFrame {
             }
             XTCEViewerSpaceSystemTreeNode selectedNode =
                 (XTCEViewerSpaceSystemTreeNode)tmParameterSpaceSystemTree.getLastSelectedPathComponent();
-            if ( ( selectedNode == null ) || ( selectedNode.getSpaceSystemReference().getFullPath().equals( spaceSystemName ) == false ) ) {
+            if ( ( selectedNode == null ) || ( selectedNode.getFullPath().equals( spaceSystemName ) == false ) ) {
                 selectSpaceSystemFromTree( tmParameterSpaceSystemTree, spaceSystemName, false );
             }
             selectParameterFromTable( tmParametersTable,
@@ -2937,7 +2977,7 @@ public class XTCEViewer extends javax.swing.JFrame {
             }
             XTCEViewerSpaceSystemTreeNode selectedNode =
                 (XTCEViewerSpaceSystemTreeNode)tcParameterSpaceSystemTree.getLastSelectedPathComponent();
-            if ( ( selectedNode == null ) || ( selectedNode.getSpaceSystemReference().getFullPath().equals( spaceSystemName ) == false ) ) {
+            if ( ( selectedNode == null ) || ( selectedNode.getFullPath().equals( spaceSystemName ) == false ) ) {
                 selectSpaceSystemFromTree( tcParameterSpaceSystemTree, spaceSystemName, false );
             }
             selectParameterFromTable( tcParametersTable,
@@ -2976,7 +3016,7 @@ public class XTCEViewer extends javax.swing.JFrame {
         }
         XTCEViewerSpaceSystemTreeNode selectedNode =
             (XTCEViewerSpaceSystemTreeNode)tcDefinitionsSpaceSystemTree.getLastSelectedPathComponent();
-        if ( ( selectedNode == null ) || ( selectedNode.getSpaceSystemReference().getFullPath().equals( spaceSystemName ) == false ) ) {
+        if ( ( selectedNode == null ) || ( selectedNode.getFullPath().equals( spaceSystemName ) == false ) ) {
             selectSpaceSystemFromTree( tcDefinitionsSpaceSystemTree, spaceSystemName, false );
         }
         selectTelecommandFromTree( telecommandName );
@@ -3022,9 +3062,11 @@ public class XTCEViewer extends javax.swing.JFrame {
             String[] fields = container.getInheritancePath().split( "/" ); // NOI18N
             XTCEViewerContainerTreeNode obj = rootObj;
             for ( int jjj = 1; jjj < fields.length; ++jjj ) {
-                obj = setContainerTreeNode( obj, container );
+                obj = setContainerTreeNode( obj, container, false );
             }
         }
+
+        tmContainerTree.setRootVisible( false );
 
         tmodel.reload();
 
@@ -3036,14 +3078,17 @@ public class XTCEViewer extends javax.swing.JFrame {
 
         ArrayList<XTCETMStream> streams = xtceDatabaseFile.getStreams();
 
-        DefaultMutableTreeNode rootObj =
-            new DefaultMutableTreeNode( XTCEFunctions.getText( "general_streams" ) ); // NOI18N
+        XTCEViewerStreamTreeNode rootObj =
+            new XTCEViewerStreamTreeNode( XTCEFunctions.getText( "general_streams" ), null ); // NOI18N
         tmodel.setRoot( rootObj );
 
         for ( XTCETMStream stream : streams ) {
-            DefaultMutableTreeNode node = new DefaultMutableTreeNode( stream.getName() );
+            XTCEViewerStreamTreeNode node =
+                new XTCEViewerStreamTreeNode( stream.getName(), stream );
             rootObj.add( node );
         }
+
+        tmStreamTree.setRootVisible( false );
 
         tmodel.reload();
 
@@ -3085,6 +3130,7 @@ public class XTCEViewer extends javax.swing.JFrame {
         clearTree( tmContainerTree );
         clearTree( tcTree );
         clearTree( tmStreamTree );
+        clearTree( tmStreamContentTree );
         
         if ( xtceDatabaseFile == null ) {
             spaceSystems = null;
@@ -3105,8 +3151,9 @@ public class XTCEViewer extends javax.swing.JFrame {
     private XTCEViewerSpaceSystemTreeNode setSpaceSystemTreeNode( XTCEViewerSpaceSystemTreeNode obj, XTCESpaceSystem spaceSystem ) {
 
         for ( int iii = 0; iii < obj.getChildCount(); ++iii ) {
-            XTCEViewerSpaceSystemTreeNode child = (XTCEViewerSpaceSystemTreeNode)(obj.getChildAt( iii ));
-            String existingPath = child.getSpaceSystemReference().getFullPath();
+            XTCEViewerSpaceSystemTreeNode child =
+                (XTCEViewerSpaceSystemTreeNode)(obj.getChildAt( iii ));
+            String existingPath = child.getFullPath();
             if ( existingPath.equals( spaceSystem.getFullPath() ) == true ) {
                 //System.out.println( "matched " + spaceSystem.getFullPath() );
                 return child;
@@ -3119,14 +3166,16 @@ public class XTCEViewer extends javax.swing.JFrame {
             }
         }
 
-        XTCEViewerSpaceSystemTreeNode newchild = new XTCEViewerSpaceSystemTreeNode( spaceSystem.getName(), spaceSystem );
+        XTCEViewerSpaceSystemTreeNode newchild =
+            new XTCEViewerSpaceSystemTreeNode( spaceSystem.getName(),
+                                               spaceSystem );
         obj.add( newchild );
 
         return newchild;
 
     }
 
-    private XTCEViewerContainerTreeNode setContainerTreeNode( XTCEViewerContainerTreeNode obj, XTCETMContainer container ) {
+    private XTCEViewerContainerTreeNode setContainerTreeNode( XTCEViewerContainerTreeNode obj, XTCETMContainer container, boolean appendDescription ) {
 
         for ( int iii = 0; iii < obj.getChildCount(); ++iii ) {
             XTCEViewerContainerTreeNode child =
@@ -3144,8 +3193,21 @@ public class XTCEViewer extends javax.swing.JFrame {
             }
         }
 
+        String label = container.getName();
+
+        if ( appendDescription == true ) {
+            if ( container.getDescription().isEmpty() == false ) {
+                StringBuilder extendedText = new StringBuilder();
+                extendedText.append( label );
+                extendedText.append( " ( " );
+                extendedText.append( container.getDescription() );
+                extendedText.append( " )" );
+                label = extendedText.toString();
+            }
+        }
+
         XTCEViewerContainerTreeNode newchild =
-            new XTCEViewerContainerTreeNode( container.getName(), container );
+            new XTCEViewerContainerTreeNode( label, container );
         obj.add( newchild );
 
         return newchild;
@@ -3279,6 +3341,72 @@ public class XTCEViewer extends javax.swing.JFrame {
             }
 
         }
+
+    }
+
+    private void drawStreamContentTree() {
+
+        XTCEViewerStreamTreeNode node =
+           (XTCEViewerStreamTreeNode)tmStreamTree.getLastSelectedPathComponent();
+
+        clearTree( tmStreamContentTree );
+
+        if ( node == null || node.getStreamReference() == null ) {
+            return;
+        }
+
+        tmStreamContentTree.putClientProperty( "JTree.lineStyle",
+                                               "Horizontal" );
+
+        DefaultTreeModel tmodel =
+            (DefaultTreeModel)tmStreamContentTree.getModel();
+
+        //System.out.println( "Stream selected " +
+        //    node.getName() +
+        //    " root path " +
+        //    node.getStreamReference().getStreamContainerPath() );
+
+        try {
+
+            ArrayList<XTCETMContainer> containers =
+                xtceDatabaseFile.getContainers( node.getStreamReference() );
+
+            Collections.sort( containers );
+
+            XTCEViewerContainerTreeNode rootObj =
+                new XTCEViewerContainerTreeNode( XTCEFunctions.getText( "general_containers" ), // NOI18N
+                                                 null );
+
+            tmodel.setRoot( rootObj );
+
+            tmStreamContentTree.setCellRenderer( new XTCEViewerContainerTreeCellRenderer() );
+
+            for ( XTCETMContainer container : containers ) {
+                //System.out.println( "Container " +
+                //                    container.getName() +
+                //                    " IPath " +
+                //                    container.getInheritancePath() +
+                //                    " CPath " +
+                //                    container.getFullPath() );
+                String[] fields =
+                    container.getInheritancePath().split( "/" ); // NOI18N
+                XTCEViewerContainerTreeNode obj = rootObj;
+                for ( int jjj = 1; jjj < fields.length; ++jjj ) {
+                    obj = setContainerTreeNode( obj, container, true );
+                }
+            }
+
+        } catch ( XTCEDatabaseException ex ) {
+            logMsg( XTCEFunctions.generalErrorPrefix() + ex.getLocalizedMessage() );
+        }
+
+        tmStreamContentTree.setRootVisible( false );
+
+        for ( int iii = 0; iii < tmStreamContentTree.getRowCount(); iii++ ) {
+            tmStreamContentTree.expandRow(iii);
+        }
+
+        tmodel.reload();
 
     }
 
@@ -3538,6 +3666,8 @@ public class XTCEViewer extends javax.swing.JFrame {
             rootObj.add( newchild );
         }
 
+        tcTree.setRootVisible( false );
+
         tmodel.reload();
 
     }
@@ -3598,7 +3728,7 @@ public class XTCEViewer extends javax.swing.JFrame {
             if ( basenameOnly == true ) {
                 match = node.getSpaceSystemReference().getName().equals( searchString );
             } else {
-                match = node.getSpaceSystemReference().getFullPath().equals( searchString );
+                match = node.getFullPath().equals( searchString );
             }
             if ( match == true ) {
                 TreeNode[] nodes = tmodel.getPathToRoot( node );
@@ -4009,6 +4139,7 @@ public class XTCEViewer extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JSplitPane jSplitPane2;
     private javax.swing.JSplitPane jSplitPane3;
@@ -4119,6 +4250,7 @@ public class XTCEViewer extends javax.swing.JFrame {
     private javax.swing.JTable tmParametersTable;
     private javax.swing.JScrollPane tmParametersTableScrollPane;
     private javax.swing.JTextField tmParametersTotal;
+    private javax.swing.JTree tmStreamContentTree;
     private javax.swing.JLabel tmStreamDetailsLabel;
     private javax.swing.JTree tmStreamTree;
     private javax.swing.JScrollPane tmStreamTreeScrollPane;

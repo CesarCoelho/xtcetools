@@ -144,7 +144,7 @@ public final class XTCEDatabase {
      *
      */
 
-    public File getFilename() {
+    public File getFilename( ) {
         return xtceFilename;
     }
 
@@ -156,7 +156,7 @@ public final class XTCEDatabase {
      *
      */
 
-    public boolean getChanged() {
+    public boolean getChanged( ) {
         return databaseChanged;
     }
 
@@ -180,7 +180,7 @@ public final class XTCEDatabase {
      *
      */
 
-    public String getSchemaFromDocument() {
+    public String getSchemaFromDocument( ) {
         return schemaLocation;
     }
 
@@ -193,7 +193,7 @@ public final class XTCEDatabase {
      *
      */
 
-    public String getNamespaceFromDocument() {
+    public String getNamespaceFromDocument( ) {
         /// @todo work on this document namespace
         return XTCEConstants.XTCE_NAMESPACE;
     }
@@ -209,7 +209,7 @@ public final class XTCEDatabase {
      *
      */
 
-    public XTCESpaceSystemMetrics getMetrics() {
+    public XTCESpaceSystemMetrics getMetrics( ) {
         return new XTCESpaceSystemMetrics( this );
     }
 
@@ -336,7 +336,7 @@ public final class XTCEDatabase {
      *
      */
 
-    public XTCESpaceSystem getRootSpaceSystem() {
+    public XTCESpaceSystem getRootSpaceSystem( ) {
 
         return new XTCESpaceSystem( "/" + topLevelSpaceSystem.getName(),
                                     topLevelSpaceSystem,
@@ -352,7 +352,7 @@ public final class XTCEDatabase {
      *
      */
 
-    public ArrayList<XTCESpaceSystem> getSpaceSystemTree() {
+    public ArrayList<XTCESpaceSystem> getSpaceSystemTree( ) {
 
         /// @todo make this efficient with a cache or something
 
@@ -479,7 +479,7 @@ public final class XTCEDatabase {
     public ArrayList<XTCEParameter> getTelemetryParameters( ) {
 
         ArrayList<XTCESpaceSystem> spaceSystems = getSpaceSystemTree();
-        ArrayList<XTCEParameter> list = new ArrayList<XTCEParameter>();
+        ArrayList<XTCEParameter> list = new ArrayList<>();
         for ( int iii = 0; iii < spaceSystems.size(); ++iii ) {
             list.addAll( spaceSystems.get( iii ).getTelemetryParameters() );
         }
@@ -503,7 +503,7 @@ public final class XTCEDatabase {
     public ArrayList<XTCEParameter> getTelecommandParameters( ) {
 
         ArrayList<XTCESpaceSystem> spaceSystems = getSpaceSystemTree();
-        ArrayList<XTCEParameter> list = new ArrayList<XTCEParameter>();
+        ArrayList<XTCEParameter> list = new ArrayList<>();
         for ( int iii = 0; iii < spaceSystems.size(); ++iii ) {
             list.addAll( spaceSystems.get( iii ).getTelecommandParameters() );
         }
@@ -527,7 +527,7 @@ public final class XTCEDatabase {
     public ArrayList<XTCEParameter> getParameters( ) {
 
         ArrayList<XTCESpaceSystem> spaceSystems = getSpaceSystemTree();
-        ArrayList<XTCEParameter> list = new ArrayList<XTCEParameter>();
+        ArrayList<XTCEParameter> list = new ArrayList<>();
         for ( int iii = 0; iii < spaceSystems.size(); ++iii ) {
             list.addAll( spaceSystems.get( iii ).getParameters() );
         }
@@ -548,7 +548,7 @@ public final class XTCEDatabase {
      *
      */
 
-    public ArrayList<XTCETMContainer> getContainers() {
+    public ArrayList<XTCETMContainer> getContainers( ) {
 
        ArrayList<XTCESpaceSystem> spaceSystems = getSpaceSystemTree();
        ArrayList<XTCETMContainer> containers   = new ArrayList<>();
@@ -558,6 +558,53 @@ public final class XTCEDatabase {
        }
        
        return containers;
+
+    }
+
+    public XTCETMContainer getContainer( String contFullPath ) throws XTCEDatabaseException {
+
+        String contPath =
+            XTCEFunctions.getPathNameFromReferenceString( contFullPath );
+        String contName =
+            XTCEFunctions.getNameFromPathReferenceString( contFullPath );
+
+        XTCESpaceSystem spaceSystem = getSpaceSystem( contPath );
+
+        return spaceSystem.getContainer( contName );
+
+    }
+
+    /** Function to retrieve all of the Telemetry Containers that are members
+     * of a specified stream in the XTCE document.
+     *
+     * @param stream XTCETMStream representing the desired stream to find the
+     * included containers.
+     *
+     * @return ArrayList of XTCETMContainers in the stream.
+     *
+     * @throws XTCEDatabaseException in the event that the stream root
+     * container does not exist in the XTCE document data.
+     *
+     */
+
+    public ArrayList<XTCETMContainer> getContainers( XTCETMStream stream ) throws XTCEDatabaseException {
+
+        ArrayList<XTCETMContainer> containers = getContainers();
+        ArrayList<XTCETMContainer> retList    = new ArrayList<>();
+
+        XTCETMContainer streamRootContainer =
+            getContainer( stream.getStreamContainerPath() );
+
+        String streamRootPath = streamRootContainer.getInheritancePath();
+
+        for ( XTCETMContainer container : containers ) {
+            String cPath = container.getInheritancePath();
+            if ( cPath.startsWith( streamRootPath ) == true ) {
+                retList.add( container );
+            }
+        }
+
+        return retList;
 
     }
 
@@ -574,7 +621,7 @@ public final class XTCEDatabase {
      *
      */
 
-    public ArrayList<XTCETMStream> getStreams() {
+    public ArrayList<XTCETMStream> getStreams( ) {
 
        ArrayList<XTCESpaceSystem> spaceSystems = getSpaceSystemTree();
        ArrayList<XTCETMStream>    streams      = new ArrayList<>();
