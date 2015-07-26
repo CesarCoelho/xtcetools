@@ -23,9 +23,19 @@ import org.omg.space.xtce.toolkit.XTCESpaceSystem;
 
 public class XTCEViewerParameterFindDialog extends javax.swing.JFrame {
 
-    /**
-     * Creates new form XTCEViewerParameterFindDialog
+    /** This dialog presents the user with an opportunity to interactively
+     * query the XML document Parameters.
+     *
+     * @param parent XTCEViewer application for setting the initial location
+     * of the dialog box.
+     *
+     * @param prefs XTCEViewerPreferences object used for saving queries that
+     * the user might like to repeat.
+     *
+     * @param dbFile XTCEDatabase object to perform the queries against.
+     *
      */
+
     public XTCEViewerParameterFindDialog( XTCEViewer            parent,
                                           XTCEViewerPreferences prefs,
                                           XTCEDatabase          dbFile ) {
@@ -34,6 +44,7 @@ public class XTCEViewerParameterFindDialog extends javax.swing.JFrame {
         prefs_      = prefs;
         dbFile_     = dbFile;
         populatePreviousSearches( true );
+        setLocationRelativeTo( xtceViewer_ );
         setVisible( true );
     }
 
@@ -274,7 +285,7 @@ public class XTCEViewerParameterFindDialog extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void dismissButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dismissButtonActionPerformed
-        this.dispatchEvent( new WindowEvent( this, WindowEvent.WINDOW_CLOSING ) );
+        dispatchEvent( new WindowEvent( this, WindowEvent.WINDOW_CLOSING ) );
     }//GEN-LAST:event_dismissButtonActionPerformed
 
     private void executeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_executeButtonActionPerformed
@@ -398,9 +409,14 @@ public class XTCEViewerParameterFindDialog extends javax.swing.JFrame {
         tableModel.setRowCount( 0 );
 
         if ( results.size() > 0 ) {
-            resultsText.setText( "Found " + Long.toString( results.size() ) + " Parameter(s)" );
+            resultsText.setText( Long.toString( results.size() ) +
+                                 " " +
+                                 XTCEFunctions.getText( "dialog_findparameter_found" ) );
         } else {
-            resultsText.setText( "No Results For Search '" + searchText + "'" );
+            resultsText.setText( XTCEFunctions.getText( "dialog_findparameter_none" ) +
+                                 " '" +
+                                 searchText +
+                                 "'" );
             return;
         }
 

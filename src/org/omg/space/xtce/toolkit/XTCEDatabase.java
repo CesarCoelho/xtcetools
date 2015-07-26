@@ -748,6 +748,21 @@ public final class XTCEDatabase {
 
     }
 
+    public ArrayList<XTCETMContainer> findContainers( XTCEParameter parameter ) {
+
+        ArrayList<XTCETMContainer> allContainers = getContainers();
+        ArrayList<XTCETMContainer> containers    = new ArrayList<>();
+
+        for ( XTCETMContainer container : allContainers ) {
+            if ( container.contains( parameter ) == true ) {
+                containers.add( container );
+            }
+        }
+
+        return containers;
+
+    }
+
     /** Retrieve the type reference from the JAXB generated objects for a
      * particular TM Parameter fully qualified type object path in the XTCE
      * data model.

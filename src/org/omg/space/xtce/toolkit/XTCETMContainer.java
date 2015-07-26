@@ -6,9 +6,12 @@
 
 package org.omg.space.xtce.toolkit;
 
+import java.util.List;
 import javax.xml.bind.JAXBElement;
 import javax.xml.namespace.QName;
+import org.omg.space.xtce.database.ParameterRefEntryType;
 import org.omg.space.xtce.database.SequenceContainerType;
+import org.omg.space.xtce.database.SequenceEntryType;
 
 /** The XTCETMContainer class models the XTCE SequenceContainer element by
  * simplifying the usage by pre-modeling the relationships. 
@@ -144,6 +147,47 @@ public class XTCETMContainer extends XTCENamedObject {
         }
 
         return parameterDescription;
+
+    }
+
+    /** Function to test if this container includes an XTCEParameter.
+     *
+     * @param parameter XTCEParameter to search in the container entry list.
+     *
+     * @return Boolean indicating if this container entry list references the
+     * requested parameter.
+     *
+     */
+
+    public boolean contains( XTCEParameter parameter ) {
+
+        try {
+
+            List<SequenceEntryType> entries =
+                container_.getEntryList().getParameterRefEntryOrParameterSegmentRefEntryOrContainerRefEntry();
+
+            for ( SequenceEntryType entry : entries ) {
+
+                //System.out.println( entry.getClass().toString() );
+                if ( entry instanceof ParameterRefEntryType ) {
+                    String parameterRef =
+                        ((ParameterRefEntryType)entry).getParameterRef();
+                    String entryFullPath =
+                        XTCEFunctions.resolvePathReference( getSpaceSystemPath(),
+                                                            parameterRef );
+                    //System.out.println( entryFullPath );
+                    if ( parameter.getFullPath().equals( entryFullPath ) == true ) {
+                        return true;
+                    }
+                }
+
+            }
+
+        } catch ( NullPointerException ex ) {
+            // it is okay if the container has an empty entry list
+        }
+        
+        return false;
 
     }
 

@@ -30,6 +30,9 @@ public class XTCEViewerXpathQueryDialog extends javax.swing.JFrame {
     /** This dialog presents the user with an opportunity to interactively
      * query the XML document loaded using the XML XPath facility.
      *
+     * @param parent XTCEViewer application for setting the initial location
+     * of the dialog box.
+     *
      * @param prefs XTCEViewerPreferences object used for saving queries that
      * the user might like to repeat.
      *
@@ -37,7 +40,8 @@ public class XTCEViewerXpathQueryDialog extends javax.swing.JFrame {
      *
      */
 
-    XTCEViewerXpathQueryDialog( XTCEViewerPreferences prefs,
+    XTCEViewerXpathQueryDialog( XTCEViewer            parent,
+                                XTCEViewerPreferences prefs,
                                 XTCEDatabase          dbFile ) {
 
         prefs_  = prefs;
@@ -47,6 +51,7 @@ public class XTCEViewerXpathQueryDialog extends javax.swing.JFrame {
         populatePreviousSearches( true );
         deleteButton.setEnabled( false );
         saveButton.setEnabled( false );
+        setLocationRelativeTo( parent );
         setVisible( true );
 
     }
@@ -246,7 +251,7 @@ public class XTCEViewerXpathQueryDialog extends javax.swing.JFrame {
 
     private void dismissButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dismissButtonActionPerformed
 
-        this.dispatchEvent( new WindowEvent( this, WindowEvent.WINDOW_CLOSING ) );
+        dispatchEvent( new WindowEvent( this, WindowEvent.WINDOW_CLOSING ) );
 
     }//GEN-LAST:event_dismissButtonActionPerformed
 

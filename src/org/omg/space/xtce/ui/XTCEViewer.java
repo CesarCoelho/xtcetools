@@ -103,6 +103,7 @@ public class XTCEViewer extends javax.swing.JFrame {
         parameterDetailPopupMenu = new javax.swing.JPopupMenu();
         showXmlElementsMenuItem = new javax.swing.JMenuItem();
         showParameterDetailsMenuItem = new javax.swing.JMenuItem();
+        showParameterUsageMenuItem = new javax.swing.JMenuItem();
         showEncodeDecodeDialogMenuItem = new javax.swing.JMenuItem();
         copyParameterCellMenuItem = new javax.swing.JMenuItem();
         containerDetailPopupMenu = new javax.swing.JPopupMenu();
@@ -289,6 +290,14 @@ public class XTCEViewer extends javax.swing.JFrame {
             }
         });
         parameterDetailPopupMenu.add(showParameterDetailsMenuItem);
+
+        showParameterUsageMenuItem.setText(bundle.getString("options_popup_showparameterusage")); // NOI18N
+        showParameterUsageMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                showParameterUsageMenuItemActionPerformed(evt);
+            }
+        });
+        parameterDetailPopupMenu.add(showParameterUsageMenuItem);
 
         showEncodeDecodeDialogMenuItem.setText("Encode/Decode Values");
         showEncodeDecodeDialogMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -1584,13 +1593,18 @@ public class XTCEViewer extends javax.swing.JFrame {
         }
 
         if ( xpathDialog != null ) {
-            xpathDialog.dispatchEvent( new WindowEvent( this, WindowEvent.WINDOW_CLOSING ) );
+            xpathDialog.dispatchEvent( new WindowEvent( xpathDialog, WindowEvent.WINDOW_CLOSING ) );
             xpathDialog = null;
         }
 
         if ( findParameterDialog != null ) {
-            findParameterDialog.dispatchEvent( new WindowEvent( this, WindowEvent.WINDOW_CLOSING ) );
+            findParameterDialog.dispatchEvent( new WindowEvent( findParameterDialog, WindowEvent.WINDOW_CLOSING ) );
             findParameterDialog = null;
+        }
+
+        if ( parameterUsageDialog != null ) {
+            parameterUsageDialog.dispatchEvent( new WindowEvent( parameterUsageDialog, WindowEvent.WINDOW_CLOSING ) );
+            parameterUsageDialog = null;
         }
 
         xtceDatabaseFile = null;
@@ -2887,7 +2901,8 @@ public class XTCEViewer extends javax.swing.JFrame {
         if ( fileOpenWarning() == true ) return;
 
         if ( xpathDialog == null ) {
-            xpathDialog = new XTCEViewerXpathQueryDialog( prefs,
+            xpathDialog = new XTCEViewerXpathQueryDialog( this,
+                                                          prefs,
                                                           xtceDatabaseFile );
         } else {
             xpathDialog.setVisible( true );
@@ -2952,6 +2967,60 @@ public class XTCEViewer extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_tmStreamContentTreeMouseClicked
+
+    private void showParameterUsageMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showParameterUsageMenuItemActionPerformed
+
+        int idx = mainWindowPrimaryWorkspace.getSelectedIndex();
+        int row = -1;
+        if ( idx == 1 ) { // telemetry parameters
+            XTCEViewerSpaceSystemTreeNode node =
+                (XTCEViewerSpaceSystemTreeNode)tmParameterSpaceSystemTree.getLastSelectedPathComponent();
+            if ( node == null ) {
+                logMsg( XTCEFunctions.generalErrorPrefix() +
+                        XTCEFunctions.getText( "rightclick_xml_no_tm_spacesystem_error_message" ) ); // NOI18N
+                return;
+            }
+            row = tmParametersTable.getSelectedRow();
+            if ( row != -1 ) {
+                String pname = (String)tmParametersTable.getValueAt( row, 0 );
+                XTCESpaceSystem ss = node.getSpaceSystemReference();
+                try {
+                    XTCEParameter parameter = ss.getTelemetryParameter( pname );
+                    if ( parameterUsageDialog != null ) {
+                        parameterUsageDialog.setVisible( false );
+                    }
+                    parameterUsageDialog = 
+                        new XTCEViewerParameterUsageDialog( this, xtceDatabaseFile, parameter );
+                } catch ( XTCEDatabaseException ex ) {
+                    logMsg( XTCEFunctions.generalErrorPrefix() + ex.getLocalizedMessage() );
+                }
+            }
+        } else if ( idx == 2 ) { // telecommand parameters
+            XTCEViewerSpaceSystemTreeNode node =
+                (XTCEViewerSpaceSystemTreeNode)tcParameterSpaceSystemTree.getLastSelectedPathComponent();
+            if ( node == null ) {
+                logMsg( XTCEFunctions.generalErrorPrefix() +
+                        XTCEFunctions.getText( "rightclick_xml_no_tc_spacesystem_error_message" ) ); // NOI18N
+                return;
+            }
+            row = tcParametersTable.getSelectedRow();
+            if ( row != -1 ) {
+                String pname = (String)tcParametersTable.getValueAt( row, 0 );
+                XTCESpaceSystem ss = node.getSpaceSystemReference();
+                try {
+                    XTCEParameter parameter = ss.getTelecommandParameter( pname );
+                    if ( parameterUsageDialog != null ) {
+                        parameterUsageDialog.setVisible( false );
+                    }
+                    parameterUsageDialog = 
+                        new XTCEViewerParameterUsageDialog( this, xtceDatabaseFile, parameter );
+                } catch ( XTCEDatabaseException ex ) {
+                    logMsg( XTCEFunctions.generalErrorPrefix() + ex.getLocalizedMessage() );
+                }
+            }
+        }
+
+    }//GEN-LAST:event_showParameterUsageMenuItemActionPerformed
 
     public void goToParameter( String  parameterName,
                                String  spaceSystemName,
@@ -3039,6 +3108,8 @@ public class XTCEViewer extends javax.swing.JFrame {
                 obj = setSpaceSystemTreeNode( obj, spaceSystems.get( iii ) );
             }
         }
+
+        tree.setRootVisible( true );
 
         tmodel.reload();
         
@@ -3935,7 +4006,6 @@ public class XTCEViewer extends javax.swing.JFrame {
                 prefs.setCurrentWorkingDirectory( dbFile.getParent() );
             }
 
-            detailSpaceSystemTree.setRootVisible( true );
             detailSpaceSystemTree.setSelectionRow( 0 );
             mainWindowPrimaryWorkspace.setSelectedIndex( 0 );
 
@@ -4088,12 +4158,13 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     // Private Data Members
 
-    private Point                         mouseLocation    = null;
-    private XTCEViewerPreferences         prefs            = null;
-    private XTCEDatabase                  xtceDatabaseFile = null;
-    private ArrayList<XTCESpaceSystem>    spaceSystems     = null;
-    private XTCEViewerXpathQueryDialog    xpathDialog      = null;
-    private XTCEViewerParameterFindDialog findParameterDialog = null;
+    private Point                          mouseLocation        = null;
+    private XTCEViewerPreferences          prefs                = null;
+    private XTCEDatabase                   xtceDatabaseFile     = null;
+    private ArrayList<XTCESpaceSystem>     spaceSystems         = null;
+    private XTCEViewerXpathQueryDialog     xpathDialog          = null;
+    private XTCEViewerParameterFindDialog  findParameterDialog  = null;
+    private XTCEViewerParameterUsageDialog parameterUsageDialog = null;
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -4206,6 +4277,7 @@ public class XTCEViewer extends javax.swing.JFrame {
     private javax.swing.JMenuItem showEncodeDecodeDialogMenuItem;
     private javax.swing.JMenuItem showItemXmlElementsMenuItem;
     private javax.swing.JMenuItem showParameterDetailsMenuItem;
+    private javax.swing.JMenuItem showParameterUsageMenuItem;
     private javax.swing.JMenuItem showXmlElementsMenuItem;
     private javax.swing.JPopupMenu spaceSystemDetailPopupMenu;
     private javax.swing.JLabel spaceSystemOverviewLabel;
