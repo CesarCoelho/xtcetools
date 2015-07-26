@@ -561,6 +561,20 @@ public final class XTCEDatabase {
 
     }
 
+    /** Retrieve a specific container in the XTCE database by the fully
+     * qualified path name to the container, using XTCE document path rules.
+     *
+     * @param contFullPath String containing the fully qualified path to the
+     * container desired.
+     *
+     * @return XTCETMContainer representing the SequenceContainer element in
+     * the XTCE data model.
+     *
+     * @throws XTCEDatabaseException thrown in the event that the container
+     * cannot be located using the provided path.
+     *
+     */
+
     public XTCETMContainer getContainer( String contFullPath ) throws XTCEDatabaseException {
 
         String contPath =
@@ -747,6 +761,17 @@ public final class XTCEDatabase {
                                                 showAllConditions );
 
     }
+
+    /** Retrieve the containers in the XTCE document that directly reference
+     * an entry in their manifest that includes the provided Parameter.
+     *
+     * @param parameter XTCEParameter object to find in the containers defined
+     * in this XTCE database document.
+     *
+     * @return ArrayList of XTCETMContainer objects found, or an empty list if
+     * the no container references the parameter.
+     *
+     */
 
     public ArrayList<XTCETMContainer> findContainers( XTCEParameter parameter ) {
 
@@ -987,7 +1012,7 @@ public final class XTCEDatabase {
 
     private void cacheParameterTypes() {
 
-        parameterTypes = new HashMap<String, NameDescriptionType>();
+        parameterTypes = new HashMap<>();
 
         ArrayList<XTCESpaceSystem> spaceSystems = getSpaceSystemTree();
 
@@ -1042,7 +1067,7 @@ public final class XTCEDatabase {
 
     private void cacheArgumentTypes() {
 
-        argumentTypes = new HashMap<String, NameDescriptionType>();
+        argumentTypes = new HashMap<>();
 
         ArrayList<XTCESpaceSystem> spaceSystems = getSpaceSystemTree();
 

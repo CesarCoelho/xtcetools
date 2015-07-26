@@ -33,12 +33,9 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Locale;
 import java.util.Properties;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTree;
@@ -1537,36 +1534,21 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     private void mainWindowOpenFileMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mainWindowOpenFileMenuItemActionPerformed
 
-        JFileChooser chooser = new JFileChooser( "." ); // NOI18N
-        JCheckBox field1 = new JCheckBox( XTCEFunctions.getText( "file_chooser_xinclude_text" ) ); // NOI18N
-        JCheckBox field2 = new JCheckBox( XTCEFunctions.getText( "file_chooser_validate_text" ) ); // NOI18N
-        JPanel accessory = new JPanel();
-        accessory.setLayout( new BoxLayout( accessory, BoxLayout.PAGE_AXIS ) );
-        accessory.add( field1 );
-        accessory.add( field2 );
-        chooser.setAccessory( accessory );
-        field1.setSelected( prefs.getUseXIncludeOption() );
-        field1.setSelected( prefs.getValidateOnLoadOption() );
+        XTCEViewerOpenFileChooser chs = new XTCEViewerOpenFileChooser( prefs );
 
-        FileFilter fileFilter =
-            new FileNameExtensionFilter( XTCEFunctions.getText( "file_chooser_xtcexml_text" ), // NOI18N
-                                         "xml" ); // NOI18N
-        chooser.addChoosableFileFilter( fileFilter );
-        chooser.setFileFilter( fileFilter ); // Initial filter setting
-        if ( prefs.getCurrentWorkingDirectory().isEmpty() == false ) {
-            chooser.setCurrentDirectory( new File( prefs.getCurrentWorkingDirectory() ) );
-        }
-        int status = chooser.showOpenDialog( this );
+        int status = chs.showOpenDialog( this );
+
         if (status == JFileChooser.APPROVE_OPTION) {
-           File dbFile = chooser.getSelectedFile();
-           openFile( dbFile, field1.isSelected(), field2.isSelected() );
+           openFile( chs.getSelectedFile(),
+                     chs.isXIncludeSelected(),
+                     chs.isValidateSelected() );
         }
 
     }//GEN-LAST:event_mainWindowOpenFileMenuItemActionPerformed
 
     private void mainWindowExitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mainWindowExitMenuItemActionPerformed
 
-        this.dispatchEvent( new WindowEvent(this, WindowEvent.WINDOW_CLOSING) );
+        dispatchEvent( new WindowEvent(this, WindowEvent.WINDOW_CLOSING) );
 
     }//GEN-LAST:event_mainWindowExitMenuItemActionPerformed
 
