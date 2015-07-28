@@ -3981,7 +3981,9 @@ public class XTCEViewer extends javax.swing.JFrame {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
+                //System.out.println( info.getName() );
             }
+            //System.setProperty( "apple.laf.useScreenMenuBar", "true" );
         } catch (ClassNotFoundException ex) {
             java.util.logging.Logger.getLogger(XTCEViewer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
@@ -3991,7 +3993,6 @@ public class XTCEViewer extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(XTCEViewer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */

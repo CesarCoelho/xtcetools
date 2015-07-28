@@ -259,12 +259,21 @@ public class XTCEViewerXpathQueryDialog extends javax.swing.JFrame {
 
         try {
 
+            long startTime = System.currentTimeMillis();
+
             NodeList nodes =
                 xtcedb_.evaluateXPathQuery( queryTextField.getText() );
 
+            long duration = System.currentTimeMillis() - startTime;
+
             resultsCountLabel.setText( Integer.toString( nodes.getLength() ) +
                                        " " +
-                                       XTCEFunctions.getText( "dialog_xpathquery_results" ) );
+                                       XTCEFunctions.getText( "dialog_xpathquery_results" ) +
+                                       " ( " +
+                                       Double.toString( duration / 1000.0 ) +
+                                       " " +
+                                       XTCEFunctions.getText( "file_chooser_load_time_unit_text" ) +
+                                       " )" );
 
             resultsText.setText( XTCEFunctions.xmlPrettyPrint( nodes ) );
             lastQueryString_ = queryTextField.getText();

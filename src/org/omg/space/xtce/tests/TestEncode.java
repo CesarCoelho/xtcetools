@@ -17,6 +17,8 @@ import org.omg.space.xtce.toolkit.XTCEParameter;
 /** This class exercises the XTCEItemValue class to demonstrate the encode()
  * methods work with the sample BogusSAT-1.xml XTCE file.
  *
+ * Note: this was before I learned how to use JUnit correctly...
+ *
  * @author David Overeem
  *
  */

@@ -85,7 +85,7 @@ public final class XTCEDatabase {
 
         try {
             updateLoadProgress( listener, 0, "Loading File" );
-            System.setProperty( "user.dir", dbFile.getParent() );
+            //System.setProperty( "user.dir", dbFile.getParent() );
             jaxbContext = JAXBContext.newInstance( XTCEConstants.XTCE_PACKAGE );
             if ( validateOnLoad == true ) {
                 updateLoadProgress( listener, 5, "Validating File" ); 

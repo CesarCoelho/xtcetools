@@ -23,6 +23,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /** This class is a container to capture some common static functions that are
@@ -352,12 +353,22 @@ public class XTCEFunctions {
                                            "yes" );
 
             for ( int iii = 0; iii < nodes.getLength(); ++iii ) {
-                ByteArrayOutputStream out = new ByteArrayOutputStream();
-                Source source = new DOMSource( nodes.item( iii ) );
-                Result target = new StreamResult( out );
-                transformer.transform( source, target );
-                resultsText.append( out.toString() );
-                resultsText.append( "\n" );
+                Node item = nodes.item( iii );
+                switch ( item.getNodeType() ) {
+                    case Node.TEXT_NODE:
+                        resultsText.append( item.getTextContent() );
+                        break;
+                    case Node.ATTRIBUTE_NODE:
+                        resultsText.append( item.getNodeValue() );
+                        break;
+                    default:
+                        ByteArrayOutputStream out = new ByteArrayOutputStream();
+                        Source source = new DOMSource( nodes.item( iii ) );
+                        Result target = new StreamResult( out );
+                        transformer.transform( source, target );
+                        resultsText.append( out.toString() );
+                }
+                resultsText.append( '\n' );
             }
 
             return resultsText.toString();
