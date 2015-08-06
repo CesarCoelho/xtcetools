@@ -10,11 +10,13 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 import javax.swing.JTree;
-import javax.swing.table.TableModel;
+import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
@@ -55,27 +57,49 @@ public class XTCEViewerFunctions {
 
     }
 
+    /** Show the right click menu associated with a table in the viewer.
+     *
+     * @param evt MouseEvent associated with the click.
+     *
+     * @param table JTable that the click event occurred on.
+     *
+     * @param menu JPopupMenu from the viewer that is associated with this
+     * particular table.
+     *
+     */
+
+    public static void showRightClickTableMenu( MouseEvent evt,
+                                                JTable     table,
+                                                JPopupMenu menu ) {
+
+        if ( SwingUtilities.isRightMouseButton( evt ) == true ) {
+            Point mouseLocation = evt.getPoint();
+            int row = table.rowAtPoint( mouseLocation );
+            int col = table.columnAtPoint( mouseLocation );
+            table.setRowSelectionInterval( row, row );
+            table.setColumnSelectionInterval( col, col );
+            menu.show( table, evt.getX(), evt.getY() );
+        }
+
+    }
+
     /** Helper function to implement copying contents of a table cell to the
      * System Clipboard for pasting in other applications.
      *
      * @param table JTable object to query for the cell contents and copy
      *
-     * @param mouseLocation Point from Java AWT that contains the location of
-     * the mouse when the copy was selected.
-     *
      */
 
-    public static void copyCell( JTable table, Point mouseLocation ) {
+    public static void copyCell( JTable table ) {
 
-        int row = table.rowAtPoint( mouseLocation );
-        int col = table.columnAtPoint( mouseLocation );
+        int row = table.getSelectedRow();
+        int col = table.getSelectedColumn();
 
         if ( ( row == -1 ) || ( col == -1 ) ) {
             return;
         }
 
-        TableModel tm = table.getModel();
-        String text = (String)tm.getValueAt( row, col );
+        String text = (String)table.getValueAt( row, col );
 
         if ( text == null ) {
             return;

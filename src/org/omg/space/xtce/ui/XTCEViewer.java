@@ -1894,27 +1894,21 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     private void tmParametersTableMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tmParametersTableMousePressed
 
-        if ( SwingUtilities.isRightMouseButton( evt ) == true ) {
-            if ( xtceDatabaseFile != null ) {
-                mouseLocation = evt.getPoint();
-                int row = tmParametersTable.rowAtPoint( mouseLocation );
-                tmParametersTable.getSelectionModel().setSelectionInterval( row, row );
-                parameterDetailPopupMenu.show( tmParametersTable, evt.getX(), evt.getY() );
-            }
-        }
+        if ( fileOpenWarning() == true ) return;
+
+        XTCEViewerFunctions.showRightClickTableMenu( evt,
+                                                     tmParametersTable,
+                                                     parameterDetailPopupMenu );
 
     }//GEN-LAST:event_tmParametersTableMousePressed
 
     private void tcParametersTableMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tcParametersTableMousePressed
 
-        if ( SwingUtilities.isRightMouseButton( evt ) == true ) {
-            if ( xtceDatabaseFile != null ) {
-                mouseLocation = evt.getPoint();
-                int row = tcParametersTable.rowAtPoint( mouseLocation );
-                tcParametersTable.getSelectionModel().setSelectionInterval( row, row );
-                parameterDetailPopupMenu.show( tcParametersTable, evt.getX(), evt.getY() );
-            }
-        }
+        if ( fileOpenWarning() == true ) return;
+
+        XTCEViewerFunctions.showRightClickTableMenu( evt,
+                                                     tcParametersTable,
+                                                     parameterDetailPopupMenu );
 
     }//GEN-LAST:event_tcParametersTableMousePressed
 
@@ -2281,14 +2275,11 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     private void tmContainerTableMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tmContainerTableMousePressed
 
-        if ( SwingUtilities.isRightMouseButton( evt ) == true ) {
-            if ( xtceDatabaseFile != null ) {
-                mouseLocation = evt.getPoint();
-                int row = tmContainerTable.rowAtPoint( mouseLocation );
-                tmContainerTable.getSelectionModel().setSelectionInterval( row, row );
-                containerTablePopupMenu.show( tmContainerTable, evt.getX(), evt.getY() );
-            }
-        }
+        if ( fileOpenWarning() == true ) return;
+
+        XTCEViewerFunctions.showRightClickTableMenu( evt,
+                                                     tmContainerTable,
+                                                     containerTablePopupMenu );
 
     }//GEN-LAST:event_tmContainerTableMousePressed
 
@@ -2873,7 +2864,7 @@ public class XTCEViewer extends javax.swing.JFrame {
 
         if ( xtceDatabaseFile == null ) return;
 
-        XTCEViewerFunctions.copyCell( tmContainerTable, mouseLocation );
+        XTCEViewerFunctions.copyCell( tmContainerTable );
 
     }//GEN-LAST:event_copyContainerCellMenuItemActionPerformed
 
@@ -2884,9 +2875,9 @@ public class XTCEViewer extends javax.swing.JFrame {
         int idx = mainWindowPrimaryWorkspace.getSelectedIndex();
 
         if ( idx == 1 ) {
-            XTCEViewerFunctions.copyCell( tmParametersTable, mouseLocation );
+            XTCEViewerFunctions.copyCell( tmParametersTable );
         } else if ( idx == 2 ) {
-            XTCEViewerFunctions.copyCell( tcParametersTable, mouseLocation );
+            XTCEViewerFunctions.copyCell( tcParametersTable );
         }
 
     }//GEN-LAST:event_copyParameterCellMenuItemActionPerformed
@@ -4006,7 +3997,6 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     // Private Data Members
 
-    private Point                          mouseLocation        = null;
     private XTCEViewerPreferences          prefs                = null;
     private XTCEDatabase                   xtceDatabaseFile     = null;
     private ArrayList<XTCESpaceSystem>     spaceSystems         = null;
