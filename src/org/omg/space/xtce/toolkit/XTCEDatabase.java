@@ -487,6 +487,70 @@ public final class XTCEDatabase {
 
     }
 
+    /** Function to retrieve all of the Telemetry Parameters that are defined
+     * in the XTCE document that match a glob style name pattern.
+     *
+     * Since the parameter name in XTCE is unique by Space System, it is
+     * possible for this method to return multiple results even for a name that
+     * is exact.
+     *
+     * @param nameGlob String containing a precise name or a glob of potential
+     * names.
+     *
+     * @return ArrayList of XTCEParameter objects found, which can be empty.
+     *
+     */
+
+    public ArrayList<XTCEParameter> getTelemetryParameters( String nameGlob ) {
+
+        ArrayList<XTCESpaceSystem> spaceSystems = getSpaceSystemTree();
+        ArrayList<XTCEParameter> list = new ArrayList<>();
+        for ( int iii = 0; iii < spaceSystems.size(); ++iii ) {
+            ArrayList<XTCEParameter> parameters =
+                spaceSystems.get( iii ).getTelemetryParameters();
+            for ( XTCEParameter parameter : parameters ) {
+                if ( XTCEFunctions.matchesUsingGlob( parameter.getName(), nameGlob ) == true ) {
+                    list.add( parameter );
+                }
+            }
+        }
+        return list;
+
+    }
+
+    /** Function to retrieve all of the Telemetry Parameters that are defined
+     * in the XTCE document that match a glob style alias pattern in a
+     * specified namespace.
+     *
+     * @param aliasGlob String containing a precise alias or a glob of
+     * potential alias strings.
+     *
+     * @param aliasNameSpace String containing the namespace of the alias in
+     * the XTCE data model.
+     *
+     * @return ArrayList of XTCEParameter objects found, which can be empty.
+     */
+
+    public ArrayList<XTCEParameter> getTelemetryParameters( String aliasGlob,
+                                                            String aliasNameSpace ) {
+
+        ArrayList<XTCESpaceSystem> spaceSystems = getSpaceSystemTree();
+        ArrayList<XTCEParameter> list = new ArrayList<>();
+        for ( int iii = 0; iii < spaceSystems.size(); ++iii ) {
+            ArrayList<XTCEParameter> parameters =
+                spaceSystems.get( iii ).getTelemetryParameters();
+            for ( XTCEParameter parameter : parameters ) {
+                String alias = parameter.getAlias( aliasNameSpace );
+                if ( ( alias.isEmpty()                                              == false ) &&
+                     ( XTCEFunctions.matchesUsingGlob( parameter.getName(), alias ) == true  ) ) {
+                    list.add( parameter );
+                }
+            }
+        }
+        return list;
+
+    }
+    
     /** Function to retrieve all of the Telecommand Parameters that are defined
      * in the XTCE document.
      *
@@ -506,6 +570,70 @@ public final class XTCEDatabase {
         ArrayList<XTCEParameter> list = new ArrayList<>();
         for ( int iii = 0; iii < spaceSystems.size(); ++iii ) {
             list.addAll( spaceSystems.get( iii ).getTelecommandParameters() );
+        }
+        return list;
+
+    }
+
+    /** Function to retrieve all of the Telecommand Parameters that are defined
+     * in the XTCE document that match a glob style name pattern.
+     *
+     * Since the parameter name in XTCE is unique by Space System, it is
+     * possible for this method to return multiple results even for a name that
+     * is exact.
+     *
+     * @param nameGlob String containing a precise name or a glob of potential
+     * names.
+     *
+     * @return ArrayList of XTCEParameter objects found, which can be empty.
+     *
+     */
+
+    public ArrayList<XTCEParameter> getTelecommandParameters( String nameGlob ) {
+
+        ArrayList<XTCESpaceSystem> spaceSystems = getSpaceSystemTree();
+        ArrayList<XTCEParameter> list = new ArrayList<>();
+        for ( int iii = 0; iii < spaceSystems.size(); ++iii ) {
+            ArrayList<XTCEParameter> parameters =
+                spaceSystems.get( iii ).getTelecommandParameters();
+            for ( XTCEParameter parameter : parameters ) {
+                if ( XTCEFunctions.matchesUsingGlob( parameter.getName(), nameGlob) ) {
+                    list.add( parameter );
+                }
+            }
+        }
+        return list;
+
+    }
+
+    /** Function to retrieve all of the Telecommand Parameters that are defined
+     * in the XTCE document that match a glob style alias pattern in a
+     * specified namespace.
+     *
+     * @param aliasGlob String containing a precise alias or a glob of
+     * potential alias strings.
+     *
+     * @param aliasNameSpace String containing the namespace of the alias in
+     * the XTCE data model.
+     *
+     * @return ArrayList of XTCEParameter objects found, which can be empty.
+     */
+
+    public ArrayList<XTCEParameter> getTelecommandParameters( String aliasGlob,
+                                                              String aliasNameSpace ) {
+
+        ArrayList<XTCESpaceSystem> spaceSystems = getSpaceSystemTree();
+        ArrayList<XTCEParameter> list = new ArrayList<>();
+        for ( int iii = 0; iii < spaceSystems.size(); ++iii ) {
+            ArrayList<XTCEParameter> parameters =
+                spaceSystems.get( iii ).getTelecommandParameters();
+            for ( XTCEParameter parameter : parameters ) {
+                String alias = parameter.getAlias( aliasNameSpace );
+                if ( ( alias.isEmpty()                                              == false ) &&
+                     ( XTCEFunctions.matchesUsingGlob( parameter.getName(), alias ) == true  ) ) {
+                    list.add( parameter );
+                }
+            }
         }
         return list;
 
