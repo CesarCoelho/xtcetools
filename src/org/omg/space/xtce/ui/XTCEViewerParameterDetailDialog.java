@@ -355,8 +355,8 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
             tableModel.addRow( rowData );
         }
 
-        System.out.println( "Spline Order: " + splineCal.getOrder().toString() );
-        System.out.println( "Spline Extrapolate: " + ( splineCal.isExtrapolate() ? "true" : "false" ) );
+        //System.out.println( "Spline Order: " + splineCal.getOrder().toString() );
+        //System.out.println( "Spline Extrapolate: " + ( splineCal.isExtrapolate() ? "true" : "false" ) );
 
     }
 

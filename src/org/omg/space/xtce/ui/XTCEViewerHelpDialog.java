@@ -157,14 +157,14 @@ public class XTCEViewerHelpDialog extends javax.swing.JDialog {
             HyperlinkEvent.EventType type = hyperlinkEvent.getEventType();
             final URL url = hyperlinkEvent.getURL();
             if (type == HyperlinkEvent.EventType.ENTERED) {
-                System.out.println( "URL: " + url );
+                //System.out.println( "URL: " + url );
             } else if (type == HyperlinkEvent.EventType.ACTIVATED) {
-                System.out.println( "Activated" );
+                //System.out.println( "Activated" );
                 Document doc = editorPane.getDocument();
                 try {
                     editorPane.setPage( url );
                 } catch ( IOException ioException ) {
-                    System.out.println("Error following link, Invalid link");
+                    //System.out.println("Error following link, Invalid link");
                     editorPane.setDocument( doc );
                 }
             }

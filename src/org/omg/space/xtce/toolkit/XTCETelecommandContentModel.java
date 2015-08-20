@@ -97,8 +97,8 @@ public class XTCETelecommandContentModel extends XTCEContainerContentModelBase {
 
         long estimatedTime = System.currentTimeMillis() - startTime;
 
-        System.out.println( "Processed Telecommand in approximately " +
-            Long.toString( estimatedTime / 1000 ) + " seconds" );
+        //System.out.println( "Processed Telecommand in approximately " +
+        //    Long.toString( estimatedTime / 1000 ) + " seconds" );
 
         return totalSize.get();
 
@@ -183,7 +183,7 @@ public class XTCETelecommandContentModel extends XTCEContainerContentModelBase {
                                           long                      containerStartBit,
                                           XTCEContainerContentEntry includedContainer ) throws XTCEDatabaseException {
 
-        System.out.println( "Processing " + telecommand.getInheritancePath() );
+        //System.out.println( "Processing " + telecommand.getInheritancePath() );
 
         // do not make a second row for the included container
         //if ( ( includedContainer != null ) && ( includedContainer.getContainer().getFullPath().equals( container.getFullPath() ) == false ) ) {

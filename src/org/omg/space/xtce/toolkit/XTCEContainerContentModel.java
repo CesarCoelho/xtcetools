@@ -133,8 +133,8 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
 
         long estimatedTime = System.currentTimeMillis() - startTime;
 
-        System.out.println( "Processed Container in approximately " +
-            Long.toString( estimatedTime / 1000 ) + " seconds" );
+        //System.out.println( "Processed Container in approximately " +
+        //    Long.toString( estimatedTime / 1000 ) + " seconds" );
 
         return totalSize.get();
 
@@ -212,7 +212,7 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
                                         long                      containerStartBit,
                                         XTCEContainerContentEntry includedContainer ) throws XTCEDatabaseException {
 
-        System.out.println( "Processing " + container.getInheritancePath() );
+        //System.out.println( "Processing " + container.getInheritancePath() );
 
         // do not make a second row for the included container
         //if ( ( includedContainer != null ) && ( includedContainer.getContainer().getFullPath().equals( container.getFullPath() ) == false ) ) {

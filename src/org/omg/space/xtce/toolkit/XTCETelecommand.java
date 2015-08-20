@@ -85,14 +85,14 @@ public class XTCETelecommand extends XTCENamedObject {
                                                   makeContainerInheritanceString( metaCommand_.getCommandContainer(), dbReference ),
                                                   metaCommand_.getCommandContainer() );
             }
-            System.out.println( "Made MetaCommand: " + getName() + " IPath: " + iPath_ + " Path: " + getSpaceSystemPath() );
+            //System.out.println( "Made MetaCommand: " + getName() + " IPath: " + iPath_ + " Path: " + getSpaceSystemPath() );
             for ( XTCEArgument arg : argumentList_ ) {
-                System.out.println( "Argument " + arg.getName() + " type " + arg.getTypeReferenceFullPath() );
+                //System.out.println( "Argument " + arg.getName() + " type " + arg.getTypeReferenceFullPath() );
             }
         } else if ( metaCommandObj.getClass() == BlockMetaCommand.class ) {
             blockMetaCommand_ = (BlockMetaCommand)metaCommandObj;
             argumentList_ = new ArrayList<XTCEArgument>();
-            System.out.println( "Made MetaCommand: " + getName() + " IPath: " + iPath_ + " Path: " + getSpaceSystemPath() );
+            //System.out.println( "Made MetaCommand: " + getName() + " IPath: " + iPath_ + " Path: " + getSpaceSystemPath() );
         }
 
     }

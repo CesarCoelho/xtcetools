@@ -831,7 +831,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
             inheritancePathBuilder.append( metaCommandName );
         }
 
-        System.out.println( "Set Inheritance Path For TC: " + inheritancePathBuilder.toString() );
+        //System.out.println( "Set Inheritance Path For TC: " + inheritancePathBuilder.toString() );
         return inheritancePathBuilder.toString();
 
     }
@@ -865,20 +865,20 @@ public class XTCESpaceSystem extends XTCENamedObject {
         String name = XTCEFunctions.getNameFromPathReferenceString( ssPath );
         String path = XTCEFunctions.getPathNameFromReferenceString( ssPath );
         ArrayList<XTCESpaceSystem> spaceSystems = databaseReference_.getSpaceSystemTree();
-        System.out.println( "Searching for MetaCommand " + name + " at " + path );
+        //System.out.println( "Searching for MetaCommand " + name + " at " + path );
         for ( XTCESpaceSystem spaceSystem : spaceSystems ) {
-            System.out.println( "Checking in Space System " + spaceSystem.getFullPath() );
+            //System.out.println( "Checking in Space System " + spaceSystem.getFullPath() );
             if ( spaceSystem.getFullPath().equals( path ) == true ) {
                 List<Object> metacommands =
                     spaceSystem.getReference()
                                .getCommandMetaData()
                                .getMetaCommandSet()
                                .getMetaCommandOrMetaCommandRefOrBlockMetaCommand();
-                System.out.println( "Found " + Integer.toString( metacommands.size() ) + " MetaCommands" );
+                //System.out.println( "Found " + Integer.toString( metacommands.size() ) + " MetaCommands" );
                 for ( Object metacommand : metacommands ) {
                     if ( metacommand.getClass() == MetaCommandType.class ) {
                         MetaCommandType found = (MetaCommandType)metacommand;
-                        System.out.println( "Found MetaCommand " + found.getName() );
+                        //System.out.println( "Found MetaCommand " + found.getName() );
                         if ( found.getName().equals( name ) == true ) {
                             return found;
                         }
