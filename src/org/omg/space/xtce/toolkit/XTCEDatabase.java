@@ -541,8 +541,8 @@ public final class XTCEDatabase {
                 spaceSystems.get( iii ).getTelemetryParameters();
             for ( XTCEParameter parameter : parameters ) {
                 String alias = parameter.getAlias( aliasNameSpace );
-                if ( ( alias.isEmpty()                                              == false ) &&
-                     ( XTCEFunctions.matchesUsingGlob( parameter.getName(), alias ) == true  ) ) {
+                if ( ( alias.isEmpty()                                    == false ) &&
+                     ( XTCEFunctions.matchesUsingGlob( alias, aliasGlob ) == true  ) ) {
                     list.add( parameter );
                 }
             }
@@ -629,8 +629,8 @@ public final class XTCEDatabase {
                 spaceSystems.get( iii ).getTelecommandParameters();
             for ( XTCEParameter parameter : parameters ) {
                 String alias = parameter.getAlias( aliasNameSpace );
-                if ( ( alias.isEmpty()                                              == false ) &&
-                     ( XTCEFunctions.matchesUsingGlob( parameter.getName(), alias ) == true  ) ) {
+                if ( ( alias.isEmpty()                                    == false ) &&
+                     ( XTCEFunctions.matchesUsingGlob( alias, aliasGlob ) == true  ) ) {
                     list.add( parameter );
                 }
             }
