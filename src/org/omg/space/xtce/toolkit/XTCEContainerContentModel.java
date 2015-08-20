@@ -42,7 +42,8 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
      * entries on the entry list.
      *
      * @param userValues ArrayList of XTCEContainerEntryValue objects for TM
-     * Parameters that are within the container.
+     * Parameters that are within the container.  This can be null if no values
+     * are needed to be passed into conditional processing.
      *
      * @param showAllConditions boolean indicating if unsatisfied conditional
      * includes should be pursued at depth.  This can be a performance hit if
@@ -53,10 +54,10 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
      *
      */
 
-    XTCEContainerContentModel( XTCETMContainer                    container,
-                               ArrayList<XTCESpaceSystem>         spaceSystems,
-                               ArrayList<XTCEContainerEntryValue> userValues,
-                               boolean                            showAllConditions ) throws XTCEDatabaseException {
+    public XTCEContainerContentModel( XTCETMContainer                    container,
+                                      ArrayList<XTCESpaceSystem>         spaceSystems,
+                                      ArrayList<XTCEContainerEntryValue> userValues,
+                                      boolean                            showAllConditions ) throws XTCEDatabaseException {
 
         super( spaceSystems, userValues, null, showAllConditions );
         container_          = container;
@@ -85,9 +86,9 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
      *
      */
 
-    XTCEContainerContentModel( XTCETMContainer                    container,
-                               ArrayList<XTCESpaceSystem>         spaceSystems,
-                               byte[]                             binaryData ) throws XTCEDatabaseException {
+    public XTCEContainerContentModel( XTCETMContainer                    container,
+                                      ArrayList<XTCESpaceSystem>         spaceSystems,
+                                      byte[]                             binaryData ) throws XTCEDatabaseException {
 
         super( spaceSystems, null, binaryData, false );
         container_          = container;
