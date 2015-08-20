@@ -31,10 +31,10 @@ public class XTCEContainerEntryValue {
      *
      */
 
-    XTCEContainerEntryValue( XTCEParameter parameter,
-                             String        value,
-                             String        operator,
-                             String        form ) {
+    public XTCEContainerEntryValue( XTCEParameter parameter,
+                                    String        value,
+                                    String        operator,
+                                    String        form ) {
 
         name_                     = parameter.getFullPath();
         value_                    = value;
@@ -61,10 +61,10 @@ public class XTCEContainerEntryValue {
      *
      */
 
-    XTCEContainerEntryValue( XTCEArgument argument,
-                             String       value,
-                             String       operator,
-                             String       form ) {
+    public XTCEContainerEntryValue( XTCEArgument argument,
+                                    String       value,
+                                    String       operator,
+                                    String       form ) {
 
         name_                     = argument.getName();
         value_                    = value;
@@ -87,7 +87,7 @@ public class XTCEContainerEntryValue {
      *
      */
 
-    XTCEContainerEntryValue( String value ) {
+    public XTCEContainerEntryValue( String value ) {
 
         name_                     = "";
         value_                    = value;
