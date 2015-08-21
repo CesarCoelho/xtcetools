@@ -77,7 +77,7 @@ public final class XTCEDatabase {
         if ( dbFile.isFile() == false || dbFile.canRead() == false ) {
             throw new XTCEDatabaseException(
                 XTCEFunctions.getText( "file_chooser_noload_text" ) + // NOI18N
-                " " +
+                " " + // NOI18N
                 dbFile.toString() );
         }
 
@@ -127,7 +127,7 @@ public final class XTCEDatabase {
             topLevelSpaceSystem = ( factory.createSpaceSystemType() );
             jaxbElementRoot     = factory.createSpaceSystem( topLevelSpaceSystem );
             topLevelSpaceSystem.setName( topLevelSpaceSystemName );
-            xtceFilename = new File( "" );
+            xtceFilename = new File( "" ); // NOI18N
             setChanged( true );
 
         } catch ( Exception ex ) {
@@ -338,7 +338,7 @@ public final class XTCEDatabase {
 
     public XTCESpaceSystem getRootSpaceSystem( ) {
 
-        return new XTCESpaceSystem( "/" + topLevelSpaceSystem.getName(),
+        return new XTCESpaceSystem( "/" + topLevelSpaceSystem.getName(), // NOI18N
                                     topLevelSpaceSystem,
                                     this );
 
@@ -360,7 +360,7 @@ public final class XTCEDatabase {
             new ArrayList<XTCESpaceSystem>();
 
         XTCESpaceSystem rootSpaceSystem =
-            new XTCESpaceSystem( "/" + topLevelSpaceSystem.getName(),
+            new XTCESpaceSystem( "/" + topLevelSpaceSystem.getName(), // NOI18N
                                  topLevelSpaceSystem,
                                  this );
         spaceSystems.add( rootSpaceSystem );
@@ -479,10 +479,12 @@ public final class XTCEDatabase {
     public ArrayList<XTCEParameter> getTelemetryParameters( ) {
 
         ArrayList<XTCESpaceSystem> spaceSystems = getSpaceSystemTree();
-        ArrayList<XTCEParameter> list = new ArrayList<>();
-        for ( int iii = 0; iii < spaceSystems.size(); ++iii ) {
-            list.addAll( spaceSystems.get( iii ).getTelemetryParameters() );
+        ArrayList<XTCEParameter>   list         = new ArrayList<>();
+
+        for ( XTCESpaceSystem spaceSystem : spaceSystems ) {
+            list.addAll( spaceSystem.getTelemetryParameters() );
         }
+
         return list;
 
     }
@@ -494,6 +496,9 @@ public final class XTCEDatabase {
      * possible for this method to return multiple results even for a name that
      * is exact.
      *
+     * TODO: This function can be optimized for searches that do not include
+     * glob matching.  Not sure if this is needed though.
+     *
      * @param nameGlob String containing a precise name or a glob of potential
      * names.
      *
@@ -504,7 +509,8 @@ public final class XTCEDatabase {
     public ArrayList<XTCEParameter> getTelemetryParameters( String nameGlob ) {
 
         ArrayList<XTCESpaceSystem> spaceSystems = getSpaceSystemTree();
-        ArrayList<XTCEParameter> list = new ArrayList<>();
+        ArrayList<XTCEParameter>   list         = new ArrayList<>();
+
         for ( int iii = 0; iii < spaceSystems.size(); ++iii ) {
             ArrayList<XTCEParameter> parameters =
                 spaceSystems.get( iii ).getTelemetryParameters();
@@ -514,6 +520,7 @@ public final class XTCEDatabase {
                 }
             }
         }
+
         return list;
 
     }
@@ -535,7 +542,8 @@ public final class XTCEDatabase {
                                                             String aliasNameSpace ) {
 
         ArrayList<XTCESpaceSystem> spaceSystems = getSpaceSystemTree();
-        ArrayList<XTCEParameter> list = new ArrayList<>();
+        ArrayList<XTCEParameter>   list         = new ArrayList<>();
+
         for ( int iii = 0; iii < spaceSystems.size(); ++iii ) {
             ArrayList<XTCEParameter> parameters =
                 spaceSystems.get( iii ).getTelemetryParameters();
@@ -547,6 +555,7 @@ public final class XTCEDatabase {
                 }
             }
         }
+
         return list;
 
     }
@@ -567,10 +576,12 @@ public final class XTCEDatabase {
     public ArrayList<XTCEParameter> getTelecommandParameters( ) {
 
         ArrayList<XTCESpaceSystem> spaceSystems = getSpaceSystemTree();
-        ArrayList<XTCEParameter> list = new ArrayList<>();
-        for ( int iii = 0; iii < spaceSystems.size(); ++iii ) {
-            list.addAll( spaceSystems.get( iii ).getTelecommandParameters() );
+        ArrayList<XTCEParameter>   list         = new ArrayList<>();
+
+        for ( XTCESpaceSystem spaceSystem : spaceSystems ) {
+            list.addAll( spaceSystem.getTelecommandParameters() );
         }
+
         return list;
 
     }
@@ -582,6 +593,9 @@ public final class XTCEDatabase {
      * possible for this method to return multiple results even for a name that
      * is exact.
      *
+     * TODO: This function can be optimized for searches that do not include
+     * glob matching.  Not sure if this is needed though.
+     *
      * @param nameGlob String containing a precise name or a glob of potential
      * names.
      *
@@ -592,16 +606,18 @@ public final class XTCEDatabase {
     public ArrayList<XTCEParameter> getTelecommandParameters( String nameGlob ) {
 
         ArrayList<XTCESpaceSystem> spaceSystems = getSpaceSystemTree();
-        ArrayList<XTCEParameter> list = new ArrayList<>();
+        ArrayList<XTCEParameter>   list         = new ArrayList<>();
+
         for ( int iii = 0; iii < spaceSystems.size(); ++iii ) {
             ArrayList<XTCEParameter> parameters =
                 spaceSystems.get( iii ).getTelecommandParameters();
             for ( XTCEParameter parameter : parameters ) {
-                if ( XTCEFunctions.matchesUsingGlob( parameter.getName(), nameGlob) ) {
+                if ( XTCEFunctions.matchesUsingGlob( parameter.getName(), nameGlob) == true ) {
                     list.add( parameter );
                 }
             }
         }
+
         return list;
 
     }
@@ -623,7 +639,8 @@ public final class XTCEDatabase {
                                                               String aliasNameSpace ) {
 
         ArrayList<XTCESpaceSystem> spaceSystems = getSpaceSystemTree();
-        ArrayList<XTCEParameter> list = new ArrayList<>();
+        ArrayList<XTCEParameter>   list         = new ArrayList<>();
+
         for ( int iii = 0; iii < spaceSystems.size(); ++iii ) {
             ArrayList<XTCEParameter> parameters =
                 spaceSystems.get( iii ).getTelecommandParameters();
@@ -635,6 +652,7 @@ public final class XTCEDatabase {
                 }
             }
         }
+
         return list;
 
     }
@@ -655,10 +673,12 @@ public final class XTCEDatabase {
     public ArrayList<XTCEParameter> getParameters( ) {
 
         ArrayList<XTCESpaceSystem> spaceSystems = getSpaceSystemTree();
-        ArrayList<XTCEParameter> list = new ArrayList<>();
-        for ( int iii = 0; iii < spaceSystems.size(); ++iii ) {
-            list.addAll( spaceSystems.get( iii ).getParameters() );
+        ArrayList<XTCEParameter>   list         = new ArrayList<>();
+
+        for ( XTCESpaceSystem spaceSystem : spaceSystems ) {
+            list.addAll( spaceSystem.getParameters() );
         }
+
         return list;
 
     }
@@ -982,7 +1002,7 @@ public final class XTCEDatabase {
                //System.out.println( "not sure why null" );
             } else {
                String newCurrent =
-                    currentSpaceSystem.getFullPath() + "/" + ssTree.get( iii ).getName();
+                    currentSpaceSystem.getFullPath() + "/" + ssTree.get( iii ).getName(); // NOI18N
                XTCESpaceSystem childSpaceSystem =
                     new XTCESpaceSystem( newCurrent, ssTree.get( iii ), this );
                spaceSystemList.add( childSpaceSystem );
@@ -1155,7 +1175,7 @@ public final class XTCEDatabase {
                                  getStringParameterTypeOrEnumeratedParameterTypeOrIntegerParameterType();
                 for ( int jjj = 0; jjj < tmtypes.size(); ++jjj ) {
                     parameterTypes.put( spaceSystems.get( iii ).getFullPath() +
-                                        "/" +
+                                        "/" + // NOI18N
                                         tmtypes.get( jjj ).getName(),
                                         tmtypes.get( jjj ) );
                 }
@@ -1172,7 +1192,7 @@ public final class XTCEDatabase {
                                  getStringParameterTypeOrEnumeratedParameterTypeOrIntegerParameterType();
                 for ( int jjj = 0; jjj < tctypes.size(); ++jjj ) {
                     parameterTypes.put( spaceSystems.get( iii ).getFullPath() +
-                                        "/" +
+                                        "/" + // NOI18N
                                         tctypes.get( jjj ).getName(),
                                         tctypes.get( jjj ) );
                 }
@@ -1209,7 +1229,7 @@ public final class XTCEDatabase {
                                  getArgumentTypeSet().
                                  getStringArgumentTypeOrEnumeratedArgumentTypeOrIntegerArgumentType();
                for ( int jjj = 0; jjj < argtypes.size(); ++jjj ) {
-                  argumentTypes.put( spaceSystems.get( iii ).getFullPath() + "/" + argtypes.get( jjj ).getName(), argtypes.get( jjj ) );
+                  argumentTypes.put( spaceSystems.get( iii ).getFullPath() + "/" + argtypes.get( jjj ).getName(), argtypes.get( jjj ) ); // NOI18N
                }
             } catch ( NullPointerException ex ) {
                 // this is okay, skip this SpaceSystem since it does not have types

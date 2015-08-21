@@ -139,7 +139,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
     public String getOperationalStatus() {
         if ( getReference().getOperationalStatus() == null ) {
-            return "";
+            return ""; // NOI18N
         }
         return getReference().getOperationalStatus();
     }
@@ -253,7 +253,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
         if ( classification == null || classification.isEmpty() == true ) {
             header.setClassification( null );
-        } else if ( classification.equals( "NotClassified") == true ) {
+        } else if ( classification.equals( "NotClassified") == true ) { // NOI18N
             header.setClassification( null );
         } else {
             header.setClassification( classification );
@@ -268,7 +268,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
         if ( validation != null && validation.isEmpty() == false ) {
             header.setValidationStatus( validation );
         } else {
-            header.setValidationStatus( "Unknown" );
+            header.setValidationStatus( "Unknown" ); // NOI18N
         }
 
     }
@@ -298,14 +298,20 @@ public class XTCESpaceSystem extends XTCENamedObject {
         }
 
         try {
-            List<Object> xmlParameters = getReference().getTelemetryMetaData().getParameterSet().getParameterOrParameterRef();
-            ArrayList<XTCEParameter> parameters = addParameters( xmlParameters );
-            tmParameterHashTable_ = ensureHashTable( parameters );
-            for ( XTCEParameter parameter : parameters ) {
-                if ( parameter.getName().equals( name ) == true ) {
-                    return true;
-                }
-            }
+            List<Object> xmlParameters = getReference().
+                                         getTelemetryMetaData().
+                                         getParameterSet().
+                                         getParameterOrParameterRef();
+            //ArrayList<XTCEParameter> parameters =
+            //    addParameters( xmlParameters );
+            tmParameterHashTable_ =
+                ensureHashTable( addParameters( xmlParameters ) );
+            return isTelemetryParameter( name );
+            //for ( XTCEParameter parameter : parameters ) {
+            //    if ( parameter.getName().equals( name ) == true ) {
+            //        return true;
+            //    }
+            //}
         } catch ( NullPointerException ex ) {
             // this is okay, the SpaceSystem may not have any TM parameters
         }
@@ -339,14 +345,20 @@ public class XTCESpaceSystem extends XTCENamedObject {
         }
 
         try {
-            List<Object> xmlParameters = getReference().getCommandMetaData().getParameterSet().getParameterOrParameterRef();
-            ArrayList<XTCEParameter> parameters = addParameters( xmlParameters );
-            tcParameterHashTable_ = ensureHashTable( parameters );
-            for ( XTCEParameter parameter : parameters ) {
-                if ( parameter.getName().equals( name ) == true ) {
-                    return true;
-                }
-            }
+            List<Object> xmlParameters = getReference().
+                                         getCommandMetaData().
+                                         getParameterSet().
+                                         getParameterOrParameterRef();
+            //ArrayList<XTCEParameter> parameters =
+            //    addParameters( xmlParameters );
+            tcParameterHashTable_ =
+                ensureHashTable( addParameters( xmlParameters ) );
+            return isTelecommandParameter( name );
+            //for ( XTCEParameter parameter : parameters ) {
+            //    if ( parameter.getName().equals( name ) == true ) {
+            //        return true;
+            //    }
+            //}
         } catch ( NullPointerException ex ) {
             // this is okay, the SpaceSystem may not have any TM parameters
         }
@@ -383,24 +395,44 @@ public class XTCESpaceSystem extends XTCENamedObject {
             if ( parameter != null ) {
                 return parameter;
             } else {
-                throw new XTCEDatabaseException( "TM Parameter " + name + " not found in Space System " + getFullPath() );
+                throw new XTCEDatabaseException( XTCEFunctions.getText( "error_tmp" ) + // NOI18N
+                                                 " '" + // NOI18N
+                                                 name +
+                                                 "' " + // NOI18N
+                                                 XTCEFunctions.getText( "error_not_in_ss" ) + // NOI18N
+                                                 " '" + // NOI18N
+                                                 getFullPath() +
+                                                 "'" ); // NOI18N
             }
         }
 
         try {
-            List<Object> xmlParameters = getReference().getTelemetryMetaData().getParameterSet().getParameterOrParameterRef();
-            ArrayList<XTCEParameter> parameters = addParameters( xmlParameters );
-            tmParameterHashTable_ = ensureHashTable( parameters );
-            for ( XTCEParameter parameter : parameters ) {
-                if ( parameter.getName().equals( name ) == true ) {
-                    return parameter;
-                }
-            }
+            List<Object> xmlParameters = getReference().
+                                         getTelemetryMetaData().
+                                         getParameterSet().
+                                         getParameterOrParameterRef();
+            //ArrayList<XTCEParameter> parameters =
+            //    addParameters( xmlParameters );
+            tmParameterHashTable_ =
+                ensureHashTable( addParameters( xmlParameters ) );
+            return getTelemetryParameter( name );
+            //for ( XTCEParameter parameter : parameters ) {
+            //    if ( parameter.getName().equals( name ) == true ) {
+            //        return parameter;
+            //    }
+            //}
         } catch ( NullPointerException ex ) {
             // this is okay, the SpaceSystem may not have any TM parameters
         }
 
-        throw new XTCEDatabaseException( "TM Parameter " + name + " not found in Space System " + getFullPath() );
+        throw new XTCEDatabaseException( XTCEFunctions.getText( "error_tmp" ) + // NOI18N
+                                         " '" + // NOI18N
+                                         name +
+                                         "' " + // NOI18N
+                                         XTCEFunctions.getText( "error_not_in_ss" ) + // NOI18N
+                                         " '" + // NOI18N
+                                         getFullPath() +
+                                         "'" ); // NOI18N
 
     }
 
@@ -433,24 +465,44 @@ public class XTCESpaceSystem extends XTCENamedObject {
             if ( parameter != null ) {
                 return parameter;
             } else {
-                throw new XTCEDatabaseException( "TC Parameter " + name + " not found in Space System " + getFullPath() );
+                throw new XTCEDatabaseException( XTCEFunctions.getText( "error_tcp" ) + // NOI18N
+                                                 " '" + // NOI18N
+                                                 name +
+                                                 "' " + // NOI18N
+                                                 XTCEFunctions.getText( "error_not_in_ss" ) + // NOI18N
+                                                 " '" + // NOI18N
+                                                 getFullPath() +
+                                                 "'" ); // NOI18N
             }
         }
 
         try {
-            List<Object> xmlParameters = getReference().getCommandMetaData().getParameterSet().getParameterOrParameterRef();
-            ArrayList<XTCEParameter> parameters = addParameters( xmlParameters );
-            tcParameterHashTable_ = ensureHashTable( parameters );
-            for ( XTCEParameter parameter : parameters ) {
-                if ( parameter.getName().equals( name ) == true ) {
-                    return parameter;
-                }
-            }
+            List<Object> xmlParameters = getReference().
+                                         getCommandMetaData().
+                                         getParameterSet().
+                                         getParameterOrParameterRef();
+            //ArrayList<XTCEParameter> parameters =
+            //    addParameters( xmlParameters );
+            tcParameterHashTable_ =
+                ensureHashTable( addParameters( xmlParameters ) );
+            return getTelecommandParameter( name );
+            //for ( XTCEParameter parameter : parameters ) {
+            //    if ( parameter.getName().equals( name ) == true ) {
+            //        return parameter;
+            //    }
+            //}
         } catch ( NullPointerException ex ) {
             // this is okay, the SpaceSystem may not have any TM parameters
         }
 
-        throw new XTCEDatabaseException( "TC Parameter " + name + " not found in Space System " + getFullPath() );
+        throw new XTCEDatabaseException( XTCEFunctions.getText( "error_tcp" ) + // NOI18N
+                                         " '" + // NOI18N
+                                         name +
+                                         "' " + // NOI18N
+                                         XTCEFunctions.getText( "error_not_in_ss" ) + // NOI18N
+                                         " '" + // NOI18N
+                                         getFullPath() +
+                                         "'" ); // NOI18N
 
     }
 
@@ -474,7 +526,10 @@ public class XTCESpaceSystem extends XTCENamedObject {
     public ArrayList<XTCEParameter> getTelemetryParameters() {
 
         try {
-           List<Object> parameters = getReference().getTelemetryMetaData().getParameterSet().getParameterOrParameterRef();
+           List<Object> parameters = getReference().
+                                     getTelemetryMetaData().
+                                     getParameterSet().
+                                     getParameterOrParameterRef();
            return addParameters( parameters );
         } catch ( NullPointerException ex ) {
             // this is okay, the SpaceSystem may not have any TM parameters
@@ -503,10 +558,13 @@ public class XTCESpaceSystem extends XTCENamedObject {
     public ArrayList<XTCEParameter> getTelecommandParameters() {
 
         try {
-           List<Object> parameters = getReference().getCommandMetaData().getParameterSet().getParameterOrParameterRef();
+           List<Object> parameters = getReference().
+                                     getCommandMetaData().
+                                     getParameterSet().
+                                     getParameterOrParameterRef();
            return addParameters( parameters );
         } catch ( NullPointerException ex ) {
-            // this is okay, the SpaceSystem may not have any TM parameters
+            // this is okay, the SpaceSystem may not have any TC parameters
         }
         return new ArrayList<>();
 
@@ -557,7 +615,10 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
         String name = XTCEFunctions.getNameFromPathReferenceString( nameOrPath );
 
-        List<SequenceContainerType> containers = getReference().getTelemetryMetaData().getContainerSet().getSequenceContainer();
+        List<SequenceContainerType> containers = getReference().
+                                                 getTelemetryMetaData().
+                                                 getContainerSet().
+                                                 getSequenceContainer();
         for ( SequenceContainerType container : containers ) {
             if ( container.getName().equals( name ) == true ) {
                 return new XTCETMContainer( getFullPath(),
@@ -566,7 +627,14 @@ public class XTCESpaceSystem extends XTCENamedObject {
             }
         }
 
-        throw new XTCEDatabaseException( "Container " + nameOrPath + " does not exist in Space System " + getFullPath() );
+        throw new XTCEDatabaseException( XTCEFunctions.getText( "error_tmc" ) + // NOI18N
+                                         " '" + // NOI18N
+                                         nameOrPath +
+                                         "' " + // NOI18N
+                                         XTCEFunctions.getText( "error_not_in_ss" ) + // NOI18N
+                                         " '" + // NOI18N
+                                         getFullPath() +
+                                         "'" ); // NOI18N
 
     }
 
@@ -706,8 +774,14 @@ public class XTCESpaceSystem extends XTCENamedObject {
             }
         }
 
-        throw new XTCEDatabaseException( "Telecommand " +
-            nameOrPath + " does not exist in Space System " + getFullPath() );
+        throw new XTCEDatabaseException( XTCEFunctions.getText( "general_telecommand" ) + // NOI18N
+                                         " '" + // NOI18N
+                                         nameOrPath +
+                                         "' " + // NOI18N
+                                         XTCEFunctions.getText( "error_not_in_ss" ) + // NOI18N
+                                         " '" + // NOI18N
+                                         getFullPath() +
+                                         "'" ); // NOI18N
 
     }
 
@@ -740,7 +814,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
                 try {
                     if ( ( metacommand.getClass() == MetaCommandType.class  ) ||
                          ( metacommand.getClass() == BlockMetaCommand.class ) ) {
-                        System.out.println( "Loading " + ((NameDescriptionType)metacommand).getName() );
+                        //System.out.println( "Loading " + ((NameDescriptionType)metacommand).getName() );
                         list.add( new XTCETelecommand( getFullPath(),
                                                        makeTelecommandInheritanceString( metacommand ),
                                                        metacommand,
@@ -797,7 +871,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
         StringBuilder inheritancePathBuilder = new StringBuilder();
         for ( String containerName : cpathList ) {
-            inheritancePathBuilder.append( "/" );
+            inheritancePathBuilder.append( "/" ); // NOI18N
             inheritancePathBuilder.append( containerName );
         }
 
@@ -809,7 +883,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
         if ( metacommand.getClass() != MetaCommandType.class ) {
             /// @todo BlockMetaCommand
-            return "";
+            return ""; // NOI18N
         }
 
         LinkedList<String> cpathList = new LinkedList<>();
@@ -827,7 +901,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
         StringBuilder inheritancePathBuilder = new StringBuilder();
         for ( String metaCommandName : cpathList ) {
-            inheritancePathBuilder.append( "/" );
+            inheritancePathBuilder.append( "/" ); // NOI18N
             inheritancePathBuilder.append( metaCommandName );
         }
 
@@ -840,7 +914,9 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
         String name = XTCEFunctions.getNameFromPathReferenceString( ssPath );
         String path = XTCEFunctions.getPathNameFromReferenceString( ssPath );
-        ArrayList<XTCESpaceSystem> spaceSystems = databaseReference_.getSpaceSystemTree();
+
+        ArrayList<XTCESpaceSystem> spaceSystems =
+            databaseReference_.getSpaceSystemTree();
         for ( XTCESpaceSystem spaceSystem : spaceSystems ) {
             if ( spaceSystem.getFullPath().equals( path ) == true ) {
                 List<SequenceContainerType> containers =
@@ -856,7 +932,14 @@ public class XTCESpaceSystem extends XTCENamedObject {
             }
         }
 
-        throw new XTCEDatabaseException( "Container named " + name + " not found in Space System " + path );
+        throw new XTCEDatabaseException( XTCEFunctions.getText( "error_tmc" ) + // NOI18N
+                                         " '" + // NOI18N
+                                         name +
+                                         "' " + // NOI18N
+                                         XTCEFunctions.getText( "error_not_in_ss" ) + // NOI18N
+                                         " '" + // NOI18N
+                                         path +
+                                         "'" ); // NOI18N
 
     }
 
@@ -887,7 +970,14 @@ public class XTCESpaceSystem extends XTCENamedObject {
             }
         }
 
-        throw new XTCEDatabaseException( "Telecommand named " + name + " not found in Space System " + path );
+        throw new XTCEDatabaseException( XTCEFunctions.getText( "general_telecommand" ) + // NOI18N
+                                         " '" + // NOI18N
+                                         name +
+                                         "' " + // NOI18N
+                                         XTCEFunctions.getText( "error_not_in_ss" ) + // NOI18N
+                                         " '" + // NOI18N
+                                         path +
+                                         "'" ); // NOI18N
 
     }
 
@@ -897,14 +987,14 @@ public class XTCESpaceSystem extends XTCENamedObject {
         // back without a completely empty list on a SpaceSystem when there is
         // 1 or more errors.
 
-        ArrayList<XTCEParameter> list = new ArrayList<XTCEParameter>();
+        ArrayList<XTCEParameter> list = new ArrayList<>();
 
         for ( int iii = 0; iii < parameters.size(); ++iii ) {
 
             if ( parameters.get( iii ).getClass() == Parameter.class ) {
 
                 Parameter parameter = (Parameter)parameters.get( iii );
-                String    path      = "";
+                String    path      = ""; // NOI18N
 
                 try {
                     path = XTCEFunctions.resolvePathReference( getFullPath(),
@@ -941,7 +1031,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
         for ( Member member : members ) {
 
-            String mpath = "";
+            String mpath = ""; // NOI18N
 
             try {
                 mpath = XTCEFunctions.resolvePathReference( getFullPath(),
@@ -950,7 +1040,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
                 // this is invalid type, we leave the XTCEParameter invalid
             }
 
-            String newbasename = basename + "." + member.getName();
+            String newbasename = basename + "." + member.getName(); // NOI18N
             NameDescriptionType mtype =
                 databaseReference_.getParameterTypeReference( mpath );
             

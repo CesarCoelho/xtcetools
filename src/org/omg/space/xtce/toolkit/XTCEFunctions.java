@@ -69,21 +69,21 @@ public class XTCEFunctions {
                                                String pathReference ) {
 
         StringBuilder fullPath = new StringBuilder();
-        if ( pathReference.charAt( 0 ) != '/' ) {
+        if ( pathReference.charAt( 0 ) != '/' ) { // NOI18N
             fullPath.append( currentPath );
         }
         
-        String[] fields = pathReference.split( "/" );
+        String[] fields = pathReference.split( "/" ); // NOI18N
         for ( String field : fields ) {
             if ( field.equals( ".." ) == true ) {
-                int index = fullPath.lastIndexOf( "/" );
+                int index = fullPath.lastIndexOf( "/" ); // NOI18N
                 if ( index >= 0 ) {
                    fullPath = fullPath.delete( index, fullPath.length() );
                 }
-            } else if ( field.equals( "." ) == true ) {
+            } else if ( field.equals( "." ) == true ) { // NOI18N
                 // do nothing
             } else if ( field.isEmpty() == false ) {
-                fullPath.append( '/' );
+                fullPath.append( '/' ); // NOI18N
                 fullPath.append( field );
             }
         }
@@ -108,7 +108,7 @@ public class XTCEFunctions {
 
     public static String getPathNameFromReferenceString( String filepath ) {
 
-        int idx  = filepath.lastIndexOf( '/' );
+        int idx  = filepath.lastIndexOf( '/' ); // NOI18N
         if ( idx == -1 ) {
             return "";
         }
@@ -276,10 +276,10 @@ public class XTCEFunctions {
             messages = ResourceBundle.getBundle( propLocation, userLocale );
             Locale.setDefault( userLocale );
         } catch ( NullPointerException ex ) {
-            System.out.println( "Invalid Locale, continuing in US English" );
+            System.out.println( "Invalid Locale, continuing in US English" ); // NOI18N
         } catch ( MissingResourceException ex ) {
-            System.out.println( "Missing Language Resource Bundle for " +
-                userLocale.getDisplayName() + ", continuing in US English" );
+            System.out.println( "Missing Language Resource Bundle for " + // NOI18N
+                userLocale.getDisplayName() + ", continuing in US English" ); // NOI18N
         }
     }
 
@@ -308,7 +308,7 @@ public class XTCEFunctions {
      */
 
     public static String generalErrorPrefix() {
-        return getText( "general_error_caps" ) + ": ";
+        return getText( "general_error_caps" ) + ": "; // NOI18N
     }
 
     /** Retrieves the internationalized version of the Warning prefix used for
@@ -319,7 +319,7 @@ public class XTCEFunctions {
      */
 
     public static String generalWarningPrefix() {
-        return getText( "general_warning" ) + ": ";
+        return getText( "general_warning" ) + ": "; // NOI18N
     }
 
     /** Method to format and "beautify" the XML text from a provided DOM
@@ -340,7 +340,7 @@ public class XTCEFunctions {
     public static String xmlPrettyPrint( NodeList nodes ) throws XTCEDatabaseException {
 
         InputStream stream = ClassLoader.getSystemResourceAsStream(
-            "org/omg/space/xtce/toolkit/prettyprint.xsl" );
+            "org/omg/space/xtce/toolkit/prettyprint.xsl" ); // NOI18N
 
         try {
 
@@ -350,7 +350,7 @@ public class XTCEFunctions {
                 TransformerFactory.newInstance()
                                   .newTransformer( new StreamSource( stream ) );
             transformer.setOutputProperty( OutputKeys.OMIT_XML_DECLARATION,
-                                           "yes" );
+                                           "yes" ); // NOI18N
 
             for ( int iii = 0; iii < nodes.getLength(); ++iii ) {
                 Node item = nodes.item( iii );
@@ -368,7 +368,7 @@ public class XTCEFunctions {
                         transformer.transform( source, target );
                         resultsText.append( out.toString() );
                 }
-                resultsText.append( '\n' );
+                resultsText.append( '\n' ); // NOI18N
             }
 
             return resultsText.toString();
@@ -397,7 +397,7 @@ public class XTCEFunctions {
     public static String xmlPrettyPrint( String xmlText ) throws XTCEDatabaseException {
 
         InputStream stream = ClassLoader.getSystemResourceAsStream(
-            "org/omg/space/xtce/toolkit/prettyprint.xsl" );
+            "org/omg/space/xtce/toolkit/prettyprint.xsl" ); // NOI18N
 
         try {
 
@@ -407,7 +407,7 @@ public class XTCEFunctions {
                 TransformerFactory.newInstance()
                                   .newTransformer( new StreamSource( stream ) );
             transformer.setOutputProperty( OutputKeys.OMIT_XML_DECLARATION,
-                                           "yes" );
+                                           "yes" ); // NOI18N
 
             ByteArrayInputStream  inStream  = new ByteArrayInputStream( xmlText.getBytes() );
             ByteArrayOutputStream outStream = new ByteArrayOutputStream();
@@ -443,13 +443,22 @@ public class XTCEFunctions {
         long          freeMemory      = runtime.freeMemory();
         long          freeAlloc       = maxMemory - allocatedMemory;
 
-        sb.append( "MemStats: free memory: " );
+        sb.append( getText( "memstats_title" ) ); // NOI18N
+        sb.append( ": " ); // NOI18N
+        sb.append( getText( "memstats_freemem" ) ); // NOI18N
+        sb.append( " " ); // NOI18N
         sb.append( formatMemoryQuantity( freeMemory ) );
-        sb.append( " allocated memory: " );
+        sb.append( " " ); // NOI18N
+        sb.append( getText( "memstats_allocmem" ) ); // NOI18N
+        sb.append( " " ); // NOI18N
         sb.append( formatMemoryQuantity( allocatedMemory ) );
-        sb.append( " max memory: " );
+        sb.append( " " ); // NOI18N
+        sb.append( getText( "memstats_maxmem" ) ); // NOI18N
+        sb.append( " " ); // NOI18N
         sb.append( formatMemoryQuantity( maxMemory ) );
-        sb.append( " total free memory: " );
+        sb.append( " " ); // NOI18N
+        sb.append( getText( "memstats_totalfreemem" ) ); // NOI18N
+        sb.append( " " ); // NOI18N
         sb.append( formatMemoryQuantity( freeMemory + freeAlloc ) );
 
         return sb.toString();
@@ -471,15 +480,15 @@ public class XTCEFunctions {
 
     private static String formatMemoryQuantity( long amount ) {
 
-        String unit = "K";
+        String unit = "K"; // NOI18N
         double quantity = amount / 1024.0;
 
         if ( quantity > 1024 ) {
-            unit = "M";
+            unit = "M"; // NOI18N
             quantity /= 1024.0;
         }
         if ( quantity > 1024 ) {
-            unit = "G";
+            unit = "G"; // NOI18N
             quantity /= 1024.0;
         }
 
@@ -490,6 +499,6 @@ public class XTCEFunctions {
     }
 
     private static ResourceBundle messages      = null;
-    private static String         propLocation  = "org.omg.space.xtce.toolkit.MessagesBundle";
+    private static String         propLocation  = "org.omg.space.xtce.toolkit.MessagesBundle"; // NOI18N
 
 }
