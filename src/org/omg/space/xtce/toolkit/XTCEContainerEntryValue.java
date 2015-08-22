@@ -82,9 +82,6 @@ public class XTCEContainerEntryValue {
      *
      * @param value The value that should be used for this Parameter.
      *
-     * @param operator The comparison operator that is used for assigning this
-     * value, which can be "==", "!=", and others - refer to the XTCE Schema.
-     *
      */
 
     public XTCEContainerEntryValue( String value ) {
