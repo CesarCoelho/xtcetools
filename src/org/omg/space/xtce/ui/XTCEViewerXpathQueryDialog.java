@@ -8,6 +8,7 @@ package org.omg.space.xtce.ui;
 
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
+import java.util.List;
 import org.omg.space.xtce.toolkit.XTCEDatabase;
 import org.omg.space.xtce.toolkit.XTCEDatabaseException;
 import org.omg.space.xtce.toolkit.XTCEFunctions;
@@ -329,7 +330,7 @@ public class XTCEViewerXpathQueryDialog extends javax.swing.JFrame {
     private void populatePreviousSearches( boolean setEmptyRow ) {
 
         queriesListBox.removeAllItems();
-        ArrayList<String> itemList = prefs_.getSavedXPathQueries();
+        List<String> itemList = prefs_.getSavedXPathQueries();
         if ( setEmptyRow == true ) {
             queriesListBox.addItem( "" );
         }

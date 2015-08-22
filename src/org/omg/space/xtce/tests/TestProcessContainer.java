@@ -7,7 +7,7 @@
 package org.omg.space.xtce.tests;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.util.List;
 import org.omg.space.xtce.toolkit.XTCEContainerContentEntry;
 import org.omg.space.xtce.toolkit.XTCEContainerContentModel;
 import org.omg.space.xtce.toolkit.XTCEDatabase;
@@ -40,7 +40,7 @@ public class TestProcessContainer {
                                                 false,
                                                 null );
 
-            ArrayList<XTCETMContainer> containers = db.getContainers();
+            List<XTCETMContainer> containers = db.getContainers();
 
             for ( XTCETMContainer container : containers ) {
 
@@ -54,7 +54,7 @@ public class TestProcessContainer {
                 long sizeInBytes = model.getTotalSize();
 
                 // for demonstration, get the parameters in the container
-                ArrayList<XTCEContainerContentEntry> entries =
+                List<XTCEContainerContentEntry> entries =
                     model.getContentList();
 
                 for( XTCEContainerContentEntry entry : entries ) {

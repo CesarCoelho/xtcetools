@@ -506,7 +506,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
     }
 
-    /** Retrieves an ArrayList of all TM Parameters modeled by this Space
+    /** Retrieves a List of all TM Parameters modeled by this Space
      * System object.
      *
      * This method does not use the hash lookup because it is a linear grab of
@@ -515,15 +515,15 @@ public class XTCESpaceSystem extends XTCENamedObject {
      * Aggregate Members where their name is in the form A.B, where A is the
      * Parameter Aggregate and B is the name attribute of the Aggregate Member
      * element.  This makes it very easy for the caller to iterate through the
-     * resulting ArrayList without needing to resolve the internal
+     * resulting List without needing to resolve the internal
      * relationships of the XTCE data model.
      *
-     * @return ArrayList of XTCEParameter objects or an empty list if there are
+     * @return List of XTCEParameter objects or an empty list if there are
      * no Parameters modeled within this particular Space System.
      *
      */
 
-    public ArrayList<XTCEParameter> getTelemetryParameters() {
+    public List<XTCEParameter> getTelemetryParameters() {
 
         try {
            List<Object> parameters = getReference().
@@ -538,7 +538,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
     }
 
-    /** Retrieves an ArrayList of all TC Parameters modeled by this Space
+    /** Retrieves a List of all TC Parameters modeled by this Space
      * System object.
      *
      * This method does not use the hash lookup because it is a linear grab of
@@ -547,15 +547,15 @@ public class XTCESpaceSystem extends XTCENamedObject {
      * Aggregate Members where their name is in the form A.B, where A is the
      * Parameter Aggregate and B is the name attribute of the Aggregate Member
      * element.  This makes it very easy for the caller to iterate through the
-     * resulting ArrayList without needing to resolve the internal
+     * resulting List without needing to resolve the internal
      * relationships of the XTCE data model.
      *
-     * @return ArrayList of XTCEParameter objects or an empty list if there are
+     * @return List of XTCEParameter objects or an empty list if there are
      * no Parameters modeled within this particular Space System.
      *
      */
 
-    public ArrayList<XTCEParameter> getTelecommandParameters() {
+    public List<XTCEParameter> getTelecommandParameters() {
 
         try {
            List<Object> parameters = getReference().
@@ -570,7 +570,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
     }
 
-    /** Retrieves an ArrayList of all Parameters modeled by this Space
+    /** Retrieves a List of all Parameters modeled by this Space
      * System object.
      *
      * This method does not use the hash lookup because it is a linear grab of
@@ -579,15 +579,15 @@ public class XTCESpaceSystem extends XTCENamedObject {
      * Aggregate Members where their name is in the form A.B, where A is the
      * Parameter Aggregate and B is the name attribute of the Aggregate Member
      * element.  This makes it very easy for the caller to iterate through the
-     * resulting ArrayList without needing to resolve the internal
+     * resulting List without needing to resolve the internal
      * relationships of the XTCE data model.
      *
-     * @return ArrayList of XTCEParameter objects or an empty list if there are
+     * @return List of XTCEParameter objects or an empty list if there are
      * no Parameters modeled within this particular Space System.
      *
      */
 
-    public ArrayList<XTCEParameter> getParameters() {
+    public List<XTCEParameter> getParameters() {
 
         ArrayList<XTCEParameter> list = new ArrayList<>();
         list.addAll( getTelemetryParameters() );
@@ -638,16 +638,16 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
     }
 
-    /** Retrieve an ArrayList of SequenceContainers that are locally defined
+    /** Retrieve a List of SequenceContainers that are locally defined
      * in this Space System, modeled as XTCETMContainer objects.
      *
-     * @return ArrayList of XTCETMContainer objects representing the containers
+     * @return List of XTCETMContainer objects representing the containers
      * that are modeled by this Space System or an empty list if the Space
      * System does not locally define any SequenceContainer elements.
      *
      */
 
-    public ArrayList<XTCETMContainer> getContainers() {
+    public List<XTCETMContainer> getContainers() {
 
         ArrayList<XTCETMContainer> list = new ArrayList<>();
 
@@ -673,19 +673,19 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
     }
 
-    /** Retrieve an ArrayList of Streams that are locally defined in this
+    /** Retrieve a List of Streams that are locally defined in this
      * Space System, modeled as XTCETMStream objects.
      *
      * Note that Custom Stream elements are not yet supported and will not be
      * included in the final list.
      *
-     * @return ArrayList of XTCETMStream objects representing the streams
+     * @return List of XTCETMStream objects representing the streams
      * that are modeled by this Space System or an empty list if the Space
      * System does not locally define any elements in a StreamSet.
      *
      */
 
-    public ArrayList<XTCETMStream> getStreams() {
+    public List<XTCETMStream> getStreams() {
 
         ArrayList<XTCETMStream> list = new ArrayList<>();
 
@@ -785,22 +785,22 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
     }
 
-    /** Retrieve an ArrayList of MetaCommand or BlockMetaCommand elements that
+    /** Retrieve a List of MetaCommand or BlockMetaCommand elements that
      * are locally defined in this Space System, modeled as XTCETelecommand
      * objects.
      *
      * @todo Figure out the rest of the error handling model for this.
      *
-     * @return ArrayList of XTCETelecommand objects representing the commands
+     * @return List of XTCETelecommand objects representing the commands
      * that are modeled by this Space System or an empty list if the Space
      * System does not locally define any MetaCommand or BlockMetaCommand
      * elements.
      *
      */
 
-    public ArrayList<XTCETelecommand> getTelecommands() {
+    public List<XTCETelecommand> getTelecommands() {
 
-        ArrayList<XTCETelecommand> list = new ArrayList<XTCETelecommand>();
+        ArrayList<XTCETelecommand> list = new ArrayList<>();
 
         try {
 
@@ -836,14 +836,14 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
     /** Private method to initialize the hash table of TM or TM parameters.
      * 
-     * @param list ArrayList of XTCEParameters that have been located/modeled.
+     * @param list List of XTCEParameters that have been located/modeled.
      *
      * @return HashMap of String names to XTCEParameter objects for setting the
      * private data member of this class.
      *
      */
 
-    private HashMap<String, XTCEParameter> ensureHashTable( ArrayList<XTCEParameter> list ) {
+    private HashMap<String, XTCEParameter> ensureHashTable( List<XTCEParameter> list ) {
 
         //System.out.println( "Creating Hash Table in " + getFullPath() );
         HashMap<String, XTCEParameter> table = new HashMap<>( list.size() );
@@ -915,7 +915,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
         String name = XTCEFunctions.getNameFromPathReferenceString( ssPath );
         String path = XTCEFunctions.getPathNameFromReferenceString( ssPath );
 
-        ArrayList<XTCESpaceSystem> spaceSystems =
+        List<XTCESpaceSystem> spaceSystems =
             databaseReference_.getSpaceSystemTree();
         for ( XTCESpaceSystem spaceSystem : spaceSystems ) {
             if ( spaceSystem.getFullPath().equals( path ) == true ) {
@@ -947,7 +947,8 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
         String name = XTCEFunctions.getNameFromPathReferenceString( ssPath );
         String path = XTCEFunctions.getPathNameFromReferenceString( ssPath );
-        ArrayList<XTCESpaceSystem> spaceSystems = databaseReference_.getSpaceSystemTree();
+        List<XTCESpaceSystem> spaceSystems =
+            databaseReference_.getSpaceSystemTree();
         //System.out.println( "Searching for MetaCommand " + name + " at " + path );
         for ( XTCESpaceSystem spaceSystem : spaceSystems ) {
             //System.out.println( "Checking in Space System " + spaceSystem.getFullPath() );
@@ -981,7 +982,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
     }
 
-    private ArrayList<XTCEParameter> addParameters( List<Object> parameters ) {
+    private List<XTCEParameter> addParameters( List<Object> parameters ) {
 
         // TODO Deal with the errors on this better so that we can send warning
         // back without a completely empty list on a SpaceSystem when there is
@@ -1025,7 +1026,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
     }
 
-    private void addMembers( String basename, AggregateDataType type, ArrayList<XTCEParameter> list ) {
+    private void addMembers( String basename, AggregateDataType type, List<XTCEParameter> list ) {
         
         List<Member> members = type.getMemberList().getMember();
 

@@ -11,6 +11,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 /** The XTCEDatabaseExporterCsv class is a specific implementation of the
@@ -61,7 +62,7 @@ public class XTCEDatabaseExporterCsv extends XTCEDatabaseExporter {
      *
      * @param outFile File object to export to the data to.
      *
-     * @return ArrayList containing 0 or more error/warning messages.
+     * @return List containing 0 or more error/warning messages.
      * For this CSV implementation, no messages are produced.  In the event
      * that there are filesystem errors, those will be thrown by exception.
      *
@@ -71,11 +72,11 @@ public class XTCEDatabaseExporterCsv extends XTCEDatabaseExporter {
      */
 
     @Override
-    public ArrayList<String> exportParameters( File outFile ) throws XTCEDatabaseException {
+    public List<String> exportParameters( File outFile ) throws XTCEDatabaseException {
 
         try {
             FileOutputStream stream = new FileOutputStream( outFile );
-            ArrayList<XTCESpaceSystem> spaceSystems = db_.getSpaceSystemTree();
+            List<XTCESpaceSystem> spaceSystems = db_.getSpaceSystemTree();
             if ( properties_.getProperty( "use_header_row" ).equals( "true" ) == true ) {
                 for ( int iii = 0; iii < headerFields_.size(); ++iii ) {
                     stream.write( headerFields_.get( iii ).getBytes() );
@@ -86,7 +87,7 @@ public class XTCEDatabaseExporterCsv extends XTCEDatabaseExporter {
                 stream.write( '\n' );
             }
             for ( XTCESpaceSystem spaceSystem : spaceSystems ) {
-                ArrayList<XTCEParameter> parameters = spaceSystem.getParameters();
+                List<XTCEParameter> parameters = spaceSystem.getParameters();
                 for ( XTCEParameter parameter : parameters ) {
                     stream.write( spaceSystem.getFullPath().getBytes() );
                     stream.write( ',' );

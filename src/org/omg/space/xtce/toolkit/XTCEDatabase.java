@@ -317,8 +317,7 @@ public final class XTCEDatabase {
 
     public XTCESpaceSystem getSpaceSystem( String fullPath ) {
 
-        ArrayList<XTCESpaceSystem> spaceSystems = getSpaceSystemTree();
-        for ( XTCESpaceSystem spaceSystem : spaceSystems ) {
+        for ( XTCESpaceSystem spaceSystem : getSpaceSystemTree() ) {
             if ( spaceSystem.getFullPath().equals( fullPath ) == true ) {
                 return spaceSystem;
             }
@@ -347,17 +346,16 @@ public final class XTCEDatabase {
     /** Retrieve a list of all the SpaceSystem elements in this XTCE document,
      * wrapped inside XTCESpaceSystem objects.
      *
-     * @return ArrayList of XTCESpaceSystem objects that are created from the
+     * @return List of XTCESpaceSystem objects that are created from the
      * structure of the XTCE document.
      *
      */
 
-    public ArrayList<XTCESpaceSystem> getSpaceSystemTree( ) {
+    public List<XTCESpaceSystem> getSpaceSystemTree( ) {
 
         /// @todo make this efficient with a cache or something
 
-        ArrayList<XTCESpaceSystem> spaceSystems =
-            new ArrayList<XTCESpaceSystem>();
+        ArrayList<XTCESpaceSystem> spaceSystems = new ArrayList<>();
 
         XTCESpaceSystem rootSpaceSystem =
             new XTCESpaceSystem( "/" + topLevelSpaceSystem.getName(), // NOI18N
@@ -388,7 +386,7 @@ public final class XTCEDatabase {
     public void addSpaceSystem( String name,
                                 String path ) throws XTCEDatabaseException {
 
-        ArrayList<XTCESpaceSystem> spaceSystems = getSpaceSystemTree();
+        List<XTCESpaceSystem> spaceSystems = getSpaceSystemTree();
 
         if ( path == null || path.isEmpty() == true ) {
             throw new XTCEDatabaseException( XTCEFunctions.getText( "error_addrootss" ) ); // NOI18N
@@ -434,7 +432,7 @@ public final class XTCEDatabase {
 
     public void deleteSpaceSystem( String ssPath ) throws XTCEDatabaseException {
 
-        ArrayList<XTCESpaceSystem> spaceSystems = getSpaceSystemTree();
+        List<XTCESpaceSystem> spaceSystems = getSpaceSystemTree();
 
         int lastSlashIndex = ssPath.lastIndexOf('/');
         String pathOnly = ssPath.substring( 0, lastSlashIndex );
@@ -469,17 +467,17 @@ public final class XTCEDatabase {
      * Similar functions exist on the XTCESpaceSystem objects.  This one is
      * intended to return the entire contents of the XTCE database file.
      *
-     * @return ArrayList of XTCEParameter objects that exist in the entirety
+     * @return List of XTCEParameter objects that exist in the entirety
      * of the file.  The list can possibly be empty if there are no telemetry
      * parameters, which is likely only to happen on a newly created database
      * file.
      *
      */
 
-    public ArrayList<XTCEParameter> getTelemetryParameters( ) {
+    public List<XTCEParameter> getTelemetryParameters( ) {
 
-        ArrayList<XTCESpaceSystem> spaceSystems = getSpaceSystemTree();
-        ArrayList<XTCEParameter>   list         = new ArrayList<>();
+        List<XTCESpaceSystem>    spaceSystems = getSpaceSystemTree();
+        ArrayList<XTCEParameter> list         = new ArrayList<>();
 
         for ( XTCESpaceSystem spaceSystem : spaceSystems ) {
             list.addAll( spaceSystem.getTelemetryParameters() );
@@ -502,17 +500,17 @@ public final class XTCEDatabase {
      * @param nameGlob String containing a precise name or a glob of potential
      * names.
      *
-     * @return ArrayList of XTCEParameter objects found, which can be empty.
+     * @return List of XTCEParameter objects found, which can be empty.
      *
      */
 
-    public ArrayList<XTCEParameter> getTelemetryParameters( String nameGlob ) {
+    public List<XTCEParameter> getTelemetryParameters( String nameGlob ) {
 
-        ArrayList<XTCESpaceSystem> spaceSystems = getSpaceSystemTree();
+        List<XTCESpaceSystem>      spaceSystems = getSpaceSystemTree();
         ArrayList<XTCEParameter>   list         = new ArrayList<>();
 
         for ( int iii = 0; iii < spaceSystems.size(); ++iii ) {
-            ArrayList<XTCEParameter> parameters =
+            List<XTCEParameter> parameters =
                 spaceSystems.get( iii ).getTelemetryParameters();
             for ( XTCEParameter parameter : parameters ) {
                 if ( XTCEFunctions.matchesUsingGlob( parameter.getName(), nameGlob ) == true ) {
@@ -535,17 +533,18 @@ public final class XTCEDatabase {
      * @param aliasNameSpace String containing the namespace of the alias in
      * the XTCE data model.
      *
-     * @return ArrayList of XTCEParameter objects found, which can be empty.
+     * @return List of XTCEParameter objects found, which can be empty.
+     *
      */
 
-    public ArrayList<XTCEParameter> getTelemetryParameters( String aliasGlob,
-                                                            String aliasNameSpace ) {
+    public List<XTCEParameter> getTelemetryParameters( String aliasGlob,
+                                                       String aliasNameSpace ) {
 
-        ArrayList<XTCESpaceSystem> spaceSystems = getSpaceSystemTree();
+        List<XTCESpaceSystem>      spaceSystems = getSpaceSystemTree();
         ArrayList<XTCEParameter>   list         = new ArrayList<>();
 
         for ( int iii = 0; iii < spaceSystems.size(); ++iii ) {
-            ArrayList<XTCEParameter> parameters =
+            List<XTCEParameter> parameters =
                 spaceSystems.get( iii ).getTelemetryParameters();
             for ( XTCEParameter parameter : parameters ) {
                 String alias = parameter.getAlias( aliasNameSpace );
@@ -566,16 +565,16 @@ public final class XTCEDatabase {
      * Similar functions exist on the XTCESpaceSystem objects.  This one is
      * intended to return the entire contents of the XTCE database file.
      *
-     * @return ArrayList of XTCEParameter objects that exist in the entirety
+     * @return List of XTCEParameter objects that exist in the entirety
      * of the file.  The list can possibly be empty if there are no telecommand
      * parameters, which is likely only to happen on a newly created database
      * file.
      *
      */
 
-    public ArrayList<XTCEParameter> getTelecommandParameters( ) {
+    public List<XTCEParameter> getTelecommandParameters( ) {
 
-        ArrayList<XTCESpaceSystem> spaceSystems = getSpaceSystemTree();
+        List<XTCESpaceSystem>      spaceSystems = getSpaceSystemTree();
         ArrayList<XTCEParameter>   list         = new ArrayList<>();
 
         for ( XTCESpaceSystem spaceSystem : spaceSystems ) {
@@ -599,17 +598,17 @@ public final class XTCEDatabase {
      * @param nameGlob String containing a precise name or a glob of potential
      * names.
      *
-     * @return ArrayList of XTCEParameter objects found, which can be empty.
+     * @return List of XTCEParameter objects found, which can be empty.
      *
      */
 
-    public ArrayList<XTCEParameter> getTelecommandParameters( String nameGlob ) {
+    public List<XTCEParameter> getTelecommandParameters( String nameGlob ) {
 
-        ArrayList<XTCESpaceSystem> spaceSystems = getSpaceSystemTree();
+        List<XTCESpaceSystem>      spaceSystems = getSpaceSystemTree();
         ArrayList<XTCEParameter>   list         = new ArrayList<>();
 
         for ( int iii = 0; iii < spaceSystems.size(); ++iii ) {
-            ArrayList<XTCEParameter> parameters =
+            List<XTCEParameter> parameters =
                 spaceSystems.get( iii ).getTelecommandParameters();
             for ( XTCEParameter parameter : parameters ) {
                 if ( XTCEFunctions.matchesUsingGlob( parameter.getName(), nameGlob) == true ) {
@@ -632,17 +631,18 @@ public final class XTCEDatabase {
      * @param aliasNameSpace String containing the namespace of the alias in
      * the XTCE data model.
      *
-     * @return ArrayList of XTCEParameter objects found, which can be empty.
+     * @return List of XTCEParameter objects found, which can be empty.
+     *
      */
 
-    public ArrayList<XTCEParameter> getTelecommandParameters( String aliasGlob,
-                                                              String aliasNameSpace ) {
+    public List<XTCEParameter> getTelecommandParameters( String aliasGlob,
+                                                         String aliasNameSpace ) {
 
-        ArrayList<XTCESpaceSystem> spaceSystems = getSpaceSystemTree();
+        List<XTCESpaceSystem>      spaceSystems = getSpaceSystemTree();
         ArrayList<XTCEParameter>   list         = new ArrayList<>();
 
         for ( int iii = 0; iii < spaceSystems.size(); ++iii ) {
-            ArrayList<XTCEParameter> parameters =
+            List<XTCEParameter> parameters =
                 spaceSystems.get( iii ).getTelecommandParameters();
             for ( XTCEParameter parameter : parameters ) {
                 String alias = parameter.getAlias( aliasNameSpace );
@@ -663,16 +663,16 @@ public final class XTCEDatabase {
      * Similar functions exist on the XTCESpaceSystem objects.  This one is
      * intended to return the entire contents of the XTCE database file.
      *
-     * @return ArrayList of XTCEParameter objects that exist in the entirety
+     * @return List of XTCEParameter objects that exist in the entirety
      * of the file.  The list can possibly be empty if there are no
      * parameters, which is likely only to happen on a newly created database
      * file.
      *
      */
 
-    public ArrayList<XTCEParameter> getParameters( ) {
+    public List<XTCEParameter> getParameters( ) {
 
-        ArrayList<XTCESpaceSystem> spaceSystems = getSpaceSystemTree();
+        List<XTCESpaceSystem>      spaceSystems = getSpaceSystemTree();
         ArrayList<XTCEParameter>   list         = new ArrayList<>();
 
         for ( XTCESpaceSystem spaceSystem : spaceSystems ) {
@@ -689,16 +689,16 @@ public final class XTCEDatabase {
      * Similar functions exist on the XTCESpaceSystem objects.  This one is
      * intended to return the entire contents of the XTCE database file.
      *
-     * @return ArrayList of XTCETMContainer objects that exist in the entirety
+     * @return List of XTCETMContainer objects that exist in the entirety
      * of the file.  The list can possibly be empty if there are no
      * containers, which is likely only to happen on a newly created database
      * file.
      *
      */
 
-    public ArrayList<XTCETMContainer> getContainers( ) {
+    public List<XTCETMContainer> getContainers( ) {
 
-       ArrayList<XTCESpaceSystem> spaceSystems = getSpaceSystemTree();
+       List<XTCESpaceSystem>      spaceSystems = getSpaceSystemTree();
        ArrayList<XTCETMContainer> containers   = new ArrayList<>();
 
        for ( XTCESpaceSystem spaceSystem : spaceSystems ) {
@@ -742,16 +742,16 @@ public final class XTCEDatabase {
      * @param stream XTCETMStream representing the desired stream to find the
      * included containers.
      *
-     * @return ArrayList of XTCETMContainers in the stream.
+     * @return List of XTCETMContainers in the stream.
      *
      * @throws XTCEDatabaseException in the event that the stream root
      * container does not exist in the XTCE document data.
      *
      */
 
-    public ArrayList<XTCETMContainer> getContainers( XTCETMStream stream ) throws XTCEDatabaseException {
+    public List<XTCETMContainer> getContainers( XTCETMStream stream ) throws XTCEDatabaseException {
 
-        ArrayList<XTCETMContainer> containers = getContainers();
+        List<XTCETMContainer>      containers = getContainers();
         ArrayList<XTCETMContainer> retList    = new ArrayList<>();
 
         XTCETMContainer streamRootContainer =
@@ -776,16 +776,16 @@ public final class XTCEDatabase {
      * Similar functions exist on the XTCESpaceSystem objects.  This one is
      * intended to return the entire contents of the XTCE database file.
      *
-     * @return ArrayList of XTCETMStream objects that exist in the entirety
+     * @return List of XTCETMStream objects that exist in the entirety
      * of the file.  The list can possibly be empty if there are no
      * containers, which is likely only to happen on a newly created database
      * file.
      *
      */
 
-    public ArrayList<XTCETMStream> getStreams( ) {
+    public List<XTCETMStream> getStreams( ) {
 
-       ArrayList<XTCESpaceSystem> spaceSystems = getSpaceSystemTree();
+       List<XTCESpaceSystem>      spaceSystems = getSpaceSystemTree();
        ArrayList<XTCETMStream>    streams      = new ArrayList<>();
 
        for ( XTCESpaceSystem spaceSystem : spaceSystems ) {
@@ -804,7 +804,7 @@ public final class XTCEDatabase {
      * @param container XTCETMContainer object containing the container/packet
      * that the caller wishes to decompose.
      *
-     * @param userValues ArrayList of XTCEContainerEntryValue objects that
+     * @param userValues List of XTCEContainerEntryValue objects that
      * represent desired setpoints for parameters in the container.  This
      * permits the caller to decompose a specific packet instance from a
      * container by specifying values for parameters that satisfy include
@@ -826,9 +826,9 @@ public final class XTCEDatabase {
      *
      */
 
-    public XTCEContainerContentModel processContainer( XTCETMContainer                    container,
-                                                       ArrayList<XTCEContainerEntryValue> userValues,
-                                                       boolean                            showAllConditions )
+    public XTCEContainerContentModel processContainer( XTCETMContainer               container,
+                                                       List<XTCEContainerEntryValue> userValues,
+                                                       boolean                       showAllConditions )
         throws XTCEDatabaseException {
 
         return new XTCEContainerContentModel( container,
@@ -876,7 +876,7 @@ public final class XTCEDatabase {
      * @param tcObject XTCETelecommand object containing the telecommand
      * that the caller wishes to decompose.
      *
-     * @param userValues ArrayList of XTCEContainerEntryValue objects that
+     * @param userValues List of XTCEContainerEntryValue objects that
      * represent desired setpoints for arguments and/or parameters in the
      * telecommand container.  This permits the caller to decompose a specific
      * telecommand instance from a more general telecommand by specifying
@@ -898,9 +898,9 @@ public final class XTCEDatabase {
      *
      */
 
-    public XTCETelecommandContentModel processTelecommand( XTCETelecommand                    tcObject,
-                                                           ArrayList<XTCEContainerEntryValue> userValues,
-                                                           boolean                            showAllConditions )
+    public XTCETelecommandContentModel processTelecommand( XTCETelecommand               tcObject,
+                                                           List<XTCEContainerEntryValue> userValues,
+                                                           boolean                       showAllConditions )
         throws XTCEDatabaseException {
 
         return new XTCETelecommandContentModel( tcObject,
@@ -916,14 +916,14 @@ public final class XTCEDatabase {
      * @param parameter XTCEParameter object to find in the containers defined
      * in this XTCE database document.
      *
-     * @return ArrayList of XTCETMContainer objects found, or an empty list if
+     * @return List of XTCETMContainer objects found, or an empty list if
      * the no container references the parameter.
      *
      */
 
-    public ArrayList<XTCETMContainer> findContainers( XTCEParameter parameter ) {
+    public List<XTCETMContainer> findContainers( XTCEParameter parameter ) {
 
-        ArrayList<XTCETMContainer> allContainers = getContainers();
+        List<XTCETMContainer>      allContainers = getContainers();
         ArrayList<XTCETMContainer> containers    = new ArrayList<>();
 
         for ( XTCETMContainer container : allContainers ) {
@@ -986,13 +986,13 @@ public final class XTCEDatabase {
      * @param currentSpaceSystem XTCESpaceSystem object to start the recursion
      * from.
      *
-     * @param spaceSystemList ArrayList of XTCESpaceSystem objects that will
+     * @param spaceSystemList List of XTCESpaceSystem objects that will
      * be populated for the caller.
      *
      */
 
-    private void recurseSpaceSystems( XTCESpaceSystem            currentSpaceSystem,
-                                      ArrayList<XTCESpaceSystem> spaceSystemList ) {
+    private void recurseSpaceSystems( XTCESpaceSystem       currentSpaceSystem,
+                                      List<XTCESpaceSystem> spaceSystemList ) {
         
         List<SpaceSystemType> ssTree =
             currentSpaceSystem.getReference().getSpaceSystem();
@@ -1162,7 +1162,7 @@ public final class XTCEDatabase {
 
         parameterTypes = new HashMap<>();
 
-        ArrayList<XTCESpaceSystem> spaceSystems = getSpaceSystemTree();
+        List<XTCESpaceSystem> spaceSystems = getSpaceSystemTree();
 
         for ( int iii = 0; iii < spaceSystems.size(); ++iii ) {
 
@@ -1217,7 +1217,7 @@ public final class XTCEDatabase {
 
         argumentTypes = new HashMap<>();
 
-        ArrayList<XTCESpaceSystem> spaceSystems = getSpaceSystemTree();
+        List<XTCESpaceSystem> spaceSystems = getSpaceSystemTree();
 
         for ( int iii = 0; iii < spaceSystems.size(); ++iii ) {
 

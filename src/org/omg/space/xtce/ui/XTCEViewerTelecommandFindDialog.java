@@ -8,6 +8,7 @@ package org.omg.space.xtce.ui;
 
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
+import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import org.omg.space.xtce.toolkit.XTCEAlias;
 import org.omg.space.xtce.toolkit.XTCEDatabase;
@@ -297,7 +298,7 @@ public class XTCEViewerTelecommandFindDialog extends javax.swing.JFrame {
 
     private void populatePreviousSearches( boolean setEmptyRow ) {
         searchTextComboBox.removeAllItems();
-        ArrayList<String> itemList = prefs_.getRecentFindTelecommandSearches();
+        List<String> itemList = prefs_.getRecentFindTelecommandSearches();
         if ( setEmptyRow == true ) {
             searchTextComboBox.addItem( "" );
         }
@@ -321,12 +322,12 @@ public class XTCEViewerTelecommandFindDialog extends javax.swing.JFrame {
 
         String preferredNamespace = prefs_.getPreferredAliasNamespaceOption();
 
-        ArrayList<XTCESpaceSystem> spaceSystems = dbFile_.getSpaceSystemTree();
-        ArrayList<XTCETelecommand> results = new ArrayList<XTCETelecommand>();
+        List<XTCESpaceSystem>      spaceSystems = dbFile_.getSpaceSystemTree();
+        ArrayList<XTCETelecommand> results      = new ArrayList<>();
 
         for ( XTCESpaceSystem spaceSystem : spaceSystems ) {
 
-            ArrayList<XTCETelecommand> containers = spaceSystem.getTelecommands();
+            List<XTCETelecommand> containers = spaceSystem.getTelecommands();
 
             for ( XTCETelecommand container : containers ) {
                 if ( containerFindByNameRadioButton.isSelected() == true ) {
@@ -342,7 +343,7 @@ public class XTCEViewerTelecommandFindDialog extends javax.swing.JFrame {
                             }
                         }
                     } else {
-                        ArrayList<XTCEAlias> aliases = container.getAliasSet();
+                        List<XTCEAlias> aliases = container.getAliasSet();
                         for ( XTCEAlias alias : aliases ) {
                             if ( XTCEFunctions.matchesUsingGlob( alias.getAliasName(), searchText) == true ) {
                                 results.add( container );
@@ -359,8 +360,8 @@ public class XTCEViewerTelecommandFindDialog extends javax.swing.JFrame {
 
     }
 
-    private void updateTelecommandTable( ArrayList<XTCETelecommand> results,
-                                       String                     searchText ) {
+    private void updateTelecommandTable( List<XTCETelecommand> results,
+                                         String                searchText ) {
 
         boolean showAllNamespaces   = prefs_.getShowAllAliasNamespacesOption();
         boolean showAliasNamespaces = prefs_.getShowAliasNamespacesOption();

@@ -8,6 +8,7 @@ package org.omg.space.xtce.toolkit;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 /** The XTCEDatabaseExporter class is an abstract base class for providing an
@@ -54,15 +55,15 @@ public abstract class XTCEDatabaseExporter {
      *
      * @param outFile File object to export to the data to.
      *
-     * @return ArrayList containing 0 or more error/warning messages.
+     * @return List containing 0 or more error/warning messages.
      *
      * @throws XTCEDatabaseException thrown in the event that the file cannot
      * be opened/written/etc.
      *
      */
 
-    public ArrayList<String> exportParameters( File outFile ) throws XTCEDatabaseException {
-        ArrayList<String> msg = new ArrayList<String>();
+    public List<String> exportParameters( File outFile ) throws XTCEDatabaseException {
+        ArrayList<String> msg = new ArrayList<>();
         msg.add( XTCEFunctions.getText( "dialog_export_notyetimplemented_text" ) );
         return msg;
     }
@@ -80,15 +81,15 @@ public abstract class XTCEDatabaseExporter {
      *
      * @param outFile File object to export to the data to.
      *
-     * @return ArrayList containing 0 or more error/warning messages.
+     * @return List containing 0 or more error/warning messages.
      *
      * @throws XTCEDatabaseException thrown in the event that the file cannot
      * be opened/written/etc.
      *
      */
 
-    public ArrayList<String> exportContainers( File outFile ) throws XTCEDatabaseException {
-        ArrayList<String> msg = new ArrayList<String>();
+    public List<String> exportContainers( File outFile ) throws XTCEDatabaseException {
+        ArrayList<String> msg = new ArrayList<>();
         msg.add( XTCEFunctions.getText( "dialog_export_notyetimplemented_text" ) );
         return msg;
     }
@@ -106,15 +107,15 @@ public abstract class XTCEDatabaseExporter {
      *
      * @param outFile File object to export to the data to.
      *
-     * @return ArrayList containing 0 or more error/warning messages.
+     * @return List containing 0 or more error/warning messages.
      *
      * @throws XTCEDatabaseException thrown in the event that the file cannot
      * be opened/written/etc.
      *
      */
 
-    public ArrayList<String> exportTelecommands( File outFile ) throws XTCEDatabaseException {
-        ArrayList<String> msg = new ArrayList<String>();
+    public List<String> exportTelecommands( File outFile ) throws XTCEDatabaseException {
+        ArrayList<String> msg = new ArrayList<>();
         msg.add( XTCEFunctions.getText( "dialog_export_notyetimplemented_text" ) );
         return msg;
     }

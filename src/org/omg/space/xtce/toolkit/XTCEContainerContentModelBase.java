@@ -34,10 +34,10 @@ public abstract class XTCEContainerContentModelBase {
      * @param container XTCETMContainer from the database object that contains
      * all the needed entry list items.
      *
-     * @param spaceSystems ArrayList of XTCESpaceSystem objects to search for
+     * @param spaceSystems List of XTCESpaceSystem objects to search for
      * entries on the entry list.
      *
-     * @param userValues ArrayList of XTCEContainerEntryValue objects for TM
+     * @param userValues List of XTCEContainerEntryValue objects for TM
      * Parameters that are within the container.
      *
      * @param binaryData BitSet containing a map of the binary data that makes
@@ -54,10 +54,10 @@ public abstract class XTCEContainerContentModelBase {
      *
      */
 
-    XTCEContainerContentModelBase( ArrayList<XTCESpaceSystem>         spaceSystems,
-                                   ArrayList<XTCEContainerEntryValue> userValues,
-                                   byte[]                             binaryValues,
-                                   boolean                            showAllConditions ) {
+    XTCEContainerContentModelBase( List<XTCESpaceSystem>         spaceSystems,
+                                   List<XTCEContainerEntryValue> userValues,
+                                   byte[]                        binaryValues,
+                                   boolean                       showAllConditions ) {
 
         spaceSystems_      = spaceSystems;
         showAllConditions_ = showAllConditions;
@@ -83,31 +83,31 @@ public abstract class XTCEContainerContentModelBase {
     /** Accessor to retrieve the list of warnings when processing this
      * container.
      *
-     * @return ArrayList of strings containing the warning messages.
+     * @return List of strings containing the warning messages.
      *
      */
 
-    public ArrayList<String> getWarnings() {
+    public List<String> getWarnings() {
         return warnings_;
     }
 
     /** Accessor to retrieve the container content in a pre-processed series
      * of rows that can be iterated through.
      *
-     * @return ArrayList of XTCEContainerContentEntry objects.
+     * @return List of XTCEContainerContentEntry objects.
      *
      */
 
-    public ArrayList<XTCEContainerContentEntry> getContentList() {
+    public List<XTCEContainerContentEntry> getContentList() {
         return contentList_;
     }
 
     /** Retrieve the current applied list of user values.
      *
-     * @return ArrayList of XTCEContainerEntryValue objects.
+     * @return List of XTCEContainerEntryValue objects.
      */
 
-    public ArrayList<XTCEContainerEntryValue> getUserValues() {
+    public List<XTCEContainerEntryValue> getUserValues() {
         return userValues_;
     }
 
@@ -233,7 +233,8 @@ public abstract class XTCEContainerContentModelBase {
 
     protected boolean isEntryConditionSatisfied( XTCEContainerContentEntry entry ) {
 
-        final ArrayList<XTCEContainerEntryValue> conditions = entry.getConditionList();
+        final List<XTCEContainerEntryValue> conditions =
+            entry.getConditionList();
 
         // short circuit if there are no conditionals to evaluate
 
@@ -290,8 +291,7 @@ public abstract class XTCEContainerContentModelBase {
 
     protected void reorderItemsByStartBit() {
 
-        ArrayList<XTCEContainerContentEntry> tempHoldingList =
-            new ArrayList<XTCEContainerContentEntry>();
+        ArrayList<XTCEContainerContentEntry> tempList = new ArrayList<>();
         String sbText = Long.toString( Long.MAX_VALUE );
 
         for ( int iii = ( contentList_.size() - 1 ); iii >= 0; --iii ) {
@@ -299,7 +299,7 @@ public abstract class XTCEContainerContentModelBase {
             if ( item.getStartBit().isEmpty() == true ) {
                 if ( iii < ( contentList_.size() - 1 ) ) {
                     item.setStartBit( sbText );
-                    tempHoldingList.add( item );
+                    tempList.add( item );
                 }
             } else {
                 sbText = item.getStartBit();
@@ -308,7 +308,7 @@ public abstract class XTCEContainerContentModelBase {
 
         Collections.sort( contentList_ );
 
-        for ( XTCEContainerContentEntry item : tempHoldingList ) {
+        for ( XTCEContainerContentEntry item : tempList ) {
             item.setStartBit( "" );
         }
 
@@ -739,8 +739,7 @@ public abstract class XTCEContainerContentModelBase {
             currentStartBit.set( containerEndBit );
         }
         //System.out.println( "Set next start bit in end of container to " + Long.toString( currentStartBit.get() ) );
-        ArrayList<XTCEContainerContentEntry> endList =
-            new ArrayList<XTCEContainerContentEntry>();
+        ArrayList<XTCEContainerContentEntry> endList = new ArrayList<>();
 
         // walk backwards through the content removing entries that are for the
         // containerEnd and add those to a temporary list.
@@ -799,7 +798,7 @@ public abstract class XTCEContainerContentModelBase {
 
     /// List of warning messages collected when processing this container.
 
-    protected ArrayList<String> warnings_ = new ArrayList<String>();
+    protected ArrayList<String> warnings_ = new ArrayList<>();
 
     /// If a binary container was provided then it is captured here
 
@@ -808,19 +807,18 @@ public abstract class XTCEContainerContentModelBase {
     /// The list of userChosenValues to apply to the model built from the
     /// provided container.
 
-    private ArrayList<XTCEContainerEntryValue> userValues_ =
-        new ArrayList<XTCEContainerEntryValue>();
+    private List<XTCEContainerEntryValue> userValues_ = new ArrayList<>();
 
     /// The list of container contents.  This can be container entries,
     /// Parameter entries, Argument entries, and Fixed Value entries.
 
     protected ArrayList<XTCEContainerContentEntry> contentList_ =
-        new ArrayList<XTCEContainerContentEntry>();
+        new ArrayList<>();
 
     /// A list of references to each of the XTCESpaceSystem objects that are a
     /// part of the data for this XTCE file.
 
-    protected ArrayList<XTCESpaceSystem> spaceSystems_ = null;
+    protected List<XTCESpaceSystem> spaceSystems_ = null;
 
     /// A hashed version of the Space System list to speed up searching for
     /// Parameter Members at depth.

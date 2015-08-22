@@ -8,6 +8,7 @@ package org.omg.space.xtce.ui;
 
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
+import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import org.omg.space.xtce.toolkit.XTCEAlias;
 import org.omg.space.xtce.toolkit.XTCEDatabase;
@@ -326,7 +327,7 @@ public class XTCEViewerParameterFindDialog extends javax.swing.JFrame {
 
     private void populatePreviousSearches( boolean setEmptyRow ) {
         searchTextComboBox.removeAllItems();
-        ArrayList<String> itemList = prefs_.getRecentFindParameterSearches();
+        List<String> itemList = prefs_.getRecentFindParameterSearches();
         if ( setEmptyRow == true ) {
             searchTextComboBox.addItem( "" );
         }
@@ -355,12 +356,12 @@ public class XTCEViewerParameterFindDialog extends javax.swing.JFrame {
 
         String preferredNamespace = prefs_.getPreferredAliasNamespaceOption();
 
-        ArrayList<XTCESpaceSystem> spaceSystems = dbFile_.getSpaceSystemTree();
-        ArrayList<XTCEParameter> results = new ArrayList<XTCEParameter>();
+        List<XTCESpaceSystem>    spaceSystems = dbFile_.getSpaceSystemTree();
+        ArrayList<XTCEParameter> results = new ArrayList<>();
 
         for ( XTCESpaceSystem spaceSystem : spaceSystems ) {
 
-            ArrayList<XTCEParameter> parameters = null;
+            List<XTCEParameter> parameters = null;
             if ( telemetryParameterRadioButton.isSelected() == true ) {
                 parameters = spaceSystem.getTelemetryParameters();
             } else {
@@ -381,7 +382,7 @@ public class XTCEViewerParameterFindDialog extends javax.swing.JFrame {
                             }
                         }
                     } else {
-                        ArrayList<XTCEAlias> aliases = parameter.getAliasSet();
+                        List<XTCEAlias> aliases = parameter.getAliasSet();
                         for ( XTCEAlias alias : aliases ) {
                             if ( XTCEFunctions.matchesUsingGlob( alias.getAliasName(), searchText) == true ) {
                                 results.add( parameter );
@@ -398,8 +399,8 @@ public class XTCEViewerParameterFindDialog extends javax.swing.JFrame {
 
     }
 
-    private void updateParameterTable( ArrayList<XTCEParameter> results,
-                                       String                   searchText ) {
+    private void updateParameterTable( List<XTCEParameter> results,
+                                       String              searchText ) {
 
         boolean showAllNamespaces   = prefs_.getShowAllAliasNamespacesOption();
         boolean showAliasNamespaces = prefs_.getShowAliasNamespacesOption();

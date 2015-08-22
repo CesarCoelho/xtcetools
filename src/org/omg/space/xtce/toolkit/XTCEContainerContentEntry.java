@@ -7,6 +7,7 @@
 package org.omg.space.xtce.toolkit;
 
 import java.util.ArrayList;
+import java.util.List;
 import org.omg.space.xtce.database.ComparisonType;
 import org.omg.space.xtce.database.MetaCommandType.BaseMetaCommand.ArgumentAssignmentList.ArgumentAssignment;
 
@@ -42,11 +43,14 @@ public class XTCEContainerContentEntry implements Comparable {
      *
      */
 
-    XTCEContainerContentEntry( XTCEParameter parameter, XTCETMContainer holdingContainer ) {
+    XTCEContainerContentEntry( XTCEParameter   parameter,
+                               XTCETMContainer holdingContainer ) {
+
         itemName   = parameter.getName(); // not used yet??
         fieldType  = FieldType.PARAMETER;
         pReference = parameter;
         hContainer = holdingContainer;
+
     }
 
     /** Constructor
@@ -62,12 +66,15 @@ public class XTCEContainerContentEntry implements Comparable {
      *
      */
 
-    XTCEContainerContentEntry( XTCETMContainer container, XTCETMContainer holdingContainer ) {
+    XTCEContainerContentEntry( XTCETMContainer container,
+                               XTCETMContainer holdingContainer ) {
+
         itemName        = container.getName(); // not used yet??
         fieldType       = FieldType.CONTAINER;
         pReference      = null;
         tmContReference = container;
         hContainer      = holdingContainer;
+
     }
 
     /** Constructor
@@ -83,11 +90,14 @@ public class XTCEContainerContentEntry implements Comparable {
      *
      */
 
-    XTCEContainerContentEntry( XTCEParameter parameter, XTCETelecommand tcContainer ) {
+    XTCEContainerContentEntry( XTCEParameter parameter,
+                               XTCETelecommand tcContainer ) {
+
         itemName    = parameter.getName(); // not used yet??
         fieldType   = FieldType.PARAMETER;
         pReference  = parameter;
         telecommand = tcContainer;
+
     }
 
     /** Constructor
@@ -103,11 +113,14 @@ public class XTCEContainerContentEntry implements Comparable {
      *
      */
 
-    XTCEContainerContentEntry( XTCEArgument argument, XTCETelecommand tcContainer ) {
+    XTCEContainerContentEntry( XTCEArgument    argument,
+                               XTCETelecommand tcContainer ) {
+
         itemName    = argument.getName(); // not used yet??
         fieldType   = FieldType.ARGUMENT;
         aReference  = argument;
         telecommand = tcContainer;
+
     }
 
     /** Constructor
@@ -123,11 +136,14 @@ public class XTCEContainerContentEntry implements Comparable {
      *
      */
 
-    XTCEContainerContentEntry( XTCETCContainer container, XTCETelecommand tcContainer ) {
+    XTCEContainerContentEntry( XTCETCContainer container,
+                               XTCETelecommand tcContainer ) {
+
         itemName         = container.getName(); // not used yet??
         fieldType        = FieldType.CONTAINER;
         tcContReference  = container;
         telecommand      = tcContainer;
+
     }
 
     /** Constructor
@@ -146,13 +162,17 @@ public class XTCEContainerContentEntry implements Comparable {
      *
      */
 
-    XTCEContainerContentEntry( String size, String value, XTCETelecommand tcContainer ) {
+    XTCEContainerContentEntry( String          size,
+                               String          value,
+                               XTCETelecommand tcContainer ) {
+
         itemName    = ""; // not used yet??
         fieldType   = FieldType.CONSTANT;
         telecommand = tcContainer;
         fixedSize   = size;
         long tempValueLong = Long.parseLong( value, 16 );
         entryValue  = new XTCEContainerEntryValue( Long.toString( tempValueLong ) );
+
     }
 
     /** Retrieve the XTCETMContainer that is represented by this entry, or a
@@ -465,12 +485,12 @@ public class XTCEContainerContentEntry implements Comparable {
     /** Retrieve the list of include conditions that are applied to this entry
      * in the container model.
      *
-     * @return ArrayList of XTCEContainerEntryValue conditions objects.  The
+     * @return List of XTCEContainerEntryValue conditions objects.  The
      * list will never be null, but is often empty.
      *
      */
 
-    public ArrayList<XTCEContainerEntryValue> getConditionList() {
+    public List<XTCEContainerEntryValue> getConditionList() {
 
         if ( conditions == null ) {
             return new ArrayList<XTCEContainerEntryValue>();
@@ -489,7 +509,7 @@ public class XTCEContainerContentEntry implements Comparable {
      *
      * @see #isCurrentlyInUse()
      *
-     * @param allConditions ArrayList of XTCEContainerEntryValue conditions to
+     * @param allConditions List of XTCEContainerEntryValue conditions to
      * set the list.
      *
      * @param entryInUse boolean indicating if this entry passes the include
@@ -497,8 +517,8 @@ public class XTCEContainerContentEntry implements Comparable {
      *
      */
 
-    public void setConditionList( ArrayList<XTCEContainerEntryValue> allConditions,
-                                  boolean                            entryInUse ) {
+    public void setConditionList( List<XTCEContainerEntryValue> allConditions,
+                                  boolean                       entryInUse ) {
 
         conditions         = allConditions;
         isCurrentlyApplied = entryInUse;
@@ -677,7 +697,7 @@ public class XTCEContainerContentEntry implements Comparable {
     /// This is the container to hold the conditions for this entry, which is
     /// a list of entries varying other Parameters and values.
 
-    ArrayList<XTCEContainerEntryValue> conditions = null;
+    List<XTCEContainerEntryValue> conditions = null;
 
     /// This is the repeat entry parameter count condition
 

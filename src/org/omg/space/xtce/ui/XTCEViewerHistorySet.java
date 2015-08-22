@@ -199,7 +199,7 @@ public class XTCEViewerHistorySet extends javax.swing.JPanel {
 
     private XTCESpaceSystem   spaceSystem_      = null;
     private JScrollPane       parentScrollPane_ = null;
-    private ArrayList<String> recordsListText_  = new ArrayList<String>();
+    private ArrayList<String> recordsListText_  = new ArrayList<>();
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

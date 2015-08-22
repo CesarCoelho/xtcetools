@@ -190,8 +190,8 @@ public class XTCEViewerAliasSet extends javax.swing.JPanel {
     // Private Data Members
 
     private XTCESpaceSystem   spaceSystem_   = null;
-    private ArrayList<String> aliasItemText_ = new ArrayList<String>();
-    private ArrayList<String> nsItemText_    = new ArrayList<String>();
+    private ArrayList<String> aliasItemText_ = new ArrayList<>();
+    private ArrayList<String> nsItemText_    = new ArrayList<>();
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

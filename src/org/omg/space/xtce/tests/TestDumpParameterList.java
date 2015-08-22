@@ -7,7 +7,7 @@
 package org.omg.space.xtce.tests;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.util.List;
 import org.omg.space.xtce.toolkit.XTCEAlias;
 import org.omg.space.xtce.toolkit.XTCEDatabase;
 import org.omg.space.xtce.toolkit.XTCEParameter;
@@ -46,11 +46,11 @@ public class TestDumpParameterList {
             XTCEDatabase db =
                 new XTCEDatabase( new File( args[0] ), false, false, null );
 
-            ArrayList<XTCEParameter> parameters = db.getTelemetryParameters();
+            List<XTCEParameter> parameters = db.getTelemetryParameters();
 
             for ( XTCEParameter parameter : parameters ) {
 
-                ArrayList<XTCEAlias> aliases = parameter.getAliasSet();
+                List<XTCEAlias> aliases = parameter.getAliasSet();
 
                 StringBuilder builder = new StringBuilder();
                 for ( XTCEAlias alias : aliases ) {

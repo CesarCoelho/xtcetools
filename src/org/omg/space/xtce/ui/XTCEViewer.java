@@ -28,6 +28,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 import javax.swing.JButton;
@@ -1725,7 +1726,7 @@ public class XTCEViewer extends javax.swing.JFrame {
         if ( node != null) {
             XTCEContainerContentModel model = node.getContentModel();
             if ( model != null ) {
-                ArrayList<XTCEContainerEntryValue> values = model.getUserValues();
+                List<XTCEContainerEntryValue> values = model.getUserValues();
                 drawContainerContentTable( values );
             } else {
                 drawContainerContentTable( null );
@@ -1752,7 +1753,7 @@ public class XTCEViewer extends javax.swing.JFrame {
             if ( node != null) {
                 XTCEContainerContentModel model = node.getContentModel();
                 if ( model != null ) {
-                    ArrayList<XTCEContainerEntryValue> values = model.getUserValues();
+                    List<XTCEContainerEntryValue> values = model.getUserValues();
                     drawContainerContentTable( values );
                 } else {
                     drawContainerContentTable( null );
@@ -2423,7 +2424,7 @@ public class XTCEViewer extends javax.swing.JFrame {
             XTCEContainerContentModel model = node.getContentModel();
             if ( model != null ) {
                 model.setShowAllConditionals( mainWindowShowAllConditionalsMenuItem.getState() );
-                ArrayList<XTCEContainerEntryValue> values = model.getUserValues();
+                List<XTCEContainerEntryValue> values = model.getUserValues();
                 drawContainerContentTable( values );
             } else {
                 drawContainerContentTable( null );
@@ -2437,7 +2438,7 @@ public class XTCEViewer extends javax.swing.JFrame {
             XTCETelecommandContentModel model = node2.getContentModel();
             if ( model != null ) {
                 model.setShowAllConditionals( mainWindowShowAllConditionalsMenuItem.getState() );
-                ArrayList<XTCEContainerEntryValue> values = model.getUserValues();
+                List<XTCEContainerEntryValue> values = model.getUserValues();
                 drawTelecommandContentTable( values );
             } else {
                 drawTelecommandContentTable( null );
@@ -2552,10 +2553,10 @@ public class XTCEViewer extends javax.swing.JFrame {
                                            JOptionPane.ERROR_MESSAGE);
         }
 
-        ArrayList<XTCEContainerEntryValue> conditions =
+        List<XTCEContainerEntryValue> conditions =
             node.getContentModel().getContentList().get( row ).getConditionList();
 
-        ArrayList<XTCEContainerEntryValue> valueList =
+        List<XTCEContainerEntryValue> valueList =
             node.getContentModel().getUserValues();
 
         for ( XTCEContainerEntryValue condition : conditions ) {
@@ -3055,7 +3056,7 @@ public class XTCEViewer extends javax.swing.JFrame {
 
         DefaultTreeModel tmodel = (DefaultTreeModel)tmContainerTree.getModel();
 
-        ArrayList<XTCETMContainer> containers = xtceDatabaseFile.getContainers();
+        List<XTCETMContainer> containers = xtceDatabaseFile.getContainers();
         Collections.sort( containers );
 
         XTCEViewerContainerTreeNode rootObj =
@@ -3083,7 +3084,7 @@ public class XTCEViewer extends javax.swing.JFrame {
 
         DefaultTreeModel tmodel = (DefaultTreeModel)tmStreamTree.getModel();
 
-        ArrayList<XTCETMStream> streams = xtceDatabaseFile.getStreams();
+        List<XTCETMStream> streams = xtceDatabaseFile.getStreams();
 
         XTCEViewerStreamTreeNode rootObj =
             new XTCEViewerStreamTreeNode( XTCEFunctions.getText( "general_streams" ), null ); // NOI18N
@@ -3226,7 +3227,7 @@ public class XTCEViewer extends javax.swing.JFrame {
            (XTCEViewerSpaceSystemTreeNode)tmParameterSpaceSystemTree.getLastSelectedPathComponent();
         if ( node != null ) {
             //System.out.println( "TM Parameter Tab: " + node.getFullPath() );
-            ArrayList<XTCEParameter> parameters =
+            List<XTCEParameter> parameters =
                 node.getSpaceSystemReference().getTelemetryParameters();
             updateParameterTable( tmParametersTable,
                                   parameters,
@@ -3244,7 +3245,7 @@ public class XTCEViewer extends javax.swing.JFrame {
            (XTCEViewerSpaceSystemTreeNode)tcParameterSpaceSystemTree.getLastSelectedPathComponent();
         if ( node != null ) {
             //System.out.println( "TC Parameter Tab: " + node.getFullPath() );
-            ArrayList<XTCEParameter> parameters =
+            List<XTCEParameter> parameters =
                 node.getSpaceSystemReference().getTelecommandParameters();
             updateParameterTable( tcParametersTable,
                                   parameters,
@@ -3257,7 +3258,7 @@ public class XTCEViewer extends javax.swing.JFrame {
         }
     }
 
-    private void drawContainerContentTable( ArrayList<XTCEContainerEntryValue> values ) {
+    private void drawContainerContentTable( List<XTCEContainerEntryValue> values ) {
 
         XTCEViewerContainerTreeNode node =
            (XTCEViewerContainerTreeNode)tmContainerTree.getLastSelectedPathComponent();
@@ -3340,7 +3341,7 @@ public class XTCEViewer extends javax.swing.JFrame {
 
         try {
 
-            ArrayList<XTCETMContainer> containers =
+            List<XTCETMContainer> containers =
                 xtceDatabaseFile.getContainers( node.getStreamReference() );
 
             Collections.sort( containers );
@@ -3385,13 +3386,13 @@ public class XTCEViewer extends javax.swing.JFrame {
            (XTCEViewerSpaceSystemTreeNode)tcDefinitionsSpaceSystemTree.getLastSelectedPathComponent();
         if ( node != null ) {
             //System.out.println( "TC Definitions Tab: " + node.getFullPath() );
-            ArrayList<XTCETelecommand> telecommands = node.getSpaceSystemReference().getTelecommands();
+            List<XTCETelecommand> telecommands = node.getSpaceSystemReference().getTelecommands();
             updateTelecommandTree( telecommands, node.getSpaceSystemReference() );
             XTCEViewerFunctions.expandAllTreeNodes( tcTree );
         }
     }
 
-    private void drawTelecommandContentTable( ArrayList<XTCEContainerEntryValue> values ) {
+    private void drawTelecommandContentTable( List<XTCEContainerEntryValue> values ) {
 
         XTCEViewerTelecommandTreeNode node =
             (XTCEViewerTelecommandTreeNode)tcTree.getLastSelectedPathComponent();
@@ -3454,7 +3455,7 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     }
 
-    private void updateParameterTable( JTable table, ArrayList<XTCEParameter> parameters, XTCESpaceSystem spaceSystem ) {
+    private void updateParameterTable( JTable table, List<XTCEParameter> parameters, XTCESpaceSystem spaceSystem ) {
 
         DefaultTableModel tableModel = (DefaultTableModel)table.getModel();
         tableModel.setRowCount( 0 );
@@ -3516,12 +3517,12 @@ public class XTCEViewer extends javax.swing.JFrame {
             return;
         }
 
-        ArrayList<String> warnings = containerModel.getWarnings();
+        List<String> warnings = containerModel.getWarnings();
         for ( String warning : warnings ) {
             logMsg( XTCEFunctions.getText( "general_warning" ) +  ": " + warning ); // NOI18N
         }
 
-        ArrayList<XTCEContainerContentEntry> entries = containerModel.getContentList();
+        List<XTCEContainerContentEntry> entries = containerModel.getContentList();
 
         tmContainerTable.setDefaultRenderer( String.class,
                                              new XTCEViewerContainerTableCellRenderer( entries ) );
@@ -3588,7 +3589,7 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     }
 
-    private void updateTelecommandTree( ArrayList<XTCETelecommand> telecommands, XTCESpaceSystem spaceSystem ) {
+    private void updateTelecommandTree( List<XTCETelecommand> telecommands, XTCESpaceSystem spaceSystem ) {
 
         if ( telecommands == null ) {
             return;
@@ -3999,7 +4000,7 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     private XTCEViewerPreferences          prefs                = null;
     private XTCEDatabase                   xtceDatabaseFile     = null;
-    private ArrayList<XTCESpaceSystem>     spaceSystems         = null;
+    private List<XTCESpaceSystem>          spaceSystems         = null;
     private XTCEViewerXpathQueryDialog     xpathDialog          = null;
     private XTCEViewerParameterFindDialog  findParameterDialog  = null;
     private XTCEViewerParameterUsageDialog parameterUsageDialog = null;

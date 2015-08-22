@@ -17,6 +17,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
@@ -343,7 +344,7 @@ public class XTCEViewerPreferences {
 
     public void updateRecentFilesList( JMenu recentItemsMenu, File dbFile ) {
 
-        ArrayList<String> files = getObject( "RecentFilesList" );
+        List<String> files = getObject( "RecentFilesList" );
         if ( dbFile != null ) {
             if ( files.contains( dbFile.getAbsolutePath() ) == true ) {
                 files.remove( dbFile.getAbsolutePath() );
@@ -442,12 +443,12 @@ public class XTCEViewerPreferences {
     /** Retrieve the list of stored XPath Query items to display in the combo
      * box for user convenience.
      *
-     * @return ArrayList of Strings in order from most recent to least recent
+     * @return List of Strings in order from most recent to least recent
      * with a limit of up to 25 previous searches.
      *
      */
 
-    public ArrayList<String> getSavedXPathQueries() {
+    public List<String> getSavedXPathQueries() {
         return getObject( "XPathQueries" );
     }
 
@@ -479,12 +480,12 @@ public class XTCEViewerPreferences {
     /** Retrieve the list of recent Find Parameter Search Text items to display
      * in the combo box for user convenience.
      *
-     * @return ArrayList of Strings in order from most recent to least recent
+     * @return List of Strings in order from most recent to least recent
      * with a limit of up to 25 previous searches.
      *
      */
 
-    public ArrayList<String> getRecentFindParameterSearches() {
+    public List<String> getRecentFindParameterSearches() {
         return getObject( "FindParameterSearches" );
     }
 
@@ -505,12 +506,12 @@ public class XTCEViewerPreferences {
     /** Retrieve the list of recent Find Container Search Text items to display
      * in the combo box for user convenience.
      *
-     * @return ArrayList of Strings in order from most recent to least recent
+     * @return List of Strings in order from most recent to least recent
      * with a limit of up to 25 previous searches.
      *
      */
 
-    public ArrayList<String> getRecentFindContainerSearches() {
+    public List<String> getRecentFindContainerSearches() {
         return getObject( "FindContainerSearches" );
     }
 
@@ -531,12 +532,12 @@ public class XTCEViewerPreferences {
     /** Retrieve the list of recent Find Telecommand Search Text items to
      * display in the combo box for user convenience.
      *
-     * @return ArrayList of Strings in order from most recent to least recent
+     * @return List of Strings in order from most recent to least recent
      * with a limit of up to 25 previous searches.
      *
      */
 
-    public ArrayList<String> getRecentFindTelecommandSearches() {
+    public List<String> getRecentFindTelecommandSearches() {
         return getObject( "FindTelecommandSearches" );
     }
 
@@ -672,16 +673,16 @@ public class XTCEViewerPreferences {
      * @param keyName String containing the key in the preferences store that
      * contains the search list.
      *
-     * @param recentSearches ArrayList of Strings containing the recent
+     * @param recentSearches List of Strings containing the recent
      * searches retrieved for the keyName list.
      *
      */
 
-    private void addFindSearch( String            searchItem,
-                                String            keyName,
-                                ArrayList<String> recentSearches ) {
+    private void addFindSearch( String       searchItem,
+                                String       keyName,
+                                List<String> recentSearches ) {
 
-        ArrayList<String> searches = new ArrayList<String>();
+        ArrayList<String> searches = new ArrayList<>();
         searches.add( searchItem );
         searches.addAll( recentSearches );
 
@@ -710,14 +711,14 @@ public class XTCEViewerPreferences {
      * @param keyName String containing the key in the preferences store that
      * contains the search list.
      *
-     * @param recentSearches ArrayList of Strings containing the recent
+     * @param recentSearches List of Strings containing the recent
      * searches retrieved for the keyName list.
      *
      */
 
-    private void removeFindSearch( String            searchItem,
-                                   String            keyName,
-                                   ArrayList<String> recentSearches ) {
+    private void removeFindSearch( String       searchItem,
+                                   String       keyName,
+                                   List<String> recentSearches ) {
 
         for ( int iii = recentSearches.size() - 1; iii >= 0; --iii ) {
             if ( recentSearches.get( iii ).equals( searchItem ) == true ) {
@@ -741,7 +742,7 @@ public class XTCEViewerPreferences {
      *
      */
 
-    private static byte[] objectToBytes( ArrayList<String> obj ) throws IOException {
+    private static byte[] objectToBytes( List<String> obj ) throws IOException {
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ObjectOutputStream    oos  = new ObjectOutputStream( baos );
@@ -764,14 +765,12 @@ public class XTCEViewerPreferences {
      *
      */
 
-    private static ArrayList<String> bytesToObject( byte raw[] ) throws IOException, ClassNotFoundException {
+    private static List<String> bytesToObject( byte raw[] ) throws IOException, ClassNotFoundException {
 
         ByteArrayInputStream bais = new ByteArrayInputStream( raw );
         ObjectInputStream    ois  = new ObjectInputStream( bais );
 
-        ArrayList<String> obj = (ArrayList<String>)ois.readObject();
-
-        return obj;
+        return (List<String>)ois.readObject();
 
     }
 
@@ -831,24 +830,24 @@ public class XTCEViewerPreferences {
 
     }
 
-    /** Get an object, which in this case is an ArrayList of Strings that is
+    /** Get an object, which in this case is a List of Strings that is
      * any size from the Java Preferences API.
      *
      * @param key String containing the name of the child node to use to store
      * the segments that make up the serialized object.
      *
-     * @return ArrayList of Strings, which can be 0 size, but will never be
+     * @return List of Strings, which can be 0 size, but will never be
      * null.
      *
      */
 
-    private ArrayList<String> getObject( String key ) {
+    private List<String> getObject( String key ) {
 
         try {
 
             Preferences child  = prefs.node( key );
             String[]    keys   = child.keys();
-            ArrayList<String> keyList = new ArrayList<String>();
+            ArrayList<String> keyList = new ArrayList<>();
             keyList.addAll(Arrays.asList(keys));
             int iii = 0;
             while ( keyList.contains(Integer.toString(iii) ) == true ) {
@@ -865,10 +864,9 @@ public class XTCEViewerPreferences {
                 pieces[iii] = child.getByteArray( ""+iii, null );
                 ++iii;
             }
-            byte              raw[] = combinePieces( pieces );
-            ArrayList<String> obj   = bytesToObject( raw );
+            byte raw[] = combinePieces( pieces );
 
-            return obj;
+            return bytesToObject( raw );
 
         } catch ( IOException ex ) {
             System.out.println( "IOException: " + ex.getLocalizedMessage() );
@@ -882,18 +880,18 @@ public class XTCEViewerPreferences {
 
     }
 
-    /** Put an object, which in this case is an ArrayList of Strings that is
+    /** Put an object, which in this case is an List of Strings that is
      * any size to the Java Preferences API.
      *
      * @param key String containing the name of the child node to use to get
      * the segments that make up the serialized object.
      *
-     * @param list An ArrayList of Strings to write to the Java Preferences
+     * @param list An List of Strings to write to the Java Preferences
      * API as serialized bytes in a child node defined by the "key" parameter.
      *
      */
 
-    private void putObject( String key, ArrayList<String> list ) {
+    private void putObject( String key, List<String> list ) {
 
         try {
 

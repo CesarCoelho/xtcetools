@@ -11,8 +11,8 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 import javax.swing.JTree;
@@ -136,8 +136,8 @@ public class XTCEViewerFunctions {
      *
      */
 
-    public static void buildSpaceSystemTree( JTree                      tree,
-                                             ArrayList<XTCESpaceSystem> spaceSystems ) {
+    public static void buildSpaceSystemTree( JTree                 tree,
+                                             List<XTCESpaceSystem> spaceSystems ) {
         
         DefaultTreeModel tmodel = (DefaultTreeModel)tree.getModel();
         

@@ -8,6 +8,7 @@ package org.omg.space.xtce.ui;
 
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
+import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import org.omg.space.xtce.toolkit.XTCEAlias;
 import org.omg.space.xtce.toolkit.XTCEDatabase;
@@ -294,7 +295,7 @@ public class XTCEViewerContainerFindDialog extends javax.swing.JFrame {
 
     private void populatePreviousSearches( boolean setEmptyRow ) {
         searchTextComboBox.removeAllItems();
-        ArrayList<String> itemList = prefs_.getRecentFindContainerSearches();
+        List<String> itemList = prefs_.getRecentFindContainerSearches();
         if ( setEmptyRow == true ) {
             searchTextComboBox.addItem( "" );
         }
@@ -318,12 +319,12 @@ public class XTCEViewerContainerFindDialog extends javax.swing.JFrame {
 
         String preferredNamespace = prefs_.getPreferredAliasNamespaceOption();
 
-        ArrayList<XTCESpaceSystem> spaceSystems = dbFile_.getSpaceSystemTree();
-        ArrayList<XTCETMContainer> results = new ArrayList<XTCETMContainer>();
+        List<XTCESpaceSystem>      spaceSystems = dbFile_.getSpaceSystemTree();
+        ArrayList<XTCETMContainer> results = new ArrayList<>();
 
         for ( XTCESpaceSystem spaceSystem : spaceSystems ) {
 
-            ArrayList<XTCETMContainer> containers = spaceSystem.getContainers();
+            List<XTCETMContainer> containers = spaceSystem.getContainers();
 
             for ( XTCETMContainer container : containers ) {
                 if ( containerFindByNameRadioButton.isSelected() == true ) {
@@ -339,7 +340,7 @@ public class XTCEViewerContainerFindDialog extends javax.swing.JFrame {
                             }
                         }
                     } else {
-                        ArrayList<XTCEAlias> aliases = container.getAliasSet();
+                        List<XTCEAlias> aliases = container.getAliasSet();
                         for ( XTCEAlias alias : aliases ) {
                             if ( XTCEFunctions.matchesUsingGlob( alias.getAliasName(), searchText) == true ) {
                                 results.add( container );
@@ -356,8 +357,8 @@ public class XTCEViewerContainerFindDialog extends javax.swing.JFrame {
 
     }
 
-    private void updateContainerTable( ArrayList<XTCETMContainer> results,
-                                       String                     searchText ) {
+    private void updateContainerTable( List<XTCETMContainer> results,
+                                       String                searchText ) {
 
         boolean showAllNamespaces   = prefs_.getShowAllAliasNamespacesOption();
         boolean showAliasNamespaces = prefs_.getShowAliasNamespacesOption();

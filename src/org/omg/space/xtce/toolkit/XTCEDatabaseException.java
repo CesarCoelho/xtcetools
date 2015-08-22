@@ -8,6 +8,7 @@ package org.omg.space.xtce.toolkit;
 
 import javax.xml.bind.MarshalException;
 import java.util.ArrayList;
+import java.util.List;
 import javax.xml.xpath.XPathException;
 
 /** The XTCEDatabaseException class serves to simplify management of exceptions
@@ -92,26 +93,26 @@ public class XTCEDatabaseException extends Exception {
     /** Constructor to initialize an XTCEDatabaseException from a list of
      * collected messages.
      *
-     * @param messages ArrayList of Strings containing feedback during a long
+     * @param messages List of Strings containing feedback during a long
      * operation that may collect many interesting errors, but can proceed
      * until completion.
      *
      */
 
-    public XTCEDatabaseException( ArrayList<String> messages ) {
+    public XTCEDatabaseException( List<String> messages ) {
         super( XTCEDatabaseException.concatenate( messages ) );
     }
 
-    /** Private method to concatenate a series of messages in an ArrayList of
+    /** Private method to concatenate a series of messages in a List of
      * Strings into a single string delimited by new lines.
      *
-     * @param messages ArrayList of String messages.
+     * @param messages List of String messages.
      *
      * @return String containing the concatenated messages.
      *
      */
 
-    private static String concatenate( ArrayList<String> messages ) {
+    private static String concatenate( List<String> messages ) {
         StringBuilder sb = new StringBuilder();
         for ( int iii = 0; iii < messages.size(); ++iii ) {
            sb.append( messages.get( iii ) );

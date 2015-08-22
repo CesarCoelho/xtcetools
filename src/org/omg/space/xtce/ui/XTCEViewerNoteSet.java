@@ -199,7 +199,7 @@ public class XTCEViewerNoteSet extends javax.swing.JPanel {
 
     private XTCESpaceSystem   spaceSystem_      = null;
     private JScrollPane       parentScrollPane_ = null;
-    private ArrayList<String> noteItemText_     = new ArrayList<String>();
+    private ArrayList<String> noteItemText_     = new ArrayList<>();
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

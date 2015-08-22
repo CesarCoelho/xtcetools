@@ -117,11 +117,11 @@ public class XTCEItemValue {
      *
      * @see #clearWarnings()
      *
-     * @return ArrayList of String containing the warning messages.
+     * @return List of String containing the warning messages.
      *
      */
 
-    public ArrayList<String> getWarnings() {
+    public List<String> getWarnings() {
         return warnings_;
     }
 
@@ -1092,8 +1092,8 @@ public class XTCEItemValue {
             long    interpolateOrder = splineCal.getOrder().longValue();
             boolean extrapolate      = splineCal.isExtrapolate();
             List<SplinePointType> points = splineCal.getSplinePoint();
-            ArrayList<BigDecimal> calList = new ArrayList<BigDecimal>();
-            ArrayList<BigDecimal> rawList = new ArrayList<BigDecimal>();
+            ArrayList<BigDecimal> calList = new ArrayList<>();
+            ArrayList<BigDecimal> rawList = new ArrayList<>();
             for ( SplinePointType point : points ) {
                 calList.add( new BigDecimal( point.getCalibrated() ) );
                 rawList.add( new BigDecimal( point.getRaw() ) );
@@ -1641,7 +1641,7 @@ public class XTCEItemValue {
     private String  booleanZeroString_;
     private String  booleanOneString_;
 
-    private ArrayList<String>          warnings_   = new ArrayList<String>();
+    private List<String>               warnings_   = new ArrayList<>();
     private List<ValueEnumerationType> enums_      = null;
     private CalibratorType             defCal_     = null;
     private XTCEValidRange             validRange_ = null;

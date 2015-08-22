@@ -9,6 +9,7 @@ package org.omg.space.xtce.tests;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.List;
 import org.omg.space.xtce.toolkit.XTCEDatabase;
 import org.omg.space.xtce.toolkit.XTCEDatabaseException;
 import org.omg.space.xtce.toolkit.XTCEItemValue;
@@ -936,9 +937,9 @@ public class TestEncode {
 
         StringBuilder msg = new StringBuilder();
 
-        String rawHex = vvv_.bitSetToHex( result );
-        String rawBin = vvv_.bitSetToBinary( result );
-        ArrayList<String> warnings = vvv_.getWarnings();
+        String rawHex         = vvv_.bitSetToHex( result );
+        String rawBin         = vvv_.bitSetToBinary( result );
+        List<String> warnings = vvv_.getWarnings();
 
         for ( String retWarning : warnings ) {
             if ( retWarning.equals( warning ) == true ) {

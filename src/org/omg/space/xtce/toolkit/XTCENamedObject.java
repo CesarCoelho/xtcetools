@@ -85,7 +85,7 @@ public abstract class XTCENamedObject implements Comparable {
     /** Accessor to retrieve the complete list of applicable Aliases for this
      * named object.
      *
-     * The list is provided in a form where each entry in the ArrayList return
+     * The list is provided in a form where each entry in the List return
      * contains a string that is in the form NS::ALIAS, which NS is the
      * nameSpace attribute of the discovered Alias and the ALIAS is the alias
      * attribute of the Alias element.
@@ -100,11 +100,11 @@ public abstract class XTCENamedObject implements Comparable {
      * elements which do not have a corresponding nameSpace attribute match on
      * the primary element are added to the list of valid aliases.
      *
-     * @return ArrayList of XTCEAlias objects that were gathered.
+     * @return List of XTCEAlias objects that were gathered.
      *
      */
 
-    public ArrayList<XTCEAlias> getAliasSet() {
+    public List<XTCEAlias> getAliasSet() {
         return aliasList_;
     }
 
@@ -228,7 +228,7 @@ public abstract class XTCENamedObject implements Comparable {
 
     protected void populateAliasListFromReference( AliasSetType set ) {
 
-        ArrayList<XTCEAlias> result = new ArrayList<XTCEAlias>();
+        ArrayList<XTCEAlias> result = new ArrayList<>();
 
         if ( set != null ) {
 
@@ -322,8 +322,8 @@ public abstract class XTCENamedObject implements Comparable {
 
     // Private Data Members, which are all references
 
-    private String               name_      = null;
-    private String               path_      = null;
-    private ArrayList<XTCEAlias> aliasList_ = null;
+    private String          name_      = null;
+    private String          path_      = null;
+    private List<XTCEAlias> aliasList_ = null;
 
 }

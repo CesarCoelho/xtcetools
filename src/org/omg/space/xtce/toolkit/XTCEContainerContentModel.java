@@ -38,10 +38,10 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
      * @param container XTCETMContainer from the database object that contains
      * all the needed entry list items.
      *
-     * @param spaceSystems ArrayList of XTCESpaceSystem objects to search for
+     * @param spaceSystems List of XTCESpaceSystem objects to search for
      * entries on the entry list.
      *
-     * @param userValues ArrayList of XTCEContainerEntryValue objects for TM
+     * @param userValues List of XTCEContainerEntryValue objects for TM
      * Parameters that are within the container.  This can be null if no values
      * are needed to be passed into conditional processing.
      *
@@ -54,10 +54,10 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
      *
      */
 
-    public XTCEContainerContentModel( XTCETMContainer                    container,
-                                      ArrayList<XTCESpaceSystem>         spaceSystems,
-                                      ArrayList<XTCEContainerEntryValue> userValues,
-                                      boolean                            showAllConditions ) throws XTCEDatabaseException {
+    public XTCEContainerContentModel( XTCETMContainer               container,
+                                      List<XTCESpaceSystem>         spaceSystems,
+                                      List<XTCEContainerEntryValue> userValues,
+                                      boolean                       showAllConditions ) throws XTCEDatabaseException {
 
         super( spaceSystems, userValues, null, showAllConditions );
         container_          = container;
@@ -73,7 +73,7 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
      * @param container XTCETMContainer from the database object that contains
      * all the needed entry list items.
      *
-     * @param spaceSystems ArrayList of XTCESpaceSystem objects to search for
+     * @param spaceSystems List of XTCESpaceSystem objects to search for
      * entries on the entry list.
      *
      * @param binaryData byte[] containing a map of the binary data that makes
@@ -86,9 +86,9 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
      *
      */
 
-    public XTCEContainerContentModel( XTCETMContainer                    container,
-                                      ArrayList<XTCESpaceSystem>         spaceSystems,
-                                      byte[]                             binaryData ) throws XTCEDatabaseException {
+    public XTCEContainerContentModel( XTCETMContainer               container,
+                                      List<XTCESpaceSystem>         spaceSystems,
+                                      byte[]                        binaryData ) throws XTCEDatabaseException {
 
         super( spaceSystems, null, binaryData, false );
         container_          = container;
@@ -290,11 +290,11 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
 
     }
 
-    private void addContainer( ContainerRefEntryType              entry,
-                               RunningStartBit                    currentStartBit,
-                               long                               containerStartBit,
-                               XTCETMContainer                    holdingContainer,
-                               ArrayList<XTCEContainerEntryValue> includedConditionsList ) throws XTCEDatabaseException {
+    private void addContainer( ContainerRefEntryType         entry,
+                               RunningStartBit               currentStartBit,
+                               long                          containerStartBit,
+                               XTCETMContainer               holdingContainer,
+                               List<XTCEContainerEntryValue> includedConditionsList ) throws XTCEDatabaseException {
 
         String nameRef = entry.getContainerRef();
         //System.out.println( "Identified Container " +
@@ -358,11 +358,11 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
 
     }
 
-    private void addParameter( ParameterRefEntryType              pRefEntry,
-                               RunningStartBit                    currentStartBit,
-                               long                               containerStartBit,
-                               XTCETMContainer                    container,
-                               ArrayList<XTCEContainerEntryValue> includedConditionsList ) throws XTCEDatabaseException {
+    private void addParameter( ParameterRefEntryType         pRefEntry,
+                               RunningStartBit               currentStartBit,
+                               long                          containerStartBit,
+                               XTCETMContainer               container,
+                               List<XTCEContainerEntryValue> includedConditionsList ) throws XTCEDatabaseException {
 
         String nameRef = pRefEntry.getParameterRef();
         //System.out.println( "Identified Parameter " +

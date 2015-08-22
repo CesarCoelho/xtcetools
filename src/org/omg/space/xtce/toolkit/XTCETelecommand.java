@@ -191,12 +191,12 @@ public class XTCETelecommand extends XTCENamedObject {
      * this XTCETelecommand, which includes all inherited Argument elements,
      * in addition to those defined with this XTCETelecommand.
      *
-     * @return ArrayList of XTCEArgument objects, or an empty list is there are
+     * @return List of XTCEArgument objects, or an empty list is there are
      * no Arguments.  This list will never be null.
      *
      */
 
-    public ArrayList<XTCEArgument> getArguments() {
+    public List<XTCEArgument> getArguments() {
         return argumentList_;
     }
 
@@ -375,7 +375,7 @@ public class XTCETelecommand extends XTCENamedObject {
         return null;
     }
 
-    /** Private method to populate the ArrayList of XTCEArguments that are
+    /** Private method to populate the List of XTCEArguments that are
      * located for this XTCETelecommand.
      *
      * This method only looks 1 deep for the BaseMetaCommand.  The recursion
@@ -466,7 +466,7 @@ public class XTCETelecommand extends XTCENamedObject {
      * @param type AggregateDataType object from the XTCE data model that
      * contains the Argument Member list and their associated types.
      *
-     * @param list ArrayList of XTCEArguments that represents the current
+     * @param list List of XTCEArguments that represents the current
      * running list.  This will eventually become the private data member of
      * this object that contains all the XTCEArgument objects.
      *
@@ -476,10 +476,10 @@ public class XTCETelecommand extends XTCENamedObject {
      *
      */
 
-    private void addArgumentMembers( String                  basename,
-                                     AggregateDataType       type,
-                                     ArrayList<XTCEArgument> list,
-                                     XTCEDatabase            dbReference ) {
+    private void addArgumentMembers( String             basename,
+                                     AggregateDataType  type,
+                                     List<XTCEArgument> list,
+                                     XTCEDatabase       dbReference ) {
         
         List<Member> members = type.getMemberList().getMember();
 
@@ -570,7 +570,7 @@ public class XTCETelecommand extends XTCENamedObject {
 
         String name = XTCEFunctions.getNameFromPathReferenceString( ssPath );
         String path = XTCEFunctions.getPathNameFromReferenceString( ssPath );
-        ArrayList<XTCESpaceSystem> spaceSystems = dbReference.getSpaceSystemTree();
+        List<XTCESpaceSystem> spaceSystems = dbReference.getSpaceSystemTree();
         for ( XTCESpaceSystem spaceSystem : spaceSystems ) {
             if ( spaceSystem.getFullPath().equals( path ) == true ) {
                 try {

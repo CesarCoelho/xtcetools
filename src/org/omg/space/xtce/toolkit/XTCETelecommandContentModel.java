@@ -33,10 +33,10 @@ import org.omg.space.xtce.toolkit.XTCEContainerContentEntry.FieldType;
 
 public class XTCETelecommandContentModel extends XTCEContainerContentModelBase {
 
-    XTCETelecommandContentModel( XTCETelecommand                    tcObject,
-                                 ArrayList<XTCESpaceSystem>         spaceSystems,
-                                 ArrayList<XTCEContainerEntryValue> userValues,
-                                 boolean                            showAllConditions ) throws XTCEDatabaseException {
+    XTCETelecommandContentModel( XTCETelecommand               tcObject,
+                                 List<XTCESpaceSystem>         spaceSystems,
+                                 List<XTCEContainerEntryValue> userValues,
+                                 boolean                       showAllConditions ) throws XTCEDatabaseException {
 
         super( spaceSystems, userValues, null, showAllConditions );
         telecommand_        = tcObject;
@@ -67,7 +67,7 @@ public class XTCETelecommandContentModel extends XTCEContainerContentModelBase {
     }
 
     /** This method processes the contents of the entire telecommand into
-     * an ArrayList of XTCEContainerContentEntry objects.
+     * a List of XTCEContainerContentEntry objects.
      *
      * @return long containing the total length of this content/container
      * entry.
@@ -322,11 +322,5 @@ public class XTCETelecommandContentModel extends XTCEContainerContentModelBase {
     }
 
     private XTCETelecommand telecommand_ = null;
-
-    /// The list of userChosenValues to apply to the model built from the
-    /// provided container.
-
-    private ArrayList<XTCEContainerEntryValue> userValues_ =
-        new ArrayList<XTCEContainerEntryValue>();
 
 }

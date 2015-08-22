@@ -8,7 +8,7 @@ package org.omg.space.xtce.ui;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import org.omg.space.xtce.toolkit.XTCEContainerContentEntry;
@@ -22,7 +22,7 @@ import org.omg.space.xtce.toolkit.XTCEContainerContentEntry.FieldType;
 
 public class XTCEViewerContainerTableCellRenderer extends DefaultTableCellRenderer {
 
-    XTCEViewerContainerTableCellRenderer( ArrayList<XTCEContainerContentEntry> entries ) {
+    XTCEViewerContainerTableCellRenderer( List<XTCEContainerContentEntry> entries ) {
         entries_ = entries;
     }
 
@@ -63,7 +63,7 @@ public class XTCEViewerContainerTableCellRenderer extends DefaultTableCellRender
 
     }
 
-    private ArrayList<XTCEContainerContentEntry> entries_ = null;
+    private List<XTCEContainerContentEntry> entries_ = null;
 
     private final DefaultTableCellRenderer defaultRenderer =
         new DefaultTableCellRenderer();

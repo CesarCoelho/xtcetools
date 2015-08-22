@@ -179,7 +179,7 @@ public class XTCEViewerAuthorSet extends javax.swing.JPanel {
     // Private Data Members
 
     private XTCESpaceSystem   spaceSystem_  = null;
-    private ArrayList<String> noteItemText_ = new ArrayList<String>();
+    private ArrayList<String> noteItemText_ = new ArrayList<>();
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

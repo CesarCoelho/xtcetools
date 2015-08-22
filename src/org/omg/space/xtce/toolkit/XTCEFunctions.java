@@ -11,6 +11,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -170,8 +171,9 @@ public class XTCEFunctions {
                                                  boolean         showAliasNamespaces,
                                                  String          preferredNamespace ) {
 
-        ArrayList<XTCEAlias> aliasList = parameter.getAliasSet();
-        StringBuilder aliasDisplay = new StringBuilder();
+        List<XTCEAlias> aliasList    = parameter.getAliasSet();
+        StringBuilder   aliasDisplay = new StringBuilder();
+
         for ( XTCEAlias entry : aliasList ) {
             if ( ( showAllNamespaces                                 == true ) ||
                  ( preferredNamespace.equals( entry.getNameSpace() ) == true ) ) {

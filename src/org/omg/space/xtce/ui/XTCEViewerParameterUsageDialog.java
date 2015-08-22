@@ -7,7 +7,7 @@
 package org.omg.space.xtce.ui;
 
 import java.awt.event.WindowEvent;
-import java.util.ArrayList;
+import java.util.List;
 import javax.swing.DefaultListModel;
 import org.omg.space.xtce.toolkit.XTCEDatabase;
 import org.omg.space.xtce.toolkit.XTCEFunctions;
@@ -205,8 +205,8 @@ public class XTCEViewerParameterUsageDialog extends javax.swing.JFrame {
 
     // Private Member Variables
 
-    private XTCEViewer                 xtceViewer_ = null;
-    private ArrayList<XTCETMContainer> containers_ = null;
+    private XTCEViewer            xtceViewer_ = null;
+    private List<XTCETMContainer> containers_ = null;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel buttonPanel;

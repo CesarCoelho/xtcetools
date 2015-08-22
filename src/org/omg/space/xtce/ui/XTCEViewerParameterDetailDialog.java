@@ -51,7 +51,7 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
         }
         parameter_ = parameter;
         nameTextField.setText( parameter.getName() );
-        ArrayList<XTCEAlias> aliases = parameter.getAliasSet();
+        List<XTCEAlias> aliases = parameter.getAliasSet();
         for ( int iii = 0; iii < aliases.size(); ++iii ) {
             aliasTextField.append( aliases.get( iii ).getFullAliasName() );
             if ( iii < ( aliases.size() - 1 ) ) {
