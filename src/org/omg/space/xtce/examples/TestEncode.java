@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package org.omg.space.xtce.tests;
+package org.omg.space.xtce.examples;
 
 import java.io.File;
 import java.util.ArrayList;

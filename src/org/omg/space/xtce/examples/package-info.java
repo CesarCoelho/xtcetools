@@ -4,4 +4,4 @@
  *
  */
 
-package org.omg.space.xtce.tests;
+package org.omg.space.xtce.examples;

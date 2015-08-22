@@ -88,8 +88,10 @@ public class XTCEFunctions {
                 fullPath.append( field );
             }
         }
-        
-        return fullPath.toString();
+
+        String candidate = fullPath.toString();
+
+        return candidate.replaceAll( "/+", "/" );
 
     }
 
@@ -171,6 +173,10 @@ public class XTCEFunctions {
                                                  boolean         showAliasNamespaces,
                                                  String          preferredNamespace ) {
 
+        if ( preferredNamespace == null ) {
+            preferredNamespace = "";
+        }
+
         List<XTCEAlias> aliasList    = parameter.getAliasSet();
         StringBuilder   aliasDisplay = new StringBuilder();
 
@@ -215,30 +221,30 @@ public class XTCEFunctions {
     public static boolean matchesUsingGlob( String text, String glob ) {
 
         String rest = null;
-        int pos = glob.indexOf('*');
-        if (pos != -1) {
-            rest = glob.substring(pos + 1);
-            glob = glob.substring(0, pos);
+        int pos = glob.indexOf( '*' );
+        if ( pos != -1 ) {
+            rest = glob.substring( pos + 1 );
+            glob = glob.substring( 0, pos );
         }
 
-        if (glob.length() > text.length()) {
+        if ( glob.length() > text.length() ) {
             return false;
         }
 
         // handle the part up to the first *
-        for (int i = 0; i < glob.length(); i++) {
-            if ( ( glob.charAt(i) != '?' ) &&
-                 ( !glob.substring(i, i + 1).equalsIgnoreCase(text.substring(i, i + 1)) ) ) {
+        for ( int iii = 0; iii < glob.length(); ++iii ) {
+            if ( ( glob.charAt( iii ) != '?' ) &&
+                 ( ! glob.substring( iii, iii + 1 ).equalsIgnoreCase(text.substring( iii, iii + 1 ) ) ) ) {
                 return false;
             }
         }
 
         // recurse for the part after the first *, if any
-        if (rest == null) {
+        if ( rest == null ) {
             return glob.length() == text.length();
         } else {
-            for (int i = glob.length(); i <= text.length(); i++) {
-                if (matchesUsingGlob(text.substring(i), rest)) {
+            for ( int iii = glob.length(); iii <= text.length(); ++iii ) {
+                if ( matchesUsingGlob( text.substring( iii ), rest ) == true ) {
                     return true;
                 }
             }
@@ -259,10 +265,13 @@ public class XTCEFunctions {
      */
 
     public static String getText( String key ) {
-        if ( messages == null ) {
+
+        if ( messages_ == null ) {
             setLocalePreference( Locale.getDefault() );
         }
-        return messages.getString( key );
+
+        return messages_.getString( key );
+
     }
 
     /** Sets the user language and country preference so that a ResourceBundle
@@ -271,18 +280,25 @@ public class XTCEFunctions {
      * @param userLocale Locale object containing the desired language and
      * country.  A properties file is needed to support the choice.
      *
+     * @return boolean indicating if the preference was valid and could be set.
+     *
      */
 
-    public static void setLocalePreference( Locale userLocale ) {
+    public static boolean setLocalePreference( Locale userLocale ) {
+
         try {
-            messages = ResourceBundle.getBundle( propLocation, userLocale );
+            messages_ = ResourceBundle.getBundle( propLocation_, userLocale );
             Locale.setDefault( userLocale );
+            return true;
         } catch ( NullPointerException ex ) {
             System.out.println( "Invalid Locale, continuing in US English" ); // NOI18N
         } catch ( MissingResourceException ex ) {
             System.out.println( "Missing Language Resource Bundle for " + // NOI18N
                 userLocale.getDisplayName() + ", continuing in US English" ); // NOI18N
         }
+
+        return false;
+
     }
 
     /** Checks if a Locale preference is supported by this toolkit.
@@ -294,12 +310,14 @@ public class XTCEFunctions {
      */
 
     public static boolean checkLocaleAvailable( Locale userLocale ) {
+
         try {
-            ResourceBundle.getBundle( propLocation, userLocale );
+            ResourceBundle.getBundle( propLocation_, userLocale );
             return true;
         } catch ( Exception ex ) {
             return false;
         }
+
     }
 
     /** Retrieves the internationalized version of the ERROR prefix used for
@@ -500,7 +518,7 @@ public class XTCEFunctions {
 
     }
 
-    private static ResourceBundle messages      = null;
-    private static String         propLocation  = "org.omg.space.xtce.toolkit.MessagesBundle"; // NOI18N
+    private static ResourceBundle messages_      = null;
+    private static String         propLocation_  = "org.omg.space.xtce.toolkit.MessagesBundle"; // NOI18N
 
 }
