@@ -1,0 +1,70 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+
+<head>
+<title></title>
+</head>
+
+<body>
+
+    <p>The XTCE Tools Java JAR file supports the XTCE technology by providing a
+        Graphical User Interface named "xtceview" to view/browse/edit an XTCE
+        document and also a non-graphical underlying "toolkit" package to
+        enable any user to generate an application that uses an XTCE document
+        with minimal effort.</p>
+    <p>The toolkit does not depend on any graphical
+        interfaces.  To complement, the graphical user interface "xtceview"
+        contains little to no business logic, preferring to be a graphical
+        wrapper around the toolkit package.  To supplement this, a number of
+        examples, sample databases, and schema documentation are also included
+        in other packages.  All documentation can be trivially accessed from
+        the GUI Help Menu.</p>
+
+    <h3>Key Features</h3>
+
+    <ul style='list-style-type:disc'>
+        <li>Telemetry Parameter access without needing to understand the XTCE
+            data model, relationships, references, or other complexities.</li>
+        <li>Similar Telecommand and Argument access without needing to
+            understand the XTCE data model. (Still In Work)</li>
+        <li>Telemetry and Telecommand Container/Packet processing supporting
+            most of the XTCE schema complexity, reducing the output access to
+            simple flattened accessors such that the user need not understand
+            or be aware of the complexities of the XTCE data model.</li>
+        <li>Extremely fast optimized searches for Parameters, Telecommands,
+            and usage of Parameters in Containers/Packets.</li>
+        <li>Support for Streams and ability to link from Streams to specific
+            Containers/Packets.</li>
+        <li>Ability to export from XTCE to common formats, such as CSV, and
+            vendor specific formats such a Harris OS/Comet and L-3 InControl.
+            (Vendor Formats Still In Work).  The author has significant
+            experience using these vendor's products and highly recommends
+            their XTCE support levels.</li>
+        <li>Regression tested using Java standard JUnit 4 classes</li>
+        <li>Open Source licensing not owned by any particular Corporation or
+            Vendor.</li>
+        <li>The toolkit and GUI are both conceived with idea of editing as well
+            as viewing in mind, although the edit features are only minimally
+            complete.</li>
+        <li>Java JAXB and DOM are both in use in order to permit round trip
+            XML load/save, as well as XPath support for unlimited query
+            capability.</li>
+        <li>The toolkit and GUI have both been extensively used on programs
+            that utilize CCSDS Space Data Link and even ECSS Packet Utilization
+            (PUS) standards.</li>
+        <li>The toolkit and GUI are regularly used with satellite databases
+            that incorporate XInclude and in total are hundreds of megabytes in
+            size.  Performance is a strong consideration.</li>
+        <li>Full I18/L10 Internationalization with support currently installed
+            for both US English and European French languages.  This package
+            is actively used in Europe, in addition to the United States.</li>
+    </ul>
+    
+</body>
+
+</html>

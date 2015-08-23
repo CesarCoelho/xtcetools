@@ -31,23 +31,21 @@ import org.omg.space.xtce.toolkit.XTCEParameter;
  *
  *     List<XTCEParameter> parameters = db.getTelemetryParameters();
  *
- *         for ( XTCEParameter parameter : parameters ) {
+ *     for ( XTCEParameter parameter : parameters ) {
  *
- *             List<XTCEAlias> aliases = parameter.getAliasSet();
+ *         List<XTCEAlias> aliases = parameter.getAliasSet();
  *
- *             StringBuilder builder = new StringBuilder();
- *             for ( XTCEAlias alias : aliases ) {
- *                 builder.append( alias.getFullAliasName() );
- *                 builder.append( " " );
- *             }
- *
- *             System.out.println( parameter.getName() +
- *                                 " " +
- *                                 builder.toString() );
- *
+ *         StringBuilder builder = new StringBuilder();
+ *         for ( XTCEAlias alias : aliases ) {
+ *             builder.append( alias.getFullAliasName() );
+ *             builder.append( " " );
  *         }
  *
- *         System.out.println( "Done" );
+ *         System.out.println( parameter.getName() +
+ *                             " " +
+ *                             builder.toString() );
+ *
+ *     }
  *
  * } catch ( Exception ex ) {
  *
