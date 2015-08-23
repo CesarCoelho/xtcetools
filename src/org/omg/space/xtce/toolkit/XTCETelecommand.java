@@ -16,6 +16,7 @@ import org.omg.space.xtce.database.AggregateDataType.MemberList.Member;
 import org.omg.space.xtce.database.AliasSetType;
 import org.omg.space.xtce.database.CommandContainerType;
 import org.omg.space.xtce.database.CommandMetaDataType.MetaCommandSet.BlockMetaCommand;
+import org.omg.space.xtce.database.DescriptionType.AncillaryDataSet;
 import org.omg.space.xtce.database.MetaCommandType;
 import org.omg.space.xtce.database.MetaCommandType.ArgumentList.Argument;
 import org.omg.space.xtce.database.MetaCommandType.BaseMetaCommand;
@@ -75,7 +76,9 @@ public class XTCETelecommand extends XTCENamedObject {
 
         super( getNameFromProperElement( metaCommandObj ),
                path,
-               getAliasSetFromProperElement( metaCommandObj ) );
+               getAliasSetFromProperElement( metaCommandObj ),
+               getAncillaryDataFromProperElement( metaCommandObj) );
+
         iPath_ = iPath;
         if ( metaCommandObj.getClass() == MetaCommandType.class ) {
             metaCommand_ = (MetaCommandType)metaCommandObj;
@@ -371,6 +374,25 @@ public class XTCETelecommand extends XTCENamedObject {
             return ((MetaCommandType)element).getAliasSet();
         } else if ( element.getClass() == BlockMetaCommand.class ) {
             return ((BlockMetaCommand)element).getAliasSet();
+        }
+        return null;
+    }
+
+    /** Private method to extract the AncillaryDataSet element from the XTCE
+     * data model for the Object that this XTCETelecommand represents.
+     *
+     * @param element Object containing the XTCE data model element.
+     *
+     * @return AncillaryDataSet from the appropriate MetaCommand or
+     * BlockMetaCommand, which can be null.
+     *
+     */
+
+    private static AncillaryDataSet getAncillaryDataFromProperElement( Object element ) {
+        if ( element.getClass() == MetaCommandType.class ) {
+            return ((MetaCommandType)element).getAncillaryDataSet();
+        } else if ( element.getClass() == BlockMetaCommand.class ) {
+            return ((BlockMetaCommand)element).getAncillaryDataSet();
         }
         return null;
     }

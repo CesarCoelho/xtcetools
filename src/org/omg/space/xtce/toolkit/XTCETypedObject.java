@@ -21,6 +21,8 @@ import org.omg.space.xtce.database.BinaryDataType;
 import org.omg.space.xtce.database.BooleanDataType;
 import org.omg.space.xtce.database.CalibratorType;
 import org.omg.space.xtce.database.CalibratorType.SplineCalibrator;
+import org.omg.space.xtce.database.DescriptionType.AncillaryDataSet;
+import org.omg.space.xtce.database.DescriptionType.AncillaryDataSet.AncillaryData;
 import org.omg.space.xtce.database.EnumeratedDataType;
 import org.omg.space.xtce.database.FloatDataType;
 import org.omg.space.xtce.database.IntegerDataType;
@@ -66,13 +68,25 @@ public abstract class XTCETypedObject extends XTCENamedObject {
     XTCETypedObject( String              name,
                      String              spaceSystemPath,
                      AliasSetType        obj,
+                     AncillaryDataSet    anc,
                      NameDescriptionType typeObj ) {
 
-        super( name, spaceSystemPath, obj );
+        super( name, spaceSystemPath, obj, anc );
 
         typeObj_ = typeObj;
+
+        // this overloads the previously defined alias list that was determined
+        // from the named object with additions from the typed object.
+
         if ( typeObj_ != null ) {
             populateAliasListFromReference( typeObj_.getAliasSet() );
+        }
+
+        // if the AncillaryDataSet is not null, then XTCE requires there to be
+        // content from getAncillaryData(), so no second null check needed.
+
+        if ( typeObj.getAncillaryDataSet() != null ) {
+           typeAncDataList_ = typeObj.getAncillaryDataSet().getAncillaryData();
         }
 
     }
@@ -100,6 +114,92 @@ public abstract class XTCETypedObject extends XTCENamedObject {
 
     public boolean isValid() {
         return ( typeObj_ != null );
+    }
+
+    /** Accessor to retrieve the list of AncillaryData elements from the XTCE
+     * model that apply to this typed object, but it a Parameter, Argument, or
+     * Member.
+     *
+     * This accessor filters duplicates in preference for those that are
+     * defined on the named object.  Duplicate is determined when both the
+     * name attribute and the value are the same.
+     *
+     * @return List of AncillaryData elements that apply.  The caller cannot
+     * differentiate from this function if those came from the named object or
+     * the typed object.
+     *
+     */
+
+    @Override
+    public List<AncillaryData> getAncillaryData() {
+
+        List<AncillaryData> namedObjAncData = super.getAncillaryData();
+        List<AncillaryData> retList         = namedObjAncData;
+
+        if ( typeAncDataList_ == null ) {
+            return retList;
+        }
+
+        for ( AncillaryData ancData : typeAncDataList_ ) {
+
+            String  nameAttr = ancData.getName();
+            String  value    = ancData.getValue();
+            boolean found    = false;
+
+            for ( AncillaryData namedAncData : namedObjAncData ) {
+                String namedNameAttr = namedAncData.getName();
+                String namedValue    = namedAncData.getValue();
+                if ( nameAttr.equals( namedNameAttr ) == true ) {
+                    if ( value != null && namedValue != null ) {
+                        if ( value.equals( namedValue ) == true ) {
+                            found = true;
+                        }
+                    } else {
+                        found = true;
+                    }
+                }
+            }
+
+            if ( found == false ) {
+                retList.add( ancData );
+            }
+
+        }
+
+        return retList;
+
+    }
+
+    /** Accessor to retrieve only a partial list of AncillaryData elements from
+     * the XTCE data for this typed object where the name attribute of the
+     * AncillaryData element must either exactly match a string or a glob style
+     * pattern.
+     *
+     * Since the name attribute of an AncillaryData element does not qualify
+     * uniqueness, multiple results can still be retrieved when doing an exact
+     * match.
+     *
+     * @param nameGlob String containing a precise name or a glob style pattern
+     * to match against the name attribute of the AncillaryData elements.
+     *
+     * @return List of AncillaryData elements that match.  The list can be
+     * empty but it will never be null.
+     *
+     */
+
+    @Override
+    public List<AncillaryData> getAncillaryData( String nameGlob ) {
+
+        ArrayList<AncillaryData> list = new ArrayList<>();
+
+        for ( AncillaryData element : getAncillaryData() ) {
+            if ( XTCEFunctions.matchesUsingGlob( element.getName(), nameGlob) == true ) {
+                list.add( element );
+            }
+        }
+
+        return list;
+
     }
 
     /** Retrieve the units of measure and the nature/description for this
@@ -1102,6 +1202,7 @@ public abstract class XTCETypedObject extends XTCENamedObject {
 
     // Private Data Members
 
-    private NameDescriptionType typeObj_ = null;
+    private NameDescriptionType typeObj_         = null;
+    private List<AncillaryData> typeAncDataList_ = null;
 
 }

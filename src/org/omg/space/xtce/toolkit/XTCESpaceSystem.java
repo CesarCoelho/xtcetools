@@ -53,7 +53,8 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
         super( ssRef.getName(),
                XTCEFunctions.getPathNameFromReferenceString( path ),
-               ssRef.getAliasSet() );
+               ssRef.getAliasSet(),
+               ssRef.getAncillaryDataSet() );
 
         reference_         = ssRef;
         databaseReference_ = dbRef;
@@ -701,7 +702,8 @@ public class XTCESpaceSystem extends XTCENamedObject {
                 try {
                     list.add( new XTCETMStream( stream,
                                                 this,
-                                                stream.getAliasSet() ) );
+                                                stream.getAliasSet(),
+                                                stream.getAncillaryDataSet() ) );
                 } catch ( XTCEDatabaseException ex ) {
                     System.out.println( ex.getLocalizedMessage() );
                     // need to make an error message

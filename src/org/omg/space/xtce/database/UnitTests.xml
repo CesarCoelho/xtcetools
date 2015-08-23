@@ -19,6 +19,15 @@ and open the template in the editor.
 				<xtce:UnitSet/>
 				<xtce:IntegerDataEncoding/>
 			</xtce:IntegerParameterType>
+			<xtce:IntegerParameterType name="I3_TYPE" initialValue="1">
+                            <xtce:AncillaryDataSet>
+                                <xtce:AncillaryData name="">value1</xtce:AncillaryData>
+                                <xtce:AncillaryData name="test1"/>
+                                <xtce:AncillaryData name="test2">value2</xtce:AncillaryData>
+                            </xtce:AncillaryDataSet>
+				<xtce:UnitSet/>
+				<xtce:IntegerDataEncoding/>
+			</xtce:IntegerParameterType>
 		</xtce:ParameterTypeSet>
 		<xtce:ParameterSet>
 			<xtce:Parameter name="INT_WITH_ALIAS" parameterTypeRef="I1_TYPE">
@@ -39,6 +48,39 @@ and open the template in the editor.
 			<xtce:Parameter name="INT_NO_ALIAS" parameterTypeRef="I1_TYPE">
 				<xtce:ParameterProperties dataSource="telemetered"/>
 			</xtce:Parameter>
+			<xtce:Parameter name="INT_NO_ANCDATA" parameterTypeRef="I1_TYPE">
+				<xtce:ParameterProperties dataSource="telemetered"/>
+			</xtce:Parameter>
+			<xtce:Parameter name="INT_TYPEONLY_ANCDATA" parameterTypeRef="I3_TYPE">
+				<xtce:ParameterProperties dataSource="telemetered"/>
+			</xtce:Parameter>
+			<xtce:Parameter name="INT_PONLY_ANCDATA" parameterTypeRef="I1_TYPE">
+                            <xtce:AncillaryDataSet>
+                                <xtce:AncillaryData name="">value4</xtce:AncillaryData>
+                                <xtce:AncillaryData name="test5"/>
+                                <xtce:AncillaryData name="test6">value6</xtce:AncillaryData>
+                            </xtce:AncillaryDataSet>
+				<xtce:ParameterProperties dataSource="telemetered"/>
+			</xtce:Parameter>
+			<xtce:Parameter name="INT_MIXED_ANCDATA" parameterTypeRef="I3_TYPE">
+                            <xtce:AncillaryDataSet>
+                                <xtce:AncillaryData name="">value1</xtce:AncillaryData>
+                                <xtce:AncillaryData name="test1"/>
+                                <xtce:AncillaryData name="test2">value2</xtce:AncillaryData>
+                                <xtce:AncillaryData name="">value4</xtce:AncillaryData>
+                                <xtce:AncillaryData name="test5"/>
+                                <xtce:AncillaryData name="test6">value6</xtce:AncillaryData>
+                            </xtce:AncillaryDataSet>
+				<xtce:ParameterProperties dataSource="telemetered"/>
+			</xtce:Parameter>
 		</xtce:ParameterSet>
 	</xtce:TelemetryMetaData>
+        <xtce:SpaceSystem name="ANCDATA_SS_TEST">
+            <xtce:AncillaryDataSet>
+                <xtce:AncillaryData name="">value10</xtce:AncillaryData>
+                <xtce:AncillaryData name="foo"/>
+                <xtce:AncillaryData name="foo">value11</xtce:AncillaryData>
+                <xtce:AncillaryData name="bar">value12</xtce:AncillaryData>
+            </xtce:AncillaryDataSet>
+        </xtce:SpaceSystem>
 </xtce:SpaceSystem>

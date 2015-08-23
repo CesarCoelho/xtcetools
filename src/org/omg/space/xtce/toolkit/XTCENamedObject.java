@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import org.omg.space.xtce.database.AliasSetType;
 import org.omg.space.xtce.database.DescriptionType;
+import org.omg.space.xtce.database.DescriptionType.AncillaryDataSet;
+import org.omg.space.xtce.database.DescriptionType.AncillaryDataSet.AncillaryData;
 
 /** The XTCENamedObject class serves to capture the common elements to XTCE
  * Parameters, Arguments, Containers, and Streams.
@@ -26,24 +28,45 @@ public abstract class XTCENamedObject implements Comparable {
      * These include Parameters, Arguments, Container, Telecommands, and
      * Streams.
      *
+     * A casual reader might wonder why the obvious thing was not done here in
+     * that the arguments passed include AliasSet, AncillaryDataSet, etc when
+     * it would be much cleaner to pass NameDescriptionType.  There is one
+     * element in XTCE that needs to behave in this model but does not inherit
+     * from NameDescriptionType and that is the Member element on Aggregate
+     * Parameters and Arguments.  A goal of this abstraction is to make Member
+     * elements look to the end user application like bonafide Parameters or
+     * Arguments.  Hence the reason this was implemented the way it was.
+     *
      * @param name String containing the object name as referenced from the
      * getName() method on the JAXB generated object.
      *
      * @param path String containing the Space System path leading to this
      * object in the XTCE data model, but without the object name.
      *
-     * @param obj AliasSetType object from the JAXB generated classes.
+     * @param aliasSet AliasSetType object from the JAXB generated classes for
+     * the named object, not the typed object.
+     *
+     * @param ancDataSet AncillaryDataSet object from the JAXB generated
+     * classes for the named object, not the typed object.
      *
      */
 
-    XTCENamedObject( String name, String path, AliasSetType obj ) {
+    XTCENamedObject( String           name,
+                     String           path,
+                     AliasSetType     aliasSet,
+                     AncillaryDataSet ancDataSet ) {
         name_      = name;
         path_      = path;
         aliasList_ = new ArrayList<XTCEAlias>();
 
         // Member Elements do not have Aliases
-        if ( obj != null ) {
-            populateAliasListFromReference( obj );
+        if ( aliasSet != null ) {
+            populateAliasListFromReference( aliasSet );
+        }
+
+        // Member Elements do not have Ancillary Data
+        if ( ancDataSet != null ) {
+            populateAncillaryListFromReference( ancDataSet );
         }
 
     }
@@ -80,6 +103,20 @@ public abstract class XTCENamedObject implements Comparable {
 
     public String getSpaceSystemPath() {
         return path_;
+    }
+
+    /** Retrieve the Space System name that contains this object in the XTCE
+     * data model.
+     *
+     * @return String containing just the name of the Space System that
+     * contains this named object without the path hierarchy that is otherwise
+     * returned from getSpaceSystemPath().
+     *
+     */
+
+    public String getSpaceSystemName() {
+        int idx = path_.lastIndexOf( '/' );
+        return path_.substring( idx + 1 );
     }
 
     /** Accessor to retrieve the complete list of applicable Aliases for this
@@ -136,6 +173,64 @@ public abstract class XTCENamedObject implements Comparable {
             }
         }
         return "";
+
+    }
+
+    /** Accessor to retrieve the List of AncillaryData elements from the XTCE
+     * data for this named object.
+     *
+     * AncillaryData is not managed like Aliases are in the object.  While
+     * aliases are pre-populated and cached, AncillaryData is only retrieved
+     * when actually requested since it is expected to not be all that
+     * popular.
+     *
+     * @return List of AncillaryData elements which can be empty but it will
+     * never be null.
+     *
+     */
+
+    public List<AncillaryData> getAncillaryData( ) {
+
+        if ( ancDataList_ == null ) {
+            return new ArrayList<AncillaryData>();
+        } else {
+            return ancDataList_;
+        }
+
+    }
+
+    /** Accessor to retrieve only a partial list of AncillaryData elements from
+     * the XTCE data for this named object where the name attribute of the
+     * AncillaryData element must either exactly match a string or a glob style
+     * pattern.
+     *
+     * Since the name attribute of an AncillaryData element does not qualify
+     * uniqueness, multiple results can still be retrieved when doing an exact
+     * match.
+     *
+     * @param nameGlob String containing a precise name or a glob style pattern
+     * to match against the name attribute of the AncillaryData elements.
+     *
+     * @return List of AncillaryData elements that match.  The list can be
+     * empty but it will never be null.
+     *
+     */
+
+    public List<AncillaryData> getAncillaryData( String nameGlob ) {
+
+        ArrayList<AncillaryData> list = new ArrayList<>();
+
+        if ( ancDataList_ == null ) {
+            return list;
+        }
+
+        for ( AncillaryData element : ancDataList_ ) {
+            if ( XTCEFunctions.matchesUsingGlob( element.getName(), nameGlob) == true ) {
+                list.add( element );
+            }
+        }
+
+        return list;
 
     }
 
@@ -273,6 +368,10 @@ public abstract class XTCENamedObject implements Comparable {
 
     }
 
+    protected void populateAncillaryListFromReference( AncillaryDataSet set ) {
+        ancDataList_ = set.getAncillaryData();
+    }
+
     /** Comparison Interface
      *
      * Comparison of this named object in the XTCE data model is based on the
@@ -322,8 +421,9 @@ public abstract class XTCENamedObject implements Comparable {
 
     // Private Data Members, which are all references
 
-    private String          name_      = null;
-    private String          path_      = null;
-    private List<XTCEAlias> aliasList_ = null;
+    private String              name_        = null;
+    private String              path_        = null;
+    private List<XTCEAlias>     aliasList_   = null;
+    private List<AncillaryData> ancDataList_ = null;
 
 }

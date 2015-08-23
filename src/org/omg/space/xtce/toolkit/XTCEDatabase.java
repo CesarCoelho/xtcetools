@@ -311,7 +311,7 @@ public final class XTCEDatabase {
      * reference.
      *
      * @return XTCESpaceSystem object containing the SpaceSystem and also some
-     * helper functions.
+     * helper functions.  If not found, the return can be null.
      *
      */
 
@@ -353,19 +353,21 @@ public final class XTCEDatabase {
 
     public List<XTCESpaceSystem> getSpaceSystemTree( ) {
 
-        /// @todo make this efficient with a cache or something
+        if ( spaceSystemCache != null ) {
+            return spaceSystemCache;
+        }
 
-        ArrayList<XTCESpaceSystem> spaceSystems = new ArrayList<>();
+        spaceSystemCache = new ArrayList<>();
 
         XTCESpaceSystem rootSpaceSystem =
             new XTCESpaceSystem( "/" + topLevelSpaceSystem.getName(), // NOI18N
                                  topLevelSpaceSystem,
                                  this );
-        spaceSystems.add( rootSpaceSystem );
+        spaceSystemCache.add( rootSpaceSystem );
         
-        recurseSpaceSystems( rootSpaceSystem, spaceSystems );
+        recurseSpaceSystems( rootSpaceSystem, spaceSystemCache );
 
-        return spaceSystems;
+        return spaceSystemCache;
         
     }
 
@@ -415,6 +417,7 @@ public final class XTCEDatabase {
         }
 
         setChanged( true );
+        spaceSystemCache = null;
 
     }
 
@@ -451,6 +454,7 @@ public final class XTCEDatabase {
                         list.remove( jjj );
                         jjj = list.size();
                         setChanged( true );
+                        spaceSystemCache = null;
                         return;
                     }
                 }
@@ -1279,7 +1283,8 @@ public final class XTCEDatabase {
     private Document        domDocumentRoot     = null;
     private Binder<Node>    domBinder           = null;
 
-    private HashMap<String, NameDescriptionType> parameterTypes = null;
-    private HashMap<String, NameDescriptionType> argumentTypes  = null;
+    private HashMap<String, NameDescriptionType> parameterTypes   = null;
+    private HashMap<String, NameDescriptionType> argumentTypes    = null;
+    private ArrayList<XTCESpaceSystem>           spaceSystemCache = null;
 
 }

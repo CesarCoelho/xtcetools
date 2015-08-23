@@ -18,6 +18,7 @@ import static org.junit.Assert.*;
 import org.omg.space.xtce.toolkit.XTCEAlias;
 import org.omg.space.xtce.toolkit.XTCEDatabase;
 import org.omg.space.xtce.toolkit.XTCEParameter;
+import org.omg.space.xtce.toolkit.XTCESpaceSystem;
 
 /**
  *
@@ -140,11 +141,34 @@ public class AliasLogicTest {
             List<XTCEAlias> aliases = parameter.getAliasSet();
 
             Assert.assertTrue( "Expected 0 aliases",
-                               aliases.size() == 0 );
+                               aliases.isEmpty() == true );
 
             String alias = parameter.getAlias( "nobody" );
 
             Assert.assertTrue( "Expected an empty string but got " + alias,
+                               alias.isEmpty() == true );
+
+        } catch ( Throwable ex ) {
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+    }
+
+    @Test
+    public void testNoAliasSpaceSystem() {
+
+        try {
+
+            XTCESpaceSystem ss = db_.getRootSpaceSystem();
+
+            List<XTCEAlias> aliases = ss.getAliasSet();
+
+            Assert.assertTrue( "Expected 0 aliases",
+                               aliases.isEmpty() == true );
+
+            String alias = ss.getAlias( "nobody" );
+
+            Assert.assertTrue( "Expected 0 aliases for pattern",
                                alias.isEmpty() == true );
 
         } catch ( Throwable ex ) {

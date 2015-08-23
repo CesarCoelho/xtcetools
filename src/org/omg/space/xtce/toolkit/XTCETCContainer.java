@@ -31,9 +31,15 @@ public class XTCETCContainer extends XTCENamedObject {
      */
 
     XTCETCContainer( String path, String iPath, CommandContainerType container ) {
-        super( container.getName(), path, container.getAliasSet() );
+
+        super( container.getName(),
+               path,
+               container.getAliasSet(),
+               container.getAncillaryDataSet() );
+
         iPath_     = iPath;
         container_ = container;
+
     }
 
     /** Retrieve a reference to the CommandContainer element in the JAXB

@@ -7,6 +7,7 @@
 package org.omg.space.xtce.toolkit;
 
 import org.omg.space.xtce.database.AliasSetType;
+import org.omg.space.xtce.database.DescriptionType.AncillaryDataSet;
 import org.omg.space.xtce.database.FixedFrameStreamType;
 import org.omg.space.xtce.database.PCMStreamType;
 import org.omg.space.xtce.database.VariableFrameStreamType;
@@ -38,11 +39,15 @@ public class XTCETMStream extends XTCENamedObject {
      *
      */
 
-    XTCETMStream( PCMStreamType   stream,
-                  XTCESpaceSystem spaceSystem,
-                  AliasSetType    aliasSet ) throws XTCEDatabaseException {
+    XTCETMStream( PCMStreamType    stream,
+                  XTCESpaceSystem  spaceSystem,
+                  AliasSetType     aliasSet,
+                  AncillaryDataSet ancDataSet ) throws XTCEDatabaseException {
 
-        super( stream.getName(), spaceSystem.getFullPath(), aliasSet );
+        super( stream.getName(),
+               spaceSystem.getFullPath(),
+               aliasSet,
+               ancDataSet );
 
         stream_ = stream;
 

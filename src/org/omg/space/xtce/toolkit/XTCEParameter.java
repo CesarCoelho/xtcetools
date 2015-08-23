@@ -48,9 +48,16 @@ public class XTCEParameter extends XTCETypedObject {
      */
 
     XTCEParameter( String name, String path, Parameter pRef, NameDescriptionType ptRef ) {
-        super( name, path, pRef.getAliasSet(), ptRef );
+
+        super( name,
+               path,
+               pRef.getAliasSet(),
+               pRef.getAncillaryDataSet(),
+               ptRef );
+
         reference_       = pRef;
         memberReference_ = null;
+
     }
 
     /** Constructor
@@ -70,9 +77,12 @@ public class XTCEParameter extends XTCETypedObject {
      */
 
     XTCEParameter( String name, String path, Member pRef, NameDescriptionType ptRef ) {
-        super( name, path, null, ptRef );
+
+        super( name, path, null, null, ptRef );
+
         reference_       = null;
         memberReference_ = pRef;
+
     }
 
     /** Retrieves the fully qualified XTCE path reference to the type

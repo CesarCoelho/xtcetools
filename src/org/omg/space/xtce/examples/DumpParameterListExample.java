@@ -15,11 +15,54 @@ import org.omg.space.xtce.toolkit.XTCEParameter;
 /** This class is an executable main that loads an XTCE database file and dumps
  * the parameters to STDOUT.
  *
+ * <P>The following is an example based on this demonstration class file.  The
+ * class main() requires a command line argument to point to the database file
+ * instead of the "myfile.xml" used in the example code below.</P>
+ *
+ * <pre>
+ * {@code
+ * try {
+ *
+ *
+ *     XTCEDatabase db = new XTCEDatabase( new File( "myfile.xml" ),
+ *                                         false,
+ *                                         false,
+ *                                         null );
+ *
+ *     List<XTCEParameter> parameters = db.getTelemetryParameters();
+ *
+ *         for ( XTCEParameter parameter : parameters ) {
+ *
+ *             List<XTCEAlias> aliases = parameter.getAliasSet();
+ *
+ *             StringBuilder builder = new StringBuilder();
+ *             for ( XTCEAlias alias : aliases ) {
+ *                 builder.append( alias.getFullAliasName() );
+ *                 builder.append( " " );
+ *             }
+ *
+ *             System.out.println( parameter.getName() +
+ *                                 " " +
+ *                                 builder.toString() );
+ *
+ *         }
+ *
+ *         System.out.println( "Done" );
+ *
+ * } catch ( Exception ex ) {
+ *
+ *     System.out.println( "Exception: " + ex.getLocalizedMessage() );
+ *     ex.printStackTrace();
+ *
+ * }
+ * }
+ * </pre>
+ *
  * @author David Overeem
  *
  */
 
-public class TestDumpParameterList {
+public class DumpParameterListExample {
 
     /** The main executable function
      *

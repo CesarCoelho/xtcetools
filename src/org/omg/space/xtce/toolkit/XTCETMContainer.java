@@ -36,9 +36,15 @@ public class XTCETMContainer extends XTCENamedObject {
      */
 
     XTCETMContainer( String path, String iPath, SequenceContainerType container ) {
-        super( container.getName(), path, container.getAliasSet() );
+
+        super( container.getName(),
+               path,
+               container.getAliasSet(),
+               container.getAncillaryDataSet() );
+
         iPath_     = iPath;
         container_ = container;
+
     }
 
     /** Retrieve a reference to the SequenceContainer element in the JAXB
