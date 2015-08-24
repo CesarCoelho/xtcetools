@@ -88,7 +88,7 @@ public class XTCEViewerNoteSet extends javax.swing.JPanel {
                 .addComponent(noteParentPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(addNoteButton)
-                .addGap(4, 4, 4))
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 

@@ -7,7 +7,6 @@
 package org.omg.space.xtce.ui;
 
 import java.awt.BorderLayout;
-import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -3232,11 +3231,15 @@ public class XTCEViewer extends javax.swing.JFrame {
             updateParameterTable( tmParametersTable,
                                   parameters,
                                   node.getSpaceSystemReference() );
-            logMsg( "Processed Space System " +
+            logMsg( XTCEFunctions.getText( "ss_processed" ) + // NOI18N
+                    " '" + // NOI18N
                     node.getSpaceSystemReference().getName() +
-                    " contains " +
+                    "' " + // NOI18N
+                    XTCEFunctions.getText( "ss_processed_contains" ) + // NOI18N
+                    " " + // NOI18N
                     Integer.toString( parameters.size() ) +
-                    " TM parameters" );
+                    " " + // NOI18N
+                    XTCEFunctions.getText( "ss_tmparameters" ) ); // NOI18N
         }
     }
 
@@ -3250,11 +3253,15 @@ public class XTCEViewer extends javax.swing.JFrame {
             updateParameterTable( tcParametersTable,
                                   parameters,
                                   node.getSpaceSystemReference() );
-            logMsg( "Processed Space System " +
+            logMsg( XTCEFunctions.getText( "ss_processed" ) + // NOI18N
+                    " '" + // NOI18N
                     node.getSpaceSystemReference().getName() +
-                    " contains " +
+                    "' " + // NOI18N
+                    XTCEFunctions.getText( "ss_processed_contains" ) + // NOI18N
+                    " " + // NOI18N
                     Integer.toString( parameters.size() ) +
-                    " TC parameters" );
+                    " " + // NOI18N
+                    XTCEFunctions.getText( "ss_tcparameters" ) ); // NOI18N
         }
     }
 
@@ -3302,13 +3309,20 @@ public class XTCEViewer extends javax.swing.JFrame {
          
                 tmContainerDrawingScrollPane.setViewportView( drawing );
 
-                logMsg( "Processed Container " +
+                logMsg( XTCEFunctions.getText( "ss_cont_processed" ) + // NOI18N
+                        " '" + // NOI18N
                         containerModel.getContainerReference().getName() +
-                        " contains " +
+                        "' " + // NOI18N
+                        XTCEFunctions.getText( "ss_processed_contains" ) + // NOI18N
+                        " " + // NOI18N
                         Long.toString( containerModel.getContentList().size() ) +
-                        " rows occupying " +
+                        " " + // NOI18N
+                        XTCEFunctions.getText( "ss_cont_rowsoccupied" ) + // NOI18N
+                        " " + // NOI18N
                         Long.toString( containerModel.getTotalSize() ) +
-                        " bits" );
+                        " " + // NOI18N
+                        XTCEFunctions.getText( "ss_cont_bits" ) ); // NOI18N
+
             } catch ( XTCEDatabaseException ex ) {
                 logMsg( XTCEFunctions.generalErrorPrefix() + ex.getLocalizedMessage() );
             }
@@ -3328,8 +3342,8 @@ public class XTCEViewer extends javax.swing.JFrame {
             return;
         }
 
-        tmStreamContentTree.putClientProperty( "JTree.lineStyle",
-                                               "Horizontal" );
+        tmStreamContentTree.putClientProperty( "JTree.lineStyle", // NOI18N
+                                               "Horizontal" ); // NOI18N
 
         DefaultTreeModel tmodel =
             (DefaultTreeModel)tmStreamContentTree.getModel();
@@ -3439,13 +3453,19 @@ public class XTCEViewer extends javax.swing.JFrame {
          
                 //tcContentDrawingScrollPane.setViewportView( drawing );
 
-                logMsg( "Processed Telecommand " +
+                logMsg( XTCEFunctions.getText( "ss_processed_tc" ) + // NOI18N
+                        " '" + // NOI18N
                         containerModel.getContainerReference().getName() +
-                        " contains " +
+                        "' " + // NOI18N
+                        XTCEFunctions.getText( "ss_processed_contains" ) + // NOI18N
+                        " " + // NOI18N
                         Long.toString( containerModel.getContentList().size() ) +
-                        " rows occupying " +
+                        " " + // NOI18N
+                        XTCEFunctions.getText( "ss_cont_rowsoccupied" ) + // NOI18N
+                        " " + // NOI18N
                         Long.toString( containerModel.getTotalSize() ) +
-                        " bits" );
+                        " " + // NOI18N
+                        XTCEFunctions.getText( "ss_cont_bits" ) ); // NOI18N
 
             } catch ( XTCEDatabaseException ex ) {
                 logMsg( XTCEFunctions.generalErrorPrefix() + ex.getLocalizedMessage() );
