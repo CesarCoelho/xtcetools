@@ -740,6 +740,30 @@ public final class XTCEDatabase {
 
     }
 
+    /** Retrieve a List of SequenceContainers that match a user provided string
+     * glob, modeled as XTCETMContainer objects.
+     *
+     * @param nameGlob String containing a glob style matching pattern to match
+     * against the container names.
+     *
+     * @return List of XTCETMContainer objects representing the containers
+     * that match the provided glob or an empty list if there are no matches.
+     *
+     */
+
+    public List<XTCETMContainer> getContainers( String nameGlob ) {
+
+        List<XTCESpaceSystem>      spaceSystems = getSpaceSystemTree();
+        ArrayList<XTCETMContainer> list         = new ArrayList<>();
+
+        for ( XTCESpaceSystem spaceSystem : spaceSystems ) {
+            list.addAll( spaceSystem.getContainers( nameGlob ) );
+        }
+
+        return list;
+
+    }
+
     /** Function to retrieve all of the Telemetry Containers that are members
      * of a specified stream in the XTCE document.
      *

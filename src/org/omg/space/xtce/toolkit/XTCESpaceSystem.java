@@ -620,6 +620,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
                                                  getTelemetryMetaData().
                                                  getContainerSet().
                                                  getSequenceContainer();
+
         for ( SequenceContainerType container : containers ) {
             if ( container.getName().equals( name ) == true ) {
                 return new XTCETMContainer( getFullPath(),
@@ -639,6 +640,53 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
     }
 
+    /** Retrieve a List of SequenceContainers that match a user provided string
+     * glob, modeled as XTCETMContainer objects.
+     *
+     * @param nameGlob String containing a glob style matching pattern to match
+     * against the container names.
+     *
+     * @return List of XTCETMContainer objects representing the containers
+     * that match the provided glob or an empty list if there are no matches.
+     *
+     */
+
+    public List<XTCETMContainer> getContainers( String nameGlob ) {
+
+        ArrayList<XTCETMContainer> list = new ArrayList<>();
+
+        try {
+
+            List<SequenceContainerType> containers = getReference().
+                                                     getTelemetryMetaData().
+                                                     getContainerSet().
+                                                     getSequenceContainer();
+
+            for ( SequenceContainerType container : containers ) {
+
+                if ( XTCEFunctions.matchesUsingGlob( container.getName(), nameGlob ) == true ) {
+
+                    try {
+                        list.add(new XTCETMContainer( getFullPath(),
+                                                      makeContainerInheritanceString( container ),
+                                                      container ) );
+                    } catch ( XTCEDatabaseException ex ) {
+                        System.out.println( ex.getLocalizedMessage() );
+                        // need to make an error message
+                    }
+
+                }
+
+            }
+
+        } catch ( NullPointerException ex ) {
+            // this is okay, the SpaceSystem may not have any TM parameters
+        }
+
+        return list;
+
+    }
+
     /** Retrieve a List of SequenceContainers that are locally defined
      * in this Space System, modeled as XTCETMContainer objects.
      *
@@ -654,7 +702,11 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
         try {
 
-            List<SequenceContainerType> containers = getReference().getTelemetryMetaData().getContainerSet().getSequenceContainer();
+            List<SequenceContainerType> containers = getReference().
+                                                     getTelemetryMetaData().
+                                                     getContainerSet().
+                                                     getSequenceContainer();
+
             for ( SequenceContainerType container : containers ) {
                 try {
                     list.add(new XTCETMContainer( getFullPath(),
