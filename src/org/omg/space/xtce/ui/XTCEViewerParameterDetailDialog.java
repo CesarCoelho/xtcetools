@@ -47,7 +47,7 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         if ( parameter == null ) {
-            throw new XTCEDatabaseException( "test" );
+            throw new XTCEDatabaseException( "test" ); // NOI18N
         }
         parameter_ = parameter;
         nameTextField.setText( parameter.getName() );
@@ -55,13 +55,13 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
         for ( int iii = 0; iii < aliases.size(); ++iii ) {
             aliasTextField.append( aliases.get( iii ).getFullAliasName() );
             if ( iii < ( aliases.size() - 1 ) ) {
-                aliasTextField.append( "\n" );
+                aliasTextField.append( "\n" ); // NOI18N
             }
         }
         unitsTextField.setText( parameter.getUnits() );
         systemNameTextField.setText( parameter.getSystemName() );
         sourceComboField.setSelectedItem( parameter.getDataSource() );
-        if ( parameter.getDataSource().equals( "constant" ) == true ) {
+        if ( parameter.getDataSource().equals( "constant" ) == true ) { // NOI18N
             readOnlyCheckboxField.setSelected( true );
             readOnlyCheckboxField.setEnabled( false );
         } else {

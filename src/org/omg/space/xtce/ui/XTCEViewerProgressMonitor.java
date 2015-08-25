@@ -6,6 +6,7 @@
 package org.omg.space.xtce.ui;
 
 import javax.swing.ProgressMonitor;
+import org.omg.space.xtce.toolkit.XTCEProgressListener;
 
 /**
  *
@@ -13,29 +14,77 @@ import javax.swing.ProgressMonitor;
  *
  */
 
-public class XTCEViewerProgressMonitor extends javax.swing.JDialog {
+public class XTCEViewerProgressMonitor extends javax.swing.JDialog implements XTCEProgressListener {
 
     /**
      * Creates new form XTCEViewerProgressMonitor
      */
     public XTCEViewerProgressMonitor(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
-        //initComponents();
-        progressMonitor = new ProgressMonitor( parent, "Opening File", "", 0, 100 );
 
+        //super( parent, modal );
+        //initComponents();
+
+        progressMonitor =
+            new ProgressMonitor( parent, "Opening File", "", 0, 100 );
+        
         //progressBar.setMinimum( 0 );
         //progressBar.setMaximum( 100 );
+        //progressBar.setValue( 0 );
+        //progressBar.setStringPainted( true );
+
+        setLocationRelativeTo( parent );
+
+        //java.awt.EventQueue.invokeLater( new Runnable() {
+        //    @Override
+        //    public void run() {
+        //        setVisible( true );
+        //    }
+        //});
+
     }
 
+    @Override
     public void updateProgress( int percentComplete, String currentStep ) {
+
         if ( percentComplete < 0 ) {
             progressMonitor.setProgress( 0 );
+            //progressBar.setValue( 0 );
         } else if ( percentComplete > 100 ) {
+            //progressBar.setValue( 100 );
             progressMonitor.setProgress( 100 );
         } else {
+            //progressBar.setValue( percentComplete );
             progressMonitor.setProgress( percentComplete );
         }
         progressMonitor.setNote( currentStep );
+        //progressText.setText( currentStep );
+
+        //if ( percentComplete == 100 ) {
+        //    java.awt.EventQueue.invokeLater( new Runnable() {
+        //        @Override
+        //        public void run() {
+        //            setVisible( false );
+        //        }
+        //    });
+        //}
+
+        if ( percentComplete == 100 ) {
+            java.awt.EventQueue.invokeLater( new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Thread.sleep( 100 );
+                    } catch ( Exception ex ) {
+                        // do nothing
+                    }
+                    progressMonitor.close();
+                }
+            });
+        }
+
+        //validate();
+        //repaint();
+
     }
 
     private ProgressMonitor progressMonitor = null;

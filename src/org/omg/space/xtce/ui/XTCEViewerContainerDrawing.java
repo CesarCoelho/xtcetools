@@ -208,9 +208,9 @@ public class XTCEViewerContainerDrawing extends JPanel {
             // cheesy - but make sure we have a file extension so that we can
             // pass the correct type to the write method.
 
-            int lastPeriodIndex = fileName.getName().lastIndexOf('.');
+            int lastPeriodIndex = fileName.getName().lastIndexOf('.'); // NOI18N
             if ( lastPeriodIndex == -1 ) {
-                throw new XTCEDatabaseException( "Missing File Extension" );
+                throw new XTCEDatabaseException( XTCEFunctions.getText( "error_missing_ext" ) ); // NOI18N
             }
 
             // write the imagem, this could send back an IOException.
@@ -220,7 +220,10 @@ public class XTCEViewerContainerDrawing extends JPanel {
 
         } catch ( Exception ex ) {
 
-            String msg = "Unable to save image file " + fileName + " because: ";
+            String msg = XTCEFunctions.getText( "error_cannot_save_image" ) + // NOI18N
+                         " '" + fileName + "', " + // NOI18N
+                         XTCEFunctions.getText( "general_because" ) + // NOI18N
+                         ": ";
             throw new XTCEDatabaseException( msg + ex.getLocalizedMessage() );
 
         }

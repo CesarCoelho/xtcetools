@@ -60,8 +60,9 @@ public class XTCETMStream extends XTCENamedObject {
             VariableFrameStreamType vstream = (VariableFrameStreamType)stream_;
             ref = vstream.getContainerRef().getContainerRef();
         } else {
-            throw new XTCEDatabaseException( "Stream " + getName() +
-                " is an unsupported type in the XTCE Schema" );
+            throw new XTCEDatabaseException( XTCEFunctions.getText( "error_stream_unsupported" ) +
+                                             ": '" + getName() +
+                                             "'" );
         }
 
         sPath_ = XTCEFunctions.resolvePathReference( spaceSystem.getFullPath(),

@@ -1536,9 +1536,9 @@ public class XTCEViewer extends javax.swing.JFrame {
         int status = chs.showOpenDialog( this );
 
         if (status == JFileChooser.APPROVE_OPTION) {
-           openFile( chs.getSelectedFile(),
-                     chs.isXIncludeSelected(),
-                     chs.isValidateSelected() );
+            openFile( chs.getSelectedFile(),
+                      chs.isXIncludeSelected(),
+                      chs.isValidateSelected() );
         }
 
     }//GEN-LAST:event_mainWindowOpenFileMenuItemActionPerformed
@@ -3820,7 +3820,7 @@ public class XTCEViewer extends javax.swing.JFrame {
      *
      */
 
-    public void openFile( File dbFile, boolean applyXInclude, boolean validateOnLoad ) {
+    public void openFile( final File dbFile, final boolean applyXInclude, final boolean validateOnLoad ) {
 
         // in the event that a file is already open, we should attempt to
         // close the file before creating a new database.
@@ -3836,6 +3836,13 @@ public class XTCEViewer extends javax.swing.JFrame {
             return;
         }
 
+        //final XTCEViewerProgressMonitor progress =
+        //    new XTCEViewerProgressMonitor( this, true );
+
+        //java.awt.EventQueue.invokeLater( new Runnable() {
+            
+        //@Override
+        //public void run() {
         try {
 
             logMsg( XTCEFunctions.getMemoryUsageStatistics() );
@@ -3888,8 +3895,11 @@ public class XTCEViewer extends javax.swing.JFrame {
             logMsg( XTCEFunctions.generalErrorPrefix() +
                     ex.getLocalizedMessage() );
 
+            //progress.updateProgress( 100, "Failed to Load File" );
+
         }
 
+        //} } );
     }
 
     /** Private method to open a help dialog browser.
