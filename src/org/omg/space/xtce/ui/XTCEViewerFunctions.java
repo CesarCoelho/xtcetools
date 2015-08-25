@@ -110,6 +110,71 @@ public class XTCEViewerFunctions {
 
     }
 
+    /** Helper function to implement copying contents of a table row to the
+     * System Clipboard for pasting in other applications.
+     *
+     * @param table JTable object to query for the row contents and copy
+     *
+     */
+
+    public static void copyRow( JTable table ) {
+
+        int row         = table.getSelectedRow();
+        int columnCount = table.getColumnCount();
+
+        if ( row == -1 ) {
+            return;
+        }
+
+        StringBuilder sb = new StringBuilder();
+
+        for ( int iii = 0; iii < columnCount; ++iii ) {
+            sb.append( '"' );
+            sb.append( (String)table.getValueAt( row, iii ) );
+            sb.append( '"' );
+            if ( iii < ( columnCount - 1 ) ) {
+                sb.append( ',' );
+            }
+        }
+
+        //sb.append( System.lineSeparator() );
+
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clipboard.setContents( new StringSelection( sb.toString() ), null );
+
+    }
+
+    /** Helper function to implement copying contents of a table to the
+     * System Clipboard for pasting in other applications.
+     *
+     * @param table JTable object to query for the contents and copy
+     *
+     */
+
+    public static void copyTable( JTable table ) {
+
+        int rowCount    = table.getRowCount();
+        int columnCount = table.getColumnCount();
+
+        StringBuilder sb = new StringBuilder();
+
+        for ( int rrr = 0; rrr < rowCount; ++rrr ) {
+            for ( int iii = 0; iii < columnCount; ++iii ) {
+                sb.append( '"' );
+                sb.append( (String)table.getValueAt( rrr, iii ) );
+                sb.append( '"' );
+                if ( iii < ( columnCount - 1 ) ) {
+                    sb.append( ',' );
+                }
+            }
+            sb.append( System.lineSeparator() );
+        }
+
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clipboard.setContents( new StringSelection( sb.toString() ), null );
+
+    }
+
     /** Helper function to clear/erase the contents of a JTree Swing widget.
      *
      * This is apparently complex enough to justify having its own function and

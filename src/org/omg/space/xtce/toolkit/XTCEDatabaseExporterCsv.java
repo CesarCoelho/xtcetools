@@ -75,6 +75,7 @@ public class XTCEDatabaseExporterCsv extends XTCEDatabaseExporter {
     public List<String> exportParameters( File outFile ) throws XTCEDatabaseException {
 
         try {
+
             FileOutputStream stream = new FileOutputStream( outFile );
             List<XTCESpaceSystem> spaceSystems = db_.getSpaceSystemTree();
             if ( properties_.getProperty( "use_header_row" ).equals( "true" ) == true ) {
@@ -118,12 +119,16 @@ public class XTCEDatabaseExporterCsv extends XTCEDatabaseExporter {
                 }
             }
             stream.close();
-            return new ArrayList<String>();
+
         } catch ( FileNotFoundException ex ) {
             throw new XTCEDatabaseException( "Unable to open file for writing: " + outFile.getAbsolutePath() );
         } catch ( IOException ex ) {
             throw new XTCEDatabaseException( "Unable to write to file: " + outFile.getAbsolutePath() );
+        } catch ( NullPointerException ex ) {
+            ex.printStackTrace();
         }
+
+        return new ArrayList<String>();
 
     }
 
