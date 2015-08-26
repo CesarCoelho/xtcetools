@@ -7,7 +7,6 @@
 package org.omg.space.xtce.ui;
 
 import java.awt.event.WindowEvent;
-import java.util.ArrayList;
 import java.util.List;
 import org.omg.space.xtce.toolkit.XTCEDatabase;
 import org.omg.space.xtce.toolkit.XTCEDatabaseException;
