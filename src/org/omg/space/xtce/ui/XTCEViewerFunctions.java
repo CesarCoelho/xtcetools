@@ -20,6 +20,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
+import javax.swing.tree.TreeSelectionModel;
 import org.omg.space.xtce.toolkit.XTCESpaceSystem;
 
 /** This class is a container to capture some common static functions that are
@@ -128,16 +129,22 @@ public class XTCEViewerFunctions {
 
         StringBuilder sb = new StringBuilder();
 
-        for ( int iii = 0; iii < columnCount; ++iii ) {
+        for ( int ccc = 0; ccc < columnCount; ++ccc ) {
             sb.append( '"' );
-            sb.append( (String)table.getValueAt( row, iii ) );
+            if ( table.getValueAt( row, ccc ) instanceof Boolean ) {
+                if ( (Boolean)table.getValueAt( row, ccc ) == true ) {
+                    sb.append( "true" );
+                } else {
+                    sb.append( "false" );
+                }
+            } else {
+                sb.append( (String)table.getValueAt( row, ccc ) );
+            }
             sb.append( '"' );
-            if ( iii < ( columnCount - 1 ) ) {
+            if ( ccc < ( columnCount - 1 ) ) {
                 sb.append( ',' );
             }
         }
-
-        //sb.append( System.lineSeparator() );
 
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         clipboard.setContents( new StringSelection( sb.toString() ), null );
@@ -159,11 +166,19 @@ public class XTCEViewerFunctions {
         StringBuilder sb = new StringBuilder();
 
         for ( int rrr = 0; rrr < rowCount; ++rrr ) {
-            for ( int iii = 0; iii < columnCount; ++iii ) {
+            for ( int ccc = 0; ccc < columnCount; ++ccc ) {
                 sb.append( '"' );
-                sb.append( (String)table.getValueAt( rrr, iii ) );
+                if ( table.getValueAt( rrr, ccc ) instanceof Boolean ) {
+                    if ( (Boolean)table.getValueAt( rrr, ccc ) == true ) {
+                        sb.append( "true" );
+                    } else {
+                        sb.append( "false" );
+                    }
+                } else {
+                    sb.append( (String)table.getValueAt( rrr, ccc ) );
+                }
                 sb.append( '"' );
-                if ( iii < ( columnCount - 1 ) ) {
+                if ( ccc < ( columnCount - 1 ) ) {
                     sb.append( ',' );
                 }
             }
@@ -220,7 +235,7 @@ public class XTCEViewerFunctions {
         }
 
         tree.setRootVisible( true );
-
+        tree.getSelectionModel().setSelectionMode( TreeSelectionModel.SINGLE_TREE_SELECTION );
         tmodel.reload();
 
     }

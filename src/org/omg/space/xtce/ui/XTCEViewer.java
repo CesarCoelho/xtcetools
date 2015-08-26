@@ -44,6 +44,7 @@ import javax.swing.table.TableModel;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
+import javax.swing.tree.TreeSelectionModel;
 import org.omg.space.xtce.toolkit.XTCEContainerContentEntry.FieldType;
 import org.omg.space.xtce.toolkit.XTCEContainerEntryValue;
 import org.omg.space.xtce.toolkit.XTCEFunctions;
@@ -100,6 +101,8 @@ public class XTCEViewer extends javax.swing.JFrame {
         showParameterUsageMenuItem = new javax.swing.JMenuItem();
         showEncodeDecodeDialogMenuItem = new javax.swing.JMenuItem();
         copyParameterCellMenuItem = new javax.swing.JMenuItem();
+        copyParameterRowMenuItem = new javax.swing.JMenuItem();
+        copyParameterTableMenuItem = new javax.swing.JMenuItem();
         containerDetailPopupMenu = new javax.swing.JPopupMenu();
         showContainerXmlMenuItem = new javax.swing.JMenuItem();
         containerTablePopupMenu = new javax.swing.JPopupMenu();
@@ -310,6 +313,22 @@ public class XTCEViewer extends javax.swing.JFrame {
             }
         });
         parameterDetailPopupMenu.add(copyParameterCellMenuItem);
+
+        copyParameterRowMenuItem.setText(bundle.getString("general_copy_row")); // NOI18N
+        copyParameterRowMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                copyParameterRowMenuItemActionPerformed(evt);
+            }
+        });
+        parameterDetailPopupMenu.add(copyParameterRowMenuItem);
+
+        copyParameterTableMenuItem.setText(bundle.getString("general_copy_table")); // NOI18N
+        copyParameterTableMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                copyParameterTableMenuItemActionPerformed(evt);
+            }
+        });
+        parameterDetailPopupMenu.add(copyParameterTableMenuItem);
 
         showContainerXmlMenuItem.setText(bundle.getString("options_popup_showcontainerxml")); // NOI18N
         showContainerXmlMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -3009,6 +3028,34 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     }//GEN-LAST:event_copyContainerTableMenuItemActionPerformed
 
+    private void copyParameterRowMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_copyParameterRowMenuItemActionPerformed
+
+        if ( xtceDatabaseFile == null ) return;
+
+        int idx = mainWindowPrimaryWorkspace.getSelectedIndex();
+
+        if ( idx == 1 ) {
+            XTCEViewerFunctions.copyRow( tmParametersTable );
+        } else if ( idx == 2 ) {
+            XTCEViewerFunctions.copyRow( tcParametersTable );
+        }
+
+    }//GEN-LAST:event_copyParameterRowMenuItemActionPerformed
+
+    private void copyParameterTableMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_copyParameterTableMenuItemActionPerformed
+
+        if ( xtceDatabaseFile == null ) return;
+
+        int idx = mainWindowPrimaryWorkspace.getSelectedIndex();
+
+        if ( idx == 1 ) {
+            XTCEViewerFunctions.copyTable( tmParametersTable );
+        } else if ( idx == 2 ) {
+            XTCEViewerFunctions.copyTable( tcParametersTable );
+        }
+
+    }//GEN-LAST:event_copyParameterTableMenuItemActionPerformed
+
     public void goToParameter( String  parameterName,
                                String  spaceSystemName,
                                boolean isTelemetryParameter ) {
@@ -3108,7 +3155,7 @@ public class XTCEViewer extends javax.swing.JFrame {
         }
 
         tmContainerTree.setRootVisible( false );
-
+        tmContainerTree.getSelectionModel().setSelectionMode( TreeSelectionModel.SINGLE_TREE_SELECTION );
         tmodel.reload();
 
     }
@@ -3130,7 +3177,7 @@ public class XTCEViewer extends javax.swing.JFrame {
         }
 
         tmStreamTree.setRootVisible( false );
-
+        tmStreamTree.getSelectionModel().setSelectionMode( TreeSelectionModel.SINGLE_TREE_SELECTION );
         tmodel.reload();
 
     }
@@ -4086,6 +4133,8 @@ public class XTCEViewer extends javax.swing.JFrame {
     private javax.swing.JMenuItem copyContainerRowMenuItem;
     private javax.swing.JMenuItem copyContainerTableMenuItem;
     private javax.swing.JMenuItem copyParameterCellMenuItem;
+    private javax.swing.JMenuItem copyParameterRowMenuItem;
+    private javax.swing.JMenuItem copyParameterTableMenuItem;
     private javax.swing.JPanel databaseMetricsPanel;
     private javax.swing.JMenuItem deleteSpaceSystemMenuItem;
     private javax.swing.JScrollPane detailSpaceSystemPanelScrollPane;
