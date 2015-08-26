@@ -107,6 +107,8 @@ public class XTCEViewer extends javax.swing.JFrame {
         goToEntryMenuItem = new javax.swing.JMenuItem();
         setConditionTrueMenuItem = new javax.swing.JMenuItem();
         copyContainerCellMenuItem = new javax.swing.JMenuItem();
+        copyContainerRowMenuItem = new javax.swing.JMenuItem();
+        copyContainerTableMenuItem = new javax.swing.JMenuItem();
         containerDrawingPopupMenu = new javax.swing.JPopupMenu();
         saveContainerDrawingMenuItem = new javax.swing.JMenuItem();
         cloneContainerDrawingMenuItem = new javax.swing.JMenuItem();
@@ -348,6 +350,22 @@ public class XTCEViewer extends javax.swing.JFrame {
             }
         });
         containerTablePopupMenu.add(copyContainerCellMenuItem);
+
+        copyContainerRowMenuItem.setText(bundle.getString("general_copy_row")); // NOI18N
+        copyContainerRowMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                copyContainerRowMenuItemActionPerformed(evt);
+            }
+        });
+        containerTablePopupMenu.add(copyContainerRowMenuItem);
+
+        copyContainerTableMenuItem.setText(bundle.getString("general_copy_table")); // NOI18N
+        copyContainerTableMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                copyContainerTableMenuItemActionPerformed(evt);
+            }
+        });
+        containerTablePopupMenu.add(copyContainerTableMenuItem);
 
         saveContainerDrawingMenuItem.setText(bundle.getString("options_popup_savedrawing")); // NOI18N
         saveContainerDrawingMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -2975,6 +2993,22 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     }//GEN-LAST:event_showParameterUsageMenuItemActionPerformed
 
+    private void copyContainerRowMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_copyContainerRowMenuItemActionPerformed
+
+        if ( xtceDatabaseFile == null ) return;
+
+        XTCEViewerFunctions.copyRow( tmContainerTable );
+
+    }//GEN-LAST:event_copyContainerRowMenuItemActionPerformed
+
+    private void copyContainerTableMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_copyContainerTableMenuItemActionPerformed
+
+        if ( xtceDatabaseFile == null ) return;
+
+        XTCEViewerFunctions.copyTable( tmContainerTable );
+
+    }//GEN-LAST:event_copyContainerTableMenuItemActionPerformed
+
     public void goToParameter( String  parameterName,
                                String  spaceSystemName,
                                boolean isTelemetryParameter ) {
@@ -4049,6 +4083,8 @@ public class XTCEViewer extends javax.swing.JFrame {
     private javax.swing.JPopupMenu containerTablePopupMenu;
     private javax.swing.JTextField containersTotal;
     private javax.swing.JMenuItem copyContainerCellMenuItem;
+    private javax.swing.JMenuItem copyContainerRowMenuItem;
+    private javax.swing.JMenuItem copyContainerTableMenuItem;
     private javax.swing.JMenuItem copyParameterCellMenuItem;
     private javax.swing.JPanel databaseMetricsPanel;
     private javax.swing.JMenuItem deleteSpaceSystemMenuItem;

@@ -1276,7 +1276,98 @@ public class XTCEItemValue {
 
         SplineCalibrator splineCal = defCal_.getSplineCalibrator();
         if ( splineCal != null ) {
-            
+            long    interpolateOrder = splineCal.getOrder().longValue();
+            boolean extrapolate      = splineCal.isExtrapolate();
+            List<SplinePointType> points = splineCal.getSplinePoint();
+            ArrayList<BigDecimal> calList = new ArrayList<>();
+            ArrayList<BigDecimal> rawList = new ArrayList<>();
+            for ( SplinePointType point : points ) {
+                calList.add( new BigDecimal( point.getCalibrated() ) );
+                rawList.add( new BigDecimal( point.getRaw() ) );
+            }
+            BigDecimal minCalValue = calList.get( 0 );
+            BigDecimal maxCalValue = calList.get( calList.size() - 1);
+            for ( BigDecimal cal : calList ) {
+                if ( cal.min( minCalValue ) == cal ) {
+                    minCalValue = cal;
+                }
+                if ( cal.max( maxCalValue ) == cal ) {
+                    maxCalValue = cal;
+                }
+            }
+            if ( extrapolate == false ) {
+                if ( ( calValue.compareTo( minCalValue ) < 0 ) ||
+                     ( calValue.compareTo( maxCalValue ) > 0 ) ) {
+                    warnings_.add( "Spline Calibrator for " +
+                                   itemName_ +
+                                   " does not bound calibrated value " +
+                                   calValue.toString() +
+                                   " and extrapolate is false" );
+                    return BigInteger.ZERO;
+                }
+            }
+            BigDecimal rawValue1 = null;
+            BigDecimal rawValue2 = null;
+            BigDecimal calValue1 = null;
+            BigDecimal calValue2 = null;
+            Iterator<BigDecimal> calitr = calList.iterator();
+            Iterator<BigDecimal> rawitr = rawList.iterator();
+            if ( calitr.hasNext() == true ) {
+                calValue1 = calitr.next();
+                rawValue1 = rawitr.next();
+            }
+            while ( calitr.hasNext() == true ) {
+                if ( calValue2 != null ) {
+                    calValue1 = calValue2;
+                    rawValue1 = rawValue2;
+                }
+                calValue2 = calitr.next();
+                rawValue2 = rawitr.next();
+                //System.out.println( "Cals: cal1 = " + calValue1.toString() +
+                //                    " cal2 = " + calValue2.toString() );
+                if ( ( calValue1.compareTo( calValue ) <= 0 ) &&
+                     ( calValue2.compareTo( calValue ) >= 0 ) ) {
+                    if ( calValue.equals( calValue1 ) == true ) {
+                        return rawValue1.toBigInteger();
+                    } else if ( calValue.equals( calValue2 ) == true ) {
+                        return rawValue2.toBigInteger();
+                    }
+                    break;
+                }
+            }
+            if ( rawValue1 == null || rawValue2 == null ) {
+                warnings_.add( "Spline Calibrator for " +
+                               itemName_ +
+                               " does not bound calibrated value " +
+                               calValue.toString() );
+                return BigInteger.ZERO;
+            }
+            //System.out.println( calValue.toString() +
+            //                    " Order = " + Long.toString( interpolateOrder ) +
+            //                    " y2 = " + calValue2.toString() +
+            //                    " y1 = " + calValue1.toString() +
+            //                    " x2 = " + rawValue2.toString() +
+            //                    " x1 = " + rawValue2.toString() );
+            double y2 = calValue2.doubleValue();
+            double y1 = calValue1.doubleValue();
+            double x2 = rawValue2.doubleValue();
+            double x1 = rawValue1.doubleValue();
+            if ( interpolateOrder == 0 ) {
+                return new BigDecimal( ( x1 + x2 ) / 2.0 ).toBigInteger();
+            } else if ( interpolateOrder == 1 ) {
+                double slope = ( y2 - y1 ) / ( x2 - x1 );
+                //System.out.println( "Slope = " + Double.toString( slope ) );
+                double rawValue = ( calValue.doubleValue() - y1 ) / slope + x1;
+                //System.out.println( "Raw = " + Double.toString( rawValue ) );
+                return new BigDecimal( rawValue ).toBigInteger();
+            } else {
+                warnings_.add( "Spline Calibrator for " +
+                               itemName_ +
+                               " contains interpolate order of " +
+                               Long.toString( interpolateOrder ) +
+                               ".  Not supported by this toolkit." );
+                return BigInteger.ZERO;
+            }
         }
 
         MathOperationCalibrator mathCal = defCal_.getMathOperationCalibrator();

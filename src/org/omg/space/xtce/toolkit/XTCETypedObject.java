@@ -339,9 +339,21 @@ public abstract class XTCETypedObject extends XTCENamedObject {
 
             if ( pTypeRef != null ) {
                 if ( pTypeRef.getIntegerDataEncoding() != null ) {
-                    return pTypeRef.getIntegerDataEncoding().getChangeThreshold().toString();
+                    if ( pTypeRef.getIntegerDataEncoding().getChangeThreshold() != null ) {
+                        return pTypeRef.getIntegerDataEncoding().
+                                        getChangeThreshold().
+                                        toString();
+                    } else {
+                        return "";
+                    }
                 } else if ( pTypeRef.getFloatDataEncoding() != null ) {
-                    return pTypeRef.getFloatDataEncoding().getChangeThreshold().toString();
+                    if ( pTypeRef.getFloatDataEncoding().getChangeThreshold() != null ) {
+                        return pTypeRef.getFloatDataEncoding().
+                                        getChangeThreshold().
+                                        toString();
+                    } else {
+                        return "";
+                    }
                 } else if ( pTypeRef.getBinaryDataEncoding() != null ) {
                     return "";
                 } else if ( pTypeRef.getStringDataEncoding() != null ) {
@@ -356,9 +368,23 @@ public abstract class XTCETypedObject extends XTCENamedObject {
             if ( pTypeRef != null ) {
                 if ( pTypeRef.getEncoding() != null ) {
                     if ( pTypeRef.getEncoding().getIntegerDataEncoding() != null ) {
-                        return pTypeRef.getEncoding().getIntegerDataEncoding().getChangeThreshold().toString();
+                        if ( pTypeRef.getEncoding().getIntegerDataEncoding().getChangeThreshold() != null ) {
+                            return pTypeRef.getEncoding().
+                                            getIntegerDataEncoding().
+                                            getChangeThreshold().
+                                            toString();
+                        } else {
+                            return "";
+                        }
                     } else if ( pTypeRef.getEncoding().getFloatDataEncoding() != null ) {
-                        return pTypeRef.getEncoding().getFloatDataEncoding().getChangeThreshold().toString();
+                        if ( pTypeRef.getEncoding().getFloatDataEncoding().getChangeThreshold() != null ) {
+                            return pTypeRef.getEncoding().
+                                            getFloatDataEncoding().
+                                            getChangeThreshold().
+                                            toString();
+                        } else {
+                            return "";
+                        }
                     } else if ( pTypeRef.getEncoding().getBinaryDataEncoding() != null ) {
                         return "";
                     } else if ( pTypeRef.getEncoding().getStringDataEncoding() != null ) {
@@ -1176,6 +1202,10 @@ public abstract class XTCETypedObject extends XTCENamedObject {
 
     private boolean isBaseDataType() {
 
+        if ( typeObj_ == null ) {
+            return false;
+        }
+
         return ( ( typeObj_ instanceof IntegerDataType    ) ||
                  ( typeObj_ instanceof EnumeratedDataType ) ||
                  ( typeObj_ instanceof FloatDataType      ) ||
@@ -1194,6 +1224,10 @@ public abstract class XTCETypedObject extends XTCENamedObject {
      */
 
     private boolean isBaseTimeDataType() {
+
+        if ( typeObj_ == null ) {
+            return false;
+        }
 
         return ( ( typeObj_ instanceof AbsoluteTimeDataType ) ||
                  ( typeObj_ instanceof RelativeTimeDataType ) );

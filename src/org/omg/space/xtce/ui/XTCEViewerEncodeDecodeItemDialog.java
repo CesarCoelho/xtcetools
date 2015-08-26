@@ -124,8 +124,12 @@ public class XTCEViewerEncodeDecodeItemDialog extends javax.swing.JDialog {
             }
         });
 
+        warningsScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
         warningsText.setColumns(20);
+        warningsText.setLineWrap(true);
         warningsText.setRows(5);
+        warningsText.setWrapStyleWord(true);
         warningsScrollPane.setViewportView(warningsText);
 
         dismissButton.setText("Dismiss");
