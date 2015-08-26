@@ -182,7 +182,7 @@ public class XTCEViewerFunctions {
                     sb.append( ',' );
                 }
             }
-            sb.append( System.lineSeparator() );
+            sb.append( System.getProperty( "line.separator" ) );
         }
 
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
