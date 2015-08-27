@@ -2214,7 +2214,14 @@ public class XTCEViewer extends javax.swing.JFrame {
                     exportFile = new File( exportFile.getAbsolutePath() + ".xml" ); // NOI18N
                 }
             }
-            logMsg( "Exporting " + fileExtensionDescription + " to file " + exportFile.getName() );
+            logMsg( XTCEFunctions.getText( "general_exporting" ) + // NOI18N
+                    " " + // NOI18N
+                    fileExtensionDescription +
+                    " " + // NOI18N
+                    XTCEFunctions.getText( "file_menu_label" ) + // NOI18N
+                    " '" + // NOI18N
+                    exportFile.getName() +
+                    "'" ); // NOI18N
             Properties configProperties = new Properties();
             configProperties.setProperty( "file_extension_description", fileExtensionDescription ); // NOI18N
             configProperties.setProperty( "file_extension_pattern", fileExtensionPattern ); // NOI18N
