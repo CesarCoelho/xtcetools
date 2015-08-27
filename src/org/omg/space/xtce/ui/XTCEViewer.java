@@ -2220,6 +2220,9 @@ public class XTCEViewer extends javax.swing.JFrame {
             configProperties.setProperty( "file_extension_pattern", fileExtensionPattern ); // NOI18N
             configProperties.setProperty( "use_header_row", ( exportParametersIncludeHeaderRowCheckbox.isSelected() == true ? "true" : "false" ) ); // NOI18N
             configProperties.setProperty( "use_namespaces", ( exportParametersUseNamespacesCheckbox.isSelected() == true ? "true" : "false" ) ); // NOI18N
+            configProperties.setProperty( "show_all_alias_namespaces", ( prefs.getShowAllAliasNamespacesOption() == true ? "true" : "false" ) ); // NOI18N
+            configProperties.setProperty( "show_alias_namespaces", ( prefs.getShowAliasNamespacesOption() == true ? "true" : "false" ) ); // NOI18N
+            configProperties.setProperty( "preferred_alias_namespace", prefs.getPreferredAliasNamespaceOption() ); // NOI18N
             try {
                 XTCEDatabaseExporter dbExport = null;
                 if ( exportParametersCsvRadioButton.isSelected() == true ) {
