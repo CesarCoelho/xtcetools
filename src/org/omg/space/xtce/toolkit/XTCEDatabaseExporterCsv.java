@@ -41,6 +41,7 @@ public class XTCEDatabaseExporterCsv extends XTCEDatabaseExporter {
         headerFields_ = new ArrayList<String>();
         headerFields_.add( "SpaceSystem" );
         headerFields_.add( "Name" );
+        headerFields_.add( "Alias(s)" );
         headerFields_.add( "EngType" );
         headerFields_.add( "Unit" );
         headerFields_.add( "Size" );
@@ -81,18 +82,27 @@ public class XTCEDatabaseExporterCsv extends XTCEDatabaseExporter {
             if ( properties_.getProperty( "use_header_row" ).equals( "true" ) == true ) {
                 for ( int iii = 0; iii < headerFields_.size(); ++iii ) {
                     stream.write( headerFields_.get( iii ).getBytes() );
-                    if ( iii == ( headerFields_.size() - 1) ) {
+                    if ( iii != ( headerFields_.size() - 1) ) {
                         stream.write( ',' );
                     }
                 }
-                stream.write( '\n' );
+                stream.write( System.getProperty( "line.separator" ).getBytes() );
             }
             for ( XTCESpaceSystem spaceSystem : spaceSystems ) {
                 List<XTCEParameter> parameters = spaceSystem.getParameters();
                 for ( XTCEParameter parameter : parameters ) {
+
+                    String aliasText =
+                        XTCEFunctions.makeAliasDisplayString( parameter,
+                                                              properties_.getProperty( "show_all_alias_namespaces" ).equals( "true" ), // NOI18N
+                                                              properties_.getProperty( "show_alias_namespaces" ).equals( "true" ), // NOI18N
+                                                              properties_.getProperty( "preferred_alias_namespace" ) ); // NOI18N
+
                     stream.write( spaceSystem.getFullPath().getBytes() );
                     stream.write( ',' );
                     stream.write( parameter.getName().getBytes() );
+                    stream.write( ',' );
+                    stream.write( aliasText.getBytes() );
                     stream.write( ',' );
                     stream.write( parameter.getEngineeringType().getBytes() );
                     stream.write( ',' );
@@ -115,7 +125,8 @@ public class XTCEDatabaseExporterCsv extends XTCEDatabaseExporter {
                     stream.write( '"' );
                     stream.write( parameter.getDescription().getBytes() );
                     stream.write( '"' );
-                    stream.write( '\n' );
+                    stream.write( System.getProperty( "line.separator" ).getBytes() );
+
                 }
             }
             stream.close();
