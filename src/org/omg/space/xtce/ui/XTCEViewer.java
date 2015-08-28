@@ -118,6 +118,7 @@ public class XTCEViewer extends javax.swing.JFrame {
         parameterFieldExclusion = new javax.swing.ButtonGroup();
         parameterLocationExclusion = new javax.swing.ButtonGroup();
         exportParametersButtonGroup = new javax.swing.ButtonGroup();
+        exportContainersButtonGroup = new javax.swing.ButtonGroup();
         parameterExportPanel = new javax.swing.JPanel();
         exportParametersLabel = new javax.swing.JLabel();
         exportParametersCsvRadioButton = new javax.swing.JRadioButton();
@@ -126,6 +127,14 @@ public class XTCEViewer extends javax.swing.JFrame {
         exportParametersCometRadioButton = new javax.swing.JRadioButton();
         exportParametersIncludeHeaderRowCheckbox = new javax.swing.JCheckBox();
         exportParametersUseNamespacesCheckbox = new javax.swing.JCheckBox();
+        containerExportPanel = new javax.swing.JPanel();
+        exportContainersLabel = new javax.swing.JLabel();
+        exportContainersCsvRadioButton = new javax.swing.JRadioButton();
+        exportContainersCppRadioButton = new javax.swing.JRadioButton();
+        exportContainersInControlRadioButton = new javax.swing.JRadioButton();
+        exportContainersCometRadioButton = new javax.swing.JRadioButton();
+        exportContainersIncludeHeaderRowCheckbox = new javax.swing.JCheckBox();
+        exportContainersUseNamespacesCheckbox = new javax.swing.JCheckBox();
         databaseMetricsPanel = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -237,6 +246,7 @@ public class XTCEViewer extends javax.swing.JFrame {
         mainWindowShowMetricsMenuItem = new javax.swing.JMenuItem();
         mainWindowExportMenu = new javax.swing.JMenu();
         mainWindowExportParametersMenuItem = new javax.swing.JMenuItem();
+        mainWindowExportContainersMenuItem = new javax.swing.JMenuItem();
         mainWindowOptionsMenu = new javax.swing.JMenu();
         mainWindowValidateOnLoadMenuItem = new javax.swing.JCheckBoxMenuItem();
         mainWindowShowAliasNamespaceMenuItem = new javax.swing.JCheckBoxMenuItem();
@@ -462,6 +472,69 @@ public class XTCEViewer extends javax.swing.JFrame {
                 .addComponent(exportParametersIncludeHeaderRowCheckbox)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(exportParametersUseNamespacesCheckbox)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        exportContainersLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        exportContainersLabel.setText(bundle.getString("dialog_export_containers_options_title")); // NOI18N
+        exportContainersLabel.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
+
+        exportContainersButtonGroup.add(exportContainersCsvRadioButton);
+        exportContainersCsvRadioButton.setSelected(true);
+        exportContainersCsvRadioButton.setText(bundle.getString("dialog_export_parameters_options_csv_text")); // NOI18N
+
+        exportContainersButtonGroup.add(exportContainersCppRadioButton);
+        exportContainersCppRadioButton.setText(bundle.getString("dialog_export_parameters_options_cxx_text")); // NOI18N
+
+        exportContainersButtonGroup.add(exportContainersInControlRadioButton);
+        exportContainersInControlRadioButton.setText(bundle.getString("dialog_export_containers_options_incng_text")); // NOI18N
+
+        exportContainersButtonGroup.add(exportContainersCometRadioButton);
+        exportContainersCometRadioButton.setText(bundle.getString("dialog_export_containers_options_osc_text")); // NOI18N
+
+        exportContainersIncludeHeaderRowCheckbox.setSelected(true);
+        exportContainersIncludeHeaderRowCheckbox.setText(bundle.getString("dialog_export_parameters_options_header_row_text")); // NOI18N
+
+        exportContainersUseNamespacesCheckbox.setText(bundle.getString("dialog_export_parameters_options_ss_2_ns_text")); // NOI18N
+
+        javax.swing.GroupLayout containerExportPanelLayout = new javax.swing.GroupLayout(containerExportPanel);
+        containerExportPanel.setLayout(containerExportPanelLayout);
+        containerExportPanelLayout.setHorizontalGroup(
+            containerExportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(containerExportPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(containerExportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(containerExportPanelLayout.createSequentialGroup()
+                        .addComponent(exportContainersLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addGroup(containerExportPanelLayout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addGroup(containerExportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(exportContainersCppRadioButton)
+                            .addComponent(exportContainersCsvRadioButton)
+                            .addComponent(exportContainersInControlRadioButton)
+                            .addComponent(exportContainersCometRadioButton)
+                            .addComponent(exportContainersIncludeHeaderRowCheckbox)
+                            .addComponent(exportContainersUseNamespacesCheckbox))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+        );
+        containerExportPanelLayout.setVerticalGroup(
+            containerExportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(containerExportPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(exportContainersLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(exportContainersCsvRadioButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(exportContainersCppRadioButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(exportContainersInControlRadioButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(exportContainersCometRadioButton)
+                .addGap(18, 18, 18)
+                .addComponent(exportContainersIncludeHeaderRowCheckbox)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(exportContainersUseNamespacesCheckbox)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -1382,6 +1455,14 @@ public class XTCEViewer extends javax.swing.JFrame {
         });
         mainWindowExportMenu.add(mainWindowExportParametersMenuItem);
 
+        mainWindowExportContainersMenuItem.setText(bundle.getString("export_menu_containers_label")); // NOI18N
+        mainWindowExportContainersMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mainWindowExportContainersMenuItemActionPerformed(evt);
+            }
+        });
+        mainWindowExportMenu.add(mainWindowExportContainersMenuItem);
+
         mainWindowMenuBar.add(mainWindowExportMenu);
 
         mainWindowOptionsMenu.setText(bundle.getString("options_menu_label")); // NOI18N
@@ -2230,6 +2311,7 @@ public class XTCEViewer extends javax.swing.JFrame {
             configProperties.setProperty( "show_all_alias_namespaces", ( prefs.getShowAllAliasNamespacesOption() == true ? "true" : "false" ) ); // NOI18N
             configProperties.setProperty( "show_alias_namespaces", ( prefs.getShowAliasNamespacesOption() == true ? "true" : "false" ) ); // NOI18N
             configProperties.setProperty( "preferred_alias_namespace", prefs.getPreferredAliasNamespaceOption() ); // NOI18N
+            configProperties.setProperty( "show_all_conditions", ( prefs.getShowAllContainerConditionalsOption() == true ? "true" : "false" ) ); // NOI18N
             try {
                 XTCEDatabaseExporter dbExport = null;
                 if ( exportParametersCsvRadioButton.isSelected() == true ) {
@@ -3065,6 +3147,105 @@ public class XTCEViewer extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_copyParameterTableMenuItemActionPerformed
+
+    private void mainWindowExportContainersMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mainWindowExportContainersMenuItemActionPerformed
+
+        if ( fileOpenWarning() == true ) return;
+
+        int value = JOptionPane.showConfirmDialog( this,
+                                                   parameterExportPanel,
+                                                   XTCEFunctions.getText( "dialog_exportcontainers_text" ), // NOI18N
+                                                   JOptionPane.OK_CANCEL_OPTION );
+        if ( value == JOptionPane.CANCEL_OPTION ) {
+            return;
+        }
+
+        String fileExtensionDescription = XTCEFunctions.getText( "file_chooser_csv_text" ); // NOI18N
+        String fileExtensionPattern     = "csv"; // NOI18N
+        if ( exportParametersCppRadioButton.isSelected() == true ) {
+            fileExtensionDescription = XTCEFunctions.getText( "file_chooser_cpp_text" ); // NOI18N
+            fileExtensionPattern     = "h"; // NOI18N
+        } else if ( exportParametersCometRadioButton.isSelected() == true ) {
+            fileExtensionDescription = XTCEFunctions.getText( "file_chooser_oscomet_text" ); // NOI18N
+            fileExtensionPattern     = "def"; // NOI18N
+        } else if ( exportParametersInControlRadioButton.isSelected() == true ) {
+            fileExtensionDescription = XTCEFunctions.getText( "file_chooser_incontrol_text" ); // NOI18N
+            fileExtensionPattern     = "xml"; // NOI18N
+        }
+        JFileChooser chooser = new JFileChooser( "." ); // NOI18N
+        FileFilter fileFilter = new FileNameExtensionFilter( fileExtensionDescription,
+                                                             fileExtensionPattern );
+        chooser.addChoosableFileFilter( fileFilter );
+        chooser.setFileFilter( fileFilter );
+        int status = chooser.showSaveDialog( this );
+        if (status == JFileChooser.APPROVE_OPTION) {
+            File exportFile = chooser.getSelectedFile();
+            if ( exportParametersCsvRadioButton.isSelected() == true ) {
+                if ( exportFile.getName().endsWith( ".csv" ) == false ) { // NOI18N
+                    exportFile = new File( exportFile.getAbsolutePath() + ".csv" ); // NOI18N
+                }
+            } else if ( exportParametersCppRadioButton.isSelected() == true ) {
+                if ( exportFile.getName().endsWith( ".h" ) == false ) { // NOI18N
+                    exportFile = new File( exportFile.getAbsolutePath() + ".h" ); // NOI18N
+                }
+            } else if ( exportParametersCometRadioButton.isSelected() == true ) {
+                if ( exportFile.getName().endsWith( ".def" ) == false ) { // NOI18N
+                    exportFile = new File( exportFile.getAbsolutePath() + ".def" ); // NOI18N
+                }
+            } else if ( exportParametersInControlRadioButton.isSelected() == true ) {
+                if ( exportFile.getName().endsWith( ".xml" ) == false ) { // NOI18N
+                    exportFile = new File( exportFile.getAbsolutePath() + ".xml" ); // NOI18N
+                }
+            }
+            logMsg( XTCEFunctions.getText( "general_exporting" ) + // NOI18N
+                    " " + // NOI18N
+                    fileExtensionDescription +
+                    " " + // NOI18N
+                    XTCEFunctions.getText( "file_menu_label" ) + // NOI18N
+                    " '" + // NOI18N
+                    exportFile.getName() +
+                    "'" ); // NOI18N
+            Properties configProperties = new Properties();
+            configProperties.setProperty( "file_extension_description", fileExtensionDescription ); // NOI18N
+            configProperties.setProperty( "file_extension_pattern", fileExtensionPattern ); // NOI18N
+            configProperties.setProperty( "use_header_row", ( exportParametersIncludeHeaderRowCheckbox.isSelected() == true ? "true" : "false" ) ); // NOI18N
+            configProperties.setProperty( "use_namespaces", ( exportParametersUseNamespacesCheckbox.isSelected() == true ? "true" : "false" ) ); // NOI18N
+            configProperties.setProperty( "show_all_alias_namespaces", ( prefs.getShowAllAliasNamespacesOption() == true ? "true" : "false" ) ); // NOI18N
+            configProperties.setProperty( "show_alias_namespaces", ( prefs.getShowAliasNamespacesOption() == true ? "true" : "false" ) ); // NOI18N
+            configProperties.setProperty( "preferred_alias_namespace", prefs.getPreferredAliasNamespaceOption() ); // NOI18N
+            configProperties.setProperty( "show_all_conditions", ( prefs.getShowAllContainerConditionalsOption() == true ? "true" : "false" ) ); // NOI18N
+            try {
+                XTCEDatabaseExporter dbExport = null;
+                if ( exportParametersCsvRadioButton.isSelected() == true ) {
+                    dbExport = new XTCEDatabaseExporterCsv( xtceDatabaseFile, configProperties );
+                    dbExport.exportContainers( exportFile );
+                } else if ( exportParametersCppRadioButton.isSelected() == true ) {
+                    logMsg( XTCEFunctions.getText( "general_warning" ) + // NOI18N
+                            XTCEFunctions.getText( "dialog_export_notyetimplemented_text" ) + // NOI18N
+                            " " + // NOI18N
+                            fileExtensionDescription );
+                } else if ( exportParametersCometRadioButton.isSelected() == true ) {
+                    logMsg( XTCEFunctions.getText( "general_warning" ) + // NOI18N
+                            XTCEFunctions.getText( "dialog_export_notyetimplemented_text" ) + // NOI18N
+                            " " + // NOI18N
+                            fileExtensionDescription );
+                } else if ( exportParametersInControlRadioButton.isSelected() == true ) {
+                    logMsg( XTCEFunctions.getText( "general_warning" ) + // NOI18N
+                            XTCEFunctions.getText( "dialog_export_notyetimplemented_text" ) + // NOI18N
+                            " " + // NOI18N
+                            fileExtensionDescription );
+                }
+            } catch ( XTCEDatabaseException ex ) {
+                logMsg( XTCEFunctions.generalErrorPrefix() +
+                        XTCEFunctions.getText( "dialog_export_exporting_text" ) + // NOI18N
+                        " " + // NOI18N
+                        fileExtensionDescription +
+                        ": " + // NOI18N
+                        ex.getLocalizedMessage() );
+            }
+        }
+
+    }//GEN-LAST:event_mainWindowExportContainersMenuItemActionPerformed
 
     public void goToParameter( String  parameterName,
                                String  spaceSystemName,
@@ -4137,6 +4318,7 @@ public class XTCEViewer extends javax.swing.JFrame {
     private javax.swing.JMenu containerDrawingOrientationMenu;
     private javax.swing.JPopupMenu containerDrawingPopupMenu;
     private javax.swing.JRadioButtonMenuItem containerDrawingTopToBottom;
+    private javax.swing.JPanel containerExportPanel;
     private javax.swing.JPopupMenu containerTablePopupMenu;
     private javax.swing.JTextField containersTotal;
     private javax.swing.JMenuItem copyContainerCellMenuItem;
@@ -4150,6 +4332,14 @@ public class XTCEViewer extends javax.swing.JFrame {
     private javax.swing.JScrollPane detailSpaceSystemPanelScrollPane;
     private javax.swing.JTree detailSpaceSystemTree;
     private javax.swing.JScrollPane detailSpaceSystemTreeScrollPane;
+    private javax.swing.ButtonGroup exportContainersButtonGroup;
+    private javax.swing.JRadioButton exportContainersCometRadioButton;
+    private javax.swing.JRadioButton exportContainersCppRadioButton;
+    private javax.swing.JRadioButton exportContainersCsvRadioButton;
+    private javax.swing.JRadioButton exportContainersInControlRadioButton;
+    private javax.swing.JCheckBox exportContainersIncludeHeaderRowCheckbox;
+    private javax.swing.JLabel exportContainersLabel;
+    private javax.swing.JCheckBox exportContainersUseNamespacesCheckbox;
     private javax.swing.ButtonGroup exportParametersButtonGroup;
     private javax.swing.JRadioButton exportParametersCometRadioButton;
     private javax.swing.JRadioButton exportParametersCppRadioButton;
@@ -4192,6 +4382,7 @@ public class XTCEViewer extends javax.swing.JFrame {
     private javax.swing.JMenuItem mainWindowExitMenuItem;
     private javax.swing.JMenuItem mainWindowExpandAllSpaceSystemTreeMenuItem;
     private javax.swing.JMenuItem mainWindowExpandContainerTreeMenuItem;
+    private javax.swing.JMenuItem mainWindowExportContainersMenuItem;
     private javax.swing.JMenu mainWindowExportMenu;
     private javax.swing.JMenuItem mainWindowExportParametersMenuItem;
     private javax.swing.JMenu mainWindowFileMenu;

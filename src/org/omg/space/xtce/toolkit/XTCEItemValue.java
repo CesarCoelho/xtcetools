@@ -372,6 +372,53 @@ public class XTCEItemValue {
 
     }
 
+    /*
+    public String uncalibrate( String euValue ) {
+
+        BigInteger calNumericValue   = null;
+        BigInteger uncalNumericValue = null;
+        String     uncalValue        = "";
+
+        if ( euTypeName_.equals( "BOOLEAN" ) == true ) {
+            uncalNumericValue = numberFromBoolean( euValue );
+            uncalValue        = uncalNumericValue.toString();
+        } else if ( euTypeName_.equals( "ENUMERATED" ) == true ) {
+            uncalNumericValue = numberFromEnumeration( euValue );
+            uncalValue        = uncalNumericValue.toString();
+        } else if ( euTypeName_.equals( "STRING" ) == true ) {
+            uncalValue        = euValue;
+        } else if ( euTypeName_.equals( "BINARY" ) == true ) {
+            uncalNumericValue = encodeString( euValue );
+            uncalValue        = "0x" + uncalNumericValue.toString( 16 );
+        } else if ( euTypeName_.startsWith( "FLOAT" ) == true ) {
+            uncalNumericValue = encodeString( euValue );
+            rawValue          = encodeRawBits( uncalNumericValue );
+        } else if ( euTypeName_.equals( "UNSIGNED" ) == true ) {
+            uncalNumericValue = encodeString( euValue );
+            rawValue          = encodeRawBits( uncalNumericValue );
+        } else if ( euTypeName_.equals( "SIGNED" ) == true ) {
+            uncalNumericValue = encodeString( euValue );
+            rawValue          = encodeRawBits( uncalNumericValue );
+        } else if ( euTypeName_.equals( "TIME" ) == true ) {
+            // TODO Add TIME Type
+            warnings_.add( "Absolute Time Type Not Yet Supported for " +
+                           itemName_ );
+        } else if ( euTypeName_.equals( "DURATION" ) == true ) {
+            // TODO Add DURATION Type
+            warnings_.add( "Relative Time Type Not Yet Supported for " +
+                           itemName_ );
+        } else {
+            warnings_.add( "AGGREGATE and ARRAY types for item " +
+                           itemName_ +
+                           " cannot directly be encoded." + 
+                           "  Use their children instead" );
+        }
+
+        return rawValue;
+
+    }
+    */
+
     /** Function to resolve a Boolean Engineering Type, which has a flexible
      * set of EU values, into the numeric calibrated value.
      *

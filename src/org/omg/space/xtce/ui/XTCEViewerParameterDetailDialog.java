@@ -500,6 +500,7 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         alarmDefinitionsTab = new javax.swing.JPanel();
+        ancillaryDataTab = new javax.swing.JPanel();
         rangeLowInclusiveCheckbox = new javax.swing.JCheckBox();
         rangeHighInclusiveCheckbox = new javax.swing.JCheckBox();
         jLabel20 = new javax.swing.JLabel();
@@ -908,7 +909,7 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
             .addGroup(enumerationPanelLayout.createSequentialGroup()
                 .addComponent(enumerationLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(enumerationScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 517, Short.MAX_VALUE)
+                .addComponent(enumerationScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 565, Short.MAX_VALUE)
                 .addGap(14, 14, 14)
                 .addGroup(enumerationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(removeEnumerationButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -965,7 +966,7 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
         );
         latexDrawingPanelLayout.setVerticalGroup(
             latexDrawingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 264, Short.MAX_VALUE)
+            .addGap(0, 267, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
@@ -1085,7 +1086,7 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
         );
         polynomialCalibratorsTabLayout.setVerticalGroup(
             polynomialCalibratorsTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 620, Short.MAX_VALUE)
+            .addGap(0, 647, Short.MAX_VALUE)
             .addGroup(polynomialCalibratorsTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(polynomialCalibratorsTabLayout.createSequentialGroup()
                     .addComponent(polynomialCalibratorsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1165,7 +1166,7 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
                 .addContainerGap()
                 .addComponent(jLabel16)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTabbedPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 518, Short.MAX_VALUE)
+                .addComponent(jTabbedPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 568, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(splineCalibratorsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1187,7 +1188,7 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
         );
         splineCalibratorsTabLayout.setVerticalGroup(
             splineCalibratorsTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 620, Short.MAX_VALUE)
+            .addGap(0, 647, Short.MAX_VALUE)
             .addGroup(splineCalibratorsTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(splineCalibratorsTabLayout.createSequentialGroup()
                     .addComponent(splineCalibratorsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1204,10 +1205,23 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
         );
         alarmDefinitionsTabLayout.setVerticalGroup(
             alarmDefinitionsTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 620, Short.MAX_VALUE)
+            .addGap(0, 647, Short.MAX_VALUE)
         );
 
         extraDetailsTabbedPane.addTab("Alarm Definitions", alarmDefinitionsTab);
+
+        javax.swing.GroupLayout ancillaryDataTabLayout = new javax.swing.GroupLayout(ancillaryDataTab);
+        ancillaryDataTab.setLayout(ancillaryDataTabLayout);
+        ancillaryDataTabLayout.setHorizontalGroup(
+            ancillaryDataTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 578, Short.MAX_VALUE)
+        );
+        ancillaryDataTabLayout.setVerticalGroup(
+            ancillaryDataTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 647, Short.MAX_VALUE)
+        );
+
+        extraDetailsTabbedPane.addTab("Ancillary Data", ancillaryDataTab);
 
         rangeLowInclusiveCheckbox.setText("Inclusive");
 
@@ -1235,7 +1249,7 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(extraDetailsTabbedPane)
+                .addComponent(extraDetailsTabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 693, Short.MAX_VALUE)
                 .addGap(4, 4, 4)
                 .addComponent(rangeLowInclusiveCheckbox)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -1269,7 +1283,7 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -1478,6 +1492,7 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
     private javax.swing.JPanel alarmDefinitionsTab;
     private javax.swing.JLabel aliasLabel;
     private javax.swing.JTextArea aliasTextField;
+    private javax.swing.JPanel ancillaryDataTab;
     private javax.swing.JComboBox bitOrderComboField;
     private javax.swing.JTextField changeThresholdTextField;
     private javax.swing.JTextField coefficient0Text;

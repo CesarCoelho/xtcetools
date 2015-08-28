@@ -37,6 +37,10 @@ public abstract class XTCEDatabaseExporter {
      * alias output to a specific namespace.  This is ignored if the property
      * show_all_alias_namespaces is "true".
      *
+     * @li show_all_conditions = "false".  This property restricts the
+     * container conditional depth to stop at the first non-included container
+     * when a container is conditionally included in another container.
+     *
      * @param db XTCEDatabase object to export from.
      * 
      * @param properties Properties object containing potential modifiers for
@@ -63,20 +67,24 @@ public abstract class XTCEDatabaseExporter {
             properties_ = new Properties();
         }
 
-        if ( properties_.getProperty( "use_header_row") == null ) {
+        if ( properties_.getProperty( "use_header_row" ) == null ) {
             properties_.setProperty( "use_header_row", "true" );
         }
 
-        if ( properties_.getProperty( "show_all_alias_namespaces") == null ) {
+        if ( properties_.getProperty( "show_all_alias_namespaces" ) == null ) {
             properties_.setProperty( "show_all_alias_namespaces", "true" );
         }
 
-        if ( properties_.getProperty( "show_alias_namespaces") == null ) {
+        if ( properties_.getProperty( "show_alias_namespaces" ) == null ) {
             properties_.setProperty( "show_alias_namespaces", "true" );
         }
 
-        if ( properties_.getProperty( "preferred_alias_namespace") == null ) {
+        if ( properties_.getProperty( "preferred_alias_namespace" ) == null ) {
             properties_.setProperty( "preferred_alias_namespace", "" );
+        }
+
+        if ( properties_.getProperty( "show_all_conditions" ) == null ) {
+            properties_.setProperty( "show_all_conditions", "false" );
         }
 
     }

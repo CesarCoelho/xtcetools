@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import org.omg.space.xtce.database.DescriptionType.AncillaryDataSet.AncillaryData;
+import org.omg.space.xtce.toolkit.XTCEContainerContentEntry.FieldType;
 
 /** The XTCEDatabaseExporterCsv class is a specific implementation of the
  * XTCEDatabaseExporter abstract base class for the purpose of exporting TM
@@ -38,21 +40,6 @@ public class XTCEDatabaseExporterCsv extends XTCEDatabaseExporter {
     public XTCEDatabaseExporterCsv( XTCEDatabase db, Properties properties ) throws XTCEDatabaseException {
 
         super( db, properties );
-
-        headerFields_ = new ArrayList<String>();
-        headerFields_.add( XTCEFunctions.getText( "ss_name_text" ) ); // NOI18N
-        headerFields_.add( XTCEFunctions.getText( "table_parameters_name_col_label" ) ); // NOI18N
-        headerFields_.add( XTCEFunctions.getText( "table_parameters_aliases_col_label" ) ); // NOI18N
-        headerFields_.add( XTCEFunctions.getText( "table_parameters_type_col_label" ) ); // NOI18N
-        headerFields_.add( XTCEFunctions.getText( "table_parameters_unit_col_label" ) ); // NOI18N
-        headerFields_.add( XTCEFunctions.getText( "table_parameters_size_col_label" ) ); // NOI18N
-        headerFields_.add( XTCEFunctions.getText( "table_parameters_encoding_col_label" ) ); // NOI18N
-        headerFields_.add( XTCEFunctions.getText( "table_parameters_bitorder_label" ) ); // NOI18N
-        headerFields_.add( XTCEFunctions.getText( "table_parameters_source_col_label" ) ); // NOI18N
-        headerFields_.add( XTCEFunctions.getText( "table_parameters_readonly_col_label" ) ); // NOI18N
-        headerFields_.add( XTCEFunctions.getText( "table_parameters_defaultvalue_col_label" ) ); // NOI18N
-        headerFields_.add( XTCEFunctions.getText( "table_parameters_changethreshold_label" ) ); // NOI18N
-        headerFields_.add( XTCEFunctions.getText( "table_parameters_desc_col_label" ) ); // NOI18N
 
     }
 
@@ -80,10 +67,12 @@ public class XTCEDatabaseExporterCsv extends XTCEDatabaseExporter {
 
             FileOutputStream stream = new FileOutputStream( outFile );
             List<XTCESpaceSystem> spaceSystems = db_.getSpaceSystemTree();
+
             if ( properties_.getProperty( "use_header_row" ).equals( "true" ) == true ) { // NOI18N
-                for ( int iii = 0; iii < headerFields_.size(); ++iii ) {
-                    stream.write( headerFields_.get( iii ).getBytes() );
-                    if ( iii != ( headerFields_.size() - 1) ) {
+                List<String> headerFields = getParametersHeaderFields();
+                for ( int iii = 0; iii < headerFields.size(); ++iii ) {
+                    stream.write( headerFields.get( iii ).getBytes() );
+                    if ( iii != ( headerFields.size() - 1) ) {
                         stream.write( ',' ); // NOI18N
                     }
                 }
@@ -101,32 +90,34 @@ public class XTCEDatabaseExporterCsv extends XTCEDatabaseExporter {
                                                               properties_.getProperty( "preferred_alias_namespace" ) ); // NOI18N
 
                     stream.write( spaceSystem.getFullPath().getBytes() );
-                    stream.write( ',' );
+                    stream.write( ',' ); // NOI18N
                     stream.write( parameter.getName().getBytes() );
-                    stream.write( ',' );
+                    stream.write( ',' ); // NOI18N
                     stream.write( aliasText.getBytes() );
-                    stream.write( ',' );
+                    stream.write( ',' ); // NOI18N
                     stream.write( parameter.getEngineeringType().getBytes() );
-                    stream.write( ',' );
+                    stream.write( ',' ); // NOI18N
                     stream.write( parameter.getUnits().getBytes() );
-                    stream.write( ',' );
+                    stream.write( ',' ); // NOI18N
                     stream.write( parameter.getRawSizeInBits().getBytes() );
-                    stream.write( ',' );
+                    stream.write( ',' ); // NOI18N
                     stream.write( parameter.getRawType().getBytes() );
-                    stream.write( ',' );
+                    stream.write( ',' ); // NOI18N
                     stream.write( parameter.getRawBitOrder().getBytes() );
-                    stream.write( ',' );
+                    stream.write( ',' ); // NOI18N
                     stream.write( parameter.getDataSource().getBytes() );
-                    stream.write( ',' );
+                    stream.write( ',' ); // NOI18N
                     stream.write( ( parameter.isSettable() == true ? "true" : "false" ).getBytes() ); // NOI18N
-                    stream.write( ',' );
+                    stream.write( ',' ); // NOI18N
                     stream.write( parameter.getInitialValue().getBytes() );
-                    stream.write( ',' );
+                    stream.write( ',' ); // NOI18N
                     stream.write( parameter.getChangeThreshold().getBytes() );
-                    stream.write( ',' );
-                    stream.write( '"' );
+                    stream.write( ',' ); // NOI18N
+                    stream.write( getSpecialData( parameter ).getBytes() );
+                    stream.write( ',' ); // NOI18N
+                    stream.write( '"' ); // NOI18N
                     stream.write( parameter.getDescription().getBytes() );
-                    stream.write( '"' );
+                    stream.write( '"' ); // NOI18N
                     stream.write( System.getProperty( "line.separator" ).getBytes() ); // NOI18N
 
                 }
@@ -148,9 +139,190 @@ public class XTCEDatabaseExporterCsv extends XTCEDatabaseExporter {
 
     }
 
-    /// Header row fields specific to the CSV output and intialized in the
-    /// constructor of this class.
+    /** Export the containers in the XTCE file represented by an XTCEDatabase
+     * object.
+     * 
+     * The XTCEDatabase object is provided to the constructor of this class,
+     * along with a Properties object that contains modifier information.
+     *
+     * @param outFile File object to export to the data to.
+     *
+     * @return List containing 0 or more error/warning messages.
+     * For this CSV implementation, no messages are produced.  In the event
+     * that there are filesystem errors, those will be thrown by exception.
+     *
+     * @throws XTCEDatabaseException thrown in the event that the file cannot
+     * be opened/written/etc.
+     *
+     */
 
-    private ArrayList<String> headerFields_ = null;
+    @Override
+    public List<String> exportContainers( File outFile ) throws XTCEDatabaseException {
+
+        ArrayList<String> warnings = new ArrayList<>();
+
+        try {
+
+            FileOutputStream stream = new FileOutputStream( outFile );
+
+            if ( properties_.getProperty( "use_header_row" ).equals( "true" ) == true ) { // NOI18N
+                List<String> headerFields = getContainersHeaderFields();
+                for ( int iii = 0; iii < headerFields.size(); ++iii ) {
+                    stream.write( headerFields.get( iii ).getBytes() );
+                    if ( iii != ( headerFields.size() - 1) ) {
+                        stream.write( ',' ); // NOI18N
+                    }
+                }
+                stream.write( System.getProperty( "line.separator" ).getBytes() ); // NOI18N
+            }
+
+            List<XTCETMContainer> containers = db_.getContainers();
+
+            for ( XTCETMContainer container : containers ) {
+
+                XTCEContainerContentModel model =
+                    db_.processContainer( container,
+                                          null,
+                                          properties_.getProperty( "show_all_conditions" ).equals( "true" ) ); // NOI18N
+
+                warnings.addAll( model.getWarnings() );
+
+                List<XTCEContainerContentEntry> entries =
+                    model.getContentList();
+
+                for ( XTCEContainerContentEntry entry : entries ) {
+
+                    String aliasString = ""; // NOI18N
+                    String name        = ""; // NOI18N
+                    if ( entry.getEntryType() == FieldType.PARAMETER ) {
+                        aliasString =
+                            XTCEFunctions.makeAliasDisplayString( entry.getParameter(),
+                                                                  properties_.getProperty( "show_all_alias_namespaces" ).equals( "true" ), // NOI18N
+                                                                  properties_.getProperty( "show_alias_namespaces" ).equals( "true" ), // NOI18N
+                                                                  properties_.getProperty( "preferred_alias_namespace" ) ); // NOI18N
+                        name = entry.getParameter().getName();
+                    }
+
+                    String containerName = null;
+                    String description   = null;
+                    if ( entry.getEntryType() == FieldType.PARAMETER ) {
+                        containerName = entry.getHoldingContainer().getName();
+                        description   = entry.getParameter().getDescription();
+                    } else if ( entry.getEntryType() == FieldType.CONTAINER ) {
+                        containerName = entry.getTelemetryContainer().getName();
+                        description   = entry.getTelemetryContainer().getDescription();
+                    } else {
+                        containerName = "UNDEFINED"; // NOI18N
+                        description   = "";
+                    }
+
+                    stream.write( container.getName().getBytes() );
+                    stream.write( ',' ); // NOI18N
+                    stream.write( containerName.getBytes() );
+                    stream.write( ',' ); // NOI18N
+                    stream.write( name.getBytes() );
+                    stream.write( ',' ); // NOI18N
+                    stream.write( aliasString.getBytes() );
+                    stream.write( ',' ); // NOI18N
+                    stream.write( entry.getRawSizeInBits().getBytes() );
+                    stream.write( ',' ); // NOI18N
+                    stream.write( entry.getStartBit().getBytes() );
+                    stream.write( ',' ); // NOI18N
+                    stream.write( entry.getValue().getBytes() );
+                    stream.write( ',' ); // NOI18N
+                    stream.write( entry.getInitialValue().getBytes() );
+                    stream.write( ',' ); // NOI18N
+                    stream.write( entry.getConditions().getBytes() );
+                    stream.write( ',' ); // NOI18N
+                    stream.write( entry.getRepeatParameterInfo().getBytes() );
+                    stream.write( ',' ); // NOI18N
+                    stream.write( '"' ); // NOI18N
+                    stream.write( description.getBytes() );
+                    stream.write( '"' ); // NOI18N
+                    stream.write( System.getProperty( "line.separator" ).getBytes() ); // NOI18N
+
+                }
+
+            }
+
+            stream.close();
+
+        } catch ( FileNotFoundException ex ) {
+            throw new XTCEDatabaseException( XTCEFunctions.getText( "dialog_export_error_writing" ) + // NOI18N
+                                             " (" + outFile.getAbsolutePath() + // NOI18N
+                                             "): " + ex.getLocalizedMessage() ); // NOI18N
+        } catch ( IOException ex ) {
+            throw new XTCEDatabaseException( XTCEFunctions.getText( "dialog_export_error_writing" ) + // NOI18N
+                                             " (" + outFile.getAbsolutePath() + // NOI18N
+                                             "): " + ex.getLocalizedMessage() ); // NOI18N
+        }
+
+        return warnings;
+
+    }
+
+    /** Private method to assemble the list of header fields for the parameter
+     * export output.
+     *
+     * @return List of String objects containing the names of the columns.
+     *
+     */
+
+    private List<String> getParametersHeaderFields() {
+
+        ArrayList<String> headerFields = new ArrayList<>();
+        headerFields.add( XTCEFunctions.getText( "ss_name_text" ) ); // NOI18N
+        headerFields.add( XTCEFunctions.getText( "table_parameters_name_col_label" ) ); // NOI18N
+        headerFields.add( XTCEFunctions.getText( "table_parameters_aliases_col_label" ) ); // NOI18N
+        headerFields.add( XTCEFunctions.getText( "table_parameters_type_col_label" ) ); // NOI18N
+        headerFields.add( XTCEFunctions.getText( "table_parameters_unit_col_label" ) ); // NOI18N
+        headerFields.add( XTCEFunctions.getText( "table_parameters_size_col_label" ) ); // NOI18N
+        headerFields.add( XTCEFunctions.getText( "table_parameters_encoding_col_label" ) ); // NOI18N
+        headerFields.add( XTCEFunctions.getText( "table_parameters_bitorder_label" ) ); // NOI18N
+        headerFields.add( XTCEFunctions.getText( "table_parameters_source_col_label" ) ); // NOI18N
+        headerFields.add( XTCEFunctions.getText( "table_parameters_readonly_col_label" ) ); // NOI18N
+        headerFields.add( XTCEFunctions.getText( "table_parameters_defaultvalue_col_label" ) ); // NOI18N
+        headerFields.add( XTCEFunctions.getText( "table_parameters_changethreshold_label" ) ); // NOI18N
+        headerFields.add( XTCEFunctions.getText( "table_parameters_id_label" ) ); // NOI18N
+        headerFields.add( XTCEFunctions.getText( "table_parameters_desc_col_label" ) ); // NOI18N
+        return headerFields;
+
+    }
+
+    /** Private method to assemble the list of header fields for the container
+     * export output.
+     *
+     * @return List of String objects containing the names of the columns.
+     *
+     */
+
+    private List<String> getContainersHeaderFields() {
+
+        ArrayList<String> headerFields = new ArrayList<>();
+        headerFields.add( XTCEFunctions.getText( "table_containers_contname_label" ) ); // NOI18N
+        headerFields.add( XTCEFunctions.getText( "table_containers_contname_label" ) ); // NOI18N
+        headerFields.add( XTCEFunctions.getText( "table_containers_paramname_label" ) ); // NOI18N
+        headerFields.add( XTCEFunctions.getText( "table_containers_paramaliases_label" ) ); // NOI18N
+        headerFields.add( XTCEFunctions.getText( "table_containers_size_label" ) ); // NOI18N
+        headerFields.add( XTCEFunctions.getText( "table_containers_startbit_label" ) ); // NOI18N
+        headerFields.add( XTCEFunctions.getText( "table_containers_value_label" ) ); // NOI18N
+        headerFields.add( XTCEFunctions.getText( "table_containers_defaultvalue_label" ) ); // NOI18N
+        headerFields.add( XTCEFunctions.getText( "table_containers_condition_label" ) ); // NOI18N
+        headerFields.add( XTCEFunctions.getText( "table_containers_repeat_label" ) ); // NOI18N
+        headerFields.add( XTCEFunctions.getText( "table_parameters_desc_col_label" ) ); // NOI18N
+        return headerFields;
+
+    }
+
+    private String getSpecialData( XTCEParameter parameter ) {
+
+        List<AncillaryData> list = parameter.getAncillaryData( "PARAMID = *" );
+        for ( AncillaryData data : list ) {
+            return data.getName().replaceFirst( "PARAMID = ", "" );
+        }
+
+        return "";
+
+    }
 
 }
