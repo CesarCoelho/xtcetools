@@ -8,6 +8,7 @@ package org.omg.space.xtce.toolkit;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.BitSet;
@@ -18,6 +19,7 @@ import org.omg.space.xtce.database.BooleanDataType;
 import org.omg.space.xtce.database.CalibratorType;
 import org.omg.space.xtce.database.CalibratorType.MathOperationCalibrator;
 import org.omg.space.xtce.database.CalibratorType.SplineCalibrator;
+import org.omg.space.xtce.database.EnumeratedDataType;
 import org.omg.space.xtce.database.NameDescriptionType;
 import org.omg.space.xtce.database.PolynomialType;
 import org.omg.space.xtce.database.SplinePointType;
@@ -60,26 +62,27 @@ public class XTCEItemValue {
         rawTypeName_ = item.getRawType();
         rawBitOrder_ = item.getRawBitOrder();
 
+        // gather the Type Reference, for which we cannot proceed further
+        // unless exists
+        NameDescriptionType typeObj = item.getTypeReference();
+        if ( typeObj == null ) {
+            warnings_.add( "No type defined for " + itemName_ +
+                           ", uncalibration may be possible, but not raw." );
+            validObject_ = false;
+            return;
+        }
+
         // gather the raw encoding size, which may not be appropriate
         try {
             rawSizeInBits_ = Integer.parseInt( item.getRawSizeInBits() );
             validObject_   = true;
         } catch ( NumberFormatException ex ) {
-            warnings_.add( "Cannot encode/decode item " +
+            warnings_.add( "Cannot encode/decode typed item " +
                            itemName_ +
                            " without a numeric raw size in bits.  Size is '" +
                            rawSizeInBits_ +
                            "'" );
             validObject_ = false;
-        }
-
-        // gather the Type Reference, for which we cannot proceed further
-        // unless exists
-        NameDescriptionType typeObj = item.getTypeReference();
-        if ( typeObj == null ) {
-            warnings_.add( "No type defined for " + itemName_ );
-            validObject_ = false;
-            return;
         }
 
         // gather the extended attributes that are needed for specific types
@@ -132,26 +135,243 @@ public class XTCEItemValue {
      */
 
     public void clearWarnings() {
-        warnings_ = new ArrayList<String>();
+        warnings_ = new ArrayList<>();
     }
 
+    /** Retrieve the Calibrated/Engineering value of this typed object when
+     * given the raw binary value.
+     *
+     * This method is a shortcut to calling both the getUncalibratedFromRaw()
+     * and getCalibratedFromUncalibrated() functions.  Those functions contain
+     * additional details for the reader concerning the nature of the data
+     * and what is being performed.
+     * 
+     * The user must interrogate the getWarnings() method to ensure that this
+     * function did not encounter any problems during conversion.  In the
+     * event that warnings happened, then the return value cannot be used.
+     *
+     * @param rawValue BitSet containing the raw binary value that would
+     * be encoded on the wire or bitfield.  The raw binary is always expected
+     * to be in the order read from the stream.
+     *
+     * @return String containing the proper Calibrated/Engineering
+     * representation of the raw encoded value provided by the caller.
+     * 
+     */
+
     public String decode( BitSet rawValue ) {
-        return "";
+
+        String uncalValue = getUncalibratedFromRaw( rawValue );
+        if ( getWarnings().isEmpty() == false ) {
+            return "";
+        } else {
+            return getCalibratedFromUncalibrated( uncalValue );
+        }
+
     }
+
+
+    /** Retrieve the uncalibrated value of this typed object item when given
+     * the raw binary value.
+     *
+     * The raw value is provided as a Java BitSet to account for an
+     * arbitrary size of the raw value binary.  The output of this function
+     * takes into account the encoding type to interpret the raw binary in the
+     * proper type and alignment.
+     *
+     * @param rawValue BitSet containing the raw binary value that would
+     * be encoded on the wire or bitfield.  The raw binary is always expected
+     * to be in the order read from the stream.
+     *
+     * @return String containing the proper uncalibrated representation of the
+     * raw encoded value provided by the caller.
+     *
+     */
+
+    public String getUncalibratedFromRaw( BitSet rawValue ) {
+
+        clearWarnings();
+
+        String rawTypeName = rawTypeName_;
+        String rawBitOrder = rawBitOrder_;
+
+        if ( rawBitOrder.equals( "mostSignificantBitFirst" ) == false ) {
+            warnings_.add( itemName_ + " Raw encoding " + rawBitOrder +
+                " not yet supported" );
+            return "";
+        }
+
+        BigInteger numericValue = bitSetToNumber( rawValue );
+
+        if ( rawTypeName.equals( "unsigned" ) == true ) {
+            return numericValue.toString();
+        } else if ( rawTypeName.equals( "signMagnitude" ) == true ) {
+            int sizeInBits = rawSizeInBits_;
+            if ( numericValue.testBit( sizeInBits - 1 ) == true ) {
+                return numericValue.negate().toString();
+            }
+            return rawValue.toString();
+        } else if ( rawTypeName.equals( "twosComplement" ) == true ) {
+            byte[] dataValues = rawValue.toByteArray();
+            BigInteger retValue = new BigInteger( dataValues );
+            return retValue.toString();
+        } else if ( rawTypeName.equals( "onesComplement" ) == true ) {
+            // TODO not sure that this is correct
+            BigInteger onesValue = numericValue.subtract( BigInteger.ONE );
+            byte[] dataValues = onesValue.toByteArray();
+            BigInteger retValue = new BigInteger( dataValues );
+            return retValue.toString();
+        } else if ( rawTypeName.equals( "IEEE754_1985" ) == true ) {
+            int sizeInBits = rawSizeInBits_;
+            if ( sizeInBits == 32 ) {
+                return Float.toString( numericValue.floatValue() );
+            } else if ( sizeInBits == 64 ) {
+                return Double.toString( numericValue.doubleValue() );
+            } else {
+                warnings_.add( itemName_ + " Raw encoding " +
+                    rawTypeName + " using " +
+                    Integer.toString( rawSizeInBits_ ) + " bits " +
+                    "is not yet supported" );
+                return "";
+            }
+        } else if ( rawTypeName.equals( "binary" ) == true ) {
+            return "0x" + numericValue.toString( 16 );
+        } else if ( rawTypeName.equals( "UTF-8" ) == true ) {
+            String retValue = new String( numericValue.toByteArray(),
+                                          Charset.forName( "UTF-8" ) );
+            if ( retValue.length() == 0 ) {
+                return "";
+            }
+            int endIndex = retValue.length() - 1;
+            while ( retValue.charAt( endIndex ) == '\0' ) {
+                if ( endIndex == 0 ) {
+                    return "";
+                } else {
+                    retValue = retValue.substring( 0, endIndex );
+                }
+                endIndex = retValue.length() - 1;
+            }
+            return retValue;
+        } else if ( rawTypeName.equals( "UTF-16" ) == true ) {
+            String retValue = new String( numericValue.toByteArray(),
+                                          Charset.forName( "UTF-16" ) );
+            if ( retValue.length() == 0 ) {
+                return "";
+            }
+            int endIndex = retValue.length() - 1;
+            while ( retValue.charAt( endIndex ) == '\0' ) {
+                if ( endIndex == 0 ) {
+                    return "";
+                } else {
+                    retValue = retValue.substring( 0, endIndex );
+                }
+                endIndex = retValue.length() - 1;
+            }
+            return retValue;
+        }
+
+        // not supported MILSTD_1750A, BCD, packedBCD
+        warnings_.add( itemName_ + " Raw encoding type " + rawTypeName +
+            " not yet supported" );
+
+        return "";
+
+    }
+
+    /** Retrieve the EU calibrated value of this typed object item when given
+     * the uncalibrated value.
+     *
+     * @param uncalValue String containing the uncalibrated value that is
+     * derived from the encoded value on the wire or bitfield.
+     *
+     * @return String containing the proper EU calibrated representation of the
+     * uncalibrated value provided by the caller.
+     *
+     */
+
+    public String getCalibratedFromUncalibrated( String uncalValue ) {
+
+        clearWarnings();
+
+        String rawTypeName = rawTypeName_;
+        String engTypeName = euTypeName_;
+        String calValue    = applyCalibrator( uncalValue );
+
+        if ( ( engTypeName.equals( "UNSIGNED" ) == true ) ||
+             ( engTypeName.equals( "SIGNED" )   == true ) ) {
+            return getCalibratedFromIntegerString( calValue );
+        } else if ( ( engTypeName.equals( "FLOAT32" )  == true ) ||
+                    ( engTypeName.equals( "FLOAT64" )  == true ) ||
+                    ( engTypeName.equals( "FLOAT128" ) == true ) ) {
+            return getCalibratedFromFloatString( calValue );
+        } else if ( engTypeName.equals( "BOOLEAN" ) == true ) {
+            return getCalibratedFromBooleanNumericString( calValue );
+        } else if ( engTypeName.equals( "ENUMERATED" ) == true ) {
+            return getCalibratedValueFromEnumeratedNumericString( calValue );
+        } else if ( engTypeName.equals( "STRING" ) == true ) {
+            return calValue;
+        } else if ( engTypeName.equals( "BINARY" ) == true ) {
+            // warnings for binary transformations?
+            // might need 0x protection over entire function
+            if ( calValue.startsWith( "0x" ) == true ) {
+                BigInteger intValue = new BigInteger( calValue.replaceFirst( "0x", "" ), 16 );
+                return "0x" + intValue.toString( 16 );
+            } else {
+                BigInteger intValue = new BigInteger( calValue );
+                return "0x" + intValue.toString( 16 );
+            }
+        } else if ( engTypeName.equals( "TIME" ) == true ) {
+            warnings_.add( itemName_ + " Absolute Time Type is not " +
+                "yet supported" );
+        } else if ( engTypeName.equals( "DURATION" ) == true ) {
+            warnings_.add( itemName_ + " Relative Time Type is not " +
+                "yet supported" );
+        } else {
+            warnings_.add( itemName_ + " Type '" + engTypeName +
+                "' is not yet supported" );
+        }
+
+        return "";
+
+    }
+
+    /** Retrieve the Raw value of this typed object when given the EU
+     * calibrated value.
+     *
+     * This method is a shortcut to calling both the
+     * getUncalibratedFromCalibrated() and getRawFromUncalibrated() functions.
+     * Those functions contain additional details for the reader concerning the
+     * nature of the data and what is being performed.
+     * 
+     * The user must interrogate the getWarnings() method to ensure that this
+     * function did not encounter any problems during conversion.  In the
+     * event that warnings happened, then the return value cannot be used.
+     *
+     * @param euValue String containing the EU calibrated value that would
+     * be encoded on the wire or bitfield.
+     *
+     * @return String containing the encoded BitSet suitable for encoding a
+     * stream with this item value.
+     * 
+     */
 
     public BitSet encode( String euValue ) {
 
-        BigInteger calNumericValue   = null;
+        BigInteger integerTempValue  = null;
         BigInteger uncalNumericValue = null;
         BitSet     rawValue          = new BitSet( rawSizeInBits_ );
 
         if ( euTypeName_.equals( "BOOLEAN" ) == true ) {
-            calNumericValue   = numberFromBoolean( euValue );
-            uncalNumericValue = encodeNumber( calNumericValue );
+            // two steps, first get the integral value from the boolean type
+            // EU value and then apply uncalibration from the encoding element
+            integerTempValue  = integerFromBooleanType( euValue );
+            uncalNumericValue = encodeInteger( integerTempValue );
             rawValue          = encodeRawBits( uncalNumericValue );
         } else if ( euTypeName_.equals( "ENUMERATED" ) == true ) {
-            calNumericValue   = numberFromEnumeration( euValue );
-            uncalNumericValue = encodeNumber( calNumericValue );
+            // two steps, first get the integral value from the enumerated type
+            // EU value and then apply uncalibration from the encoding element
+            integerTempValue  = integerFromEnumerationType( euValue );
+            uncalNumericValue = encodeInteger( integerTempValue );
             rawValue          = encodeRawBits( uncalNumericValue );
         } else if ( euTypeName_.equals( "STRING" ) == true ) {
             uncalNumericValue = encodeString( euValue );
@@ -186,34 +406,59 @@ public class XTCEItemValue {
         return rawValue;
 
     }
+
+    /** Retrieve the Raw value of this typed object when given the EU
+     * calibrated value.
+     *
+     * This method is a shortcut to calling both the
+     * getUncalibratedFromCalibrated() and getRawFromUncalibrated() functions.
+     * Those functions contain additional details for the reader concerning the
+     * nature of the data and what is being performed.
+     * 
+     * The user must interrogate the getWarnings() method to ensure that this
+     * function did not encounter any problems during conversion.  In the
+     * event that warnings happened, then the return value cannot be used.
+     *
+     * @param euValue long containing the EU calibrated value that would
+     * be encoded on the wire or bitfield.
+     *
+     * @return String containing the encoded BitSet suitable for encoding a
+     * stream with this item value.
+     * 
+     */
 
     public BitSet encode( long euValue ) {
 
-        BigInteger calNumericValue   = null;
+        BigInteger integerTempValue  = null;
         BigInteger uncalNumericValue = null;
         BitSet     rawValue          = new BitSet( rawSizeInBits_ );
+
         if ( euTypeName_.equals( "BOOLEAN" ) == true ) {
-            calNumericValue   = numberFromBoolean( Long.toString( euValue ) );
-            uncalNumericValue = encodeNumber( calNumericValue );
+            // two steps, first get the integral value from the boolean type
+            // EU value and then apply uncalibration from the encoding element
+            integerTempValue  = integerFromBooleanType( Long.toString( euValue ) );
+            uncalNumericValue = encodeInteger( integerTempValue );
             rawValue          = encodeRawBits( uncalNumericValue );
         } else if ( euTypeName_.equals( "ENUMERATED" ) == true ) {
-            calNumericValue   = numberFromEnumeration( Long.toString( euValue ) );
-            uncalNumericValue = encodeNumber( calNumericValue );
+            // two steps, first get the integral value from the enumerated type
+            // EU value and then apply uncalibration from the encoding element
+            integerTempValue  = integerFromEnumerationType( Long.toString( euValue ) );
+            uncalNumericValue = encodeInteger( integerTempValue );
             rawValue          = encodeRawBits( uncalNumericValue );
         } else if ( euTypeName_.equals( "STRING" ) == true ) {
-            uncalNumericValue = encodeNumber( BigInteger.valueOf( euValue ) );
+            uncalNumericValue = encodeInteger( BigInteger.valueOf( euValue ) );
             rawValue          = encodeRawBits( uncalNumericValue );
         } else if ( euTypeName_.equals( "BINARY" ) == true ) {
-            uncalNumericValue = encodeNumber( BigInteger.valueOf( euValue ) );
+            uncalNumericValue = encodeInteger( BigInteger.valueOf( euValue ) );
             rawValue          = encodeRawBits( uncalNumericValue );
         } else if ( euTypeName_.startsWith( "FLOAT" ) == true ) {
-            uncalNumericValue = encodeNumber( BigInteger.valueOf( euValue ) );
+            uncalNumericValue = encodeInteger( BigInteger.valueOf( euValue ) );
             rawValue          = encodeRawBits( uncalNumericValue );
         } else if ( euTypeName_.equals( "UNSIGNED" ) == true ) {
-            uncalNumericValue = encodeNumber( BigInteger.valueOf( euValue ) );
+            uncalNumericValue = encodeInteger( BigInteger.valueOf( euValue ) );
             rawValue          = encodeRawBits( uncalNumericValue );
         } else if ( euTypeName_.equals( "SIGNED" ) == true ) {
-            uncalNumericValue = encodeNumber( BigInteger.valueOf( euValue ) );
+            uncalNumericValue = encodeInteger( BigInteger.valueOf( euValue ) );
             rawValue          = encodeRawBits( uncalNumericValue );
         } else if ( euTypeName_.equals( "TIME" ) == true ) {
             // TODO Add TIME Type
@@ -233,20 +478,49 @@ public class XTCEItemValue {
         return rawValue;
 
     }
+
+    /** Retrieve the Raw value of this typed object when given the EU
+     * calibrated value.
+     *
+     * This method is a shortcut to calling both the
+     * getUncalibratedFromCalibrated() and getRawFromUncalibrated() functions.
+     * Those functions contain additional details for the reader concerning the
+     * nature of the data and what is being performed.
+     * 
+     * The user must interrogate the getWarnings() method to ensure that this
+     * function did not encounter any problems during conversion.  In the
+     * event that warnings happened, then the return value cannot be used.
+     *
+     * @param euValue double containing the EU calibrated value that would
+     * be encoded on the wire or bitfield.
+     *
+     * @return String containing the encoded BitSet suitable for encoding a
+     * stream with this item value.
+     * 
+     */
 
     public BitSet encode( double euValue ) {
 
-        BigInteger calNumericValue   = null;
+        BigInteger integerTempValue  = null;
         BigInteger uncalNumericValue = null;
         BitSet     rawValue          = new BitSet( rawSizeInBits_ );
+
         if ( euTypeName_.equals( "BOOLEAN" ) == true ) {
+            // two steps, first get the integral value from the boolean type
+            // EU value and then apply uncalibration from the encoding element
+            // TODO: the boolean string values can be anything, so check this
+            // for suitability.
             long numericValue = Double.valueOf( euValue ).longValue();
-            calNumericValue   = numberFromBoolean( Long.toString( numericValue ) );
-            uncalNumericValue = encodeNumber( calNumericValue );
+            integerTempValue  = integerFromBooleanType( Long.toString( numericValue ) );
+            uncalNumericValue = encodeInteger( integerTempValue );
             rawValue          = encodeRawBits( uncalNumericValue );
         } else if ( euTypeName_.equals( "ENUMERATED" ) == true ) {
-            calNumericValue   = numberFromEnumeration( Double.toString( euValue ) );
-            uncalNumericValue = encodeNumber( calNumericValue );
+            // two steps, first get the integral value from the enumerated type
+            // EU value and then apply uncalibration from the encoding element
+            // TODO: the boolean string values can be anything, so check this
+            // for suitability.
+            integerTempValue  = integerFromEnumerationType( Double.toString( euValue ) );
+            uncalNumericValue = encodeInteger( integerTempValue );
             rawValue          = encodeRawBits( uncalNumericValue );
         } else if ( euTypeName_.equals( "STRING" ) == true ) {
             uncalNumericValue = encodeDecimal( BigDecimal.valueOf( euValue ) );
@@ -270,7 +544,7 @@ public class XTCEItemValue {
                 return rawValue;
             }
             long number = Double.valueOf( euValue ).longValue();
-            uncalNumericValue = encodeNumber( BigInteger.valueOf( number ) );
+            uncalNumericValue = encodeInteger( BigInteger.valueOf( number ) );
             rawValue          = encodeRawBits( uncalNumericValue );
         } else if ( euTypeName_.equals( "SIGNED" ) == true ) {
             if ( ( euValue % 1 ) != 0 ) {
@@ -282,7 +556,7 @@ public class XTCEItemValue {
                 return rawValue;
             }
             long number = Double.valueOf( euValue ).longValue();
-            uncalNumericValue = encodeNumber( BigInteger.valueOf( number ) );
+            uncalNumericValue = encodeInteger( BigInteger.valueOf( number ) );
             rawValue          = encodeRawBits( uncalNumericValue );
         } else if ( euTypeName_.equals( "TIME" ) == true ) {
             // TODO Add TIME Type
@@ -302,20 +576,49 @@ public class XTCEItemValue {
         return rawValue;
 
     }
+
+    /** Retrieve the Raw value of this typed object when given the EU
+     * calibrated value.
+     *
+     * This method is a shortcut to calling both the
+     * getUncalibratedFromCalibrated() and getRawFromUncalibrated() functions.
+     * Those functions contain additional details for the reader concerning the
+     * nature of the data and what is being performed.
+     * 
+     * The user must interrogate the getWarnings() method to ensure that this
+     * function did not encounter any problems during conversion.  In the
+     * event that warnings happened, then the return value cannot be used.
+     *
+     * @param euValue float containing the EU calibrated value that would
+     * be encoded on the wire or bitfield.
+     *
+     * @return String containing the encoded BitSet suitable for encoding a
+     * stream with this item value.
+     * 
+     */
 
     public BitSet encode( float euValue ) {
 
-        BigInteger calNumericValue   = null;
+        BigInteger integerTempValue  = null;
         BigInteger uncalNumericValue = null;
         BitSet     rawValue          = new BitSet( rawSizeInBits_ );
+
         if ( euTypeName_.equals( "BOOLEAN" ) == true ) {
+            // two steps, first get the integral value from the boolean type
+            // EU value and then apply uncalibration from the encoding element
+            // TODO: the boolean string values can be anything, so check this
+            // for suitability.
             long numericValue = Float.valueOf( euValue ).longValue();
-            calNumericValue   = numberFromBoolean( Long.toString( numericValue ) );
-            uncalNumericValue = encodeNumber( calNumericValue );
+            integerTempValue  = integerFromBooleanType( Long.toString( numericValue ) );
+            uncalNumericValue = encodeInteger( integerTempValue );
             rawValue          = encodeRawBits( uncalNumericValue );
         } else if ( euTypeName_.equals( "ENUMERATED" ) == true ) {
-            calNumericValue   = numberFromEnumeration( Float.toString( euValue ) );
-            uncalNumericValue = encodeNumber( calNumericValue );
+            // two steps, first get the integral value from the enumerated type
+            // EU value and then apply uncalibration from the encoding element
+            // TODO: the boolean string values can be anything, so check this
+            // for suitability.
+            integerTempValue  = integerFromEnumerationType( Float.toString( euValue ) );
+            uncalNumericValue = encodeInteger( integerTempValue );
             rawValue          = encodeRawBits( uncalNumericValue );
         } else if ( euTypeName_.equals( "STRING" ) == true ) {
             uncalNumericValue = encodeDecimal( BigDecimal.valueOf( euValue ) );
@@ -339,7 +642,7 @@ public class XTCEItemValue {
                 return rawValue;
             }
             long number = Float.valueOf( euValue ).longValue();
-            uncalNumericValue = encodeNumber( BigInteger.valueOf( number ) );
+            uncalNumericValue = encodeInteger( BigInteger.valueOf( number ) );
             rawValue          = encodeRawBits( uncalNumericValue );
         } else if ( euTypeName_.equals( "SIGNED" ) == true ) {
             if ( ( euValue % 1 ) != 0 ) {
@@ -351,7 +654,7 @@ public class XTCEItemValue {
                 return rawValue;
             }
             long number = Float.valueOf( euValue ).longValue();
-            uncalNumericValue = encodeNumber( BigInteger.valueOf( number ) );
+            uncalNumericValue = encodeInteger( BigInteger.valueOf( number ) );
             rawValue          = encodeRawBits( uncalNumericValue );
         } else if ( euTypeName_.equals( "TIME" ) == true ) {
             // TODO Add TIME Type
@@ -372,52 +675,123 @@ public class XTCEItemValue {
 
     }
 
-    /*
-    public String uncalibrate( String euValue ) {
+    public BitSet getRawFromUncalibrated( String uncalValue ) {
 
-        BigInteger calNumericValue   = null;
-        BigInteger uncalNumericValue = null;
-        String     uncalValue        = "";
+        // TODO Handle Byte order element ByteOrderList in the encoding
 
-        if ( euTypeName_.equals( "BOOLEAN" ) == true ) {
-            uncalNumericValue = numberFromBoolean( euValue );
-            uncalValue        = uncalNumericValue.toString();
-        } else if ( euTypeName_.equals( "ENUMERATED" ) == true ) {
-            uncalNumericValue = numberFromEnumeration( euValue );
-            uncalValue        = uncalNumericValue.toString();
-        } else if ( euTypeName_.equals( "STRING" ) == true ) {
-            uncalValue        = euValue;
-        } else if ( euTypeName_.equals( "BINARY" ) == true ) {
-            uncalNumericValue = encodeString( euValue );
-            uncalValue        = "0x" + uncalNumericValue.toString( 16 );
-        } else if ( euTypeName_.startsWith( "FLOAT" ) == true ) {
-            uncalNumericValue = encodeString( euValue );
-            rawValue          = encodeRawBits( uncalNumericValue );
-        } else if ( euTypeName_.equals( "UNSIGNED" ) == true ) {
-            uncalNumericValue = encodeString( euValue );
-            rawValue          = encodeRawBits( uncalNumericValue );
-        } else if ( euTypeName_.equals( "SIGNED" ) == true ) {
-            uncalNumericValue = encodeString( euValue );
-            rawValue          = encodeRawBits( uncalNumericValue );
-        } else if ( euTypeName_.equals( "TIME" ) == true ) {
-            // TODO Add TIME Type
-            warnings_.add( "Absolute Time Type Not Yet Supported for " +
-                           itemName_ );
-        } else if ( euTypeName_.equals( "DURATION" ) == true ) {
-            // TODO Add DURATION Type
-            warnings_.add( "Relative Time Type Not Yet Supported for " +
-                           itemName_ );
-        } else {
-            warnings_.add( "AGGREGATE and ARRAY types for item " +
-                           itemName_ +
-                           " cannot directly be encoded." + 
-                           "  Use their children instead" );
-        }
+        warnings_.add( itemName_ + " getRawFromUncalibrated( String ) " +
+            "not yet supported" );
 
-        return rawValue;
+        return new BitSet( rawSizeInBits_ );
 
     }
-    */
+
+    public BitSet getRawFromUncalibrated( BigInteger uncalValue ) {
+
+        BitSet rawBits = new BitSet( rawSizeInBits_ );
+
+        if ( uncalValue.compareTo( BigInteger.ZERO ) < 0 ) {
+            if ( rawTypeName_.equals( "signMagnitude" ) == true ) {
+                uncalValue = uncalValue.negate();
+                uncalValue = uncalValue.setBit( rawSizeInBits_ - 1 );
+            } else if ( rawTypeName_.equals( "onesComplement" ) == true ) {
+                uncalValue = uncalValue.subtract( BigInteger.ONE );
+            }
+        }
+
+        if ( rawBitOrder_.equals( "mostSignificantBitFirst" ) == true ) {
+            for ( int iii = rawSizeInBits_ - 1; iii >= 0; --iii ) {
+                rawBits.set( iii, uncalValue.testBit( iii ) );
+            }
+        } else {
+            for ( int iii = rawSizeInBits_ - 1; iii >= 0; --iii ) {
+                rawBits.set( rawSizeInBits_ - iii - 1, uncalValue.testBit( iii ) );
+            }
+        }
+
+        return rawBits;
+
+    }
+
+    public BitSet getRawFromUncalibrated( long uncalValue ) {
+
+        BigInteger intValue = BigInteger.valueOf( uncalValue );
+        return getRawFromUncalibrated( intValue );
+
+    }
+
+    public BitSet getRawFromUncalibrated( BigDecimal uncalValue ) {
+
+        // TODO Handle Byte order element ByteOrderList in the encoding
+
+        warnings_.add( itemName_ + " getRawFromUncalibrated( BigDecimal ) " +
+            "not yet supported" );
+
+        return new BitSet( rawSizeInBits_ );
+
+    }
+
+    public BitSet getRawFromUncalibrated( double uncalValue ) {
+
+        BigDecimal decimalValue = new BigDecimal( uncalValue );
+        return getRawFromUncalibrated( decimalValue );
+
+    }
+
+    public BitSet getRawFromUncalibrated( float uncalValue ) {
+
+        BigDecimal decimalValue = new BigDecimal( uncalValue );
+        return getRawFromUncalibrated( decimalValue );
+
+    }
+
+    public String getUncalibratedFromCalibrated( String euValue ) {
+
+        warnings_.add( itemName_ + " getUncalibratedFromCalibrated( String ) " +
+            "not yet supported" );
+
+        return "";
+
+    }
+
+    public String getUncalibratedFromCalibrated( BigInteger euValue ) {
+
+        warnings_.add( itemName_ + " getUncalibratedFromCalibrated( BigInteger ) " +
+            "not yet supported" );
+
+        return "";
+
+    }
+
+    public String getUncalibratedFromCalibrated( long euValue ) {
+
+        BigInteger intValue = BigInteger.valueOf( euValue );
+        return getUncalibratedFromCalibrated( intValue );
+
+    }
+
+    public String getUncalibratedFromCalibrated( BigDecimal euValue ) {
+
+        warnings_.add( itemName_ + " getUncalibratedFromCalibrated( BigDecimal ) " +
+            "not yet supported" );
+
+        return "";
+
+    }
+
+    public String getUncalibratedFromCalibrated( double euValue ) {
+
+        BigDecimal decimalValue = new BigDecimal( euValue );
+        return getUncalibratedFromCalibrated( decimalValue );
+
+    }
+
+    public String getUncalibratedFromCalibrated( float euValue ) {
+
+        BigDecimal decimalValue = new BigDecimal( euValue );
+        return getUncalibratedFromCalibrated( decimalValue );
+
+    }
 
     /** Function to resolve a Boolean Engineering Type, which has a flexible
      * set of EU values, into the numeric calibrated value.
@@ -437,7 +811,7 @@ public class XTCEItemValue {
      *
      */
 
-    private BigInteger numberFromBoolean( String euValue ) {
+    private BigInteger integerFromBooleanType( String euValue ) {
 
         if ( euValue.equals( booleanZeroString_ ) == true ) {
             return BigInteger.ZERO;
@@ -455,48 +829,51 @@ public class XTCEItemValue {
 
     }
 
-    /** Function to resolve a numeric raw value to an EU Boolean string value.
+    /** Function to resolve a numeric uncalibrated value to a Calibrated EU
+     * Boolean string value.
      *
-     * @param rawValue double containing the raw value, which will result in a
-     * warning if the value is not integral.
+     * @param uncalValue double containing the raw value, which will result in
+     * a warning if the value is not integral.
      *
      * @return String containing the Boolean EU type text.
      *
      */
 
-    private String booleanFromNumber( double rawValue ) {
+    private String booleanTypeFromUncalibrated( double uncalValue ) {
 
-        if ( ( rawValue % 1 ) != 0 ) {
+        if ( ( uncalValue % 1 ) != 0 ) {
             warnings_.add( itemName_ +
                            " Invalid raw value of '" +
-                           Double.toString( rawValue ) +
+                           Double.toString( uncalValue ) +
                            "' for Boolean EU type" );
             return booleanZeroString_;
         }
-        return booleanFromNumber( Double.valueOf( rawValue ).longValue() );
+
+        return booleanTypeFromUncalibrated( Double.valueOf( uncalValue ).longValue() );
 
     }
 
-    /** Function to resolve a numeric raw value to an EU Boolean string value.
+    /** Function to resolve a numeric uncalibrated value to a Calibrated EU
+     * Boolean string value.
      *
-     * @param rawValue long containing the raw value, which will result in a
-     * warning if the value is not either 0 or 1.
+     * @param uncalValue long containing the raw value, which will result in
+     * a warning if the value is not either 0 or 1.
      *
      * @return String containing the Boolean EU type text.
      *
      */
 
-    private String booleanFromNumber( long rawValue ) {
+    private String booleanTypeFromUncalibrated( long uncalValue ) {
 
-        if ( rawValue == 0 ) {
+        if ( uncalValue == 0 ) {
             return booleanZeroString_;
-        } else if ( rawValue == 1 ) {
+        } else if ( uncalValue == 1 ) {
             return booleanOneString_;
         } else {
             warnings_.add( itemName_ +
                            " Invalid raw value of " +
                            "'" +
-                           Long.toString( rawValue ) +
+                           Long.toString( uncalValue ) +
                            "' for Boolean EU type" );
             return booleanZeroString_;
         }
@@ -524,7 +901,7 @@ public class XTCEItemValue {
      *
      */
 
-    private BigInteger numberFromEnumeration( String euValue ) {
+    private BigInteger integerFromEnumerationType( String euValue ) {
 
         for ( ValueEnumerationType enumItem : enums_ ) {
 
@@ -557,18 +934,18 @@ public class XTCEItemValue {
 
     }
 
-    /** Function to resolve a numeric raw value to an EU Enumerated string
-     * value.
+    /** Function to resolve a numeric uncalibrated value to a Calibrated EU
+     *  Enumerated string value.
      *
-     * @param rawValue BigInteger containing the raw value.  A warning will be
-     * recorded if the number does not resolve to a label.
+     * @param uncalValue BigInteger containing the uncalibrated value.  A
+     * warning will be recorded if the number does not resolve to a label.
      *
      * @return String containing the Enumerated EU type text, or an empty
      * string if no label was found for the numeric value.
      *
      */
 
-    private String enumerationFromNumber( BigInteger euValue ) {
+    private String enumeratedTypeFromUncalibrated( BigInteger uncalValue ) {
 
         for ( ValueEnumerationType enumItem : enums_ ) {
             BigInteger value    = enumItem.getValue();
@@ -576,16 +953,17 @@ public class XTCEItemValue {
             if ( enumItem.getMaxValue() != null ) {
                 maxValue = enumItem.getMaxValue();
             }
-            if ( ( euValue.compareTo( value )    > -1 ) &&
-                 ( euValue.compareTo( maxValue ) < 1  ) ) {
+            if ( ( uncalValue.compareTo( value )    > -1 ) &&
+                 ( uncalValue.compareTo( maxValue ) < 1  ) ) {
                 return enumItem.getLabel();
             }
         }
 
-        warnings_.add( "No enumeration label found for " +
-                       itemName_ +
-                       " value: " +
-                       euValue.toString() );
+        warnings_.add( itemName_ + " No enumeration label found for " +
+                       " value of '" +
+                       uncalValue.toString() +
+                       "'");
+
         return "";
 
     }
@@ -624,7 +1002,7 @@ public class XTCEItemValue {
 
     }
 
-    private BigInteger encodeNumber( BigInteger calValue ) {
+    private BigInteger encodeInteger( BigInteger calValue ) {
 
         if ( rawTypeName_.equals( "unsigned" ) == true ) {
             BigInteger uncalValue = integerEncodingUncalibrate( calValue );
@@ -907,6 +1285,243 @@ public class XTCEItemValue {
 
     }
 
+    private String getCalibratedFromIntegerString( String calValue ) {
+
+        try {
+            BigInteger retValue = new BigInteger( calValue );
+            return retValue.toString();
+        } catch ( NumberFormatException ex ) {
+            warnings_.add( itemName_ + " Calibrated value '" +
+                calValue + "' is not representative of an integer" );
+        }
+
+        return "";
+
+    }
+
+    private String getCalibratedFromFloatString( String calValue ) {
+
+        try {
+            BigDecimal retValue = new BigDecimal( calValue );
+            return retValue.toString();
+        } catch ( NumberFormatException ex ) {
+            warnings_.add( itemName_ + " Calibrated value '" +
+                calValue + "' is not representative of a floating " +
+                "point number" );
+        }
+
+        return "";
+
+    }
+
+    private String getCalibratedFromBooleanNumericString( String uncalValue ) {
+
+        try {
+
+            BigInteger intValue = new BigInteger( uncalValue );
+
+            if ( intValue.compareTo( BigInteger.ZERO ) == 0 ) {
+                return booleanZeroString_;
+            } else if ( intValue.compareTo( BigInteger.ONE ) == 0 ) {
+                return booleanOneString_;
+            }
+
+            warnings_.add( itemName_ + " Boolean undefined for " +
+                " uncalibrated value '" + uncalValue + "'" );
+
+        } catch ( NumberFormatException ex ) {
+            warnings_.add( itemName_ + " uncalibrated value '" +
+                uncalValue + "' is not an integer number needed for an " +
+                "boolean type label" );
+        }
+
+        return "";
+
+    }
+
+    private String getCalibratedValueFromEnumeratedNumericString( String uncalValue ) {
+
+        try {
+
+            BigInteger intValue = new BigInteger( uncalValue );
+
+            for ( ValueEnumerationType entry : enums_ ) {
+                if ( entry.getValue().compareTo( intValue ) == 0 ) {
+                    return entry.getLabel();
+                } else if ( entry.getMaxValue() != null ) {
+                    if ( ( entry.getValue().compareTo( intValue )    <= 0 ) &&
+                         ( entry.getMaxValue().compareTo( intValue ) >= 0 ) ) {
+                        return entry.getLabel();
+                    }
+                }
+            }
+
+            warnings_.add( itemName_ + " Enumeration undefined for " +
+                "uncalibrated value '" + uncalValue + "'" );
+
+        } catch ( NumberFormatException ex ) {
+            warnings_.add( itemName_ + " uncalibrated value '" +
+                uncalValue + "' is not an integer number needed for an " +
+                "enumerated type label" );
+        }
+
+        return "";
+
+    }
+
+    /** Private method to calculate and apply the calibrator to the
+     * uncalibrated value.
+     *
+     * This method does not support ContextCalibrator and
+     * MathOperationCalibrator elements and will record a warning.
+     * ContextCalibrators are quietly ignored.
+     *
+     * @param uncalValue String containing the uncalibrated value derived from
+     * the raw binary value in the stream.
+     *
+     * @return String containing the value as calibrated, or a quick return of
+     * the original value if no calibrator exists to act on.
+     *
+     */
+
+    private String applyCalibrator( String uncalValue ) {
+
+        CalibratorType calNode = defCal_;
+        if ( calNode == null ) {
+            return uncalValue;
+        }
+
+        BigDecimal xValue = new BigDecimal( uncalValue );
+
+        if ( calNode.getPolynomialCalibrator() != null ) {
+            PolynomialType polyCalNode = calNode.getPolynomialCalibrator();
+            List<PolynomialType.Term> terms = polyCalNode.getTerm();
+            return applyPolynomial( xValue, terms ).toString();
+        } else if ( calNode.getSplineCalibrator() != null ) {
+            SplineCalibrator      splineNode  = calNode.getSplineCalibrator();
+            BigInteger            order       = splineNode.getOrder();
+            boolean               extrapolate = splineNode.isExtrapolate();
+            List<SplinePointType> points      = splineNode.getSplinePoint();
+            return applySpline( xValue, order, extrapolate, points ).toString();
+        } else {
+            warnings_.add( itemName_ + " Unsupported calibrator form" );
+        }
+
+        return "";
+
+    }
+
+    /** Private method to apply a Polynomial Calibrator to an uncalibrated
+     * value.
+     *
+     * This method doesn't care which order the coefficient/exponent terms
+     * appears because of the commutative property of addition, so any
+     * sequence of terms may be specified in XTCE and this function will apply
+     * them as they are specified.
+     *
+     * This function is not concerned with the encoding type (integer or float)
+     * when performing the calculation.  The calculation is always done in the
+     * floating point space and if the engineering type is integer, then it
+     * will be later rounded back.  This could be a point of controversy.
+     *
+     * @param xValue BigDecimal containing the uncalibrated value.
+     *
+     * @param terms List of the Term elements in the XTCE Polynomial Calibrator
+     * element.
+     *
+     * @return BigDecimal containing the results.
+     *
+     */
+
+    private BigDecimal applyPolynomial( BigDecimal xValue,
+                                        List<PolynomialType.Term> terms ) {
+
+        BigDecimal yValue = BigDecimal.ZERO;
+        for ( PolynomialType.Term term : terms ) {
+            BigDecimal coeff    = new BigDecimal( term.getCoefficient() );
+            BigInteger exponent = term.getExponent();
+            BigDecimal part1    = xValue.pow( exponent.intValue() );
+            yValue = yValue.add( coeff.multiply( part1 ) );
+        }
+        return yValue;
+
+    }
+
+    /** Private method to apply a Spline Calibrator, otherwise known as a
+     * "piecewise function", to an uncalibrated raw value.
+     *
+     * The Spline Point pairs in XTCE are expected to be in sequential order
+     * from lowest to highest raw value.  The first two points are mandatory
+     * and subsequent points are made by adding one new point and dropping the
+     * previous low point.  This assures that the evaluation is continuous.  It
+     * is also assumed that they are in order from lowest raw value to highest
+     * raw value.
+     *
+     * @param xValue BigDecimal containing the uncalibrated value.
+     *
+     * @param order BigInteger indicating the order of interpolation between
+     * the points.  This can be 0, which is a flat line from the low point to
+     * the high point, 1 for a linear interpolation, and 2 for a quadratic
+     * interpolation.  In the event that the value is exactly at the high
+     * point of the pair of points, then the value is evaluated when the next
+     * pair occurs and the value is at the low point.
+     *
+     * @param extrapolate boolean indicating if the value should be
+     * extrapolated when outside of the spline point pairs based on the curve
+     * from the first or last spline point set, respectively.
+     *
+     * @param points List of SplinePointType objects from the SplinePoint
+     * elements in the XTCE SplineCalibrator element.  Two more more of these
+     * will always exist per the XTCE schema definition.
+     *
+     * @return BigDecimal containing the results.
+     *
+     */
+
+    private BigDecimal applySpline( BigDecimal            xValue,
+                                    BigInteger            order,
+                                    boolean               extrapolate,
+                                    List<SplinePointType> points ) {
+
+        // TODO: Support quadratics because I did it on the other side
+
+        if ( order.intValue() > 1 ) {
+            warnings_.add( itemName_ + " Unsupported Spline " +
+                "order of approximation " + order.toString() +
+                ", only flat, linear, and quadratic (0, 1, 2) are " +
+                "supported." );
+            return BigDecimal.ZERO;
+        }
+
+        BigDecimal yValue = BigDecimal.ZERO;
+        double rawVal  = xValue.doubleValue();
+        double rawLow  = points.get( 0 ).getRaw();
+        double calLow  = points.get( 0 ).getCalibrated();
+        for ( int iii = 1; iii < points.size(); iii += 2 ) {
+            double rawHigh = points.get( iii + 1 ).getRaw();
+            double calHigh = points.get( iii + 1 ).getCalibrated();
+            if ( ( rawVal >= rawLow ) && ( rawVal <= rawHigh ) ) {
+                if ( order.intValue() == 0 ) {
+                    // if it equals rawHigh, then take the next one as there is
+                    // a discontinuity and this is how I handled it
+                    if ( rawVal < rawHigh ) {
+                        yValue = new BigDecimal( calLow );
+                        return yValue;
+                    }
+                } else if ( order.intValue() == 1 ) {
+                    double slope = ( rawHigh - rawLow ) / ( calHigh - calLow );
+                    double yyy   = slope * xValue.doubleValue() + calLow;
+                    yValue = new BigDecimal( yyy );
+                    return yValue;
+                }
+            }
+            rawLow = rawHigh;
+            calLow = calHigh;
+        }
+
+        return xValue;
+    }
+
     private BigInteger encodeUtfString( BigInteger retValue ) {
 
         long bitLength = retValue.toByteArray().length * 8;
@@ -1039,6 +1654,47 @@ public class XTCEItemValue {
             }
         }
         return sb.toString();
+
+    }
+
+    /** Convert the BitSet object from the encode() method over to a integral
+     * number, ordered from the most significant byte to the least significant
+     * byte.
+     *
+     * @param bits BitSet returned from the encode() function.
+     *
+     * @return String containing the hex of the raw value to be encoded,
+     * subject to the explanation above associated with this function.
+     *
+     */
+
+    public BigInteger bitSetToNumber( BitSet bits ) {
+
+        int bitCount = rawSizeInBits_;
+        if ( ( rawSizeInBits_ % 8 ) != 0 ) {
+            bitCount += 8 - ( rawSizeInBits_ % 8 );
+        }
+
+        int byteCount = bitCount / 8;
+        StringBuilder sb = new StringBuilder();
+        byte[] bytes = bits.toByteArray();
+
+        for ( int iii = byteCount - 1; iii >= 0; --iii ) {
+            if ( iii < bytes.length ) {
+                sb.append( String.format( "%02x", bytes[iii] ) );
+            } else {
+                sb.append( "00" );
+            }
+        }
+
+        if ( bits.length() > rawSizeInBits_ ) {
+            warnings_.add( itemName_ + " raw binary length '" +
+                Integer.toString( bits.length() ) + "' overflows raw " +
+                "encoding length of '" + Integer.toString( rawSizeInBits_ ) +
+                "'" );
+        }
+
+        return new BigInteger( sb.toString(), 16 );
 
     }
 

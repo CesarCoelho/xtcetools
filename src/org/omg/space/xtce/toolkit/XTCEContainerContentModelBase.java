@@ -618,11 +618,11 @@ public abstract class XTCEContainerContentModelBase {
             BigInteger rawValue = extractRawValue( entry );
             String uncalValue = null;
             if ( entry.getEntryType() == FieldType.PARAMETER ) {
-                uncalValue = entry.getParameter()
-                                  .getUncalibratedFromRaw( rawValue );
+                //uncalValue = entry.getParameter()
+                //                  .getUncalibratedFromRaw( rawValue );
             } else if ( entry.getEntryType() == FieldType.ARGUMENT ) {
-                uncalValue = entry.getArgument()
-                                  .getUncalibratedFromRaw( rawValue );
+                //uncalValue = entry.getArgument()
+                //                  .getUncalibratedFromRaw( rawValue );
             } else {
                 // do any of the others make sense?
 

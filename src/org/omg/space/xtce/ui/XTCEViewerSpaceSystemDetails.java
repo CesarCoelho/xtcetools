@@ -51,12 +51,12 @@ public class XTCEViewerSpaceSystemDetails extends javax.swing.JPanel {
         spaceSystemNoteSetPanel = new org.omg.space.xtce.ui.XTCEViewerNoteSet();
         spaceSystemHistorySetPanel = new org.omg.space.xtce.ui.XTCEViewerHistorySet();
 
-        setPreferredSize(new java.awt.Dimension(780, 744));
-
         longDescriptionLabel.setText("Long Description");
 
         longDescriptionText.setColumns(20);
+        longDescriptionText.setLineWrap(true);
         longDescriptionText.setRows(2);
+        longDescriptionText.setWrapStyleWord(true);
         longDescriptionScrollPane.setViewportView(longDescriptionText);
 
         javax.swing.GroupLayout attributesPanelLayout = new javax.swing.GroupLayout(attributesPanel);
@@ -116,7 +116,7 @@ public class XTCEViewerSpaceSystemDetails extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(attributesPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(spaceSystemNoteSetPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE)
+                .addComponent(spaceSystemNoteSetPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 137, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(spaceSystemHistorySetPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
@@ -135,14 +135,22 @@ public class XTCEViewerSpaceSystemDetails extends javax.swing.JPanel {
 
     }
 
+    public void sizeChanged() {
+        setPreferredSize( getPreferredSize() );
+        revalidate();
+        repaint();
+        parentScrollPane_.revalidate();
+        parentScrollPane_.repaint();
+    }
+
     private void initializeFields() {
 
         longDescriptionText.setText( spaceSystem_.getLongDescription() );
         spaceSystemAttributesPanel.setSpaceSystem( spaceSystem_ );
         spaceSystemAliasSetPanel.setSpaceSystem( spaceSystem_ );
         spaceSystemAuthorSetPanel.setSpaceSystem( spaceSystem_ );
-        spaceSystemHistorySetPanel.setSpaceSystem( spaceSystem_, parentScrollPane_ );
-        spaceSystemNoteSetPanel.setSpaceSystem( spaceSystem_, parentScrollPane_ );
+        spaceSystemHistorySetPanel.setSpaceSystem( spaceSystem_, this );
+        spaceSystemNoteSetPanel.setSpaceSystem( spaceSystem_, this );
 
     }
 
