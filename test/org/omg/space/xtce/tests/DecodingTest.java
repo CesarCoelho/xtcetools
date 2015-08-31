@@ -669,6 +669,158 @@ public class DecodingTest {
 
     }
 
+    @Test
+    public void testFloatParameterTypesWithRawUnsignedLinearCalibrator() {
+
+        long errors = 0;
+
+        try {
+
+            System.out.println( "Testing EU Float Raw unsigned Linear Calibrator" );
+
+            getParameterItemValueObj( "/BogusSAT/SC001/BusElectronics",
+                                      "Solar_Array_Voltage_1" );
+
+            errors += checkPass( "-100.0",
+                                 "0x0000" );
+
+            errors += checkPass( "-100.0",
+                                 (float)0.0 );
+
+            errors += checkPass( "-50.0",
+                                 "0x01f4" );
+
+            errors += checkPass( "-50.0",
+                                 0x01f4 );
+
+            errors += checkPass( "0.0",
+                                 "0x03e8" );
+
+            errors += checkPass( "5.0",
+                                 "0x041a" );
+
+            errors += checkPass( "-1.0",
+                                 "0x03de" );
+
+            // Reasonableness is not yet making warnings
+
+            //errors += check( 1024,
+            //                 "unsigned encoding value for item Solar_Array_Voltage_1 is 11240, which is greater than the maximum value 4000" );
+
+            //errors += check( -200.0,
+            //                 "Unsigned value for item Solar_Array_Voltage_1 is -1000 which cannot be negative" );
+
+            //errors += check( 50000.0,
+            //                 "unsigned encoding value for item Solar_Array_Voltage_1 is 501000, which is greater than the maximum value 4000" );
+
+            System.out.println( "" );
+
+        } catch ( Throwable ex ) {
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+        if ( errors != 0 ) {
+            Assert.fail( "Not all checks passed" );
+        }
+
+    }
+
+    @Test
+    public void testFloatParameterTypesWithRawUnsignedQuadraticCalibrator() {
+
+        long errors = 0;
+
+        try {
+
+            System.out.println( "Testing EU Float Raw unsigned Quadratic Calibrator" );
+
+            getParameterItemValueObj( "/BogusSAT/SC001/BusElectronics",
+                                      "Quadratic_Demo" );
+
+            errors += checkPass( "0.0",
+                                 "0x0002" );
+
+            errors += checkPass( "0.0",
+                                 2 );
+
+            errors += checkPass( "7.0",
+                                 "0x0003" );
+
+            errors += checkPass( "1015.0",
+                                 "0x001f" );
+
+            errors += checkPass( "16.0",
+                                 "0x0004" );
+
+            errors += checkPass( "50167.0",
+                                 223 );
+
+            errors += checkPass( "50167.0",
+                                 "0x00df" );
+
+            System.out.println( "" );
+
+        } catch ( Throwable ex ) {
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+        if ( errors != 0 ) {
+            Assert.fail( "Not all checks passed" );
+        }
+
+    }
+
+    @Test
+    public void testFloatParameterTypesWithRawFloatSplineCalibrator() {
+
+        long errors = 0;
+
+        try {
+
+            System.out.println( "Testing EU Float Raw float Spline Calibrator" );
+
+            getParameterItemValueObj( "/BogusSAT/SC001/BusElectronics",
+                                      "Spline_Demo" );
+
+            //errors += check( "0",
+            //                 "Spline Calibrator for Spline_Demo does not bound calibrated value 0 and extrapolate is false" );
+
+            //errors += check( 0.0,
+            //                 "Spline Calibrator for Spline_Demo does not bound calibrated value 0.0 and extrapolate is false" );
+
+            //errors += check( (float)0.0,
+            //                 "Spline Calibrator for Spline_Demo does not bound calibrated value 0.0 and extrapolate is false" );
+
+            errors += checkPass( "2.0",
+                                 "0xc008000000000000" );
+
+            //errors += check( "-2",
+            //                 "Spline Calibrator for Spline_Demo does not bound calibrated value -2 and extrapolate is false" );
+
+            errors += checkPass( "3.0",
+                                 "0xbff0000000000000" );
+
+            errors += checkPass( "2.5",
+                                 "0xc000000000000000" );
+
+            //errors += check( -4.0,
+            //                 "Spline Calibrator for Spline_Demo does not bound calibrated value -4.0 and extrapolate is false" );
+
+            //errors += check( 5.0,
+            //                 "Spline Calibrator for Spline_Demo does not bound calibrated value 5.0 and extrapolate is false" );
+
+            System.out.println( "" );
+
+        } catch ( Throwable ex ) {
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+        if ( errors != 0 ) {
+            Assert.fail( "Not all checks passed" );
+        }
+
+    }
+
     private long checkFail( BitSet bits, long raw, String warning ) {
 
         String result = vvv_.decode( bits );

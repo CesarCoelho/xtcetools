@@ -1400,18 +1400,20 @@ public class XTCEItemValue {
             return uncalValue;
         }
 
-        BigDecimal xValue = new BigDecimal( uncalValue );
+        double xValue = Double.valueOf( uncalValue );
 
         if ( calNode.getPolynomialCalibrator() != null ) {
             PolynomialType polyCalNode = calNode.getPolynomialCalibrator();
             List<PolynomialType.Term> terms = polyCalNode.getTerm();
-            return applyPolynomial( xValue, terms ).toString();
+            double doubleValue = applyPolynomial( xValue, terms );
+            return Double.toString( doubleValue );
         } else if ( calNode.getSplineCalibrator() != null ) {
             SplineCalibrator      splineNode  = calNode.getSplineCalibrator();
             BigInteger            order       = splineNode.getOrder();
             boolean               extrapolate = splineNode.isExtrapolate();
             List<SplinePointType> points      = splineNode.getSplinePoint();
-            return applySpline( xValue, order, extrapolate, points ).toString();
+            double doubleValue = applySpline( xValue, order, extrapolate, points );
+            return Double.toString( doubleValue );
         } else {
             warnings_.add( itemName_ + " Unsupported calibrator form" );
         }
@@ -1433,24 +1435,24 @@ public class XTCEItemValue {
      * floating point space and if the engineering type is integer, then it
      * will be later rounded back.  This could be a point of controversy.
      *
-     * @param xValue BigDecimal containing the uncalibrated value.
+     * @param xValue double containing the uncalibrated value.
      *
      * @param terms List of the Term elements in the XTCE Polynomial Calibrator
      * element.
      *
-     * @return BigDecimal containing the results.
+     * @return double containing the results.
      *
      */
 
-    private BigDecimal applyPolynomial( BigDecimal xValue,
-                                        List<PolynomialType.Term> terms ) {
+    private double applyPolynomial( double                    xValue,
+                                    List<PolynomialType.Term> terms ) {
 
-        BigDecimal yValue = BigDecimal.ZERO;
+        double yValue = 0.0;
         for ( PolynomialType.Term term : terms ) {
-            BigDecimal coeff    = new BigDecimal( term.getCoefficient() );
-            BigInteger exponent = term.getExponent();
-            BigDecimal part1    = xValue.pow( exponent.intValue() );
-            yValue = yValue.add( coeff.multiply( part1 ) );
+            double coeff    = term.getCoefficient();
+            double exponent = term.getExponent().doubleValue();
+            double powTerm  = Math.pow( xValue, exponent );
+            yValue += coeff * powTerm;
         }
         return yValue;
 
@@ -1466,7 +1468,7 @@ public class XTCEItemValue {
      * is also assumed that they are in order from lowest raw value to highest
      * raw value.
      *
-     * @param xValue BigDecimal containing the uncalibrated value.
+     * @param xValue double containing the uncalibrated value.
      *
      * @param order BigInteger indicating the order of interpolation between
      * the points.  This can be 0, which is a flat line from the low point to
@@ -1487,10 +1489,10 @@ public class XTCEItemValue {
      *
      */
 
-    private BigDecimal applySpline( BigDecimal            xValue,
-                                    BigInteger            order,
-                                    boolean               extrapolate,
-                                    List<SplinePointType> points ) {
+    private double applySpline( double                xValue,
+                                BigInteger            order,
+                                boolean               extrapolate,
+                                List<SplinePointType> points ) {
 
         // TODO: Support quadratics because I did it on the other side
 
@@ -1499,34 +1501,37 @@ public class XTCEItemValue {
                 "order of approximation " + order.toString() +
                 ", only flat, linear, and quadratic (0, 1, 2) are " +
                 "supported." );
-            return BigDecimal.ZERO;
+            return 0.0;
         }
 
-        BigDecimal yValue = BigDecimal.ZERO;
-        double rawVal  = xValue.doubleValue();
         double rawLow  = points.get( 0 ).getRaw();
         double calLow  = points.get( 0 ).getCalibrated();
-        for ( int iii = 1; iii < points.size(); iii += 2 ) {
-            double rawHigh = points.get( iii + 1 ).getRaw();
-            double calHigh = points.get( iii + 1 ).getCalibrated();
-            if ( ( rawVal >= rawLow ) && ( rawVal <= rawHigh ) ) {
+        for ( int iii = 1; iii < points.size(); ++iii ) {
+            double rawHigh = points.get( iii ).getRaw();
+            double calHigh = points.get( iii ).getCalibrated();
+            if ( ( xValue >= rawLow ) && ( xValue <= rawHigh ) ) {
                 if ( order.intValue() == 0 ) {
                     // if it equals rawHigh, then take the next one as there is
                     // a discontinuity and this is how I handled it
-                    if ( rawVal < rawHigh ) {
-                        yValue = new BigDecimal( calLow );
-                        return yValue;
+                    if ( xValue < rawHigh ) {
+                        return calLow;
                     }
                 } else if ( order.intValue() == 1 ) {
-                    double slope = ( rawHigh - rawLow ) / ( calHigh - calLow );
-                    double yyy   = slope * xValue.doubleValue() + calLow;
-                    yValue = new BigDecimal( yyy );
-                    return yValue;
+                    double slope = ( calHigh - calLow ) / ( rawHigh - rawLow );
+                    double intercept = calLow - ( slope * rawLow );
+                    //double slope = ( rawHigh - rawLow ) / ( calHigh - calLow );
+                    //System.out.println( "xvalue = " + new Double( xValue ).toString() +
+                    //    " slope = " + new Double( slope ).toString() +
+                    //    " calLow = " + new Double( calLow ).toString() +
+                    //    " calHigh = " + new Double( calHigh ).toString() );
+                    return ( slope * xValue ) + intercept;
                 }
             }
             rawLow = rawHigh;
             calLow = calHigh;
         }
+
+        // out of bounds case
 
         return xValue;
     }
