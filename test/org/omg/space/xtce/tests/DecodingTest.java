@@ -100,6 +100,14 @@ public class DecodingTest {
 
             errors += checkFail( overflow, 0x00, "Bus_Fault_Message raw binary length '132' overflows raw encoding length of '128'" );
 
+            getParameterItemValueObj( "/BogusSAT",
+                                      "CCSDSAPID" );
+
+            overflow = new BitSet( 16 );
+            overflow.set( 15 );
+
+            errors += checkFail( overflow, 0x00, "CCSDSAPID raw binary length '16' overflows raw encoding length of '11'" );
+
             System.out.println( "" );
 
         } catch ( Throwable ex ) {
@@ -306,6 +314,361 @@ public class DecodingTest {
 
     }
 
+    @Test
+    public void testIntegerParameterTypesRawUnsigned() {
+
+        long errors = 0;
+
+        try {
+
+            System.out.println( "Testing EU UnsignedInteger Raw unsigned no Calibrator" );
+
+            getParameterItemValueObj( "/BogusSAT",
+                                      "CCSDSAPID" );
+
+            errors += checkPass( "0",
+                                 "0x00000000" );
+
+            errors += checkPass( "0",
+                                 0 );
+
+            errors += checkPass( "15",
+                                 0x000f );
+
+            errors += checkPass( "1",
+                                 0x0001 );
+
+            errors += checkPass( "2047",
+                                 "0x07ff" );
+
+            errors += checkPass( "5",
+                                 0x0005 );
+
+            //errors += check( (float)1.25,
+            //                 "CCSDSAPID Invalid EU unsigned integer value of '1.25'" );
+
+            System.out.println( "" );
+
+        } catch ( Throwable ex ) {
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+        if ( errors != 0 ) {
+            Assert.fail( "Not all checks passed" );
+        }
+
+    }
+
+    @Test
+    public void testIntegerParameterTypesRawSignMagnitude() {
+
+        long errors = 0;
+
+        try {
+
+            System.out.println( "Testing EU SignedInteger Raw signMagnitude no Calibrator" );
+
+            getParameterItemValueObj( "/BogusSAT/SC001/Payload1",
+                                      "Basic_int32_signmag" );
+
+            errors += checkPass( "0",
+                                 "0x00000000" );
+
+            errors += checkPass( "0",
+                                 0 );
+
+            errors += checkPass( "1",
+                                 "0x00000001" );
+
+            errors += checkPass( "1",
+                                 1 );
+
+            //errors += check( 1.0,
+            //                 "0x00000001",
+            //                 "00000000000000000000000000000001" );
+
+            //errors += check( (float)1.0,
+            //                 "0x00000001",
+            //                 "00000000000000000000000000000001" );
+
+            errors += checkPass( "2047",
+                                 0x000007ff );
+
+            errors += checkPass( "5",
+                                 "0x00000005" );
+
+            //errors += check( (float)1.25,
+            //                 "Basic_int32_signmag Invalid EU signed integer value of '1.25'" );
+
+            errors += checkPass( "-1",
+                                 "0x80000001" );
+
+            errors += checkPass( "-1",
+                                 -1 );
+
+            errors += checkPass( "-2",
+                                 "0x80000002" );
+
+            errors += checkPass( "-2",
+                                 -2 );
+
+            errors += checkPass( "-6",
+                                 "0x80000006" );
+
+            errors += checkPass( "-2147483647",
+                                 "0xffffffff" );
+
+            errors += checkPass( "0",
+                                 "0x80000000" );
+
+            System.out.println( "" );
+
+        } catch ( Throwable ex ) {
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+        if ( errors != 0 ) {
+            Assert.fail( "Not all checks passed" );
+        }
+
+    }
+
+    @Test
+    public void testIntegerParameterTypesRawTwosComplement() {
+
+        long errors = 0;
+
+        try {
+
+            System.out.println( "Testing EU SignedInteger Raw twosComplement no Calibrator" );
+
+            getParameterItemValueObj( "/BogusSAT/SC001/Payload1",
+                                      "Basic_int32_twoscomp" );
+
+            errors += checkPass( "0",
+                                 "0x00000000" );
+
+            errors += checkPass( "0",
+                                 0 );
+
+            errors += checkPass( "1",
+                                 "0x00000001" );
+
+            errors += checkPass( "1",
+                                 1 );
+
+            //errors += check( 1.0,
+            //                 "0x00000001",
+            //                 "00000000000000000000000000000001" );
+
+            //errors += check( (float)1.0,
+            //                 "0x00000001",
+            //                 "00000000000000000000000000000001" );
+
+            errors += checkPass( "2047",
+                                 0x000007ff );
+
+            errors += checkPass( "5",
+                                 "0x00000005" );
+
+            //errors += check( (float)1.25,
+            //                 "Basic_int32_signmag Invalid EU signed integer value of '1.25'" );
+
+            errors += checkPass( "-1",
+                                 "0xffffffff" );
+
+            errors += checkPass( "-1",
+                                 -1 );
+
+            errors += checkPass( "-2",
+                                 "0xfffffffe" );
+
+            errors += checkPass( "-2",
+                                 -2 );
+
+            errors += checkPass( "-6",
+                                 "0xfffffffa" );
+
+            errors += checkPass( "-2147483648",
+                                 "0x80000000" );
+
+            System.out.println( "" );
+
+        } catch ( Throwable ex ) {
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+        if ( errors != 0 ) {
+            Assert.fail( "Not all checks passed" );
+        }
+
+    }
+
+    @Test
+    public void testIntegerParameterTypesRawOnesComplement() {
+
+        long errors = 0;
+
+        try {
+
+            System.out.println( "Testing EU SignedInteger Raw onesComplement no Calibrator" );
+
+            getParameterItemValueObj( "/BogusSAT/SC001/Payload1",
+                                      "Basic_int32_onescomp" );
+
+            errors += checkPass( "0",
+                                 "0x00000000" );
+
+            errors += checkPass( "0",
+                                 0 );
+
+            errors += checkPass( "1",
+                                 "0x00000001" );
+
+            errors += checkPass( "1",
+                                 1 );
+
+            //errors += check( 1.0,
+            //                 "0x00000001",
+            //                 "00000000000000000000000000000001" );
+
+            //errors += check( (float)1.0,
+            //                 "0x00000001",
+            //                 "00000000000000000000000000000001" );
+
+            errors += checkPass( "2047",
+                                 0x000007ff );
+
+            errors += checkPass( "5",
+                                 "0x00000005" );
+
+            //errors += check( (float)1.25,
+            //                 "Basic_int32_signmag Invalid EU signed integer value of '1.25'" );
+
+            errors += checkPass( "-1",
+                                 "0xfffffffe" );
+
+            errors += checkPass( "-1",
+                                 -1 );
+
+            errors += checkPass( "-2",
+                                 "0xfffffffd" );
+
+            errors += checkPass( "-2",
+                                 -2 );
+
+            errors += checkPass( "-6",
+                                 "0xfffffff9" );
+
+            errors += checkPass( "-2147483647",
+                                 "0x80000000" );
+
+            System.out.println( "" );
+
+        } catch ( Throwable ex ) {
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+        if ( errors != 0 ) {
+            Assert.fail( "Not all checks passed" );
+        }
+
+    }
+
+    @Test
+    public void testFloatParameterTypesRaw32() {
+
+        long errors = 0;
+
+        try {
+
+            System.out.println( "Testing EU Float Raw float32 no Calibrator" );
+
+            getParameterItemValueObj( "/BogusSAT/SC001/BusElectronics",
+                                      "Battery_Voltage" );
+
+            errors += checkPass( "1.25",
+                                 "0x3fa00000" );
+
+            errors += checkPass( "1.25",
+                                 (float)1.25 );
+
+            errors += checkPass( "12.1",
+                                 "0x4141999a" );
+
+            errors += checkPass( "12.1",
+                                 (float)12.1 );
+
+            errors += checkPass( "5.0",
+                                 "0x40a00000" );
+
+            // Reasonableness is not yet making warnings
+
+            //errors += checkFail( (float)99.50,
+            //                     "IEEE754_1985 encoding value for item Battery_Voltage is 99.5, which is greater than the maximum value 15.0" );
+
+            //errors += checkFail( (float)-1024.5,
+            //                     "IEEE754_1985 encoding value for item Battery_Voltage is -1024.5, which is less than the minimum value 0.0" );
+
+            System.out.println( "" );
+
+        } catch ( Throwable ex ) {
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+        if ( errors != 0 ) {
+            Assert.fail( "Not all checks passed" );
+        }
+
+    }
+
+    @Test
+    public void testFloatParameterTypesRaw64() {
+
+        long errors = 0;
+
+        try {
+            
+            System.out.println( "Testing EU Float Raw float64 no Calibrator" );
+
+            getParameterItemValueObj( "/BogusSAT/SC001/Payload1",
+                                      "Basic_Float64" );
+
+            errors += checkPass( "1.25",
+                                 "0x3ff4000000000000" );
+
+            errors += checkPass( "1.25",
+                                 (double)1.25 );
+
+            errors += checkPass( "12.1",
+                                 "0x4028333333333333" );
+
+            errors += checkPass( "12.1",
+                                 (double)12.1 );
+
+            errors += checkPass( "5.0",
+                                 "0x4014000000000000" );
+
+            // Reasonableness is not yet making warnings
+
+            //errors += checkFail( (float)99.50,
+            //                     "IEEE754_1985 encoding value for item Battery_Voltage is 99.5, which is greater than the maximum value 15.0" );
+
+            //errors += checkFail( (float)-1024.5,
+            //                     "IEEE754_1985 encoding value for item Battery_Voltage is -1024.5, which is less than the minimum value 0.0" );
+
+            System.out.println( "" );
+
+        } catch ( Throwable ex ) {
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+        if ( errors != 0 ) {
+            Assert.fail( "Not all checks passed" );
+        }
+
+    }
+
     private long checkFail( BitSet bits, long raw, String warning ) {
 
         String result = vvv_.decode( bits );
@@ -315,10 +678,19 @@ public class DecodingTest {
 
     private long checkFail( String raw, String warning ) {
 
-        BigInteger rawHex   = new BigInteger( raw.getBytes() );
-        BitSet     rawValue = vvv_.encodeRawBits( rawHex );
-        String     result   = vvv_.decode( rawValue );
-        return checkWarning( "0x" + rawHex.toString( 16 ), result, warning );
+        //BigInteger rawHex   = new BigInteger( raw.getBytes() );
+        //BitSet     rawValue = vvv_.encodeRawBits( rawHex );
+        //String     result   = vvv_.decode( rawValue );
+        BigInteger rawIntegerValue = null;
+        if ( raw.startsWith( "0x" ) == true ) {
+            rawIntegerValue = new BigInteger( raw.replaceFirst( "0x", "" ), 16 );
+        } else {
+            rawIntegerValue = new BigInteger( raw, 16 );
+        }
+
+        BitSet rawValue = vvv_.encodeRawBits( rawIntegerValue );
+        String result   = vvv_.decode( rawValue );
+        return checkWarning( raw, result, warning );
 
     }
 
@@ -349,24 +721,28 @@ public class DecodingTest {
         return checkWarning( Float.toString( raw ), result, warning );
 
     }
-/*
-    private long check( double eu, String raw, String binary ) {
 
-        BitSet result = vvv_.encode( eu );
-        return checkExpected( Double.toString( eu ), raw, binary, result );
+    private long checkPass( String eu, double raw ) {
+
+        BigInteger intValue = BigInteger.valueOf( Double.doubleToRawLongBits( raw ) );
+        BitSet     rawValue = vvv_.encodeRawBits( intValue );
+        String result = vvv_.decode( rawValue );
+        return checkExpected( eu, "0x" + intValue.toString( 16 ), result );
+
+    }
+
+    private long checkPass( String eu, float raw ) {
+
+        BigInteger intValue = BigInteger.valueOf( Float.floatToIntBits( raw ) );
+        BitSet     rawValue = vvv_.encodeRawBits( intValue );
+        String result = vvv_.decode( rawValue );
+        return checkExpected( eu, "0x" + intValue.toString( 16 ), result );
 
     }
 
-    private long check( float eu, String raw, String binary ) {
-
-        BitSet result = vvv_.encode( eu );
-        return checkExpected( Float.toString( eu ), raw, binary, result );
-
-    }
-*/
     private long checkPass( String eu, long raw ) {
 
-        BitSet rawValue = vvv_.encodeRawBits( BigInteger.valueOf( raw ) );
+        BitSet rawValue = vvv_.encodeRawBits( new BigInteger( Long.toString( raw ) ) );
         String result   = vvv_.decode( rawValue );
         return checkExpected( eu, Long.toString( raw ), result );
 
@@ -399,7 +775,7 @@ public class DecodingTest {
             msg.append( vvv_.getItemName() );
             msg.append( " EU/Cal Value '" );
             msg.append( result );
-            msg.append( "' Raw Hex '" );
+            msg.append( "' Raw '" );
             msg.append( raw );
             msg.append( "' (Expected EU '" );
             msg.append( eu );
@@ -409,7 +785,7 @@ public class DecodingTest {
             msg.append( vvv_.getItemName() );
             msg.append( " EU/Cal Value '" );
             msg.append( eu );
-            msg.append( "' Raw Hex '" );
+            msg.append( "' Raw '" );
             msg.append( raw );
             msg.append( "'" );
         }

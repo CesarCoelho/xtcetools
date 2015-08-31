@@ -207,26 +207,35 @@ public class XTCEItemValue {
             return numericValue.toString();
         } else if ( rawTypeName.equals( "signMagnitude" ) == true ) {
             int sizeInBits = rawSizeInBits_;
-            if ( numericValue.testBit( sizeInBits - 1 ) == true ) {
-                return numericValue.negate().toString();
+            BigInteger halfValue = BigInteger.valueOf( 2 ).pow( sizeInBits - 1 );
+            if ( numericValue.compareTo( halfValue ) >= 0 ) {
+                numericValue = numericValue.subtract( halfValue ).negate();
             }
-            return rawValue.toString();
+            return numericValue.toString();
         } else if ( rawTypeName.equals( "twosComplement" ) == true ) {
-            byte[] dataValues = rawValue.toByteArray();
-            BigInteger retValue = new BigInteger( dataValues );
-            return retValue.toString();
+            int sizeInBits = rawSizeInBits_;
+            BigInteger halfValue = BigInteger.valueOf( 2 ).pow( sizeInBits - 1 );
+            BigInteger fullValue = BigInteger.valueOf( 2 ).pow( sizeInBits );
+            if ( numericValue.compareTo( halfValue ) >= 0 ) {
+                numericValue = numericValue.subtract( fullValue );
+            }
+            return numericValue.toString();
         } else if ( rawTypeName.equals( "onesComplement" ) == true ) {
-            // TODO not sure that this is correct
-            BigInteger onesValue = numericValue.subtract( BigInteger.ONE );
-            byte[] dataValues = onesValue.toByteArray();
-            BigInteger retValue = new BigInteger( dataValues );
-            return retValue.toString();
+            int sizeInBits = rawSizeInBits_;
+            BigInteger halfValue = BigInteger.valueOf( 2 ).pow( sizeInBits - 1 );
+            BigInteger fullValue = BigInteger.valueOf( 2 ).pow( sizeInBits );
+            if ( numericValue.compareTo( halfValue ) >= 0 ) {
+                numericValue = numericValue.subtract( fullValue ).add( BigInteger.ONE );
+            }
+            return numericValue.toString();
         } else if ( rawTypeName.equals( "IEEE754_1985" ) == true ) {
             int sizeInBits = rawSizeInBits_;
             if ( sizeInBits == 32 ) {
-                return Float.toString( numericValue.floatValue() );
+                Float floatValue = Float.intBitsToFloat( numericValue.intValue() );
+                return floatValue.toString();
             } else if ( sizeInBits == 64 ) {
-                return Double.toString( numericValue.doubleValue() );
+                Double doubleValue = Double.longBitsToDouble( numericValue.longValue() );
+                return doubleValue.toString();
             } else {
                 warnings_.add( itemName_ + " Raw encoding " +
                     rawTypeName + " using " +
