@@ -19,7 +19,6 @@ import org.omg.space.xtce.database.BooleanDataType;
 import org.omg.space.xtce.database.CalibratorType;
 import org.omg.space.xtce.database.CalibratorType.MathOperationCalibrator;
 import org.omg.space.xtce.database.CalibratorType.SplineCalibrator;
-import org.omg.space.xtce.database.EnumeratedDataType;
 import org.omg.space.xtce.database.NameDescriptionType;
 import org.omg.space.xtce.database.PolynomialType;
 import org.omg.space.xtce.database.SplinePointType;
@@ -1744,9 +1743,8 @@ public class XTCEItemValue {
 
         PolynomialType polyCal = defCal_.getPolynomialCalibrator();
         if ( polyCal != null ) {
-            HashMap<BigInteger, BigDecimal> terms =
-                new HashMap<BigInteger, BigDecimal>();
-            List<PolynomialType.Term> xtceTerms = polyCal.getTerm();
+            HashMap<BigInteger, BigDecimal> terms     = new HashMap<>();
+            List<PolynomialType.Term>       xtceTerms = polyCal.getTerm();
             long maxExponent = 0;
             for ( PolynomialType.Term term : xtceTerms ) {
                 if ( term.getCoefficient() != 0.0 ) {
@@ -1931,10 +1929,9 @@ public class XTCEItemValue {
 
         PolynomialType polyCal = defCal_.getPolynomialCalibrator();
         if ( polyCal != null ) {
-            HashMap<BigInteger, BigDecimal> terms =
-                new HashMap<BigInteger, BigDecimal>();
-            List<PolynomialType.Term> xtceTerms = polyCal.getTerm();
-            long maxExponent = 0;
+            HashMap<BigInteger, BigDecimal> terms       = new HashMap<>();
+            List<PolynomialType.Term>       xtceTerms   = polyCal.getTerm();
+            long                            maxExponent = 0;
             for ( PolynomialType.Term term : xtceTerms ) {
                 if ( term.getCoefficient() != 0.0 ) {
                     terms.put( term.getExponent(), new BigDecimal( term.getCoefficient() ) );
