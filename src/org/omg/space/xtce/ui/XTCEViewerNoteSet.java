@@ -85,10 +85,10 @@ public class XTCEViewerNoteSet extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(noteListLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(noteParentPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(noteParentPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(addNoteButton)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -96,7 +96,7 @@ public class XTCEViewerNoteSet extends javax.swing.JPanel {
         addNote( "New Note" );
     }//GEN-LAST:event_addNoteButtonActionPerformed
 
-    public void setSpaceSystem( XTCESpaceSystem spaceSystem, JScrollPane parentScrollPane ) {
+    public void setSpaceSystem( XTCESpaceSystem spaceSystem, XTCEViewerSpaceSystemDetails parentScrollPane ) {
 
         spaceSystem_      = spaceSystem;
         parentScrollPane_ = parentScrollPane;
@@ -161,9 +161,10 @@ public class XTCEViewerNoteSet extends javax.swing.JPanel {
         noteParentPanel.setLayout( new BoxLayout( noteParentPanel,
                                                   BoxLayout.Y_AXIS ) );
         noteParentPanel.add( notePanel );
+        noteParentPanel.revalidate();
+        noteParentPanel.repaint();
 
-        parentScrollPane_.revalidate();
-        parentScrollPane_.repaint();
+        parentScrollPane_.sizeChanged();
 
     }
 
@@ -198,7 +199,7 @@ public class XTCEViewerNoteSet extends javax.swing.JPanel {
     // Private Data Members
 
     private XTCESpaceSystem   spaceSystem_      = null;
-    private JScrollPane       parentScrollPane_ = null;
+    private XTCEViewerSpaceSystemDetails            parentScrollPane_ = null;
     private ArrayList<String> noteItemText_     = new ArrayList<>();
 
 

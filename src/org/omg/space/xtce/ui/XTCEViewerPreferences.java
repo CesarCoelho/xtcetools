@@ -366,7 +366,8 @@ public class XTCEViewerPreferences {
                 public void actionPerformed( ActionEvent evt ) {
                     viewer.openFile( actionFile,
                                      getUseXIncludeOption(),
-                                     getValidateOnLoadOption() );
+                                     getValidateOnLoadOption(),
+                                     true );
                 }
             });
             recentItemsMenu.add( item );
@@ -420,7 +421,7 @@ public class XTCEViewerPreferences {
             item.addActionListener( new ActionListener() {
                 @Override
                 public void actionPerformed( ActionEvent evt ) {
-                    viewer.openFile( actionFile, true, true );
+                    viewer.openFile( actionFile, true, true, true );
                 }
             });
             exampleItemsMenu.add( item );

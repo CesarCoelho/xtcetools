@@ -51,6 +51,7 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
         }
         parameter_ = parameter;
         nameTextField.setText( parameter.getName() );
+        nameTextField.setCaretPosition( 0 );
         List<XTCEAlias> aliases = parameter.getAliasSet();
         for ( int iii = 0; iii < aliases.size(); ++iii ) {
             aliasTextField.append( aliases.get( iii ).getFullAliasName() );
@@ -58,7 +59,9 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
                 aliasTextField.append( "\n" ); // NOI18N
             }
         }
+        aliasTextField.setCaretPosition( 0 );
         unitsTextField.setText( parameter.getUnits() );
+        unitsTextField.setCaretPosition( 0 );
         systemNameTextField.setText( parameter.getSystemName() );
         sourceComboField.setSelectedItem( parameter.getDataSource() );
         if ( parameter.getDataSource().equals( "constant" ) == true ) { // NOI18N
@@ -68,7 +71,9 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
             readOnlyCheckboxField.setSelected( parameter.isSettable() );
         }
         shortDescriptionField.setText( parameter.getShortDescription() );
+        shortDescriptionField.setCaretPosition( 0 );
         longDescriptionField.setText( parameter.getLongDescription() );
+        longDescriptionField.setCaretPosition( 0 );
         engineeringTypeComboField.setSelectedItem( parameter.getEngineeringType() );
         if ( parameter.getRawType().isEmpty() == true ) {
             encodingTypeComboField.setSelectedItem( "" );
@@ -94,6 +99,8 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
             parameterTypeReferenceText.setText( "Parameter ERROR: Broken Reference: " + parameter.getTypeReferenceFullPath() );
             xtceTypeNameTextField.setText( "INVALID" );
         }
+        parameterTypeReferenceText.setCaretPosition( 0 );
+        xtceTypeNameTextField.setCaretPosition( 0 );
         pack();
         setLocationRelativeTo( parent );
     }

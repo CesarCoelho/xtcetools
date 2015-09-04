@@ -20,6 +20,7 @@ public class XTCEViewerNote extends javax.swing.JPanel {
     public XTCEViewerNote( XTCEViewerNoteSet noteSet, String text, int idx ) {
         initComponents();
         noteText.setText( text );
+        noteText.setCaretPosition( 0 );
         noteSet_ = noteSet;
         idx_     = idx;
     }

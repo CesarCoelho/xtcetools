@@ -36,11 +36,13 @@ public class XTCEViewerOpenFileChooser extends JFileChooser {
 
         xincludeCheckBox.setSelected( prefs.getUseXIncludeOption() );
         validateCheckBox.setSelected( prefs.getValidateOnLoadOption() );
+        readOnlyCheckBox.setSelected( true );
 
         JPanel accessory = new JPanel();
         accessory.setLayout( new BoxLayout( accessory, BoxLayout.PAGE_AXIS ) );
         accessory.add( xincludeCheckBox );
         accessory.add( validateCheckBox );
+        accessory.add( readOnlyCheckBox );
         setAccessory( accessory );
 
         FileFilter fileFilter =
@@ -77,6 +79,17 @@ public class XTCEViewerOpenFileChooser extends JFileChooser {
         return validateCheckBox.isSelected();
     }
 
+    /** Retrieve the selection state of the option to open the XTCE document in
+     * read-only mode, which is much faster.
+     *
+     * @return boolean indicating if the document is read-only
+     *
+     */
+
+    public boolean isReadOnlySelected() {
+        return readOnlyCheckBox.isSelected();
+    }
+
     // Private Data Members
 
     private JCheckBox xincludeCheckBox =
@@ -84,5 +97,8 @@ public class XTCEViewerOpenFileChooser extends JFileChooser {
 
     private JCheckBox validateCheckBox =
         new JCheckBox( XTCEFunctions.getText( "file_chooser_validate_text" ) ); // NOI18N
+
+    private JCheckBox readOnlyCheckBox =
+        new JCheckBox( XTCEFunctions.getText( "file_chooser_readonly_text" ) ); // NOI18N
 
 }

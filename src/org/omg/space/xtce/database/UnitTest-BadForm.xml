@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<xtce:SpaceSystem name="UNIT_TEST_BAD_FORM" xmlns:xtce="http://www.omg.org/space/xtce" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.omg.org/space/xtce SpaceSystemV1.2-27Feb2014-mods.xsd">
+
+		<xtce:ParameterTypeSet>
+			<xtce:IntegerParameterType name="I1_TYPE" initialValue="1">
+				<xtce:UnitSet/>
+				<xtce:IntegerDataEncoding/>
+			</xtce:IntegerParameterType>
+			<xtce:IntegerParameterType name="I2_TYPE" initialValue="1">
+				<xtce:AliasSet>
+					<xtce:Alias nameSpace="foo" alias="INTTYPE_WITH_ALIAS"/>
+					<xtce:Alias nameSpace="bar" alias="INTTYPE_WITH_SECOND_ALIAS"/>
+				</xtce:AliasSet>
+				<xtce:UnitSet/>
+				<xtce:IntegerDataEncoding/>
+			</xtce:IntegerParameterType>
+			<xtce:IntegerParameterType name="I3_TYPE" initialValue="1">
+                            <xtce:AncillaryDataSet>
+                                <xtce:AncillaryData name="">value1</xtce:AncillaryData>
+                                <xtce:AncillaryData name="test1"/>
+                                <xtce:AncillaryData name="test2">value2</xtce:AncillaryData>
+                            </xtce:AncillaryDataSet>
+				<xtce:UnitSet/>
+				<xtce:IntegerDataEncoding/>
+			</xtce:IntegerParameterType>
+		</xtce:ParameterTypeSet>
+		<xtce:ParameterSet>
+			<xtce:Parameter name="INT_WITH_ALIAS" parameterTypeRef="I1_TYPE">
+				<xtce:AliasSet>
+					<xtce:Alias nameSpace="foo" alias="INT_WITH_ALIAS_2"/>
+				</xtce:AliasSet>
+				<xtce:ParameterProperties dataSource="telemetered"/>
+			</xtce:Parameter>
+			<xtce:Parameter name="INT_WITHOUT_ALIAS" parameterTypeRef="I2_TYPE">
+				<xtce:ParameterProperties dataSource="telemetered"/>
+			</xtce:Parameter>
+			<xtce:Parameter name="INT_WITH_MIXED_ALIAS" parameterTypeRef="I2_TYPE">
+				<xtce:AliasSet>
+					<xtce:Alias nameSpace="foo" alias="INT_WITH_ALIAS_2"/>
+				</xtce:AliasSet>
+				<xtce:ParameterProperties dataSource="telemetered"/>
+			</xtce:Parameter>
+			<xtce:Parameter name="INT_NO_ALIAS" parameterTypeRef="I1_TYPE">
+				<xtce:ParameterProperties dataSource="telemetered"/>
+			</xtce:Parameter>
+			<xtce:Parameter name="INT_NO_ANCDATA" parameterTypeRef="I1_TYPE">
+				<xtce:ParameterProperties dataSource="telemetered"/>
+			</xtce:Parameter>
+			<xtce:Parameter name="INT_TYPEONLY_ANCDATA" parameterTypeRef="I3_TYPE">
+				<xtce:ParameterProperties dataSource="telemetered"/>
+			</xtce:Parameter>
+			<xtce:Parameter name="INT_PONLY_ANCDATA" parameterTypeRef="I1_TYPE">
+                            <xtce:AncillaryDataSet>
+                                <xtce:AncillaryData name="">value4</xtce:AncillaryData>
+                                <xtce:AncillaryData name="test5"/>
+                                <xtce:AncillaryData name="test6">value6</xtce:AncillaryData>
+                            </xtce:AncillaryDataSet>
+				<xtce:ParameterProperties dataSource="telemetered"/>
+			</xtce:Parameter>
+			<xtce:Parameter name="INT_MIXED_ANCDATA" parameterTypeRef="I3_TYPE">
+                            <xtce:AncillaryDataSet>
+                                <xtce:AncillaryData name="">value1</xtce:AncillaryData>
+                                <xtce:AncillaryData name="test1"/>
+                                <xtce:AncillaryData name="test2">value2</xtce:AncillaryData>
+                                <xtce:AncillaryData name="">value4</xtce:AncillaryData>
+                                <xtce:AncillaryData name="test5"/>
+                                <xtce:AncillaryData name="test6">value6</xtce:AncillaryData>
+                            </xtce:AncillaryDataSet>
+				<xtce:ParameterProperties dataSource="telemetered"/>
+			</xtce:Parameter>
+		</xtce:ParameterSet>
+	</xtce:TelemetryMetaData>
+        <xtce:SpaceSystem name="ANCDATA_SS_TEST">
+            <xtce:AncillaryDataSet>
+                <xtce:AncillaryData name="">value10</xtce:AncillaryData>
+                <xtce:AncillaryData name="foo"/>
+                <xtce:AncillaryData name="foo">value11</xtce:AncillaryData>
+                <xtce:AncillaryData name="bar">value12</xtce:AncillaryData>
+            </xtce:AncillaryDataSet>
+        </xtce:SpaceSystem>
+</xtce:SpaceSystem>

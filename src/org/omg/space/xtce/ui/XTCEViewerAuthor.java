@@ -19,6 +19,7 @@ public class XTCEViewerAuthor extends javax.swing.JPanel {
     public XTCEViewerAuthor( XTCEViewerAuthorSet authorSet, String text, int idx ) {
         initComponents();
         authorText.setText( text );
+        authorText.setCaretPosition( 0 );
         authorSet_ = authorSet;
         idx_       = idx;
     }

@@ -711,6 +711,8 @@ public class XTCEViewer extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("xtceview");
         setMinimumSize(new java.awt.Dimension(800, 600));
+        setPreferredSize(new java.awt.Dimension(1150, 800));
+        setSize(new java.awt.Dimension(1150, 800));
 
         loadedFilenameLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         loadedFilenameLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -1560,6 +1562,7 @@ public class XTCEViewer extends javax.swing.JFrame {
         mainWindowOptionsMenu.add(containerDrawingOrientationMenu);
 
         mainWindowEditDocumentMenuItem.setText(bundle.getString("options_menu_edit_document_label")); // NOI18N
+        mainWindowEditDocumentMenuItem.setEnabled(false);
         mainWindowEditDocumentMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mainWindowEditDocumentMenuItemActionPerformed(evt);
@@ -1656,7 +1659,8 @@ public class XTCEViewer extends javax.swing.JFrame {
         if (status == JFileChooser.APPROVE_OPTION) {
             openFile( chs.getSelectedFile(),
                       chs.isXIncludeSelected(),
-                      chs.isValidateSelected() );
+                      chs.isValidateSelected(),
+                      chs.isReadOnlySelected() );
         }
 
     }//GEN-LAST:event_mainWindowOpenFileMenuItemActionPerformed
@@ -1802,7 +1806,7 @@ public class XTCEViewer extends javax.swing.JFrame {
             try {
 
                 long startTime = System.currentTimeMillis();
-                xtceDatabaseFile.saveDatabase( dbFile );
+                xtceDatabaseFile.save( dbFile );
 
                 prefs.updateRecentFilesList( mainWindowOpenRecentMenu, dbFile );
 
@@ -2860,6 +2864,8 @@ public class XTCEViewer extends javax.swing.JFrame {
                                               detailSpaceSystemPanelScrollPane,
                                               mainWindowEditDocumentMenuItem.isSelected() );
         detailSpaceSystemPanelScrollPane.setViewportView( detailDataPanel );
+        detailSpaceSystemPanelScrollPane.revalidate();
+        detailSpaceSystemPanelScrollPane.repaint();
 
     }//GEN-LAST:event_detailSpaceSystemTreeValueChanged
 
@@ -4090,9 +4096,15 @@ public class XTCEViewer extends javax.swing.JFrame {
      * @param validateOnLoad Boolean indicating if the file should be validated
      * against schema on load.
      *
+     * @param readOnly Boolean indicating if the file should be opened in
+     * read-only state for performance.
+     *
      */
 
-    public void openFile( final File dbFile, final boolean applyXInclude, final boolean validateOnLoad ) {
+    public void openFile( final File    dbFile,
+                          final boolean applyXInclude,
+                          final boolean validateOnLoad,
+                          final boolean readOnly ) {
 
         // in the event that a file is already open, we should attempt to
         // close the file before creating a new database.
@@ -4108,26 +4120,29 @@ public class XTCEViewer extends javax.swing.JFrame {
             return;
         }
 
-        //final XTCEViewerProgressMonitor progress =
-        //    new XTCEViewerProgressMonitor( this, true );
-
-        //java.awt.EventQueue.invokeLater( new Runnable() {
-            
-        //@Override
-        //public void run() {
         try {
 
             logMsg( XTCEFunctions.getMemoryUsageStatistics() );
 
             long    startTime      = System.currentTimeMillis();
 
-            //XTCEViewerProgressMonitor progressDialog = new XTCEViewerProgressMonitor( this, true );
-            //XTCEViewerProgressListener listener = new XTCEViewerProgressListener( progressDialog );
-
             xtceDatabaseFile = new XTCEDatabase( dbFile,
                                                  validateOnLoad,
                                                  applyXInclude,
-                                                 null );
+                                                 readOnly );
+
+            mainWindowEditDocumentMenuItem.setSelected( ! readOnly );
+            mainWindowEditDocumentMenuItemActionPerformed( null );
+
+            for ( String message : xtceDatabaseFile.getDocumentWarnings() ) {
+                logMsg( message );
+            }
+
+            if ( xtceDatabaseFile.getErrorCount() > 0 ) {
+                throw new XTCEDatabaseException( XTCEFunctions.getText( "dialog_unabletoload_text" ) +
+                                                 " " +
+                                                 dbFile.getAbsolutePath() );
+            }
 
             loadedFilenameLabel.setText( dbFile.getAbsolutePath() );
 
@@ -4161,17 +4176,10 @@ public class XTCEViewer extends javax.swing.JFrame {
         } catch ( XTCEDatabaseException ex ) {
 
             logMsg( XTCEFunctions.generalErrorPrefix() +
-                    XTCEFunctions.getText( "dialog_unabletoload_text" ) + // NOI18N
-                    " " +
-                    dbFile.getAbsolutePath() );
-            logMsg( XTCEFunctions.generalErrorPrefix() +
                     ex.getLocalizedMessage() );
-
-            //progress.updateProgress( 100, "Failed to Load File" );
 
         }
 
-        //} } );
     }
 
     /** Private method to open a help dialog browser.

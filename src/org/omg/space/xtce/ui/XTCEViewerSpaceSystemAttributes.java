@@ -305,8 +305,10 @@ public class XTCEViewerSpaceSystemAttributes extends javax.swing.JPanel {
         spaceSystem_ = spaceSystem;
 
         shortDescriptionText.setText( spaceSystem_.getShortDescription() );
+        shortDescriptionText.setCaretPosition( 0 );
         operationalStatusText.setText( spaceSystem_.getReference().
                                                     getOperationalStatus() );
+        operationalStatusText.setCaretPosition( 0 );
 
         if ( spaceSystem_.getReference().getHeader() != null ) {
 
@@ -322,6 +324,7 @@ public class XTCEViewerSpaceSystemAttributes extends javax.swing.JPanel {
             classificationInstructionsText.setText( spaceSystem_.getReference().
                                                                  getHeader().
                                                                  getClassificationInstructions() );
+            classificationInstructionsText.setCaretPosition( 0 );
             validationStatusComboBox.setSelectedItem( spaceSystem_.getReference().
                                                                    getHeader().
                                                                    getValidationStatus() );

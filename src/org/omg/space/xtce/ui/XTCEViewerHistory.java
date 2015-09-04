@@ -20,6 +20,7 @@ public class XTCEViewerHistory extends javax.swing.JPanel {
     public XTCEViewerHistory( XTCEViewerHistorySet historySet, String text, int idx ) {
         initComponents();
         noteText.setText( text );
+        noteText.setCaretPosition( 0 );
         historySet_ = historySet;
         idx_        = idx;
     }

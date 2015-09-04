@@ -19,7 +19,9 @@ public class XTCEViewerAlias extends javax.swing.JPanel {
     public XTCEViewerAlias( XTCEViewerAliasSet aliasSet, String ns, String text, int idx ) {
         initComponents();
         namespaceText.setText( ns );
+        namespaceText.setCaretPosition( 0 );
         aliasText.setText( text );
+        aliasText.setCaretPosition( 0 );
         aliasSet_ = aliasSet;
         idx_      = idx;
     }

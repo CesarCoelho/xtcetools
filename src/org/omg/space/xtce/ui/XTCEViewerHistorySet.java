@@ -85,10 +85,10 @@ public class XTCEViewerHistorySet extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(historyRecordsLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(historyParentPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(historyParentPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(addHistoryButton)
-                .addGap(4, 4, 4))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -96,7 +96,7 @@ public class XTCEViewerHistorySet extends javax.swing.JPanel {
         addHistoryRecord( "New History Record" );
     }//GEN-LAST:event_addHistoryButtonActionPerformed
 
-    public void setSpaceSystem( XTCESpaceSystem spaceSystem, JScrollPane parentScrollPane ) {
+    public void setSpaceSystem( XTCESpaceSystem spaceSystem, XTCEViewerSpaceSystemDetails parentScrollPane ) {
 
         spaceSystem_      = spaceSystem;
         parentScrollPane_ = parentScrollPane;
@@ -161,9 +161,10 @@ public class XTCEViewerHistorySet extends javax.swing.JPanel {
         historyParentPanel.setLayout( new BoxLayout( historyParentPanel,
                                                      BoxLayout.Y_AXIS ) );
         historyParentPanel.add( notePanel );
+        historyParentPanel.revalidate();
+        historyParentPanel.repaint();
 
-        parentScrollPane_.revalidate();
-        parentScrollPane_.repaint();
+        parentScrollPane_.sizeChanged();
 
     }
 
@@ -198,7 +199,7 @@ public class XTCEViewerHistorySet extends javax.swing.JPanel {
     // Private Data Members
 
     private XTCESpaceSystem   spaceSystem_      = null;
-    private JScrollPane       parentScrollPane_ = null;
+    private XTCEViewerSpaceSystemDetails            parentScrollPane_ = null;
     private ArrayList<String> recordsListText_  = new ArrayList<>();
 
 

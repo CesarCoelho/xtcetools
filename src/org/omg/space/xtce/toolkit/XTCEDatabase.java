@@ -7,33 +7,17 @@
 package org.omg.space.xtce.toolkit;
 
 import java.io.File;
-import java.io.FileInputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import javax.xml.bind.Binder;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathException;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathFactory;
 import org.omg.space.xtce.database.NameDescriptionType;
-import org.omg.space.xtce.database.ObjectFactory;
-import org.xml.sax.XMLReader;
-import org.xml.sax.InputSource;
 import org.omg.space.xtce.database.SpaceSystemType;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /** The XTCEDatabase class is the first core object to be used by a client
@@ -44,7 +28,7 @@ import org.w3c.dom.NodeList;
  *
  */
 
-public final class XTCEDatabase {
+public final class XTCEDatabase extends XTCEDatabaseParser {
 
     /** Constructor for use with an XTCE database file on the filesystem.
      *
@@ -74,35 +58,98 @@ public final class XTCEDatabase {
                          boolean              applyXIncludes,
                          XTCEProgressListener listener ) throws XTCEDatabaseException {
 
-        if ( dbFile.isFile() == false || dbFile.canRead() == false ) {
-            throw new XTCEDatabaseException(
-                XTCEFunctions.getText( "file_chooser_noload_text" ) + // NOI18N
-                " " + // NOI18N
-                dbFile.toString() );
-        }
+        topLevelSpaceSystem = loadDatabase( dbFile,
+                                            validateOnLoad,
+                                            applyXIncludes,
+                                            false );
 
-        String currentDir = System.getProperty( "user.dir" ); // NOI18N
+        setFilename( dbFile );
+        cacheParameterTypes();
+        cacheArgumentTypes();
 
-        try {
-            updateLoadProgress( listener, 0, "Loading File" );
-            //System.setProperty( "user.dir", dbFile.getParent() );
-            jaxbContext = JAXBContext.newInstance( XTCEConstants.XTCE_PACKAGE );
-            if ( validateOnLoad == true ) {
-                updateLoadProgress( listener, 5, "Validating File" ); 
-            } else {
-                updateLoadProgress( listener, 25, "Validation Disabled (WARNING: Viewer May Be De-Stabilized)" );
-            }
-            populateDataModel( dbFile,
-                               listener,
-                               validateOnLoad,
-                               applyXIncludes );
-            xtceFilename = dbFile;
-            updateLoadProgress( listener, 100, "Completed" );
-        } catch ( Exception ex ) {
-            throw new XTCEDatabaseException( ex );
-        } finally {
-            System.setProperty( "user.dir", currentDir ); // NOI18N
-        }
+    }
+
+    /** Constructor for use with an XTCE database file on the filesystem.
+     *
+     * Successfully constructing this object means that the XTCE database file
+     * was successfully loaded and methods can be called on the contents.
+     *
+     * @param dbLocation URL object containing the location of the XTCE
+     * document to load.
+     *
+     * @param validateOnLoad boolean indicating if the XSD validation should be
+     * performed during the loading.
+     *
+     * @param applyXIncludes boolean indicating if the XInclude processing for
+     * the loaded file should be applied or ignored.
+     *
+     * @param readOnly boolean indicating if the document should be opened in
+     * a read-only context, which is faster because only the JAXB structure is
+     * created, avoiding the need to build the Document Object Model that is
+     * needed for round trip processing.
+     *
+     * @throws XTCEDatabaseException in the event that the file could not be
+     * successfully loaded in a valid state.  This can be partly bypassed by
+     * not enabling the XSD validation, which is not recommended because it
+     * may de-stabilize the application using this data file.
+     *
+     */
+
+    public XTCEDatabase( URL     dbLocation,
+                         boolean validateOnLoad,
+                         boolean applyXIncludes,
+                         boolean readOnly ) throws XTCEDatabaseException {
+
+        topLevelSpaceSystem = loadDatabase( dbLocation,
+                                            validateOnLoad,
+                                            applyXIncludes,
+                                            readOnly );
+
+        setFilename( new File( dbLocation.getPath() ) );
+        cacheParameterTypes();
+        cacheArgumentTypes();
+
+    }
+
+    /** Constructor for use with an XTCE database file on the filesystem.
+     *
+     * Successfully constructing this object means that the XTCE database file
+     * was successfully loaded and methods can be called on the contents.
+     *
+     * @param dbFile File object containing the name and path to the XTCE
+     * database file to load and optionally validate.
+     *
+     * @param validateOnLoad boolean indicating if the XSD validation should be
+     * performed during the loading.
+     *
+     * @param applyXIncludes boolean indicating if the XInclude processing for
+     * the loaded file should be applied or ignored.
+     *
+     * @param readOnly boolean indicating if the document should be opened in
+     * a read-only context, which is faster because only the JAXB structure is
+     * created, avoiding the need to build the Document Object Model that is
+     * needed for round trip processing.
+     *
+     * @throws XTCEDatabaseException in the event that the file could not be
+     * successfully loaded in a valid state.  This can be partly bypassed by
+     * not enabling the XSD validation, which is not recommended because it
+     * may de-stabilize the application using this data file.
+     *
+     */
+
+    public XTCEDatabase( File    dbFile,
+                         boolean validateOnLoad,
+                         boolean applyXIncludes,
+                         boolean readOnly ) throws XTCEDatabaseException {
+
+        topLevelSpaceSystem = loadDatabase( dbFile,
+                                            validateOnLoad,
+                                            applyXIncludes,
+                                            readOnly );
+
+        setFilename( dbFile );
+        cacheParameterTypes();
+        cacheArgumentTypes();
 
     }
 
@@ -120,32 +167,11 @@ public final class XTCEDatabase {
 
     public XTCEDatabase ( String topLevelSpaceSystemName ) throws XTCEDatabaseException {
 
-        try {
+        topLevelSpaceSystem = newDatabase( topLevelSpaceSystemName );
 
-            ObjectFactory factory = new ObjectFactory();
-            jaxbContext         = JAXBContext.newInstance( XTCEConstants.XTCE_PACKAGE );
-            topLevelSpaceSystem = ( factory.createSpaceSystemType() );
-            jaxbElementRoot     = factory.createSpaceSystem( topLevelSpaceSystem );
-            topLevelSpaceSystem.setName( topLevelSpaceSystemName );
-            xtceFilename = new File( "" ); // NOI18N
-            setChanged( true );
+        setFilename( new File( "" ) );
+        setChanged( true );
 
-        } catch ( Exception ex ) {
-            throw new XTCEDatabaseException( ex );
-        }
-
-    }
-
-    /** Retrieve the current filename, in fully qualified path form, for the
-     * XTCE database file that is loaded.
-     *
-     * @return String containing the name, or an empty string if this is a new
-     * database that has not yet been saved to a filesystem.
-     *
-     */
-
-    public File getFilename( ) {
-        return xtceFilename;
     }
 
     /** Retrieve the changed flag indicating if some part of the XTCE document
@@ -169,33 +195,6 @@ public final class XTCEDatabase {
 
     public void setChanged( boolean changedFlag ) {
         databaseChanged = changedFlag;
-    }
-
-    /** Retrieve the XTCE schema document that is applicable for this loaded
-     * file.
-     *
-     * TODO: This only returns the default right now, need to work that.
-     *
-     * @return String containing the file and path to the schema document.
-     *
-     */
-
-    public String getSchemaFromDocument( ) {
-        return schemaLocation;
-    }
-
-    /** Retrieve the XTCE namespace that is applicable to the document that is
-     * loaded.
-     *
-     * TODO: This only returns the default right now, need to work that.
-     *
-     * @return String containing the namespace.
-     *
-     */
-
-    public String getNamespaceFromDocument( ) {
-        /// @todo work on this document namespace
-        return XTCEConstants.XTCE_NAMESPACE;
     }
 
     /** Retrieve the metrics for the XTCE document represented by this object.
@@ -228,13 +227,18 @@ public final class XTCEDatabase {
 
     public NodeList evaluateXPathQuery( String query ) throws XTCEDatabaseException {
 
+        if ( isReadOnly() == true ) {
+            String message = "XPath cannot be used when loading Read-Only";
+            throw new XTCEDatabaseException( message );
+        }
+
         XPath xpath = XPathFactory.newInstance().newXPath();
         xpath.setNamespaceContext( new XTCENamespaceContext() );
 
         try {
 
             XPathExpression expr = xpath.compile( query );
-            NodeList nnn = (NodeList)expr.evaluate( domDocumentRoot.getDocumentElement(),
+            NodeList nnn = (NodeList)expr.evaluate( getDocumentElement(),
                                                     XPathConstants.NODESET );
             return nnn;
 
@@ -255,53 +259,16 @@ public final class XTCEDatabase {
      *
      */
 
-    public void saveDatabase( File dbFile ) throws XTCEDatabaseException {
-        
-        try {
+    public void save( File dbFile ) throws XTCEDatabaseException {
 
-            // thinking about this update, maybe it should be done when nodes
-            // are edited to keep in sync for xpath
-
-            if ( getChanged() == true ) {
-                domBinder.updateXML( jaxbElementRoot );
-            }
-
-            TransformerFactory tf = TransformerFactory.newInstance();
-            Transformer        t  = tf.newTransformer();
-
-            t.transform( new DOMSource( domDocumentRoot ),
-                         new StreamResult( dbFile ) );
-
-            //Marshaller mmm = jaxbContext.createMarshaller();
-
-            //mmm.setProperty( Marshaller.JAXB_FORMATTED_OUTPUT, true );
-            //mmm.setProperty( Marshaller.JAXB_SCHEMA_LOCATION,
-            //                 XTCEConstants.XTCE_NAMESPACE +
-            //                 " " +
-            //                 XTCEConstants.DEFAULT_SCHEMA_FILE );
-
-            //XMLOutputFactory xof = XMLOutputFactory.newInstance();
-            //FileOutputStream stream = new FileOutputStream( dbFile );
-            //XMLStreamWriter writer = xof.createXMLStreamWriter( stream );
-            // TODO: not sure how to manipulate if xtce: prefix is present
-            //writer.setDefaultNamespace( XTCEConstants.XTCE_NAMESPACE );
-            //writer.setPrefix( "", XTCEConstants.XTCE_NAMESPACE );
-            //writer.setPrefix( "xtce", XTCEConstants.XTCE_NAMESPACE );
-
-            //mmm.marshal( jaxbElementRoot, stream );
-
-            xtceFilename = dbFile;
-
-            //stream.close();
-
-            setChanged( false );
-
-        } catch ( Exception ex ) {
-            
-            throw new XTCEDatabaseException( ex );
-            
+        if ( getChanged() == false ) {
+            throw new XTCEDatabaseException( "No changes to save" );
         }
-        
+
+        saveDatabase( dbFile );
+        setFilename( dbFile );
+        setChanged( false );
+
     }
 
     /** Retrieve an arbitrary SpaceSystem wrapped element from the document.
@@ -1039,144 +1006,6 @@ public final class XTCEDatabase {
         }
     }
 
-    /** Private method to read an XTCE XML document and populate the internal
-     * indexes for this object.
-     *
-     * @param dbFile File object containing the XTCE XML document to load.
-     *
-     * @param listener XTCEProgressListener currently unused as the progress
-     * bar portion of the graphical user interface has not been completed or
-     * even well conceived at this point.  A null object is currently used.
-     *
-     * @param validate boolean to indicate if the XML document should be
-     * validated through the XML Schema Description (XSD) document that is
-     * configured for the XTCEDatabase object.  In the future this will be more
-     * flexible.
-     *
-     * @param applyXIncludes boolean indicating if the XInclude processing for
-     * the loaded file should be applied or ignored.
-     *
-     * @throws XTCEDatabaseException thrown in the event that the document
-     * cannot be read or is not sufficiently valid to complete construction of
-     * the internal data model.
-     *
-     */
-
-    private void populateDataModel( File                 dbFile,
-                                    XTCEProgressListener listener,
-                                    boolean              validate,
-                                    boolean              applyXIncludes ) throws XTCEDatabaseException {
-        
-        try {
-
-            updateLoadProgress( listener, 30, "Loading File" );
-
-            domBinder = jaxbContext.createBinder();
-
-            //Unmarshaller     um  = jaxbContext.createUnmarshaller();
-            //SAXParserFactory spf = SAXParserFactory.newInstance();
-
-            //spf.setXIncludeAware( applyXIncludes );
-	    //spf.setNamespaceAware( true );
-            //spf.setValidating( validate );
-
-            //SAXParser parser = spf.newSAXParser();
-            //parser.setProperty( "http://java.sun.com/xml/jaxp/properties/schemaLanguage",
-            //                    "http://www.w3.org/2001/XMLSchema" );
-
-            //XMLReader              reader  = parser.getXMLReader();
-            XTCESchemaErrorHandler handler = new XTCESchemaErrorHandler();
-
-            //reader.setErrorHandler( handler );
-
-            //FileInputStream stream = new FileInputStream( dbFile );
-
-            //SAXSource source = new SAXSource( reader, new InputSource( stream ) );
-
-            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-
-            dbf.setXIncludeAware( applyXIncludes );
-            dbf.setNamespaceAware( true );
-            dbf.setValidating( validate );
-
-            DocumentBuilder db = dbf.newDocumentBuilder();
-            db.setErrorHandler( handler );
-
-            domDocumentRoot = db.parse( dbFile );
-
-            jaxbElementRoot = (JAXBElement)domBinder.unmarshal( domDocumentRoot );
-            
-            Object candidate = jaxbElementRoot.getValue();
-
-            if ( candidate.getClass().equals( SpaceSystemType.class ) == false ) {
-                throw new XTCEDatabaseException( XTCEFunctions.getText( "error_invalidxmlfile" ) ); // NOI18N
-            }
-            
-            topLevelSpaceSystem = (SpaceSystemType)candidate;
-
-            updateLoadProgress( listener, 70, "Caching Type Information" );
-
-            cacheParameterTypes();
-            cacheArgumentTypes();
-
-        } catch ( Exception ex ) {
-            
-            throw new XTCEDatabaseException( ex );
-            
-        }
-        
-    }
-
-    /** Private method to perform XML Schema Description (XSD) verification on
-     * the XTCE document that has been loaded.
-     *
-     * At present, this function is somewhat inefficient because it needs to
-     * do a separate loading and verification prior to the unmarshal operation
-     * of the JAXB data model.  It would be nice if this could be combined.
-     *
-     * @param dbFile File object containing the fully qualified filesystem path
-     * to the XTCE document to be loaded and verified.
-     *
-     * @throws XTCEDatabaseException thrown in the event that the document does
-     * not pass validation.  The specific messages in the exception will
-     * reflect the issues.  The application may de-stabilize if an document is
-     * used that does not pass validation against the schema document.
-     *
-     */
-
-    private void validateInputDocument( File dbFile ) throws XTCEDatabaseException {
-        
-        try {
-
-            SAXParserFactory spf = SAXParserFactory.newInstance();
-            spf.setNamespaceAware( true );
-            spf.setXIncludeAware( true );
-            spf.setValidating( true );
-            
-            SAXParser parser = spf.newSAXParser();
-            parser.setProperty( "http://java.sun.com/xml/jaxp/properties/schemaLanguage", // NOI18N
-                                "http://www.w3.org/2001/XMLSchema" ); // NOI18N
-
-            FileInputStream stream = new FileInputStream( dbFile );
-            
-            XTCESchemaErrorHandler handler = new XTCESchemaErrorHandler();
-            
-            XMLReader reader = parser.getXMLReader();
-            reader.setErrorHandler( handler );
-            reader.parse( new InputSource( stream ) );
-
-            if ( handler.errors > 0 ) {
-                throw new XTCEDatabaseException( handler.messages );
-            }
-            
-        } catch ( Exception ex ) {
-
-            throw new XTCEDatabaseException( ex );
-            
-        }
-        
-    }
-
     /** Private method to capture the Parameter Type paths with mapping to a
      * reference to the Argument Type itself, as generically represented by a
      * NameDescriptionType in the inheritance tree.
@@ -1298,14 +1127,8 @@ public final class XTCEDatabase {
 
     // Private Data Members
 
-    private File            xtceFilename        = null;
-    private JAXBContext     jaxbContext         = null;
     private SpaceSystemType topLevelSpaceSystem = null;
-    private JAXBElement     jaxbElementRoot     = null;
     private boolean         databaseChanged     = false;
-    private String          schemaLocation      = XTCEConstants.DEFAULT_SCHEMA_FILE;
-    private Document        domDocumentRoot     = null;
-    private Binder<Node>    domBinder           = null;
 
     private HashMap<String, NameDescriptionType> parameterTypes   = null;
     private HashMap<String, NameDescriptionType> argumentTypes    = null;
