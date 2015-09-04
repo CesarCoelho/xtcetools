@@ -2984,6 +2984,15 @@ public class XTCEViewer extends javax.swing.JFrame {
 
         if ( fileOpenWarning() == true ) return;
 
+        if ( xtceDatabaseFile.isReadOnly() == true ) {
+            JOptionPane.showMessageDialog(
+                this,
+                XTCEFunctions.getText( "error_isreadonly" ), // NOI18N
+                XTCEFunctions.getText( "general_error" ), // NOI18N
+                JOptionPane.ERROR_MESSAGE );
+            return;
+        }
+
         if ( xpathDialog == null ) {
             xpathDialog = new XTCEViewerXpathQueryDialog( this,
                                                           prefs,
