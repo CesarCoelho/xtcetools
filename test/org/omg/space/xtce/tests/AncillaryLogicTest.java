@@ -56,6 +56,11 @@ public class AncillaryLogicTest {
     @Test
     public void testNoAncDataOnParameter() {
 
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
         try {
 
             XTCEParameter parameter = db_.
@@ -82,6 +87,11 @@ public class AncillaryLogicTest {
     @Test
     public void testNoAncDataOnSpaceSystem() {
 
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
         try {
 
             XTCESpaceSystem ss = db_.getRootSpaceSystem();
@@ -105,6 +115,11 @@ public class AncillaryLogicTest {
 
     @Test
     public void testParamOnlyAncData() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
 
         try {
 
@@ -176,6 +191,11 @@ public class AncillaryLogicTest {
     @Test
     public void testParamTypeOnlyAncData() {
 
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
         try {
 
             XTCEParameter parameter = db_.
@@ -245,6 +265,11 @@ public class AncillaryLogicTest {
 
     @Test
     public void testParamMixedAncData() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
 
         try {
 
@@ -334,6 +359,11 @@ public class AncillaryLogicTest {
 
     @Test
     public void testSpaceSystemAncData() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
 
         try {
 

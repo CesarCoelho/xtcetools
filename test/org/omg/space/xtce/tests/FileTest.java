@@ -47,6 +47,11 @@ public class FileTest {
     @Test
     public void testFileLocation() {
 
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
         File fileObj = new File( "src/overview.html" );
 
         String absPath = fileObj.getAbsolutePath();
@@ -69,6 +74,11 @@ public class FileTest {
 
     @Test
     public void testUriLocation() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
 
         File fileObj = new File( "src/overview.html" );
 
@@ -99,6 +109,11 @@ public class FileTest {
     @Test
     public void testFileInJar() {
 
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
         URL fileUrl =
             ClassLoader.getSystemResource( "junit/runner/Version.class" );
 
@@ -124,6 +139,11 @@ public class FileTest {
 
     @Test
     public void testDirectoryInJar() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
 
         try {
         Enumeration<URL> fileUrls =

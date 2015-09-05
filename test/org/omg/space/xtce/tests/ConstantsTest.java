@@ -44,6 +44,11 @@ public class ConstantsTest {
     @Test
     public void checkSchemaDefaultValue() {
 
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
         String expected = "SpaceSystemV1.2-27Feb2014-mods.xsd";
         Assert.assertTrue( "Expected '" +
                            expected +
@@ -57,6 +62,11 @@ public class ConstantsTest {
     @Test
     public void checkNamespaceDefaultValue() {
 
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
         String expected = "http://www.omg.org/space/xtce";
         Assert.assertTrue( "Expected '" +
                            expected +
@@ -69,6 +79,11 @@ public class ConstantsTest {
 
     @Test
     public void checkPackageDefaultValue() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
 
         String expected = "org.omg.space.xtce.database";
         Assert.assertTrue( "Expected '" +

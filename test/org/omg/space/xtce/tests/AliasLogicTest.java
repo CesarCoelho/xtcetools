@@ -58,6 +58,11 @@ public class AliasLogicTest {
     @Test
     public void testSingleAliasOnParameter() {
 
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
         try {
 
             XTCEParameter parameter = db_.
@@ -81,6 +86,11 @@ public class AliasLogicTest {
 
     @Test
     public void testAliasesOnParameterType() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
 
         try {
 
@@ -107,6 +117,11 @@ public class AliasLogicTest {
     @Test
     public void testMixedAliases() {
 
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
         try {
 
             XTCEParameter parameter = db_.
@@ -132,6 +147,11 @@ public class AliasLogicTest {
     @Test
     public void testNoAliasParameter() {
 
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
         try {
 
             XTCEParameter parameter = db_.
@@ -156,6 +176,11 @@ public class AliasLogicTest {
 
     @Test
     public void testNoAliasSpaceSystem() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
 
         try {
 

@@ -59,6 +59,11 @@ public class StaticFunctionsTest {
     @Test
     public void resolvePathReference() {
 
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
         String currentPath   = null;
         String pathReference = null;
         String realPath      = null;
@@ -165,6 +170,11 @@ public class StaticFunctionsTest {
     @Test
     public void getPathNameFromReferenceString() {
 
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
         String filePath = null;
         String pathName = null;
 
@@ -193,6 +203,11 @@ public class StaticFunctionsTest {
 
     @Test
     public void getNameFromPathReferenceString() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
 
         String filePath = null;
         String pathName = null;
@@ -223,6 +238,11 @@ public class StaticFunctionsTest {
     @Test
     public void makeAliasDisplayString_ForNoAlias() {
 
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
         try {
 
             XTCEParameter parameter = db_.
@@ -249,6 +269,11 @@ public class StaticFunctionsTest {
     @Test
     public void makeAliasDisplayString_ForPreferredNoNamespaceAlias() {
 
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
         try {
 
             XTCEParameter parameter = db_.
@@ -273,6 +298,11 @@ public class StaticFunctionsTest {
     @Test
     public void makeAliasDisplayString_ForPreferredWithNamespaceAlias() {
 
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
         try {
 
             XTCEParameter parameter = db_.
@@ -296,6 +326,11 @@ public class StaticFunctionsTest {
 
     @Test
     public void makeAliasDisplayString_ForPreferredNoNamespaceAliasShowAll() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
 
         // the preferred namespace is ignored in the show all case
 
@@ -323,6 +358,11 @@ public class StaticFunctionsTest {
     @Test
     public void makeAliasDisplayString_ForPreferredWithNamespaceAliasShowAll() {
 
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
         // the preferred namespace is ignored in the show all case
 
         try {
@@ -348,6 +388,11 @@ public class StaticFunctionsTest {
 
     @Test
     public void matchesUsingGlob() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
 
         String  text   = null;
         String  glob   = null;
@@ -400,6 +445,11 @@ public class StaticFunctionsTest {
     @Test
     public void getText() {
 
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
         // a valid key in the resource bundle will return text but an invalid
         // key will throw
 
@@ -434,6 +484,11 @@ public class StaticFunctionsTest {
     @Test
     public void setLocalePreference() {
 
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
         boolean result = false;
 
         try {
@@ -459,6 +514,11 @@ public class StaticFunctionsTest {
     @Test
     public void checkLocaleAvailable() {
 
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
         boolean result = false;
 
         result = XTCEFunctions.checkLocaleAvailable( Locale.ENGLISH );
@@ -481,6 +541,11 @@ public class StaticFunctionsTest {
     @Test
     public void generalErrorPrefix() {
 
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
         try {
             XTCEFunctions.setLocalePreference( Locale.ENGLISH );
             String out = XTCEFunctions.generalErrorPrefix();
@@ -494,6 +559,11 @@ public class StaticFunctionsTest {
 
     @Test
     public void generalWarningPrefix() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
 
         try {
             XTCEFunctions.setLocalePreference( Locale.ENGLISH );

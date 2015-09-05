@@ -56,6 +56,11 @@ public class DecodingTest {
     @Test
     public void testRawOverflows() {
 
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
         long errors = 0;
 
         try {
@@ -123,6 +128,11 @@ public class DecodingTest {
     @Test
     public void testBooleanParameterTypes() {
 
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
         long errors = 0;
 
         try {
@@ -150,6 +160,11 @@ public class DecodingTest {
 
     @Test
     public void testEnumeratedParameterTypes() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
 
         long errors = 0;
 
@@ -180,6 +195,11 @@ public class DecodingTest {
 
     @Test
     public void testBinaryParameterTypes() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
 
         long errors = 0;
 
@@ -213,6 +233,11 @@ public class DecodingTest {
 
     @Test
     public void testStringParameterTypesForUTF8() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
 
         long errors = 0;
 
@@ -264,6 +289,11 @@ public class DecodingTest {
 
     @Test
     public void testStringParameterTypesForUTF16() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
 
         long errors = 0;
 
@@ -317,6 +347,11 @@ public class DecodingTest {
     @Test
     public void testIntegerParameterTypesRawUnsigned() {
 
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
         long errors = 0;
 
         try {
@@ -361,6 +396,11 @@ public class DecodingTest {
 
     @Test
     public void testIntegerParameterTypesRawSignMagnitude() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
 
         long errors = 0;
 
@@ -436,6 +476,11 @@ public class DecodingTest {
     @Test
     public void testIntegerParameterTypesRawTwosComplement() {
 
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
         long errors = 0;
 
         try {
@@ -506,6 +551,11 @@ public class DecodingTest {
 
     @Test
     public void testIntegerParameterTypesRawOnesComplement() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
 
         long errors = 0;
 
@@ -578,6 +628,11 @@ public class DecodingTest {
     @Test
     public void testFloatParameterTypesRaw32() {
 
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
         long errors = 0;
 
         try {
@@ -625,6 +680,11 @@ public class DecodingTest {
     @Test
     public void testFloatParameterTypesRaw64() {
 
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
         long errors = 0;
 
         try {
@@ -671,6 +731,11 @@ public class DecodingTest {
 
     @Test
     public void testFloatParameterTypesWithRawUnsignedLinearCalibrator() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
 
         long errors = 0;
 
@@ -728,6 +793,11 @@ public class DecodingTest {
     @Test
     public void testFloatParameterTypesWithRawUnsignedQuadraticCalibrator() {
 
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
         long errors = 0;
 
         try {
@@ -772,6 +842,11 @@ public class DecodingTest {
 
     @Test
     public void testFloatParameterTypesWithRawFloatSplineCalibrator() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
 
         long errors = 0;
 
