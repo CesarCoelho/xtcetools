@@ -9,6 +9,7 @@ package org.omg.space.xtce.toolkit;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
@@ -16,9 +17,11 @@ import java.util.List;
 import javax.xml.bind.Binder;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
+import javax.xml.bind.UnmarshalException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.Transformer;
@@ -31,6 +34,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
 
 /** Helper class to do the XTCE document parsing to support the XTCEDatabase
@@ -137,6 +142,16 @@ public abstract class XTCEDatabaseParser {
     public static List<String> validateDocument( File    dbFile,
                                                  boolean applyXIncludes ) {
 
+        String currentDir = System.getProperty( "user.dir" ); // NOI18N
+        String path       = dbFile.getAbsolutePath();
+
+        path = XTCEFunctions.getPathNameFromReferenceString( path );
+
+        System.out.println( "Path is: " + path );
+        if ( path != null ) {
+            System.setProperty( "user.dir", path ); // NOI18N
+        }
+
         XTCESchemaErrorHandler handler = new XTCESchemaErrorHandler();
 
         try {
@@ -150,17 +165,22 @@ public abstract class XTCEDatabaseParser {
             parser.setProperty( "http://java.sun.com/xml/jaxp/properties/schemaLanguage", // NOI18N
                                 "http://www.w3.org/2001/XMLSchema" ); // NOI18N
 
-            FileInputStream stream = new FileInputStream( dbFile );
-            
             XMLReader reader = parser.getXMLReader();
             reader.setErrorHandler( handler );
-            reader.parse( new InputSource( stream ) );
+            reader.parse( new InputSource( dbFile.getName() ) );
 
-        } catch ( Throwable ex ) {
-
+        } catch ( ParserConfigurationException ex ) {
             List<String> messages = new ArrayList<>();
-            messages.add( ex.getLocalizedMessage() );
-            
+            messages.add( "Bad Configuration: " + ex.getLocalizedMessage() );
+            return messages;
+        } catch ( SAXParseException ex ) {
+            handler.fatalError( ex );
+        } catch ( SAXException ex ) {
+            handler.fatalError( ex );
+        } catch ( IOException ex ) {
+            handler.fatalError( ex );
+        } finally {
+            System.setProperty( "user.dir", currentDir ); // NOI18N
         }
 
         return handler.getMessages();
@@ -243,15 +263,12 @@ public abstract class XTCEDatabaseParser {
                                             boolean applyXIncludes,
                                             boolean readOnly ) throws XTCEDatabaseException {
 
+        String path = dbFile.getAbsolutePath();
+        path = XTCEFunctions.getPathNameFromReferenceString( path );
+
         try {
 
-            File        parent  = dbFile.getParentFile();
             InputStream istream = new FileInputStream( dbFile );
-            String      path    = null;
-
-            if ( parent != null ) {
-                path = parent.getAbsolutePath();
-            }
 
             return loadDatabase( istream,
                                  path,
@@ -385,6 +402,8 @@ public abstract class XTCEDatabaseParser {
             System.setProperty( "user.dir", path ); // NOI18N
         }
 
+        XTCESchemaErrorHandler handler = new XTCESchemaErrorHandler();
+
         try {
 
             Unmarshaller     um  = jaxbContext_.createUnmarshaller();
@@ -398,13 +417,12 @@ public abstract class XTCEDatabaseParser {
             parser.setProperty( "http://java.sun.com/xml/jaxp/properties/schemaLanguage",
                                 "http://www.w3.org/2001/XMLSchema" );
 
-            XMLReader              reader  = parser.getXMLReader();
-            XTCESchemaErrorHandler handler = new XTCESchemaErrorHandler();
-
+            XMLReader reader = parser.getXMLReader();
             reader.setErrorHandler( handler );
+            um.setEventHandler( handler );
 
-            SAXSource source = new SAXSource( reader,
-                                              new InputSource( dbStream ) );
+            SAXSource source =
+                new SAXSource( reader, new InputSource( dbStream ) );
 
             jaxbElementRoot_ = (JAXBElement)um.unmarshal( source );
 
@@ -425,6 +443,8 @@ public abstract class XTCEDatabaseParser {
 
             return (SpaceSystemType)candidate;
 
+        } catch ( UnmarshalException ex ) {
+            throw new XTCEDatabaseException( handler.getMessages() );
         } catch ( Exception ex ) {
             throw new XTCEDatabaseException( ex ); 
         } finally {
@@ -444,11 +464,12 @@ public abstract class XTCEDatabaseParser {
             System.setProperty( "user.dir", path ); // NOI18N
         }
 
+        XTCESchemaErrorHandler handler = new XTCESchemaErrorHandler();
+
         try {
 
             domBinder_ = jaxbContext_.createBinder();
-
-            XTCESchemaErrorHandler handler = new XTCESchemaErrorHandler();
+            domBinder_.setEventHandler( handler );
 
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 
@@ -461,12 +482,12 @@ public abstract class XTCEDatabaseParser {
 
             domDocumentRoot_ = db.parse( dbStream );
 
+            jaxbElementRoot_ =
+                (JAXBElement)domBinder_.unmarshal( domDocumentRoot_ );
+
             errorCount_ = handler.getErrorCount();
             warnings_   = handler.getMessages();
 
-            jaxbElementRoot_ =
-                (JAXBElement)domBinder_.unmarshal( domDocumentRoot_ );
-            
             Object candidate = jaxbElementRoot_.getValue();
 
             if ( candidate.getClass().equals( SpaceSystemType.class ) == false ) {
@@ -479,6 +500,8 @@ public abstract class XTCEDatabaseParser {
 
             return (SpaceSystemType)candidate;
 
+        } catch ( UnmarshalException ex ) {
+            throw new XTCEDatabaseException( handler.getMessages() );
         } catch ( Exception ex ) {
             throw new XTCEDatabaseException( ex );    
         } finally {

@@ -6,6 +6,7 @@
 package org.omg.space.xtce.tests;
 
 import java.io.File;
+import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -43,7 +44,12 @@ public class ParsingTest {
     @Test
     public void testLoadingFileNotFound() {
 
-        String file = "foo-xtce.xml";
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        final String file = "foo-xtce.xml";
 
         try {
 
@@ -68,7 +74,12 @@ public class ParsingTest {
     @Test
     public void testLoadingUnitTestFileReadOnly() {
 
-        String file = "src/org/omg/space/xtce/database/UnitTests.xml";
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        final String file = "src/org/omg/space/xtce/database/UnitTests.xml";
 
         try {
 
@@ -90,7 +101,12 @@ public class ParsingTest {
     @Test
     public void testLoadingUnitTestFileEditable() {
 
-        String file = "src/org/omg/space/xtce/database/UnitTests.xml";
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        final String file = "src/org/omg/space/xtce/database/UnitTests.xml";
 
         try {
 
@@ -112,7 +128,12 @@ public class ParsingTest {
     @Test
     public void testCreatingFile() {
 
-        String ssName = "New_Space_System";
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        final String ssName = "New_Space_System";
 
         try {
 
@@ -134,7 +155,13 @@ public class ParsingTest {
     @Test
     public void testLoadingFileWithSyntaxErrorsReadOnlyWithValidation() {
 
-        String file = "src/org/omg/space/xtce/database/UnitTest-BadForm.xml";
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        final String file =
+            "src/org/omg/space/xtce/database/UnitTest-BadForm.xml";
 
         try {
 
@@ -158,7 +185,13 @@ public class ParsingTest {
     @Test
     public void testLoadingFileWithSyntaxErrorsEditableWithValidation() {
 
-        String file = "src/org/omg/space/xtce/database/UnitTest-BadForm.xml";
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        final String file =
+            "src/org/omg/space/xtce/database/UnitTest-BadForm.xml";
 
         try {
 
@@ -182,7 +215,13 @@ public class ParsingTest {
     @Test
     public void testLoadingFileWithErrorsReadOnlyWithValidation() {
 
-        String file = "src/org/omg/space/xtce/database/BogusSAT-1-Bad.xml";
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        final String file =
+            "src/org/omg/space/xtce/database/BogusSAT-1-Bad.xml";
 
         try {
 
@@ -193,6 +232,12 @@ public class ParsingTest {
 
             if ( db.getErrorCount() == 0 ) {
                 Assert.fail( "Expected errors loading " + file );
+            } else {
+                for ( String message : db.getDocumentWarnings() ) {
+                    Assert.assertFalse( "Should not have gotten IO Fatal",
+                                        message.startsWith( "IO Fatal:" ) );
+                    System.out.println( "Expected Message: " + message );
+                }
             }
 
         } catch ( Exception ex ) {
@@ -208,7 +253,13 @@ public class ParsingTest {
     @Test
     public void testLoadingFileWithErrorsEditableWithValidation() {
 
-        String file = "src/org/omg/space/xtce/database/BogusSAT-1-Bad.xml";
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        final String file =
+            "src/org/omg/space/xtce/database/BogusSAT-1-Bad.xml";
 
         try {
 
@@ -217,7 +268,15 @@ public class ParsingTest {
                                                 false,   // xinclude
                                                 false ); // read only
 
-            Assert.fail( "Expected errors loading " + file );
+            if ( db.getErrorCount() == 0 ) {
+                Assert.fail( "Expected errors loading " + file );
+            } else {
+                for ( String message : db.getDocumentWarnings() ) {
+                    Assert.assertFalse( "Should not have gotten IO Fatal",
+                                        message.startsWith( "IO Fatal:" ) );
+                    System.out.println( "Expected Message: " + message );
+                }
+            }
 
         } catch ( Exception ex ) {
 
@@ -232,7 +291,13 @@ public class ParsingTest {
     @Test
     public void testLoadingFileWithErrorsReadOnlyNoValidation() {
 
-        String file = "src/org/omg/space/xtce/database/BogusSAT-1-Bad.xml";
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        final String file =
+            "src/org/omg/space/xtce/database/BogusSAT-1-Bad.xml";
 
         try {
 
@@ -252,7 +317,13 @@ public class ParsingTest {
     @Test
     public void testLoadingFileWithErrorsEditableNoValidation() {
 
-        String file = "src/org/omg/space/xtce/database/BogusSAT-1-Bad.xml";
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        final String file =
+            "src/org/omg/space/xtce/database/BogusSAT-1-Bad.xml";
 
         try {
 
@@ -264,6 +335,76 @@ public class ParsingTest {
         } catch ( Exception ex ) {
 
             Assert.fail( "Unexpected exception: " + ex.getLocalizedMessage() );
+
+        }
+
+    }
+
+    @Test
+    public void testStaticValidationFunctionBadlyFormed() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        final String file =
+            "src/org/omg/space/xtce/database/UnitTest-BadForm.xml";
+
+        try {
+
+            List<String> messages =
+                XTCEDatabase.validateDocument( new File( file ), false );
+
+            if ( messages.size() == 0 ) {
+                Assert.fail( "Expected errors loading " + file );
+            } else {
+                for ( String message : messages ) {
+                    Assert.assertFalse( "Should not have gotten IO Fatal",
+                                        message.startsWith( "IO Fatal:" ) );
+                    System.out.println( "Expected Message: " + message );
+                }
+            }
+
+        } catch ( Exception ex ) {
+
+            Assert.fail( "Should not have thrown from " +
+                "XTCEDatabase.validateDocument: " + ex.getLocalizedMessage() );
+
+        }
+
+    }
+
+    @Test
+    public void testStaticValidationFunctionNotSchemaCompliant() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        final String file =
+            "src/org/omg/space/xtce/database/BogusSAT-1-Bad.xml";
+
+        try {
+
+            List<String> messages =
+                XTCEDatabase.validateDocument( new File( file ), false );
+
+            if ( messages.size() == 0 ) {
+                Assert.fail( "Expected errors loading " + file );
+            } else {
+                for ( String message : messages ) {
+                    Assert.assertFalse( "Should not have gotten IO Fatal",
+                                        message.startsWith( "IO Fatal:" ) );
+                    System.out.println( "Expected Message: " + message );
+                }
+            }
+
+        } catch ( Exception ex ) {
+
+            Assert.fail( "Should not have thrown from " +
+                "XTCEDatabase.validateDocument: " + ex.getLocalizedMessage() );
 
         }
 
