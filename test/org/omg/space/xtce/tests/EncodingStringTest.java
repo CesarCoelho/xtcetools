@@ -16,6 +16,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 import org.omg.space.xtce.toolkit.XTCEDatabase;
 import org.omg.space.xtce.toolkit.XTCEDatabaseException;
 import org.omg.space.xtce.toolkit.XTCEItemValue;
@@ -392,6 +393,169 @@ public class EncodingStringTest {
 
             errors += check( "12345678901234567890",
                              "Basic_string_int32_onescomp overflow value '12345678901234567890', larger than maximum value for encoding." );
+
+            System.out.println( "" );
+
+        } catch ( Throwable ex ) {
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+        if ( errors != 0 ) {
+            Assert.fail( "Not all checks passed" );
+        }
+
+    }
+
+    @Test
+    public void testStringParameterTypeFloatEncoding() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        long errors = 0;
+
+        try {
+
+            System.out.println( "Testing EU String Raw float No Calibrator" );
+
+            getParameterItemValueObj( "/BogusSAT/SC001/Payload1",
+                                      "Basic_string_float32" );
+
+            errors += check( "This is a test",
+                             "Basic_string_float32 Invalid String value for encoding IEEE754_1985 of 'This is a test'" );
+
+            errors += check( "",
+                             "0x00000000",
+                             "00000000000000000000000000000000" );
+
+            errors += check( 5,
+                             "0x40a00000",
+                             "01000000101000000000000000000000" );
+
+            errors += check( 1.25,
+                             "0x3fa00000",
+                             "00111111101000000000000000000000" );
+
+            errors += check( (float)99.0,
+                             "0x42c60000",
+                             "01000010110001100000000000000000" );
+
+
+            errors += check( "12345678901234567890",
+                             "0x5f2b54aa",
+                             "01011111001010110101010010101010" );
+
+            getParameterItemValueObj( "/BogusSAT/SC001/Payload1",
+                                      "Basic_string_float64" );
+
+            errors += check( "This is a test",
+                             "Basic_string_float64 Invalid String value for encoding IEEE754_1985 of 'This is a test'" );
+
+            errors += check( "",
+                             "0x0000000000000000",
+                             "0000000000000000000000000000000000000000000000000000000000000000" );
+
+            errors += check( 5,
+                             "0x4014000000000000",
+                             "0100000000010100000000000000000000000000000000000000000000000000" );
+
+            errors += check( 1.25,
+                             "0x3ff4000000000000",
+                             "0011111111110100000000000000000000000000000000000000000000000000" );
+
+            errors += check( (float)99.0,
+                             "0x4058c00000000000",
+                             "0100000001011000110000000000000000000000000000000000000000000000" );
+
+
+            errors += check( "12345678901234567890",
+                             "0x43e56a95319d63e1",
+                             "0100001111100101011010101001010100110001100111010110001111100001" );
+
+            System.out.println( "" );
+
+        } catch ( Throwable ex ) {
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+        if ( errors != 0 ) {
+            Assert.fail( "Not all checks passed" );
+        }
+
+    }
+
+    @Ignore( "not ready yet" )
+    @Test
+    public void testStringParameterTypeBinaryEncoding() {
+
+        // this test is a placeholder until I can figure out what it should be
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        long errors = 0;
+
+        try {
+
+            System.out.println( "Testing EU String Raw float No Calibrator" );
+
+            getParameterItemValueObj( "/BogusSAT/SC001/Payload1",
+                                      "Basic_string_binary" );
+
+            errors += check( "This is a test",
+                             "Basic_string_binary Invalid String value for encoding binary of 'This is a test'" );
+
+            errors += check( "",
+                             "0x00000000",
+                             "00000000000000000000000000000000" );
+
+            errors += check( 5,
+                             "0x40a00000",
+                             "01000000101000000000000000000000" );
+
+            errors += check( 1.25,
+                             "0x3fa00000",
+                             "00111111101000000000000000000000" );
+
+            errors += check( (float)99.0,
+                             "0x42c60000",
+                             "01000010110001100000000000000000" );
+
+
+            errors += check( "12345678901234567890",
+                             "0x5f2b54aa",
+                             "01011111001010110101010010101010" );
+
+            getParameterItemValueObj( "/BogusSAT/SC001/Payload1",
+                                      "Basic_string_binary" );
+
+            errors += check( "This is a test",
+                             "Basic_string_binary Invalid String value for encoding binary of 'This is a test'" );
+
+            errors += check( "",
+                             "0x0000000000000000",
+                             "0000000000000000000000000000000000000000000000000000000000000000" );
+
+            errors += check( 5,
+                             "0x4014000000000000",
+                             "0100000000010100000000000000000000000000000000000000000000000000" );
+
+            errors += check( 1.25,
+                             "0x3ff4000000000000",
+                             "0011111111110100000000000000000000000000000000000000000000000000" );
+
+            errors += check( (float)99.0,
+                             "0x4058c00000000000",
+                             "0100000001011000110000000000000000000000000000000000000000000000" );
+
+
+            errors += check( "12345678901234567890",
+                             "0x43e56a95319d63e1",
+                             "0100001111100101011010101001010100110001100111010110001111100001" );
 
             System.out.println( "" );
 

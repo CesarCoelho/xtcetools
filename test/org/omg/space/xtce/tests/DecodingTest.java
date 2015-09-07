@@ -16,6 +16,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 import org.omg.space.xtce.toolkit.XTCEDatabase;
 import org.omg.space.xtce.toolkit.XTCEDatabaseException;
 import org.omg.space.xtce.toolkit.XTCEItemValue;
@@ -287,6 +288,7 @@ public class DecodingTest {
 
     }
 
+    @Ignore( "not sure what this should be yet" )
     @Test
     public void testStringParameterTypesForUTF16() {
 
