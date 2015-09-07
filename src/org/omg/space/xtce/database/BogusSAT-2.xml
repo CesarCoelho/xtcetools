@@ -388,6 +388,32 @@
 						<xtce:UnitSet/>
 						<xtce:IntegerDataEncoding bitOrder="mostSignificantBitFirst" encoding="unsigned" sizeInBits="1" changeThreshold="1"/>
 					</xtce:BooleanParameterType>
+					<xtce:BooleanParameterType name="boolean_float32_Type" zeroStringValue="FALSE" oneStringValue="TRUE" shortDescription="Generic boolean EU type with float32 data encoding">
+						<xtce:UnitSet/>
+						<xtce:FloatDataEncoding bitOrder="mostSignificantBitFirst" encoding="IEEE754_1985" sizeInBits="32" changeThreshold="1"/>
+					</xtce:BooleanParameterType>
+					<xtce:BooleanParameterType name="boolean_float64_Type" zeroStringValue="FALSE" oneStringValue="TRUE" shortDescription="Generic boolean EU type with float64 data encoding">
+						<xtce:UnitSet/>
+						<xtce:FloatDataEncoding bitOrder="mostSignificantBitFirst" encoding="IEEE754_1985" sizeInBits="64" changeThreshold="1"/>
+					</xtce:BooleanParameterType>
+					<xtce:BooleanParameterType name="boolean_binary_Type" zeroStringValue="FALSE" oneStringValue="TRUE" shortDescription="Generic boolean EU type with binary data encoding">
+						<xtce:UnitSet/>
+						<xtce:BinaryDataEncoding>
+                                                    <xtce:SizeInBits>
+                                                        <xtce:FixedValue>4</xtce:FixedValue>
+                                                    </xtce:SizeInBits>
+                                                </xtce:BinaryDataEncoding>
+					</xtce:BooleanParameterType>
+					<xtce:BooleanParameterType name="boolean_string_Type" zeroStringValue="FALSE" oneStringValue="TRUE" shortDescription="Generic boolean EU type with string data encoding">
+						<xtce:UnitSet/>
+						<xtce:StringDataEncoding encoding="UTF-8">
+                                                    <xtce:SizeInBits>
+                                                        <xtce:Fixed>
+                                                            <xtce:FixedValue>32</xtce:FixedValue>
+                                                        </xtce:Fixed>
+                                                    </xtce:SizeInBits>
+                                                </xtce:StringDataEncoding>
+					</xtce:BooleanParameterType>
 					<xtce:FloatParameterType name="Battery_Voltage_Type" sizeInBits="32" shortDescription="This parameter describes the measured battery voltage">
 						<xtce:LongDescription>The battery on BogusSAT is a modeled by a typical flooded lead acid car battery.</xtce:LongDescription>
 						<xtce:UnitSet>
@@ -526,6 +552,26 @@
 				</xtce:ParameterTypeSet>
 				<xtce:ParameterSet>
 					<xtce:Parameter name="Battery_Charge_Mode" parameterTypeRef="Battery_Charge_Mode_Type">
+						<xtce:ParameterProperties dataSource="telemetered" readOnly="true">
+							<xtce:SystemName>EPS</xtce:SystemName>
+						</xtce:ParameterProperties>
+					</xtce:Parameter>
+					<xtce:Parameter name="boolean_float32" parameterTypeRef="boolean_float32_Type">
+						<xtce:ParameterProperties dataSource="telemetered" readOnly="true">
+							<xtce:SystemName>EPS</xtce:SystemName>
+						</xtce:ParameterProperties>
+                                        </xtce:Parameter>
+					<xtce:Parameter name="boolean_float64" parameterTypeRef="boolean_float64_Type">
+						<xtce:ParameterProperties dataSource="telemetered" readOnly="true">
+							<xtce:SystemName>EPS</xtce:SystemName>
+						</xtce:ParameterProperties>
+					</xtce:Parameter>
+					<xtce:Parameter name="boolean_binary" parameterTypeRef="boolean_binary_Type">
+						<xtce:ParameterProperties dataSource="telemetered" readOnly="true">
+							<xtce:SystemName>EPS</xtce:SystemName>
+						</xtce:ParameterProperties>
+					</xtce:Parameter>
+					<xtce:Parameter name="boolean_string" parameterTypeRef="boolean_string_Type">
 						<xtce:ParameterProperties dataSource="telemetered" readOnly="true">
 							<xtce:SystemName>EPS</xtce:SystemName>
 						</xtce:ParameterProperties>
@@ -675,6 +721,107 @@
 							<xtce:Enumeration label="FAILED" value="6" maxValue="16"/>
 						</xtce:EnumerationList>
 					</xtce:EnumeratedParameterType>
+					<xtce:EnumeratedParameterType name="enum_int16_signmag_Type" shortDescription="Generic EU Enumerated type with raw int16 signMagnitude encoding">
+						<xtce:UnitSet/>
+						<xtce:IntegerDataEncoding sizeInBits="16" encoding="signMagnitude"/>
+						<xtce:EnumerationList>
+							<xtce:Enumeration label="TEST" value="1"/>
+							<xtce:Enumeration label="LAUNCH" value="2"/>
+							<xtce:Enumeration label="STANDBY" value="3"/>
+							<xtce:Enumeration label="ACTIVE" value="4"/>
+							<xtce:Enumeration label="SHUTDOWN" value="5"/>
+							<xtce:Enumeration label="FAILED" value="6" maxValue="16"/>
+                                                        <xtce:Enumeration label="NEGNUM" value="-2"/>
+						</xtce:EnumerationList>
+					</xtce:EnumeratedParameterType>
+					<xtce:EnumeratedParameterType name="enum_int16_twoscomp_Type" shortDescription="Generic EU Enumerated type with raw int16 twosComplement encoding">
+						<xtce:UnitSet/>
+						<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement"/>
+						<xtce:EnumerationList>
+							<xtce:Enumeration label="TEST" value="1"/>
+							<xtce:Enumeration label="LAUNCH" value="2"/>
+							<xtce:Enumeration label="STANDBY" value="3"/>
+							<xtce:Enumeration label="ACTIVE" value="4"/>
+							<xtce:Enumeration label="SHUTDOWN" value="5"/>
+							<xtce:Enumeration label="FAILED" value="6" maxValue="16"/>
+                                                        <xtce:Enumeration label="NEGNUM" value="-2"/>
+						</xtce:EnumerationList>
+					</xtce:EnumeratedParameterType>
+					<xtce:EnumeratedParameterType name="enum_int16_onescomp_Type" shortDescription="Generic EU Enumerated type with raw int16 onesComplement encoding">
+						<xtce:UnitSet/>
+						<xtce:IntegerDataEncoding sizeInBits="16" encoding="onesComplement"/>
+						<xtce:EnumerationList>
+							<xtce:Enumeration label="TEST" value="1"/>
+							<xtce:Enumeration label="LAUNCH" value="2"/>
+							<xtce:Enumeration label="STANDBY" value="3"/>
+							<xtce:Enumeration label="ACTIVE" value="4"/>
+							<xtce:Enumeration label="SHUTDOWN" value="5"/>
+							<xtce:Enumeration label="FAILED" value="6" maxValue="16"/>
+                                                        <xtce:Enumeration label="NEGNUM" value="-2"/>
+						</xtce:EnumerationList>
+					</xtce:EnumeratedParameterType>
+					<xtce:EnumeratedParameterType name="enum_binary_Type" shortDescription="Generic EU Enumerated type with raw binary encoding">
+						<xtce:UnitSet/>
+						<xtce:BinaryDataEncoding>
+                                                    <xtce:SizeInBits>
+                                                        <xtce:FixedValue>32</xtce:FixedValue>
+                                                    </xtce:SizeInBits>
+                                                </xtce:BinaryDataEncoding>
+						<xtce:EnumerationList>
+							<xtce:Enumeration label="TEST" value="1"/>
+							<xtce:Enumeration label="LAUNCH" value="2"/>
+							<xtce:Enumeration label="STANDBY" value="3"/>
+							<xtce:Enumeration label="ACTIVE" value="4"/>
+							<xtce:Enumeration label="SHUTDOWN" value="5"/>
+							<xtce:Enumeration label="FAILED" value="6" maxValue="16"/>
+                                                        <xtce:Enumeration label="NEGNUM" value="-2"/>
+						</xtce:EnumerationList>
+					</xtce:EnumeratedParameterType>
+					<xtce:EnumeratedParameterType name="enum_float32_Type" shortDescription="Generic EU Enumerated type with raw float32 encoding">
+						<xtce:UnitSet/>
+						<xtce:FloatDataEncoding sizeInBits="32" encoding="IEEE754_1985"/>
+						<xtce:EnumerationList>
+							<xtce:Enumeration label="TEST" value="1"/>
+							<xtce:Enumeration label="LAUNCH" value="2"/>
+							<xtce:Enumeration label="STANDBY" value="3"/>
+							<xtce:Enumeration label="ACTIVE" value="4"/>
+							<xtce:Enumeration label="SHUTDOWN" value="5"/>
+							<xtce:Enumeration label="FAILED" value="6" maxValue="16"/>
+                                                        <xtce:Enumeration label="NEGNUM" value="-2"/>
+						</xtce:EnumerationList>
+					</xtce:EnumeratedParameterType>
+					<xtce:EnumeratedParameterType name="enum_float64_Type" shortDescription="Generic EU Enumerated type with raw float64 encoding">
+						<xtce:UnitSet/>
+						<xtce:FloatDataEncoding sizeInBits="64" encoding="IEEE754_1985"/>
+						<xtce:EnumerationList>
+							<xtce:Enumeration label="TEST" value="1"/>
+							<xtce:Enumeration label="LAUNCH" value="2"/>
+							<xtce:Enumeration label="STANDBY" value="3"/>
+							<xtce:Enumeration label="ACTIVE" value="4"/>
+							<xtce:Enumeration label="SHUTDOWN" value="5"/>
+							<xtce:Enumeration label="FAILED" value="6" maxValue="16"/>
+                                                        <xtce:Enumeration label="NEGNUM" value="-2"/>
+						</xtce:EnumerationList>
+					</xtce:EnumeratedParameterType>
+					<xtce:EnumeratedParameterType name="enum_string_Type" shortDescription="Generic EU Enumerated type with raw string encoding">
+						<xtce:UnitSet/>
+						<xtce:StringDataEncoding>
+                                                    <xtce:SizeInBits>
+                                                        <xtce:Fixed>
+                                                            <xtce:FixedValue>32</xtce:FixedValue>
+                                                        </xtce:Fixed>
+                                                    </xtce:SizeInBits>
+                                                </xtce:StringDataEncoding>
+						<xtce:EnumerationList>
+							<xtce:Enumeration label="TEST" value="1"/>
+							<xtce:Enumeration label="LAUNCH" value="2"/>
+							<xtce:Enumeration label="STANDBY" value="3"/>
+							<xtce:Enumeration label="ACTIVE" value="4"/>
+							<xtce:Enumeration label="SHUTDOWN" value="5"/>
+							<xtce:Enumeration label="FAILED" value="6" maxValue="16"/>
+                                                        <xtce:Enumeration label="NEGNUM" value="-2"/>
+						</xtce:EnumerationList>
+					</xtce:EnumeratedParameterType>
 					<xtce:EnumeratedParameterType name="Payload_1_Antenna_State_Type" shortDescription="Payload 1 antenna operational state">
 						<xtce:UnitSet/>
 						<xtce:EnumerationList>
@@ -777,6 +924,41 @@
 						</xtce:ParameterProperties>
 					</xtce:Parameter>
 					<xtce:Parameter name="Payload_1_Phase" parameterTypeRef="Payload_1_Phase_Type">
+						<xtce:ParameterProperties dataSource="telemetered" readOnly="true">
+							<xtce:SystemName>CPU</xtce:SystemName>
+						</xtce:ParameterProperties>
+					</xtce:Parameter>
+					<xtce:Parameter name="enum_binary" parameterTypeRef="enum_binary_Type">
+						<xtce:ParameterProperties dataSource="telemetered" readOnly="true">
+							<xtce:SystemName>CPU</xtce:SystemName>
+						</xtce:ParameterProperties>
+					</xtce:Parameter>
+					<xtce:Parameter name="enum_float32" parameterTypeRef="enum_float32_Type">
+						<xtce:ParameterProperties dataSource="telemetered" readOnly="true">
+							<xtce:SystemName>CPU</xtce:SystemName>
+						</xtce:ParameterProperties>
+					</xtce:Parameter>
+					<xtce:Parameter name="enum_float64" parameterTypeRef="enum_float64_Type">
+						<xtce:ParameterProperties dataSource="telemetered" readOnly="true">
+							<xtce:SystemName>CPU</xtce:SystemName>
+						</xtce:ParameterProperties>
+					</xtce:Parameter>
+					<xtce:Parameter name="enum_string" parameterTypeRef="enum_string_Type">
+						<xtce:ParameterProperties dataSource="telemetered" readOnly="true">
+							<xtce:SystemName>CPU</xtce:SystemName>
+						</xtce:ParameterProperties>
+					</xtce:Parameter>
+					<xtce:Parameter name="enum_int16_signmag" parameterTypeRef="enum_int16_signmag_Type">
+						<xtce:ParameterProperties dataSource="telemetered" readOnly="true">
+							<xtce:SystemName>CPU</xtce:SystemName>
+						</xtce:ParameterProperties>
+					</xtce:Parameter>
+					<xtce:Parameter name="enum_int16_twoscomp" parameterTypeRef="enum_int16_twoscomp_Type">
+						<xtce:ParameterProperties dataSource="telemetered" readOnly="true">
+							<xtce:SystemName>CPU</xtce:SystemName>
+						</xtce:ParameterProperties>
+					</xtce:Parameter>
+					<xtce:Parameter name="enum_int16_onescomp" parameterTypeRef="enum_int16_onescomp_Type">
 						<xtce:ParameterProperties dataSource="telemetered" readOnly="true">
 							<xtce:SystemName>CPU</xtce:SystemName>
 						</xtce:ParameterProperties>
