@@ -737,6 +737,38 @@
 						<xtce:UnitSet/>
 						<xtce:IntegerDataEncoding bitOrder="mostSignificantBitFirst" encoding="onesComplement" sizeInBits="32" changeThreshold="1"/>
 					</xtce:IntegerParameterType>
+					<xtce:StringParameterType name="Basic_string_uint32_Type" shortDescription="Generic string encoded as unsigned 32 bit number">
+						<xtce:UnitSet/>
+						<xtce:IntegerDataEncoding bitOrder="mostSignificantBitFirst" encoding="unsigned" sizeInBits="32"/>
+					</xtce:StringParameterType>
+					<xtce:StringParameterType name="Basic_string_int32_signmag_Type" shortDescription="Generic string encoded as signed 32 bit number with sign magnitude encoding">
+						<xtce:UnitSet/>
+						<xtce:IntegerDataEncoding bitOrder="mostSignificantBitFirst" encoding="signMagnitude" sizeInBits="32"/>
+					</xtce:StringParameterType>
+					<xtce:StringParameterType name="Basic_string_int32_twoscomp_Type" shortDescription="Generic string encoded as signed 32 bit number with twos complement encoding">
+						<xtce:UnitSet/>
+						<xtce:IntegerDataEncoding bitOrder="mostSignificantBitFirst" encoding="twosComplement" sizeInBits="32"/>
+					</xtce:StringParameterType>
+					<xtce:StringParameterType name="Basic_string_int32_onescomp_Type" shortDescription="Generic string encoded as signed 32 bit number with ones complement encoding">
+						<xtce:UnitSet/>
+						<xtce:IntegerDataEncoding bitOrder="mostSignificantBitFirst" encoding="onesComplement" sizeInBits="32"/>
+					</xtce:StringParameterType>
+					<xtce:StringParameterType name="Basic_string_binary_Type" shortDescription="Generic string encoded as binary octets instead of C style char string encoding">
+						<xtce:UnitSet/>
+						<xtce:BinaryDataEncoding>
+                                                    <xtce:SizeInBits>
+                                                        <xtce:FixedValue>128</xtce:FixedValue>
+                                                    </xtce:SizeInBits>
+                                                </xtce:BinaryDataEncoding>
+					</xtce:StringParameterType>
+					<xtce:StringParameterType name="Basic_string_float32_Type" shortDescription="Generic string encoded as 32 bit IEEE-754 floating point encoding">
+						<xtce:UnitSet/>
+						<xtce:FloatDataEncoding encoding="IEEE754_1985" sizeInBits="32"/>
+					</xtce:StringParameterType>
+					<xtce:StringParameterType name="Basic_string_float64_Type" shortDescription="Generic string encoded as 64 bit IEEE-754 floating point encoding">
+						<xtce:UnitSet/>
+						<xtce:FloatDataEncoding encoding="IEEE754_1985" sizeInBits="64"/>
+					</xtce:StringParameterType>
 				</xtce:ParameterTypeSet>
 				<xtce:ParameterSet>
 					<xtce:Parameter name="Payload_1_State" parameterTypeRef="Payload_1_State_Type">
@@ -795,6 +827,41 @@
 						</xtce:ParameterProperties>
 					</xtce:Parameter>
 					<xtce:Parameter name="Basic_int32_onescomp" parameterTypeRef="Basic_int32_onescomp_Type">
+						<xtce:ParameterProperties dataSource="telemetered" readOnly="true">
+							<xtce:SystemName>CPU</xtce:SystemName>
+						</xtce:ParameterProperties>
+					</xtce:Parameter>
+					<xtce:Parameter name="Basic_string_uint32" parameterTypeRef="Basic_string_uint32_Type">
+						<xtce:ParameterProperties dataSource="telemetered" readOnly="true">
+							<xtce:SystemName>CPU</xtce:SystemName>
+						</xtce:ParameterProperties>
+					</xtce:Parameter>
+					<xtce:Parameter name="Basic_string_int32_signmag" parameterTypeRef="Basic_string_int32_signmag_Type">
+						<xtce:ParameterProperties dataSource="telemetered" readOnly="true">
+							<xtce:SystemName>CPU</xtce:SystemName>
+						</xtce:ParameterProperties>
+					</xtce:Parameter>
+					<xtce:Parameter name="Basic_string_int32_twoscomp" parameterTypeRef="Basic_string_int32_twoscomp_Type">
+						<xtce:ParameterProperties dataSource="telemetered" readOnly="true">
+							<xtce:SystemName>CPU</xtce:SystemName>
+						</xtce:ParameterProperties>
+					</xtce:Parameter>
+					<xtce:Parameter name="Basic_string_int32_onescomp" parameterTypeRef="Basic_string_int32_onescomp_Type">
+						<xtce:ParameterProperties dataSource="telemetered" readOnly="true">
+							<xtce:SystemName>CPU</xtce:SystemName>
+						</xtce:ParameterProperties>
+					</xtce:Parameter>
+					<xtce:Parameter name="Basic_string_binary" parameterTypeRef="Basic_string_binary_Type">
+						<xtce:ParameterProperties dataSource="telemetered" readOnly="true">
+							<xtce:SystemName>CPU</xtce:SystemName>
+						</xtce:ParameterProperties>
+					</xtce:Parameter>
+					<xtce:Parameter name="Basic_string_float32" parameterTypeRef="Basic_string_float32_Type">
+						<xtce:ParameterProperties dataSource="telemetered" readOnly="true">
+							<xtce:SystemName>CPU</xtce:SystemName>
+						</xtce:ParameterProperties>
+					</xtce:Parameter>
+					<xtce:Parameter name="Basic_string_float64" parameterTypeRef="Basic_string_float64_Type">
 						<xtce:ParameterProperties dataSource="telemetered" readOnly="true">
 							<xtce:SystemName>CPU</xtce:SystemName>
 						</xtce:ParameterProperties>

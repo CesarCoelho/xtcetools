@@ -42,17 +42,23 @@ public class XTCEViewerEncodeDecodeItemDialog extends javax.swing.JDialog {
 
         super( parent, modal );
         initComponents();
+
         itemValueObj_ = new XTCEItemValue( item );
+
         if ( aliases.isEmpty() == false ) {
             setTitle( item.getName() + " (" + aliases + ")" );
         } else {
             setTitle( item.getName() );
         }
+
         if ( item.isValid() == false ) {
             warningsText.setText( "ERROR: Invalid Type For This Item" );
-            makeCalibratedButton.setEnabled( false );
-            makeRawButton.setEnabled( false );
+            makeFromRawButton.setEnabled( false );
+            makeFromUncalibratedButton.setEnabled( false );
+            makeFromCalibratedButton.setEnabled( false );
         }
+
+        setLocationRelativeTo( parent );
         setVisible( true );
 
     }
@@ -66,11 +72,10 @@ public class XTCEViewerEncodeDecodeItemDialog extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
+        encodeDecodePanel = new javax.swing.JPanel();
         titleLabel = new javax.swing.JLabel();
         calibratedFieldLabel = new javax.swing.JLabel();
         orLabel = new javax.swing.JLabel();
-        uncalibratedFieldLabel = new javax.swing.JLabel();
         rawFieldLabel = new javax.swing.JLabel();
         binaryFieldLabel = new javax.swing.JLabel();
         warningsLabel = new javax.swing.JLabel();
@@ -78,8 +83,9 @@ public class XTCEViewerEncodeDecodeItemDialog extends javax.swing.JDialog {
         uncalibratedValueField = new javax.swing.JTextField();
         rawValueField = new javax.swing.JTextField();
         binaryValueField = new javax.swing.JTextField();
-        makeRawButton = new javax.swing.JButton();
-        makeCalibratedButton = new javax.swing.JButton();
+        makeFromCalibratedButton = new javax.swing.JButton();
+        makeFromUncalibratedButton = new javax.swing.JButton();
+        makeFromRawButton = new javax.swing.JButton();
         warningsScrollPane = new javax.swing.JScrollPane();
         warningsText = new javax.swing.JTextArea();
         dismissPanel = new javax.swing.JPanel();
@@ -88,39 +94,42 @@ public class XTCEViewerEncodeDecodeItemDialog extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(515, 360));
 
-        jPanel1.setMinimumSize(new java.awt.Dimension(500, 332));
+        encodeDecodePanel.setMinimumSize(new java.awt.Dimension(500, 332));
 
         titleLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         titleLabel.setText("Generate Sample Values");
 
-        calibratedFieldLabel.setText("Enter EU/Calibrated Value");
+        calibratedFieldLabel.setText("EU/Calibrated Value");
 
-        orLabel.setText("OR");
+        orLabel.setText("Uncalibrated Value");
 
-        uncalibratedFieldLabel.setText("(Uncalibrated Value)");
-
-        rawFieldLabel.setText("Enter Raw Value");
+        rawFieldLabel.setText("Raw Value");
 
         binaryFieldLabel.setText("Raw Binary Bit Set");
 
         warningsLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         warningsLabel.setText("Warnings");
 
-        uncalibratedValueField.setEditable(false);
-
         binaryValueField.setEditable(false);
 
-        makeRawButton.setText("Generate Raw");
-        makeRawButton.addActionListener(new java.awt.event.ActionListener() {
+        makeFromCalibratedButton.setText("Generate Uncal & Raw");
+        makeFromCalibratedButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                makeRawButtonActionPerformed(evt);
+                makeFromCalibratedButtonActionPerformed(evt);
             }
         });
 
-        makeCalibratedButton.setText("Generate EU/Calibrated");
-        makeCalibratedButton.addActionListener(new java.awt.event.ActionListener() {
+        makeFromUncalibratedButton.setText("Generate EU/Cal & Raw");
+        makeFromUncalibratedButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                makeCalibratedButtonActionPerformed(evt);
+                makeFromUncalibratedButtonActionPerformed(evt);
+            }
+        });
+
+        makeFromRawButton.setText("Generate UE/Cal & Uncal");
+        makeFromRawButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                makeFromRawButtonActionPerformed(evt);
             }
         });
 
@@ -159,54 +168,56 @@ public class XTCEViewerEncodeDecodeItemDialog extends javax.swing.JDialog {
                 .addGap(0, 0, 0))
         );
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout encodeDecodePanelLayout = new javax.swing.GroupLayout(encodeDecodePanel);
+        encodeDecodePanel.setLayout(encodeDecodePanelLayout);
+        encodeDecodePanelLayout.setHorizontalGroup(
+            encodeDecodePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(titleLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(encodeDecodePanelLayout.createSequentialGroup()
+                .addGroup(encodeDecodePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(orLabel)
                     .addComponent(rawFieldLabel)
                     .addComponent(binaryFieldLabel)
                     .addComponent(calibratedFieldLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(calibratedValueField)
-                    .addComponent(rawValueField, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(binaryValueField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)
-                    .addComponent(uncalibratedValueField, javax.swing.GroupLayout.Alignment.LEADING))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(makeCalibratedButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(makeRawButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(uncalibratedFieldLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(encodeDecodePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(encodeDecodePanelLayout.createSequentialGroup()
+                        .addGroup(encodeDecodePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(calibratedValueField, javax.swing.GroupLayout.DEFAULT_SIZE, 308, Short.MAX_VALUE)
+                            .addComponent(rawValueField, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(uncalibratedValueField, javax.swing.GroupLayout.Alignment.LEADING))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(encodeDecodePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(makeFromRawButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(makeFromCalibratedButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(makeFromUncalibratedButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(binaryValueField))
                 .addContainerGap())
             .addComponent(warningsLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(warningsScrollPane)
             .addComponent(dismissPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        encodeDecodePanelLayout.setVerticalGroup(
+            encodeDecodePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(encodeDecodePanelLayout.createSequentialGroup()
                 .addComponent(titleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(encodeDecodePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(calibratedFieldLabel)
                     .addComponent(calibratedValueField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(makeRawButton))
+                    .addComponent(makeFromCalibratedButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(encodeDecodePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(orLabel)
                     .addComponent(uncalibratedValueField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(uncalibratedFieldLabel))
+                    .addComponent(makeFromUncalibratedButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(encodeDecodePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(rawFieldLabel)
                     .addComponent(rawValueField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(makeCalibratedButton))
+                    .addComponent(makeFromRawButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(encodeDecodePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(binaryFieldLabel)
                     .addComponent(binaryValueField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -224,14 +235,14 @@ public class XTCEViewerEncodeDecodeItemDialog extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(encodeDecodePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, 0)
+                .addComponent(encodeDecodePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -243,47 +254,89 @@ public class XTCEViewerEncodeDecodeItemDialog extends javax.swing.JDialog {
 
     }//GEN-LAST:event_dismissButtonActionPerformed
 
-    private void makeRawButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_makeRawButtonActionPerformed
+    private void makeFromCalibratedButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_makeFromCalibratedButtonActionPerformed
 
         itemValueObj_.clearWarnings();
+
         String calValue = calibratedValueField.getText();
-        BitSet bits     = itemValueObj_.encode( calValue );
-        String rawValue = itemValueObj_.bitSetToHex( bits );
-        String binValue = itemValueObj_.bitSetToBinary( bits );
-        warningsText.setText( "" );
-        for ( String warning : itemValueObj_.getWarnings() ) {
-            warningsText.append( warning );
-        }
+
+        String uncalValue = itemValueObj_.getUncalibratedFromCalibrated( calValue );
+        BitSet rawBits    = itemValueObj_.getRawFromUncalibrated( uncalValue );
+        String rawValue   = itemValueObj_.bitSetToHex( rawBits );
+        String binValue   = itemValueObj_.bitSetToBinary( rawBits );
+
+        showWarnings();
+
         rawValueField.setText( rawValue );
-        uncalibratedValueField.setText( "" );
+        uncalibratedValueField.setText( uncalValue );
         binaryValueField.setText( binValue );
 
-    }//GEN-LAST:event_makeRawButtonActionPerformed
+        resetCaretPositions();
 
-    private void makeCalibratedButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_makeCalibratedButtonActionPerformed
+    }//GEN-LAST:event_makeFromCalibratedButtonActionPerformed
+
+    private void makeFromRawButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_makeFromRawButtonActionPerformed
 
         itemValueObj_.clearWarnings();
-        BigInteger uncalValue = BigInteger.ZERO;
-        String     rawValue   = rawValueField.getText();
-        rawValue = rawValue.toLowerCase();
-        if ( rawValue.startsWith( "0x" ) == true ) {
-            uncalValue = new BigInteger( rawValue.replaceFirst( "0x", "" ), 16 );
-        } else {
-            uncalValue = new BigInteger( rawValue );
-        }
-        BitSet bits     = itemValueObj_.encodeRawBits( uncalValue );
-        String calValue = itemValueObj_.decode( bits );
-        String binValue = itemValueObj_.bitSetToBinary( bits );
-        warningsText.setText( "" );
-        for ( String warning : itemValueObj_.getWarnings() ) {
-            warningsText.append( warning );
-        }
+
+        String rawValue = rawValueField.getText();
+
+        BigInteger rawInteger = itemValueObj_.integerStringToBigInteger( rawValue);
+        BitSet     bits       = itemValueObj_.encodeRawBits( rawInteger );
+        String     binValue   = itemValueObj_.bitSetToBinary( bits );
+        String     uncalValue = itemValueObj_.getUncalibratedFromRaw( bits );
+        String     calValue   = itemValueObj_.getCalibratedFromUncalibrated( uncalValue );
+
+        showWarnings();
+
         calibratedValueField.setText( calValue );
-        uncalibratedValueField.setText( uncalValue.toString() );
+        uncalibratedValueField.setText( uncalValue );
         binaryValueField.setText( binValue );
 
-    }//GEN-LAST:event_makeCalibratedButtonActionPerformed
+        resetCaretPositions();
 
+    }//GEN-LAST:event_makeFromRawButtonActionPerformed
+
+    private void makeFromUncalibratedButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_makeFromUncalibratedButtonActionPerformed
+
+        itemValueObj_.clearWarnings();
+
+        String uncalValue = uncalibratedValueField.getText();
+
+        String calValue   = itemValueObj_.getCalibratedFromUncalibrated( uncalValue );
+        BitSet rawBits    = itemValueObj_.getRawFromUncalibrated( uncalValue );
+        String rawValue   = itemValueObj_.bitSetToHex( rawBits );
+        String binValue   = itemValueObj_.bitSetToBinary( rawBits );
+        
+        showWarnings();
+
+        calibratedValueField.setText( calValue );
+        rawValueField.setText( rawValue );
+        binaryValueField.setText( binValue );
+
+        resetCaretPositions();
+
+    }//GEN-LAST:event_makeFromUncalibratedButtonActionPerformed
+
+    private void showWarnings() {
+
+        warningsText.setText( "" );
+        for ( String warning : itemValueObj_.getWarnings() ) {
+            warningsText.append( warning +
+                                 System.getProperty( "line.separator" ) );
+        }
+
+    }
+
+    private void resetCaretPositions() {
+
+        rawValueField.setCaretPosition( 0 );
+        calibratedValueField.setCaretPosition( 0 );
+        uncalibratedValueField.setCaretPosition( 0 );
+        binaryValueField.setCaretPosition( 0 );
+        warningsText.setCaretPosition( 0 );
+
+    }
 
     // Private Data Members
 
@@ -297,14 +350,14 @@ public class XTCEViewerEncodeDecodeItemDialog extends javax.swing.JDialog {
     private javax.swing.JTextField calibratedValueField;
     private javax.swing.JButton dismissButton;
     private javax.swing.JPanel dismissPanel;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JButton makeCalibratedButton;
-    private javax.swing.JButton makeRawButton;
+    private javax.swing.JPanel encodeDecodePanel;
+    private javax.swing.JButton makeFromCalibratedButton;
+    private javax.swing.JButton makeFromRawButton;
+    private javax.swing.JButton makeFromUncalibratedButton;
     private javax.swing.JLabel orLabel;
     private javax.swing.JLabel rawFieldLabel;
     private javax.swing.JTextField rawValueField;
     private javax.swing.JLabel titleLabel;
-    private javax.swing.JLabel uncalibratedFieldLabel;
     private javax.swing.JTextField uncalibratedValueField;
     private javax.swing.JLabel warningsLabel;
     private javax.swing.JScrollPane warningsScrollPane;

@@ -100,7 +100,7 @@ public abstract class XTCEDatabaseParser {
      *
      */
 
-    public List<String> getDocumentWarnings() {
+    public List<String> getDocumentWarnings( ) {
         return warnings_;
     }
 
@@ -111,7 +111,7 @@ public abstract class XTCEDatabaseParser {
      *
      */
 
-    public long getErrorCount() {
+    public long getErrorCount( ) {
         return errorCount_;
     }
 
@@ -124,7 +124,7 @@ public abstract class XTCEDatabaseParser {
      *
      */
 
-    public boolean isReadOnly() {
+    public boolean isReadOnly( ) {
         return ( domLoaded_ == false );
     }
 

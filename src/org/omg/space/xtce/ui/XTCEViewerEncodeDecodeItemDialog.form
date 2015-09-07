@@ -28,7 +28,7 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jPanel1" max="32767" attributes="0"/>
+              <Component id="encodeDecodePanel" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -36,14 +36,14 @@
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="1" attributes="0">
-              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-              <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="0" max="-2" attributes="0"/>
+              <Component id="encodeDecodePanel" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Container class="javax.swing.JPanel" name="jPanel1">
+    <Container class="javax.swing.JPanel" name="encodeDecodePanel">
       <Properties>
         <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
           <Dimension value="[500, 332]"/>
@@ -62,17 +62,21 @@
                       <Component id="calibratedFieldLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="1" attributes="0">
-                      <Component id="calibratedValueField" max="32767" attributes="0"/>
-                      <Component id="rawValueField" alignment="0" max="32767" attributes="0"/>
-                      <Component id="binaryValueField" alignment="0" pref="280" max="32767" attributes="0"/>
-                      <Component id="uncalibratedValueField" alignment="0" max="32767" attributes="0"/>
-                  </Group>
-                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="makeCalibratedButton" max="32767" attributes="0"/>
-                      <Component id="makeRawButton" max="32767" attributes="0"/>
-                      <Component id="uncalibratedFieldLabel" max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" attributes="0">
+                          <Group type="103" groupAlignment="1" attributes="0">
+                              <Component id="calibratedValueField" pref="308" max="32767" attributes="0"/>
+                              <Component id="rawValueField" alignment="0" max="32767" attributes="0"/>
+                              <Component id="uncalibratedValueField" alignment="0" max="32767" attributes="0"/>
+                          </Group>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="makeFromRawButton" max="32767" attributes="0"/>
+                              <Component id="makeFromCalibratedButton" max="32767" attributes="0"/>
+                              <Component id="makeFromUncalibratedButton" max="32767" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <Component id="binaryValueField" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -89,19 +93,19 @@
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="calibratedFieldLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="calibratedValueField" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="makeRawButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="makeFromCalibratedButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="orLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="uncalibratedValueField" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="uncalibratedFieldLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="makeFromUncalibratedButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="rawFieldLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="rawValueField" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="makeCalibratedButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="makeFromRawButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
@@ -128,22 +132,17 @@
         </Component>
         <Component class="javax.swing.JLabel" name="calibratedFieldLabel">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Enter EU/Calibrated Value"/>
+            <Property name="text" type="java.lang.String" value="EU/Calibrated Value"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="orLabel">
           <Properties>
-            <Property name="text" type="java.lang.String" value="OR"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JLabel" name="uncalibratedFieldLabel">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="(Uncalibrated Value)"/>
+            <Property name="text" type="java.lang.String" value="Uncalibrated Value"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="rawFieldLabel">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Enter Raw Value"/>
+            <Property name="text" type="java.lang.String" value="Raw Value"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="binaryFieldLabel">
@@ -160,9 +159,6 @@
         <Component class="javax.swing.JTextField" name="calibratedValueField">
         </Component>
         <Component class="javax.swing.JTextField" name="uncalibratedValueField">
-          <Properties>
-            <Property name="editable" type="boolean" value="false"/>
-          </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="rawValueField">
         </Component>
@@ -171,20 +167,28 @@
             <Property name="editable" type="boolean" value="false"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="makeRawButton">
+        <Component class="javax.swing.JButton" name="makeFromCalibratedButton">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Generate Raw"/>
+            <Property name="text" type="java.lang.String" value="Generate Uncal &amp; Raw"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="makeRawButtonActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="makeFromCalibratedButtonActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="makeCalibratedButton">
+        <Component class="javax.swing.JButton" name="makeFromUncalibratedButton">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Generate EU/Calibrated"/>
+            <Property name="text" type="java.lang.String" value="Generate EU/Cal &amp; Raw"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="makeCalibratedButtonActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="makeFromUncalibratedButtonActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="makeFromRawButton">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Generate UE/Cal &amp; Uncal"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="makeFromRawButtonActionPerformed"/>
           </Events>
         </Component>
         <Container class="javax.swing.JScrollPane" name="warningsScrollPane">
