@@ -7,7 +7,6 @@
 package org.omg.space.xtce.toolkit;
 
 import javax.xml.bind.MarshalException;
-import java.util.ArrayList;
 import java.util.List;
 import javax.xml.xpath.XPathException;
 

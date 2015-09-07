@@ -8,6 +8,7 @@ package org.omg.space.xtce.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Rectangle;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import org.omg.space.xtce.toolkit.XTCEDatabaseException;
@@ -31,6 +32,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
@@ -1694,20 +1696,35 @@ public class XTCEViewer extends javax.swing.JFrame {
         }
 
         if ( xpathDialog != null ) {
-            xpathDialog.dispatchEvent( new WindowEvent( xpathDialog, WindowEvent.WINDOW_CLOSING ) );
+            xpathDialog.dispose();
             xpathDialog = null;
         }
 
         if ( findParameterDialog != null ) {
-            findParameterDialog.dispatchEvent( new WindowEvent( findParameterDialog, WindowEvent.WINDOW_CLOSING ) );
+            findParameterDialog.dispose();
             findParameterDialog = null;
         }
 
         if ( parameterUsageDialog != null ) {
-            parameterUsageDialog.dispatchEvent( new WindowEvent( parameterUsageDialog, WindowEvent.WINDOW_CLOSING ) );
+            parameterUsageDialog.dispose();
             parameterUsageDialog = null;
         }
 
+        if ( findContainerDialog != null ) {
+            findContainerDialog.dispose();
+            findContainerDialog = null;
+        }
+
+        if ( findTelecommandDialog != null ) {
+            findTelecommandDialog.dispose();
+            findTelecommandDialog = null;
+        }
+
+        Window[] children = getOwnedWindows();
+        for ( Window child : children ) {
+            child.dispose();
+        }
+        
         xtceDatabaseFile = null;
         resetAllDisplays();
         detailSpaceSystemPanelScrollPane.setViewportView( null );
@@ -2216,9 +2233,10 @@ public class XTCEViewer extends javax.swing.JFrame {
         if ( fileOpenWarning() == true ) return;
 
         if ( findParameterDialog == null ) {
-            findParameterDialog = new XTCEViewerParameterFindDialog( this,
-                                                                     prefs,
-                                                                     xtceDatabaseFile );
+            findParameterDialog =
+                new XTCEViewerParameterFindDialog( this,
+                                                   prefs,
+                                                   xtceDatabaseFile );
         } else {
             findParameterDialog.setVisible( true );
             findParameterDialog.toFront();
@@ -2814,11 +2832,13 @@ public class XTCEViewer extends javax.swing.JFrame {
 
         XTCENamedObject container = node.getContainerReference();
 
-        final JFrame newWindow = new JFrame( container.getFullPath() );
+        final JDialog newWindow = new JDialog( this, false );
+        newWindow.setTitle( container.getFullPath() );
         JScrollPane graphScrollPane = new JScrollPane();
         graphScrollPane.setViewportView( newDrawing );
         newWindow.getContentPane().add( graphScrollPane, BorderLayout.CENTER );
-        JButton dismissButton = new JButton( XTCEFunctions.getText( "general_dismiss_text" ) ); // NOI18N
+        JButton dismissButton =
+            new JButton( XTCEFunctions.getText( "general_dismiss_text" ) ); // NOI18N
         dismissButton.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed( ActionEvent evt ) {
@@ -2835,8 +2855,15 @@ public class XTCEViewer extends javax.swing.JFrame {
 
         if ( fileOpenWarning() == true ) return;
 
-        XTCEViewerContainerFindDialog findDialog =
-            new XTCEViewerContainerFindDialog( this, prefs, xtceDatabaseFile );
+        if ( findContainerDialog == null ) {
+            findContainerDialog =
+                new XTCEViewerContainerFindDialog( this,
+                                                   prefs,
+                                                   xtceDatabaseFile );
+        } else {
+            findContainerDialog.setVisible( true );
+            findContainerDialog.toFront();
+        }
 
     }//GEN-LAST:event_mainWindowFindContainerMenuItemActionPerformed
 
@@ -2844,8 +2871,15 @@ public class XTCEViewer extends javax.swing.JFrame {
 
         if ( fileOpenWarning() == true ) return;
 
-        XTCEViewerTelecommandFindDialog findDialog =
-            new XTCEViewerTelecommandFindDialog( this, prefs, xtceDatabaseFile );
+        if ( findTelecommandDialog == null ) {
+            findTelecommandDialog =
+                new XTCEViewerTelecommandFindDialog( this,
+                                                     prefs,
+                                                     xtceDatabaseFile );
+        } else {
+            findTelecommandDialog.setVisible( true );
+            findTelecommandDialog.toFront();
+        }
 
     }//GEN-LAST:event_mainWindowFindTelecommandMenuItemActionPerformed
 
@@ -4317,12 +4351,14 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     // Private Data Members
 
-    private XTCEViewerPreferences          prefs                = null;
-    private XTCEDatabase                   xtceDatabaseFile     = null;
-    private List<XTCESpaceSystem>          spaceSystems         = null;
-    private XTCEViewerXpathQueryDialog     xpathDialog          = null;
-    private XTCEViewerParameterFindDialog  findParameterDialog  = null;
-    private XTCEViewerParameterUsageDialog parameterUsageDialog = null;
+    private XTCEViewerPreferences           prefs                 = null;
+    private XTCEDatabase                    xtceDatabaseFile      = null;
+    private List<XTCESpaceSystem>           spaceSystems          = null;
+    private XTCEViewerXpathQueryDialog      xpathDialog           = null;
+    private XTCEViewerParameterFindDialog   findParameterDialog   = null;
+    private XTCEViewerParameterUsageDialog  parameterUsageDialog  = null;
+    private XTCEViewerContainerFindDialog   findContainerDialog   = null;
+    private XTCEViewerTelecommandFindDialog findTelecommandDialog = null;
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
