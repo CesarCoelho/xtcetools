@@ -200,7 +200,7 @@ public class XTCESchemaErrorHandler implements ErrorHandler,
     private List<String> messages;
 
     private final String skipMsg_    =
-        XTCEFunctions.getText( "xml_fallback_ignore" );
+        XTCEFunctions.getText( "xml_fallback_ignore" ); // NOI18N
     private final String warningMsg_ =
         XTCEFunctions.getText( "xml_schema_warning" ) + ": "; // NOI18N
     private final String errorMsg_   =
