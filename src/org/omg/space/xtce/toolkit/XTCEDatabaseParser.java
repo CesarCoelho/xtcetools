@@ -143,12 +143,10 @@ public abstract class XTCEDatabaseParser {
                                                  boolean applyXIncludes ) {
 
         String currentDir = System.getProperty( "user.dir" ); // NOI18N
-        String path       = dbFile.getParent();
 
-        //path = XTCEFunctions.getPathNameFromReferenceString( path );
-
-        if ( path != null ) {
-            System.setProperty( "user.dir", path ); // NOI18N
+        if ( dbFile.getParent() != null ) {
+            File absPath = new File( dbFile.getParent() );
+            System.setProperty( "user.dir", absPath.getAbsolutePath() );
         }
 
         XTCESchemaErrorHandler handler = new XTCESchemaErrorHandler();
@@ -263,8 +261,12 @@ public abstract class XTCEDatabaseParser {
                                             boolean applyXIncludes,
                                             boolean readOnly ) throws XTCEDatabaseException {
 
-        String path = dbFile.getParent();
-        //path = XTCEFunctions.getPathNameFromReferenceString( path );
+        String path = null;
+
+        if ( dbFile.getParent() != null ) {
+            File absPath = new File( dbFile.getParent() );
+            path = absPath.getAbsolutePath();
+        }
 
         try {
 

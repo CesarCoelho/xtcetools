@@ -360,9 +360,9 @@ public class ParsingTest {
                 Assert.fail( "Expected errors loading " + file );
             } else {
                 for ( String message : messages ) {
+                    System.out.println( "Message: " + message );
                     Assert.assertFalse( "Should not have gotten IO Fatal",
                                         message.startsWith( "IO Fatal:" ) );
-                    System.out.println( "Expected Message: " + message );
                 }
             }
 
@@ -395,9 +395,9 @@ public class ParsingTest {
                 Assert.fail( "Expected errors loading " + file );
             } else {
                 for ( String message : messages ) {
+                    System.out.println( "Message: " + message );
                     Assert.assertFalse( "Should not have gotten IO Fatal",
                                         message.startsWith( "IO Fatal:" ) );
-                    System.out.println( "Expected Message: " + message );
                 }
             }
 
