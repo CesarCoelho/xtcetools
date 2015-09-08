@@ -88,7 +88,8 @@ public class XTCESchemaErrorHandler implements ErrorHandler,
      */
 
     public void fatalError( SAXException ex ) {
-        messages.add( "XML Fatal: " + ex.getLocalizedMessage() );
+        messages.add( XTCEFunctions.getText( "xml_fatal_parse" ) + ": " + // NOI18N
+                      ex.getLocalizedMessage() );
         ++errors;
     }
 
@@ -99,7 +100,8 @@ public class XTCESchemaErrorHandler implements ErrorHandler,
      */
 
     public void fatalError( IOException ex ) {
-        messages.add( "IO Fatal: " + ex.getLocalizedMessage() );
+        messages.add( XTCEFunctions.getText( "xml_io_fatal" ) + ": " + // NOI18N
+                      ex.getLocalizedMessage() );
         ++errors;
     }
 
@@ -198,8 +200,11 @@ public class XTCESchemaErrorHandler implements ErrorHandler,
     private List<String> messages;
 
     private final String skipMsg_    = "reverting to fallback";
-    private final String warningMsg_ = "XML Schema Compliance Warning: ";
-    private final String errorMsg_   = "XML Schema Compliance Error: ";
-    private final String fatalMsg_   = "XML Schema Compliance Fatal: ";
+    private final String warningMsg_ =
+        XTCEFunctions.getText( "xml_schema_warning" ) + ": "; // NOI18N
+    private final String errorMsg_   =
+        XTCEFunctions.getText( "xml_schema_error" ) + ": "; // NOI18N
+    private final String fatalMsg_   =
+        XTCEFunctions.getText( "xml_schema_fatal" ) + ": "; // NOI18N
 
 }

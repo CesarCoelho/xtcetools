@@ -143,11 +143,10 @@ public abstract class XTCEDatabaseParser {
                                                  boolean applyXIncludes ) {
 
         String currentDir = System.getProperty( "user.dir" ); // NOI18N
-        String path       = dbFile.getAbsolutePath();
+        String path       = dbFile.getParent();
 
-        path = XTCEFunctions.getPathNameFromReferenceString( path );
+        //path = XTCEFunctions.getPathNameFromReferenceString( path );
 
-        System.out.println( "Path is: " + path );
         if ( path != null ) {
             System.setProperty( "user.dir", path ); // NOI18N
         }
@@ -171,7 +170,8 @@ public abstract class XTCEDatabaseParser {
 
         } catch ( ParserConfigurationException ex ) {
             List<String> messages = new ArrayList<>();
-            messages.add( "Bad Configuration: " + ex.getLocalizedMessage() );
+            messages.add( XTCEFunctions.getText( "xml_bad_configuration" ) + // NOI18N
+                          ": " + ex.getLocalizedMessage() ); // NOI18N
             return messages;
         } catch ( SAXParseException ex ) {
             handler.fatalError( ex );
@@ -263,8 +263,8 @@ public abstract class XTCEDatabaseParser {
                                             boolean applyXIncludes,
                                             boolean readOnly ) throws XTCEDatabaseException {
 
-        String path = dbFile.getAbsolutePath();
-        path = XTCEFunctions.getPathNameFromReferenceString( path );
+        String path = dbFile.getParent();
+        //path = XTCEFunctions.getPathNameFromReferenceString( path );
 
         try {
 
