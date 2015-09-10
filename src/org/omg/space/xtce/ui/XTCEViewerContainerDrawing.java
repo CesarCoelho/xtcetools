@@ -245,6 +245,17 @@ public class XTCEViewerContainerDrawing extends JPanel {
 
         setDefaultSizing();
 
+        // short circuit crazy large drawings that are unreadable anyway
+
+        if ( contentModel_.getContentList().size() > 256 ) {
+            totalSizeX_ = 250;
+            totalSizeY_ = 100;
+            ggg.drawString( "Drawing not shown for rows > 256", 25, 25 );
+            return;
+        }
+
+        // make the drawing
+
         if ( orientDrawingAs_ == Orientation.LEFT_TO_RIGHT ) {
             drawParameterNames( ggg );
             drawParameters( ggg );
