@@ -4314,6 +4314,7 @@ public class XTCEViewer extends javax.swing.JFrame {
      */
 
     public static void main(String args[]) {
+    
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -4339,6 +4340,13 @@ public class XTCEViewer extends javax.swing.JFrame {
         }
         //</editor-fold>
 
+        //Properties props = System.getProperties();
+        //Enumeration<?> keys = props.propertyNames();
+        //while ( keys.hasMoreElements() == true ) {
+        //    String key = (String)keys.nextElement();
+        //    System.out.println( key + " = " + props.getProperty( key ) );
+        //}
+        
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
@@ -4346,6 +4354,7 @@ public class XTCEViewer extends javax.swing.JFrame {
                 new XTCEViewer().setVisible(true);
             }
         });
+
     }
 
     // Private Data Members
