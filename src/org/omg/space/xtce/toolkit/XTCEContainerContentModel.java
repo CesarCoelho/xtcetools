@@ -330,6 +330,14 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
                                                             Long.toString( repeatCount ) );
             }
 
+            //System.out.println( "Identified Container " +
+            //                    nameRef +
+            //                    " cur start bit " +
+            //                    Long.toString( currentStartBit.get() ) +
+            //                    " cont start bit " +
+            //                    Long.toString( containerStartBit ) +
+            //                    " instance " + Integer.toString( iii ) );
+
             contentList_.add( nextIncludedContent );
 
             // short circuit the application of this container when the option
@@ -349,9 +357,8 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
 
             // need a deep copy of the content if this is NOT the last
             if ( iii < ( repeatCount - 1 ) ) {
+                containerStartBit   = currentStartBit.get();
                 nextIncludedContent = nextIncludedContent.deepCopy();
-                // deep copy include is previousEntry 0 right now, but we need
-                // to eventually consider repeat offset
             }
 
         }
