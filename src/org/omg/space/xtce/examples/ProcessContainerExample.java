@@ -26,9 +26,9 @@ import org.omg.space.xtce.toolkit.XTCETMContainer;
  *
  *
  *     XTCEDatabase db = new XTCEDatabase( new File( "myfile.xml" ),
- *                                         false,
- *                                         false,
- *                                         true );
+ *                                         false,   // skip XSD validation
+ *                                         true,    // apply the XIncludes
+ *                                         true ); // ReadOnly
  *
  *     List<XTCETMContainer> containers = db.getContainers();
  *
@@ -126,7 +126,7 @@ public class ProcessContainerExample {
 
             XTCEDatabase db = new XTCEDatabase( new File( file ),
                                                 false,
-                                                false,
+                                                true,
                                                 true );
 
             List<XTCETMContainer> containers = db.getContainers();
