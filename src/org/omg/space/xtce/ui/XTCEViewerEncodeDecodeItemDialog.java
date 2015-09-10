@@ -97,36 +97,37 @@ public class XTCEViewerEncodeDecodeItemDialog extends javax.swing.JDialog {
         encodeDecodePanel.setMinimumSize(new java.awt.Dimension(500, 332));
 
         titleLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        titleLabel.setText("Generate Sample Values");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/omg/space/xtce/toolkit/MessagesBundle"); // NOI18N
+        titleLabel.setText(bundle.getString("dialog_param_encdec_title")); // NOI18N
 
-        calibratedFieldLabel.setText("EU/Calibrated Value");
+        calibratedFieldLabel.setText(bundle.getString("dialog_param_encdec_eucal")); // NOI18N
 
-        orLabel.setText("Uncalibrated Value");
+        orLabel.setText(bundle.getString("dialog_param_encdec_uncal")); // NOI18N
 
-        rawFieldLabel.setText("Raw Value");
+        rawFieldLabel.setText(bundle.getString("dialog_param_encdec_raw")); // NOI18N
 
-        binaryFieldLabel.setText("Raw Binary Bit Set");
+        binaryFieldLabel.setText(bundle.getString("dialog_param_encdec_rawbin")); // NOI18N
 
         warningsLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        warningsLabel.setText("Warnings");
+        warningsLabel.setText(bundle.getString("general_warnings")); // NOI18N
 
         binaryValueField.setEditable(false);
 
-        makeFromCalibratedButton.setText("Generate Uncal & Raw");
+        makeFromCalibratedButton.setText(bundle.getString("dialog_param_encdec_gen_uncalraw")); // NOI18N
         makeFromCalibratedButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 makeFromCalibratedButtonActionPerformed(evt);
             }
         });
 
-        makeFromUncalibratedButton.setText("Generate EU/Cal & Raw");
+        makeFromUncalibratedButton.setText(bundle.getString("dialog_param_encdec_gen_eucalraw")); // NOI18N
         makeFromUncalibratedButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 makeFromUncalibratedButtonActionPerformed(evt);
             }
         });
 
-        makeFromRawButton.setText("Generate UE/Cal & Uncal");
+        makeFromRawButton.setText(bundle.getString("dialog_oaram_encdec_gen_eucaluncal")); // NOI18N
         makeFromRawButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 makeFromRawButtonActionPerformed(evt);
@@ -141,7 +142,7 @@ public class XTCEViewerEncodeDecodeItemDialog extends javax.swing.JDialog {
         warningsText.setWrapStyleWord(true);
         warningsScrollPane.setViewportView(warningsText);
 
-        dismissButton.setText("Dismiss");
+        dismissButton.setText(bundle.getString("general_dismiss_text")); // NOI18N
         dismissButton.setMaximumSize(new java.awt.Dimension(80, 25));
         dismissButton.setMinimumSize(new java.awt.Dimension(80, 25));
         dismissButton.setPreferredSize(new java.awt.Dimension(80, 25));

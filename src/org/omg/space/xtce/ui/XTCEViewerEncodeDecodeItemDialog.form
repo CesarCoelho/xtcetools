@@ -127,33 +127,45 @@
         <Component class="javax.swing.JLabel" name="titleLabel">
           <Properties>
             <Property name="horizontalAlignment" type="int" value="0"/>
-            <Property name="text" type="java.lang.String" value="Generate Sample Values"/>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="org/omg/space/xtce/toolkit/MessagesBundle.properties" key="dialog_param_encdec_title" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+            </Property>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="calibratedFieldLabel">
           <Properties>
-            <Property name="text" type="java.lang.String" value="EU/Calibrated Value"/>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="org/omg/space/xtce/toolkit/MessagesBundle.properties" key="dialog_param_encdec_eucal" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+            </Property>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="orLabel">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Uncalibrated Value"/>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="org/omg/space/xtce/toolkit/MessagesBundle.properties" key="dialog_param_encdec_uncal" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+            </Property>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="rawFieldLabel">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Raw Value"/>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="org/omg/space/xtce/toolkit/MessagesBundle.properties" key="dialog_param_encdec_raw" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+            </Property>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="binaryFieldLabel">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Raw Binary Bit Set"/>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="org/omg/space/xtce/toolkit/MessagesBundle.properties" key="dialog_param_encdec_rawbin" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+            </Property>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="warningsLabel">
           <Properties>
             <Property name="horizontalAlignment" type="int" value="0"/>
-            <Property name="text" type="java.lang.String" value="Warnings"/>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="org/omg/space/xtce/toolkit/MessagesBundle.properties" key="general_warnings" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+            </Property>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="calibratedValueField">
@@ -169,7 +181,9 @@
         </Component>
         <Component class="javax.swing.JButton" name="makeFromCalibratedButton">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Generate Uncal &amp; Raw"/>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="org/omg/space/xtce/toolkit/MessagesBundle.properties" key="dialog_param_encdec_gen_uncalraw" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+            </Property>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="makeFromCalibratedButtonActionPerformed"/>
@@ -177,7 +191,9 @@
         </Component>
         <Component class="javax.swing.JButton" name="makeFromUncalibratedButton">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Generate EU/Cal &amp; Raw"/>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="org/omg/space/xtce/toolkit/MessagesBundle.properties" key="dialog_param_encdec_gen_eucalraw" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+            </Property>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="makeFromUncalibratedButtonActionPerformed"/>
@@ -185,7 +201,9 @@
         </Component>
         <Component class="javax.swing.JButton" name="makeFromRawButton">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Generate UE/Cal &amp; Uncal"/>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="org/omg/space/xtce/toolkit/MessagesBundle.properties" key="dialog_oaram_encdec_gen_eucaluncal" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+            </Property>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="makeFromRawButtonActionPerformed"/>
@@ -233,7 +251,9 @@
           <SubComponents>
             <Component class="javax.swing.JButton" name="dismissButton">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Dismiss"/>
+                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                  <ResourceString bundle="org/omg/space/xtce/toolkit/MessagesBundle.properties" key="general_dismiss_text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                </Property>
                 <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[80, 25]"/>
                 </Property>

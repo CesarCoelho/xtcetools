@@ -310,7 +310,7 @@ public class XTCEViewer extends javax.swing.JFrame {
         });
         parameterDetailPopupMenu.add(showParameterUsageMenuItem);
 
-        showEncodeDecodeDialogMenuItem.setText("Encode/Decode Values");
+        showEncodeDecodeDialogMenuItem.setText(bundle.getString("options_popup_encdec_values")); // NOI18N
         showEncodeDecodeDialogMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 showEncodeDecodeDialogMenuItemActionPerformed(evt);
@@ -713,7 +713,6 @@ public class XTCEViewer extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("xtceview");
         setMinimumSize(new java.awt.Dimension(800, 600));
-        setPreferredSize(new java.awt.Dimension(1150, 800));
         setSize(new java.awt.Dimension(1150, 800));
 
         loadedFilenameLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
