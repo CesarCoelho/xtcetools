@@ -309,7 +309,7 @@ public class EncodingBinaryTest {
 
         String file = "src/org/omg/space/xtce/database/BogusSat-1.xml";
 
-        db_ = new XTCEDatabase( new File( file ), false, false, null );
+        db_ = new XTCEDatabase( new File( file ), false, false, true );
 
     }
 

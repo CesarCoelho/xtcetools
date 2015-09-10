@@ -35,45 +35,6 @@ public final class XTCEDatabase extends XTCEDatabaseParser {
      * Successfully constructing this object means that the XTCE database file
      * was successfully loaded and methods can be called on the contents.
      *
-     * @param dbFile File object containing the name and path to the XTCE
-     * database file to load and optionally validate.
-     *
-     * @param validateOnLoad boolean indicating if the XSD validation should be
-     * performed during the loading.
-     *
-     * @param applyXIncludes boolean indicating if the XInclude processing for
-     * the loaded file should be applied or ignored.
-     *
-     * @param listener Hold on to this.
-     *
-     * @throws XTCEDatabaseException in the event that the file could not be
-     * successfully loaded in a valid state.  This can be partly bypassed by
-     * not enabling the XSD validation, which is not recommended because it
-     * may de-stabilize the application using this data file.
-     *
-     */
-
-    public XTCEDatabase( File                 dbFile,
-                         boolean              validateOnLoad,
-                         boolean              applyXIncludes,
-                         XTCEProgressListener listener ) throws XTCEDatabaseException {
-
-        topLevelSpaceSystem = loadDatabase( dbFile,
-                                            validateOnLoad,
-                                            applyXIncludes,
-                                            false );
-
-        setFilename( dbFile );
-        cacheParameterTypes();
-        cacheArgumentTypes();
-
-    }
-
-    /** Constructor for use with an XTCE database file on the filesystem.
-     *
-     * Successfully constructing this object means that the XTCE database file
-     * was successfully loaded and methods can be called on the contents.
-     *
      * @param dbLocation URL object containing the location of the XTCE
      * document to load.
      *

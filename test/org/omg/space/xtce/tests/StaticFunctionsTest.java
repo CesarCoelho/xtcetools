@@ -33,7 +33,7 @@ public class StaticFunctionsTest {
         String file = "src/org/omg/space/xtce/database/UnitTests.xml";
 
         try {
-           db_ = new XTCEDatabase( new File( file ), false, false, null );
+           db_ = new XTCEDatabase( new File( file ), false, false, true );
         } catch ( Exception ex ) {
             Assert.fail( ex.getLocalizedMessage() );
         }

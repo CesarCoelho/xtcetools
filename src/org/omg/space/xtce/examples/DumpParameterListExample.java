@@ -27,7 +27,7 @@ import org.omg.space.xtce.toolkit.XTCEParameter;
  *     XTCEDatabase db = new XTCEDatabase( new File( "myfile.xml" ),
  *                                         false,
  *                                         false,
- *                                         null );
+ *                                         false );
  *
  *     List<XTCEParameter> parameters = db.getTelemetryParameters();
  *
@@ -69,7 +69,7 @@ public class DumpParameterListExample {
      *
      */
 
-    public static void main(String[] args) {
+    public static void main( String[] args ) {
 
         System.out.println( "Running TestDumpParameterList" );
 
@@ -84,8 +84,10 @@ public class DumpParameterListExample {
                                 args[0] +
                                 " database file" );
 
-            XTCEDatabase db =
-                new XTCEDatabase( new File( args[0] ), false, false, null );
+            XTCEDatabase db = new XTCEDatabase( new File( args[0] ),
+                                                false,
+                                                false,
+                                                true );
 
             List<XTCEParameter> parameters = db.getTelemetryParameters();
 

@@ -28,7 +28,7 @@ import org.omg.space.xtce.toolkit.XTCETMContainer;
  *     XTCEDatabase db = new XTCEDatabase( new File( "myfile.xml" ),
  *                                         false,
  *                                         false,
- *                                         null );
+ *                                         true );
  *
  *     List<XTCETMContainer> containers = db.getContainers();
  *
@@ -114,7 +114,7 @@ public class ProcessContainerExample {
      * @param args the command line arguments
      */
 
-    public static void main(String[] args) {
+    public static void main( String[] args ) {
 
         System.out.println( "Running ProcessContainer For XTCEDatabase" );
 
@@ -127,7 +127,7 @@ public class ProcessContainerExample {
             XTCEDatabase db = new XTCEDatabase( new File( file ),
                                                 false,
                                                 false,
-                                                null );
+                                                true );
 
             List<XTCETMContainer> containers = db.getContainers();
 
