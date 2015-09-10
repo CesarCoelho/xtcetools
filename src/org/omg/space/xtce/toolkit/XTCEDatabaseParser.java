@@ -42,6 +42,7 @@ import org.xml.sax.XMLReader;
  * class.
  *
  * @author dovereem
+ *
  */
 
 public abstract class XTCEDatabaseParser {
@@ -78,7 +79,7 @@ public abstract class XTCEDatabaseParser {
      */
 
     public String getSchemaFromDocument( ) {
-        return schemaLocation_;
+        return XTCEConstants.DEFAULT_SCHEMA_FILE;
     }
 
     /** Retrieve the XTCE namespace that is applicable to the document that is
@@ -137,6 +138,9 @@ public abstract class XTCEDatabaseParser {
      * @param applyXIncludes boolean indicating if the XInclude processing for
      * the loaded file should be applied or ignored.
      *
+     * @return List of strings that contain the validation warning and error
+     * messages from the validator.
+     *
      */
 
     public static List<String> validateDocument( File    dbFile,
@@ -185,7 +189,24 @@ public abstract class XTCEDatabaseParser {
 
     }
 
+    /** Method to create a new XTCE Document in memory, which is always created
+     * in an editable state instead of read-only.
+     *
+     * @param spaceSystemName Name attribute of the root SpaceSystem element
+     * to begin the document.
+     *
+     * @return SpaceSystemType object from the JAXB binding that represents
+     * the newly created docuemnt.
+     *
+     * @throws XTCEDatabaseException in the event that the DocumentBuilder
+     * cannot make a new document or JAXB cannot bind to the new document from
+     * the DOM.  This is unlikely.
+     *
+     */
+
     protected SpaceSystemType newDatabase( String spaceSystemName ) throws XTCEDatabaseException {
+
+        // TODO check on cleanup within the catch of this function.
 
         try {
 
@@ -393,6 +414,31 @@ public abstract class XTCEDatabaseParser {
 
     }
 
+    /** Private method to implement a document load operation for read-only
+     * mode.
+     *
+     * Read only mode only initializes the JAXB binding.  It skips the DOM
+     * binding in order to save time and memory.
+     *
+     * @param dbStream InputStream containing the XML to retrieve.
+     *
+     * @param path The path to the XML document.  This get set so that XInclude
+     * and schema validation can find their artifacts from the xml base.
+     *
+     * @param validateOnLoad boolean indicating if XSD validation should be
+     * performed on load.
+     *
+     * @param applyXIncludes boolean indicating if XInclude elements should
+     * be resolved.
+     *
+     * @return SpaceSystemType element from the JAXB model of the root Space
+     * System of the XTCE document data.
+     *
+     * @throws XTCEDatabaseException in the event that the file could not be
+     * loaded.
+     *
+     */
+
     private SpaceSystemType loadReadOnlyDatabase( InputStream dbStream,
                                                   String      path,
                                                   boolean     validateOnLoad,
@@ -455,6 +501,31 @@ public abstract class XTCEDatabaseParser {
 
     }
 
+    /** Private method to implement a document load operation for edit mode.
+     *
+     * Editable mode initializes both the JAXB binding as well as the DOM
+     * binding.  This is needed for XPath and round trip output.  It has the
+     * disadvantage of needing more memory and is slower to startup.
+     *
+     * @param dbStream InputStream containing the XML to retrieve.
+     *
+     * @param path The path to the XML document.  This get set so that XInclude
+     * and schema validation can find their artifacts from the xml base.
+     *
+     * @param validateOnLoad boolean indicating if XSD validation should be
+     * performed on load.
+     *
+     * @param applyXIncludes boolean indicating if XInclude elements should
+     * be resolved.
+     *
+     * @return SpaceSystemType element from the JAXB model of the root Space
+     * System of the XTCE document data.
+     *
+     * @throws XTCEDatabaseException in the event that the file could not be
+     * loaded.
+     *
+     */
+
     private SpaceSystemType loadEditableDatabase( InputStream dbStream,
                                                   String      path,
                                                   boolean     validateOnLoad,
@@ -512,6 +583,15 @@ public abstract class XTCEDatabaseParser {
 
     }
 
+    /** Method to write the current XTCE Docuent in memory to a File object.
+     *
+     * @param dbFile File containing the location to write the database XML.
+     *
+     * @throws XTCEDatabaseException in the event that the document is opened
+     * read-only, in which case the DOM is not loaded or initialized.
+     *
+     */
+
     protected void saveDatabase( File dbFile ) throws XTCEDatabaseException {
 
         if ( isReadOnly() == true ) {
@@ -539,6 +619,16 @@ public abstract class XTCEDatabaseParser {
         
     }
 
+    /** Method to return the root document element from the Document Object
+     * Model (DOM) of this XTCE document.
+     *
+     * @return Element containing the root SpaceSystem.
+     *
+     * @throws XTCEDatabaseException in the event that the document is opened
+     * read-only, in which case the DOM is not loaded or initialized.
+     *
+     */
+
     protected Element getDocumentElement() throws XTCEDatabaseException {
 
         if ( isReadOnly() == true ) {
@@ -552,7 +642,6 @@ public abstract class XTCEDatabaseParser {
     // Private Data Members
 
     private File         xtceFilename_    = null;
-    private String       schemaLocation_  = XTCEConstants.DEFAULT_SCHEMA_FILE;
     private List<String> warnings_        = new ArrayList<>();
     private long         errorCount_      = 0;
     private boolean      domLoaded_       = true;

@@ -30,7 +30,7 @@ public class XTCESchemaErrorHandler implements ErrorHandler,
      *
      */
 
-    XTCESchemaErrorHandler() {
+    public XTCESchemaErrorHandler() {
         messages = new ArrayList<>();
         errors   = 0;
         warnings = 0;
@@ -44,7 +44,11 @@ public class XTCESchemaErrorHandler implements ErrorHandler,
 
     @Override
     public void error( SAXParseException ex ) {
-        messages.add( errorMsg_ + ex.getLocalizedMessage() );
+        if ( ex != null ) {
+            messages.add( errorMsg_ + ex.getLocalizedMessage() );
+        } else {
+            messages.add( errorMsg_ + XTCEFunctions.getText( "general_lastresort_exception" ) );
+        }
         ++errors;
     }
 
@@ -56,6 +60,12 @@ public class XTCESchemaErrorHandler implements ErrorHandler,
 
     @Override
     public void warning( SAXParseException ex ) {
+
+        if ( ex == null ) {
+            messages.add( warningMsg_ + XTCEFunctions.getText( "general_lastresort_exception" ) );
+            ++warnings;
+            return;
+        }
 
         if ( ex.getMessage().contains( skipMsg_ ) == true ) {
             return;
@@ -77,7 +87,11 @@ public class XTCESchemaErrorHandler implements ErrorHandler,
 
     @Override
     public void fatalError( SAXParseException ex ) {
-        messages.add( fatalMsg_ + ex.getLocalizedMessage() );
+        if ( ex != null ) {
+            messages.add( fatalMsg_ + ex.getLocalizedMessage() );
+        } else {
+            messages.add( fatalMsg_ + XTCEFunctions.getText( "general_lastresort_exception" ) );
+        }
         ++errors;
     }
 
@@ -88,8 +102,13 @@ public class XTCESchemaErrorHandler implements ErrorHandler,
      */
 
     public void fatalError( SAXException ex ) {
-        messages.add( XTCEFunctions.getText( "xml_fatal_parse" ) + ": " + // NOI18N
-                      ex.getLocalizedMessage() );
+        if ( ex != null ) {
+            messages.add( XTCEFunctions.getText( "xml_fatal_parse" ) + ": " + // NOI18N
+                          ex.getLocalizedMessage() );
+        } else {
+            messages.add( XTCEFunctions.getText( "xml_fatal_parse" ) + ": " + // NOI18N
+                          XTCEFunctions.getText( "general_lastresort_exception" ) );
+        }
         ++errors;
     }
 
@@ -100,8 +119,13 @@ public class XTCESchemaErrorHandler implements ErrorHandler,
      */
 
     public void fatalError( IOException ex ) {
-        messages.add( XTCEFunctions.getText( "xml_io_fatal" ) + ": " + // NOI18N
-                      ex.getLocalizedMessage() );
+        if ( ex != null ) {
+            messages.add( XTCEFunctions.getText( "xml_io_fatal" ) + ": " + // NOI18N
+                          ex.getLocalizedMessage() );
+        } else {
+            messages.add( XTCEFunctions.getText( "xml_io_fatal" ) + ": " + // NOI18N
+                          XTCEFunctions.getText( "general_lastresort_exception" ) );
+        }
         ++errors;
     }
 
@@ -110,12 +134,18 @@ public class XTCESchemaErrorHandler implements ErrorHandler,
      *
      * @param event ValidationEvent containing the message of interest.
      *
-     * @return true always.
+     * @return true unless the event is null, then it is false.
      *
      */
 
     @Override
     public boolean handleEvent( ValidationEvent event ) {
+
+        if ( event == null ) {
+            messages.add( errorMsg_ + XTCEFunctions.getText( "general_lastresort_exception" ) );
+            ++errors;
+            return false;
+        }
 
         String msg = null;
 
