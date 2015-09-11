@@ -638,6 +638,8 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
         jScrollPane2.setViewportView(unitsTextField);
 
         sourceComboField.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "telemetered", "derived", "local", "constant" }));
+        sourceComboField.setMinimumSize(new java.awt.Dimension(150, 27));
+        sourceComboField.setPreferredSize(new java.awt.Dimension(150, 27));
 
         readOnlyCheckboxField.setText("Read Only");
 
@@ -714,8 +716,8 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
                         .addGap(3, 3, 3)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(sourceComboField, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(sourceComboField, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(readOnlyCheckboxField))
                             .addComponent(systemNameTextField)
                             .addComponent(nameTextField)
