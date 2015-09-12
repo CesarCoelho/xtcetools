@@ -36,8 +36,8 @@ import org.omg.space.xtce.database.ValueEnumerationType;
  *     // load the satellite database
  *
  *     XTCEDatabase db = new XTCEDatabase( new File( "myfile.xml" ),
- *                                         false,   // skip XSD validation
- *                                         true,    // apply the XIncludes
+ *                                         false,  // skip XSD validation
+ *                                         true,   // apply the XIncludes
  *                                         true ); // ReadOnly
  *
  *     System.out.println( "Done Loading" );
@@ -344,8 +344,11 @@ public class ProcessEcssHousekeepingExample {
 
          System.out.println( "Exception: " + ex.getLocalizedMessage() );
          ex.printStackTrace();
+         System.exit( -1 );
 
       } // end of try block
+
+      System.exit( 0 );
 
    } // end of main() function
 

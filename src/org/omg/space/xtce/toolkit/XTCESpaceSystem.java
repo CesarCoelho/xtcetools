@@ -58,6 +58,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
         reference_         = ssRef;
         databaseReference_ = dbRef;
+        warnings_          = new ArrayList<>();
 
     }
 
@@ -70,6 +71,16 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
     public SpaceSystemType getReference() {
         return reference_;
+    }
+
+    /** Retrieve the warnings created from the last operation invoked.
+     *
+     * @return List of Strings containing the warnings.
+     *
+     */
+
+    public List<String> getWarningsFromLastOperation() {
+        return warnings_;
     }
 
     /** Retrieve the short description attribute of this Space System.
@@ -680,7 +691,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
             }
 
         } catch ( NullPointerException ex ) {
-            // this is okay, the SpaceSystem may not have any TM parameters
+            // this is okay, the SpaceSystem may not have any TM containers
         }
 
         return list;
@@ -719,7 +730,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
             }
 
         } catch ( NullPointerException ex ) {
-            // this is okay, the SpaceSystem may not have any TM parameters
+            // this is okay, the SpaceSystem may not have any TM containers
         }
 
         return list;
@@ -763,7 +774,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
             }
 
         } catch ( NullPointerException ex ) {
-            // this is okay, the SpaceSystem may not have any TM parameters
+            // this is okay, the SpaceSystem may not have any TM streams
         }
 
         return list;
@@ -1038,9 +1049,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
     private List<XTCEParameter> addParameters( List<Object> parameters ) {
 
-        // TODO Deal with the errors on this better so that we can send warning
-        // back without a completely empty list on a SpaceSystem when there is
-        // 1 or more errors.
+        warnings_ = new ArrayList<>();
 
         ArrayList<XTCEParameter> list = new ArrayList<>();
 
@@ -1049,27 +1058,34 @@ public class XTCESpaceSystem extends XTCENamedObject {
             if ( parameters.get( iii ).getClass() == Parameter.class ) {
 
                 Parameter parameter = (Parameter)parameters.get( iii );
-                String    path      = ""; // NOI18N
 
                 try {
-                    path = XTCEFunctions.resolvePathReference( getFullPath(),
-                                                               parameter.getParameterTypeRef() );
+
+                    String path =
+                        XTCEFunctions.resolvePathReference( getFullPath(),
+                                                            parameter.getParameterTypeRef() );
+
+                    NameDescriptionType type =
+                        databaseReference_.getParameterTypeReference( path );
+
+                    list.add( new XTCEParameter( parameter.getName(),
+                                                 getFullPath(),
+                                                 parameter,
+                                                 type ) );
+
+                    if ( ( type            != null                    ) &&
+                         ( type.getClass() == AggregateDataType.class ) ) {
+
+                        addMembers( parameter.getName(),
+                                    (AggregateDataType)type,
+                                    list );
+
+                    }
+
+
                 } catch ( NullPointerException ex ) {
-                    // this is a bad type, we leave the XTCEParameter invalid
-                }
-
-                NameDescriptionType type =
-                    databaseReference_.getParameterTypeReference( path );
-
-                list.add( new XTCEParameter( parameter.getName(),
-                                             getFullPath(),
-                                             parameter,
-                                             type ) );
-
-                if ( ( type != null ) && ( type.getClass() == AggregateDataType.class ) ) {
-                    addMembers( parameter.getName(),
-                                (AggregateDataType)type,
-                                list );
+                    warnings_.add( parameter.getName() + " " +  // NOI18N
+                        XTCEFunctions.getText( "error_param_invalid_type" ) ); // NOI18N
                 }
 
             }
@@ -1080,32 +1096,42 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
     }
 
-    private void addMembers( String basename, AggregateDataType type, List<XTCEParameter> list ) {
-        
+    private void addMembers( String              basename,
+                             AggregateDataType   type,
+                             List<XTCEParameter> list ) {
+
+        // this function need not clear the warnings because it is only called
+        // from the addParameters method.
+
         List<Member> members = type.getMemberList().getMember();
 
         for ( Member member : members ) {
 
-            String mpath = ""; // NOI18N
-
             try {
-                mpath = XTCEFunctions.resolvePathReference( getFullPath(),
-                                                            member.getTypeRef() );
-            } catch ( NullPointerException ex ) {
-                // this is invalid type, we leave the XTCEParameter invalid
-            }
 
-            String newbasename = basename + "." + member.getName(); // NOI18N
-            NameDescriptionType mtype =
-                databaseReference_.getParameterTypeReference( mpath );
+                String mpath =
+                    XTCEFunctions.resolvePathReference( getFullPath(),
+                                                        member.getTypeRef() );
+
+                String newbasename = basename + "." + member.getName(); // NOI18N
+                NameDescriptionType mtype =
+                    databaseReference_.getParameterTypeReference( mpath );
             
-            list.add( new XTCEParameter( newbasename,
-                                         getFullPath(),
-                                         member,
-                                         mtype ) );
+                list.add( new XTCEParameter( newbasename,
+                                             getFullPath(),
+                                             member,
+                                             mtype ) );
 
-            if ( ( mtype != null ) && ( mtype.getClass() == AggregateDataType.class ) ) {
-                addMembers( newbasename, (AggregateDataType)mtype, list );
+                if ( ( mtype            != null                    ) &&
+                     ( mtype.getClass() == AggregateDataType.class ) ) {
+
+                    addMembers( newbasename, (AggregateDataType)mtype, list );
+
+                }
+
+            } catch ( NullPointerException ex ) {
+                warnings_.add( member.getName() + " " +  // NOI18N
+                    XTCEFunctions.getText( "error_parammember_invalid_type" ) ); // NOI18N
             }
 
         }
@@ -1118,5 +1144,6 @@ public class XTCESpaceSystem extends XTCENamedObject {
     private XTCEDatabase                   databaseReference_    = null;
     private HashMap<String, XTCEParameter> tmParameterHashTable_ = null;
     private HashMap<String, XTCEParameter> tcParameterHashTable_ = null;
+    private List<String>                   warnings_             = null;
 
 }

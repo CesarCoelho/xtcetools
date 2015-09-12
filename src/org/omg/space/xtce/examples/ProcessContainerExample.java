@@ -26,8 +26,8 @@ import org.omg.space.xtce.toolkit.XTCETMContainer;
  *
  *
  *     XTCEDatabase db = new XTCEDatabase( new File( "myfile.xml" ),
- *                                         false,   // skip XSD validation
- *                                         true,    // apply the XIncludes
+ *                                         false,  // skip XSD validation
+ *                                         true,   // apply the XIncludes
  *                                         true ); // ReadOnly
  *
  *     List<XTCETMContainer> containers = db.getContainers();
@@ -120,11 +120,16 @@ public class ProcessContainerExample {
 
         try {
 
-            System.out.println( "Loading the BogusSat-1.xml demo database" );
+            if ( args.length < 1 ) {
+                System.out.println( "Expecting a database filename" );
+                System.exit( -1 );
+            }
 
-            String file = "src/org/omg/space/xtce/database/BogusSat-1.xml";
+            System.out.println( "Loading the " +
+                                args[0] +
+                                " database file" );
 
-            XTCEDatabase db = new XTCEDatabase( new File( file ),
+            XTCEDatabase db = new XTCEDatabase( new File( args[0] ),
                                                 false,
                                                 true,
                                                 true );
@@ -198,8 +203,11 @@ public class ProcessContainerExample {
 
             System.out.println( "Exception: " + ex.getLocalizedMessage() );
             ex.printStackTrace();
+            System.exit( -1 );
 
         }
+
+        System.exit( 0 );
 
     }
 

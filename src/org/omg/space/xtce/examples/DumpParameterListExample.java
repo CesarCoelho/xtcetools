@@ -25,8 +25,8 @@ import org.omg.space.xtce.toolkit.XTCEParameter;
  *
  *
  *     XTCEDatabase db = new XTCEDatabase( new File( "myfile.xml" ),
- *                                         false,   // skip XSD validation
- *                                         true,    // apply the XIncludes
+ *                                         false,  // skip XSD validation
+ *                                         true,   // apply the XIncludes
  *                                         true ); // ReadOnly
  *
  *     List<XTCEParameter> parameters = db.getTelemetryParameters();
@@ -113,9 +113,12 @@ public class DumpParameterListExample {
 
             System.out.println( "Exception: " + ex.getLocalizedMessage() );
             ex.printStackTrace();
+            System.exit( -1 );
 
         }
 
+        System.exit( 0 );
+
     }
-    
+
 }

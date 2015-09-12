@@ -3795,7 +3795,9 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     }
 
-    private void updateParameterTable( JTable table, List<XTCEParameter> parameters, XTCESpaceSystem spaceSystem ) {
+    private void updateParameterTable( JTable              table,
+                                       List<XTCEParameter> parameters,
+                                       XTCESpaceSystem     spaceSystem ) {
 
         DefaultTableModel tableModel = (DefaultTableModel)table.getModel();
         tableModel.setRowCount( 0 );
@@ -3843,6 +3845,10 @@ public class XTCEViewer extends javax.swing.JFrame {
                         ")" ); // NOI18N
             }
 
+        }
+
+        for ( String warning : spaceSystem.getWarningsFromLastOperation() ) {
+            logMsg( XTCEFunctions.getText( "general_warning" ) +  ": " + warning ); // NOI18N
         }
 
     }

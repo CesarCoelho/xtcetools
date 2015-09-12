@@ -40,7 +40,8 @@ public class XTCEFunctions {
 
     /** Private Constructor
      *
-     * This is to prevent a class of this type from being instantiated.
+     * This is to prevent a class of this type from being instantiated.  It has
+     * no non-static functions or data members.
      *
      */
 
