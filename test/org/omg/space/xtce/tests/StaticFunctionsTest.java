@@ -7,6 +7,7 @@
 package org.omg.space.xtce.tests;
 
 import java.io.File;
+import java.util.BitSet;
 import java.util.List;
 import java.util.Locale;
 import org.junit.After;
@@ -54,6 +55,50 @@ public class StaticFunctionsTest {
     
     @After
     public void tearDown() {
+    }
+
+    @Test
+    public void testGetBitSetFromByteArray() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        byte[] bytes = new byte[5];
+        bytes[0] = (byte)0xff;
+        bytes[1] = (byte)0x00;
+        bytes[2] = (byte)0xf0;
+        bytes[3] = (byte)0x0f;
+        bytes[4] = (byte)0x00;
+
+        BitSet bits = XTCEFunctions.getBitSetFromByteArray( bytes );
+
+        for ( int iii = 0; iii < bits.size(); ++iii ) {
+            if ( ( iii >= 0 ) && ( iii < 8 ) ) {
+                Assert.assertTrue( "bits 0 to 7 should be 1",
+                                   bits.get( iii ) == true );
+            } else if ( ( iii >= 8 ) && ( iii < 16 ) ) {
+                Assert.assertTrue( "bits 8 to 16 should be 0",
+                                   bits.get( iii ) == false );
+            } else if ( ( iii >= 17 ) && ( iii < 20 ) ) {
+                Assert.assertTrue( "bits 17 to 20 should be 1",
+                                   bits.get( iii ) == true );
+            } else if ( ( iii >= 20 ) && ( iii < 24 ) ) {
+                Assert.assertTrue( "bits 20 to 24 should be 0",
+                                   bits.get( iii ) == false );
+            } else if ( ( iii >= 24 ) && ( iii < 28 ) ) {
+                Assert.assertTrue( "bits 24 to 28 should be 0",
+                                   bits.get( iii ) == false );
+            } else if ( ( iii >= 28 ) && ( iii < 32 ) ) {
+                Assert.assertTrue( "bits 28 to 32 should be 1",
+                                   bits.get( iii ) == true );
+            } else if ( ( iii >= 32 ) && ( iii < 40 ) ) {
+                Assert.assertTrue( "bits 32 to 40 should be 0",
+                                   bits.get( iii ) == false );
+            }
+        }
+        
     }
 
     @Test

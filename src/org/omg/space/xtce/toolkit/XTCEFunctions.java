@@ -10,6 +10,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.text.NumberFormat;
+import java.util.BitSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.MissingResourceException;
@@ -44,6 +45,35 @@ public class XTCEFunctions {
      */
 
     private XTCEFunctions() { }
+
+    /** This function converts a byte array to a BitSet suitable for use in the
+     * container content processing when applying a binary data set.
+     *
+     * The BitSet is sequenced where bit 0 is the first bit in the data bytes,
+     * progressing forward in count until the last bit in the data bytes.
+     *
+     * @param bytes byte[] array of raw binary data.
+     *
+     * @return BitSet containing the binary data exactly sized to the number
+     * of bytes, so it will always be a multiple of 8 bits in size.
+     *
+     */
+
+    public static BitSet getBitSetFromByteArray( byte[] bytes ) {
+
+        BitSet bits = new BitSet( bytes.length * 8 );
+
+        for ( int iii = 0; iii < bytes.length; ++iii ) {
+            for ( int jjj = 0; jjj < 8; ++jjj ) {
+                if ( ( bytes[iii] & ( 1 << ( 7 - jjj ) ) ) != 0 ) {
+                    bits.set( ( iii * 8 ) + jjj );
+                }
+            }
+        }
+
+        return bits;
+
+    }
 
     /** This function mimics the behavior of the ubiquitous filesystem function
      * called realpath().
