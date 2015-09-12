@@ -94,6 +94,17 @@ public class XTCEContainerEntryValue {
 
     }
 
+    /** Retrieve the Name of the item for which this value is associated, which
+     * can be an Argument or Parameter name.
+     *
+     * @return String containing the name.
+     *
+     */
+
+    public String getName() {
+        return XTCEFunctions.getNameFromPathReferenceString( name_ );
+    }
+
     /** Retrieve the fully qualified name of the Parameter/Argument that is
      * attached to this value.
      *

@@ -274,8 +274,13 @@ public abstract class XTCEContainerContentModelBase {
             //}
 
             for ( final XTCEContainerContentEntry listEntry : contentList_ ) {
-                final String entryValue = listEntry.getValue();
+                final String entryValue    = listEntry.getValue();
+                final String parameterName = listEntry.getItemFullPath();
                 if ( ( entryValue == null ) || ( entryValue.isEmpty() == true ) ) {
+                    continue;
+                }
+                System.out.println( parameterName + " and " + condition.getItemFullPath() );
+                if ( parameterName.equals( condition.getItemFullPath() ) == false ) {
                     continue;
                 }
                 if ( entryValue.equals( condition.toStringWithoutParameter() ) == true ) {

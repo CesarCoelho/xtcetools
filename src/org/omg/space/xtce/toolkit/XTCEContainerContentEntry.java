@@ -175,6 +175,40 @@ public class XTCEContainerContentEntry implements Comparable {
 
     }
 
+    /** Retrieve the Name of the item for which this entry is associated, which
+     * can be an Argument, Parameter, or Container name.
+     *
+     * @return String containing the name.
+     *
+     */
+
+    public String getName() {
+        return
+            XTCEFunctions.getNameFromPathReferenceString( getItemFullPath() );
+    }
+
+    /** Retrieve the Fully Qualified Name of the item for which this entry is
+     * associated, which can be an Argument, Parameter, or Container name.
+     *
+     * @return String containing the name.
+     *
+     */
+
+    public String getItemFullPath() {
+        if ( fieldType == FieldType.PARAMETER ) {
+            return pReference.getFullPath();
+        } else if ( fieldType == FieldType.ARGUMENT ) {
+            return aReference.getFullPath();
+        } else if ( fieldType == FieldType.CONTAINER ) {
+            if ( tmContReference != null ) {
+                return tmContReference.getFullPath();
+            } else if ( tcContReference != null ) {
+                return tcContReference.getFullPath();
+            }
+        }
+        return "";
+    }
+
     /** Retrieve the XTCETMContainer that is represented by this entry, or a
      * null pointer if this entry is not based on an XTCETMContainer.
      *
