@@ -150,12 +150,16 @@ public class XTCEFunctions {
      *
      * @param bits BitSet containing an arbitrarily long binary field.
      *
+     * @param minBytes integer containing the minimum number of bytes to output
+     * on the hex string.  This results in 0 padding if the BitSet is too
+     * small.
+     *
      * @return String containing the hex of the raw value, subject to the
      * explanation above associated with this function.
      *
      */
 
-    public static String bitSetToHex( BitSet bits ) {
+    public static String bitSetToHex( BitSet bits, int minBytes ) {
 
         int bitCount = bits.size();
         if ( ( bits.size() % 8 ) != 0 ) {
@@ -166,6 +170,8 @@ public class XTCEFunctions {
 
         if ( byteCount == 0 ) {
             return "0x00";
+        } else if ( byteCount < minBytes ) {
+            byteCount = minBytes;
         }
 
         StringBuilder sb = new StringBuilder( "0x" );

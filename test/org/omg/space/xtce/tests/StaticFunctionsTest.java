@@ -69,20 +69,20 @@ public class StaticFunctionsTest {
         String hex;
 
         bits = new BitSet( 2 );
-        hex  = XTCEFunctions.bitSetToHex( bits );
+        hex  = XTCEFunctions.bitSetToHex( bits, 8 );
 
         Assert.assertTrue( "Value should be 0x0000000000000000, but is " + hex,
                            hex.equals( "0x0000000000000000" ) == true );
 
         bits.set( 1, true );
-        hex = XTCEFunctions.bitSetToHex( bits );
+        hex = XTCEFunctions.bitSetToHex( bits, 8 );
 
         Assert.assertTrue( "Value should be 0x0000000000000002, but is " + hex,
                            hex.equals( "0x0000000000000002" ) == true );
 
         bits = new BitSet( 70 );
         bits.set( 69 );
-        hex = XTCEFunctions.bitSetToHex( bits );
+        hex = XTCEFunctions.bitSetToHex( bits, 8 );
 
         Assert.assertTrue( "Value should be 0x00000000000000200000000000000000, but is " + hex,
                            hex.equals( "0x00000000000000200000000000000000" ) == true );
@@ -109,7 +109,7 @@ public class StaticFunctionsTest {
 
         BitSet bits = XTCEFunctions.getBitSetFromByteArray( bytes );
 
-        System.out.println( "Checking " + XTCEFunctions.bitSetToHex( bits ) );
+        System.out.println( "Checking " + XTCEFunctions.bitSetToHex( bits, 6 ) );
 
         for ( int iii = 0; iii < bits.size(); ++iii ) {
             if ( ( iii >= 0 ) && ( iii < 8 ) ) {

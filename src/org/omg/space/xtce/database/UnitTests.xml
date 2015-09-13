@@ -28,7 +28,15 @@ and open the template in the editor.
 				<xtce:UnitSet/>
 				<xtce:IntegerDataEncoding/>
 			</xtce:IntegerParameterType>
-			<xtce:AbsoluteTimeParameterType name="CUCTimeType" shortDescription="OPTIONAL PUS Timestamp (CUC or CDS CCSDS Time Standard)">
+			<xtce:AbsoluteTimeParameterType name="CUCTAITimeType" shortDescription="CUC CCSDS Time Standard on TAI Epoch">
+				<xtce:Encoding>
+					<xtce:IntegerDataEncoding sizeInBits="56"/>
+				</xtce:Encoding>
+				<xtce:ReferenceTime>
+					<xtce:Epoch>TAI</xtce:Epoch>
+				</xtce:ReferenceTime>
+			</xtce:AbsoluteTimeParameterType>
+			<xtce:AbsoluteTimeParameterType name="CUCGPSTimeType" shortDescription="CUC CCSDS Time Standard on GPS Epoch">
 				<xtce:Encoding>
 					<xtce:IntegerDataEncoding sizeInBits="56"/>
 				</xtce:Encoding>
@@ -97,7 +105,10 @@ and open the template in the editor.
                             </xtce:AncillaryDataSet>
 				<xtce:ParameterProperties dataSource="telemetered"/>
 			</xtce:Parameter>
-			<xtce:Parameter name="CUC_TIME" parameterTypeRef="CUCTimeType">
+			<xtce:Parameter name="CUC_TAI_TIME" parameterTypeRef="CUCTAITimeType">
+				<xtce:ParameterProperties dataSource="telemetered"/>
+			</xtce:Parameter>
+			<xtce:Parameter name="CUC_GPS_TIME" parameterTypeRef="CUCGPSTimeType">
 				<xtce:ParameterProperties dataSource="telemetered"/>
 			</xtce:Parameter>
 			<xtce:Parameter name="UNIX_TIME" parameterTypeRef="POSIXTimeType">

@@ -17,6 +17,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.omg.space.xtce.database.AbsoluteTimeDataType;
+import org.omg.space.xtce.toolkit.XTCEAbsoluteTimeType;
 import org.omg.space.xtce.toolkit.XTCEDatabase;
 import org.omg.space.xtce.toolkit.XTCEFunctions;
 import org.omg.space.xtce.toolkit.XTCEParameter;
@@ -74,7 +75,7 @@ public class PosixTimeHandlerTest {
 
         try {
 
-            XTCEPosixTimeHandler instance = new XTCEPosixTimeHandler();
+            XTCEAbsoluteTimeType instance = new XTCEPosixTimeHandler();
 
             parameter =
                 db_.getRootSpaceSystem().getTelemetryParameter( "ODD_TIME" );
@@ -118,7 +119,7 @@ public class PosixTimeHandlerTest {
             String     uncalValue;
             BigInteger uncalTime;
 
-            XTCEPosixTimeHandler instance = new XTCEPosixTimeHandler();
+            XTCEAbsoluteTimeType instance = new XTCEPosixTimeHandler();
 
             XTCEParameter parameter =
                 db_.getRootSpaceSystem().getTelemetryParameter( "UNIX_TIME" );
@@ -140,7 +141,7 @@ public class PosixTimeHandlerTest {
 
             uncalValue = instance.getUncalibratedFromRaw( aTime );
 
-            System.out.println( "BitSet: " + XTCEFunctions.bitSetToHex( aTime) );
+            System.out.println( "BitSet: " + XTCEFunctions.bitSetToHex( aTime, 8 ) );
             System.out.println( "Uncal Time: " + uncalValue );
 
             Assert.assertTrue( "Time should be 0xe3eca7dc0",
@@ -153,7 +154,7 @@ public class PosixTimeHandlerTest {
 
             uncalValue = instance.getUncalibratedFromRaw( bTime );
 
-            System.out.println( "BitSet: " + XTCEFunctions.bitSetToHex( bTime) );
+            System.out.println( "BitSet: " + XTCEFunctions.bitSetToHex( bTime, 8 ) );
             System.out.println( "Uncal Time: " + uncalValue );
 
             Assert.assertTrue( "Time should be 0xe3ecb5b8c",
@@ -166,7 +167,7 @@ public class PosixTimeHandlerTest {
 
             uncalValue = instance.getUncalibratedFromRaw( cTime );
 
-            System.out.println( "BitSet: " + XTCEFunctions.bitSetToHex( cTime) );
+            System.out.println( "BitSet: " + XTCEFunctions.bitSetToHex( cTime, 8 ) );
             System.out.println( "Uncal Time: " + uncalValue );
 
             Assert.assertTrue( "Time should be 0xf423ffff0bdc0",
@@ -196,7 +197,7 @@ public class PosixTimeHandlerTest {
             String     calValue;
             BigInteger uncalTime;
 
-            XTCEPosixTimeHandler instance = new XTCEPosixTimeHandler();
+            XTCEAbsoluteTimeType instance = new XTCEPosixTimeHandler();
 
             XTCEParameter parameter =
                 db_.getRootSpaceSystem().getTelemetryParameter( "UNIX_TIME" );
@@ -255,7 +256,7 @@ public class PosixTimeHandlerTest {
 
         try {
 
-            XTCEPosixTimeHandler instance = new XTCEPosixTimeHandler();
+            XTCEAbsoluteTimeType instance = new XTCEPosixTimeHandler();
 
             XTCEParameter parameter =
                 db_.getRootSpaceSystem().getTelemetryParameter( "UNIX_TIME" );
@@ -268,7 +269,7 @@ public class PosixTimeHandlerTest {
 
             uncalValue = "0x00";
             bits = instance.getRawFromUncalibrated( uncalValue );
-            hex = XTCEFunctions.bitSetToHex( bits );
+            hex = XTCEFunctions.bitSetToHex( bits, 8 );
 
             System.out.println( "Uncal Time: " + uncalValue );
             System.out.println( "BitSet: " + hex );
@@ -278,7 +279,7 @@ public class PosixTimeHandlerTest {
 
             uncalValue = "0xe3eca7dc0";
             bits = instance.getRawFromUncalibrated( uncalValue );
-            hex = XTCEFunctions.bitSetToHex( bits );
+            hex = XTCEFunctions.bitSetToHex( bits, 8 );
 
             System.out.println( "Uncal Time: " + uncalValue );
             System.out.println( "BitSet: " + hex );
@@ -288,7 +289,7 @@ public class PosixTimeHandlerTest {
 
             uncalValue = "0xe3ecb5b8c";
             bits = instance.getRawFromUncalibrated( uncalValue );
-            hex = XTCEFunctions.bitSetToHex( bits );
+            hex = XTCEFunctions.bitSetToHex( bits, 8 );
 
             System.out.println( "Uncal Time: " + uncalValue );
             System.out.println( "BitSet: " + hex );
@@ -320,7 +321,7 @@ public class PosixTimeHandlerTest {
             String     calValue;
             BigInteger uncalTime;
 
-            XTCEPosixTimeHandler instance = new XTCEPosixTimeHandler();
+            XTCEAbsoluteTimeType instance = new XTCEPosixTimeHandler();
 
             XTCEParameter parameter =
                 db_.getRootSpaceSystem().getTelemetryParameter( "UNIX_TIME" );
