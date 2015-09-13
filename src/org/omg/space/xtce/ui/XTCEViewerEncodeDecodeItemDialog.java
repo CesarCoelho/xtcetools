@@ -9,6 +9,7 @@ package org.omg.space.xtce.ui;
 import java.awt.event.WindowEvent;
 import java.math.BigInteger;
 import java.util.BitSet;
+import org.omg.space.xtce.toolkit.XTCEFunctions;
 import org.omg.space.xtce.toolkit.XTCEItemValue;
 import org.omg.space.xtce.toolkit.XTCETypedObject;
 
@@ -46,16 +47,24 @@ public class XTCEViewerEncodeDecodeItemDialog extends javax.swing.JDialog {
         itemValueObj_ = new XTCEItemValue( item );
 
         if ( aliases.isEmpty() == false ) {
-            setTitle( item.getName() + " (" + aliases + ")" );
+            setTitle( item.getName() + " (" + aliases + ")" ); // NOI18N
         } else {
             setTitle( item.getName() );
         }
 
         if ( item.isValid() == false ) {
-            warningsText.setText( "ERROR: Invalid Type For This Item" );
+            warningsText.setText(
+                XTCEFunctions.getText( "error_invalid_parametertype" ) ); // NOI18N
             makeFromRawButton.setEnabled( false );
             makeFromUncalibratedButton.setEnabled( false );
             makeFromCalibratedButton.setEnabled( false );
+        }
+
+        if ( itemValueObj_.isValid() == false ) {
+            for ( String warning : itemValueObj_.getWarnings() ) {
+                warningsText.append( warning );
+                warningsText.append( System.getProperty( "line.separator" ) ); // NOI18N
+            }
         }
 
         setLocationRelativeTo( parent );
@@ -324,7 +333,7 @@ public class XTCEViewerEncodeDecodeItemDialog extends javax.swing.JDialog {
         warningsText.setText( "" );
         for ( String warning : itemValueObj_.getWarnings() ) {
             warningsText.append( warning +
-                                 System.getProperty( "line.separator" ) );
+                                 System.getProperty( "line.separator" ) ); // NOI18N
         }
 
     }

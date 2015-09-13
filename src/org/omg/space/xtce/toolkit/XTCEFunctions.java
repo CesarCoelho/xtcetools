@@ -59,10 +59,7 @@ public class XTCEFunctions {
 
     public static void registerAbsoluteTimeHandler( XTCEAbsoluteTimeType instance ) {
 
-        if ( absTimeHandlersInitialized_ == false ) {
-            absTimeHandlers_.add( new XTCEPosixTimeHandler() );
-            absTimeHandlersInitialized_ = true;
-        }
+        ensureDefaultRegistration();
 
         absTimeHandlers_.add( instance );
 
@@ -87,10 +84,7 @@ public class XTCEFunctions {
 
     public static XTCEAbsoluteTimeType getAbsoluteTimeHandler( AbsoluteTimeDataType element ) throws XTCEDatabaseException {
 
-        if ( absTimeHandlersInitialized_ == false ) {
-            absTimeHandlers_.add( new XTCEPosixTimeHandler() );
-            absTimeHandlersInitialized_ = true;
-        }
+        ensureDefaultRegistration();
 
         for ( int iii = absTimeHandlers_.size() - 1; iii >= 0; --iii ) {
             try {
@@ -99,15 +93,15 @@ public class XTCEFunctions {
                 }
             } catch ( Exception ex ) {
                 throw new XTCEDatabaseException(
-                    XTCEFunctions.getText( "error_bad_abstime_handler" ) +
+                    XTCEFunctions.getText( "error_bad_abstime_handler" ) + // NOI18N
                     " '" +
-                    absTimeHandlers_.get( iii ).getClass().getName() + "': " +
+                    absTimeHandlers_.get( iii ).getClass().getName() + "': " + // NOI18N
                     ex.getLocalizedMessage() );
             }
         }
 
         throw new XTCEDatabaseException(
-            XTCEFunctions.getText( "error_noabstime_handler" ) );
+            XTCEFunctions.getText( "error_noabstime_handler" ) ); // NOI18N
 
     }
 
@@ -169,19 +163,19 @@ public class XTCEFunctions {
         int byteCount = bitCount / 8;
 
         if ( byteCount == 0 ) {
-            return "0x00";
+            return "0x00"; // NOI18N
         } else if ( byteCount < minBytes ) {
             byteCount = minBytes;
         }
 
-        StringBuilder sb = new StringBuilder( "0x" );
+        StringBuilder sb = new StringBuilder( "0x" ); // NOI18N
 
         byte[] bytes = bits.toByteArray();
         for ( int iii = byteCount - 1; iii >= 0; --iii ) {
             if ( iii < bytes.length ) {
-                sb.append( String.format( "%02x", bytes[iii] ) );
+                sb.append( String.format( "%02x", bytes[iii] ) ); // NOI18N
             } else {
-                sb.append( "00" );
+                sb.append( "00" ); // NOI18N
             }
         }
 
@@ -658,6 +652,28 @@ public class XTCEFunctions {
         NumberFormat format = NumberFormat.getInstance();
 
         return format.format( quantity ) + unit;
+
+    }
+
+    /** Private method to ensure that the default XTCEAbsoluteTimeType handlers
+     * are registered before searching for one.
+     *
+     */
+
+    private static void ensureDefaultRegistration() {
+
+        // do not add the TAI variant of the CCSDS CUC yet because it is not
+        // finished or tested.
+
+        if ( absTimeHandlersInitialized_ == false ) {
+            absTimeHandlers_.add( new XTCEPosixTimeHandler() );
+            absTimeHandlers_.add( new XTCECcsdsCucTimeHandler( "yyyy-MM-dd HH:mm:ss.SSS",
+                                                               "GMT",
+                                                               "1980-01-06", 
+                                                               4,
+                                                               3 ) );
+            absTimeHandlersInitialized_ = true;
+        }
 
     }
 

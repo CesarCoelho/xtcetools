@@ -205,7 +205,7 @@ public class XTCEPosixTimeHandler implements XTCEAbsoluteTimeType {
      * microseconds within the second.  The input String will be an integral
      * representation of the number of microseconds since 1970-01-01.</p>
      *
-     * <p>This conversions uses only system time capabilities, and as a result
+     * <p>This conversion uses only system time capabilities, and as a result
      * is not leap second corrected.</p>
      *
      * @param uncalValue String containing the uncalibrated representation of

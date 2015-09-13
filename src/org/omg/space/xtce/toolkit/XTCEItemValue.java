@@ -67,8 +67,8 @@ public class XTCEItemValue {
         // unless exists
         NameDescriptionType typeObj = item.getTypeReference();
         if ( typeObj == null ) {
-            warnings_.add( "No type defined for " + itemName_ +
-                           ", uncalibration may be possible, but not raw." );
+            warnings_.add( itemName_ + " " +
+                           XTCEFunctions.getText( "error_encdec_notype" ) ); // NOI18N
             validObject_ = false;
             return;
         }
@@ -78,16 +78,14 @@ public class XTCEItemValue {
             rawSizeInBits_ = Integer.parseInt( item.getRawSizeInBits() );
             validObject_   = true;
         } catch ( NumberFormatException ex ) {
-            warnings_.add( "Cannot encode/decode typed item " +
-                           itemName_ +
-                           " without a numeric raw size in bits.  Size is '" +
-                           rawSizeInBits_ +
-                           "'" );
+            warnings_.add( itemName_ + " " + // NOI18N
+                           XTCEFunctions.getText( "error_encdec_norawsize" ) + // NOI18N
+                           " '" + rawSizeInBits_ + "'" ); // NOI18N
             validObject_ = false;
         }
 
         // get the registered time handler if one exists
-        if ( euTypeName_.equals( "TIME" ) == true ) {
+        if ( euTypeName_.equals( "TIME" ) == true ) { // NOI18N
             try {
                 AbsoluteTimeDataType timeXml =
                     (AbsoluteTimeDataType)itemObj_.getTypeReference();
@@ -216,7 +214,7 @@ public class XTCEItemValue {
             return "";
         }
 
-        if ( euTypeName_.equals( "TIME" ) == true ) {
+        if ( euTypeName_.equals( "TIME" ) == true ) { // NOI18N
             if ( timeHandler_ != null ) {
                 return timeHandler_.getUncalibratedFromRaw( rawValue );
             } else {

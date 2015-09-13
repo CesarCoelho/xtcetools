@@ -434,7 +434,7 @@ public class CcsdsCucTimeHandlerTest {
     /**
      * Test of getRawFromUncalibrated method, of class XTCEPosixTimeHandler.
      */
-/*
+
     @Test
     public void testGetRawFromUncalibrated() {
 
@@ -460,42 +460,62 @@ public class CcsdsCucTimeHandlerTest {
             String hex;
             String uncalValue;
 
-            uncalValue = "0x00";
+            // 6 January 1980 is 0
+            // UNIX time is 315964800 (0x12d53d80)
+            // usecs 315964800000000 (0x11f5e49aa6000)
+
+            uncalValue = "0x11f5e49aa6000";
             bits = instance.getRawFromUncalibrated( uncalValue );
-            hex = XTCEFunctions.bitSetToHex( bits );
+            hex = XTCEFunctions.bitSetToHex( bits, 7 );
 
             System.out.println( "Uncal Time: " + uncalValue );
             System.out.println( "BitSet: " + hex );
+            System.out.println( "Expect: 0x0000000000000000" );
 
-            Assert.assertTrue( "Uncal 0x00 should have raw 0x0000000000000000",
+            Assert.assertTrue( "Uncal 0x11f5e49aa6000 should have raw 0x0000000000000000",
                                hex.equals( "0x0000000000000000" ) == true );
 
-            uncalValue = "0xe3eca7dc0";
+            // 1 June 1980 00:00:00 is  (0xc1cc80 0x000000)
+            // UNIX time is 328665600 (0x13970a00)
+            // usecs 328665600000000 (0x12aeb6c568000)
+            // gps usecs offset 0x4990f83c00
+            // uncal 0x12aeb6c568000
+
+            uncalValue = "0x12aeb6c568000";
             bits = instance.getRawFromUncalibrated( uncalValue );
-            hex = XTCEFunctions.bitSetToHex( bits );
+            hex = XTCEFunctions.bitSetToHex( bits, 7 );
 
             System.out.println( "Uncal Time: " + uncalValue );
             System.out.println( "BitSet: " + hex );
+            System.out.println( "Expect: 0x0000c1cc80000000" );
 
-            Assert.assertTrue( "Uncal 0xe3eca7dc0 should have raw 0x0000eeff00000000",
-                               hex.equals( "0x0000eeff00000000" ) == true );
+            Assert.assertTrue( "Uncal 0x12aeb6c568000 should have raw 0x0000c1cc80000000",
+                               hex.equals( "0x0000c1cc80000000" ) == true );
 
-            uncalValue = "0xe3ecb5b8c";
+            // 20 December 2012 00:00:30.500 is  (0x3DFD179E 0x800000)
+            // CUC is 17448251464613888 (0x3DFD179E800000)
+            // UNIX time is 1355961630 (0x50D2551E)
+            // usecs 1355961630000000 (0x4D13D6B490380)
+            // gps usecs offset 0x4990f83c00
+            // uncal 0x4d13d6b50a4a0
+
+            uncalValue = "0x4d13d6b50a4a0";
             bits = instance.getRawFromUncalibrated( uncalValue );
-            hex = XTCEFunctions.bitSetToHex( bits );
+            hex = XTCEFunctions.bitSetToHex( bits, 7 );
 
             System.out.println( "Uncal Time: " + uncalValue );
             System.out.println( "BitSet: " + hex );
+            System.out.println( "Expect: 0x003dfd179e800000" );
 
-            Assert.assertTrue( "Uncal 0xe3eca7dc0 should have raw 0x0000eeff0000ddcc",
-                               hex.equals( "0x0000eeff0000ddcc" ) == true );
+            Assert.assertTrue( "Uncal 0x4d13d6b50a4a0 should have raw 0x003dfd179e800000",
+                               hex.equals( "0x003dfd179e800000" ) == true );
 
         } catch ( Throwable ex ) {
             Assert.fail( ex.getClass().getName() + ": " + ex.getLocalizedMessage() );
         }
 
     }
-*/
+
     /**
      * Test of getUncalibratedFromCalibrated method, of class XTCEPosixTimeHandler.
      */

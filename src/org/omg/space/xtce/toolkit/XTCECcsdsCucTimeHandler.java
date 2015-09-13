@@ -16,7 +16,6 @@ import java.util.Date;
 import java.util.TimeZone;
 import org.omg.space.xtce.database.AbsoluteTimeDataType;
 import org.omg.space.xtce.database.IntegerDataEncodingType;
-import org.omg.space.xtce.database.ReferenceTimeType;
 import org.omg.space.xtce.database.ReferenceTimeType.Epoch;
 
 /** This class implements CCSDS CUC time to support AbsoluteTimeDataType
@@ -94,15 +93,23 @@ public class XTCECcsdsCucTimeHandler implements XTCEAbsoluteTimeType {
                                     String epoch,
                                     int    numSecBytes,
                                     int    numFracBytes ) {
+
         isoTimeFmt_   = timeFormat;
         timeZone_     = timeZone;
         numSecBytes_  = numSecBytes;
         numFracBytes_ = numFracBytes;
+
         if ( ( epoch == null ) || ( epoch.equals( "TAI" ) == true ) ) {
             epoch_ = "1958-01-01";
         } else {
             epoch_ = epoch;
         }
+
+        if ( epoch_.matches( "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" ) == false ) {
+            throw new RuntimeException( "Cannot register because the Epoch " +
+                "string '" + epoch_ + "' is not properly formatted." );
+        }
+
     }
 
     /** Method to determine if an XTCE AbsoluteTimeType, either Parameter or
@@ -181,7 +188,7 @@ public class XTCECcsdsCucTimeHandler implements XTCEAbsoluteTimeType {
             hex = hex.substring( 1 );
         }
 
-        System.out.println( "Temp: " + hex );
+        //System.out.println( "Temp: " + hex );
         int sPos = numSecBytes_  * 8 / 4;
         int fPos = numFracBytes_ * 8 / 4;
         int tPos = sPos + fPos;
@@ -194,21 +201,19 @@ public class XTCECcsdsCucTimeHandler implements XTCEAbsoluteTimeType {
 
         frac = frac.multiply( oneMillion_ );
 
-        DateFormat format = new SimpleDateFormat( isoTimeFmt_ );
+        DateFormat format = new SimpleDateFormat( "yyyy-MM-dd" );
         format.setTimeZone( TimeZone.getTimeZone( timeZone_ ) );
 
         secs = secs.multiply( oneThousand_ );
 
         try {
 
-            //Date unixEpoch = format.parse( "1970-01-01 00:00:00" );
-            Date thisEpoch = format.parse( epoch_ + " 00:00:00.000" );
+            Date thisEpoch = format.parse( epoch_ );
 
-            System.out.println( "Offset ms 0x" + Long.toString( thisEpoch.getTime(), 16) );
             secs = secs.add( new BigInteger( Long.toString( thisEpoch.getTime(), 16), 16 ) );
 
         } catch ( ParseException ex ) {
-            System.out.println( ex.getLocalizedMessage() );
+            System.err.println( ex.getLocalizedMessage() );
         }
 
         secs = secs.multiply( oneThousand_ );
@@ -259,13 +264,7 @@ public class XTCECcsdsCucTimeHandler implements XTCEAbsoluteTimeType {
     /** Retrieve the raw binary bits for encoding of this time item, which can
      * be a Parameter or Argument, when given the uncalibrated value.
      *
-     * <p>The raw output value is a BitSet of 64 bits in the form of two
-     * 32 bit unsigned integers.  The first is the number of seconds since
-     * the UNIX epoch of 1970-01-01 and the seconds in the number of
-     * microseconds within the second.  The input String will be an integral
-     * representation of the number of microseconds since 1970-01-01.</p>
-     *
-     * <p>This conversions uses only system time capabilities, and as a result
+     * <p>This conversion uses only system time capabilities, and as a result
      * is not leap second corrected.</p>
      *
      * @param uncalValue String containing the uncalibrated representation of
@@ -289,16 +288,45 @@ public class XTCECcsdsCucTimeHandler implements XTCEAbsoluteTimeType {
         }
 
         BigInteger secs = usecs.divide( oneThousand_ ).divide( oneThousand_ );
+
         usecs = usecs.subtract( secs.multiply( oneThousand_ ).multiply( oneThousand_ ) );
 
-        String hexSeconds = String.format( "%8s", secs.toString( 16 ) );
-        String hexUsecs   = String.format( "%8s", usecs.toString( 16 ) );
+        DateFormat format = new SimpleDateFormat( "yyyy-MM-dd" );
+        format.setTimeZone( TimeZone.getTimeZone( timeZone_ ) );
 
-        System.out.println( "Temp: " + hexSeconds + hexUsecs );
-        hexSeconds = hexSeconds.replaceAll( " ", "0" );
-        hexUsecs   = hexUsecs.replaceAll( " ", "0" );
+        try {
 
-        System.out.println( "Temp: " + hexSeconds + hexUsecs );
+            Date thisEpoch = format.parse( epoch_ );
+
+            BigInteger epochms = BigInteger.valueOf( thisEpoch.getTime() );
+            secs = secs.subtract( epochms.divide( oneThousand_ ) );
+
+        } catch ( ParseException ex ) {
+            System.err.println( ex.getLocalizedMessage() );
+        }
+
+        //System.out.println( "Remaining microseconds: " + usecs.toString() );
+        //System.out.println( "Remaining microseconds: 0x" + usecs.toString( 16 ) );
+
+        BigDecimal frac = new BigDecimal( usecs ).divide( oneMillion_ );
+        frac = frac.multiply( new BigDecimal( "2.0" ).pow( numFracBytes_ * 8 ) );
+
+        //System.out.println( "Fraction: " + frac.toString() );
+        //System.out.println( "HexFraction 0x" + frac.toBigInteger().toString( 16 ) );
+
+        String hexSeconds = secs.toString( 16 );
+        while ( hexSeconds.length() < ( numSecBytes_ * 2 ) ) {
+            hexSeconds = "0" + hexSeconds;
+        }
+
+        
+        String hexUsecs = frac.toBigInteger().toString( 16 );
+        while ( hexUsecs.length() < ( numFracBytes_ * 2 ) ) {
+            hexUsecs = "0" + hexUsecs;
+        }
+
+        //System.out.println( "Temp: 0x" + hexSeconds + hexUsecs );
+
         BigInteger rawInteger = new BigInteger( hexSeconds + hexUsecs, 16 );
 
         BitSet rawBits = new BitSet( 64 );
