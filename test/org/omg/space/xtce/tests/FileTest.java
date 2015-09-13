@@ -56,7 +56,8 @@ public class FileTest {
 
         String absPath = fileObj.getAbsolutePath();
 
-        if ( absPath.startsWith( "/" ) == false ) {
+        if ( ( absPath.startsWith( "/" ) == false ) &&
+             ( absPath.charAt( 2 )       != '\\'   ) ) {
             Assert.fail( "Expected absolute path to overview.html, got " +
                          absPath );
         }
