@@ -10,6 +10,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
 import java.util.Locale;
@@ -24,6 +25,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
+import org.omg.space.xtce.database.AbsoluteTimeDataType;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -47,6 +49,68 @@ public class XTCEFunctions {
 
     private XTCEFunctions() { }
 
+    /** Method to register a custom time handler for XTCE AbsoluteTimeDataType
+     * elements.
+     *
+     * @param instance Constructed object of a type that implements the
+     * interface XTCEAbsoluteTimeType in toolkit.
+     *
+     */
+
+    public static void registerAbsoluteTimeHandler( XTCEAbsoluteTimeType instance ) {
+
+        if ( absTimeHandlersInitialized_ == false ) {
+            absTimeHandlers_.add( new XTCEPosixTimeHandler() );
+            absTimeHandlersInitialized_ = true;
+        }
+
+        absTimeHandlers_.add( instance );
+
+    }
+
+    /** Method to locate a time handler for an XTCE AbsoluteTimeDataType
+     * element.
+     *
+     * Handlers are searched in reverse order of addition, so the newest is
+     * always checked first.
+     *
+     * @param element AbsoluteTimeDataType XML element from an XTCE document.
+     *
+     * @return Handler that implements the XTCEAbsoluteTimeType class in this
+     * toolkit that matches the XML element required contents.  If not handler
+     * exists, then the function throws.
+     *
+     * @throws XTCEDatabaseException thrown in the event that a handler is not
+     * available or not usable for this element.
+     *
+     */
+
+    public static XTCEAbsoluteTimeType getAbsoluteTimeHandler( AbsoluteTimeDataType element ) throws XTCEDatabaseException {
+
+        if ( absTimeHandlersInitialized_ == false ) {
+            absTimeHandlers_.add( new XTCEPosixTimeHandler() );
+            absTimeHandlersInitialized_ = true;
+        }
+
+        for ( int iii = absTimeHandlers_.size() - 1; iii >= 0; --iii ) {
+            try {
+                if ( absTimeHandlers_.get( iii ).isApplicable( element ) == true ) {
+                    return absTimeHandlers_.get( iii );
+                }
+            } catch ( Exception ex ) {
+                throw new XTCEDatabaseException(
+                    XTCEFunctions.getText( "error_bad_abstime_handler" ) +
+                    " '" +
+                    absTimeHandlers_.get( iii ).getClass().getName() + "': " +
+                    ex.getLocalizedMessage() );
+            }
+        }
+
+        throw new XTCEDatabaseException(
+            XTCEFunctions.getText( "error_noabstime_handler" ) );
+
+    }
+
     /** This function converts a byte array to a BitSet suitable for use in the
      * container content processing when applying a binary data set.
      *
@@ -62,17 +126,60 @@ public class XTCEFunctions {
 
     public static BitSet getBitSetFromByteArray( byte[] bytes ) {
 
-        BitSet bits = new BitSet( bytes.length * 8 );
+        //BitSet bits = new BitSet( bytes.length * 8 );
 
-        for ( int iii = 0; iii < bytes.length; ++iii ) {
-            for ( int jjj = 0; jjj < 8; ++jjj ) {
-                if ( ( bytes[iii] & ( 1 << ( 7 - jjj ) ) ) != 0 ) {
-                    bits.set( ( iii * 8 ) + jjj );
-                }
+        //for ( int iii = 0; iii < bytes.length; ++iii ) {
+        //    for ( int jjj = 0; jjj < 8; ++jjj ) {
+        //        if ( ( bytes[iii] & ( 1 << ( 7 - jjj ) ) ) != 0 ) {
+        //            bits.set( ( iii * 8 ) + jjj );
+        //        }
+        //    }
+        //}
+
+        //return bits;
+        return BitSet.valueOf( bytes );
+
+    }
+    /** Convert a BitSet object to a hex byte string, ordered from the most
+     * significant byte to the least significant byte.
+     *
+     * The most significant bits are padded with zero in this case when the
+     * raw size is not on an even 8 bit boundary.  This results in the function
+     * never returning a hex string that is less than 2 characters for each
+     * byte, with a minimum of 1 byte.  A "0x" is prepended.
+     *
+     * @param bits BitSet containing an arbitrarily long binary field.
+     *
+     * @return String containing the hex of the raw value, subject to the
+     * explanation above associated with this function.
+     *
+     */
+
+    public static String bitSetToHex( BitSet bits ) {
+
+        int bitCount = bits.size();
+        if ( ( bits.size() % 8 ) != 0 ) {
+            bitCount += 8 - ( bits.size() % 8 );
+        }
+
+        int byteCount = bitCount / 8;
+
+        if ( byteCount == 0 ) {
+            return "0x00";
+        }
+
+        StringBuilder sb = new StringBuilder( "0x" );
+
+        byte[] bytes = bits.toByteArray();
+        for ( int iii = byteCount - 1; iii >= 0; --iii ) {
+            if ( iii < bytes.length ) {
+                sb.append( String.format( "%02x", bytes[iii] ) );
+            } else {
+                sb.append( "00" );
             }
         }
 
-        return bits;
+        return sb.toString();
 
     }
 
@@ -550,5 +657,9 @@ public class XTCEFunctions {
 
     private static ResourceBundle messages_      = null;
     private static String         propLocation_  = "org.omg.space.xtce.toolkit.MessagesBundle"; // NOI18N
+
+    private static boolean absTimeHandlersInitialized_ = false;
+
+    private static List<XTCEAbsoluteTimeType> absTimeHandlers_ = new ArrayList<>();
 
 }

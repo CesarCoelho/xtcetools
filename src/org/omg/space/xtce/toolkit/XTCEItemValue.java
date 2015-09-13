@@ -15,6 +15,7 @@ import java.util.BitSet;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import org.omg.space.xtce.database.AbsoluteTimeDataType;
 import org.omg.space.xtce.database.BooleanDataType;
 import org.omg.space.xtce.database.CalibratorType;
 import org.omg.space.xtce.database.CalibratorType.MathOperationCalibrator;
@@ -60,6 +61,7 @@ public class XTCEItemValue {
         euTypeName_  = item.getEngineeringType();
         rawTypeName_ = item.getRawType();
         rawBitOrder_ = item.getRawBitOrder();
+        itemObj_     = item;
 
         // gather the Type Reference, for which we cannot proceed further
         // unless exists
@@ -82,6 +84,20 @@ public class XTCEItemValue {
                            rawSizeInBits_ +
                            "'" );
             validObject_ = false;
+        }
+
+        // get the registered time handler if one exists
+        if ( euTypeName_.equals( "TIME" ) == true ) {
+            try {
+                AbsoluteTimeDataType timeXml =
+                    (AbsoluteTimeDataType)itemObj_.getTypeReference();
+                timeHandler_ =
+                    XTCEFunctions.getAbsoluteTimeHandler( timeXml );
+            } catch ( XTCEDatabaseException ex ) {
+                warnings_.add( itemName_ + " " + ex.getLocalizedMessage() );
+                validObject_ = false;
+                return;
+            }
         }
 
         // gather the extended attributes that are needed for specific types
@@ -198,6 +214,14 @@ public class XTCEItemValue {
             warnings_.add( itemName_ + " Raw encoding " + rawBitOrder +
                 " not yet supported" );
             return "";
+        }
+
+        if ( euTypeName_.equals( "TIME" ) == true ) {
+            if ( timeHandler_ != null ) {
+                return timeHandler_.getUncalibratedFromRaw( rawValue );
+            } else {
+                return "0x00";
+            }
         }
 
         BigInteger numericValue = bitSetToNumber( rawValue );
@@ -329,8 +353,13 @@ public class XTCEItemValue {
                 return "0x" + intValue.toString( 16 );
             }
         } else if ( engTypeName.equals( "TIME" ) == true ) {
-            warnings_.add( itemName_ + " Absolute Time Type is not " +
-                "yet supported" );
+            try {
+                if ( timeHandler_ != null ) {
+                    return timeHandler_.getCalibratedFromUncalibrated( uncalValue );
+                }
+            } catch ( Exception ex ) {
+                warnings_.add( itemName_ + ex.getLocalizedMessage() );
+            }
         } else if ( engTypeName.equals( "DURATION" ) == true ) {
             warnings_.add( itemName_ + " Relative Time Type is not " +
                 "yet supported" );
@@ -699,6 +728,16 @@ public class XTCEItemValue {
 */
     }
 
+    /** Retrieve the raw binary bits for encoding of this typed object when
+     * given the uncalibrated value.
+     *
+     * @param uncalValue String containing the uncalibrated representation of
+     * the value.
+     *
+     * @return BitSet containing the raw bits.
+     *
+     */
+
     public BitSet getRawFromUncalibrated( String uncalValue ) {
 
         // TODO Handle Byte order element ByteOrderList in the encoding
@@ -707,10 +746,16 @@ public class XTCEItemValue {
 
         try {
 
-            if ( ( rawTypeName_.equals( "unsigned" )       == true ) ||
-                 ( rawTypeName_.equals( "signMagnitude" )  == true ) ||
-                 ( rawTypeName_.equals( "twosComplement" ) == true ) ||
-                 ( rawTypeName_.equals( "onesComplement" ) == true ) )   {
+            if ( euTypeName_.equals( "TIME" ) == true ) {
+                if ( timeHandler_ != null ) {
+                    return timeHandler_.getRawFromUncalibrated( uncalValue );
+                } else {
+                    return new BitSet( rawSizeInBits_ );
+                }
+            } else if ( ( rawTypeName_.equals( "unsigned" )       == true ) ||
+                        ( rawTypeName_.equals( "signMagnitude" )  == true ) ||
+                        ( rawTypeName_.equals( "twosComplement" ) == true ) ||
+                        ( rawTypeName_.equals( "onesComplement" ) == true ) ) {
                 String lowerCalValue = uncalValue.toLowerCase();
                 if ( lowerCalValue.startsWith( "0x" ) == true ) {
                     intValue = new BigInteger( lowerCalValue.replaceFirst( "0x", "" ), 16 );
@@ -757,10 +802,6 @@ public class XTCEItemValue {
                     retValue = new BigInteger( utf16_ );
                 }
                 intValue = encodeUtfString( retValue );
-            } else if ( euTypeName_.equals( "TIME" ) == true ) {
-                // TODO Add TIME Type
-                warnings_.add( "Absolute Time Type Not Yet Supported for " +
-                               itemName_ );
             } else if ( euTypeName_.equals( "DURATION" ) == true ) {
                 // TODO Add DURATION Type
                 warnings_.add( "Relative Time Type Not Yet Supported for " +
@@ -792,9 +833,27 @@ public class XTCEItemValue {
 
     }
 
+    /** Retrieve the raw binary bits for encoding of this typed object when
+     * given the uncalibrated value.
+     *
+     * @param uncalValue BigInteger containing the uncalibrated representation
+     * of the value.
+     *
+     * @return BitSet containing the raw bits.
+     *
+     */
+
     public BitSet getRawFromUncalibrated( BigInteger uncalValue ) {
 
         // TODO Handle Byte order element ByteOrderList in the encoding
+
+        if ( euTypeName_.equals( "TIME" ) == true ) {
+            if ( timeHandler_ != null ) {
+                return timeHandler_.getRawFromUncalibrated( uncalValue.toString() );
+            } else {
+                return new BitSet( rawSizeInBits_ );
+            }
+        }
 
         if ( rawTypeName_.equals( "unsigned" ) == true ) {
             BigInteger max = new BigInteger( "2" ).pow( rawSizeInBits_ );
@@ -910,12 +969,32 @@ public class XTCEItemValue {
 
     }
 
+    /** Retrieve the raw binary bits for encoding of this typed object when
+     * given the uncalibrated value.
+     *
+     * @param uncalValue long containing the uncalibrated representation of
+     * the value.
+     *
+     * @return BitSet containing the raw bits.
+     *
+     */
+
     public BitSet getRawFromUncalibrated( long uncalValue ) {
 
         BigInteger intValue = BigInteger.valueOf( uncalValue );
         return getRawFromUncalibrated( intValue );
 
     }
+
+    /** Retrieve the raw binary bits for encoding of this typed object when
+     * given the uncalibrated value.
+     *
+     * @param uncalValue BigDecimal containing the uncalibrated representation
+     * of the value.
+     *
+     * @return BitSet containing the raw bits.
+     *
+     */
 
     public BitSet getRawFromUncalibrated( BigDecimal uncalValue ) {
 
@@ -992,6 +1071,16 @@ public class XTCEItemValue {
 
     }
 
+    /** Retrieve the raw binary bits for encoding of this typed object when
+     * given the uncalibrated value.
+     *
+     * @param uncalValue double containing the uncalibrated representation of
+     * the value.
+     *
+     * @return BitSet containing the raw bits.
+     *
+     */
+
     public BitSet getRawFromUncalibrated( double uncalValue ) {
 
         BigDecimal decimalValue = new BigDecimal( uncalValue );
@@ -999,12 +1088,32 @@ public class XTCEItemValue {
 
     }
 
+    /** Retrieve the raw binary bits for encoding of this typed object when
+     * given the uncalibrated value.
+     *
+     * @param uncalValue float containing the uncalibrated representation of
+     * the value.
+     *
+     * @return BitSet containing the raw bits.
+     *
+     */
+
     public BitSet getRawFromUncalibrated( float uncalValue ) {
 
         BigDecimal decimalValue = new BigDecimal( uncalValue );
         return getRawFromUncalibrated( decimalValue );
 
     }
+
+    /** Retrieve the uncalibrated value of an EU calibrated value for this
+     * typed object.
+     *
+     * @param euValue String containing a value of this item represented in
+     * EU/calibrated form.
+     *
+     * @return String containing the uncalibrated value.
+     *
+     */
 
     public String getUncalibratedFromCalibrated( String euValue ) {
 
@@ -1061,9 +1170,13 @@ public class XTCEItemValue {
                                "'" );
             }
         } else if ( euTypeName_.equals( "TIME" ) == true ) {
-            // TODO Add TIME Type
-            warnings_.add( "Absolute Time Type Not Yet Supported for " +
-                           itemName_ );
+            try {
+                if ( timeHandler_ != null ) {
+                    return timeHandler_.getUncalibratedFromCalibrated( euValue );
+                }
+            } catch ( Exception ex ) {
+                warnings_.add( itemName_ + ex.getLocalizedMessage() );
+            }
         } else if ( euTypeName_.equals( "DURATION" ) == true ) {
             // TODO Add DURATION Type
             warnings_.add( "Relative Time Type Not Yet Supported for " +
@@ -1079,11 +1192,31 @@ public class XTCEItemValue {
 
     }
 
+    /** Retrieve the uncalibrated value of an EU calibrated value for this
+     * typed object.
+     *
+     * @param euValue BigInteger containing a value of this item represented in
+     * EU/calibrated form.
+     *
+     * @return String containing the uncalibrated value.
+     *
+     */
+
     public String getUncalibratedFromCalibrated( BigInteger euValue ) {
 
         return getUncalibratedFromCalibrated( euValue.toString() );
 
     }
+
+    /** Retrieve the uncalibrated value of an EU calibrated value for this
+     * typed object.
+     *
+     * @param euValue long containing a value of this item represented in
+     * EU/calibrated form.
+     *
+     * @return String containing the uncalibrated value.
+     *
+     */
 
     public String getUncalibratedFromCalibrated( long euValue ) {
 
@@ -1092,17 +1225,47 @@ public class XTCEItemValue {
 
     }
 
+    /** Retrieve the uncalibrated value of an EU calibrated value for this
+     * typed object.
+     *
+     * @param euValue BigDecimal containing a value of this item represented in
+     * EU/calibrated form.
+     *
+     * @return String containing the uncalibrated value.
+     *
+     */
+
     public String getUncalibratedFromCalibrated( BigDecimal euValue ) {
 
         return getUncalibratedFromCalibrated( euValue.doubleValue() );
 
     }
 
+    /** Retrieve the uncalibrated value of an EU calibrated value for this
+     * typed object.
+     *
+     * @param euValue double containing a value of this item represented in
+     * EU/calibrated form.
+     *
+     * @return String containing the uncalibrated value.
+     *
+     */
+
     public String getUncalibratedFromCalibrated( double euValue ) {
 
         return getUncalibratedFromCalibrated( Double.toString( euValue ) );
 
     }
+
+    /** Retrieve the uncalibrated value of an EU calibrated value for this
+     * typed object.
+     *
+     * @param euValue float containing a value of this item represented in
+     * EU/calibrated form.
+     *
+     * @return String containing the uncalibrated value.
+     *
+     */
 
     public String getUncalibratedFromCalibrated( float euValue ) {
 
@@ -2908,10 +3071,12 @@ public class XTCEItemValue {
     private String  booleanZeroString_;
     private String  booleanOneString_;
 
-    private List<String>               warnings_   = new ArrayList<>();
-    private List<ValueEnumerationType> enums_      = null;
-    private CalibratorType             defCal_     = null;
-    private XTCEValidRange             validRange_ = null;
+    private List<String>               warnings_    = new ArrayList<>();
+    private List<ValueEnumerationType> enums_       = null;
+    private CalibratorType             defCal_      = null;
+    private XTCEValidRange             validRange_  = null;
+    private XTCETypedObject            itemObj_     = null;
+    private XTCEAbsoluteTimeType       timeHandler_ = null;
 
     private static final byte[] utf16_ = new byte[] { (byte)0xfe, (byte)0xff };
 

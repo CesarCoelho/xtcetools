@@ -546,6 +546,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
         } catch ( NullPointerException ex ) {
             // this is okay, the SpaceSystem may not have any TM parameters
         }
+
         return new ArrayList<>();
 
     }
@@ -578,6 +579,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
         } catch ( NullPointerException ex ) {
             // this is okay, the SpaceSystem may not have any TC parameters
         }
+
         return new ArrayList<>();
 
     }
@@ -664,6 +666,8 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
     public List<XTCETMContainer> getContainers( String nameGlob ) {
 
+        warnings_ = new ArrayList<>();
+
         ArrayList<XTCETMContainer> list = new ArrayList<>();
 
         try {
@@ -678,12 +682,11 @@ public class XTCESpaceSystem extends XTCENamedObject {
                 if ( XTCEFunctions.matchesUsingGlob( container.getName(), nameGlob ) == true ) {
 
                     try {
-                        list.add(new XTCETMContainer( getFullPath(),
-                                                      makeContainerInheritanceString( container ),
-                                                      container ) );
+                        list.add( new XTCETMContainer( getFullPath(),
+                                                       makeContainerInheritanceString( container ),
+                                                       container ) );
                     } catch ( XTCEDatabaseException ex ) {
-                        System.out.println( ex.getLocalizedMessage() );
-                        // need to make an error message
+                        warnings_.add( ex.getLocalizedMessage() );
                     }
 
                 }
@@ -709,6 +712,8 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
     public List<XTCETMContainer> getContainers() {
 
+        warnings_ = new ArrayList<>();
+
         ArrayList<XTCETMContainer> list = new ArrayList<>();
 
         try {
@@ -720,12 +725,11 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
             for ( SequenceContainerType container : containers ) {
                 try {
-                    list.add(new XTCETMContainer( getFullPath(),
-                                                  makeContainerInheritanceString( container ),
-                                                  container ) );
+                    list.add( new XTCETMContainer( getFullPath(),
+                                                   makeContainerInheritanceString( container ),
+                                                   container ) );
                 } catch ( XTCEDatabaseException ex ) {
-                    System.out.println( ex.getLocalizedMessage() );
-                    // need to make an error message
+                    warnings_.add( ex.getLocalizedMessage() );
                 }
             }
 
@@ -751,6 +755,8 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
     public List<XTCETMStream> getStreams() {
 
+        warnings_ = new ArrayList<>();
+
         ArrayList<XTCETMStream> list = new ArrayList<>();
 
         try {
@@ -768,8 +774,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
                                                 stream.getAliasSet(),
                                                 stream.getAncillaryDataSet() ) );
                 } catch ( XTCEDatabaseException ex ) {
-                    System.out.println( ex.getLocalizedMessage() );
-                    // need to make an error message
+                    warnings_.add( ex.getLocalizedMessage() );
                 }
             }
 

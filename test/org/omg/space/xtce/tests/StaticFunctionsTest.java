@@ -58,6 +58,38 @@ public class StaticFunctionsTest {
     }
 
     @Test
+    public void testBitSetToHex() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        BitSet bits;
+        String hex;
+
+        bits = new BitSet( 2 );
+        hex  = XTCEFunctions.bitSetToHex( bits );
+
+        Assert.assertTrue( "Value should be 0x0000000000000000, but is " + hex,
+                           hex.equals( "0x0000000000000000" ) == true );
+
+        bits.set( 1, true );
+        hex = XTCEFunctions.bitSetToHex( bits );
+
+        Assert.assertTrue( "Value should be 0x0000000000000002, but is " + hex,
+                           hex.equals( "0x0000000000000002" ) == true );
+
+        bits = new BitSet( 70 );
+        bits.set( 69 );
+        hex = XTCEFunctions.bitSetToHex( bits );
+
+        Assert.assertTrue( "Value should be 0x00000000000000200000000000000000, but is " + hex,
+                           hex.equals( "0x00000000000000200000000000000000" ) == true );
+
+    }
+
+    @Test
     public void testGetBitSetFromByteArray() {
 
         final String methodName =
@@ -65,37 +97,54 @@ public class StaticFunctionsTest {
 
         System.out.println( "Test Case: " + methodName + "()" );
 
-        byte[] bytes = new byte[5];
+        // this is 0xee000ff000ff
+
+        byte[] bytes = new byte[6];
         bytes[0] = (byte)0xff;
         bytes[1] = (byte)0x00;
         bytes[2] = (byte)0xf0;
         bytes[3] = (byte)0x0f;
         bytes[4] = (byte)0x00;
+        bytes[5] = (byte)0xee;
 
         BitSet bits = XTCEFunctions.getBitSetFromByteArray( bytes );
+
+        System.out.println( "Checking " + XTCEFunctions.bitSetToHex( bits ) );
 
         for ( int iii = 0; iii < bits.size(); ++iii ) {
             if ( ( iii >= 0 ) && ( iii < 8 ) ) {
                 Assert.assertTrue( "bits 0 to 7 should be 1",
                                    bits.get( iii ) == true );
             } else if ( ( iii >= 8 ) && ( iii < 16 ) ) {
-                Assert.assertTrue( "bits 8 to 16 should be 0",
+                Assert.assertTrue( "bits 8 to 15 should be 0",
                                    bits.get( iii ) == false );
-            } else if ( ( iii >= 17 ) && ( iii < 20 ) ) {
-                Assert.assertTrue( "bits 17 to 20 should be 1",
-                                   bits.get( iii ) == true );
+            } else if ( ( iii >= 16 ) && ( iii < 20 ) ) {
+                Assert.assertTrue( "bits 16 to 19 should be 0",
+                                   bits.get( iii ) == false );
             } else if ( ( iii >= 20 ) && ( iii < 24 ) ) {
-                Assert.assertTrue( "bits 20 to 24 should be 0",
-                                   bits.get( iii ) == false );
-            } else if ( ( iii >= 24 ) && ( iii < 28 ) ) {
-                Assert.assertTrue( "bits 24 to 28 should be 0",
-                                   bits.get( iii ) == false );
-            } else if ( ( iii >= 28 ) && ( iii < 32 ) ) {
-                Assert.assertTrue( "bits 28 to 32 should be 1",
+                Assert.assertTrue( "bits 20 to 23 should be 1",
                                    bits.get( iii ) == true );
-            } else if ( ( iii >= 32 ) && ( iii < 40 ) ) {
-                Assert.assertTrue( "bits 32 to 40 should be 0",
+            } else if ( ( iii >= 24 ) && ( iii < 28 ) ) {
+                Assert.assertTrue( "bits 24 to 27 should be 1",
+                                   bits.get( iii ) == true );
+            } else if ( ( iii >= 28 ) && ( iii < 32 ) ) {
+                Assert.assertTrue( "bits 28 to 31 should be 0",
                                    bits.get( iii ) == false );
+            } else if ( ( iii >= 32 ) && ( iii < 40 ) ) {
+                Assert.assertTrue( "bits 32 to 39 should be 0",
+                                   bits.get( iii ) == false );
+            } else if ( iii == 40 ) {
+                Assert.assertTrue( "bit 40 should be 0",
+                                   bits.get( iii ) == false );
+            } else if ( ( iii >= 41 ) && ( iii < 44 ) ) {
+                Assert.assertTrue( "bits 41 to 43 should be 1",
+                                   bits.get( iii ) == true );
+            } else if ( iii == 44 ) {
+                Assert.assertTrue( "bit 44 should be 0",
+                                   bits.get( iii ) == false );
+            } else if ( ( iii >= 45 ) && ( iii < 48 ) ) {
+                Assert.assertTrue( "bits 45 to 47 should be 1",
+                                   bits.get( iii ) == true );
             }
         }
         
