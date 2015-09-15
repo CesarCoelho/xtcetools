@@ -251,16 +251,28 @@ public class XTCEParameter extends XTCETypedObject {
 
     public String getDataSource() {
 
+        // we compensate here for the missing default value in the XTCE schema
+        // for ParameterProperties/@dataSource
+
+        String dataSource = "telemetered";
+
         try {
+
             if ( isMember() == true ) {
-                return memberReference_.getParameterProperties().getDataSource();
+                if ( memberReference_.getParameterProperties().getDataSource() != null ) {
+                    dataSource = memberReference_.getParameterProperties().getDataSource();
+                }
             } else if ( isParameter() == true ) {
-                return reference_.getParameterProperties().getDataSource();
+                if ( reference_.getParameterProperties().getDataSource() != null ) {
+                    dataSource = reference_.getParameterProperties().getDataSource();
+                }
             }
+
         } catch ( NullPointerException ex ) {
             // this is okay when the Parameter is a Member or the dataSource attribute is not present
         }
-        return "telemetered";
+
+        return dataSource;
 
     }
 
