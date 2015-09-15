@@ -4230,6 +4230,104 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     }
 
+    /** Method to load a new XTCE database file, taking into account that one
+     * might already be loaded and offering the user an opportunity to save
+     * this or cancel before closing an already open file.
+     *
+     * @param dbUrl URL file object in Java to use to open the file.
+     *
+     * @param applyXInclude Boolean indicating if the file should be opened
+     * with XInclude processing enabled.
+     *
+     * @param validateOnLoad Boolean indicating if the file should be validated
+     * against schema on load.
+     *
+     * @param readOnly Boolean indicating if the file should be opened in
+     * read-only state for performance.
+     *
+     */
+
+    public void openFile( final URL     dbUrl,
+                          final boolean applyXInclude,
+                          final boolean validateOnLoad,
+                          final boolean readOnly ) {
+
+        // in the event that a file is already open, we should attempt to
+        // close the file before creating a new database.
+
+        if ( xtceDatabaseFile != null ) {
+            mainWindowCloseFileMenuItemActionPerformed( null );
+        }
+
+        // this extra test captures the case where a file is open and the user
+        // chose to cancel the save and close, leaving the original file open.
+
+        if ( xtceDatabaseFile != null ) {
+            return;
+        }
+
+        try {
+
+            logMsg( XTCEFunctions.getMemoryUsageStatistics() );
+
+            long    startTime      = System.currentTimeMillis();
+
+            xtceDatabaseFile = new XTCEDatabase( dbUrl,
+                                                 validateOnLoad,
+                                                 applyXInclude,
+                                                 readOnly );
+
+            mainWindowEditDocumentMenuItem.setSelected( ! readOnly );
+            mainWindowEditDocumentMenuItemActionPerformed( null );
+
+            for ( String message : xtceDatabaseFile.getDocumentWarnings() ) {
+                logMsg( message );
+            }
+
+            if ( xtceDatabaseFile.getErrorCount() > 0 ) {
+                throw new XTCEDatabaseException( XTCEFunctions.getText( "dialog_unabletoload_text" ) +
+                                                 " " +
+                                                 dbUrl.toString() );
+            }
+
+            loadedFilenameLabel.setText( dbUrl.toString() );
+
+            if ( validateOnLoad == true ) {
+                loadedSchemaLabel.setText( xtceDatabaseFile.getSchemaFromDocument() );
+            }
+
+            buildSpaceSystemTrees();
+
+            //prefs.updateRecentFilesList( mainWindowOpenRecentMenu, dbFile );
+
+            //if ( dbFile.getParent() != null ) {
+            //    prefs.setCurrentWorkingDirectory( dbFile.getParent() );
+            //}
+
+            detailSpaceSystemTree.setSelectionRow( 0 );
+            mainWindowPrimaryWorkspace.setSelectedIndex( 0 );
+
+            long estimatedTime = System.currentTimeMillis() - startTime;
+
+            logMsg( XTCEFunctions.getText( "file_chooser_load_time_text" ) + // NOI18N
+                " " + // NOI18N
+                Long.toString( estimatedTime / 1000 ) +
+                " " + // NOI18N
+                XTCEFunctions.getText( "file_chooser_load_time_unit_text" ) + // NOI18N
+                " " + // NOI18N
+                ( validateOnLoad == true ? "" : " (" + XTCEFunctions.getText( "file_chooser_schema_disable_text" ) + ")" ) ); // NOI18N
+
+            logMsg( XTCEFunctions.getMemoryUsageStatistics() );
+
+        } catch ( XTCEDatabaseException ex ) {
+
+            logMsg( XTCEFunctions.generalErrorPrefix() +
+                    ex.getLocalizedMessage() );
+
+        }
+
+    }
+
     /** Private method to open a help dialog browser.
      *
      * The help dialog browser is not limited to just having a single one open

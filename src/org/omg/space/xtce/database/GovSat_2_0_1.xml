@@ -5,7 +5,12 @@
 		<xtce:AncillaryData name="DocVersion">1.0.0</xtce:AncillaryData>
 		<xtce:AncillaryData name="SpacecraftID">123</xtce:AncillaryData>
 	</xtce:AncillaryDataSet>
-	<xtce:Header version="1.0" validationStatus="Draft" date="2010-04-02"/>
+	<xtce:Header version="1.0" validationStatus="Draft" date="2010-04-02">
+            <xtce:NoteSet>
+                <xtce:Note>Minor modifications to meet the XTCE 1.2 candidate schema</xtce:Note>
+                <xtce:Note>Added StreamSet to show the functionality</xtce:Note>
+            </xtce:NoteSet>
+        </xtce:Header>
 	<xtce:TelemetryMetaData>
 		<xtce:ParameterTypeSet>
 			<xtce:IntegerParameterType signed="false" name="CCSDSSCIDType">
@@ -52,7 +57,7 @@
 			</xtce:AbsoluteTimeParameterType>
 			<xtce:IntegerParameterType signed="true" name="CAM0NumImagersType" shortDescription="Number of registered imagers">
 				<xtce:UnitSet/>
-				<xtce:IntegerDataEncoding sizeInBits="8" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="8" encoding="twosComplement"/>
 			</xtce:IntegerParameterType>
 			<xtce:IntegerParameterType signed="false" name="CAM0ImagerNumberType" shortDescription="Index to an imager list entry">
 				<xtce:UnitSet/>
@@ -1136,11 +1141,11 @@
 				<xtce:UnitSet>
 					<xtce:Unit description="ScaleUnits">V</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment">
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement">
 					<xtce:DefaultCalibrator>
 						<xtce:PolynomialCalibrator>
-							<xtce:Term exponent="0.0" coefficient="0.0"/>
-							<xtce:Term exponent="1.0" coefficient="0.1"/>
+							<xtce:Term exponent="0" coefficient="0.0"/>
+							<xtce:Term exponent="1" coefficient="0.1"/>
 						</xtce:PolynomialCalibrator>
 					</xtce:DefaultCalibrator>
 				</xtce:IntegerDataEncoding>
@@ -1149,11 +1154,11 @@
 				<xtce:UnitSet>
 					<xtce:Unit description="ScaleUnits">V</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment">
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement">
 					<xtce:DefaultCalibrator>
 						<xtce:PolynomialCalibrator>
-							<xtce:Term exponent="0.0" coefficient="0.0"/>
-							<xtce:Term exponent="1.0" coefficient="0.1"/>
+							<xtce:Term exponent="0" coefficient="0.0"/>
+							<xtce:Term exponent="1" coefficient="0.1"/>
 						</xtce:PolynomialCalibrator>
 					</xtce:DefaultCalibrator>
 				</xtce:IntegerDataEncoding>
@@ -1162,11 +1167,11 @@
 				<xtce:UnitSet>
 					<xtce:Unit description="ScaleUnits">A</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment">
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement">
 					<xtce:DefaultCalibrator>
 						<xtce:PolynomialCalibrator>
-							<xtce:Term exponent="0.0" coefficient="0.0"/>
-							<xtce:Term exponent="1.0" coefficient="0.1"/>
+							<xtce:Term exponent="0" coefficient="0.0"/>
+							<xtce:Term exponent="1" coefficient="0.1"/>
 						</xtce:PolynomialCalibrator>
 					</xtce:DefaultCalibrator>
 				</xtce:IntegerDataEncoding>
@@ -1175,11 +1180,11 @@
 				<xtce:UnitSet>
 					<xtce:Unit description="ScaleUnits">A</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment">
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement">
 					<xtce:DefaultCalibrator>
 						<xtce:PolynomialCalibrator>
-							<xtce:Term exponent="0.0" coefficient="0.0"/>
-							<xtce:Term exponent="1.0" coefficient="0.1"/>
+							<xtce:Term exponent="0" coefficient="0.0"/>
+							<xtce:Term exponent="1" coefficient="0.1"/>
 						</xtce:PolynomialCalibrator>
 					</xtce:DefaultCalibrator>
 				</xtce:IntegerDataEncoding>
@@ -1188,11 +1193,11 @@
 				<xtce:UnitSet>
 					<xtce:Unit description="ScaleUnits">A</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment">
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement">
 					<xtce:DefaultCalibrator>
 						<xtce:PolynomialCalibrator>
-							<xtce:Term exponent="0.0" coefficient="0.0"/>
-							<xtce:Term exponent="1.0" coefficient="0.1"/>
+							<xtce:Term exponent="0" coefficient="0.0"/>
+							<xtce:Term exponent="1" coefficient="0.1"/>
 						</xtce:PolynomialCalibrator>
 					</xtce:DefaultCalibrator>
 				</xtce:IntegerDataEncoding>
@@ -1209,11 +1214,11 @@
 				<xtce:UnitSet>
 					<xtce:Unit description="ScaleUnits">A</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment">
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement">
 					<xtce:DefaultCalibrator>
 						<xtce:PolynomialCalibrator>
-							<xtce:Term exponent="0.0" coefficient="0.0"/>
-							<xtce:Term exponent="1.0" coefficient="0.1"/>
+							<xtce:Term exponent="0" coefficient="0.0"/>
+							<xtce:Term exponent="1" coefficient="0.1"/>
 						</xtce:PolynomialCalibrator>
 					</xtce:DefaultCalibrator>
 				</xtce:IntegerDataEncoding>
@@ -1242,55 +1247,55 @@
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">degC</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement"/>
 			</xtce:IntegerParameterType>
 			<xtce:IntegerParameterType signed="true" name="PowmX1Temp2Type">
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">degC</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement"/>
 			</xtce:IntegerParameterType>
 			<xtce:IntegerParameterType signed="true" name="PowmX1Temp3Type">
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">degC</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement"/>
 			</xtce:IntegerParameterType>
 			<xtce:IntegerParameterType signed="true" name="PowmX1Temp4Type">
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">degC</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement"/>
 			</xtce:IntegerParameterType>
 			<xtce:IntegerParameterType signed="true" name="PowmX1Temp5Type">
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">degC</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement"/>
 			</xtce:IntegerParameterType>
 			<xtce:IntegerParameterType signed="true" name="PowmX1Temp6Type">
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">degC</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement"/>
 			</xtce:IntegerParameterType>
 			<xtce:IntegerParameterType signed="true" name="PowmX1Temp7Type">
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">degC</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement"/>
 			</xtce:IntegerParameterType>
 			<xtce:IntegerParameterType signed="true" name="PowmX1Temp8Type">
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">degC</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement"/>
 			</xtce:IntegerParameterType>
 			<xtce:IntegerParameterType signed="true" name="PowmX2DeviceTemperatureType">
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">degC</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement"/>
 				<xtce:DefaultAlarm>
 					<xtce:StaticAlarmRanges>
 						<xtce:WarningRange minInclusive="0.0" maxInclusive="40.0"/>
@@ -1301,11 +1306,11 @@
 				<xtce:UnitSet>
 					<xtce:Unit description="ScaleUnits">V</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment">
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement">
 					<xtce:DefaultCalibrator>
 						<xtce:PolynomialCalibrator>
-							<xtce:Term exponent="0.0" coefficient="0.0"/>
-							<xtce:Term exponent="1.0" coefficient="0.1"/>
+							<xtce:Term exponent="0" coefficient="0.0"/>
+							<xtce:Term exponent="1" coefficient="0.1"/>
 						</xtce:PolynomialCalibrator>
 					</xtce:DefaultCalibrator>
 				</xtce:IntegerDataEncoding>
@@ -1314,11 +1319,11 @@
 				<xtce:UnitSet>
 					<xtce:Unit description="ScaleUnits">V</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment">
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement">
 					<xtce:DefaultCalibrator>
 						<xtce:PolynomialCalibrator>
-							<xtce:Term exponent="0.0" coefficient="0.0"/>
-							<xtce:Term exponent="1.0" coefficient="0.1"/>
+							<xtce:Term exponent="0" coefficient="0.0"/>
+							<xtce:Term exponent="1" coefficient="0.1"/>
 						</xtce:PolynomialCalibrator>
 					</xtce:DefaultCalibrator>
 				</xtce:IntegerDataEncoding>
@@ -1327,11 +1332,11 @@
 				<xtce:UnitSet>
 					<xtce:Unit description="ScaleUnits">A</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment">
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement">
 					<xtce:DefaultCalibrator>
 						<xtce:PolynomialCalibrator>
-							<xtce:Term exponent="0.0" coefficient="0.0"/>
-							<xtce:Term exponent="1.0" coefficient="0.1"/>
+							<xtce:Term exponent="0" coefficient="0.0"/>
+							<xtce:Term exponent="1" coefficient="0.1"/>
 						</xtce:PolynomialCalibrator>
 					</xtce:DefaultCalibrator>
 				</xtce:IntegerDataEncoding>
@@ -1340,11 +1345,11 @@
 				<xtce:UnitSet>
 					<xtce:Unit description="ScaleUnits">A</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment">
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement">
 					<xtce:DefaultCalibrator>
 						<xtce:PolynomialCalibrator>
-							<xtce:Term exponent="0.0" coefficient="0.0"/>
-							<xtce:Term exponent="1.0" coefficient="0.1"/>
+							<xtce:Term exponent="0" coefficient="0.0"/>
+							<xtce:Term exponent="1" coefficient="0.1"/>
 						</xtce:PolynomialCalibrator>
 					</xtce:DefaultCalibrator>
 				</xtce:IntegerDataEncoding>
@@ -1353,11 +1358,11 @@
 				<xtce:UnitSet>
 					<xtce:Unit description="ScaleUnits">A</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment">
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement">
 					<xtce:DefaultCalibrator>
 						<xtce:PolynomialCalibrator>
-							<xtce:Term exponent="0.0" coefficient="0.0"/>
-							<xtce:Term exponent="1.0" coefficient="0.1"/>
+							<xtce:Term exponent="0" coefficient="0.0"/>
+							<xtce:Term exponent="1" coefficient="0.1"/>
 						</xtce:PolynomialCalibrator>
 					</xtce:DefaultCalibrator>
 				</xtce:IntegerDataEncoding>
@@ -1374,11 +1379,11 @@
 				<xtce:UnitSet>
 					<xtce:Unit description="ScaleUnits">A</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment">
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement">
 					<xtce:DefaultCalibrator>
 						<xtce:PolynomialCalibrator>
-							<xtce:Term exponent="0.0" coefficient="0.0"/>
-							<xtce:Term exponent="1.0" coefficient="0.1"/>
+							<xtce:Term exponent="0" coefficient="0.0"/>
+							<xtce:Term exponent="1" coefficient="0.1"/>
 						</xtce:PolynomialCalibrator>
 					</xtce:DefaultCalibrator>
 				</xtce:IntegerDataEncoding>
@@ -1407,55 +1412,55 @@
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">degC</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement"/>
 			</xtce:IntegerParameterType>
 			<xtce:IntegerParameterType signed="true" name="PowmZ1Temp2Type">
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">degC</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement"/>
 			</xtce:IntegerParameterType>
 			<xtce:IntegerParameterType signed="true" name="PowmZ1Temp3Type">
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">degC</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement"/>
 			</xtce:IntegerParameterType>
 			<xtce:IntegerParameterType signed="true" name="PowmZ1Temp4Type">
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">degC</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement"/>
 			</xtce:IntegerParameterType>
 			<xtce:IntegerParameterType signed="true" name="PowmZ1Temp5Type">
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">degC</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement"/>
 			</xtce:IntegerParameterType>
 			<xtce:IntegerParameterType signed="true" name="PowmZ1Temp6Type">
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">degC</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement"/>
 			</xtce:IntegerParameterType>
 			<xtce:IntegerParameterType signed="true" name="PowmZ1Temp7Type">
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">degC</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement"/>
 			</xtce:IntegerParameterType>
 			<xtce:IntegerParameterType signed="true" name="PowmZ1Temp8Type">
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">degC</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement"/>
 			</xtce:IntegerParameterType>
 			<xtce:IntegerParameterType signed="true" name="PowmZ2DeviceTemperatureType">
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">degC</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement"/>
 				<xtce:DefaultAlarm>
 					<xtce:StaticAlarmRanges>
 						<xtce:WarningRange minInclusive="0.0" maxInclusive="40.0"/>
@@ -1466,11 +1471,11 @@
 				<xtce:UnitSet>
 					<xtce:Unit description="ScaleUnits">V</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment">
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement">
 					<xtce:DefaultCalibrator>
 						<xtce:PolynomialCalibrator>
-							<xtce:Term exponent="0.0" coefficient="0.0"/>
-							<xtce:Term exponent="1.0" coefficient="0.1"/>
+							<xtce:Term exponent="0" coefficient="0.0"/>
+							<xtce:Term exponent="1" coefficient="0.1"/>
 						</xtce:PolynomialCalibrator>
 					</xtce:DefaultCalibrator>
 				</xtce:IntegerDataEncoding>
@@ -1479,11 +1484,11 @@
 				<xtce:UnitSet>
 					<xtce:Unit description="ScaleUnits">V</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment">
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement">
 					<xtce:DefaultCalibrator>
 						<xtce:PolynomialCalibrator>
-							<xtce:Term exponent="0.0" coefficient="0.0"/>
-							<xtce:Term exponent="1.0" coefficient="0.1"/>
+							<xtce:Term exponent="0" coefficient="0.0"/>
+							<xtce:Term exponent="1" coefficient="0.1"/>
 						</xtce:PolynomialCalibrator>
 					</xtce:DefaultCalibrator>
 				</xtce:IntegerDataEncoding>
@@ -1492,11 +1497,11 @@
 				<xtce:UnitSet>
 					<xtce:Unit description="ScaleUnits">A</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment">
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement">
 					<xtce:DefaultCalibrator>
 						<xtce:PolynomialCalibrator>
-							<xtce:Term exponent="0.0" coefficient="0.0"/>
-							<xtce:Term exponent="1.0" coefficient="0.1"/>
+							<xtce:Term exponent="0" coefficient="0.0"/>
+							<xtce:Term exponent="1" coefficient="0.1"/>
 						</xtce:PolynomialCalibrator>
 					</xtce:DefaultCalibrator>
 				</xtce:IntegerDataEncoding>
@@ -1505,11 +1510,11 @@
 				<xtce:UnitSet>
 					<xtce:Unit description="ScaleUnits">A</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment">
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement">
 					<xtce:DefaultCalibrator>
 						<xtce:PolynomialCalibrator>
-							<xtce:Term exponent="0.0" coefficient="0.0"/>
-							<xtce:Term exponent="1.0" coefficient="0.1"/>
+							<xtce:Term exponent="0" coefficient="0.0"/>
+							<xtce:Term exponent="1" coefficient="0.1"/>
 						</xtce:PolynomialCalibrator>
 					</xtce:DefaultCalibrator>
 				</xtce:IntegerDataEncoding>
@@ -1518,11 +1523,11 @@
 				<xtce:UnitSet>
 					<xtce:Unit description="ScaleUnits">A</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment">
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement">
 					<xtce:DefaultCalibrator>
 						<xtce:PolynomialCalibrator>
-							<xtce:Term exponent="0.0" coefficient="0.0"/>
-							<xtce:Term exponent="1.0" coefficient="0.1"/>
+							<xtce:Term exponent="0" coefficient="0.0"/>
+							<xtce:Term exponent="1" coefficient="0.1"/>
 						</xtce:PolynomialCalibrator>
 					</xtce:DefaultCalibrator>
 				</xtce:IntegerDataEncoding>
@@ -1539,11 +1544,11 @@
 				<xtce:UnitSet>
 					<xtce:Unit description="ScaleUnits">A</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment">
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement">
 					<xtce:DefaultCalibrator>
 						<xtce:PolynomialCalibrator>
-							<xtce:Term exponent="0.0" coefficient="0.0"/>
-							<xtce:Term exponent="1.0" coefficient="0.1"/>
+							<xtce:Term exponent="0" coefficient="0.0"/>
+							<xtce:Term exponent="1" coefficient="0.1"/>
 						</xtce:PolynomialCalibrator>
 					</xtce:DefaultCalibrator>
 				</xtce:IntegerDataEncoding>
@@ -1572,55 +1577,55 @@
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">degC</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement"/>
 			</xtce:IntegerParameterType>
 			<xtce:IntegerParameterType signed="true" name="PowmY1Temp2Type">
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">degC</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement"/>
 			</xtce:IntegerParameterType>
 			<xtce:IntegerParameterType signed="true" name="PowmY1Temp3Type">
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">degC</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement"/>
 			</xtce:IntegerParameterType>
 			<xtce:IntegerParameterType signed="true" name="PowmY1Temp4Type">
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">degC</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement"/>
 			</xtce:IntegerParameterType>
 			<xtce:IntegerParameterType signed="true" name="PowmY1Temp5Type">
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">degC</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement"/>
 			</xtce:IntegerParameterType>
 			<xtce:IntegerParameterType signed="true" name="PowmY1Temp6Type">
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">degC</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement"/>
 			</xtce:IntegerParameterType>
 			<xtce:IntegerParameterType signed="true" name="PowmY1Temp7Type">
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">degC</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement"/>
 			</xtce:IntegerParameterType>
 			<xtce:IntegerParameterType signed="true" name="PowmY1Temp8Type">
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">degC</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement"/>
 			</xtce:IntegerParameterType>
 			<xtce:IntegerParameterType signed="true" name="PowmY2DeviceTemperatureType">
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">degC</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement"/>
 				<xtce:DefaultAlarm>
 					<xtce:StaticAlarmRanges>
 						<xtce:WarningRange minInclusive="0.0" maxInclusive="40.0"/>
@@ -1631,11 +1636,11 @@
 				<xtce:UnitSet>
 					<xtce:Unit description="ScaleUnits">V</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment">
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement">
 					<xtce:DefaultCalibrator>
 						<xtce:PolynomialCalibrator>
-							<xtce:Term exponent="0.0" coefficient="0.0"/>
-							<xtce:Term exponent="1.0" coefficient="0.1"/>
+							<xtce:Term exponent="0" coefficient="0.0"/>
+							<xtce:Term exponent="1" coefficient="0.1"/>
 						</xtce:PolynomialCalibrator>
 					</xtce:DefaultCalibrator>
 				</xtce:IntegerDataEncoding>
@@ -1644,11 +1649,11 @@
 				<xtce:UnitSet>
 					<xtce:Unit description="ScaleUnits">V</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment">
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement">
 					<xtce:DefaultCalibrator>
 						<xtce:PolynomialCalibrator>
-							<xtce:Term exponent="0.0" coefficient="0.0"/>
-							<xtce:Term exponent="1.0" coefficient="0.1"/>
+							<xtce:Term exponent="0" coefficient="0.0"/>
+							<xtce:Term exponent="1" coefficient="0.1"/>
 						</xtce:PolynomialCalibrator>
 					</xtce:DefaultCalibrator>
 				</xtce:IntegerDataEncoding>
@@ -1657,11 +1662,11 @@
 				<xtce:UnitSet>
 					<xtce:Unit description="ScaleUnits">A</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment">
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement">
 					<xtce:DefaultCalibrator>
 						<xtce:PolynomialCalibrator>
-							<xtce:Term exponent="0.0" coefficient="0.0"/>
-							<xtce:Term exponent="1.0" coefficient="0.1"/>
+							<xtce:Term exponent="0" coefficient="0.0"/>
+							<xtce:Term exponent="1" coefficient="0.1"/>
 						</xtce:PolynomialCalibrator>
 					</xtce:DefaultCalibrator>
 				</xtce:IntegerDataEncoding>
@@ -1670,11 +1675,11 @@
 				<xtce:UnitSet>
 					<xtce:Unit description="ScaleUnits">A</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment">
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement">
 					<xtce:DefaultCalibrator>
 						<xtce:PolynomialCalibrator>
-							<xtce:Term exponent="0.0" coefficient="0.0"/>
-							<xtce:Term exponent="1.0" coefficient="0.1"/>
+							<xtce:Term exponent="0" coefficient="0.0"/>
+							<xtce:Term exponent="1" coefficient="0.1"/>
 						</xtce:PolynomialCalibrator>
 					</xtce:DefaultCalibrator>
 				</xtce:IntegerDataEncoding>
@@ -1683,11 +1688,11 @@
 				<xtce:UnitSet>
 					<xtce:Unit description="ScaleUnits">A</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment">
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement">
 					<xtce:DefaultCalibrator>
 						<xtce:PolynomialCalibrator>
-							<xtce:Term exponent="0.0" coefficient="0.0"/>
-							<xtce:Term exponent="1.0" coefficient="0.1"/>
+							<xtce:Term exponent="0" coefficient="0.0"/>
+							<xtce:Term exponent="1" coefficient="0.1"/>
 						</xtce:PolynomialCalibrator>
 					</xtce:DefaultCalibrator>
 				</xtce:IntegerDataEncoding>
@@ -1704,11 +1709,11 @@
 				<xtce:UnitSet>
 					<xtce:Unit description="ScaleUnits">A</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment">
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement">
 					<xtce:DefaultCalibrator>
 						<xtce:PolynomialCalibrator>
-							<xtce:Term exponent="0.0" coefficient="0.0"/>
-							<xtce:Term exponent="1.0" coefficient="0.1"/>
+							<xtce:Term exponent="0" coefficient="0.0"/>
+							<xtce:Term exponent="1" coefficient="0.1"/>
 						</xtce:PolynomialCalibrator>
 					</xtce:DefaultCalibrator>
 				</xtce:IntegerDataEncoding>
@@ -1737,55 +1742,55 @@
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">degC</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement"/>
 			</xtce:IntegerParameterType>
 			<xtce:IntegerParameterType signed="true" name="PowpX1Temp2Type">
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">degC</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement"/>
 			</xtce:IntegerParameterType>
 			<xtce:IntegerParameterType signed="true" name="PowpX1Temp3Type">
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">degC</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement"/>
 			</xtce:IntegerParameterType>
 			<xtce:IntegerParameterType signed="true" name="PowpX1Temp4Type">
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">degC</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement"/>
 			</xtce:IntegerParameterType>
 			<xtce:IntegerParameterType signed="true" name="PowpX1Temp5Type">
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">degC</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement"/>
 			</xtce:IntegerParameterType>
 			<xtce:IntegerParameterType signed="true" name="PowpX1Temp6Type">
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">degC</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement"/>
 			</xtce:IntegerParameterType>
 			<xtce:IntegerParameterType signed="true" name="PowpX1Temp7Type">
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">degC</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement"/>
 			</xtce:IntegerParameterType>
 			<xtce:IntegerParameterType signed="true" name="PowpX1Temp8Type">
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">degC</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement"/>
 			</xtce:IntegerParameterType>
 			<xtce:IntegerParameterType signed="true" name="PowpX2DeviceTemperatureType">
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">degC</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement"/>
 				<xtce:DefaultAlarm>
 					<xtce:StaticAlarmRanges>
 						<xtce:WarningRange minInclusive="0.0" maxInclusive="40.0"/>
@@ -1796,11 +1801,11 @@
 				<xtce:UnitSet>
 					<xtce:Unit description="ScaleUnits">V</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment">
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement">
 					<xtce:DefaultCalibrator>
 						<xtce:PolynomialCalibrator>
-							<xtce:Term exponent="0.0" coefficient="0.0"/>
-							<xtce:Term exponent="1.0" coefficient="0.1"/>
+							<xtce:Term exponent="0" coefficient="0.0"/>
+							<xtce:Term exponent="1" coefficient="0.1"/>
 						</xtce:PolynomialCalibrator>
 					</xtce:DefaultCalibrator>
 				</xtce:IntegerDataEncoding>
@@ -1809,11 +1814,11 @@
 				<xtce:UnitSet>
 					<xtce:Unit description="ScaleUnits">V</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment">
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement">
 					<xtce:DefaultCalibrator>
 						<xtce:PolynomialCalibrator>
-							<xtce:Term exponent="0.0" coefficient="0.0"/>
-							<xtce:Term exponent="1.0" coefficient="0.1"/>
+							<xtce:Term exponent="0" coefficient="0.0"/>
+							<xtce:Term exponent="1" coefficient="0.1"/>
 						</xtce:PolynomialCalibrator>
 					</xtce:DefaultCalibrator>
 				</xtce:IntegerDataEncoding>
@@ -1822,11 +1827,11 @@
 				<xtce:UnitSet>
 					<xtce:Unit description="ScaleUnits">A</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment">
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement">
 					<xtce:DefaultCalibrator>
 						<xtce:PolynomialCalibrator>
-							<xtce:Term exponent="0.0" coefficient="0.0"/>
-							<xtce:Term exponent="1.0" coefficient="0.1"/>
+							<xtce:Term exponent="0" coefficient="0.0"/>
+							<xtce:Term exponent="1" coefficient="0.1"/>
 						</xtce:PolynomialCalibrator>
 					</xtce:DefaultCalibrator>
 				</xtce:IntegerDataEncoding>
@@ -1835,11 +1840,11 @@
 				<xtce:UnitSet>
 					<xtce:Unit description="ScaleUnits">A</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment">
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement">
 					<xtce:DefaultCalibrator>
 						<xtce:PolynomialCalibrator>
-							<xtce:Term exponent="0.0" coefficient="0.0"/>
-							<xtce:Term exponent="1.0" coefficient="0.1"/>
+							<xtce:Term exponent="0" coefficient="0.0"/>
+							<xtce:Term exponent="1" coefficient="0.1"/>
 						</xtce:PolynomialCalibrator>
 					</xtce:DefaultCalibrator>
 				</xtce:IntegerDataEncoding>
@@ -1848,11 +1853,11 @@
 				<xtce:UnitSet>
 					<xtce:Unit description="ScaleUnits">A</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment">
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement">
 					<xtce:DefaultCalibrator>
 						<xtce:PolynomialCalibrator>
-							<xtce:Term exponent="0.0" coefficient="0.0"/>
-							<xtce:Term exponent="1.0" coefficient="0.1"/>
+							<xtce:Term exponent="0" coefficient="0.0"/>
+							<xtce:Term exponent="1" coefficient="0.1"/>
 						</xtce:PolynomialCalibrator>
 					</xtce:DefaultCalibrator>
 				</xtce:IntegerDataEncoding>
@@ -1869,11 +1874,11 @@
 				<xtce:UnitSet>
 					<xtce:Unit description="ScaleUnits">A</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment">
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement">
 					<xtce:DefaultCalibrator>
 						<xtce:PolynomialCalibrator>
-							<xtce:Term exponent="0.0" coefficient="0.0"/>
-							<xtce:Term exponent="1.0" coefficient="0.1"/>
+							<xtce:Term exponent="0" coefficient="0.0"/>
+							<xtce:Term exponent="1" coefficient="0.1"/>
 						</xtce:PolynomialCalibrator>
 					</xtce:DefaultCalibrator>
 				</xtce:IntegerDataEncoding>
@@ -1902,55 +1907,55 @@
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">degC</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement"/>
 			</xtce:IntegerParameterType>
 			<xtce:IntegerParameterType signed="true" name="PowpY1Temp2Type">
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">degC</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement"/>
 			</xtce:IntegerParameterType>
 			<xtce:IntegerParameterType signed="true" name="PowpY1Temp3Type">
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">degC</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement"/>
 			</xtce:IntegerParameterType>
 			<xtce:IntegerParameterType signed="true" name="PowpY1Temp4Type">
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">degC</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement"/>
 			</xtce:IntegerParameterType>
 			<xtce:IntegerParameterType signed="true" name="PowpY1Temp5Type">
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">degC</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement"/>
 			</xtce:IntegerParameterType>
 			<xtce:IntegerParameterType signed="true" name="PowpY1Temp6Type">
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">degC</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement"/>
 			</xtce:IntegerParameterType>
 			<xtce:IntegerParameterType signed="true" name="PowpY1Temp7Type">
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">degC</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement"/>
 			</xtce:IntegerParameterType>
 			<xtce:IntegerParameterType signed="true" name="PowpY1Temp8Type">
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">degC</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement"/>
 			</xtce:IntegerParameterType>
 			<xtce:IntegerParameterType signed="true" name="PowpY2DeviceTemperatureType">
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">degC</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement"/>
 				<xtce:DefaultAlarm>
 					<xtce:StaticAlarmRanges>
 						<xtce:WarningRange minInclusive="0.0" maxInclusive="40.0"/>
@@ -1961,11 +1966,11 @@
 				<xtce:UnitSet>
 					<xtce:Unit description="ScaleUnits">V</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment">
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement">
 					<xtce:DefaultCalibrator>
 						<xtce:PolynomialCalibrator>
-							<xtce:Term exponent="0.0" coefficient="0.0"/>
-							<xtce:Term exponent="1.0" coefficient="0.1"/>
+							<xtce:Term exponent="0" coefficient="0.0"/>
+							<xtce:Term exponent="1" coefficient="0.1"/>
 						</xtce:PolynomialCalibrator>
 					</xtce:DefaultCalibrator>
 				</xtce:IntegerDataEncoding>
@@ -1974,11 +1979,11 @@
 				<xtce:UnitSet>
 					<xtce:Unit description="ScaleUnits">V</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment">
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement">
 					<xtce:DefaultCalibrator>
 						<xtce:PolynomialCalibrator>
-							<xtce:Term exponent="0.0" coefficient="0.0"/>
-							<xtce:Term exponent="1.0" coefficient="0.1"/>
+							<xtce:Term exponent="0" coefficient="0.0"/>
+							<xtce:Term exponent="1" coefficient="0.1"/>
 						</xtce:PolynomialCalibrator>
 					</xtce:DefaultCalibrator>
 				</xtce:IntegerDataEncoding>
@@ -1987,11 +1992,11 @@
 				<xtce:UnitSet>
 					<xtce:Unit description="ScaleUnits">A</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment">
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement">
 					<xtce:DefaultCalibrator>
 						<xtce:PolynomialCalibrator>
-							<xtce:Term exponent="0.0" coefficient="0.0"/>
-							<xtce:Term exponent="1.0" coefficient="0.1"/>
+							<xtce:Term exponent="0" coefficient="0.0"/>
+							<xtce:Term exponent="1" coefficient="0.1"/>
 						</xtce:PolynomialCalibrator>
 					</xtce:DefaultCalibrator>
 				</xtce:IntegerDataEncoding>
@@ -2000,11 +2005,11 @@
 				<xtce:UnitSet>
 					<xtce:Unit description="ScaleUnits">A</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment">
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement">
 					<xtce:DefaultCalibrator>
 						<xtce:PolynomialCalibrator>
-							<xtce:Term exponent="0.0" coefficient="0.0"/>
-							<xtce:Term exponent="1.0" coefficient="0.1"/>
+							<xtce:Term exponent="0" coefficient="0.0"/>
+							<xtce:Term exponent="1" coefficient="0.1"/>
 						</xtce:PolynomialCalibrator>
 					</xtce:DefaultCalibrator>
 				</xtce:IntegerDataEncoding>
@@ -2013,11 +2018,11 @@
 				<xtce:UnitSet>
 					<xtce:Unit description="ScaleUnits">A</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment">
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement">
 					<xtce:DefaultCalibrator>
 						<xtce:PolynomialCalibrator>
-							<xtce:Term exponent="0.0" coefficient="0.0"/>
-							<xtce:Term exponent="1.0" coefficient="0.1"/>
+							<xtce:Term exponent="0" coefficient="0.0"/>
+							<xtce:Term exponent="1" coefficient="0.1"/>
 						</xtce:PolynomialCalibrator>
 					</xtce:DefaultCalibrator>
 				</xtce:IntegerDataEncoding>
@@ -2034,11 +2039,11 @@
 				<xtce:UnitSet>
 					<xtce:Unit description="ScaleUnits">A</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment">
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement">
 					<xtce:DefaultCalibrator>
 						<xtce:PolynomialCalibrator>
-							<xtce:Term exponent="0.0" coefficient="0.0"/>
-							<xtce:Term exponent="1.0" coefficient="0.1"/>
+							<xtce:Term exponent="0" coefficient="0.0"/>
+							<xtce:Term exponent="1" coefficient="0.1"/>
 						</xtce:PolynomialCalibrator>
 					</xtce:DefaultCalibrator>
 				</xtce:IntegerDataEncoding>
@@ -2067,55 +2072,55 @@
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">degC</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement"/>
 			</xtce:IntegerParameterType>
 			<xtce:IntegerParameterType signed="true" name="PowpZ1Temp2Type">
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">degC</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement"/>
 			</xtce:IntegerParameterType>
 			<xtce:IntegerParameterType signed="true" name="PowpZ1Temp3Type">
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">degC</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement"/>
 			</xtce:IntegerParameterType>
 			<xtce:IntegerParameterType signed="true" name="PowpZ1Temp4Type">
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">degC</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement"/>
 			</xtce:IntegerParameterType>
 			<xtce:IntegerParameterType signed="true" name="PowpZ1Temp5Type">
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">degC</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement"/>
 			</xtce:IntegerParameterType>
 			<xtce:IntegerParameterType signed="true" name="PowpZ1Temp6Type">
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">degC</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement"/>
 			</xtce:IntegerParameterType>
 			<xtce:IntegerParameterType signed="true" name="PowpZ1Temp7Type">
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">degC</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement"/>
 			</xtce:IntegerParameterType>
 			<xtce:IntegerParameterType signed="true" name="PowpZ1Temp8Type">
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">degC</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement"/>
 			</xtce:IntegerParameterType>
 			<xtce:IntegerParameterType signed="true" name="PowpZ2DeviceTemperatureType">
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">degC</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement"/>
 				<xtce:DefaultAlarm>
 					<xtce:StaticAlarmRanges>
 						<xtce:WarningRange minInclusive="0.0" maxInclusive="40.0"/>
@@ -2133,7 +2138,7 @@
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">m</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="32" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="32" encoding="twosComplement"/>
 			</xtce:IntegerParameterType>
 			<xtce:ArrayParameterType numberOfDimensions="1" arrayTypeRef="GPSmY0GPSVelocityTypeField" name="GPSmY0GPSVelocityType"/>
 			<xtce:FloatParameterType sizeInBits="64" name="GPSmY0GPSVelocityTypeField">
@@ -2223,7 +2228,7 @@
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">m</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="32" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="32" encoding="twosComplement"/>
 			</xtce:IntegerParameterType>
 			<xtce:ArrayParameterType numberOfDimensions="1" arrayTypeRef="GPSpY0GPSVelocityTypeField" name="GPSpY0GPSVelocityType"/>
 			<xtce:FloatParameterType sizeInBits="64" name="GPSpY0GPSVelocityTypeField">
@@ -2376,7 +2381,7 @@
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">counts</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement"/>
 			</xtce:IntegerParameterType>
 			<xtce:FloatParameterType sizeInBits="64" name="ESM0CurrentToBusType" shortDescription="monitored current to bus">
 				<xtce:UnitSet>
@@ -2454,7 +2459,7 @@
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">degC</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement"/>
 				<xtce:DefaultAlarm>
 					<xtce:StaticAlarmRanges>
 						<xtce:WarningRange minInclusive="0.0" maxInclusive="40.0"/>
@@ -2465,7 +2470,7 @@
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">degC</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement"/>
 				<xtce:DefaultAlarm>
 					<xtce:StaticAlarmRanges>
 						<xtce:WarningRange minInclusive="0.0" maxInclusive="40.0"/>
@@ -2476,7 +2481,7 @@
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">degC</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement"/>
 				<xtce:DefaultAlarm>
 					<xtce:StaticAlarmRanges>
 						<xtce:WarningRange minInclusive="0.0" maxInclusive="40.0"/>
@@ -2487,7 +2492,7 @@
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">degC</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement"/>
 				<xtce:DefaultAlarm>
 					<xtce:StaticAlarmRanges>
 						<xtce:WarningRange minInclusive="0.0" maxInclusive="40.0"/>
@@ -2891,11 +2896,11 @@
 			</xtce:IntegerParameterType>
 			<xtce:IntegerParameterType signed="true" name="VS1HubType" shortDescription="index of hub on spacecraft">
 				<xtce:UnitSet/>
-				<xtce:IntegerDataEncoding sizeInBits="8" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="8" encoding="twosComplement"/>
 			</xtce:IntegerParameterType>
 			<xtce:IntegerParameterType signed="true" name="VS1EndpointType" shortDescription="index of endpoint on hub">
 				<xtce:UnitSet/>
-				<xtce:IntegerDataEncoding sizeInBits="8" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="8" encoding="twosComplement"/>
 			</xtce:IntegerParameterType>
 			<xtce:StringParameterType name="VS1ComponentKeyType">
 				<xtce:UnitSet/>
@@ -3160,13 +3165,13 @@
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">s</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="32" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="32" encoding="twosComplement"/>
 			</xtce:IntegerParameterType>
 			<xtce:IntegerParameterType signed="true" name="RTC0TBItareType" shortDescription="Clock tare used by test bypass to sync clocks to HWIL simulation">
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">s</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="32" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="32" encoding="twosComplement"/>
 			</xtce:IntegerParameterType>
 			<xtce:IntegerParameterType signed="false" name="RTC0GPSTimeoutType" shortDescription="Time to wait after no-GPS to activate clock">
 				<xtce:UnitSet>
@@ -3332,7 +3337,7 @@
 			</xtce:StringParameterType>
 			<xtce:IntegerParameterType signed="true" name="TM0ExitStatusType">
 				<xtce:UnitSet/>
-				<xtce:IntegerDataEncoding sizeInBits="32" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="32" encoding="twosComplement"/>
 			</xtce:IntegerParameterType>
 			<xtce:IntegerParameterType signed="false" name="TM0SenderAddrType">
 				<xtce:UnitSet/>
@@ -3366,7 +3371,7 @@
 			</xtce:IntegerParameterType>
 			<xtce:EnumeratedParameterType name="TM0ExecutionModeType" shortDescription="Task execution mode.">
 				<xtce:UnitSet/>
-				<xtce:IntegerDataEncoding sizeInBits="8" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="8" encoding="twosComplement"/>
 				<xtce:EnumerationList>
 					<xtce:Enumeration value="1" label="Normal"/>
 					<xtce:Enumeration value="2" label="AlwaysRunning"/>
@@ -3374,7 +3379,7 @@
 			</xtce:EnumeratedParameterType>
 			<xtce:EnumeratedParameterType name="TM0ArchitectureTypeType">
 				<xtce:UnitSet/>
-				<xtce:IntegerDataEncoding sizeInBits="8" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="8" encoding="twosComplement"/>
 				<xtce:EnumerationList>
 					<xtce:Enumeration value="1" label="Intel"/>
 					<xtce:Enumeration value="2" label="Microblaze"/>
@@ -3382,7 +3387,7 @@
 			</xtce:EnumeratedParameterType>
 			<xtce:EnumeratedParameterType name="TM0OsTypeType">
 				<xtce:UnitSet/>
-				<xtce:IntegerDataEncoding sizeInBits="8" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="8" encoding="twosComplement"/>
 				<xtce:EnumerationList>
 					<xtce:Enumeration value="1" label="Linux"/>
 					<xtce:Enumeration value="2" label="Win"/>
@@ -3390,7 +3395,7 @@
 			</xtce:EnumeratedParameterType>
 			<xtce:EnumeratedParameterType name="TM0MemTypeeType">
 				<xtce:UnitSet/>
-				<xtce:IntegerDataEncoding sizeInBits="8" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="8" encoding="twosComplement"/>
 				<xtce:EnumerationList>
 					<xtce:Enumeration value="1" label="MemA"/>
 					<xtce:Enumeration value="2" label="MemB"/>
@@ -3400,7 +3405,7 @@
 			</xtce:EnumeratedParameterType>
 			<xtce:EnumeratedParameterType name="TM0TaskStateType">
 				<xtce:UnitSet/>
-				<xtce:IntegerDataEncoding sizeInBits="8" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="8" encoding="twosComplement"/>
 				<xtce:EnumerationList>
 					<xtce:Enumeration value="1" label="Queued"/>
 					<xtce:Enumeration value="2" label="Scheduled"/>
@@ -3659,8 +3664,8 @@
 				<xtce:IntegerDataEncoding sizeInBits="32" encoding="unsigned">
 					<xtce:DefaultCalibrator>
 						<xtce:PolynomialCalibrator>
-							<xtce:Term exponent="0.0" coefficient="0.0"/>
-							<xtce:Term exponent="1.0" coefficient="1.0E-6"/>
+							<xtce:Term exponent="0" coefficient="0.0"/>
+							<xtce:Term exponent="1" coefficient="1.0E-6"/>
 						</xtce:PolynomialCalibrator>
 					</xtce:DefaultCalibrator>
 				</xtce:IntegerDataEncoding>
@@ -3757,8 +3762,8 @@
 				<xtce:IntegerDataEncoding sizeInBits="32" encoding="unsigned">
 					<xtce:DefaultCalibrator>
 						<xtce:PolynomialCalibrator>
-							<xtce:Term exponent="0.0" coefficient="0.0"/>
-							<xtce:Term exponent="1.0" coefficient="1.0E-5"/>
+							<xtce:Term exponent="0" coefficient="0.0"/>
+							<xtce:Term exponent="1" coefficient="1.0E-5"/>
 						</xtce:PolynomialCalibrator>
 					</xtce:DefaultCalibrator>
 				</xtce:IntegerDataEncoding>
@@ -4086,13 +4091,13 @@
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">s</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="32" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="32" encoding="twosComplement"/>
 			</xtce:IntegerParameterType>
 			<xtce:IntegerParameterType signed="true" name="BMG0MaxTimeType" shortDescription="Max time range value for buffer searches, -1 indicates no constraint">
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">s</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="32" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="32" encoding="twosComplement"/>
 			</xtce:IntegerParameterType>
 			<xtce:EnumeratedParameterType name="BMG0SourceSearchFlagType">
 				<xtce:LongDescription>Flag indicating search source data, 1 is all, 2 uses Source data from SourceSensorID/SourceIpAddress/SourcePortID variables</xtce:LongDescription>
@@ -4199,7 +4204,7 @@
 			</xtce:IntegerParameterType>
 			<xtce:IntegerParameterType name="ErrCodeType">
 				<xtce:UnitSet/>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement"/>
 			</xtce:IntegerParameterType>
 			<xtce:FloatParameterType name="ElevCalcType">
 				<xtce:UnitSet/>
@@ -4232,7 +4237,7 @@
 			</xtce:IntegerParameterType>
 			<xtce:IntegerParameterType sizeInBits="64" name="MSBlsbType">
 				<xtce:UnitSet/>
-				<xtce:IntegerDataEncoding sizeInBits="64" encoding="twosCompliment" bitOrder="leastSignificantBitFirst">
+				<xtce:IntegerDataEncoding sizeInBits="64" encoding="twosComplement" bitOrder="leastSignificantBitFirst">
 					<xtce:ByteOrderList>
 						<xtce:Byte byteSignificance="7"/>
 						<xtce:Byte byteSignificance="6"/>
@@ -4275,25 +4280,25 @@
 				<xtce:UnitSet>
 					<xtce:Unit description="Bq">units:Becquerel</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment">
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement">
 					<xtce:DefaultCalibrator>
-						<xtce:SplineCalibrator>
-							<xtce:SplinePoint raw="-32768.0" order="1" calibrated="0.0"/>
-							<xtce:SplinePoint raw="0.0" order="1" calibrated="5.0"/>
-							<xtce:SplinePoint raw="32767.0" order="1" calibrated="20.0"/>
-							<xtce:SplinePoint raw="0.0" order="1" calibrated="0.0"/>
-							<xtce:SplinePoint raw="0.0" order="1" calibrated="0.0"/>
-							<xtce:SplinePoint raw="0.0" order="1" calibrated="0.0"/>
-							<xtce:SplinePoint raw="0.0" order="1" calibrated="0.0"/>
-							<xtce:SplinePoint raw="0.0" order="1" calibrated="0.0"/>
-							<xtce:SplinePoint raw="0.0" order="1" calibrated="0.0"/>
+						<xtce:SplineCalibrator order="1">
+							<xtce:SplinePoint raw="-32768.0" calibrated="0.0"/>
+							<xtce:SplinePoint raw="0.0" calibrated="5.0"/>
+							<xtce:SplinePoint raw="32767.0" calibrated="20.0"/>
+							<xtce:SplinePoint raw="0.0" calibrated="0.0"/>
+							<xtce:SplinePoint raw="0.0" calibrated="0.0"/>
+							<xtce:SplinePoint raw="0.0" calibrated="0.0"/>
+							<xtce:SplinePoint raw="0.0" calibrated="0.0"/>
+							<xtce:SplinePoint raw="0.0" calibrated="0.0"/>
+							<xtce:SplinePoint raw="0.0" calibrated="0.0"/>
 						</xtce:SplineCalibrator>
 					</xtce:DefaultCalibrator>
 				</xtce:IntegerDataEncoding>
 			</xtce:FloatParameterType>
 			<xtce:IntegerParameterType name="PwithAlarmRangesType">
 				<xtce:UnitSet/>
-				<xtce:IntegerDataEncoding sizeInBits="32" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="32" encoding="twosComplement"/>
 				<xtce:DefaultAlarm>
 					<xtce:StaticAlarmRanges>
 						<xtce:WarningRange minInclusive="-2000.0" maxInclusive="5000.0"/>
@@ -4305,12 +4310,12 @@
 				<xtce:UnitSet>
 					<xtce:Unit description="cd/m^2">units:CandelaPerSquareMeter</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment">
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement">
 					<xtce:DefaultCalibrator>
 						<xtce:PolynomialCalibrator>
-							<xtce:Term exponent="1.0" coefficient="-48.446"/>
-							<xtce:Term exponent="2.0" coefficient="1.4901"/>
-							<xtce:Term exponent="3.0" coefficient="-0.0048"/>
+							<xtce:Term exponent="1" coefficient="-48.446"/>
+							<xtce:Term exponent="2" coefficient="1.4901"/>
+							<xtce:Term exponent="3" coefficient="-0.0048"/>
 						</xtce:PolynomialCalibrator>
 					</xtce:DefaultCalibrator>
 					<xtce:ContextCalibratorList>
@@ -4320,9 +4325,9 @@
 							</xtce:ContextMatch>
 							<xtce:Calibrator>
 								<xtce:PolynomialCalibrator>
-									<xtce:Term exponent="1.0" coefficient="-47.446"/>
-									<xtce:Term exponent="2.0" coefficient="1.481"/>
-									<xtce:Term exponent="3.0" coefficient="-0.0148"/>
+									<xtce:Term exponent="1" coefficient="-47.446"/>
+									<xtce:Term exponent="2" coefficient="1.481"/>
+									<xtce:Term exponent="3" coefficient="-0.0148"/>
 								</xtce:PolynomialCalibrator>
 							</xtce:Calibrator>
 						</xtce:ContextCalibrator>
@@ -12293,6 +12298,20 @@
 				</xtce:BaseContainer>
 			</xtce:SequenceContainer>
 		</xtce:ContainerSet>
+                <xtce:StreamSet>
+                    <xtce:VariableFrameStream name="CCSDS-TM" shortDescription="CCSDS Telemetry Stream">
+                        <xtce:ContainerRef containerRef="CCSDSBaseTelemetryPacket"/>
+                        <xtce:SyncStrategy>
+                            <xtce:Flag/>
+                        </xtce:SyncStrategy>
+                    </xtce:VariableFrameStream>
+                    <xtce:VariableFrameStream name="ErrorEvents">
+                        <xtce:ContainerRef containerRef="ErrorEventPacket"/>
+                        <xtce:SyncStrategy>
+                            <xtce:Flag/>
+                        </xtce:SyncStrategy>
+                    </xtce:VariableFrameStream>
+                </xtce:StreamSet>
 	</xtce:TelemetryMetaData>
 	<xtce:CommandMetaData>
 		<xtce:ArgumentTypeSet>
@@ -12647,11 +12666,11 @@
 				<xtce:UnitSet>
 					<xtce:Unit description="ScaleUnits">A</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment">
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement">
 					<xtce:DefaultCalibrator>
 						<xtce:PolynomialCalibrator>
-							<xtce:Term exponent="0.0" coefficient="0.0"/>
-							<xtce:Term exponent="1.0" coefficient="0.1"/>
+							<xtce:Term exponent="0" coefficient="0.0"/>
+							<xtce:Term exponent="1" coefficient="0.1"/>
 						</xtce:PolynomialCalibrator>
 					</xtce:DefaultCalibrator>
 				</xtce:IntegerDataEncoding>
@@ -12674,11 +12693,11 @@
 				<xtce:UnitSet>
 					<xtce:Unit description="ScaleUnits">A</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment">
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement">
 					<xtce:DefaultCalibrator>
 						<xtce:PolynomialCalibrator>
-							<xtce:Term exponent="0.0" coefficient="0.0"/>
-							<xtce:Term exponent="1.0" coefficient="0.1"/>
+							<xtce:Term exponent="0" coefficient="0.0"/>
+							<xtce:Term exponent="1" coefficient="0.1"/>
 						</xtce:PolynomialCalibrator>
 					</xtce:DefaultCalibrator>
 				</xtce:IntegerDataEncoding>
@@ -12701,11 +12720,11 @@
 				<xtce:UnitSet>
 					<xtce:Unit description="ScaleUnits">A</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment">
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement">
 					<xtce:DefaultCalibrator>
 						<xtce:PolynomialCalibrator>
-							<xtce:Term exponent="0.0" coefficient="0.0"/>
-							<xtce:Term exponent="1.0" coefficient="0.1"/>
+							<xtce:Term exponent="0" coefficient="0.0"/>
+							<xtce:Term exponent="1" coefficient="0.1"/>
 						</xtce:PolynomialCalibrator>
 					</xtce:DefaultCalibrator>
 				</xtce:IntegerDataEncoding>
@@ -12728,11 +12747,11 @@
 				<xtce:UnitSet>
 					<xtce:Unit description="ScaleUnits">A</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment">
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement">
 					<xtce:DefaultCalibrator>
 						<xtce:PolynomialCalibrator>
-							<xtce:Term exponent="0.0" coefficient="0.0"/>
-							<xtce:Term exponent="1.0" coefficient="0.1"/>
+							<xtce:Term exponent="0" coefficient="0.0"/>
+							<xtce:Term exponent="1" coefficient="0.1"/>
 						</xtce:PolynomialCalibrator>
 					</xtce:DefaultCalibrator>
 				</xtce:IntegerDataEncoding>
@@ -12755,11 +12774,11 @@
 				<xtce:UnitSet>
 					<xtce:Unit description="ScaleUnits">A</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment">
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement">
 					<xtce:DefaultCalibrator>
 						<xtce:PolynomialCalibrator>
-							<xtce:Term exponent="0.0" coefficient="0.0"/>
-							<xtce:Term exponent="1.0" coefficient="0.1"/>
+							<xtce:Term exponent="0" coefficient="0.0"/>
+							<xtce:Term exponent="1" coefficient="0.1"/>
 						</xtce:PolynomialCalibrator>
 					</xtce:DefaultCalibrator>
 				</xtce:IntegerDataEncoding>
@@ -12782,11 +12801,11 @@
 				<xtce:UnitSet>
 					<xtce:Unit description="ScaleUnits">A</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment">
+				<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement">
 					<xtce:DefaultCalibrator>
 						<xtce:PolynomialCalibrator>
-							<xtce:Term exponent="0.0" coefficient="0.0"/>
-							<xtce:Term exponent="1.0" coefficient="0.1"/>
+							<xtce:Term exponent="0" coefficient="0.0"/>
+							<xtce:Term exponent="1" coefficient="0.1"/>
 						</xtce:PolynomialCalibrator>
 					</xtce:DefaultCalibrator>
 				</xtce:IntegerDataEncoding>
@@ -13245,7 +13264,7 @@
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">s</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="32" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="32" encoding="twosComplement"/>
 			</xtce:IntegerArgumentType>
 			<xtce:EnumeratedArgumentType name="RTC0ForceClockTickType" shortDescription="Enable forcing of clock tick messages">
 				<xtce:UnitSet/>
@@ -13345,7 +13364,7 @@
 			</xtce:IntegerArgumentType>
 			<xtce:EnumeratedArgumentType name="TM0ArchitectureTypeType">
 				<xtce:UnitSet/>
-				<xtce:IntegerDataEncoding sizeInBits="8" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="8" encoding="twosComplement"/>
 				<xtce:EnumerationList>
 					<xtce:Enumeration value="1" label="Intel"/>
 					<xtce:Enumeration value="2" label="Microblaze"/>
@@ -13353,7 +13372,7 @@
 			</xtce:EnumeratedArgumentType>
 			<xtce:EnumeratedArgumentType name="TM0OsTypeType">
 				<xtce:UnitSet/>
-				<xtce:IntegerDataEncoding sizeInBits="8" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="8" encoding="twosComplement"/>
 				<xtce:EnumerationList>
 					<xtce:Enumeration value="1" label="Linux"/>
 					<xtce:Enumeration value="2" label="Win"/>
@@ -13361,7 +13380,7 @@
 			</xtce:EnumeratedArgumentType>
 			<xtce:EnumeratedArgumentType name="TM0MemTypeeType">
 				<xtce:UnitSet/>
-				<xtce:IntegerDataEncoding sizeInBits="8" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="8" encoding="twosComplement"/>
 				<xtce:EnumerationList>
 					<xtce:Enumeration value="1" label="MemA"/>
 					<xtce:Enumeration value="2" label="MemB"/>
@@ -13371,7 +13390,7 @@
 			</xtce:EnumeratedArgumentType>
 			<xtce:EnumeratedArgumentType name="TM0ExecutionModeType" shortDescription="Task execution mode.">
 				<xtce:UnitSet/>
-				<xtce:IntegerDataEncoding sizeInBits="8" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="8" encoding="twosComplement"/>
 				<xtce:EnumerationList>
 					<xtce:Enumeration value="1" label="Normal"/>
 					<xtce:Enumeration value="2" label="AlwaysRunning"/>
@@ -13379,7 +13398,7 @@
 			</xtce:EnumeratedArgumentType>
 			<xtce:EnumeratedArgumentType name="TM0TaskRetrievalLocationType">
 				<xtce:UnitSet/>
-				<xtce:IntegerDataEncoding sizeInBits="8" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="8" encoding="twosComplement"/>
 				<xtce:EnumerationList>
 					<xtce:Enumeration value="1" label="PrimaryLocation"/>
 					<xtce:Enumeration value="2" label="TemporaryTestLocation"/>
@@ -13530,8 +13549,8 @@
 				<xtce:IntegerDataEncoding sizeInBits="32" encoding="unsigned">
 					<xtce:DefaultCalibrator>
 						<xtce:PolynomialCalibrator>
-							<xtce:Term exponent="0.0" coefficient="0.0"/>
-							<xtce:Term exponent="1.0" coefficient="1.0E-6"/>
+							<xtce:Term exponent="0" coefficient="0.0"/>
+							<xtce:Term exponent="1" coefficient="1.0E-6"/>
 						</xtce:PolynomialCalibrator>
 					</xtce:DefaultCalibrator>
 				</xtce:IntegerDataEncoding>
@@ -13549,8 +13568,8 @@
 				<xtce:IntegerDataEncoding sizeInBits="32" encoding="unsigned">
 					<xtce:DefaultCalibrator>
 						<xtce:PolynomialCalibrator>
-							<xtce:Term exponent="0.0" coefficient="0.0"/>
-							<xtce:Term exponent="1.0" coefficient="1.0E-6"/>
+							<xtce:Term exponent="0" coefficient="0.0"/>
+							<xtce:Term exponent="1" coefficient="1.0E-6"/>
 						</xtce:PolynomialCalibrator>
 					</xtce:DefaultCalibrator>
 				</xtce:IntegerDataEncoding>
@@ -13598,8 +13617,8 @@
 				<xtce:IntegerDataEncoding sizeInBits="32" encoding="unsigned">
 					<xtce:DefaultCalibrator>
 						<xtce:PolynomialCalibrator>
-							<xtce:Term exponent="0.0" coefficient="0.0"/>
-							<xtce:Term exponent="1.0" coefficient="1.0E-5"/>
+							<xtce:Term exponent="0" coefficient="0.0"/>
+							<xtce:Term exponent="1" coefficient="1.0E-5"/>
 						</xtce:PolynomialCalibrator>
 					</xtce:DefaultCalibrator>
 				</xtce:IntegerDataEncoding>
@@ -13645,8 +13664,8 @@
 				<xtce:IntegerDataEncoding sizeInBits="32" encoding="unsigned">
 					<xtce:DefaultCalibrator>
 						<xtce:PolynomialCalibrator>
-							<xtce:Term exponent="0.0" coefficient="0.0"/>
-							<xtce:Term exponent="1.0" coefficient="1.0E-6"/>
+							<xtce:Term exponent="0" coefficient="0.0"/>
+							<xtce:Term exponent="1" coefficient="1.0E-6"/>
 						</xtce:PolynomialCalibrator>
 					</xtce:DefaultCalibrator>
 				</xtce:IntegerDataEncoding>
@@ -13664,8 +13683,8 @@
 				<xtce:IntegerDataEncoding sizeInBits="32" encoding="unsigned">
 					<xtce:DefaultCalibrator>
 						<xtce:PolynomialCalibrator>
-							<xtce:Term exponent="0.0" coefficient="0.0"/>
-							<xtce:Term exponent="1.0" coefficient="1.0E-6"/>
+							<xtce:Term exponent="0" coefficient="0.0"/>
+							<xtce:Term exponent="1" coefficient="1.0E-6"/>
 						</xtce:PolynomialCalibrator>
 					</xtce:DefaultCalibrator>
 				</xtce:IntegerDataEncoding>
@@ -13781,13 +13800,13 @@
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">s</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="32" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="32" encoding="twosComplement"/>
 			</xtce:IntegerArgumentType>
 			<xtce:IntegerArgumentType signed="true" name="BMG0MaxTimeType" shortDescription="Max time range value for buffer searches, -1 indicates no constraint">
 				<xtce:UnitSet>
 					<xtce:Unit description="Units">s</xtce:Unit>
 				</xtce:UnitSet>
-				<xtce:IntegerDataEncoding sizeInBits="32" encoding="twosCompliment"/>
+				<xtce:IntegerDataEncoding sizeInBits="32" encoding="twosComplement"/>
 			</xtce:IntegerArgumentType>
 			<xtce:EnumeratedArgumentType name="BMG0ReadMaskType" shortDescription="Defines whether previously read elements are to be saerched">
 				<xtce:UnitSet/>
@@ -13977,7 +13996,7 @@
 					</xtce:AncillaryDataSet>
 					<xtce:EntryList>
 						<xtce:ArgumentRefEntry argumentRef="SBAND1DataLength"/>
-						<xtce:ArrayArgumentRefEntry parameterRef="SBAND1DataBuffer">
+						<xtce:ArrayArgumentRefEntry argumentRef="SBAND1DataBuffer">
 							<xtce:DimensionList>
 								<xtce:Dimension>
 									<xtce:StartingIndex>
@@ -14251,7 +14270,7 @@
 					</xtce:AncillaryDataSet>
 					<xtce:EntryList>
 						<xtce:ArgumentRefEntry argumentRef="UHF1DataLength"/>
-						<xtce:ArrayArgumentRefEntry parameterRef="UHF1DataBuffer">
+						<xtce:ArrayArgumentRefEntry argumentRef="UHF1DataBuffer">
 							<xtce:DimensionList>
 								<xtce:Dimension>
 									<xtce:StartingIndex>
@@ -15592,7 +15611,7 @@
 						<xtce:ArgumentRefEntry argumentRef="ESM2TempBattCoef"/>
 						<xtce:ArgumentRefEntry argumentRef="ESM2BattCurrCoef"/>
 						<xtce:ArgumentRefEntry argumentRef="ESM2TempPwmCoef"/>
-						<xtce:ArrayArgumentRefEntry parameterRef="ESM2BattCellMuxCoef">
+						<xtce:ArrayArgumentRefEntry argumentRef="ESM2BattCellMuxCoef">
 							<xtce:DimensionList>
 								<xtce:Dimension>
 									<xtce:StartingIndex>
@@ -15943,7 +15962,7 @@
 						<xtce:AncillaryData name="VCID">19</xtce:AncillaryData>
 					</xtce:AncillaryDataSet>
 					<xtce:EntryList>
-						<xtce:ArrayArgumentRefEntry parameterRef="VS0SpacecraftCenterOfMass">
+						<xtce:ArrayArgumentRefEntry argumentRef="VS0SpacecraftCenterOfMass">
 							<xtce:DimensionList>
 								<xtce:Dimension>
 									<xtce:StartingIndex>
@@ -15974,7 +15993,7 @@
 						<xtce:AncillaryData name="VCID">19</xtce:AncillaryData>
 					</xtce:AncillaryDataSet>
 					<xtce:EntryList>
-						<xtce:ArrayArgumentRefEntry parameterRef="VS0SpacecraftInertiaMatrix">
+						<xtce:ArrayArgumentRefEntry argumentRef="VS0SpacecraftInertiaMatrix">
 							<xtce:DimensionList>
 								<xtce:Dimension>
 									<xtce:StartingIndex>
@@ -16196,7 +16215,7 @@
 					</xtce:AncillaryDataSet>
 					<xtce:EntryList>
 						<xtce:ArgumentRefEntry argumentRef="VS2TrajectoryId"/>
-						<xtce:ArrayArgumentRefEntry parameterRef="VS2InsertionVelocity">
+						<xtce:ArrayArgumentRefEntry argumentRef="VS2InsertionVelocity">
 							<xtce:DimensionList>
 								<xtce:Dimension>
 									<xtce:StartingIndex>
@@ -16208,7 +16227,7 @@
 								</xtce:Dimension>
 							</xtce:DimensionList>
 						</xtce:ArrayArgumentRefEntry>
-						<xtce:ArrayArgumentRefEntry parameterRef="VS2InsertionPosition">
+						<xtce:ArrayArgumentRefEntry argumentRef="VS2InsertionPosition">
 							<xtce:DimensionList>
 								<xtce:Dimension>
 									<xtce:StartingIndex>
@@ -17070,7 +17089,7 @@
 					</xtce:AncillaryDataSet>
 					<xtce:EntryList>
 						<xtce:ArgumentRefEntry argumentRef="DC1DataLength"/>
-						<xtce:ArrayArgumentRefEntry parameterRef="DC1DataBuffer">
+						<xtce:ArrayArgumentRefEntry argumentRef="DC1DataBuffer">
 							<xtce:DimensionList>
 								<xtce:Dimension>
 									<xtce:StartingIndex>
@@ -17304,7 +17323,7 @@
 					<xtce:EntryList>
 						<xtce:ArgumentRefEntry argumentRef="WFCam0StartTime"/>
 						<xtce:ArgumentRefEntry argumentRef="WFCam0DurationSubS"/>
-						<xtce:ArrayArgumentRefEntry parameterRef="WFCam0GatePosition">
+						<xtce:ArrayArgumentRefEntry argumentRef="WFCam0GatePosition">
 							<xtce:DimensionList>
 								<xtce:Dimension>
 									<xtce:StartingIndex>
@@ -17319,7 +17338,7 @@
 						<xtce:ArgumentRefEntry argumentRef="WFCam0ImageMode"/>
 						<xtce:ArgumentRefEntry argumentRef="WFCam0WideColorMode"/>
 						<xtce:ArgumentRefEntry argumentRef="WFCam0ImageRate"/>
-						<xtce:ArrayArgumentRefEntry parameterRef="WFCam0GateSize">
+						<xtce:ArrayArgumentRefEntry argumentRef="WFCam0GateSize">
 							<xtce:DimensionList>
 								<xtce:Dimension>
 									<xtce:StartingIndex>
@@ -17392,7 +17411,7 @@
 					<xtce:EntryList>
 						<xtce:ArgumentRefEntry argumentRef="WFCam2StartTime"/>
 						<xtce:ArgumentRefEntry argumentRef="WFCam2TrackMode"/>
-						<xtce:ArrayArgumentRefEntry parameterRef="WFCam2GatePosition">
+						<xtce:ArrayArgumentRefEntry argumentRef="WFCam2GatePosition">
 							<xtce:DimensionList>
 								<xtce:Dimension>
 									<xtce:StartingIndex>
@@ -17404,7 +17423,7 @@
 								</xtce:Dimension>
 							</xtce:DimensionList>
 						</xtce:ArrayArgumentRefEntry>
-						<xtce:ArrayArgumentRefEntry parameterRef="WFCam2GateSize">
+						<xtce:ArrayArgumentRefEntry argumentRef="WFCam2GateSize">
 							<xtce:DimensionList>
 								<xtce:Dimension>
 									<xtce:StartingIndex>
@@ -17780,19 +17799,19 @@
 						<xtce:BooleanExpression>
 							<xtce:ORedConditions>
 								<xtce:Condition>
-									<xtce:ParameterInstanceRef parameterRef="TCCmdErr"/>
+									<xtce:ParameterInstanceRef1 parameterRef="TCCmdErr"/>
 									<xtce:ComparisonOperator>!=</xtce:ComparisonOperator>
-									<xtce:ParameterInstanceRef parameterRef="CmdErr"/>
+									<xtce:ParameterInstanceRef2 parameterRef="CmdErr"/>
 								</xtce:Condition>
 								<xtce:Condition>
-									<xtce:ParameterInstanceRef parameterRef="TCCmdErr"/>
+									<xtce:ParameterInstanceRef1 parameterRef="TCCmdErr"/>
 									<xtce:ComparisonOperator>!=</xtce:ComparisonOperator>
-									<xtce:ParameterInstanceRef parameterRef="CmdRcv"/>
+									<xtce:ParameterInstanceRef2 parameterRef="CmdRcv"/>
 								</xtce:Condition>
 								<xtce:Condition>
-									<xtce:ParameterInstanceRef parameterRef="TCCmdErr"/>
+									<xtce:ParameterInstanceRef1 parameterRef="TCCmdErr"/>
 									<xtce:ComparisonOperator>!=</xtce:ComparisonOperator>
-									<xtce:ParameterInstanceRef parameterRef="CmdRej"/>
+									<xtce:ParameterInstanceRef2 parameterRef="CmdRej"/>
 								</xtce:Condition>
 							</xtce:ORedConditions>
 						</xtce:BooleanExpression>
@@ -17802,19 +17821,19 @@
 						<xtce:BooleanExpression>
 							<xtce:ORedConditions>
 								<xtce:Condition>
-									<xtce:ParameterInstanceRef parameterRef="TCCmdErr"/>
+									<xtce:ParameterInstanceRef1 parameterRef="TCCmdErr"/>
 									<xtce:ComparisonOperator>!=</xtce:ComparisonOperator>
-									<xtce:ParameterInstanceRef parameterRef="ExpCmdErr"/>
+									<xtce:ParameterInstanceRef2 parameterRef="ExpCmdErr"/>
 								</xtce:Condition>
 								<xtce:Condition>
-									<xtce:ParameterInstanceRef parameterRef="TCCmdErr"/>
+									<xtce:ParameterInstanceRef1 parameterRef="TCCmdErr"/>
 									<xtce:ComparisonOperator>!=</xtce:ComparisonOperator>
-									<xtce:ParameterInstanceRef parameterRef="ExpCmdRcv"/>
+									<xtce:ParameterInstanceRef2 parameterRef="ExpCmdRcv"/>
 								</xtce:Condition>
 								<xtce:Condition>
-									<xtce:ParameterInstanceRef parameterRef="TCCmdErr"/>
+									<xtce:ParameterInstanceRef1 parameterRef="TCCmdErr"/>
 									<xtce:ComparisonOperator>!=</xtce:ComparisonOperator>
-									<xtce:ParameterInstanceRef parameterRef="ExpCmdRej"/>
+									<xtce:ParameterInstanceRef2 parameterRef="ExpCmdRej"/>
 								</xtce:Condition>
 							</xtce:ORedConditions>
 						</xtce:BooleanExpression>

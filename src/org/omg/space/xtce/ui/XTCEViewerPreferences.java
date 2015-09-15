@@ -393,7 +393,6 @@ public class XTCEViewerPreferences {
 
     public void updateExampleFilesList( JMenu exampleItemsMenu ) {
 
-
         ArrayList<File> files = new ArrayList<>();
 
         URL dbFilesDirectoryUrl =
@@ -415,16 +414,49 @@ public class XTCEViewerPreferences {
         }
 
         exampleItemsMenu.removeAll();
-        for ( int iii = ( files.size() - 1 ); iii >= 0; --iii ) {
-            JMenuItem item = new JMenuItem( files.get( iii ).getName() );
-            final File actionFile = files.get( iii );
-            item.addActionListener( new ActionListener() {
+
+        if ( files.isEmpty() == true ) {
+            final URL example1 = ClassLoader.getSystemResource(
+                "org/omg/space/xtce/database/BogusSAT-2.xml" );
+            final URL example2 = ClassLoader.getSystemResource(
+                "org/omg/space/xtce/database/GovSat_2_0_1.xml" );
+            JMenuItem item1 = new JMenuItem( example1.getFile() );
+            item1.addActionListener( new ActionListener() {
                 @Override
                 public void actionPerformed( ActionEvent evt ) {
-                    viewer.openFile( actionFile, true, true, true );
+                    viewer.openFile( example1,
+                                     false,
+                                     true,
+                                     false );
                 }
             });
-            exampleItemsMenu.add( item );
+            JMenuItem item2 = new JMenuItem( example2.getFile() );
+            item2.addActionListener( new ActionListener() {
+                @Override
+                public void actionPerformed( ActionEvent evt ) {
+                    viewer.openFile( example2,
+                                     false,
+                                     true,
+                                     false );
+                }
+            });
+            exampleItemsMenu.add( item1 );
+            exampleItemsMenu.add( item2 );
+        } else {
+            for ( int iii = ( files.size() - 1 ); iii >= 0; --iii ) {
+                JMenuItem item = new JMenuItem( files.get( iii ).getName() );
+                final File actionFile = files.get( iii );
+                item.addActionListener( new ActionListener() {
+                    @Override
+                    public void actionPerformed( ActionEvent evt ) {
+                        viewer.openFile( actionFile,
+                                         true,
+                                         true,
+                                         false );
+                    }
+                });
+                exampleItemsMenu.add( item );
+            }
         }
 
     }

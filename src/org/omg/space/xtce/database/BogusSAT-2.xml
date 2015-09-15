@@ -243,6 +243,14 @@
 				</xtce:BaseContainer>
 			</xtce:SequenceContainer>
 		</xtce:ContainerSet>
+                <xtce:StreamSet>
+                    <xtce:VariableFrameStream name="CCSDS-TM" shortDescription="CCSDS Telemetry Stream">
+                        <xtce:ContainerRef containerRef="CCSDSTelemetryPacket"/>
+                        <xtce:SyncStrategy>
+                            <xtce:Flag/>
+                        </xtce:SyncStrategy>
+                    </xtce:VariableFrameStream>
+                </xtce:StreamSet>
 	</xtce:TelemetryMetaData>
 	<xtce:CommandMetaData>
 		<xtce:ParameterTypeSet>
@@ -370,6 +378,100 @@
 				</xtce:SequenceContainer>
 			</xtce:ContainerSet>
 		</xtce:TelemetryMetaData>
+                <xtce:SpaceSystem name="Onboard_Tables" shortDescription="Tables of data onboard that are not part of the regular TM stream">
+                    <xtce:TelemetryMetaData>
+                        <xtce:ParameterTypeSet>
+                            <xtce:FloatParameterType name="Float32_Offset">
+                                <xtce:UnitSet/>
+                                <xtce:FloatDataEncoding encoding="IEEE754_1985" sizeInBits="32"/>
+                                <xtce:ValidRange minInclusive="-100.0" maxInclusive="100.0"/>
+                            </xtce:FloatParameterType>
+                            <xtce:IntegerParameterType name="Uint32_Offset">
+                                <xtce:UnitSet/>
+                                <xtce:IntegerDataEncoding encoding="twosComplement" sizeInBits="32"/>
+                                <xtce:ValidRange minInclusive="-50" maxInclusive="40"/>
+                            </xtce:IntegerParameterType>
+                            <xtce:FloatParameterType name="Float64_Offset">
+                                <xtce:UnitSet/>
+                                <xtce:FloatDataEncoding encoding="IEEE754_1985" sizeInBits="64"/>
+                                <xtce:ValidRange minInclusive="-80.0" maxInclusive="75.0"/>
+                            </xtce:FloatParameterType>
+                            <xtce:EnumeratedParameterType name="Start_Mode_Type">
+                                <xtce:UnitSet/>
+                                <xtce:IntegerDataEncoding encoding="unsigned" sizeInBits="8"/>
+                                <xtce:EnumerationList>
+                                    <xtce:Enumeration value="0" label="DIAGNOSTIC"/>
+                                    <xtce:Enumeration value="1" label="NORMAL"/>
+                                    <xtce:Enumeration value="2" label="SAFEHOLD"/>
+                                </xtce:EnumerationList>
+                            </xtce:EnumeratedParameterType>
+                        </xtce:ParameterTypeSet>
+                        <xtce:ParameterSet>
+                            <xtce:Parameter name="Battery_Voltage_Offset" initialValue="2.5" parameterTypeRef="Float32_Offset" shortDescription="Correction for battery voltage measurements">
+                                <xtce:ParameterProperties dataSource="telemetered" readOnly="false">
+                                    <xtce:PhysicalAddressSet>
+                                        <xtce:PhysicalAddress sourceName="CPU1" sourceAddress="0000f010"/>
+                                    </xtce:PhysicalAddressSet>
+                                </xtce:ParameterProperties>
+                            </xtce:Parameter>
+                            <xtce:Parameter name="Solar_Array_Voltage_1_Offset" initialValue="2" parameterTypeRef="Uint32_Offset" shortDescription="Correction for solar array voltage measurements">
+                                <xtce:ParameterProperties dataSource="telemetered" readOnly="false">
+                                    <xtce:PhysicalAddressSet>
+                                        <xtce:PhysicalAddress sourceName="CPU1" sourceAddress="0000f016"/>
+                                    </xtce:PhysicalAddressSet>
+                                </xtce:ParameterProperties>
+                            </xtce:Parameter>
+                            <xtce:Parameter name="Solar_Array_Voltage_2_Offset" initialValue="1" parameterTypeRef="Uint32_Offset" shortDescription="Correction for solar array voltage measurements">
+                                <xtce:ParameterProperties dataSource="telemetered" readOnly="false">
+                                    <xtce:PhysicalAddressSet>
+                                        <xtce:PhysicalAddress sourceName="CPU1" sourceAddress="0000f01a"/>
+                                    </xtce:PhysicalAddressSet>
+                                </xtce:ParameterProperties>
+                            </xtce:Parameter>
+                            <xtce:Parameter name="Battery_Current_Offset" initialValue="-1.5" parameterTypeRef="Float64_Offset" shortDescription="Correction for battery current measurements">
+                                <xtce:ParameterProperties dataSource="telemetered" readOnly="false">
+                                    <xtce:PhysicalAddressSet>
+                                        <xtce:PhysicalAddress sourceName="CPU1" sourceAddress="0000f020"/>
+                                    </xtce:PhysicalAddressSet>
+                                </xtce:ParameterProperties>
+                            </xtce:Parameter>
+                            <xtce:Parameter name="Default_CPU_Start_Mode" initialValue="NORMAL" parameterTypeRef="Start_Mode_Type" shortDescription="Starting mode for the onboard processor">
+                                <xtce:ParameterProperties dataSource="telemetered" readOnly="false">
+                                    <xtce:PhysicalAddressSet>
+                                        <xtce:PhysicalAddress sourceName="CPU1" sourceAddress="0000f028"/>
+                                    </xtce:PhysicalAddressSet>
+                                </xtce:ParameterProperties>
+                            </xtce:Parameter>
+                        </xtce:ParameterSet>
+                        <xtce:ContainerSet>
+                            <xtce:SequenceContainer name="Calibration_Offsets" shortDescription="This is an onboard table for upload/download that contains configuration parameters">
+                                <xtce:EntryList>
+                                    <xtce:ParameterRefEntry parameterRef="Battery_Voltage_Offset"/>
+                                    <xtce:ParameterRefEntry parameterRef="Solar_Array_Voltage_1_Offset">
+                                        <xtce:LocationInContainerInBits referenceLocation="previousEntry">
+                                            <xtce:FixedValue>16</xtce:FixedValue>
+                                        </xtce:LocationInContainerInBits>
+                                    </xtce:ParameterRefEntry>
+                                    <xtce:ParameterRefEntry parameterRef="Solar_Array_Voltage_2_Offset"/>
+                                    <xtce:ParameterRefEntry parameterRef="Battery_Current_Offset">
+                                        <xtce:LocationInContainerInBits referenceLocation="containerStart">
+                                            <xtce:FixedValue>112</xtce:FixedValue>
+                                        </xtce:LocationInContainerInBits>
+                                    </xtce:ParameterRefEntry>
+                                    <xtce:ParameterRefEntry parameterRef="Default_CPU_Start_Mode"/>
+                                </xtce:EntryList>
+                            </xtce:SequenceContainer>
+                        </xtce:ContainerSet>
+                        <xtce:StreamSet>
+                            <xtce:VariableFrameStream name="CALTABLE" shortDescription="This is an onboard table for upload/download that contains configuration parameters">
+                                <xtce:ContainerRef containerRef="Calibration_Offsets"/>
+                                <xtce:SyncStrategy>
+                                    <xtce:Flag/>
+                                </xtce:SyncStrategy>
+                            </xtce:VariableFrameStream>
+                        </xtce:StreamSet>
+                    </xtce:TelemetryMetaData>
+                </xtce:SpaceSystem>
 		<xtce:SpaceSystem name="BusElectronics">
 			<xtce:Header validationStatus="Test" classification="NotClassified" version="Build0" date="27-10-2012"/>
 			<xtce:TelemetryMetaData>
