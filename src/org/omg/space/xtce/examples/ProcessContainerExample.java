@@ -41,7 +41,7 @@ import org.omg.space.xtce.toolkit.XTCETMContainer;
  *                                            false );
  *
  *         // get the size
- *         long sizeInBytes = model.getTotalSize();
+ *         long sizeInBits = model.getTotalSize();
  *
  *         // for demonstration, get the parameters in the container
  *         List<XTCEContainerContentEntry> entries =
@@ -88,8 +88,8 @@ import org.omg.space.xtce.toolkit.XTCETMContainer;
  *         }
  *
  *         System.out.println( "Total Size: " +
- *                             Long.toString( sizeInBytes ) +
- *                             " bytes" );
+ *                             Long.toString( sizeInBits ) +
+ *                             " bits" );
  *
  *     }
  *
@@ -145,7 +145,7 @@ public class ProcessContainerExample {
                                                    false );
 
                 // get the size
-                long sizeInBytes = model.getTotalSize();
+                long sizeInBits = model.getTotalSize();
 
                 // for demonstration, get the parameters in the container
                 List<XTCEContainerContentEntry> entries =
@@ -192,8 +192,8 @@ public class ProcessContainerExample {
                 }
 
                 System.out.println( "Total Size: " +
-                                    Long.toString( sizeInBytes ) +
-                                    " bytes" );
+                                    Long.toString( sizeInBits ) +
+                                    " bits" );
 
             }
 

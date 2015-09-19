@@ -267,37 +267,9 @@ public class XTCEItemValue {
         } else if ( rawTypeName.equals( "binary" ) == true ) {
             return "0x" + numericValue.toString( 16 );
         } else if ( rawTypeName.equals( "UTF-8" ) == true ) {
-            String retValue = new String( numericValue.toByteArray(),
-                                          Charset.forName( "UTF-8" ) );
-            if ( retValue.length() == 0 ) {
-                return "";
-            }
-            int endIndex = retValue.length() - 1;
-            while ( retValue.charAt( endIndex ) == '\0' ) {
-                if ( endIndex == 0 ) {
-                    return "";
-                } else {
-                    retValue = retValue.substring( 0, endIndex );
-                }
-                endIndex = retValue.length() - 1;
-            }
-            return retValue;
+            return getUncalibratedFromRawString( "UTF-8", numericValue );
         } else if ( rawTypeName.equals( "UTF-16" ) == true ) {
-            String retValue = new String( numericValue.toByteArray(),
-                                          Charset.forName( "UTF-16" ) );
-            if ( retValue.length() == 0 ) {
-                return "";
-            }
-            int endIndex = retValue.length() - 1;
-            while ( retValue.charAt( endIndex ) == '\0' ) {
-                if ( endIndex == 0 ) {
-                    return "";
-                } else {
-                    retValue = retValue.substring( 0, endIndex );
-                }
-                endIndex = retValue.length() - 1;
-            }
-            return retValue;
+            return getUncalibratedFromRawString( "UTF-16", numericValue );
         }
 
         // not supported MILSTD_1750A, BCD, packedBCD
@@ -1551,6 +1523,29 @@ public class XTCEItemValue {
         }
 
         return "0";
+
+    }
+
+    private String getUncalibratedFromRawString( String     encoding,
+                                                 BigInteger uncalValue ) {
+
+        // we need to accomodate the TerminationChar and the LeadingSize here
+
+        String retValue = new String( uncalValue.toByteArray(),
+                                      Charset.forName( encoding ) );
+        if ( retValue.length() == 0 ) {
+            return "";
+        }
+        int endIndex = retValue.length() - 1;
+        while ( retValue.charAt( endIndex ) == '\0' ) {
+            if ( endIndex == 0 ) {
+                return "";
+            } else {
+                retValue = retValue.substring( 0, endIndex );
+            }
+            endIndex = retValue.length() - 1;
+        }
+        return retValue;
 
     }
 

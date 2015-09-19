@@ -627,19 +627,26 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
     public XTCETMContainer getContainer( String nameOrPath ) throws XTCEDatabaseException {
 
-        String name = XTCEFunctions.getNameFromPathReferenceString( nameOrPath );
+        try {
 
-        List<SequenceContainerType> containers = getReference().
-                                                 getTelemetryMetaData().
-                                                 getContainerSet().
-                                                 getSequenceContainer();
+            String name =
+                XTCEFunctions.getNameFromPathReferenceString( nameOrPath );
 
-        for ( SequenceContainerType container : containers ) {
-            if ( container.getName().equals( name ) == true ) {
-                return new XTCETMContainer( getFullPath(),
-                                            makeContainerInheritanceString( container ),
-                                            container );
+            List<SequenceContainerType> containers = getReference().
+                                                     getTelemetryMetaData().
+                                                     getContainerSet().
+                                                     getSequenceContainer();
+
+            for ( SequenceContainerType container : containers ) {
+                if ( container.getName().equals( name ) == true ) {
+                    return new XTCETMContainer( getFullPath(),
+                                                makeContainerInheritanceString( container ),
+                                                container );
+                }
             }
+
+        } catch ( NullPointerException ex ) {
+            // do nothing as we throw next
         }
 
         throw new XTCEDatabaseException( XTCEFunctions.getText( "error_tmc" ) + // NOI18N

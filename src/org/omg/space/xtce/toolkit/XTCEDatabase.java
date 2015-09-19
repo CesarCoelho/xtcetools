@@ -662,9 +662,17 @@ public final class XTCEDatabase extends XTCEDatabaseParser {
         String contName =
             XTCEFunctions.getNameFromPathReferenceString( contFullPath );
 
-        XTCESpaceSystem spaceSystem = getSpaceSystem( contPath );
+        try {
 
-        return spaceSystem.getContainer( contName );
+            XTCESpaceSystem spaceSystem = getSpaceSystem( contPath );
+
+            return spaceSystem.getContainer( contName );
+
+        } catch ( NullPointerException ex ) {
+            throw new XTCEDatabaseException(
+                XTCEFunctions.getText( "dialog_nolocatespacesystem_text" ) +
+                " '" + contPath + "'" );
+        }
 
     }
 

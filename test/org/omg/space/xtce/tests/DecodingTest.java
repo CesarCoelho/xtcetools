@@ -3,6 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package org.omg.space.xtce.tests;
 
 import java.io.File;
@@ -26,6 +27,7 @@ import org.omg.space.xtce.toolkit.XTCEParameter;
  *
  * @author dovereem
  */
+
 public class DecodingTest {
     
     public DecodingTest() {

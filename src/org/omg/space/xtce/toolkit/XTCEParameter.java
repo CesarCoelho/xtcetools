@@ -294,6 +294,7 @@ public class XTCEParameter extends XTCETypedObject {
     public String getSystemName() {
 
         try {
+
             if ( isMember() == true ) {
                 if ( memberReference_.getParameterProperties().getSystemName() == null ) {
                     return "";
@@ -305,9 +306,11 @@ public class XTCEParameter extends XTCETypedObject {
                 }
                 return reference_.getParameterProperties().getSystemName();
             }
+
         } catch ( NullPointerException ex ) {
             // this is okay when the SystemName element is not present
         }
+
         return "";
 
     }
@@ -357,14 +360,17 @@ public class XTCEParameter extends XTCETypedObject {
     public boolean isSettable() {
 
         try {
+
             if ( isMember() == true ) {
                 return memberReference_.getParameterProperties().isReadOnly();
             } else if ( isParameter() == true ) {
                 return reference_.getParameterProperties().isReadOnly();
             }
+
         } catch ( NullPointerException ex ) {
             // this is okay when the Parameter is a Member
         }
+
         return false;
 
     }
