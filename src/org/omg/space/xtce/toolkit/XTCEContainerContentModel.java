@@ -312,8 +312,10 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
 
         nextIncludedContent.setConditionList( includedConditionsList, false );
 
+        // second argument was nextIncludedContainer
+
         addIncludeConditions( entry,
-                              nextIncludedContainer,
+                              holdingContainer,
                               nextIncludedContent );
 
         evaluateIncludeConditions( nextIncludedContent );

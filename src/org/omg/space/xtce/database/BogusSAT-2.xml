@@ -396,6 +396,25 @@
 						</xtce:RestrictionCriteria>
 					</xtce:BaseContainer>
 				</xtce:SequenceContainer>
+				<xtce:SequenceContainer name="CCSDS_SpacePacket4">
+					<xtce:EntryList>
+						<xtce:ParameterRefEntry parameterRef="Payload1/Payload_1_State"/>
+                                                <xtce:ContainerRefEntry containerRef="Payload1/IncludedContainer1">
+                                                    <xtce:IncludeCondition>
+                                                        <xtce:Comparison parameterRef="Payload1/Payload_1_State" value="ON"/>
+                                                    </xtce:IncludeCondition>
+                                                </xtce:ContainerRefEntry>
+                                                <xtce:ContainerRefEntry containerRef="Payload1/IncludedContainer2"/>
+					</xtce:EntryList>
+					<xtce:BaseContainer containerRef="/BogusSAT/CCSDSTelemetryPacket">
+						<xtce:RestrictionCriteria>
+							<xtce:ComparisonList>
+								<xtce:Comparison value="NotPresent" parameterRef="CCSDS_Packet_ID/SecHdrFlag"/>
+								<xtce:Comparison value="4" parameterRef="CCSDS_Packet_ID/APID"/>
+							</xtce:ComparisonList>
+						</xtce:RestrictionCriteria>
+					</xtce:BaseContainer>
+				</xtce:SequenceContainer>
                                 <xtce:SequenceContainer name="ECSS_Service_1_Subservice_1" shortDescription="Telecommand Acceptance Report - Success (1,1)">
 					<xtce:EntryList>
 						<xtce:ParameterRefEntry parameterRef="Commanding/TC_Packet_ID"/>
@@ -1322,6 +1341,25 @@
 						</xtce:ParameterProperties>
 					</xtce:Parameter>
 				</xtce:ParameterSet>
+                                <xtce:ContainerSet>
+                                    <xtce:SequenceContainer name="IncludedContainer1" shortDescription="Unit Test of container to include">
+                                        <xtce:EntryList>
+                                            <xtce:ParameterRefEntry parameterRef="Basic_uint32"/>
+                                            <xtce:ParameterRefEntry parameterRef="Basic_int32_signmag"/>
+                                            <xtce:ParameterRefEntry parameterRef="Basic_int32_twoscomp"/>
+                                            <xtce:ParameterRefEntry parameterRef="Basic_int32_onescomp"/>
+                                        </xtce:EntryList>
+                                    </xtce:SequenceContainer>
+                                    <xtce:SequenceContainer name="IncludedContainer2" shortDescription="Unit Test of container to include">
+                                        <xtce:EntryList>
+                                            <xtce:ParameterRefEntry parameterRef="Basic_Float32"/>
+                                            <xtce:ParameterRefEntry parameterRef="Basic_Float64"/>
+                                            <xtce:ParameterRefEntry parameterRef="enum_int16_signmag"/>
+                                            <xtce:ParameterRefEntry parameterRef="enum_int16_twoscomp"/>
+                                            <xtce:ParameterRefEntry parameterRef="enum_int16_onescomp"/>
+                                        </xtce:EntryList>
+                                    </xtce:SequenceContainer>
+                                </xtce:ContainerSet>
 			</xtce:TelemetryMetaData>
 		</xtce:SpaceSystem>
 		<xtce:SpaceSystem name="Payload2" xsi:nil="true"/>

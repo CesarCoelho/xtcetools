@@ -4405,7 +4405,10 @@ public class XTCEViewer extends javax.swing.JFrame {
         if ( messagesText.getText().equals( XTCEFunctions.getText( "no_messages_text" ) ) == true ) { // NOI18N
             messagesText.setText( "" ); // NOI18N
         }
+
         messagesText.append( msg + "\n" ); // NOI18N
+
+        messagesText.setCaretPosition( messagesText.getText().length() );
 
     }
 

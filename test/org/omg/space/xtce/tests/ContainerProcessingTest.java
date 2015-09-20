@@ -144,7 +144,7 @@ public class ContainerProcessingTest {
 
             List<XTCETMContainer> containers = db_.getContainers();
 
-            long expected = 12;
+            long expected = 15;
 
             Assert.assertTrue( "Should have found " +
                 Long.toString( expected ) + " containers, but found instead " +
@@ -167,7 +167,7 @@ public class ContainerProcessingTest {
 
             List<XTCETMContainer> containers = ss.getContainers();
 
-            long expected = 8;
+            long expected = 9;
 
             Assert.assertTrue( "Should have found " +
                 Long.toString( expected ) + " containers, but found instead " +
@@ -805,6 +805,389 @@ public class ContainerProcessingTest {
             Assert.assertTrue( "Container parameter count of " + containerName + " is " +
                 Long.toString( items ) + " but should be 23 items",
                 items == 23 );
+
+            assertOnWarnings( model );
+
+        } catch ( Exception ex ) {
+            //ex.printStackTrace();
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+    }
+
+    @Test
+    public void processContainerWithInheritanceDynamicRepeatNoCountParameter() {
+
+        String containerName = "/BogusSAT/SC001/ECSS_Service_1_Subservice_2";
+
+        try {
+
+            XTCETMContainer container = db_.getContainer( containerName );
+
+            XTCEContainerContentModel model =
+                db_.processContainer( container, null, false );
+
+            long sizeInBytes = model.getTotalSize();
+
+            Assert.assertTrue( "Container size of " + containerName + " is " +
+                Long.toString( sizeInBytes ) + " but should be 152 bits",
+                sizeInBytes == 152 );
+
+            List<XTCEContainerContentEntry> entries = model.getContentList();
+
+            long items = 0;
+
+            for ( XTCEContainerContentEntry entry : entries ) {
+
+                if ( entry.getName().equals( "CCSDS_Packet_ID.Version" ) ) {
+                    ++items;
+                    checkEntry( entry, "3", "0", "==0{cal}", "0", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_ID.Type" ) ) {
+                    ++items;
+                    checkEntry( entry, "1", "3", "==TM{cal}", "", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_ID.SecHdrFlag" ) ) {
+                    ++items;
+                    checkEntry( entry, "1", "4", "==Present{cal}", "", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_ID.APID" ) ) {
+                    ++items;
+                    checkEntry( entry, "11", "5", "==100{cal}", "2047", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_Sequence.GroupFlags" ) ) {
+                    ++items;
+                    checkEntry( entry, "2", "16", "", "3", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_Sequence.Count" ) ) {
+                    ++items;
+                    checkEntry( entry, "14", "18", "", "", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_Length" ) ) {
+                    ++items;
+                    checkEntry( entry, "16", "32", "", "", "", "" );
+                } else if ( entry.getName().equals( "PUS_Data_Field_Header.Spare1" ) ) {
+                    ++items;
+                    checkEntry( entry, "1", "48", "==0{cal}", "0", "", "" );
+                } else if ( entry.getName().equals( "PUS_Data_Field_Header.Version" ) ) {
+                    ++items;
+                    checkEntry( entry, "3", "49", "==1{cal}", "1", "", "" );
+                } else if ( entry.getName().equals( "PUS_Data_Field_Header.Spare4" ) ) {
+                    ++items;
+                    checkEntry( entry, "4", "52", "==0{cal}", "0", "", "" );
+                } else if ( entry.getName().equals( "PUS_Data_Field_Header.Service" ) ) {
+                    ++items;
+                    checkEntry( entry, "8", "56", "==1{cal}", "", "", "" );
+                } else if ( entry.getName().equals( "PUS_Data_Field_Header.Subservice" ) ) {
+                    ++items;
+                    checkEntry( entry, "8", "64", "==2{cal}", "", "", "" );
+                } else if ( entry.getName().equals( "PUS_Data_Field_Header.SeqCount" ) ) {
+                    ++items;
+                    checkEntry( entry, "8", "72", "", "", "", "" );
+                } else if ( entry.getName().equals( "PUS_Data_Field_Header.Destination" ) ) {
+                    ++items;
+                    checkEntry( entry, "8", "80", "", "", "", "" );
+                } else if ( entry.getName().equals( "PUS_Time" ) ) {
+                    ++items;
+                    checkEntry( entry, "64", "", "", "", "APPL_TIME_CODE!=NotUsed{cal}", "" );
+                } else if ( entry.getName().equals( "PUS_Error_Control_Field" ) ) {
+                    ++items;
+                    checkEntry( entry, "16", "", "", "", "TM_CHECKSUM_TYPE!=NotUsed{cal}", "" );
+                } else if ( entry.getName().equals( "TC_Packet_ID" ) ) {
+                    ++items;
+                    checkEntry( entry, "16", "88", "", "", "", "" );
+                } else if ( entry.getName().equals( "TC_Packet_Sequence_Control" ) ) {
+                    ++items;
+                    checkEntry( entry, "16", "104", "", "", "", "" );
+                } else if ( entry.getName().equals( "TC_Accept_Failure_Code" ) ) {
+                    ++items;
+                    checkEntry( entry, "16", "120", "", "", "", "" );
+                } else if ( entry.getName().equals( "TC_Parameter_Count" ) ) {
+                    ++items;
+                    checkEntry( entry, "8", "136", "", "", "", "" );
+                } else if ( entry.getName().equals( "TC_Parameter_Data" ) ) {
+                    ++items;
+                    checkEntry( entry, "8", "144", "", "", "", "==TC_Parameter_Count{cal}" );
+                }
+
+            }
+
+            Assert.assertTrue( "Container parameter count of " + containerName + " is " +
+                Long.toString( items ) + " but should be 21 items",
+                items == 21 );
+
+            assertOnWarnings( model );
+
+        } catch ( Exception ex ) {
+            //ex.printStackTrace();
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+    }
+
+    @Test
+    public void processContainerWithIncludesNotTrueNotExpanded() {
+
+        String containerName = "/BogusSAT/SC001/CCSDS_SpacePacket4";
+
+        try {
+
+            XTCETMContainer container = db_.getContainer( containerName );
+
+            XTCEContainerContentModel model =
+                db_.processContainer( container, null, false );
+
+            long sizeInBytes = model.getTotalSize();
+
+            Assert.assertTrue( "Container size of " + containerName + " is " +
+                Long.toString( sizeInBytes ) + " but should be 196 bits",
+                sizeInBytes == 196 );
+
+            List<XTCEContainerContentEntry> entries = model.getContentList();
+
+            long items = 0;
+
+            for ( XTCEContainerContentEntry entry : entries ) {
+
+                if ( entry.getName().equals( "CCSDS_Packet_ID.Version" ) ) {
+                    ++items;
+                    checkEntry( entry, "3", "0", "==0{cal}", "0", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_ID.Type" ) ) {
+                    ++items;
+                    checkEntry( entry, "1", "3", "==TM{cal}", "", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_ID.SecHdrFlag" ) ) {
+                    ++items;
+                    checkEntry( entry, "1", "4", "==NotPresent{cal}", "", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_ID.APID" ) ) {
+                    ++items;
+                    checkEntry( entry, "11", "5", "==4{cal}", "2047", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_Sequence.GroupFlags" ) ) {
+                    ++items;
+                    checkEntry( entry, "2", "16", "", "3", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_Sequence.Count" ) ) {
+                    ++items;
+                    checkEntry( entry, "14", "18", "", "", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_Length" ) ) {
+                    ++items;
+                    checkEntry( entry, "16", "32", "", "", "", "" );
+                } else if ( entry.getName().equals( "Payload_1_State" ) ) {
+                    ++items;
+                    checkEntry( entry, "4", "48", "", "", "", "" );
+                } else if ( entry.getName().equals( "Basic_Float32" ) ) {
+                    ++items;
+                    checkEntry( entry, "32", "52", "", "", "", "" );
+                } else if ( entry.getName().equals( "Basic_Float64" ) ) {
+                    ++items;
+                    checkEntry( entry, "64", "84", "", "", "", "" );
+                } else if ( entry.getName().equals( "enum_int16_signmag" ) ) {
+                    ++items;
+                    checkEntry( entry, "16", "148", "", "", "", "" );
+                } else if ( entry.getName().equals( "enum_int16_twoscomp" ) ) {
+                    ++items;
+                    checkEntry( entry, "16", "164", "", "", "", "" );
+                } else if ( entry.getName().equals( "enum_int16_onescomp" ) ) {
+                    ++items;
+                    checkEntry( entry, "16", "180", "", "", "", "" );
+                }
+
+            }
+
+            Assert.assertTrue( "Container parameter count of " + containerName + " is " +
+                Long.toString( items ) + " but should be 13 items",
+                items == 13 );
+
+            assertOnWarnings( model );
+
+        } catch ( Exception ex ) {
+            //ex.printStackTrace();
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+    }
+
+    @Test
+    public void processContainerWithIncludesNotTrueExpanded() {
+
+        String containerName = "/BogusSAT/SC001/CCSDS_SpacePacket4";
+
+        try {
+
+            XTCETMContainer container = db_.getContainer( containerName );
+
+            XTCEContainerContentModel model =
+                db_.processContainer( container, null, true );
+
+            long sizeInBytes = model.getTotalSize();
+
+            Assert.assertTrue( "Container size of " + containerName + " is " +
+                Long.toString( sizeInBytes ) + " but should be 196 bits",
+                sizeInBytes == 196 );
+
+            List<XTCEContainerContentEntry> entries = model.getContentList();
+
+            long items = 0;
+
+            for ( XTCEContainerContentEntry entry : entries ) {
+
+                if ( entry.getName().equals( "CCSDS_Packet_ID.Version" ) ) {
+                    ++items;
+                    checkEntry( entry, "3", "0", "==0{cal}", "0", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_ID.Type" ) ) {
+                    ++items;
+                    checkEntry( entry, "1", "3", "==TM{cal}", "", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_ID.SecHdrFlag" ) ) {
+                    ++items;
+                    checkEntry( entry, "1", "4", "==NotPresent{cal}", "", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_ID.APID" ) ) {
+                    ++items;
+                    checkEntry( entry, "11", "5", "==4{cal}", "2047", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_Sequence.GroupFlags" ) ) {
+                    ++items;
+                    checkEntry( entry, "2", "16", "", "3", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_Sequence.Count" ) ) {
+                    ++items;
+                    checkEntry( entry, "14", "18", "", "", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_Length" ) ) {
+                    ++items;
+                    checkEntry( entry, "16", "32", "", "", "", "" );
+                } else if ( entry.getName().equals( "Payload_1_State" ) ) {
+                    ++items;
+                    checkEntry( entry, "4", "48", "", "", "", "" );
+                } else if ( entry.getName().equals( "Basic_uint32" ) ) {
+                    ++items;
+                    checkEntry( entry, "32", "", "", "", "Payload_1_State==ON{cal}", "" );
+                } else if ( entry.getName().equals( "Basic_int32_signmag" ) ) {
+                    ++items;
+                    checkEntry( entry, "32", "", "", "", "Payload_1_State==ON{cal}", "" );
+                } else if ( entry.getName().equals( "Basic_int32_twoscomp" ) ) {
+                    ++items;
+                    checkEntry( entry, "32", "", "", "", "Payload_1_State==ON{cal}", "" );
+                } else if ( entry.getName().equals( "Basic_int32_onescomp" ) ) {
+                    ++items;
+                    checkEntry( entry, "32", "", "", "", "Payload_1_State==ON{cal}", "" );
+                } else if ( entry.getName().equals( "Basic_Float32" ) ) {
+                    ++items;
+                    checkEntry( entry, "32", "52", "", "", "", "" );
+                } else if ( entry.getName().equals( "Basic_Float64" ) ) {
+                    ++items;
+                    checkEntry( entry, "64", "84", "", "", "", "" );
+                } else if ( entry.getName().equals( "enum_int16_signmag" ) ) {
+                    ++items;
+                    checkEntry( entry, "16", "148", "", "", "", "" );
+                } else if ( entry.getName().equals( "enum_int16_twoscomp" ) ) {
+                    ++items;
+                    checkEntry( entry, "16", "164", "", "", "", "" );
+                } else if ( entry.getName().equals( "enum_int16_onescomp" ) ) {
+                    ++items;
+                    checkEntry( entry, "16", "180", "", "", "", "" );
+                }
+
+            }
+
+            Assert.assertTrue( "Container parameter count of " + containerName + " is " +
+                Long.toString( items ) + " but should be 17 items",
+                items == 17 );
+
+            assertOnWarnings( model );
+
+        } catch ( Exception ex ) {
+            //ex.printStackTrace();
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+    }
+
+    @Test
+    public void processContainerWithIncludesTrue() {
+
+        String containerName = "/BogusSAT/SC001/CCSDS_SpacePacket4";
+
+        try {
+
+            XTCETMContainer container = db_.getContainer( containerName );
+
+            List<XTCEParameter> repParameters =
+                db_.getTelemetryParameters( "Payload_1_State" );
+
+            Assert.assertTrue( "Should find 1 parameter named 'Payload_1_State'",
+                               repParameters.size() == 1 );
+
+            XTCEContainerEntryValue valueObj =
+               new XTCEContainerEntryValue( repParameters.get( 0 ),
+                                            "ON",
+                                            "==",
+                                            "Calibrated" );
+
+            ArrayList<XTCEContainerEntryValue> values = new ArrayList<>();
+            values.add( valueObj );
+
+            XTCEContainerContentModel model =
+                db_.processContainer( container, values, true );
+
+            long sizeInBytes = model.getTotalSize();
+
+            Assert.assertTrue( "Container size of " + containerName + " is " +
+                Long.toString( sizeInBytes ) + " but should be 324 bits",
+                sizeInBytes == 324 );
+
+            List<XTCEContainerContentEntry> entries = model.getContentList();
+
+            long items = 0;
+
+            for ( XTCEContainerContentEntry entry : entries ) {
+
+                if ( entry.getName().equals( "CCSDS_Packet_ID.Version" ) ) {
+                    ++items;
+                    checkEntry( entry, "3", "0", "==0{cal}", "0", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_ID.Type" ) ) {
+                    ++items;
+                    checkEntry( entry, "1", "3", "==TM{cal}", "", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_ID.SecHdrFlag" ) ) {
+                    ++items;
+                    checkEntry( entry, "1", "4", "==NotPresent{cal}", "", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_ID.APID" ) ) {
+                    ++items;
+                    checkEntry( entry, "11", "5", "==4{cal}", "2047", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_Sequence.GroupFlags" ) ) {
+                    ++items;
+                    checkEntry( entry, "2", "16", "", "3", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_Sequence.Count" ) ) {
+                    ++items;
+                    checkEntry( entry, "14", "18", "", "", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_Length" ) ) {
+                    ++items;
+                    checkEntry( entry, "16", "32", "", "", "", "" );
+                } else if ( entry.getName().equals( "Payload_1_State" ) ) {
+                    ++items;
+                    checkEntry( entry, "4", "48", "==ON{cal}", "", "", "" );
+                } else if ( entry.getName().equals( "Basic_uint32" ) ) {
+                    ++items;
+                    checkEntry( entry, "32", "52", "", "", "Payload_1_State==ON{cal}", "" );
+                } else if ( entry.getName().equals( "Basic_int32_signmag" ) ) {
+                    ++items;
+                    checkEntry( entry, "32", "84", "", "", "Payload_1_State==ON{cal}", "" );
+                } else if ( entry.getName().equals( "Basic_int32_twoscomp" ) ) {
+                    ++items;
+                    checkEntry( entry, "32", "116", "", "", "Payload_1_State==ON{cal}", "" );
+                } else if ( entry.getName().equals( "Basic_int32_onescomp" ) ) {
+                    ++items;
+                    checkEntry( entry, "32", "148", "", "", "Payload_1_State==ON{cal}", "" );
+                } else if ( entry.getName().equals( "Basic_Float32" ) ) {
+                    ++items;
+                    checkEntry( entry, "32", "180", "", "", "", "" );
+                } else if ( entry.getName().equals( "Basic_Float64" ) ) {
+                    ++items;
+                    checkEntry( entry, "64", "212", "", "", "", "" );
+                } else if ( entry.getName().equals( "enum_int16_signmag" ) ) {
+                    ++items;
+                    checkEntry( entry, "16", "276", "", "", "", "" );
+                } else if ( entry.getName().equals( "enum_int16_twoscomp" ) ) {
+                    ++items;
+                    checkEntry( entry, "16", "292", "", "", "", "" );
+                } else if ( entry.getName().equals( "enum_int16_onescomp" ) ) {
+                    ++items;
+                    checkEntry( entry, "16", "308", "", "", "", "" );
+                }
+
+            }
+
+            Assert.assertTrue( "Container parameter count of " + containerName + " is " +
+                Long.toString( items ) + " but should be 17 items",
+                items == 17 );
 
             assertOnWarnings( model );
 

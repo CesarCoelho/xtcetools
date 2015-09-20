@@ -350,6 +350,8 @@ public abstract class XTCEContainerContentModelBase {
 
                 XTCEParameter parameterInstance;
 
+                // TODO: Telecommand container support will be needed here
+
                 if ( contentEntry.getTelemetryContainer() != null ) {
                     parameterInstance = findParameter( parameterRef,
                                                        contentEntry.getTelemetryContainer() );
