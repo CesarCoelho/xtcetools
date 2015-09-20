@@ -206,6 +206,8 @@ public class XTCEFunctions {
     public static String resolvePathReference( String currentPath,
                                                String pathReference ) {
 
+        // TODO: This function takes a big performance hit.
+
         StringBuilder fullPath = new StringBuilder();
         if ( pathReference.charAt( 0 ) != '/' ) { // NOI18N
             fullPath.append( currentPath );

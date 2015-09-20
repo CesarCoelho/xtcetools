@@ -3750,8 +3750,6 @@ public class XTCEViewer extends javax.swing.JFrame {
             List<XTCETMContainer> containers =
                 xtceDatabaseFile.getContainers( node.getStreamReference() );
 
-            //Collections.sort( containers );
-
             XTCEViewerContainerTreeNode rootObj =
                 new XTCEViewerContainerTreeNode( XTCEFunctions.getText( "general_containers" ), // NOI18N
                                                  null );
@@ -3774,6 +3772,13 @@ public class XTCEViewer extends javax.swing.JFrame {
                     obj = setContainerTreeNode( obj, container, true );
                 }
             }
+
+            logMsg( XTCEFunctions.getText( "ss_processed_stream" ) + // NOI18N
+                " '" + node.getStreamReference().getName() +
+                "' " + XTCEFunctions.getText( "ss_stream_containing" ) +
+                " " + Long.toString( containers.size() ) +
+                " " +
+                XTCEFunctions.getText( "general_containers" ) );
 
         } catch ( XTCEDatabaseException ex ) {
             logMsg( XTCEFunctions.generalErrorPrefix() + ex.getLocalizedMessage() );
