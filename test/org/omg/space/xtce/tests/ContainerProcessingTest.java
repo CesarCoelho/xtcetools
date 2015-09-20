@@ -61,6 +61,11 @@ public class ContainerProcessingTest {
     @Test
     public void lookupSingleContainerFromDatabase() {
 
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
         String containerName;
 
         containerName = "/BogusSAT/SC001/CCSDS_SpacePacket1";
@@ -95,6 +100,11 @@ public class ContainerProcessingTest {
 
     @Test
     public void lookupSingleContainerFromSpaceSystem() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
 
         try {
 
@@ -140,6 +150,11 @@ public class ContainerProcessingTest {
     @Test
     public void lookupAllContainersFromDatabase() {
 
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
         try {
 
             List<XTCETMContainer> containers = db_.getContainers();
@@ -160,6 +175,11 @@ public class ContainerProcessingTest {
 
     @Test
     public void lookupAllContainersFromSpaceSystem() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
 
         try {
 
@@ -183,6 +203,11 @@ public class ContainerProcessingTest {
 
     @Test
     public void lookupMultipleContainersFromDatabase() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
 
         try {
 
@@ -213,6 +238,11 @@ public class ContainerProcessingTest {
 
     @Test
     public void lookupMultipleContainersFromSpaceSystem() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
 
         try {
 
@@ -245,6 +275,11 @@ public class ContainerProcessingTest {
 
     @Test
     public void processSimpleContainer() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
 
         String containerName =
             "/BogusSAT/SC001/Onboard_Tables/Calibration_Offsets";
@@ -302,6 +337,11 @@ public class ContainerProcessingTest {
 
     @Test
     public void processContainerWithInheritance() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
 
         String containerName = "/BogusSAT/SC001/CCSDS_SpacePacket1";
 
@@ -382,6 +422,11 @@ public class ContainerProcessingTest {
 
     @Test
     public void processContainerWithInheritanceAndIncludesFalse() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
 
         String containerName = "/BogusSAT/SC001/ECSS_SpacePacket2";
 
@@ -492,6 +537,11 @@ public class ContainerProcessingTest {
 
     @Test
     public void processContainerWithInheritanceAndIncludesTrue() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
 
         String containerName = "/BogusSAT/SC001/ECSS_SpacePacket2";
 
@@ -618,6 +668,11 @@ public class ContainerProcessingTest {
     @Test
     public void processContainerWithInheritanceFixedRepeatParameter() {
 
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
         String containerName = "/BogusSAT/SC001/CCSDS_SpacePacket3";
 
         try {
@@ -692,6 +747,11 @@ public class ContainerProcessingTest {
 
     @Test
     public void processContainerWithInheritanceDynamicRepeatParameter() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
 
         String containerName = "/BogusSAT/SC001/ECSS_Service_1_Subservice_2";
 
@@ -818,6 +878,11 @@ public class ContainerProcessingTest {
     @Test
     public void processContainerWithInheritanceDynamicRepeatNoCountParameter() {
 
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
         String containerName = "/BogusSAT/SC001/ECSS_Service_1_Subservice_2";
 
         try {
@@ -922,6 +987,11 @@ public class ContainerProcessingTest {
     @Test
     public void processContainerWithIncludesNotTrueNotExpanded() {
 
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
         String containerName = "/BogusSAT/SC001/CCSDS_SpacePacket4";
 
         try {
@@ -1001,6 +1071,11 @@ public class ContainerProcessingTest {
 
     @Test
     public void processContainerWithIncludesNotTrueExpanded() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
 
         String containerName = "/BogusSAT/SC001/CCSDS_SpacePacket4";
 
@@ -1093,6 +1168,11 @@ public class ContainerProcessingTest {
 
     @Test
     public void processContainerWithIncludesTrue() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
 
         String containerName = "/BogusSAT/SC001/CCSDS_SpacePacket4";
 

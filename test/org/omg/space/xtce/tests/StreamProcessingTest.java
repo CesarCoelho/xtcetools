@@ -57,6 +57,11 @@ public class StreamProcessingTest {
     @Test
     public void lookupAllStreamsFromDatabase() {
 
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
         try {
 
             List<XTCETMStream> streams = db_.getStreams();
@@ -77,6 +82,11 @@ public class StreamProcessingTest {
 
     @Test
     public void lookupAllStreamsFromSpaceSystem() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
 
         try {
 

@@ -56,6 +56,11 @@ public class ContainerEntryValueTest {
     @Test
     public void checkFixedValue() {
 
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
         try {
 
             XTCEContainerEntryValue valueObj =
@@ -90,6 +95,11 @@ public class ContainerEntryValueTest {
 
     @Test
     public void checkCalibratedEqualityValue() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
 
         String paramName = "Payload_1_Phase";
 
@@ -142,6 +152,11 @@ public class ContainerEntryValueTest {
     @Test
     public void checkCalibratedInequalityValue() {
 
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
         String paramName = "Payload_1_Phase";
 
         try {
@@ -192,6 +207,11 @@ public class ContainerEntryValueTest {
 
     @Test
     public void checkUncalibratedEqualityValue() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
 
         String paramName = "Payload_1_Phase";
 
@@ -244,6 +264,11 @@ public class ContainerEntryValueTest {
     @Test
     public void checkUncalibratedInequalityValue() {
 
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
         String paramName = "Payload_1_Phase";
 
         try {
@@ -294,6 +319,11 @@ public class ContainerEntryValueTest {
 
     @Test
     public void checkEquality() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
 
         String paramName1 = "Payload_1_Phase";
         String paramName2 = "Payload_1_State";
@@ -374,6 +404,11 @@ public class ContainerEntryValueTest {
 
     @Test
     public void checkCompatibility() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
 
         String paramName1 = "Payload_1_Phase";
         String paramName2 = "Payload_1_State";
