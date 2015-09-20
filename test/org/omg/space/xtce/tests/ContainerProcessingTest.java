@@ -1224,10 +1224,15 @@ public class ContainerProcessingTest {
             }
         }
 
-        if ( entry.getValue().equals( value ) == false ) {
+        String itemValue = "";
+        if ( entry.getValue() != null ) {
+            itemValue = entry.getValue().toStringWithoutParameter();
+        }
+
+        if ( itemValue.equals( value ) == false ) {
             Assert.fail( "Container parameter " + entry.getName() +
                 " should have value of '" + value + "' but it is '" +
-                entry.getValue() + "' instead" );
+                itemValue + "' instead" );
         }
 
         if ( entry.getInitialValue().equals( initialValue ) == false ) {

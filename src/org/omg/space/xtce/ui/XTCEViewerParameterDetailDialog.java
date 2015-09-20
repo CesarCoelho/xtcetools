@@ -572,9 +572,10 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Parameter Detail Display");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/omg/space/xtce/toolkit/MessagesBundle"); // NOI18N
+        setTitle(bundle.getString("dialog_paramdetail_title")); // NOI18N
 
-        editButton.setText("Edit");
+        editButton.setText(bundle.getString("general_edit")); // NOI18N
         editButton.setMaximumSize(new java.awt.Dimension(75, 25));
         editButton.setMinimumSize(new java.awt.Dimension(75, 25));
         editButton.setPreferredSize(new java.awt.Dimension(75, 25));
@@ -584,7 +585,7 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
             }
         });
 
-        dismissButton.setText("Dismiss");
+        dismissButton.setText(bundle.getString("general_dismiss_text")); // NOI18N
         dismissButton.setMaximumSize(new java.awt.Dimension(75, 25));
         dismissButton.setMinimumSize(new java.awt.Dimension(75, 25));
         dismissButton.setPreferredSize(new java.awt.Dimension(75, 25));
@@ -615,15 +616,15 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
                 .addContainerGap())
         );
 
-        nameLabel.setText("Name");
+        nameLabel.setText(bundle.getString("dialog_paramdetail_name")); // NOI18N
 
-        aliasLabel.setText("Alias(s)");
+        aliasLabel.setText(bundle.getString("dialog_paramdetail_aliases")); // NOI18N
 
-        unitsLabel.setText("Units");
+        unitsLabel.setText(bundle.getString("dialog_paramdetail_units")); // NOI18N
 
-        sourceLabel.setText("Source");
+        sourceLabel.setText(bundle.getString("dialog_paramdetail_source")); // NOI18N
 
-        systemNameLabel.setText("Subsystem");
+        systemNameLabel.setText(bundle.getString("dialog_paramdetail_subsys")); // NOI18N
 
         jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
@@ -641,22 +642,22 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
         sourceComboField.setMinimumSize(new java.awt.Dimension(150, 27));
         sourceComboField.setPreferredSize(new java.awt.Dimension(150, 27));
 
-        readOnlyCheckboxField.setText("Read Only");
+        readOnlyCheckboxField.setText(bundle.getString("dialog_paramdetail_readonly")); // NOI18N
 
         parameterDescriptionLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        parameterDescriptionLabel.setText("Parameter Description");
+        parameterDescriptionLabel.setText(bundle.getString("dialog_paramdetail_pdesc")); // NOI18N
         parameterDescriptionLabel.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
 
         encodingInformationLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        encodingInformationLabel.setText("Encoding Information");
+        encodingInformationLabel.setText(bundle.getString("dialog_paramdetail_enc")); // NOI18N
         encodingInformationLabel.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
 
         shortDescriptionLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        shortDescriptionLabel.setText("Short Description");
+        shortDescriptionLabel.setText(bundle.getString("dialog_paramdetail_sdesc")); // NOI18N
         shortDescriptionLabel.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
 
         longDescriptionLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        longDescriptionLabel.setText("Long Description");
+        longDescriptionLabel.setText(bundle.getString("dialog_paramdetail_ldesc")); // NOI18N
         longDescriptionLabel.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
 
         longDescriptionField.setColumns(20);
@@ -665,19 +666,19 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
         longDescriptionField.setWrapStyleWord(true);
         jScrollPane3.setViewportView(longDescriptionField);
 
-        jLabel1.setText("Engineering Type");
+        jLabel1.setText(bundle.getString("dialog_paramdetail_etype")); // NOI18N
 
-        jLabel2.setText("Encoding Type");
+        jLabel2.setText(bundle.getString("dialog_paramdetail_rtype")); // NOI18N
 
-        jLabel3.setText("Encoding Size");
+        jLabel3.setText(bundle.getString("dialog_paramdetail_rsize")); // NOI18N
 
-        jLabel4.setText("Type Name");
+        jLabel4.setText(bundle.getString("dialog_paramdetail_ptypename")); // NOI18N
 
-        jLabel5.setText("Bit Order");
+        jLabel5.setText(bundle.getString("dialog_paramdetail_bitorder")); // NOI18N
 
-        jLabel6.setText("Change Threshold");
+        jLabel6.setText(bundle.getString("dialog_paramdetail_cthreshold")); // NOI18N
 
-        jLabel7.setText("Default Value");
+        jLabel7.setText(bundle.getString("dialog_paramdetail_ivalue")); // NOI18N
 
         engineeringTypeComboField.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "ENUMERATED", "SIGNED", "UNSIGNED", "FLOAT32", "FLOAT64", "FLOAT128", "STRUCTURE", "BINARY", "BOOLEAN", "STRING", "TIME", "DURATION", "ARRAY" }));
 
@@ -687,11 +688,11 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
 
         rangeAppliesToComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Uncalibrated", "Calibrated", "" }));
 
-        jLabel17.setText("Range Low");
+        jLabel17.setText(bundle.getString("dialog_paramdetail_rangelow")); // NOI18N
 
-        jLabel18.setText("Range High");
+        jLabel18.setText(bundle.getString("dialog_paramdetail_rangehigh")); // NOI18N
 
-        jLabel19.setText("Range Scope");
+        jLabel19.setText(bundle.getString("dialog_paramdetail_rangescope")); // NOI18N
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -829,7 +830,7 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
         );
 
         enumerationLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        enumerationLabel.setText("Enumeration/Multistate Table");
+        enumerationLabel.setText(bundle.getString("dialog_paramdetail_tabenumstitle")); // NOI18N
         enumerationLabel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         enumerationTable.setAutoCreateRowSorter(true);
@@ -857,8 +858,13 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
             }
         });
         enumerationScrollPane.setViewportView(enumerationTable);
+        if (enumerationTable.getColumnModel().getColumnCount() > 0) {
+            enumerationTable.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("dialog_paramdetail_enumslabel")); // NOI18N
+            enumerationTable.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("dialog_paramdetail_enumsvalue")); // NOI18N
+            enumerationTable.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("dialog_paramdetail_enumsdesc")); // NOI18N
+        }
 
-        removeEnumerationButton.setText("Remove");
+        removeEnumerationButton.setText(bundle.getString("general_remove")); // NOI18N
         removeEnumerationButton.setMaximumSize(new java.awt.Dimension(75, 25));
         removeEnumerationButton.setMinimumSize(new java.awt.Dimension(75, 25));
         removeEnumerationButton.setPreferredSize(new java.awt.Dimension(75, 25));
@@ -868,7 +874,7 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
             }
         });
 
-        editEnumerationButton.setText("Edit");
+        editEnumerationButton.setText(bundle.getString("general_edit")); // NOI18N
         editEnumerationButton.setMaximumSize(new java.awt.Dimension(75, 25));
         editEnumerationButton.setMinimumSize(new java.awt.Dimension(75, 25));
         editEnumerationButton.setPreferredSize(new java.awt.Dimension(75, 25));
@@ -878,7 +884,7 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
             }
         });
 
-        addEnumerationButton.setText("Add");
+        addEnumerationButton.setText(bundle.getString("general_add")); // NOI18N
         addEnumerationButton.setMaximumSize(new java.awt.Dimension(75, 25));
         addEnumerationButton.setMinimumSize(new java.awt.Dimension(75, 25));
         addEnumerationButton.setPreferredSize(new java.awt.Dimension(75, 25));
@@ -888,7 +894,7 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
             }
         });
 
-        hexCheckbox.setText("Show Values in Hex");
+        hexCheckbox.setText(bundle.getString("dialog_paramdetail_enumshex")); // NOI18N
         hexCheckbox.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 hexCheckboxStateChanged(evt);
@@ -945,10 +951,10 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
                 .addContainerGap())
         );
 
-        extraDetailsTabbedPane.addTab("Enumerations", engioneeringConversionTab);
+        extraDetailsTabbedPane.addTab(bundle.getString("dialog_paramdetail_tabenums"), engioneeringConversionTab); // NOI18N
 
         polynomialCalibratorsLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        polynomialCalibratorsLabel.setText("Polynomial Calibrator");
+        polynomialCalibratorsLabel.setText(bundle.getString("dialog_paramdetail_polycal")); // NOI18N
         polynomialCalibratorsLabel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jLabel8.setText("X0 Coefficient");
@@ -1082,6 +1088,8 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
                 .addContainerGap())
         );
 
+        jTabbedPane1.getAccessibleContext().setAccessibleName(bundle.getString("dialog_paramdetail_defaulttab")); // NOI18N
+
         javax.swing.GroupLayout polynomialCalibratorsTabLayout = new javax.swing.GroupLayout(polynomialCalibratorsTab);
         polynomialCalibratorsTab.setLayout(polynomialCalibratorsTabLayout);
         polynomialCalibratorsTabLayout.setHorizontalGroup(
@@ -1102,10 +1110,10 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
                     .addContainerGap()))
         );
 
-        extraDetailsTabbedPane.addTab("Polynomial Calibrators", polynomialCalibratorsTab);
+        extraDetailsTabbedPane.addTab(bundle.getString("dialog_paramdetail_tabpolycal"), polynomialCalibratorsTab); // NOI18N
 
         jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel16.setText("Spline Calibrator / Piecewise Functions");
+        jLabel16.setText(bundle.getString("dialog_paramdetail_splinecaltitle")); // NOI18N
         jLabel16.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         splineTable.setAutoCreateRowSorter(true);
@@ -1133,20 +1141,24 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
             }
         });
         jScrollPane4.setViewportView(splineTable);
+        if (splineTable.getColumnModel().getColumnCount() > 0) {
+            splineTable.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("dialog_paramdetail_splineraw")); // NOI18N
+            splineTable.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("dialog_paramdetail_splinecal")); // NOI18N
+        }
 
         jTabbedPane2.addTab("Default", jScrollPane4);
 
-        jButton1.setText("Remove");
+        jButton1.setText(bundle.getString("general_remove")); // NOI18N
         jButton1.setMaximumSize(new java.awt.Dimension(75, 25));
         jButton1.setMinimumSize(new java.awt.Dimension(75, 25));
         jButton1.setPreferredSize(new java.awt.Dimension(75, 25));
 
-        jButton2.setText("Edit");
+        jButton2.setText(bundle.getString("general_edit")); // NOI18N
         jButton2.setMaximumSize(new java.awt.Dimension(75, 25));
         jButton2.setMinimumSize(new java.awt.Dimension(75, 25));
         jButton2.setPreferredSize(new java.awt.Dimension(75, 25));
 
-        jButton3.setText("Add");
+        jButton3.setText(bundle.getString("general_add")); // NOI18N
         jButton3.setMaximumSize(new java.awt.Dimension(75, 25));
         jButton3.setMinimumSize(new java.awt.Dimension(75, 25));
         jButton3.setPreferredSize(new java.awt.Dimension(75, 25));
@@ -1184,6 +1196,8 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
                 .addContainerGap())
         );
 
+        jTabbedPane2.getAccessibleContext().setAccessibleName(bundle.getString("dialog_paramdetail_defaulttab")); // NOI18N
+
         javax.swing.GroupLayout splineCalibratorsTabLayout = new javax.swing.GroupLayout(splineCalibratorsTab);
         splineCalibratorsTab.setLayout(splineCalibratorsTabLayout);
         splineCalibratorsTabLayout.setHorizontalGroup(
@@ -1204,7 +1218,7 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
                     .addContainerGap()))
         );
 
-        extraDetailsTabbedPane.addTab("Spline Calibrators", splineCalibratorsTab);
+        extraDetailsTabbedPane.addTab(bundle.getString("dialog_paramdetail_tabslinecal"), splineCalibratorsTab); // NOI18N
 
         javax.swing.GroupLayout alarmDefinitionsTabLayout = new javax.swing.GroupLayout(alarmDefinitionsTab);
         alarmDefinitionsTab.setLayout(alarmDefinitionsTabLayout);
@@ -1217,7 +1231,7 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
             .addGap(0, 647, Short.MAX_VALUE)
         );
 
-        extraDetailsTabbedPane.addTab("Alarm Definitions", alarmDefinitionsTab);
+        extraDetailsTabbedPane.addTab(bundle.getString("dialog_paramdetail_tabalarm"), alarmDefinitionsTab); // NOI18N
 
         javax.swing.GroupLayout ancillaryDataTabLayout = new javax.swing.GroupLayout(ancillaryDataTab);
         ancillaryDataTab.setLayout(ancillaryDataTabLayout);
@@ -1230,13 +1244,13 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
             .addGap(0, 647, Short.MAX_VALUE)
         );
 
-        extraDetailsTabbedPane.addTab("Ancillary Data", ancillaryDataTab);
+        extraDetailsTabbedPane.addTab(bundle.getString("dialog_paramdetail_tabancdata"), ancillaryDataTab); // NOI18N
 
-        rangeLowInclusiveCheckbox.setText("Inclusive");
+        rangeLowInclusiveCheckbox.setText(bundle.getString("dialog_paramdetail_inclusive")); // NOI18N
 
-        rangeHighInclusiveCheckbox.setText("Inclusive");
+        rangeHighInclusiveCheckbox.setText(bundle.getString("dialog_paramdetail_inclusive")); // NOI18N
 
-        jLabel20.setText("Parameter Type Reference");
+        jLabel20.setText(bundle.getString("dialog_paramdetail_ptyperef")); // NOI18N
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);

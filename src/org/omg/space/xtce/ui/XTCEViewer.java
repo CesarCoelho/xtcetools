@@ -111,6 +111,7 @@ public class XTCEViewer extends javax.swing.JFrame {
         showItemXmlElementsMenuItem = new javax.swing.JMenuItem();
         goToEntryMenuItem = new javax.swing.JMenuItem();
         setConditionTrueMenuItem = new javax.swing.JMenuItem();
+        setRepeatCounterMenuItem = new javax.swing.JMenuItem();
         copyContainerCellMenuItem = new javax.swing.JMenuItem();
         copyContainerRowMenuItem = new javax.swing.JMenuItem();
         copyContainerTableMenuItem = new javax.swing.JMenuItem();
@@ -373,6 +374,15 @@ public class XTCEViewer extends javax.swing.JFrame {
             }
         });
         containerTablePopupMenu.add(setConditionTrueMenuItem);
+
+        setRepeatCounterMenuItem.setText(bundle.getString("options_popup_setrepeat")); // NOI18N
+        setRepeatCounterMenuItem.setEnabled(false);
+        setRepeatCounterMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                setRepeatCounterMenuItemActionPerformed(evt);
+            }
+        });
+        containerTablePopupMenu.add(setRepeatCounterMenuItem);
 
         copyContainerCellMenuItem.setText(bundle.getString("general_copy_cell")); // NOI18N
         copyContainerCellMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -3295,6 +3305,68 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     }//GEN-LAST:event_mainWindowExportContainersMenuItemActionPerformed
 
+    private void setRepeatCounterMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setRepeatCounterMenuItemActionPerformed
+
+        XTCEViewerContainerTreeNode node =
+            (XTCEViewerContainerTreeNode)tmContainerTree.getLastSelectedPathComponent();
+        if ( node == null ) {
+            logMsg( XTCEFunctions.generalErrorPrefix() +
+                    XTCEFunctions.getText( "rightclick_xml_no_tm_container_error_message" ) ); // NOI18N
+            return;
+        }
+
+        int row = tmContainerTable.getSelectedRow();
+        if ( row == -1 ) {
+            return;
+        }
+
+        if ( ( node.getContentModel().getContentList().get( row ).getRepeatParameterInfo().isEmpty()          == true ) ||
+             ( node.getContentModel().getContentList().get( row ).getRepeatParameterInfo().startsWith( "==" ) == false ) ) {
+            JOptionPane.showMessageDialog( this,
+                                           XTCEFunctions.getText( "rightclick_container_table_nocounter_message" ), // NOI18N
+                                           XTCEFunctions.getText( "general_error" ), // NOI18N
+                                           JOptionPane.ERROR_MESSAGE);
+        }
+
+        // TODO do dialog here
+/*
+        String repeatCondition =
+            node.getContentModel().getContentList().get( row ).getRepeatParameterInfo();
+
+        List<XTCEContainerEntryValue> valueList =
+            node.getContentModel().getUserValues();
+
+        repeatCondition = repeatCondition.replaceFirst( "==", "" );
+        String form = "Calibrated";
+        if ( repeatCondition.endsWith( "{uncal}" ) == true ) {
+            form = "Uncalibrated";
+            repeatCondition = repeatCondition.replaceAll( "{uncal}", "" );
+        } else {
+            repeatCondition = repeatCondition.replaceAll( "{cal}", "" );
+        }
+
+        // need parameter
+
+        boolean found = false;
+        for ( XTCEContainerEntryValue value : valueList ) {
+            if ( value.getName().equals( repeatCondition ) == true ) {
+                found = true;
+                value.setOperator( "==" );
+                value.setComparisonForm( form );
+                value.setValue( newValue );
+            }
+        }
+
+        if ( found == false ) {
+            XTCEContainerEntryValue value =
+                new XTCEContainerEntryValue( parameter, newValue, "==", form );
+            valueList.add( value );
+        }
+
+        drawContainerContentTable( valueList );
+*/
+    }//GEN-LAST:event_setRepeatCounterMenuItemActionPerformed
+
     public void goToParameter( String  parameterName,
                                String  spaceSystemName,
                                boolean isTelemetryParameter ) {
@@ -3678,7 +3750,7 @@ public class XTCEViewer extends javax.swing.JFrame {
             List<XTCETMContainer> containers =
                 xtceDatabaseFile.getContainers( node.getStreamReference() );
 
-            Collections.sort( containers );
+            //Collections.sort( containers );
 
             XTCEViewerContainerTreeNode rootObj =
                 new XTCEViewerContainerTreeNode( XTCEFunctions.getText( "general_containers" ), // NOI18N
@@ -3709,9 +3781,9 @@ public class XTCEViewer extends javax.swing.JFrame {
 
         tmStreamContentTree.setRootVisible( false );
 
-        XTCEViewerFunctions.expandAllTreeNodes( tmStreamContentTree );
-
         tmodel.reload();
+
+        XTCEViewerFunctions.expandAllTreeNodes( tmStreamContentTree );
 
     }
 
@@ -3899,12 +3971,17 @@ public class XTCEViewer extends javax.swing.JFrame {
                 containerName = "UNDEFINED"; // NOI18N
             }
 
+            String itemValue = null;
+            if ( entry.getValue() != null ) {
+                itemValue = entry.getValue().toStringWithoutParameter();
+            }
+
             Object rowData[] = { containerName,
                                  name,
                                  aliasString,
                                  entry.getRawSizeInBits(),
                                  entry.getStartBit(),
-                                 entry.getValue(),
+                                 itemValue,
                                  entry.getInitialValue(),
                                  entry.getConditions(),
                                  entry.getRepeatParameterInfo() };
@@ -4596,6 +4673,7 @@ public class XTCEViewer extends javax.swing.JFrame {
     private javax.swing.JTextField parametersTotal;
     private javax.swing.JMenuItem saveContainerDrawingMenuItem;
     private javax.swing.JMenuItem setConditionTrueMenuItem;
+    private javax.swing.JMenuItem setRepeatCounterMenuItem;
     private javax.swing.JMenuItem showContainerXmlMenuItem;
     private javax.swing.JMenuItem showEncodeDecodeDialogMenuItem;
     private javax.swing.JMenuItem showItemXmlElementsMenuItem;

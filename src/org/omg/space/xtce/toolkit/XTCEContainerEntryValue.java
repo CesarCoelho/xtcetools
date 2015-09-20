@@ -6,6 +6,8 @@
 
 package org.omg.space.xtce.toolkit;
 
+import java.util.BitSet;
+
 /** This class represents the value of an entry in the container model when
  * processing a specific Container in the XTCE data model.
  *
@@ -20,7 +22,7 @@ public class XTCEContainerEntryValue {
      * This constructs an instance of the class to represent an assigned or
      * chosen value for an XTCEParameter and whether or not it is Calibrated.
      *
-     * @param parameter The parameter to keep this value for.
+     * @param item The parameter or argument to keep this value for.
      *
      * @param value The value that should be used for this Parameter.
      *
@@ -31,15 +33,16 @@ public class XTCEContainerEntryValue {
      *
      */
 
-    public XTCEContainerEntryValue( XTCEParameter parameter,
-                                    String        value,
-                                    String        operator,
-                                    String        form ) {
+    public XTCEContainerEntryValue( XTCETypedObject item,
+                                    String          value,
+                                    String          operator,
+                                    String          form ) {
 
-        name_                     = parameter.getFullPath();
+        name_                     = item.getFullPath();
         value_                    = value;
         operator_                 = operator;
         form_                     = form;
+        item_                     = item;
         toStringWithoutParameter_ = operator_ + value_ +
             ( form_.equals( "Calibrated" ) == true ? "{cal}" : "{uncal}" );
 
@@ -48,37 +51,7 @@ public class XTCEContainerEntryValue {
     /** Constructor
      *
      * This constructs an instance of the class to represent an assigned or
-     * chosen value for an XTCEArgument and whether or not it is Calibrated.
-     *
-     * @param argument The argument to keep this value for.
-     *
-     * @param value The value that should be used for this Parameter.
-     *
-     * @param operator The comparison operator that is used for assigning this
-     * value, which can be "==", "!=", and others - refer to the XTCE Schema.
-     *
-     * @param form The form of the value, either "Calibrated" or "Uncalibrated".
-     *
-     */
-
-    public XTCEContainerEntryValue( XTCEArgument argument,
-                                    String       value,
-                                    String       operator,
-                                    String       form ) {
-
-        name_                     = argument.getName();
-        value_                    = value;
-        operator_                 = operator;
-        form_                     = form;
-        toStringWithoutParameter_ = operator_ + value_ +
-            ( form_.equals( "Calibrated" ) == true ? "{cal}" : "{uncal}" );
-
-    }
-
-    /** Constructor
-     *
-     * This constructs an instance of the class to represent an assigned or
-     * chosen value for an FixedValue field, which is always uncalibrated.
+     * chosen value for an FixedValue field, which is always calibrated.
      *
      * @param value The value that should be used for this Parameter.
      *
@@ -89,8 +62,34 @@ public class XTCEContainerEntryValue {
         name_                     = "";
         value_                    = value;
         operator_                 = "==";
-        form_                     = "Uncalibrated";
-        toStringWithoutParameter_ = operator_ + value_ + "{uncal}";
+        form_                     = "Calibrated";
+        toStringWithoutParameter_ = operator_ + value_ + "{cal}";
+
+    }
+
+    /** Constructor
+     *
+     * This constructs an instance of the class to represent a binary decoded
+     * value from a binary stream BitSet, which is always a raw value.
+     *
+     * @param item XTCETypedObject representing the parameter or argument in
+     * the XTCE document.
+     *
+     * @param rawValue BitSet containing the raw encoded bits for this item.
+     *
+     */
+
+    public XTCEContainerEntryValue( XTCETypedObject item,
+                                    BitSet          rawValue ) {
+
+        item_                     = item;
+        name_                     = item.getFullPath();
+        itemValueObj_             = new XTCEItemValue( item );
+        rawValue_                 = rawValue;
+        value_                    = itemValueObj_.decode( rawValue );
+        operator_                 = "==";
+        form_                     = "Calibrated";
+        toStringWithoutParameter_ = operator_ + value_ + "{cal}";
 
     }
 
@@ -128,7 +127,7 @@ public class XTCEContainerEntryValue {
      *
      */
 
-    public String getValue() {
+    public String getAssignedValue() {
         return value_;
     }
 
@@ -146,12 +145,160 @@ public class XTCEContainerEntryValue {
 
     /** Retrieve the form of the value that is associated with this entry.
      *
-     * @return Strig containing with "Calibrated" or "Uncalibrated".
+     * @return String containing with "Calibrated" or "Uncalibrated".
      *
      */
 
     public String getComparisonForm() {
         return form_;
+    }
+
+    /** Retrieve the EU/Calibrated value of the entry, regardless of how it
+     * was assigned.
+     *
+     * @return String containing the EU/Calibrated value.
+     *
+     */
+
+    public String getCalibratedValue() {
+
+        if ( form_.equals( "Calibrated" ) == true ) {
+            return value_;
+        } else {
+            if ( itemValueObj_ == null ) {
+                itemValueObj_ = new XTCEItemValue( item_ );
+            }
+            return itemValueObj_.getCalibratedFromUncalibrated( value_ );
+        }
+
+    }
+
+    /** Retrieve the Uncalibrated value of the entry, regardless of how it
+     * was assigned.
+     *
+     * @return String containing the Uncalibrated value.
+     *
+     */
+
+    public String getUncalibratedValue() {
+
+        if ( form_.equals( "Uncalibrated" ) == true ) {
+            return value_;
+        } else {
+            if ( itemValueObj_ == null ) {
+                itemValueObj_ = new XTCEItemValue( item_ );
+            }
+            return itemValueObj_.getUncalibratedFromCalibrated( value_ );
+        }
+    }
+
+    /** Retrieve the Raw value of the entry, regardless of how it was assigned.
+     *
+     * @return BitSet containing the raw value.
+     *
+     */
+
+    public BitSet getRawValue() {
+
+        if ( rawValue_ != null ) {
+            return rawValue_;
+        }
+
+        String uncalValue = getUncalibratedValue();
+        if ( itemValueObj_ == null ) {
+            itemValueObj_ = new XTCEItemValue( item_ );
+        }
+
+        return itemValueObj_.getRawFromUncalibrated( uncalValue );
+
+    }
+
+/* Right now these are not used but were prototyped for the repeat set case
+
+    public void setValue( String value ) {
+        value_ = value;
+    }
+
+    public void setOperator( String operator ) {
+        operator_ = operator;
+    }
+
+    public void setComparisonForm( String form ) {
+        form_ = form;
+    }
+*/
+
+    /** Compatibility Operator
+     *
+     * This method compares this entry value with another entry value to see if
+     * they are "compatible".  They are compatible if equal, taking into
+     * account that they may be in different forms (uncalibrated versus
+     * calibrated).  They may also have different operators, so in the case
+     * where I have this object being equal to a value, it could be compatible
+     * with another object which is not equal to any value except this one.
+     *
+     * @param that XTCEContainerEntryValue to compare to.
+     *
+     * @return boolean indicating if there is compatibility between these two
+     * entry values in a container.
+     *
+     */
+
+    public boolean isCompatibleWith( XTCEContainerEntryValue that ) {
+
+        // if these are exactly the same object on the Java heap then they must
+        // be compatible
+
+        if ( this == that ) {
+            return true;
+        }
+
+        // next check if the parameter/argument represented is actually the
+        // same, otherwise these are never compatible
+
+        if ( this.name_.equals( that.name_) == false ) {
+            return false;
+        }
+
+        // first check if the internal representation is the same, in which
+        // case the test is simpler by far
+
+        if ( this.form_.equals( that.form_ ) == true ) {
+            return checkValuesCompatible( that.value_, that.operator_ );
+
+        // otherwise we calibrated whichever of the two is uncalibrated and do
+        // the comparison on the new temporary
+
+        } else {
+            if ( this.form_.equals( "Uncalibrated" ) == true ) {
+                if ( itemValueObj_ == null ) {
+                    itemValueObj_ = new XTCEItemValue( item_ );
+                }
+                String correctedValue =
+                    itemValueObj_.getCalibratedFromUncalibrated( value_ );
+                XTCEContainerEntryValue newObject =
+                    new XTCEContainerEntryValue( item_,
+                                                 correctedValue,
+                                                 operator_,
+                                                 "Calibrated" );
+                return newObject.checkValuesCompatible( that.value_,
+                                                        that.operator_ );
+            } else {
+                if ( itemValueObj_ == null ) {
+                    itemValueObj_ = new XTCEItemValue( item_ );
+                }
+                String correctedValue =
+                    itemValueObj_.getCalibratedFromUncalibrated( that.value_ );
+                XTCEContainerEntryValue newObject =
+                    new XTCEContainerEntryValue( that.item_,
+                                                 correctedValue,
+                                                 that.operator_,
+                                                 "Calibrated" );
+                return checkValuesCompatible( newObject.value_,
+                                              newObject.operator_ );
+            }
+        }
+
     }
 
     /** Equality Operator
@@ -224,6 +371,29 @@ public class XTCEContainerEntryValue {
         return toStringWithoutParameter_;
     }
 
+    private boolean checkValuesCompatible( String otherValue,
+                                           String otherOperator ) {
+
+        if ( operator_.equals( "==" ) == true ) {
+            if ( otherOperator.equals( "==" ) == true ) {
+                return value_.equals( otherValue );
+            } else if ( otherOperator.equals( "!=" ) == true ) {
+                return ! value_.equals( otherValue );
+            }
+        } else if ( operator_.equals( "!=" ) == true ) {
+            if ( otherOperator.equals( "==" ) == true ) {
+                return ! value_.equals( otherValue );
+            } else if ( otherOperator.equals( "!=" ) == true ) {
+                return value_.equals( otherValue );
+            }
+        }
+
+        // operators outside of == and != aren't yet supported
+
+        return false;
+
+    }
+
     // Private Data Members
 
     /// The fully qualified name of the XTCE Parameter or Argument that should
@@ -248,5 +418,17 @@ public class XTCEContainerEntryValue {
     /// Prebuilt string for the toStringWithoutParameter method
 
     private String toStringWithoutParameter_ = null;
+
+    /// The typed object reference
+
+    private XTCETypedObject item_ = null;
+
+    /// The XTCEItemValue object that gets made if needed
+
+    private XTCEItemValue itemValueObj_ = null;
+
+    /// The raw value if needed
+
+    private BitSet rawValue_ = null;
 
 }

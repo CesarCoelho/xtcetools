@@ -708,6 +708,66 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
     }
 
+    /** Retrieve all containers that inherit from the container inheritance
+     * path provided.
+     *
+     * Note to the implementer to be sure that it is understood that a
+     * container inheritance path is not the same as the Space System path
+     * used by XTCE documents.  This is a path that is defined by the base
+     * containers in a container inheritance structure.
+     *
+     * @param parentPath String containing a base inheritance to search for
+     * children of.
+     *
+     * @return List of XTCETMContainer objects in this SpaceSystem that inherit
+     * from the parent path provided.
+     *
+     */
+
+    public List<XTCETMContainer> getInheritingContainers( String parentPath ) {
+
+        warnings_ = new ArrayList<>();
+
+        ArrayList<XTCETMContainer> list = new ArrayList<>();
+
+        // this algorithm is a little more complicated than is necessary
+        // because it attempts to avoid constructing every XTCETMContainer
+        // object by looking at the inheritance path first.
+
+        try {
+
+            List<SequenceContainerType> containers = getReference().
+                                                     getTelemetryMetaData().
+                                                     getContainerSet().
+                                                     getSequenceContainer();
+
+            for ( SequenceContainerType container : containers ) {
+
+                try {
+
+                    String childPath =
+                        makeContainerInheritanceString( container );
+
+                    if ( childPath.startsWith( parentPath ) == true ) {
+                        list.add( new XTCETMContainer( getFullPath(),
+                                                       childPath,
+                                                       container ) );
+                    }
+
+                } catch ( XTCEDatabaseException ex ) {
+                    warnings_.add( ex.getLocalizedMessage() );
+                }
+
+            }
+
+        } catch ( NullPointerException ex ) {
+            // this is okay, the SpaceSystem may not have any TM containers
+        }
+
+        return list;
+
+    }
+
     /** Retrieve a List of SequenceContainers that are locally defined
      * in this Space System, modeled as XTCETMContainer objects.
      *
@@ -932,6 +992,8 @@ public class XTCESpaceSystem extends XTCENamedObject {
     }
 
     private String makeContainerInheritanceString( SequenceContainerType container ) throws XTCEDatabaseException {
+
+        // optimization would be good to have here.
 
         LinkedList<String> cpathList = new LinkedList<>();
         SequenceContainerType currentContainer = container;

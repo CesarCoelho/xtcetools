@@ -8,6 +8,7 @@ package org.omg.space.xtce.toolkit;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.BitSet;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -24,7 +25,7 @@ import org.omg.space.xtce.toolkit.XTCEContainerContentEntry.FieldType;
  *
  */
 
-public abstract class XTCEContainerContentModelBase {
+abstract class XTCEContainerContentModelBase {
 
     /** Constructor
      *
@@ -56,7 +57,7 @@ public abstract class XTCEContainerContentModelBase {
 
     XTCEContainerContentModelBase( List<XTCESpaceSystem>         spaceSystems,
                                    List<XTCEContainerEntryValue> userValues,
-                                   byte[]                        binaryValues,
+                                   BitSet                        binaryValues,
                                    boolean                       showAllConditions ) {
 
         spaceSystems_      = spaceSystems;
@@ -140,9 +141,7 @@ public abstract class XTCEContainerContentModelBase {
      * @param currentEntry XTCEContainerContentEntry representing the item
      * that is desired for extraction on this object.
      *
-     * @return BigInteger which is always positive because it is intended to
-     * represent the raw bits in numeric form.  Conversion to the proper
-     * encoding type is applied in the transition from raw->uncalibrated.
+     * @return BitSet which is intended to represent the raw bits.
      *
      * @throws XTCEDatabaseException thrown in the event one of three things
      * occurs.  First, the binary is not provided to this object so nothing can
@@ -152,57 +151,53 @@ public abstract class XTCEContainerContentModelBase {
      *
      */
 
-    public BigInteger extractRawValue( XTCEContainerContentEntry currentEntry ) throws XTCEDatabaseException {
+    public BitSet extractRawValue( XTCEContainerContentEntry currentEntry ) throws XTCEDatabaseException {
 
-        BigInteger result = BigInteger.ZERO;
+        BitSet result;
+        int    bitLength;
+
+        try {
+
+            bitLength = Integer.parseInt( currentEntry.getRawSizeInBits() );
+            result    = new BitSet( bitLength );
+
+        } catch ( NumberFormatException ex ) {
+            throw new XTCEDatabaseException( currentEntry.itemName +
+                " does not have a raw value because it does not have a " +
+                "numeric size in bits" );
+        }
+
         if ( binaryValues_ == null ) {
             return result;
         }
 
-        long availBits          = binaryValues_.length * 8;
-        long availBitsLastIndex = availBits - 1;
+        int availBits          = binaryValues_.size();
+        int availBitsLastIndex = availBits - 1;
 
         try {
 
-            long startBit = Long.parseLong( currentEntry.getStartBit() );
+            int startBit = Integer.parseInt( currentEntry.getStartBit() );
             if ( startBit > availBitsLastIndex ) {
                 throw new XTCEDatabaseException( "Binary too small to " +
                     "extract " + currentEntry.itemName + " (size " +
-                    Long.toString( availBits ) + " with start bit of " +
-                    Long.toString( startBit ) + ")" );
+                    Integer.toString( availBits ) + " with start bit of " +
+                    Integer.toString( startBit ) + ")" );
             }
 
-            long bitLength = Long.parseLong( currentEntry.getRawSizeInBits() );
             if ( ( startBit + bitLength ) > availBitsLastIndex ) {
                 throw new XTCEDatabaseException( "Binary too small to " +
                     "extract " + currentEntry.itemName + " (size " +
-                    Long.toString( availBits ) + " with entry size of " +
-                    Long.toString( startBit + bitLength ) + ")" );
+                    Integer.toString( availBits ) + " with entry size of " +
+                    Integer.toString( startBit + bitLength ) + ")" );
             }
 
-            long startByte = startBit / 8;
-            long numBytes  = bitLength / 8 + ( bitLength % 8 == 0 ? 0 : 1 );
-            byte[] dataBytes = new byte[(int)numBytes];
-            for ( long iii = startByte; iii < ( startByte + numBytes ); ++iii ) {
-                long index = iii - startByte;
-                dataBytes[(int)index] = binaryValues_[(int)iii];
-            }
-
-            int mask = 0xff;
-            for ( int jjj = 0; jjj < ( startBit % 8 ); ++jjj ) {
-                mask ^= ( 1 << ( 7 - jjj ) );
-            }
-            dataBytes[0] = (byte)( dataBytes[0] & (byte)mask );
-
-            result = new BigInteger( 1, dataBytes );
-            long shiftOutBits = ( ( startBit % 8 ) + bitLength ) % 8;
-            if ( shiftOutBits != 0 ) {
-                result = result.shiftRight( (int)shiftOutBits );
+            for ( int iii = 0; iii < bitLength; ++iii ) {
+                result.set( iii, binaryValues_.get( startBit + bitLength - 1 - iii ) );
             }
 
         } catch ( NumberFormatException ex ) {
-            throw new XTCEDatabaseException( "Raw value not applicable or " +
-                "has not been set for " + currentEntry.itemName );
+            throw new XTCEDatabaseException( currentEntry.itemName +
+                " Raw value not applicable or has not been set" );
         }
 
         return result;
@@ -274,18 +269,24 @@ public abstract class XTCEContainerContentModelBase {
             //}
 
             for ( final XTCEContainerContentEntry listEntry : contentList_ ) {
-                final String entryValue    = listEntry.getValue();
-                final String parameterName = listEntry.getItemFullPath();
-                if ( ( entryValue == null ) || ( entryValue.isEmpty() == true ) ) {
+                if ( listEntry.getValue() == null ) {
                     continue;
                 }
-                //System.out.println( parameterName + " and " + condition.getItemFullPath() );
-                if ( parameterName.equals( condition.getItemFullPath() ) == false ) {
-                    continue;
-                }
-                if ( entryValue.equals( condition.toStringWithoutParameter() ) == true ) {
+                if ( listEntry.getValue().isCompatibleWith( condition ) == true ) {
                     ++satisfied;
                 }
+                //final String entryValue    = listEntry.getValue();
+                //final String parameterName = listEntry.getItemFullPath();
+                //if ( ( entryValue == null ) || ( entryValue.isEmpty() == true ) ) {
+                //    continue;
+                //}
+                //System.out.println( parameterName + " and " + condition.getItemFullPath() );
+                //if ( parameterName.equals( condition.getItemFullPath() ) == false ) {
+                //    continue;
+                //}
+                //if ( entryValue.equals( condition.toStringWithoutParameter() ) == true ) {
+                //    ++satisfied;
+                //}
             }
         }
 
@@ -397,7 +398,7 @@ public abstract class XTCEContainerContentModelBase {
         for ( XTCEContainerEntryValue valueObj : userValues_ ) {
             if ( valueObj.getItemFullPath().equals( paramFullPath ) == true ) {
                 if ( valueObj.getComparisonForm().equals( form ) == true ) {
-                    String setValue = valueObj.getValue();
+                    String setValue = valueObj.getAssignedValue();
                     try {
                         return Long.parseLong( setValue );
                     } catch ( NumberFormatException ex ) {
@@ -658,14 +659,20 @@ public abstract class XTCEContainerContentModelBase {
 
         try {
 
-            BigInteger rawValue = extractRawValue( entry );
-            String uncalValue = null;
+            BitSet rawValue = extractRawValue( entry );
+
+            // what to do in the case of an existing set value?
+
             if ( entry.getEntryType() == FieldType.PARAMETER ) {
-                //uncalValue = entry.getParameter()
-                //                  .getUncalibratedFromRaw( rawValue );
+                XTCEContainerEntryValue valueObj =
+                    new XTCEContainerEntryValue( entry.getParameter(),
+                                                 rawValue );
+                entry.setValue( valueObj );
             } else if ( entry.getEntryType() == FieldType.ARGUMENT ) {
-                //uncalValue = entry.getArgument()
-                //                  .getUncalibratedFromRaw( rawValue );
+                XTCEContainerEntryValue valueObj =
+                    new XTCEContainerEntryValue( entry.getArgument(),
+                                                 rawValue );
+                entry.setValue( valueObj );
             } else {
                 // do any of the others make sense?
 
@@ -845,7 +852,7 @@ public abstract class XTCEContainerContentModelBase {
 
     /// If a binary container was provided then it is captured here
 
-    private byte[] binaryValues_ = null;
+    private BitSet binaryValues_ = null;
 
     /// The list of userChosenValues to apply to the model built from the
     /// provided container.

@@ -216,6 +216,11 @@ public class XTCEDatabaseExporterCsv extends XTCEDatabaseExporter {
                         description   = "";
                     }
 
+                    String rValue = "";
+                    if ( entry.getValue() != null ) {
+                        rValue = entry.getValue().toStringWithoutParameter();
+                    }
+
                     stream.write( container.getName().getBytes() );
                     stream.write( ',' ); // NOI18N
                     stream.write( containerName.getBytes() );
@@ -228,7 +233,7 @@ public class XTCEDatabaseExporterCsv extends XTCEDatabaseExporter {
                     stream.write( ',' ); // NOI18N
                     stream.write( entry.getStartBit().getBytes() );
                     stream.write( ',' ); // NOI18N
-                    stream.write( entry.getValue().getBytes() );
+                    stream.write( rValue.getBytes() );
                     stream.write( ',' ); // NOI18N
                     stream.write( entry.getInitialValue().getBytes() );
                     stream.write( ',' ); // NOI18N

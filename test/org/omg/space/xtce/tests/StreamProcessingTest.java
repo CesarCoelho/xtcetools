@@ -76,7 +76,7 @@ public class StreamProcessingTest {
     }
 
     @Test
-    public void lookupAllContainersFromSpaceSystem() {
+    public void lookupAllStreamsFromSpaceSystem() {
 
         try {
 

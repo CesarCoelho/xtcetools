@@ -428,16 +428,17 @@ public class XTCEContainerContentEntry implements Comparable {
     /** Retrieves the value that is set or restricted on this entry based on
      * ArgumentAssignment, RestrictionCriteria, or user chosen set values.
      *
-     * @return String containing the value or an empty string if there is no
-     * value established for this entry.
+     * @return XTCEContainerEntryValue containing the value information for
+     * this entry or a null if there is none.
      *
      */
 
-    public String getValue() {
-        if ( entryValue != null ) {
-            return entryValue.toStringWithoutParameter();
-        }
-        return "";
+    public XTCEContainerEntryValue getValue() {
+        return entryValue;
+        //if ( entryValue != null ) {
+        //    return entryValue.toStringWithoutParameter();
+        //}
+        //return "";
     }
 
     /** Sets a value for this entry based on a RestrictionCriteria by passing

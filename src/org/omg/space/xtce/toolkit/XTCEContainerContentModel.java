@@ -7,6 +7,7 @@
 package org.omg.space.xtce.toolkit;
 
 import java.util.ArrayList;
+import java.util.BitSet;
 import java.util.List;
 import org.omg.space.xtce.database.AggregateDataType;
 import org.omg.space.xtce.database.AggregateDataType.MemberList.Member;
@@ -76,7 +77,7 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
      * @param spaceSystems List of XTCESpaceSystem objects to search for
      * entries on the entry list.
      *
-     * @param binaryData byte[] containing a map of the binary data that makes
+     * @param binaryData BitSet containing a map of the binary data that makes
      * up a binary instance of the container.  The first bit in the set should
      * be the zeroth bit of the container binary (start bit 0) and may be short
      * in the event that there are trailing zeros.
@@ -88,7 +89,7 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
 
     public XTCEContainerContentModel( XTCETMContainer               container,
                                       List<XTCESpaceSystem>         spaceSystems,
-                                      byte[]                        binaryData ) throws XTCEDatabaseException {
+                                      BitSet                        binaryData ) throws XTCEDatabaseException {
 
         super( spaceSystems, null, binaryData, false );
         container_          = container;

@@ -9,6 +9,8 @@ package org.omg.space.xtce.toolkit;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.BitSet;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import javax.xml.xpath.XPath;
@@ -715,20 +717,18 @@ public final class XTCEDatabase extends XTCEDatabaseParser {
 
     public List<XTCETMContainer> getContainers( XTCETMStream stream ) throws XTCEDatabaseException {
 
-        List<XTCETMContainer>      containers = getContainers();
-        ArrayList<XTCETMContainer> retList    = new ArrayList<>();
+        ArrayList<XTCETMContainer> retList = new ArrayList<>();
 
         XTCETMContainer streamRootContainer =
             getContainer( stream.getStreamContainerPath() );
 
-        String streamRootPath = streamRootContainer.getInheritancePath();
+        String sRootPath = streamRootContainer.getInheritancePath();
 
-        for ( XTCETMContainer container : containers ) {
-            String cPath = container.getInheritancePath();
-            if ( cPath.startsWith( streamRootPath ) == true ) {
-                retList.add( container );
-            }
+        for ( XTCESpaceSystem spaceSystem : getSpaceSystemTree() ) {
+            retList.addAll( spaceSystem.getInheritingContainers( sRootPath ) );
         }
+
+        Collections.sort( retList );
 
         return retList;
 
@@ -749,10 +749,9 @@ public final class XTCEDatabase extends XTCEDatabaseParser {
 
     public List<XTCETMStream> getStreams( ) {
 
-       List<XTCESpaceSystem>      spaceSystems = getSpaceSystemTree();
-       ArrayList<XTCETMStream>    streams      = new ArrayList<>();
+       ArrayList<XTCETMStream> streams = new ArrayList<>();
 
-       for ( XTCESpaceSystem spaceSystem : spaceSystems ) {
+       for ( XTCESpaceSystem spaceSystem : getSpaceSystemTree() ) {
            streams.addAll( spaceSystem.getStreams() );
        }
        
@@ -810,7 +809,7 @@ public final class XTCEDatabase extends XTCEDatabaseParser {
      * @param container XTCETMContainer object containing the container/packet
      * that the caller wishes to decompose.
      *
-     * @param binaryData byte[] containing the container binary encoded data
+     * @param binaryData BitSet containing the container binary encoded data
      * so that the output object contains entries with actual values from a
      * real binary image.
      *
@@ -823,7 +822,7 @@ public final class XTCEDatabase extends XTCEDatabaseParser {
      */
 
     public XTCEContainerContentModel processContainer( XTCETMContainer container,
-                                                       byte[]          binaryData )
+                                                       BitSet          binaryData )
         throws XTCEDatabaseException {
 
         return new XTCEContainerContentModel( container,

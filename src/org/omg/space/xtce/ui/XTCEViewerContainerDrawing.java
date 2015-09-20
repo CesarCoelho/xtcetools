@@ -277,12 +277,16 @@ public class XTCEViewerContainerDrawing extends JPanel {
 
         for ( DrawingEntry entry : entriesInUse_ ) {
 
+            String itemValue = "";
+            if ( entry.itemEntryObj.getValue() != null ) {
+                itemValue = entry.itemEntryObj.getValue().toStringWithoutParameter();
+            }
+
             String containerName   = entry.containerName;
             String itemName        = entry.itemName;
             String itemAliases     = entry.itemAliases;
             String itemSize        = entry.itemEntryObj.getRawSizeInBits();
             String itemStartBit    = entry.itemEntryObj.getStartBit();
-            String itemValue       = entry.itemEntryObj.getValue();
             int    itemSizeInt     = Integer.parseInt( itemSize );
             int    itemStartBitInt = Integer.parseInt( itemStartBit );
 
@@ -465,12 +469,16 @@ public class XTCEViewerContainerDrawing extends JPanel {
 
         for ( DrawingEntry entry : entriesInUse_ ) {
 
+            String itemValue = "";
+            if ( entry.itemEntryObj.getValue() != null ) {
+                itemValue = entry.itemEntryObj.getValue().toStringWithoutParameter();
+            }
+
             String containerName   = entry.containerName;
             String itemName        = entry.itemName;
             String itemAliases     = entry.itemAliases;
             String itemSize        = entry.itemEntryObj.getRawSizeInBits();
             String itemStartBit    = entry.itemEntryObj.getStartBit();
-            String itemValue       = entry.itemEntryObj.getValue();
             int    itemSizeInt     = Integer.parseInt( itemSize );
             int    itemStartBitInt = Integer.parseInt( itemStartBit );
 
