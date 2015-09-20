@@ -11,6 +11,18 @@
 	</xtce:Header>
 	<xtce:TelemetryMetaData>
 		<xtce:ParameterTypeSet>
+                        <xtce:IntegerParameterType name="Generic_8bits_unsigned" signed="false">
+                            <xtce:UnitSet/>
+                            <xtce:IntegerDataEncoding encoding="unsigned" sizeInBits="8"/>
+                        </xtce:IntegerParameterType>
+                        <xtce:IntegerParameterType name="Generic_16bits_unsigned" signed="false">
+                            <xtce:UnitSet/>
+                            <xtce:IntegerDataEncoding encoding="unsigned" sizeInBits="16"/>
+                        </xtce:IntegerParameterType>
+                        <xtce:IntegerParameterType name="Generic_32bits_unsigned" signed="false">
+                            <xtce:UnitSet/>
+                            <xtce:IntegerDataEncoding encoding="unsigned" sizeInBits="32"/>
+                        </xtce:IntegerParameterType>
 			<xtce:EnumeratedParameterType name="TM_CHECKSUMType" initialValue="CRC">
 				<xtce:UnitSet/>
 				<xtce:EnumerationList>
@@ -167,6 +179,17 @@
 					</xtce:SizeInBits>
 				</xtce:BinaryDataEncoding>
 			</xtce:BinaryParameterType>
+                        <xtce:EnumeratedParameterType name="PUS_Structure_ID_Type">
+                            <xtce:UnitSet/>
+                            <xtce:IntegerDataEncoding encoding="unsigned" sizeInBits="8"/>
+                            <xtce:EnumerationList>
+                                <xtce:Enumeration value="0" label="No_Content"/>
+                                <xtce:Enumeration value="1" label="ECSS_SpacePacket1"/>
+                                <xtce:Enumeration value="2" label="ECSS_SpacePacket2"/>
+                                <xtce:Enumeration value="3" label="ECSS_SpacePacket3"/>
+                                <xtce:Enumeration value="4" label="ECSS_SpacePacket4"/>
+                            </xtce:EnumerationList>
+                        </xtce:EnumeratedParameterType>
 		</xtce:ParameterTypeSet>
 		<xtce:ParameterSet>
 			<xtce:Parameter name="TM_CHECKSUM_TYPE" parameterTypeRef="TM_CHECKSUMType" shortDescription="ECSS PUS Constant">
@@ -195,6 +218,7 @@
 			<xtce:Parameter name="Mission" parameterTypeRef="MissionType">
 				<xtce:ParameterProperties dataSource="local"/>
 			</xtce:Parameter>
+                        <xtce:Parameter name="PUS_Structure_ID" parameterTypeRef="PUS_Structure_ID_Type" shortDescription="The PUS Structure ID identifies a specific Housekeeping Parameter content in service (3,25)"/>
 		</xtce:ParameterSet>
 		<xtce:ContainerSet>
 			<xtce:SequenceContainer abstract="true" name="CCSDSPacket" shortDescription="Super-container for all CCSDS telemetry and telecommand packets">
@@ -352,6 +376,93 @@
 						</xtce:RestrictionCriteria>
 					</xtce:BaseContainer>
 				</xtce:SequenceContainer>
+				<xtce:SequenceContainer name="CCSDS_SpacePacket3">
+					<xtce:EntryList>
+						<!-- Demonstrate the Fixed Repeat working -->
+						<xtce:ParameterRefEntry parameterRef="Payload1/Basic_string_uint32">
+                                                    <xtce:RepeatEntry>
+                                                        <xtce:Count>
+                                                            <xtce:FixedValue>5</xtce:FixedValue>
+                                                        </xtce:Count>
+                                                    </xtce:RepeatEntry>
+                                                </xtce:ParameterRefEntry>
+					</xtce:EntryList>
+					<xtce:BaseContainer containerRef="/BogusSAT/CCSDSTelemetryPacket">
+						<xtce:RestrictionCriteria>
+							<xtce:ComparisonList>
+								<xtce:Comparison value="NotPresent" parameterRef="CCSDS_Packet_ID/SecHdrFlag"/>
+								<xtce:Comparison value="3" parameterRef="CCSDS_Packet_ID/APID"/>
+							</xtce:ComparisonList>
+						</xtce:RestrictionCriteria>
+					</xtce:BaseContainer>
+				</xtce:SequenceContainer>
+                                <xtce:SequenceContainer name="ECSS_Service_1_Subservice_1" shortDescription="Telecommand Acceptance Report - Success (1,1)">
+					<xtce:EntryList>
+						<xtce:ParameterRefEntry parameterRef="Commanding/TC_Packet_ID"/>
+						<xtce:ParameterRefEntry parameterRef="Commanding/TC_Packet_Sequence_Control"/>
+					</xtce:EntryList>
+					<xtce:BaseContainer containerRef="/BogusSAT/CCSDSPUSTelemetryPacket">
+						<xtce:RestrictionCriteria>
+							<xtce:ComparisonList>
+								<xtce:Comparison value="Present" parameterRef="CCSDS_Packet_ID/SecHdrFlag"/>
+								<xtce:Comparison value="100" parameterRef="CCSDS_Packet_ID/APID"/>
+								<xtce:Comparison value="0" parameterRef="PUS_Data_Field_Header/Spare1"/>
+								<xtce:Comparison value="1" parameterRef="PUS_Data_Field_Header/Version"/>
+								<xtce:Comparison value="0" parameterRef="PUS_Data_Field_Header/Spare4"/>
+								<xtce:Comparison value="1" parameterRef="PUS_Data_Field_Header/Service"/>
+								<xtce:Comparison value="1" parameterRef="PUS_Data_Field_Header/Subservice"/>
+							</xtce:ComparisonList>
+						</xtce:RestrictionCriteria>
+					</xtce:BaseContainer>
+                                </xtce:SequenceContainer>
+                                <xtce:SequenceContainer name="ECSS_Service_1_Subservice_2" shortDescription="Telecommand Acceptance Report - Failure (1,2)">
+					<xtce:EntryList>
+						<xtce:ParameterRefEntry parameterRef="Commanding/TC_Packet_ID"/>
+						<xtce:ParameterRefEntry parameterRef="Commanding/TC_Packet_Sequence_Control"/>
+                                                <xtce:ParameterRefEntry parameterRef="Commanding/TC_Accept_Failure_Code"/>
+                                                <xtce:ParameterRefEntry parameterRef="Commanding/TC_Parameter_Count"/>
+                                                <xtce:ParameterRefEntry parameterRef="Commanding/TC_Parameter_Data">
+                                                    <xtce:RepeatEntry>
+                                                        <xtce:Count>
+                                                            <xtce:DynamicValue>
+                                                                <xtce:ParameterInstanceRef parameterRef="Commanding/TC_Parameter_Count" useCalibratedValue="true"/>
+                                                            </xtce:DynamicValue>
+                                                        </xtce:Count>
+                                                    </xtce:RepeatEntry>
+                                                </xtce:ParameterRefEntry>
+					</xtce:EntryList>
+					<xtce:BaseContainer containerRef="/BogusSAT/CCSDSPUSTelemetryPacket">
+						<xtce:RestrictionCriteria>
+							<xtce:ComparisonList>
+								<xtce:Comparison value="Present" parameterRef="CCSDS_Packet_ID/SecHdrFlag"/>
+								<xtce:Comparison value="100" parameterRef="CCSDS_Packet_ID/APID"/>
+								<xtce:Comparison value="0" parameterRef="PUS_Data_Field_Header/Spare1"/>
+								<xtce:Comparison value="1" parameterRef="PUS_Data_Field_Header/Version"/>
+								<xtce:Comparison value="0" parameterRef="PUS_Data_Field_Header/Spare4"/>
+								<xtce:Comparison value="1" parameterRef="PUS_Data_Field_Header/Service"/>
+								<xtce:Comparison value="2" parameterRef="PUS_Data_Field_Header/Subservice"/>
+							</xtce:ComparisonList>
+						</xtce:RestrictionCriteria>
+					</xtce:BaseContainer>
+                                </xtce:SequenceContainer>
+                                <xtce:SequenceContainer name="ECSS_Service_3_Subservice_25" abstract="true" shortDescription="Housekeeping Parameter Report (3,25)">
+					<xtce:EntryList>
+						<xtce:ParameterRefEntry parameterRef="../PUS_Structure_ID"/>
+					</xtce:EntryList>
+					<xtce:BaseContainer containerRef="/BogusSAT/CCSDSPUSTelemetryPacket">
+						<xtce:RestrictionCriteria>
+							<xtce:ComparisonList>
+								<xtce:Comparison value="Present" parameterRef="CCSDS_Packet_ID/SecHdrFlag"/>
+								<xtce:Comparison value="100" parameterRef="CCSDS_Packet_ID/APID"/>
+								<xtce:Comparison value="0" parameterRef="PUS_Data_Field_Header/Spare1"/>
+								<xtce:Comparison value="1" parameterRef="PUS_Data_Field_Header/Version"/>
+								<xtce:Comparison value="0" parameterRef="PUS_Data_Field_Header/Spare4"/>
+								<xtce:Comparison value="3" parameterRef="PUS_Data_Field_Header/Service"/>
+								<xtce:Comparison value="25" parameterRef="PUS_Data_Field_Header/Subservice"/>
+							</xtce:ComparisonList>
+						</xtce:RestrictionCriteria>
+					</xtce:BaseContainer>
+                                </xtce:SequenceContainer>
 				<xtce:SequenceContainer name="ECSS_SpacePacket1">
 					<xtce:EntryList>
 						<!-- Demonstrate the UNIX style path stuff working -->
@@ -362,22 +473,76 @@
 						<xtce:ParameterRefEntry parameterRef="/BogusSAT/SC001/BusElectronics/Solar_Array_Voltage_1"/>
 						<xtce:ParameterRefEntry parameterRef="./BusElectronics/Solar_Array_Voltage_2"/>
 					</xtce:EntryList>
-					<xtce:BaseContainer containerRef="/BogusSAT/CCSDSPUSTelemetryPacket">
+					<xtce:BaseContainer containerRef="ECSS_Service_3_Subservice_25">
 						<xtce:RestrictionCriteria>
 							<xtce:ComparisonList>
-								<xtce:Comparison value="NotPresent" parameterRef="CCSDS_Packet_ID/SecHdrFlag"/>
-								<xtce:Comparison value="100" parameterRef="CCSDS_Packet_ID/APID"/>
-								<xtce:Comparison value="0" parameterRef="PUS_Data_Field_Header/Spare1"/>
-								<xtce:Comparison value="1" parameterRef="PUS_Data_Field_Header/Version"/>
-								<xtce:Comparison value="0" parameterRef="PUS_Data_Field_Header/Spare4"/>
-								<xtce:Comparison value="3" parameterRef="PUS_Data_Field_Header/Service"/>
-								<xtce:Comparison value="25" parameterRef="PUS_Data_Field_Header/Subservice"/>
+								<xtce:Comparison value="ECSS_SpacePacket1" parameterRef="PUS_Structure_ID"/>
+							</xtce:ComparisonList>
+						</xtce:RestrictionCriteria>
+					</xtce:BaseContainer>
+				</xtce:SequenceContainer>
+				<xtce:SequenceContainer name="ECSS_SpacePacket2">
+					<xtce:EntryList>
+						<!-- Demonstrate the UNIX style path stuff working -->
+						<xtce:ParameterRefEntry parameterRef="BusElectronics/Battery_Voltage"/>
+						<xtce:ParameterRefEntry parameterRef="BusElectronics/Battery_Current"/>
+						<xtce:ParameterRefEntry parameterRef="BusElectronics/Flag_Parameter"/>
+                                                <xtce:ParameterRefEntry parameterRef="BusElectronics/Optional_Parameter">
+                                                    <xtce:IncludeCondition>
+                                                        <xtce:Comparison parameterRef="BusElectronics/Flag_Parameter" value="1"/>
+                                                    </xtce:IncludeCondition>
+                                                </xtce:ParameterRefEntry>
+						<xtce:ParameterRefEntry parameterRef="/BogusSAT/SC001/BusElectronics/Solar_Array_Voltage_1"/>
+						<xtce:ParameterRefEntry parameterRef="./BusElectronics/Solar_Array_Voltage_2"/>
+					</xtce:EntryList>
+					<xtce:BaseContainer containerRef="ECSS_Service_3_Subservice_25">
+						<xtce:RestrictionCriteria>
+							<xtce:ComparisonList>
+								<xtce:Comparison value="ECSS_SpacePacket2" parameterRef="../PUS_Structure_ID"/>
 							</xtce:ComparisonList>
 						</xtce:RestrictionCriteria>
 					</xtce:BaseContainer>
 				</xtce:SequenceContainer>
 			</xtce:ContainerSet>
 		</xtce:TelemetryMetaData>
+                <xtce:SpaceSystem name="Commanding" shortDescription="Commanding Subsystem Parameters">
+                    <xtce:TelemetryMetaData>
+                        <xtce:ParameterTypeSet>
+                            <xtce:EnumeratedParameterType name="TC_Accept_Failure_Code_Type">
+                                <xtce:LongDescription>The code indicates the reason for the failure of the telecommand at this verification stage.</xtce:LongDescription>
+                                <xtce:UnitSet/>
+                                <xtce:IntegerDataEncoding encoding="unsigned" sizeInBits="16"/>
+                                <xtce:EnumerationList>
+                                    <xtce:Enumeration value="0" label="ILLEGAL_APID"/>
+                                    <xtce:Enumeration value="1" label="INCOMPLETE_PACKET"/>
+                                    <xtce:Enumeration value="2" label="INCORRECT_CHECKSUM"/>
+                                    <xtce:Enumeration value="3" label="ILLEGAL_PACKET_TYPE"/>
+                                    <xtce:Enumeration value="4" label="ILLEGAL_PACKET_SUBTYPE"/>
+                                    <xtce:Enumeration value="5" label="INCONSISTENT_APPL_DATA"/>
+                                </xtce:EnumerationList>
+                            </xtce:EnumeratedParameterType>
+                        </xtce:ParameterTypeSet>
+                        <xtce:ParameterSet>
+                            <xtce:Parameter name="TC_Packet_ID" parameterTypeRef="/BogusSAT/Generic_16bits_unsigned" shortDescription="TC Packet Identifier">
+                                <xtce:LongDescription>This is a copy of the corresponding fields from the packet header of the telecommand to which this verification packet relates.</xtce:LongDescription>
+                                <xtce:ParameterProperties dataSource="telemetered" readOnly="true"/>
+                            </xtce:Parameter>
+                            <xtce:Parameter name="TC_Packet_Sequence_Control" parameterTypeRef="/BogusSAT/Generic_16bits_unsigned" shortDescription="TC Packet Sequence Number">
+                                <xtce:LongDescription>This is a copy of the corresponding fields from the packet header of the telecommand to which this verification packet relates.</xtce:LongDescription>
+                                <xtce:ParameterProperties dataSource="telemetered" readOnly="true"/>
+                            </xtce:Parameter>
+                            <xtce:Parameter name="TC_Accept_Failure_Code" parameterTypeRef="TC_Accept_Failure_Code_Type" shortDescription="Acceptance Failure Reason">
+                                <xtce:ParameterProperties dataSource="telemetered" readOnly="true"/>
+                            </xtce:Parameter>
+                            <xtce:Parameter name="TC_Parameter_Count" parameterTypeRef="/BogusSAT/Generic_8bits_unsigned" shortDescription="TC Packet Parameters (specific to the TC)">
+                                <xtce:ParameterProperties dataSource="telemetered" readOnly="true"/>
+                            </xtce:Parameter>
+                            <xtce:Parameter name="TC_Parameter_Data" parameterTypeRef="/BogusSAT/Generic_8bits_unsigned" shortDescription="Unrealistic repeating list of 32 bit parameter data">
+                                <xtce:ParameterProperties dataSource="telemetered" readOnly="true"/>
+                            </xtce:Parameter>
+                        </xtce:ParameterSet>
+                    </xtce:TelemetryMetaData>
+                </xtce:SpaceSystem>
                 <xtce:SpaceSystem name="Onboard_Tables" shortDescription="Tables of data onboard that are not part of the regular TM stream">
                     <xtce:TelemetryMetaData>
                         <xtce:ParameterTypeSet>
@@ -764,6 +929,12 @@
 							</xtce:PhysicalAddressSet>
 						</xtce:ParameterProperties>
 					</xtce:Parameter>
+                                        <xtce:Parameter name="Flag_Parameter" parameterTypeRef="/BogusSAT/Generic_8bits_unsigned">
+                                            <xtce:ParameterProperties dataSource="telemetered" readOnly="true"/>
+                                        </xtce:Parameter>
+                                        <xtce:Parameter name="Optional_Parameter" parameterTypeRef="/BogusSAT/Generic_16bits_unsigned">
+                                            <xtce:ParameterProperties dataSource="telemetered" readOnly="true"/>
+                                        </xtce:Parameter>
 				</xtce:ParameterSet>
 				<xtce:AlgorithmSet>
 					<xtce:MathAlgorithm name="ComputeBatterySOC" shortDescription="Compute the battery state of charge">

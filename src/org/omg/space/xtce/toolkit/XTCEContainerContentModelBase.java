@@ -348,15 +348,28 @@ public abstract class XTCEContainerContentModelBase {
                                        getParameterInstanceRef().
                                        isUseCalibratedValue();
 
-                XTCEParameter parameterInstance = findParameter( parameterRef,
-                                                                 contentEntry.getTelemetryContainer() );
+                XTCEParameter parameterInstance;
+
+                if ( contentEntry.getTelemetryContainer() != null ) {
+                    parameterInstance = findParameter( parameterRef,
+                                                       contentEntry.getTelemetryContainer() );
+                } else if ( contentEntry.getHoldingContainer() != null ) {
+                    parameterInstance = findParameter( parameterRef,
+                                                       contentEntry.getHoldingContainer() );
+                } else {
+                    throw new XTCEDatabaseException( "Entry type not yet supported" );
+                }
 
                 contentEntry.setRepeatparameterInfo( "==" +
                                                      parameterInstance.getName() +
                                                      ( useCalValue == true ? "{cal}" : "{uncal}" ) );
 
+                return dynamicCountFromUserValue( parameterInstance,
+                                                  ( useCalValue == true ? "Calibrated" : "Uncalibrated" ) );
+
             } catch ( Exception ex ) {
 
+                ex.printStackTrace();
                 warnings_.add( "Element RepeatEntry/DynamicEntry could not be evaluated for: " +
                                contentEntry.itemName +
                                " because: " +
@@ -369,6 +382,29 @@ public abstract class XTCEContainerContentModelBase {
             warnings_.add( "Element RepeatEntry/DiscreteLookupList not yet supported for: " +
                            contentEntry.itemName );
 
+        }
+
+        return 1;
+
+    }
+
+    protected long dynamicCountFromUserValue( XTCENamedObject item, String form ) {
+
+        String paramFullPath = item.getFullPath();
+
+        for ( XTCEContainerEntryValue valueObj : userValues_ ) {
+            if ( valueObj.getItemFullPath().equals( paramFullPath ) == true ) {
+                if ( valueObj.getComparisonForm().equals( form ) == true ) {
+                    String setValue = valueObj.getValue();
+                    try {
+                        return Long.parseLong( setValue );
+                    } catch ( NumberFormatException ex ) {
+                        warnings_.add(
+                            "Numeric count not valid for Dynamic Repeat '" +
+                            setValue + "' for " + item.getName() );
+                    }
+                }
+            }
         }
 
         return 1;
