@@ -12,61 +12,65 @@ and open the template in the editor.
 
 <body>
 
+    <h3>Overview</h3>
+
     <p>The XTCE Tools Java JAR file supports the XTCE technology by providing a
         Graphical User Interface named "xtceview" to view/browse/edit an XTCE
-        document and also a non-graphical underlying "toolkit" package to
-        enable any user to generate an application that uses an XTCE document
-        with minimal effort.</p>
+        document.  It also provides a non-graphical underlying "toolkit"
+        package to enable application developers to create a specialized
+        application that uses an XTCE document, with minimal effort, when
+        compared to attempting the task without the toolkit.</p>
     <p>The toolkit does not depend on any graphical
         interfaces.  To complement, the graphical user interface "xtceview"
         contains little to no business logic, preferring to be a graphical
         wrapper around the toolkit package.  To supplement this, a number of
         examples, sample databases, and schema documentation are also included
-        in other packages.  All documentation can be trivially accessed from
-        the GUI Help Menu.</p>
+        in other packages.  All documentation can be accessed from the GUI
+        Help Menu, assuming Java FX libraries are available.</p>
 
     <h3>Key Features</h3>
 
-    <ul style='list-style-type:disc'>
-        <li>Supported by the author and tested regularly on Linux, Solaris,
-            Mac OS/X, and PC Windoze.</li>
-        <li>Telemetry Parameter access without needing to understand the XTCE
-            data model, relationships, references, or other complexities.</li>
-        <li>Similar Telecommand and Argument access without needing to
-            understand the XTCE data model. (Still In Work)</li>
-        <li>Telemetry and Telecommand Container/Packet processing supporting
+    <ul>
+        <li><p>Supported by the author and tested regularly on Linux, Solaris,
+                Mac OS/X, and Windows platforms.</p></li>
+        <li><p>Telemetry Parameter access without needing to understand the XTCE
+                data model, relationships, references, or other complexities.
+            </p></li>
+        <li><p>Similar Telecommand and Argument access without needing to
+                understand the XTCE data model. (Still In Work)</p></li>
+        <li><p>Telemetry and Telecommand Container/Packet processing supporting
             most of the XTCE schema complexity, reducing the output access to
             simple flattened accessors such that the user need not understand
-            or be aware of the complexities of the XTCE data model.</li>
-        <li>Extremely fast optimized searches for Parameters, Telecommands,
-            and usage of Parameters in Containers/Packets.</li>
-        <li>Support for Streams and ability to link from Streams to specific
-            Containers/Packets.</li>
-        <li>Ability to export from XTCE to common formats, such as CSV, and
-            vendor specific formats such a Harris OS/Comet and L-3 InControl.
-            (Vendor Formats Still In Work).  The author has significant
-            experience using these vendor's products and highly recommends
-            their XTCE support levels.</li>
-        <li>Regression tested using Java standard JUnit 4 classes</li>
-        <li>Open Source licensing not owned by any particular Corporation or
-            Vendor.</li>
-        <li>The toolkit and GUI are both conceived with idea of editing as well
-            as viewing in mind, although the edit features are only minimally
-            complete.</li>
-        <li>Java JAXB and DOM are both in use in order to permit round trip
-            XML load/save, as well as XPath support for unlimited query
-            capability.</li>
-        <li>The toolkit and GUI have both been extensively used on programs
-            that utilize CCSDS Space Data Link and even ECSS Packet Utilization
-            (PUS) standards.</li>
-        <li>The toolkit and GUI are regularly used with satellite databases
+            or be aware of the complexities of the XTCE data model.</p></li>
+        <li><p>Extremely fast optimized searches for Parameters, Telecommands,
+                and usage of Parameters in Containers/Packets.</p></li>
+        <li><p>Support for Streams and ability to link from Streams to specific
+                Containers/Packets.</p></li>
+        <li><p>Ability to export from XTCE to other common formats, such as
+                CSV, for use in a spreadsheet.</p></li>
+        <li><p>Regression tested using Java standard JUnit 4 classes.</p></li>
+        <li><p>Open Licensing via the Apache License model.</p></li>
+        <li><p>The toolkit and GUI are both conceived with idea of editing as
+            well as viewing in mind, although the edit features are only
+            minimally complete.</p></li>
+        <li><p>Round trip loading and saving operations while preserving
+                comments and formatting.</p></li>
+        <li><p>The toolkit and GUI have both been proven on programs that
+            utilize both CCSDS Space Data Link and European ECSS Packet
+            Utilization (PUS) standards.</p></li>
+        <li><p>The toolkit and GUI are regularly used with satellite databases
             that incorporate XInclude and in total are hundreds of megabytes in
-            size.  Performance is a strong consideration.</li>
-        <li>Full I18/L10 Internationalization with support currently installed
-            for both US English and European French languages.  This package
-            is actively used in Europe, in addition to the United States.</li>
+            size.  Performance was a strong consideration in the design.
+            </p></li>
+        <li><p>Full I18/L10 Internationalization with support currently
+            installed for both US English and European French languages.  This
+            package is actively used in Europe, in addition to the United
+            States.</p></li>
+        <li><p>An internal encoder and decoder for Parameters and Arguments
+            that can serve as a reference for other implementations of
+            commutation and de-commutation capabilities.</p></li>
     </ul>
-    
+
 </body>
 
 </html>
