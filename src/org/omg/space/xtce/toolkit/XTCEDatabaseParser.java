@@ -150,7 +150,7 @@ public abstract class XTCEDatabaseParser {
 
         if ( dbFile.getParent() != null ) {
             File absPath = new File( dbFile.getParent() );
-            System.setProperty( "user.dir", absPath.getAbsolutePath() );
+            System.setProperty( "user.dir", absPath.getAbsolutePath() ); // NOI18N
         }
 
         XTCESchemaErrorHandler handler = new XTCESchemaErrorHandler();
@@ -227,8 +227,8 @@ public abstract class XTCEDatabaseParser {
             domDocumentRoot_.setDocumentURI( XTCEConstants.XTCE_NAMESPACE );
             Element root =
                 domDocumentRoot_.createElementNS( XTCEConstants.XTCE_NAMESPACE,
-                                                  "SpaceSystem" );
-            root.setAttribute( "name", spaceSystemName );
+                                                  "SpaceSystem" ); // NOI18N
+            root.setAttribute( "name", spaceSystemName ); // NOI18N
             domDocumentRoot_.appendChild( root );
 
             jaxbElementRoot_ =
@@ -352,7 +352,7 @@ public abstract class XTCEDatabaseParser {
         } catch ( Exception ex ) {
 
             String msg = XTCEFunctions.getText( "error_urlnotfound" ) + // NOI18N
-                         ": " +
+                         ": " + // NOI18N
                          ex.getLocalizedMessage();
             throw new XTCEDatabaseException( msg );
 
@@ -462,8 +462,8 @@ public abstract class XTCEDatabaseParser {
             spf.setValidating( validateOnLoad );
 
             SAXParser parser = spf.newSAXParser();
-            parser.setProperty( "http://java.sun.com/xml/jaxp/properties/schemaLanguage",
-                                "http://www.w3.org/2001/XMLSchema" );
+            parser.setProperty( "http://java.sun.com/xml/jaxp/properties/schemaLanguage", // NOI18N
+                                "http://www.w3.org/2001/XMLSchema" ); // NOI18N
 
             XMLReader reader = parser.getXMLReader();
             reader.setErrorHandler( handler );
