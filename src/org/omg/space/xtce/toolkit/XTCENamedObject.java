@@ -57,7 +57,7 @@ public abstract class XTCENamedObject implements Comparable {
                      AncillaryDataSet ancDataSet ) {
         name_      = name;
         path_      = path;
-        aliasList_ = new ArrayList<XTCEAlias>();
+        aliasList_ = new ArrayList<>();
 
         // Member Elements do not have Aliases
         if ( aliasSet != null ) {
@@ -192,7 +192,7 @@ public abstract class XTCENamedObject implements Comparable {
     public List<AncillaryData> getAncillaryData( ) {
 
         if ( ancDataList_ == null ) {
-            return new ArrayList<AncillaryData>();
+            return new ArrayList<>();
         } else {
             return ancDataList_;
         }
