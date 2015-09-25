@@ -415,6 +415,26 @@
 						</xtce:RestrictionCriteria>
 					</xtce:BaseContainer>
 				</xtce:SequenceContainer>
+				<xtce:SequenceContainer name="CCSDS_SpacePacket5">
+					<xtce:EntryList>
+						<xtce:ParameterRefEntry parameterRef="Payload1/Payload_1_State"/>
+                                                <xtce:ParameterRefEntry parameterRef="BusElectronics/Solar_Array_Voltage_1_State"/>
+                                                <xtce:ContainerRefEntry containerRef="Payload1/IncludedContainer3">
+                                                    <xtce:IncludeCondition>
+                                                        <xtce:Comparison parameterRef="Payload1/Payload_1_State" value="ON"/>
+                                                    </xtce:IncludeCondition>
+                                                </xtce:ContainerRefEntry>
+                                                <xtce:ContainerRefEntry containerRef="Payload1/IncludedContainer1"/>
+					</xtce:EntryList>
+					<xtce:BaseContainer containerRef="/BogusSAT/CCSDSTelemetryPacket">
+						<xtce:RestrictionCriteria>
+							<xtce:ComparisonList>
+								<xtce:Comparison value="NotPresent" parameterRef="CCSDS_Packet_ID/SecHdrFlag"/>
+								<xtce:Comparison value="5" parameterRef="CCSDS_Packet_ID/APID"/>
+							</xtce:ComparisonList>
+						</xtce:RestrictionCriteria>
+					</xtce:BaseContainer>
+				</xtce:SequenceContainer>
                                 <xtce:SequenceContainer name="ECSS_Service_1_Subservice_1" shortDescription="Telecommand Acceptance Report - Success (1,1)">
 					<xtce:EntryList>
 						<xtce:ParameterRefEntry parameterRef="Commanding/TC_Packet_ID"/>
@@ -1355,6 +1375,24 @@
                                             <xtce:ParameterRefEntry parameterRef="Basic_Float32"/>
                                             <xtce:ParameterRefEntry parameterRef="Basic_Float64"/>
                                             <xtce:ParameterRefEntry parameterRef="enum_int16_signmag"/>
+                                            <xtce:ParameterRefEntry parameterRef="enum_int16_twoscomp"/>
+                                            <xtce:ParameterRefEntry parameterRef="enum_int16_onescomp"/>
+                                        </xtce:EntryList>
+                                    </xtce:SequenceContainer>
+                                    <xtce:SequenceContainer name="IncludedContainer3" shortDescription="Unit Test of conditionally included container with conditionally included parameter">
+                                        <xtce:EntryList>
+                                            <xtce:ParameterRefEntry parameterRef="enum_binary"/>
+                                            <xtce:ParameterRefEntry parameterRef="enum_float32"/>
+                                            <xtce:ParameterRefEntry parameterRef="enum_float64">
+                                                <xtce:IncludeCondition>
+                                                    <xtce:Comparison parameterRef="../BusElectronics/Solar_Array_Voltage_1_State" value="ON"/>
+                                                </xtce:IncludeCondition>
+                                            </xtce:ParameterRefEntry>
+                                            <xtce:ParameterRefEntry parameterRef="enum_int16_signmag">
+                                                <xtce:IncludeCondition>
+                                                    <xtce:Comparison parameterRef="../BusElectronics/Solar_Array_Voltage_1_State" comparisonOperator="!=" value="ON"/>
+                                                </xtce:IncludeCondition>
+                                            </xtce:ParameterRefEntry>
                                             <xtce:ParameterRefEntry parameterRef="enum_int16_twoscomp"/>
                                             <xtce:ParameterRefEntry parameterRef="enum_int16_onescomp"/>
                                         </xtce:EntryList>

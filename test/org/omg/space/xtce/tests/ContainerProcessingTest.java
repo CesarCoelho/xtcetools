@@ -159,7 +159,7 @@ public class ContainerProcessingTest {
 
             List<XTCETMContainer> containers = db_.getContainers();
 
-            long expected = 15;
+            long expected = 17;
 
             Assert.assertTrue( "Should have found " +
                 Long.toString( expected ) + " containers, but found instead " +
@@ -187,7 +187,7 @@ public class ContainerProcessingTest {
 
             List<XTCETMContainer> containers = ss.getContainers();
 
-            long expected = 9;
+            long expected = 10;
 
             Assert.assertTrue( "Should have found " +
                 Long.toString( expected ) + " containers, but found instead " +
@@ -1268,6 +1268,595 @@ public class ContainerProcessingTest {
             Assert.assertTrue( "Container parameter count of " + containerName + " is " +
                 Long.toString( items ) + " but should be 17 items",
                 items == 17 );
+
+            assertOnWarnings( model );
+
+        } catch ( Exception ex ) {
+            //ex.printStackTrace();
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+    }
+
+    @Test
+    public void processMultiIncludesCase1() {
+
+        // container with include, inside is parameters with includes of both
+        // == and !=, here we set no user values but check both processing
+        // the container with and without showing all conditionals
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        String containerName = "/BogusSAT/SC001/CCSDS_SpacePacket5";
+
+        XTCETMContainer container;
+        XTCEContainerContentModel model;
+        List<XTCEContainerContentEntry> entries;
+        long sizeInBytes;
+        long items;
+
+        try {
+
+            container = db_.getContainer( containerName );
+
+            model = db_.processContainer( container, null, true );
+
+            sizeInBytes = model.getTotalSize();
+
+            Assert.assertTrue( "Expanded Container size of " + containerName +
+                " is " +
+                Long.toString( sizeInBytes ) + " but should be 188 bits",
+                sizeInBytes == 188 );
+
+            entries = model.getContentList();
+
+            items = 0;
+
+            for ( XTCEContainerContentEntry entry : entries ) {
+
+                if ( entry.getName().equals( "CCSDS_Packet_ID.Version" ) ) {
+                    ++items;
+                    checkEntry( entry, "3", "0", "==0{cal}", "0", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_ID.Type" ) ) {
+                    ++items;
+                    checkEntry( entry, "1", "3", "==TM{cal}", "", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_ID.SecHdrFlag" ) ) {
+                    ++items;
+                    checkEntry( entry, "1", "4", "==NotPresent{cal}", "", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_ID.APID" ) ) {
+                    ++items;
+                    checkEntry( entry, "11", "5", "==5{cal}", "2047", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_Sequence.GroupFlags" ) ) {
+                    ++items;
+                    checkEntry( entry, "2", "16", "", "3", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_Sequence.Count" ) ) {
+                    ++items;
+                    checkEntry( entry, "14", "18", "", "", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_Length" ) ) {
+                    ++items;
+                    checkEntry( entry, "16", "32", "", "", "", "" );
+                } else if ( entry.getName().equals( "Payload_1_State" ) ) {
+                    ++items;
+                    checkEntry( entry, "4", "48", "", "", "", "" );
+                } else if ( entry.getName().equals( "Solar_Array_Voltage_1_State" ) ) {
+                    ++items;
+                    checkEntry( entry, "8", "52", "", "OFF", "", "" );
+                } else if ( entry.getName().equals( "enum_binary" ) ) {
+                    ++items;
+                    checkEntry( entry, "32", "", "", "", "Payload_1_State==ON{cal}", "" );
+                } else if ( entry.getName().equals( "enum_float32" ) ) {
+                    ++items;
+                    checkEntry( entry, "32", "", "", "", "Payload_1_State==ON{cal}", "" );
+                } else if ( entry.getName().equals( "enum_float64" ) ) {
+                    ++items;
+                    checkEntry( entry, "64", "", "", "", "Payload_1_State==ON{cal},Solar_Array_Voltage_1_State==ON{cal}", "" );
+                } else if ( entry.getName().equals( "enum_int16_signmag" ) ) {
+                    ++items;
+                    checkEntry( entry, "16", "", "", "", "Payload_1_State==ON{cal},Solar_Array_Voltage_1_State!=ON{cal}", "" );
+                } else if ( entry.getName().equals( "enum_int16_twoscomp" ) ) {
+                    ++items;
+                    checkEntry( entry, "16", "", "", "", "Payload_1_State==ON{cal}", "" );
+                } else if ( entry.getName().equals( "enum_int16_onescomp" ) ) {
+                    ++items;
+                    checkEntry( entry, "16", "", "", "", "Payload_1_State==ON{cal}", "" );
+                } else if ( entry.getName().equals( "Basic_uint32" ) ) {
+                    ++items;
+                    checkEntry( entry, "32", "60", "", "", "", "" );
+                } else if ( entry.getName().equals( "Basic_int32_signmag" ) ) {
+                    ++items;
+                    checkEntry( entry, "32", "92", "", "", "", "" );
+                } else if ( entry.getName().equals( "Basic_int32_twoscomp" ) ) {
+                    ++items;
+                    checkEntry( entry, "32", "124", "", "", "", "" );
+                } else if ( entry.getName().equals( "Basic_int32_onescomp" ) ) {
+                    ++items;
+                    checkEntry( entry, "32", "156", "", "", "", "" );
+                }
+
+            }
+
+            Assert.assertTrue( "Container parameter count of " + containerName + " is " +
+                Long.toString( items ) + " but should be 19 items",
+                items == 19 );
+
+            assertOnWarnings( model );
+
+            container = db_.getContainer( containerName );
+
+            model = db_.processContainer( container, null, false );
+
+            sizeInBytes = model.getTotalSize();
+
+            Assert.assertTrue( "Container size of " + containerName +
+                " is " +
+                Long.toString( sizeInBytes ) + " but should be 188 bits",
+                sizeInBytes == 188 );
+
+            entries = model.getContentList();
+
+            items = 0;
+
+            for ( XTCEContainerContentEntry entry : entries ) {
+
+                if ( entry.getName().equals( "CCSDS_Packet_ID.Version" ) ) {
+                    ++items;
+                    checkEntry( entry, "3", "0", "==0{cal}", "0", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_ID.Type" ) ) {
+                    ++items;
+                    checkEntry( entry, "1", "3", "==TM{cal}", "", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_ID.SecHdrFlag" ) ) {
+                    ++items;
+                    checkEntry( entry, "1", "4", "==NotPresent{cal}", "", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_ID.APID" ) ) {
+                    ++items;
+                    checkEntry( entry, "11", "5", "==5{cal}", "2047", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_Sequence.GroupFlags" ) ) {
+                    ++items;
+                    checkEntry( entry, "2", "16", "", "3", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_Sequence.Count" ) ) {
+                    ++items;
+                    checkEntry( entry, "14", "18", "", "", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_Length" ) ) {
+                    ++items;
+                    checkEntry( entry, "16", "32", "", "", "", "" );
+                } else if ( entry.getName().equals( "Payload_1_State" ) ) {
+                    ++items;
+                    checkEntry( entry, "4", "48", "", "", "", "" );
+                } else if ( entry.getName().equals( "Solar_Array_Voltage_1_State" ) ) {
+                    ++items;
+                    checkEntry( entry, "8", "52", "", "OFF", "", "" );
+                } else if ( entry.getName().equals( "Basic_uint32" ) ) {
+                    ++items;
+                    checkEntry( entry, "32", "60", "", "", "", "" );
+                } else if ( entry.getName().equals( "Basic_int32_signmag" ) ) {
+                    ++items;
+                    checkEntry( entry, "32", "92", "", "", "", "" );
+                } else if ( entry.getName().equals( "Basic_int32_twoscomp" ) ) {
+                    ++items;
+                    checkEntry( entry, "32", "124", "", "", "", "" );
+                } else if ( entry.getName().equals( "Basic_int32_onescomp" ) ) {
+                    ++items;
+                    checkEntry( entry, "32", "156", "", "", "", "" );
+                }
+
+            }
+
+            Assert.assertTrue( "Container parameter count of " + containerName + " is " +
+                Long.toString( items ) + " but should be 13 items",
+                items == 13 );
+
+            assertOnWarnings( model );
+
+        } catch ( Exception ex ) {
+            //ex.printStackTrace();
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+    }
+
+    @Test
+    public void processMultiIncludesCase2() {
+
+        // container with include, inside is parameters with includes of both
+        // == and !=, here we set no user values but check both processing
+        // the container with and without showing all conditionals
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        String containerName = "/BogusSAT/SC001/CCSDS_SpacePacket5";
+
+        XTCETMContainer container;
+        XTCEContainerContentModel model;
+        List<XTCEContainerContentEntry> entries;
+        long sizeInBytes;
+        long items;
+
+        try {
+
+            container = db_.getContainer( containerName );
+
+            List<XTCEParameter> repParameters =
+                db_.getTelemetryParameters( "Payload_1_State" );
+
+            Assert.assertTrue( "Should find 1 parameter named 'Payload_1_State'",
+                               repParameters.size() == 1 );
+
+            XTCEContainerEntryValue valueObj =
+               new XTCEContainerEntryValue( repParameters.get( 0 ),
+                                            "ON",
+                                            "==",
+                                            "Calibrated" );
+
+            ArrayList<XTCEContainerEntryValue> values = new ArrayList<>();
+            values.add( valueObj );
+
+            model = db_.processContainer( container, values, true );
+
+            sizeInBytes = model.getTotalSize();
+
+            Assert.assertTrue( "Expanded Container size of " + containerName +
+                " is " +
+                Long.toString( sizeInBytes ) + " but should be 284 bits",
+                sizeInBytes == 284 );
+
+            entries = model.getContentList();
+
+            items = 0;
+
+            for ( XTCEContainerContentEntry entry : entries ) {
+
+                if ( entry.getName().equals( "CCSDS_Packet_ID.Version" ) ) {
+                    ++items;
+                    checkEntry( entry, "3", "0", "==0{cal}", "0", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_ID.Type" ) ) {
+                    ++items;
+                    checkEntry( entry, "1", "3", "==TM{cal}", "", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_ID.SecHdrFlag" ) ) {
+                    ++items;
+                    checkEntry( entry, "1", "4", "==NotPresent{cal}", "", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_ID.APID" ) ) {
+                    ++items;
+                    checkEntry( entry, "11", "5", "==5{cal}", "2047", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_Sequence.GroupFlags" ) ) {
+                    ++items;
+                    checkEntry( entry, "2", "16", "", "3", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_Sequence.Count" ) ) {
+                    ++items;
+                    checkEntry( entry, "14", "18", "", "", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_Length" ) ) {
+                    ++items;
+                    checkEntry( entry, "16", "32", "", "", "", "" );
+                } else if ( entry.getName().equals( "Payload_1_State" ) ) {
+                    ++items;
+                    checkEntry( entry, "4", "48", "==ON{cal}", "", "", "" );
+                } else if ( entry.getName().equals( "Solar_Array_Voltage_1_State" ) ) {
+                    ++items;
+                    checkEntry( entry, "8", "52", "", "OFF", "", "" );
+                } else if ( entry.getName().equals( "enum_binary" ) ) {
+                    ++items;
+                    checkEntry( entry, "32", "60", "", "", "Payload_1_State==ON{cal}", "" );
+                } else if ( entry.getName().equals( "enum_float32" ) ) {
+                    ++items;
+                    checkEntry( entry, "32", "92", "", "", "Payload_1_State==ON{cal}", "" );
+                } else if ( entry.getName().equals( "enum_float64" ) ) {
+                    ++items;
+                    checkEntry( entry, "64", "", "", "", "Payload_1_State==ON{cal},Solar_Array_Voltage_1_State==ON{cal}", "" );
+                } else if ( entry.getName().equals( "enum_int16_signmag" ) ) {
+                    ++items;
+                    checkEntry( entry, "16", "", "", "", "Payload_1_State==ON{cal},Solar_Array_Voltage_1_State!=ON{cal}", "" );
+                } else if ( entry.getName().equals( "enum_int16_twoscomp" ) ) {
+                    ++items;
+                    checkEntry( entry, "16", "124", "", "", "Payload_1_State==ON{cal}", "" );
+                } else if ( entry.getName().equals( "enum_int16_onescomp" ) ) {
+                    ++items;
+                    checkEntry( entry, "16", "140", "", "", "Payload_1_State==ON{cal}", "" );
+                } else if ( entry.getName().equals( "Basic_uint32" ) ) {
+                    ++items;
+                    checkEntry( entry, "32", "156", "", "", "", "" );
+                } else if ( entry.getName().equals( "Basic_int32_signmag" ) ) {
+                    ++items;
+                    checkEntry( entry, "32", "188", "", "", "", "" );
+                } else if ( entry.getName().equals( "Basic_int32_twoscomp" ) ) {
+                    ++items;
+                    checkEntry( entry, "32", "220", "", "", "", "" );
+                } else if ( entry.getName().equals( "Basic_int32_onescomp" ) ) {
+                    ++items;
+                    checkEntry( entry, "32", "252", "", "", "", "" );
+                }
+
+            }
+
+            Assert.assertTrue( "Container parameter count of " + containerName + " is " +
+                Long.toString( items ) + " but should be 19 items",
+                items == 19 );
+
+            assertOnWarnings( model );
+
+        } catch ( Exception ex ) {
+            //ex.printStackTrace();
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+    }
+
+    @Test
+    public void processMultiIncludesCase3() {
+
+        // container with include, inside is parameters with includes of both
+        // == and !=, here we set no user values but check both processing
+        // the container with and without showing all conditionals
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        String containerName = "/BogusSAT/SC001/CCSDS_SpacePacket5";
+
+        XTCETMContainer container;
+        XTCEContainerContentModel model;
+        List<XTCEContainerContentEntry> entries;
+        long sizeInBytes;
+        long items;
+
+        try {
+
+            container = db_.getContainer( containerName );
+
+            List<XTCEParameter> repParameters =
+                db_.getTelemetryParameters( "Payload_1_State" );
+
+            Assert.assertTrue( "Should find 1 parameter named 'Payload_1_State'",
+                               repParameters.size() == 1 );
+
+            XTCEContainerEntryValue valueObj1 =
+               new XTCEContainerEntryValue( repParameters.get( 0 ),
+                                            "ON",
+                                            "==",
+                                            "Calibrated" );
+
+            repParameters =
+                db_.getTelemetryParameters( "Solar_Array_Voltage_1_State" );
+
+            Assert.assertTrue( "Should find 1 parameter named 'Solar_Array_Voltage_1_State'",
+                               repParameters.size() == 1 );
+
+            XTCEContainerEntryValue valueObj2 =
+               new XTCEContainerEntryValue( repParameters.get( 0 ),
+                                            "ON",
+                                            "==",
+                                            "Calibrated" );
+
+            ArrayList<XTCEContainerEntryValue> values = new ArrayList<>();
+            values.add( valueObj1 );
+            values.add( valueObj2 );
+
+            model = db_.processContainer( container, values, true );
+
+            sizeInBytes = model.getTotalSize();
+
+            Assert.assertTrue( "Expanded Container size of " + containerName +
+                " is " +
+                Long.toString( sizeInBytes ) + " but should be 348 bits",
+                sizeInBytes == 348 );
+
+            entries = model.getContentList();
+
+            items = 0;
+
+            for ( XTCEContainerContentEntry entry : entries ) {
+
+                if ( entry.getName().equals( "CCSDS_Packet_ID.Version" ) ) {
+                    ++items;
+                    checkEntry( entry, "3", "0", "==0{cal}", "0", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_ID.Type" ) ) {
+                    ++items;
+                    checkEntry( entry, "1", "3", "==TM{cal}", "", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_ID.SecHdrFlag" ) ) {
+                    ++items;
+                    checkEntry( entry, "1", "4", "==NotPresent{cal}", "", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_ID.APID" ) ) {
+                    ++items;
+                    checkEntry( entry, "11", "5", "==5{cal}", "2047", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_Sequence.GroupFlags" ) ) {
+                    ++items;
+                    checkEntry( entry, "2", "16", "", "3", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_Sequence.Count" ) ) {
+                    ++items;
+                    checkEntry( entry, "14", "18", "", "", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_Length" ) ) {
+                    ++items;
+                    checkEntry( entry, "16", "32", "", "", "", "" );
+                } else if ( entry.getName().equals( "Payload_1_State" ) ) {
+                    ++items;
+                    checkEntry( entry, "4", "48", "==ON{cal}", "", "", "" );
+                } else if ( entry.getName().equals( "Solar_Array_Voltage_1_State" ) ) {
+                    ++items;
+                    checkEntry( entry, "8", "52", "==ON{cal}", "OFF", "", "" );
+                } else if ( entry.getName().equals( "enum_binary" ) ) {
+                    ++items;
+                    checkEntry( entry, "32", "60", "", "", "Payload_1_State==ON{cal}", "" );
+                } else if ( entry.getName().equals( "enum_float32" ) ) {
+                    ++items;
+                    checkEntry( entry, "32", "92", "", "", "Payload_1_State==ON{cal}", "" );
+                } else if ( entry.getName().equals( "enum_float64" ) ) {
+                    ++items;
+                    checkEntry( entry, "64", "124", "", "", "Payload_1_State==ON{cal},Solar_Array_Voltage_1_State==ON{cal}", "" );
+                } else if ( entry.getName().equals( "enum_int16_signmag" ) ) {
+                    ++items;
+                    checkEntry( entry, "16", "", "", "", "Payload_1_State==ON{cal},Solar_Array_Voltage_1_State!=ON{cal}", "" );
+                } else if ( entry.getName().equals( "enum_int16_twoscomp" ) ) {
+                    ++items;
+                    checkEntry( entry, "16", "188", "", "", "Payload_1_State==ON{cal}", "" );
+                } else if ( entry.getName().equals( "enum_int16_onescomp" ) ) {
+                    ++items;
+                    checkEntry( entry, "16", "204", "", "", "Payload_1_State==ON{cal}", "" );
+                } else if ( entry.getName().equals( "Basic_uint32" ) ) {
+                    ++items;
+                    checkEntry( entry, "32", "220", "", "", "", "" );
+                } else if ( entry.getName().equals( "Basic_int32_signmag" ) ) {
+                    ++items;
+                    checkEntry( entry, "32", "252", "", "", "", "" );
+                } else if ( entry.getName().equals( "Basic_int32_twoscomp" ) ) {
+                    ++items;
+                    checkEntry( entry, "32", "284", "", "", "", "" );
+                } else if ( entry.getName().equals( "Basic_int32_onescomp" ) ) {
+                    ++items;
+                    checkEntry( entry, "32", "316", "", "", "", "" );
+                }
+
+            }
+
+            Assert.assertTrue( "Container parameter count of " + containerName + " is " +
+                Long.toString( items ) + " but should be 19 items",
+                items == 19 );
+
+            assertOnWarnings( model );
+
+        } catch ( Exception ex ) {
+            //ex.printStackTrace();
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+    }
+
+    @Test
+    public void processMultiIncludesCase4() {
+
+        // container with include, inside is parameters with includes of both
+        // == and !=, here we set no user values but check both processing
+        // the container with and without showing all conditionals
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        String containerName = "/BogusSAT/SC001/CCSDS_SpacePacket5";
+
+        XTCETMContainer container;
+        XTCEContainerContentModel model;
+        List<XTCEContainerContentEntry> entries;
+        long sizeInBytes;
+        long items;
+
+        try {
+
+            container = db_.getContainer( containerName );
+
+            List<XTCEParameter> repParameters =
+                db_.getTelemetryParameters( "Payload_1_State" );
+
+            Assert.assertTrue( "Should find 1 parameter named 'Payload_1_State'",
+                               repParameters.size() == 1 );
+
+            XTCEContainerEntryValue valueObj1 =
+               new XTCEContainerEntryValue( repParameters.get( 0 ),
+                                            "ON",
+                                            "==",
+                                            "Calibrated" );
+
+            repParameters =
+                db_.getTelemetryParameters( "Solar_Array_Voltage_1_State" );
+
+            Assert.assertTrue( "Should find 1 parameter named 'Solar_Array_Voltage_1_State'",
+                               repParameters.size() == 1 );
+
+            XTCEContainerEntryValue valueObj2 =
+               new XTCEContainerEntryValue( repParameters.get( 0 ),
+                                            "OFF",
+                                            "==",
+                                            "Calibrated" );
+
+            ArrayList<XTCEContainerEntryValue> values = new ArrayList<>();
+            values.add( valueObj1 );
+            values.add( valueObj2 );
+
+            model = db_.processContainer( container, values, true );
+
+            sizeInBytes = model.getTotalSize();
+
+            Assert.assertTrue( "Expanded Container size of " + containerName +
+                " is " +
+                Long.toString( sizeInBytes ) + " but should be 300 bits",
+                sizeInBytes == 300 );
+
+            entries = model.getContentList();
+
+            items = 0;
+
+            for ( XTCEContainerContentEntry entry : entries ) {
+
+                if ( entry.getName().equals( "CCSDS_Packet_ID.Version" ) ) {
+                    ++items;
+                    checkEntry( entry, "3", "0", "==0{cal}", "0", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_ID.Type" ) ) {
+                    ++items;
+                    checkEntry( entry, "1", "3", "==TM{cal}", "", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_ID.SecHdrFlag" ) ) {
+                    ++items;
+                    checkEntry( entry, "1", "4", "==NotPresent{cal}", "", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_ID.APID" ) ) {
+                    ++items;
+                    checkEntry( entry, "11", "5", "==5{cal}", "2047", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_Sequence.GroupFlags" ) ) {
+                    ++items;
+                    checkEntry( entry, "2", "16", "", "3", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_Sequence.Count" ) ) {
+                    ++items;
+                    checkEntry( entry, "14", "18", "", "", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_Length" ) ) {
+                    ++items;
+                    checkEntry( entry, "16", "32", "", "", "", "" );
+                } else if ( entry.getName().equals( "Payload_1_State" ) ) {
+                    ++items;
+                    checkEntry( entry, "4", "48", "==ON{cal}", "", "", "" );
+                } else if ( entry.getName().equals( "Solar_Array_Voltage_1_State" ) ) {
+                    ++items;
+                    checkEntry( entry, "8", "52", "==OFF{cal}", "OFF", "", "" );
+                } else if ( entry.getName().equals( "enum_binary" ) ) {
+                    ++items;
+                    checkEntry( entry, "32", "60", "", "", "Payload_1_State==ON{cal}", "" );
+                } else if ( entry.getName().equals( "enum_float32" ) ) {
+                    ++items;
+                    checkEntry( entry, "32", "92", "", "", "Payload_1_State==ON{cal}", "" );
+                } else if ( entry.getName().equals( "enum_float64" ) ) {
+                    ++items;
+                    checkEntry( entry, "64", "", "", "", "Payload_1_State==ON{cal},Solar_Array_Voltage_1_State==ON{cal}", "" );
+                } else if ( entry.getName().equals( "enum_int16_signmag" ) ) {
+                    ++items;
+                    checkEntry( entry, "16", "124", "", "", "Payload_1_State==ON{cal},Solar_Array_Voltage_1_State!=ON{cal}", "" );
+                } else if ( entry.getName().equals( "enum_int16_twoscomp" ) ) {
+                    ++items;
+                    checkEntry( entry, "16", "140", "", "", "Payload_1_State==ON{cal}", "" );
+                } else if ( entry.getName().equals( "enum_int16_onescomp" ) ) {
+                    ++items;
+                    checkEntry( entry, "16", "156", "", "", "Payload_1_State==ON{cal}", "" );
+                } else if ( entry.getName().equals( "Basic_uint32" ) ) {
+                    ++items;
+                    checkEntry( entry, "32", "172", "", "", "", "" );
+                } else if ( entry.getName().equals( "Basic_int32_signmag" ) ) {
+                    ++items;
+                    checkEntry( entry, "32", "204", "", "", "", "" );
+                } else if ( entry.getName().equals( "Basic_int32_twoscomp" ) ) {
+                    ++items;
+                    checkEntry( entry, "32", "236", "", "", "", "" );
+                } else if ( entry.getName().equals( "Basic_int32_onescomp" ) ) {
+                    ++items;
+                    checkEntry( entry, "32", "268", "", "", "", "" );
+                }
+
+            }
+
+            Assert.assertTrue( "Container parameter count of " + containerName + " is " +
+                Long.toString( items ) + " but should be 19 items",
+                items == 19 );
 
             assertOnWarnings( model );
 
