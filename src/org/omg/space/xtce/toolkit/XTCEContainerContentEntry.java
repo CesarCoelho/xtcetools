@@ -90,7 +90,7 @@ public class XTCEContainerContentEntry implements Comparable {
      *
      */
 
-    XTCEContainerContentEntry( XTCEParameter parameter,
+    XTCEContainerContentEntry( XTCEParameter   parameter,
                                XTCETelecommand tcContainer ) {
 
         itemName    = parameter.getName(); // not used yet??
@@ -555,7 +555,16 @@ public class XTCEContainerContentEntry implements Comparable {
     public void setConditionList( List<XTCEContainerEntryValue> allConditions,
                                   boolean                       entryInUse ) {
 
-        conditions         = allConditions;
+        if ( allConditions == null ) {
+            return;
+        }
+
+        if ( conditions == null ) {
+            conditions = new ArrayList<XTCEContainerEntryValue>();
+        }
+
+        conditions.addAll( allConditions );
+
         isCurrentlyApplied = entryInUse;
 
     }
@@ -580,6 +589,7 @@ public class XTCEContainerContentEntry implements Comparable {
         String value     = compare.getValue();
         String valueForm = ( compare.isUseCalibratedValue() ? "Calibrated" :
                                                               "Uncalibrated" );
+
         conditions.add( new XTCEContainerEntryValue( parameter,
                                                      value,
                                                      operator,

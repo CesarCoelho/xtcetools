@@ -6,7 +6,6 @@
 
 package org.omg.space.xtce.toolkit;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Collections;
@@ -240,6 +239,11 @@ abstract class XTCEContainerContentModelBase {
         FieldType entryType = entry.getEntryType();
         long      satisfied = 0;
 
+        //System.out.println( "Conditions: " +
+        //                    Long.toString( conditions.size() ) +
+        //                    " entry values: " +
+        //                    Long.toString( contentValues_.size() ) );
+
         for ( final XTCEContainerEntryValue condition : conditions ) {
 
             // TODO Make this so constant parameters will evaluate even if they are
@@ -268,11 +272,8 @@ abstract class XTCEContainerContentModelBase {
             //    }
             //}
 
-            for ( final XTCEContainerContentEntry listEntry : contentList_ ) {
-                if ( listEntry.getValue() == null ) {
-                    continue;
-                }
-                if ( listEntry.getValue().isCompatibleWith( condition ) == true ) {
+            for ( final XTCEContainerEntryValue listEntry : contentValues_ ) {
+                if ( listEntry.isCompatibleWith( condition ) == true ) {
                     ++satisfied;
                 }
                 //final String entryValue    = listEntry.getValue();
@@ -290,7 +291,10 @@ abstract class XTCEContainerContentModelBase {
             }
         }
 
-        //System.out.println( "Conditions Satisfied " + Long.toString( satisfied ) + " of " + Long.toString( conditions.size() ) );
+        //System.out.println( "Conditions Satisfied " +
+        //                    Long.toString( satisfied ) +
+        //                    " of " + Long.toString( conditions.size() ) );
+
         return ( satisfied == conditions.size() );
 
     }
@@ -481,7 +485,13 @@ abstract class XTCEContainerContentModelBase {
             for ( XTCEContainerContentEntry entry : contentList_ ) {
                 if ( entry.getEntryType() == FieldType.PARAMETER ) {
                     if ( entry.getParameter().getFullPath().equals( compareParameter.getFullPath() ) == true ) {
-                        entry.setValue( compare );
+                        XTCEContainerEntryValue value =
+                            new XTCEContainerEntryValue( entry.getParameter(),
+                                                         compare.getValue(),
+                                                         compare.getComparisonOperator(),
+                                                         ( compare.isUseCalibratedValue() ? "Calibrated" : "Uncalibrated" ) );
+                        entry.setValue( value );
+                        contentValues_.add( value );
                         found = true;
                     }
                 }
@@ -537,7 +547,7 @@ abstract class XTCEContainerContentModelBase {
 
         } else {
 
-            warnings_.add( "Element RestrictionCriteria in container " +
+            warnings_.add( "Element IncludeCondition in container " +
                            container.getName() +
                            " is incomplete" );
 
@@ -553,6 +563,7 @@ abstract class XTCEContainerContentModelBase {
 
             XTCEParameter compareParameter = findParameter( compare.getParameterRef(),
                                                             container );
+
             content.setCondition( compareParameter, compare );
 
         } catch ( XTCEDatabaseException ex ) {
@@ -668,11 +679,13 @@ abstract class XTCEContainerContentModelBase {
                     new XTCEContainerEntryValue( entry.getParameter(),
                                                  rawValue );
                 entry.setValue( valueObj );
+                contentValues_.add( valueObj );
             } else if ( entry.getEntryType() == FieldType.ARGUMENT ) {
                 XTCEContainerEntryValue valueObj =
                     new XTCEContainerEntryValue( entry.getArgument(),
                                                  rawValue );
                 entry.setValue( valueObj );
+                contentValues_.add( valueObj );
             } else {
                 // do any of the others make sense?
 
@@ -694,6 +707,7 @@ abstract class XTCEContainerContentModelBase {
             for ( XTCEContainerEntryValue value : userValues_ ) {
                 if ( value.getItemFullPath().equals( entry.getParameter().getFullPath() ) == true ) {
                     entry.setValue( value );
+                    contentValues_.add( value );
                     return;
                 }
             }
@@ -701,6 +715,7 @@ abstract class XTCEContainerContentModelBase {
             for ( XTCEContainerEntryValue value : userValues_ ) {
                 if ( value.getItemFullPath().equals( entry.getArgument().getFullPath() ) == true ) {
                     entry.setValue( value );
+                    contentValues_.add( value );
                     return;
                 }
             }
@@ -862,8 +877,12 @@ abstract class XTCEContainerContentModelBase {
     /// The list of container contents.  This can be container entries,
     /// Parameter entries, Argument entries, and Fixed Value entries.
 
-    protected ArrayList<XTCEContainerContentEntry> contentList_ =
-        new ArrayList<>();
+    protected List<XTCEContainerContentEntry> contentList_ = new ArrayList<>();
+
+    /// The list of container content entry values when a value is specified
+    /// for an entry.
+
+    protected List<XTCEContainerEntryValue> contentValues_ = new ArrayList<>();
 
     /// A list of references to each of the XTCESpaceSystem objects that are a
     /// part of the data for this XTCE file.

@@ -120,9 +120,11 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
 
     public final long processContainer() throws XTCEDatabaseException {
 
-        long startTime = System.currentTimeMillis();
+        contentList_.clear();
+        contentValues_.clear();
+        warnings_.clear();
 
-        warnings_ = new ArrayList<String>();
+        long startTime = System.currentTimeMillis();
 
         RunningStartBit totalSize = new RunningStartBit();
 
