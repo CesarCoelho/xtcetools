@@ -314,8 +314,8 @@ public class XTCEViewerContainerDrawing extends JPanel {
             drawYCenteredString( ggg, parameterDesc, textPosX, textPosY );
 
             int textWidth = getStringWidth( ggg, parameterDesc ) * 2;
-            if ( ( textPosX + textWidth + 50 ) > totalSizeX_ ) {
-                totalSizeX_ = textPosX + textWidth + 50;
+            if ( ( textPosX + textWidth + 200 ) > totalSizeX_ ) {
+                totalSizeX_ = textPosX + textWidth + 200;
             }
 
             currentOffset -= upOffsetEach;
