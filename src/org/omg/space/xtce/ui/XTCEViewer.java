@@ -4494,6 +4494,48 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     }
 
+    /** Display a usage message to the user when the user is using this tool
+     * with command line arguments.
+     *
+     */
+
+    private static void usage() {
+
+        // TODO: Translate this
+
+        StringBuilder msg = new StringBuilder();
+
+        msg.append( "No arguments launches the user interface normally." );
+        msg.append( System.getProperty( "line.separator" ) );
+        msg.append( "First optional argument is a filename to load on start" );
+        msg.append( System.getProperty( "line.separator" ) );
+        msg.append( "By default, a file is loaded with options:" );
+        msg.append( System.getProperty( "line.separator" ) );
+        msg.append( "   --xinclude (apply XIncludes)" );
+        msg.append( System.getProperty( "line.separator" ) );
+        msg.append( "   --readonly (open read only)" );
+        msg.append( System.getProperty( "line.separator" ) );
+        msg.append( "   --no-validate (do not do XSD validation on load)" );
+        msg.append( System.getProperty( "line.separator" ) );
+        msg.append( "The following options are recognized after a filename:" );
+        msg.append( System.getProperty( "line.separator" ) );
+        msg.append( "   --xinclude (apply XIncludes)" );
+        msg.append( System.getProperty( "line.separator" ) );
+        msg.append( "   --no-xinclude (do not apply XIncludes)" );
+        msg.append( System.getProperty( "line.separator" ) );
+        msg.append( "   --validate (do XSD validation on load)" );
+        msg.append( System.getProperty( "line.separator" ) );
+        msg.append( "   --no-validate (do not do XSD validation on load)" );
+        msg.append( System.getProperty( "line.separator" ) );
+        msg.append( "   --readonly (load the file read only)" );
+        msg.append( System.getProperty( "line.separator" ) );
+        msg.append( "   --writable (load the file for writing/saving)" );
+        msg.append( System.getProperty( "line.separator" ) );
+
+        System.err.println( msg );
+
+    }
+
     /** This is the main function that launches the XTCE Viewer/Browser/Editor
      * application.
      *
@@ -4502,7 +4544,7 @@ public class XTCEViewer extends javax.swing.JFrame {
      *
      */
 
-    public static void main(String args[]) {
+    public static void main( final String args[] ) {
     
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -4537,11 +4579,57 @@ public class XTCEViewer extends javax.swing.JFrame {
         //}
         
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
+        java.awt.EventQueue.invokeLater( new Runnable() {
+
             @Override
             public void run() {
-                new XTCEViewer().setVisible(true);
+
+                XTCEViewer app = new XTCEViewer();
+
+                if ( args.length > 0 ) {
+                    File argFile = new File( args[0] );
+                    if ( argFile.isFile() && argFile.canRead() ) {
+                        boolean useXInclude    = true;
+                        boolean validateOnLoad = false;
+                        boolean readOnly       = true;
+                        for ( int iii = 1; iii < args.length; ++iii ) {
+                            if ( args[iii].equals( "--no-xinclude" ) == true ) {
+                                useXInclude = false;
+                            } else if ( args[iii].equals( "--xinclude" ) == true ) {
+                                useXInclude = true;
+                            } else if ( args[iii].equals( "--no-validate" ) == true ) {
+                                validateOnLoad = false;
+                            } else if ( args[iii].equals( "--validate" ) == true ) {
+                                validateOnLoad = true;
+                            } else if ( args[iii].equals( "--writable" ) == true ) {
+                                readOnly = false;
+                            } else if ( args[iii].equals( "--readonly" ) == true ) {
+                                readOnly = true;
+                            } else {
+                                System.err.println(
+                                    XTCEFunctions.getText( "general_unrecognizedarg" ) +
+                                    ": " + args[iii] );
+                                usage();
+                                System.exit( -1 );
+                            }
+                        }
+                        app.openFile( argFile,
+                                      useXInclude,
+                                      validateOnLoad,
+                                      readOnly);
+                    } else {
+                        System.err.println(
+                            XTCEFunctions.getText( "file_chooser_noload_text" ) +
+                            " " + args[0] );
+                        usage();
+                        System.exit( -1 );
+                    }
+                }
+
+                app.setVisible( true );
+
             }
+
         });
 
     }
