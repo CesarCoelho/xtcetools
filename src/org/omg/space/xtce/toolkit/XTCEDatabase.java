@@ -6,7 +6,9 @@
 
 package org.omg.space.xtce.toolkit;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.BitSet;
@@ -828,6 +830,83 @@ public final class XTCEDatabase extends XTCEDatabaseParser {
         return new XTCEContainerContentModel( container,
                                               getSpaceSystemTree(),
                                               binaryData );
+
+    }
+
+    /** Function to decompose an XTCETMContainer object into a simple array of
+     * entries that an application can iterate over without the need to
+     * resolve XTCE data model references, included additional containers,
+     * base containers, and conditional processing.
+     *
+     * This function is intended to accept the byte array that is read from
+     * a ByteArrayOutputStream.toByteArray() that is easily obtained when
+     * reading a binary file using a Java FileInputStream.
+     *
+     * @param container XTCETMContainer object containing the container/packet
+     * that the caller wishes to decompose.
+     *
+     * @param bytes byte[] containing the container binary encoded data
+     * so that the output object contains entries with actual values from a
+     * real binary image.
+     *
+     * @return XTCEContainerContentModel representing this XTCETMContainer.
+     *
+     * @throws XTCEDatabaseException thrown in the event that it is not
+     * possible to decompose the container completely due to bad references in
+     * the XTCE document.
+     *
+     */
+
+    public XTCEContainerContentModel processContainer( XTCETMContainer container,
+                                                       byte[]          bytes )
+        throws XTCEDatabaseException {
+
+        BitSet bits  = XTCEFunctions.getBitSetFromStreamByteArray( bytes );
+
+        return processContainer( container, bits );
+
+    }
+
+
+    /** Function to decompose an XTCETMContainer object into a simple array of
+     * entries that an application can iterate over without the need to
+     * resolve XTCE data model references, included additional containers,
+     * base containers, and conditional processing.
+     *
+     * This function is intended to accept a Java InputStream containing the
+     * bytes to use for the binary portion of the container.
+     *
+     * @param container XTCETMContainer object containing the container/packet
+     * that the caller wishes to decompose.
+     *
+     * @param stream InputStream containing the container binary encoded data
+     * so that the output object contains entries with actual values from a
+     * real binary image.
+     *
+     * @return XTCEContainerContentModel representing this XTCETMContainer.
+     *
+     * @throws XTCEDatabaseException thrown in the event that it is not
+     * possible to decompose the container completely due to bad references in
+     * the XTCE document, or if the stream throws an IOException.
+     *
+     */
+
+    public XTCEContainerContentModel processContainer( XTCETMContainer container,
+                                                       InputStream     stream )
+        throws XTCEDatabaseException {
+
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        int byteValue;
+
+        try {
+            while ( ( byteValue = stream.read() ) != -1 ) {
+                buffer.write( byteValue );
+            }
+        } catch ( Exception ex ) {
+            throw new XTCEDatabaseException( ex.getLocalizedMessage() );
+        }
+
+        return processContainer( container, buffer.toByteArray() );
 
     }
 
