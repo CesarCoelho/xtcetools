@@ -6,7 +6,6 @@
 
 package org.omg.space.xtce.toolkit;
 
-import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
 import org.omg.space.xtce.database.AggregateDataType;

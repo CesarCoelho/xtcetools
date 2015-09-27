@@ -183,7 +183,7 @@ abstract class XTCEContainerContentModelBase {
                     Integer.toString( startBit ) + ")" );
             }
 
-            if ( ( startBit + bitLength ) > availBitsLastIndex ) {
+            if ( ( startBit + bitLength ) > availBits ) {
                 throw new XTCEDatabaseException( "Binary too small to " +
                     "extract " + currentEntry.itemName + " (size " +
                     Integer.toString( availBits ) + " with entry size of " +
@@ -198,6 +198,14 @@ abstract class XTCEContainerContentModelBase {
             throw new XTCEDatabaseException( currentEntry.itemName +
                 " Raw value not applicable or has not been set" );
         }
+
+        //int bitCount = bitLength;
+        //if ( ( bitLength % 8 ) != 0 ) {
+        //    bitCount += 8 - ( bitLength % 8 );
+        //}
+
+        //System.out.println( "Extracted " + currentEntry.getName() + " " +
+        //    XTCEFunctions.bitSetToHex( result, ( bitCount / 8 ) ) );
 
         return result;
 
@@ -485,13 +493,22 @@ abstract class XTCEContainerContentModelBase {
             for ( XTCEContainerContentEntry entry : contentList_ ) {
                 if ( entry.getEntryType() == FieldType.PARAMETER ) {
                     if ( entry.getParameter().getFullPath().equals( compareParameter.getFullPath() ) == true ) {
-                        XTCEContainerEntryValue value =
+                        XTCEContainerEntryValue valueObj =
                             new XTCEContainerEntryValue( entry.getParameter(),
                                                          compare.getValue(),
                                                          compare.getComparisonOperator(),
                                                          ( compare.isUseCalibratedValue() ? "Calibrated" : "Uncalibrated" ) );
-                        entry.setValue( value );
-                        contentValues_.add( value );
+                        if ( entry.getValue() != null ) {
+                            if ( entry.getValue().isCompatibleWith( valueObj ) == false ) {
+                                warnings_.add( entry.getName() + " binary value " +
+                                    "applied violates restricted value, perhaps this " +
+                                    "is the wrong container." );
+                                found = true;
+                                continue;
+                            }
+                        }
+                        entry.setValue( valueObj );
+                        contentValues_.add( valueObj );
                         found = true;
                     }
                 }
@@ -668,6 +685,10 @@ abstract class XTCEContainerContentModelBase {
             return;
         }
 
+        if ( entry.getStartBit().isEmpty() == true ) {
+            return;
+        }
+
         try {
 
             BitSet rawValue = extractRawValue( entry );
@@ -704,18 +725,18 @@ abstract class XTCEContainerContentModelBase {
         }
 
         if ( entry.getEntryType() == FieldType.PARAMETER ) {
-            for ( XTCEContainerEntryValue value : userValues_ ) {
-                if ( value.getItemFullPath().equals( entry.getParameter().getFullPath() ) == true ) {
-                    entry.setValue( value );
-                    contentValues_.add( value );
+            for ( XTCEContainerEntryValue valueObj : userValues_ ) {
+                if ( valueObj.getItemFullPath().equals( entry.getParameter().getFullPath() ) == true ) {
+                    entry.setValue( valueObj );
+                    contentValues_.add( valueObj );
                     return;
                 }
             }
         } else if ( entry.getEntryType() == FieldType.ARGUMENT ) {
-            for ( XTCEContainerEntryValue value : userValues_ ) {
-                if ( value.getItemFullPath().equals( entry.getArgument().getFullPath() ) == true ) {
-                    entry.setValue( value );
-                    contentValues_.add( value );
+            for ( XTCEContainerEntryValue valueObj : userValues_ ) {
+                if ( valueObj.getItemFullPath().equals( entry.getArgument().getFullPath() ) == true ) {
+                    entry.setValue( valueObj );
+                    contentValues_.add( valueObj );
                     return;
                 }
             }

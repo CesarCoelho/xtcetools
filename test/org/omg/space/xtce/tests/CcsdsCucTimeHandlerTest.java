@@ -470,10 +470,10 @@ public class CcsdsCucTimeHandlerTest {
 
             System.out.println( "Uncal Time: " + uncalValue );
             System.out.println( "BitSet: " + hex );
-            System.out.println( "Expect: 0x0000000000000000" );
+            System.out.println( "Expect: 0x00000000000000" );
 
-            Assert.assertTrue( "Uncal 0x11f5e49aa6000 should have raw 0x0000000000000000",
-                               hex.equals( "0x0000000000000000" ) == true );
+            Assert.assertTrue( "Uncal 0x11f5e49aa6000 should have raw 0x00000000000000",
+                               hex.equals( "0x00000000000000" ) == true );
 
             // 1 June 1980 00:00:00 is  (0xc1cc80 0x000000)
             // UNIX time is 328665600 (0x13970a00)
@@ -487,10 +487,10 @@ public class CcsdsCucTimeHandlerTest {
 
             System.out.println( "Uncal Time: " + uncalValue );
             System.out.println( "BitSet: " + hex );
-            System.out.println( "Expect: 0x0000c1cc80000000" );
+            System.out.println( "Expect: 0x00c1cc80000000" );
 
-            Assert.assertTrue( "Uncal 0x12aeb6c568000 should have raw 0x0000c1cc80000000",
-                               hex.equals( "0x0000c1cc80000000" ) == true );
+            Assert.assertTrue( "Uncal 0x12aeb6c568000 should have raw 0x00c1cc80000000",
+                               hex.equals( "0x00c1cc80000000" ) == true );
 
             // 20 December 2012 00:00:30.500 is  (0x3DFD179E 0x800000)
             // CUC is 17448251464613888 (0x3DFD179E800000)
@@ -505,10 +505,10 @@ public class CcsdsCucTimeHandlerTest {
 
             System.out.println( "Uncal Time: " + uncalValue );
             System.out.println( "BitSet: " + hex );
-            System.out.println( "Expect: 0x003dfd179e800000" );
+            System.out.println( "Expect: 0x3dfd179e800000" );
 
-            Assert.assertTrue( "Uncal 0x4d13d6b50a4a0 should have raw 0x003dfd179e800000",
-                               hex.equals( "0x003dfd179e800000" ) == true );
+            Assert.assertTrue( "Uncal 0x4d13d6b50a4a0 should have raw 0x3dfd179e800000",
+                               hex.equals( "0x3dfd179e800000" ) == true );
 
         } catch ( Throwable ex ) {
             Assert.fail( ex.getClass().getName() + ": " + ex.getLocalizedMessage() );

@@ -1923,6 +1923,25 @@ public class ContainerProcessingTest {
                 "' instead" );
         }
 
+        StringBuilder sb = new StringBuilder();
+        sb.append( "PASSED: " );
+        sb.append( entry.getName() );
+        sb.append( " Size: '" );
+        sb.append( sizeInBits );
+        sb.append( "' StartBit: '" );
+        sb.append( startBit );
+        sb.append( "' Value: '" );
+        sb.append( value );
+        sb.append( "' Initial Value: '" );
+        sb.append( initialValue );
+        sb.append( "' Condition: '" );
+        sb.append( condition );
+        sb.append( "' Repeat: '" );
+        sb.append( repeat );
+        sb.append( "'" );
+
+        System.out.println( sb.toString() );
+
     }
 
     private void assertOnWarnings( XTCEContainerContentModel model ) {
@@ -1937,7 +1956,7 @@ public class ContainerProcessingTest {
 
     private void loadDocument() throws XTCEDatabaseException {
 
-        //System.out.println( "Loading the BogusSat-2.xml demo database" );
+        System.out.println( "Loading the BogusSat-2.xml demo database" );
 
         String file = "src/org/omg/space/xtce/database/BogusSat-2.xml";
 

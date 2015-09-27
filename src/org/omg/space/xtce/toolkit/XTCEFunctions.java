@@ -134,6 +134,59 @@ public class XTCEFunctions {
         return BitSet.valueOf( bytes );
 
     }
+
+    /** This function converts a byte array to a BitSet suitable for use in the
+     * container content processing when applying a binary data set.
+     *
+     * The BitSet is sequenced where bit 0 is the first bit in the data bytes,
+     * progressing forward in count until the last bit in the data bytes.
+     *
+     * @param bytes byte[] array of raw binary data.
+     *
+     * @return BitSet containing the binary data exactly sized to the number
+     * of bytes, so it will always be a multiple of 8 bits in size.
+     *
+     */
+
+    public static BitSet getBitSetFromStreamByteArray( byte[] bytes ) {
+
+        BitSet bits = new BitSet( bytes.length * 8 );
+
+        for ( int iii = 0; iii < bytes.length; ++iii ) {
+            //System.out.println( "Byte: 0x" + String.format( "%02x", bytes[iii] ) );
+            for ( int jjj = 0; jjj < 8; ++jjj ) {
+                if ( ( bytes[iii] & ( 1 << ( 7 - jjj ) ) ) != 0 ) {
+                    bits.set( ( iii * 8 ) + jjj );
+                    //System.out.println( "Setting bit " + Integer.toString( ( iii * 8 ) + jjj ) + " 1" );
+                } else {
+                    //System.out.println( "Setting bit " + Integer.toString( ( iii * 8 ) + jjj ) + " 0" );
+                }
+            }
+        }
+
+        return bits;
+
+    }
+
+/*
+        BitSet bits = new BitSet( bytes.length * 8 );
+
+        for ( int iii = 0; iii < bytes.length; ++iii ) {
+        //for ( int iii = bytes.length - 1; iii >= 0; --iii ) {
+            System.out.println( "Byte: 0x" + String.format( "%02x", bytes[iii] ) );
+            for ( int jjj = 0; jjj < 8; ++jjj ) {
+                if ( ( bytes[iii] & ( 1 << ( 7 - jjj ) ) ) != 0 ) {
+                    bits.set( ( ( bytes.length - 1 - iii ) * 8 ) + ( 7 - jjj ) );
+                    System.out.println( "Setting bit " + Integer.toString( ( ( bytes.length - 1 - iii ) * 8 ) + ( 7 - jjj ) ) + " 1" );
+                } else {
+                    System.out.println( "Setting bit " + Integer.toString( ( ( bytes.length - 1 - iii ) * 8 ) + ( 7 - jjj ) ) + " 0" );
+                }
+            }
+        }
+
+        return bits;
+*/
+
     /** Convert a BitSet object to a hex byte string, ordered from the most
      * significant byte to the least significant byte.
      *
@@ -155,23 +208,10 @@ public class XTCEFunctions {
 
     public static String bitSetToHex( BitSet bits, int minBytes ) {
 
-        int bitCount = bits.size();
-        if ( ( bits.size() % 8 ) != 0 ) {
-            bitCount += 8 - ( bits.size() % 8 );
-        }
-
-        int byteCount = bitCount / 8;
-
-        if ( byteCount == 0 ) {
-            return "0x00"; // NOI18N
-        } else if ( byteCount < minBytes ) {
-            byteCount = minBytes;
-        }
-
         StringBuilder sb = new StringBuilder( "0x" ); // NOI18N
 
         byte[] bytes = bits.toByteArray();
-        for ( int iii = byteCount - 1; iii >= 0; --iii ) {
+        for ( int iii = minBytes - 1; iii >= 0; --iii ) {
             if ( iii < bytes.length ) {
                 sb.append( String.format( "%02x", bytes[iii] ) ); // NOI18N
             } else {
