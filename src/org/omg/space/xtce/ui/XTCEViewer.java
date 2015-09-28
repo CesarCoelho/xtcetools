@@ -3533,7 +3533,12 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     }
 
-    private XTCEViewerContainerTreeNode setContainerTreeNode( XTCEViewerContainerTreeNode obj, XTCETMContainer container, boolean appendDescription ) {
+    private XTCEViewerContainerTreeNode setContainerTreeNode( XTCEViewerContainerTreeNode obj,
+                                                              XTCETMContainer             container,
+                                                              boolean                     addDesc ) {
+
+        // TODO there is a minor bug in this somewhere for cases where a stream
+        // does not start at the lowest container in the inheritance tree.
 
         for ( int iii = 0; iii < obj.getChildCount(); ++iii ) {
             XTCEViewerContainerTreeNode child =
@@ -3553,7 +3558,7 @@ public class XTCEViewer extends javax.swing.JFrame {
 
         String label = container.getName();
 
-        if ( appendDescription == true ) {
+        if ( addDesc == true ) {
             if ( container.getDescription().isEmpty() == false ) {
                 StringBuilder extendedText = new StringBuilder();
                 extendedText.append( label );
@@ -3745,10 +3750,10 @@ public class XTCEViewer extends javax.swing.JFrame {
         //    " root path " +
         //    node.getStreamReference().getStreamContainerPath() );
 
-        try {
+        //try {
 
             List<XTCETMContainer> containers =
-                xtceDatabaseFile.getContainers( node.getStreamReference() );
+                node.getStreamReference().getContainers();
 
             XTCEViewerContainerTreeNode rootObj =
                 new XTCEViewerContainerTreeNode( XTCEFunctions.getText( "general_containers" ), // NOI18N
@@ -3759,12 +3764,12 @@ public class XTCEViewer extends javax.swing.JFrame {
             tmStreamContentTree.setCellRenderer( new XTCEViewerContainerTreeCellRenderer() );
 
             for ( XTCETMContainer container : containers ) {
-                //System.out.println( "Container " +
-                //                    container.getName() +
-                //                    " IPath " +
-                //                    container.getInheritancePath() +
-                //                    " CPath " +
-                //                    container.getFullPath() );
+                System.out.println( "Container " +
+                                    container.getName() +
+                                    " IPath " +
+                                    container.getInheritancePath() +
+                                    " CPath " +
+                                    container.getFullPath() );
                 String[] fields =
                     container.getInheritancePath().split( "/" ); // NOI18N
                 XTCEViewerContainerTreeNode obj = rootObj;
@@ -3780,9 +3785,9 @@ public class XTCEViewer extends javax.swing.JFrame {
                 " " +
                 XTCEFunctions.getText( "general_containers" ) );
 
-        } catch ( XTCEDatabaseException ex ) {
-            logMsg( XTCEFunctions.generalErrorPrefix() + ex.getLocalizedMessage() );
-        }
+        //} catch ( XTCEDatabaseException ex ) {
+        //    logMsg( XTCEFunctions.generalErrorPrefix() + ex.getLocalizedMessage() );
+        //}
 
         tmStreamContentTree.setRootVisible( false );
 

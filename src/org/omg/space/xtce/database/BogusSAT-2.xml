@@ -515,7 +515,7 @@
 					<xtce:BaseContainer containerRef="ECSS_Service_3_Subservice_25">
 						<xtce:RestrictionCriteria>
 							<xtce:ComparisonList>
-								<xtce:Comparison value="ECSS_SpacePacket1" parameterRef="PUS_Structure_ID"/>
+								<xtce:Comparison value="ECSS_SpacePacket1" parameterRef="../PUS_Structure_ID"/>
 							</xtce:ComparisonList>
 						</xtce:RestrictionCriteria>
 					</xtce:BaseContainer>

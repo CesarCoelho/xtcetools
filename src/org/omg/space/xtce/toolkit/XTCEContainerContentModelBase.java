@@ -91,6 +91,20 @@ abstract class XTCEContainerContentModelBase {
         return warnings_;
     }
 
+    /** Retrieve the container processing validity guess flag.
+     *
+     * In the event that this flag is false, there will always be a warning
+     * message to retrieve from getWarnings().
+     *
+     * @return boolean indicating if there were issues encountered during the
+     * processing that suggest that this data is not usable.
+     *
+     */
+
+    public boolean isValid() {
+        return valid_;
+    }
+
     /** Accessor to retrieve the container content in a pre-processed series
      * of rows that can be iterated through.
      *
@@ -504,6 +518,7 @@ abstract class XTCEContainerContentModelBase {
                                     "applied violates restricted value, perhaps this " +
                                     "is the wrong container." );
                                 found = true;
+                                valid_ = false;
                                 continue;
                             }
                         }
@@ -699,12 +714,30 @@ abstract class XTCEContainerContentModelBase {
                 XTCEContainerEntryValue valueObj =
                     new XTCEContainerEntryValue( entry.getParameter(),
                                                  rawValue );
+                if ( entry.getValue() != null ) {
+                    if ( entry.getValue().isCompatibleWith( valueObj ) == false ) {
+                        warnings_.add( entry.getName() + " binary value " +
+                            "applied violates restricted value, perhaps this " +
+                            "is the wrong container." );
+                        valid_ = false;
+                        return;
+                    }
+                }
                 entry.setValue( valueObj );
                 contentValues_.add( valueObj );
             } else if ( entry.getEntryType() == FieldType.ARGUMENT ) {
                 XTCEContainerEntryValue valueObj =
                     new XTCEContainerEntryValue( entry.getArgument(),
                                                  rawValue );
+                if ( entry.getValue() != null ) {
+                    if ( entry.getValue().isCompatibleWith( valueObj ) == false ) {
+                        warnings_.add( entry.getName() + " binary value " +
+                            "applied violates restricted value, perhaps this " +
+                            "is the wrong container." );
+                        valid_ = false;
+                        return;
+                    }
+                }
                 entry.setValue( valueObj );
                 contentValues_.add( valueObj );
             } else {
@@ -727,6 +760,15 @@ abstract class XTCEContainerContentModelBase {
         if ( entry.getEntryType() == FieldType.PARAMETER ) {
             for ( XTCEContainerEntryValue valueObj : userValues_ ) {
                 if ( valueObj.getItemFullPath().equals( entry.getParameter().getFullPath() ) == true ) {
+                    if ( entry.getValue() != null ) {
+                        if ( entry.getValue().isCompatibleWith( valueObj ) == false ) {
+                            warnings_.add( entry.getName() + " user value " +
+                                "applied violates restricted value, perhaps this " +
+                                "is the wrong container." );
+                            valid_ = false;
+                            return;
+                        }
+                    }
                     entry.setValue( valueObj );
                     contentValues_.add( valueObj );
                     return;
@@ -735,6 +777,15 @@ abstract class XTCEContainerContentModelBase {
         } else if ( entry.getEntryType() == FieldType.ARGUMENT ) {
             for ( XTCEContainerEntryValue valueObj : userValues_ ) {
                 if ( valueObj.getItemFullPath().equals( entry.getArgument().getFullPath() ) == true ) {
+                    if ( entry.getValue() != null ) {
+                        if ( entry.getValue().isCompatibleWith( valueObj ) == false ) {
+                            warnings_.add( entry.getName() + " user value " +
+                                "applied violates restricted value, perhaps this " +
+                                "is the wrong container." );
+                            valid_ = false;
+                            return;
+                        }
+                    }
                     entry.setValue( valueObj );
                     contentValues_.add( valueObj );
                     return;
@@ -881,6 +932,10 @@ abstract class XTCEContainerContentModelBase {
         }
 
     }
+
+    /// Validity flag for container processing attempts
+
+    protected boolean valid_ = true;
 
     /// List of warning messages collected when processing this container.
 

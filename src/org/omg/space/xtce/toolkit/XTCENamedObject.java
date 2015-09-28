@@ -392,31 +392,40 @@ public abstract class XTCENamedObject implements Comparable {
 
     /** Equality Operator
      *
-     * @param that XTCENamedObject to compare to this one, with equality being
-     * defined as the fully qualified path in the XTCE data model being equal
-     * to the path for this object.
+     * @param rhs String or XTCENamedObject to compare to this one, with
+     * equality being defined as the fully qualified path in the XTCE data
+     * model being equal to the path for this object.
      *
      * @return boolean indicating if the two objects are the same in the XTCE
      * data model.
-     *
      */
 
-    public boolean equals( XTCENamedObject that ) {
-        return ( this.getFullPath().equals( that.getFullPath() ) );
+    @Override
+    public boolean equals( Object rhs ) {
+
+        if ( rhs instanceof String ) {
+            return ( rhs.equals( this.path_ ) );
+        } else if ( rhs instanceof XTCENamedObject ) {
+            XTCENamedObject that = (XTCENamedObject)rhs;
+            return ( this.path_.equals( that.path_ ) );
+        } else {
+            return false;
+        }
+
     }
 
-    /** Equality Operator
+    /** Hash function for Java Collections
      *
-     * @param path String to compare to this one, with equality being
-     * defined as the fully qualified path in the XTCE data model being equal
-     * to the path for this object.
+     * Key rule here is that if this object is equal to another object via the
+     * equals() function, then the hashCode() must also be the same.
      *
-     * @return boolean indicating if the two objects are the same in the XTCE
-     * data model.
+     * @return int containing the hash code
+     *
      */
 
-    public boolean equals( String path ) {
-        return ( path.equals( path_ ) );
+    @Override
+    public int hashCode() {
+        return this.path_.hashCode();
     }
 
     // Private Data Members, which are all references

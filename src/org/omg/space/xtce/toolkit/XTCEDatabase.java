@@ -704,40 +704,8 @@ public final class XTCEDatabase extends XTCEDatabaseParser {
 
     }
 
-    /** Function to retrieve all of the Telemetry Containers that are members
-     * of a specified stream in the XTCE document.
-     *
-     * @param stream XTCETMStream representing the desired stream to find the
-     * included containers.
-     *
-     * @return List of XTCETMContainers in the stream.
-     *
-     * @throws XTCEDatabaseException in the event that the stream root
-     * container does not exist in the XTCE document data.
-     *
-     */
-
-    public List<XTCETMContainer> getContainers( XTCETMStream stream ) throws XTCEDatabaseException {
-
-        ArrayList<XTCETMContainer> retList = new ArrayList<>();
-
-        XTCETMContainer streamRootContainer =
-            getContainer( stream.getStreamContainerPath() );
-
-        String sRootPath = streamRootContainer.getInheritancePath();
-
-        for ( XTCESpaceSystem spaceSystem : getSpaceSystemTree() ) {
-            retList.addAll( spaceSystem.getInheritingContainers( sRootPath ) );
-        }
-
-        Collections.sort( retList );
-
-        return retList;
-
-    }
-
     /** Function to retrieve all of the Telemetry Streams that are defined
-     * in the XTCEdocument.
+     * in the XTCE document.
      *
      * Similar functions exist on the XTCESpaceSystem objects.  This one is
      * intended to return the entire contents of the XTCE database file.
@@ -758,6 +726,35 @@ public final class XTCEDatabase extends XTCEDatabaseParser {
        }
        
        return streams;
+
+    }
+
+    /** Function to retrieve a the Telemetry Streams that is defined in the
+     * XTCE document.
+     *
+     * Similar functions exist on the XTCESpaceSystem objects.  This one is
+     * intended to search the entire contents of the XTCE database file.
+     *
+     * @return XTCETMStream object if it exists in the document
+     *
+     * @throws XTCEDatabaseException in the event that the stream does not
+     * exist or does not process correctly.  Interrogate the reason in the
+     * exception for more information.
+     *
+     */
+
+    public XTCETMStream getStream( String name ) throws XTCEDatabaseException {
+
+       for ( XTCESpaceSystem spaceSystem : getSpaceSystemTree() ) {
+           for ( XTCETMStream stream : spaceSystem.getStreams() ) {
+               if ( stream.getName().equals( name ) == true ) {
+                   return stream;
+               }
+           }
+
+       }
+       
+       throw new XTCEDatabaseException( "Cannot locate stream '" + name + "'" );
 
     }
 
@@ -861,12 +858,11 @@ public final class XTCEDatabase extends XTCEDatabaseParser {
                                                        byte[]          bytes )
         throws XTCEDatabaseException {
 
-        BitSet bits  = XTCEFunctions.getBitSetFromStreamByteArray( bytes );
+        BitSet bits = XTCEFunctions.getBitSetFromStreamByteArray( bytes );
 
         return processContainer( container, bits );
 
     }
-
 
     /** Function to decompose an XTCETMContainer object into a simple array of
      * entries that an application can iterate over without the need to

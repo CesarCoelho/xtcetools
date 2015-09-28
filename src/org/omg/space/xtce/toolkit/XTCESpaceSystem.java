@@ -838,6 +838,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
                 try {
                     list.add( new XTCETMStream( stream,
                                                 this,
+                                                databaseReference_,
                                                 stream.getAliasSet(),
                                                 stream.getAncillaryDataSet() ) );
                 } catch ( XTCEDatabaseException ex ) {
