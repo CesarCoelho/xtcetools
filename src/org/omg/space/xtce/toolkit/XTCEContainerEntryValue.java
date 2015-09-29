@@ -121,7 +121,8 @@ public class XTCEContainerEntryValue {
         return name_;
     }
 
-    /** Retrieve any warnings that occurred when processig this specific value.
+    /** Retrieve any warnings that occurred when processing this specific
+     * value.
      *
      * This method is most effective if it is called last when interacting with
      * an item value.  Warnings are generated in the course of calling
