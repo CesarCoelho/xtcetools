@@ -113,6 +113,30 @@ and open the template in the editor.
        also test binary data packet files to exercise the data decoding
        capabilities of the toolkit.</p>
 
+    <h3>Extendability</h3>
+
+    <p>The toolkit permits Classes to be added to the package using the Java
+       Classpath.  This enables programs to implement program-specific
+       implementations of certain elements of the handling of XTCE documents
+       and database files that are compliant with the XTCE specification.</p>
+
+    <p>At present, a list of these extension interfaces includes:</p>
+
+    <ul>
+        <li><p>XTCEAbsoluteTimeType - This class is an interface for
+               implementing a program specific AbsoluteTimeParameterType or
+               AbsoluteTimeArgumentType (both are applicable for the same
+               class).  Two examples are delivered in the toolkit, one for
+               POSIX Time (XTCEPosixTimeHandler) and one for CCSDS CUC Time
+               (XTCECcsdsCucTimeHandler).  Both are registered by default and
+               any new handlers registered take priority over the existing
+               ones.</p></li>
+        <li><p>XTCEDatabaseExporter - This class is an interface for
+               implementing a custom exporter for Parameters, Containers, and
+               Telecommands.  An example implementation in the toolkit is the
+               CSV Exporter (XTCEDatabaseExporterCsv).</p></li>
+    </ul>
+
 </body>
 
 </html>
