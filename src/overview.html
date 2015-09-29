@@ -71,6 +71,46 @@ and open the template in the editor.
             commutation and de-commutation capabilities.</p></li>
     </ul>
 
+    <h3>Package Design</h3>
+
+    <p>The packages delivered with this toolkit and user interface relate to
+       one another in a layered fashion.  At the core of the toolkit is the
+       XTCE Schema, which is converted to Java classes by the JAXB code
+       generation tool.  These raw classes are utilized by the "toolkit"
+       package to provide a simpler and more intuitive interface.  The GUI
+       application (org.omg.space.xtce.ui.XTCEViewer) class contains only
+       graphical widgets and callbacks, which use the toolkit as the basis for
+       business logic.  A number of additional "code examples" help to further
+       illustrate basic usage of the toolkit API to perform common functions,
+       using an XTCE document as the database.</p>
+
+    <center>
+    <img src="../../../../../../packageoverview.png"
+         alt="Java Package Overview Diagram">
+    </center>
+
+    <p>The Application Programming Interface is documented using the standard
+       Javadoc interface and can be linked to Integrated Development
+       Environments by supplying them with the XTCETools.jar file and the
+       internal location of the Javadoc files.  These can be found inside the
+       jar file at org/omg/space/xtce/toolkit/doc/index.html.  This is the
+       starting point of the pages being viewed here.</p>
+
+    <h3>Testing</h3>
+
+    <p>The toolkit API is tested using the standard JUnit 4.10 package.  The
+       tests operate both at a class level where appropriate and also at a
+       functional level.  In order to support functional testing, several
+       example XTCE database files are included in the package.  A couple of
+       these serve as examples that can be viewed using the GUI from the File
+       Menu at item "Open Example Database".  Others are not shown and are
+       used exclusively for the JUnit testing.  The two example databases are
+       named "BogusSAT" and "GovSat".  These demonstrate CCSDS, ECSS PUS, and
+       basic "onboard table" definitions for Telemetry Packets and
+       Telecommands.  In addition to test database example files, there are
+       also test binary data packet files to exercise the data decoding
+       capabilities of the toolkit.</p>
+
 </body>
 
 </html>
