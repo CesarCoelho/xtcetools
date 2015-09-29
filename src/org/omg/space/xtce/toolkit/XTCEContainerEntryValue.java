@@ -6,7 +6,9 @@
 
 package org.omg.space.xtce.toolkit;
 
+import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.List;
 
 /** This class represents the value of an entry in the container model when
  * processing a specific Container in the XTCE data model.
@@ -117,6 +119,28 @@ public class XTCEContainerEntryValue {
 
     public String getItemFullPath() {
         return name_;
+    }
+
+    /** Retrieve any warnings that occurred when processig this specific value.
+     *
+     * This method is most effective if it is called last when interacting with
+     * an item value.  Warnings are generated in the course of calling
+     * different methods, so they may not all exist until the accessor
+     * operations have been done already.
+     *
+     * @return List of String objects containing any warning messages.  This
+     * list may be empty and will never be null.
+     *
+     */
+
+    public List<String> getWarnings() {
+
+        if ( itemValueObj_ == null ) {
+            return new ArrayList<>();
+        }
+
+        return itemValueObj_.getWarnings();
+
     }
 
     /** Retrieve the value that is associated with this Parameter/Argument
