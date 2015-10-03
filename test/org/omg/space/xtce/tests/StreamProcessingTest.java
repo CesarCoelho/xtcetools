@@ -342,6 +342,48 @@ public class StreamProcessingTest {
     }
 
     @Test
+    public void calculateCompatibilitySimpleStream() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        String containerName =
+            "/BogusSAT/SC001/Onboard_Tables/Calibration_Offsets";
+
+        String binFilename =
+            "src/org/omg/space/xtce/database/Container-Calibration_Offsets.bin";
+
+        try {
+
+            BitSet packetBits = readBytesFromFile( binFilename );
+
+            XTCETMContainer container = db_.getContainer( containerName );
+
+            XTCEContainerContentModel model =
+                new XTCEContainerContentModel( container,
+                                               db_.getSpaceSystemTree(),
+                                               null,
+                                               false );
+
+            Assert.assertTrue( "Processing " + containerName +
+                               " should have been valid ",
+                               model.isValid() == true );
+
+            Assert.assertTrue( "Binary should have been compatible (true)",
+                               model.isProcessingCompatible( packetBits ) );
+
+            assertOnWarnings( model );
+
+        } catch ( Exception ex ) {
+            //ex.printStackTrace();
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+    }
+
+    @Test
     public void processContainerWithInheritance() {
 
         final String methodName =
@@ -434,6 +476,47 @@ public class StreamProcessingTest {
     }
 
     @Test
+    public void calculateCompatibilityContainerWithInheritance() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        String containerName = "/BogusSAT/SC001/CCSDS_SpacePacket1";
+
+        String binFilename =
+            "src/org/omg/space/xtce/database/Container-CCSDS_SpacePacket1.bin";
+
+        try {
+
+            BitSet packetBits = readBytesFromFile( binFilename );
+
+            XTCETMContainer container = db_.getContainer( containerName );
+
+            XTCEContainerContentModel model =
+                new XTCEContainerContentModel( container,
+                                               db_.getSpaceSystemTree(),
+                                               null,
+                                               false );
+
+            Assert.assertTrue( "Processing " + containerName +
+                               " should have been valid ",
+                               model.isValid() == true );
+
+            Assert.assertTrue( "Binary should have been compatible (true)",
+                               model.isProcessingCompatible( packetBits ) );
+
+            assertOnWarnings( model );
+
+        } catch ( Exception ex ) {
+            //ex.printStackTrace();
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+    }
+
+    @Test
     public void processContainerWithWrongInheritance() {
 
         final String methodName =
@@ -456,6 +539,46 @@ public class StreamProcessingTest {
 
             Assert.fail( "Processing CCSDS-TM should have been invalid " +
                          "with file " + binFilename );
+
+        } catch ( Exception ex ) {
+            // expect to get an exception here
+        }
+
+    }
+
+    @Test
+    public void calculateCompatibilityContainerWithWrongInheritance() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        String containerName = "/BogusSAT/SC001/CCSDS_SpacePacket1";
+
+        String binFilename =
+            "src/org/omg/space/xtce/database/Container-CCSDS_SpacePacket1-Bad.bin";
+
+        try {
+
+            BitSet packetBits = readBytesFromFile( binFilename );
+
+            XTCETMContainer container = db_.getContainer( containerName );
+
+            XTCEContainerContentModel model =
+                new XTCEContainerContentModel( container,
+                                               db_.getSpaceSystemTree(),
+                                               null,
+                                               false );
+
+            Assert.assertTrue( "Processing " + containerName +
+                               " should have been valid ",
+                               model.isValid() == true );
+
+            Assert.assertFalse( "Binary should NOT have been compatible (false)",
+                                model.isProcessingCompatible( packetBits ) );
+
+            assertOnWarnings( model );
 
         } catch ( Exception ex ) {
             // expect to get an exception here
@@ -579,6 +702,47 @@ public class StreamProcessingTest {
             Assert.assertTrue( "Container parameter count of " + containerName + " is " +
                 Long.toString( items ) + " but should be 23 items",
                 items == 23 );
+
+            assertOnWarnings( model );
+
+        } catch ( Exception ex ) {
+            //ex.printStackTrace();
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+    }
+
+    @Test
+    public void calculateCompatibilityContainerWithInheritanceAndIncludesFalse() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        String containerName = "/BogusSAT/SC001/ECSS_SpacePacket2";
+
+        String binFilename =
+            "src/org/omg/space/xtce/database/Container-ECSS_3_25_HK-ECSS_SpacePacket2-NoInc.bin";
+
+        try {
+
+            BitSet packetBits = readBytesFromFile( binFilename );
+
+            XTCETMContainer container = db_.getContainer( containerName );
+
+            XTCEContainerContentModel model =
+                new XTCEContainerContentModel( container,
+                                               db_.getSpaceSystemTree(),
+                                               null,
+                                               false );
+
+            Assert.assertTrue( "Processing " + containerName +
+                               " should have been valid ",
+                               model.isValid() == true );
+
+            Assert.assertTrue( "Binary should have been compatible (true)",
+                               model.isProcessingCompatible( packetBits ) );
 
             assertOnWarnings( model );
 
@@ -715,20 +879,39 @@ public class StreamProcessingTest {
 
     }
 
-/*
     @Test
-    public void checkContainerHashMap() {
+    public void calculateCompatibilityContainerWithInheritanceAndIncludesTrue() {
 
         final String methodName =
             Thread.currentThread().getStackTrace()[1].getMethodName();
 
         System.out.println( "Test Case: " + methodName + "()" );
 
+        String containerName = "/BogusSAT/SC001/ECSS_SpacePacket2";
+
+        String binFilename =
+            "src/org/omg/space/xtce/database/Container-ECSS_3_25_HK-ECSS_SpacePacket2-Inc.bin";
+
         try {
 
-            XTCETMStream stream = db_.getStream( "CCSDS-TM" );
+            BitSet packetBits = readBytesFromFile( binFilename );
 
-            stream.printHashMap();
+            XTCETMContainer container = db_.getContainer( containerName );
+
+            XTCEContainerContentModel model =
+                new XTCEContainerContentModel( container,
+                                               db_.getSpaceSystemTree(),
+                                               null,
+                                               false );
+
+            Assert.assertTrue( "Processing " + containerName +
+                               " should have been valid ",
+                               model.isValid() == true );
+
+            Assert.assertTrue( "Binary should have been compatible (true)",
+                               model.isProcessingCompatible( packetBits ) );
+
+            assertOnWarnings( model );
 
         } catch ( Exception ex ) {
             //ex.printStackTrace();
@@ -736,7 +919,116 @@ public class StreamProcessingTest {
         }
 
     }
-*/
+
+    @Test
+    public void process40000Packets() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        String binFilename =
+            "src/org/omg/space/xtce/database/Container-10000Packets.bin";
+
+        long startTime = System.currentTimeMillis();
+
+        try {
+
+            XTCETMStream stream = db_.getStream( "CCSDS-TM" );
+
+            File binFile = new File( binFilename );
+
+            InputStream fstream = new FileInputStream( binFile );
+
+            int byteValue;
+
+            XTCEContainerContentModel model;
+
+            for ( int iii = 0; iii < 10000; ++iii ) {
+
+                ByteArrayOutputStream buffer1 = new ByteArrayOutputStream();
+                ByteArrayOutputStream buffer2 = new ByteArrayOutputStream();
+                ByteArrayOutputStream buffer3 = new ByteArrayOutputStream();
+                ByteArrayOutputStream buffer4 = new ByteArrayOutputStream();
+
+                for ( int bbb = 0; bbb < 18; ++bbb ) {
+                    if ( ( byteValue = fstream.read() ) != -1 ) {
+                        buffer1.write( byteValue );
+                    }
+                }
+
+                for ( int bbb = 0; bbb < 15; ++bbb ) {
+                    if ( ( byteValue = fstream.read() ) != -1 ) {
+                        buffer2.write( byteValue );
+                    }
+                }
+
+                for ( int bbb = 0; bbb < 24; ++bbb ) {
+                    if ( ( byteValue = fstream.read() ) != -1 ) {
+                        buffer3.write( byteValue );
+                    }
+                }
+
+                for ( int bbb = 0; bbb < 26; ++bbb ) {
+                    if ( ( byteValue = fstream.read() ) != -1 ) {
+                        buffer4.write( byteValue );
+                    }
+                }
+
+                model = stream.processStream( buffer1.toByteArray() );
+
+                Assert.assertTrue( "Processing CCSDS-TM should have been valid " +
+                                   "with file " + binFilename + " packet 1 " +
+                                   " on iteration " + Integer.toString( iii ),
+                                   model.isValid() == true );
+
+                assertOnWarnings( model );
+
+                model = stream.processStream( buffer2.toByteArray() );
+
+                Assert.assertTrue( "Processing CCSDS-TM should have been valid " +
+                                   "with file " + binFilename + " packet 2 " +
+                                   " on iteration " + Integer.toString( iii ),
+                                   model.isValid() == true );
+
+                assertOnWarnings( model );
+
+                model = stream.processStream( buffer3.toByteArray() );
+
+                Assert.assertTrue( "Processing CCSDS-TM should have been valid " +
+                                   "with file " + binFilename + " packet 3 " +
+                                   " on iteration " + Integer.toString( iii ),
+                                   model.isValid() == true );
+
+                assertOnWarnings( model );
+
+                model = stream.processStream( buffer4.toByteArray() );
+
+                Assert.assertTrue( "Processing CCSDS-TM should have been valid " +
+                                   "with file " + binFilename + " packet 4 " +
+                                   " on iteration " + Integer.toString( iii ),
+                                   model.isValid() == true );
+
+                assertOnWarnings( model );
+
+                if ( iii % 1000 == 0 ) {
+                    System.out.println( String.format( "%06d", iii * 4 ) );
+                }
+
+            }
+
+        } catch ( Exception ex ) {
+            //ex.printStackTrace();
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+        long estimatedTime = System.currentTimeMillis() - startTime;
+
+        System.out.println( "Elapsed Time " +
+            Double.toString( estimatedTime / 1000.0 ) + " seconds" );
+
+    }
 
     private void checkEntry( XTCEContainerContentEntry entry,
                              String                    sizeInBits,

@@ -232,6 +232,8 @@ public class XTCETMContainer extends XTCENamedObject {
         return this.getInheritancePath().compareTo(((XTCETMContainer)that).getInheritancePath() );
     }
 
+    // Private Data Members
+
     private String                iPath_     = null;
     private SequenceContainerType container_ = null;
 

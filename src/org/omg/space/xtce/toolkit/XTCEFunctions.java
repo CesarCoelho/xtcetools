@@ -278,8 +278,6 @@ public class XTCEFunctions {
      * XTCE data model for containerRef, parameterRef, and argumentRef, amongst
      * others.
      *
-     * @todo This might be done a better way
-     *
      * @param filepath An XTCE style path reference string that contains the
      * Space System path leading up to the object of interest, such as a
      * Container, Parameter, or Argument, amongst others.
@@ -301,8 +299,6 @@ public class XTCEFunctions {
     /** This function is for stripping off object name from an XTCE path
      * reference from the data model for containerRef, parameterRef, and
      * argumentRef, amongst others.
-     *
-     * @todo This might be done a better way
      *
      * @param filepath An XTCE style path reference string that contains the
      * Space System path leading up to the object of interest, such as a

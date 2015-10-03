@@ -83,5 +83,20 @@ print FILE6 pack( "C3", 0x41, 0xa4, 0xce ); # Solar_Array_Voltage_1 = 5.0, 2 = 2
 
 close( FILE6 );
 
+if ( -f "Container-10000Packets.bin" ) {
+   system( "rm", "-f", "Container-10000Packets.bin" );
+}
+
+system( "touch", "Container-10000Packets.bin" );
+
+for ( my $iii = 0; $iii < 10000; ++$iii ) {
+
+   system( "cat Container-CCSDS_SpacePacket1.bin >> Container-10000Packets.bin" );
+   system( "cat Container-ECSS_Service_1_Subservice_1.bin >> Container-10000Packets.bin" );
+   system( "cat Container-ECSS_3_25_HK-ECSS_SpacePacket2-NoInc.bin >> Container-10000Packets.bin" );
+   system( "cat Container-ECSS_3_25_HK-ECSS_SpacePacket2-Inc.bin >> Container-10000Packets.bin" );
+
+}
+
 exit( 0 );
 

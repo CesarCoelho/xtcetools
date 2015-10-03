@@ -927,7 +927,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
      * are locally defined in this Space System, modeled as XTCETelecommand
      * objects.
      *
-     * @todo Figure out the rest of the error handling model for this.
+     * TODO: Figure out the rest of the error handling model for this.
      *
      * @return List of XTCETelecommand objects representing the commands
      * that are modeled by this Space System or an empty list if the Space

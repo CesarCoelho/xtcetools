@@ -57,7 +57,8 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
     public XTCEContainerContentModel( XTCETMContainer               container,
                                       List<XTCESpaceSystem>         spaceSystems,
                                       List<XTCEContainerEntryValue> userValues,
-                                      boolean                       showAllConditions ) throws XTCEDatabaseException {
+                                      boolean                       showAllConditions )
+        throws XTCEDatabaseException {
 
         super( spaceSystems, userValues, null, showAllConditions );
         container_          = container;
@@ -86,9 +87,10 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
      *
      */
 
-    public XTCEContainerContentModel( XTCETMContainer               container,
-                                      List<XTCESpaceSystem>         spaceSystems,
-                                      BitSet                        binaryData ) throws XTCEDatabaseException {
+    public XTCEContainerContentModel( XTCETMContainer       container,
+                                      List<XTCESpaceSystem> spaceSystems,
+                                      BitSet                binaryData )
+        throws XTCEDatabaseException {
 
         super( spaceSystems, null, binaryData, false );
         container_          = container;
@@ -142,12 +144,44 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
 
     }
 
+    public final boolean isProcessingCompatible( BitSet rawBits )
+        throws XTCEDatabaseException {
+
+        if ( contentList_.isEmpty() == true ) {
+            processContainer();
+        }
+
+        boolean matches = true;
+
+        List<XTCEContainerContentEntry> entries = getContentList();
+
+        for ( XTCEContainerContentEntry entry : entries ) {
+            XTCEContainerEntryValue valueObj = entry.getValue();
+            if ( ( valueObj                                      != null  ) &&
+                 ( valueObj.toStringWithoutParameter().isEmpty() == false ) ) {
+                //System.out.println( valueObj.toString() );
+                BitSet raw = valueObj.getRawValue();
+                int    sb  = Integer.parseInt( entry.getStartBit() );
+                int    nb  = Integer.parseInt( entry.getRawSizeInBits() );
+                for ( int iii = 0; iii < nb; ++iii ) {
+                    if ( rawBits.get( sb + nb - 1 - iii ) != raw.get( iii ) ) {
+                        matches = false;
+                    }
+                }
+            }
+        }
+
+        return matches;
+
+    }
+
     private void applyCompleteContainer(  XTCETMContainer           currentContainer,
                                           RunningStartBit           currentStartBit,
                                           long                      containerStartBit,
                                           MatchCriteriaType         parentRestrictions,
                                           String                    parentSpaceSystem,
-                                          XTCEContainerContentEntry includedContainer ) throws XTCEDatabaseException {
+                                          XTCEContainerContentEntry includedContainer )
+        throws XTCEDatabaseException {
 
         long containerStartIndex = contentList_.size() - 1;
 
@@ -167,7 +201,8 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
                                      long                      containerStartBit,
                                      MatchCriteriaType         parentRestrictions,
                                      String                    parentSpaceSystem,
-                                     XTCEContainerContentEntry includedContainer ) throws XTCEDatabaseException {
+                                     XTCEContainerContentEntry includedContainer )
+        throws XTCEDatabaseException {
 
         BaseContainer baseContainerRef =
             currentContainer.getSequenceContainerReference().getBaseContainer();
@@ -212,7 +247,8 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
     private void applyCurrentContainer( XTCETMContainer           container,
                                         RunningStartBit           currentStartBit,
                                         long                      containerStartBit,
-                                        XTCEContainerContentEntry includedContainer ) throws XTCEDatabaseException {
+                                        XTCEContainerContentEntry includedContainer )
+        throws XTCEDatabaseException {
 
         //System.out.println( "Processing " + container.getInheritancePath() );
 
@@ -296,7 +332,8 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
                                RunningStartBit               currentStartBit,
                                long                          containerStartBit,
                                XTCETMContainer               holdingContainer,
-                               List<XTCEContainerEntryValue> includedConditionsList ) throws XTCEDatabaseException {
+                               List<XTCEContainerEntryValue> includedConditionsList )
+        throws XTCEDatabaseException {
 
         String nameRef = entry.getContainerRef();
         //System.out.println( "Identified Container " +
@@ -373,7 +410,8 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
                                RunningStartBit               currentStartBit,
                                long                          containerStartBit,
                                XTCETMContainer               container,
-                               List<XTCEContainerEntryValue> includedConditionsList ) throws XTCEDatabaseException {
+                               List<XTCEContainerEntryValue> includedConditionsList )
+        throws XTCEDatabaseException {
 
         String nameRef = pRefEntry.getParameterRef();
         //System.out.println( "Identified Parameter " +
@@ -442,7 +480,8 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
     private void addMembers( XTCEParameter             parameter,
                              RunningStartBit           currentStartBit,
                              XTCETMContainer           container,
-                             XTCEContainerContentEntry parentContentEntry ) throws XTCEDatabaseException {
+                             XTCEContainerContentEntry parentContentEntry )
+        throws XTCEDatabaseException {
 
         List<AggregateDataType.MemberList.Member> members =
             ((AggregateDataType)parameter.getTypeReference()).getMemberList().getMember();

@@ -11,9 +11,10 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 import org.omg.space.xtce.database.AliasSetType;
 import org.omg.space.xtce.database.DescriptionType.AncillaryDataSet;
 import org.omg.space.xtce.database.FixedFrameStreamType;
@@ -84,17 +85,18 @@ public class XTCETMStream extends XTCENamedObject {
 
         rootContainer_ = db_.getContainer( sPath );
 
-        streamContainers_ = new ArrayList<>();
+        streamContainers_ = new TreeMap<>();
 
         String iPath = getStreamRootContainer().getInheritancePath();
 
         for ( XTCESpaceSystem ss : db.getSpaceSystemTree() ) {
-            streamContainers_.addAll( ss.getInheritingContainers( iPath ) );
+            List<XTCETMContainer> containers =
+                ss.getInheritingContainers( iPath );
+            for ( XTCETMContainer container : containers ) {
+                streamContainers_.put( container, null );
+                //System.out.println( "Adding Container " + container.getName() );
+            }
         }
-
-        Collections.sort( streamContainers_ );
-
-        // buildHashMap();
 
     }
 
@@ -140,7 +142,16 @@ public class XTCETMStream extends XTCENamedObject {
      */
 
     public List<XTCETMContainer> getContainers() {
-        return streamContainers_;
+
+        Set<XTCETMContainer>  containers = streamContainers_.keySet();
+        List<XTCETMContainer> sorted     = new ArrayList<>();
+
+        //System.out.println( "Count: " + Long.toString( containers.size() ) );
+        sorted.addAll( containers );
+        Collections.sort( sorted );
+
+        return sorted;
+
     }
 
     /** Function to decompose a binary data stream into a simple array of
@@ -163,19 +174,29 @@ public class XTCETMStream extends XTCENamedObject {
     public XTCEContainerContentModel processStream( BitSet binaryData )
         throws XTCEDatabaseException {
 
-        for ( XTCETMContainer container : streamContainers_ ) {
+        for ( XTCETMContainer container : streamContainers_.keySet() ) {
 
             if ( container.isAbstract() == true ) {
                 continue;
             }
 
-            XTCEContainerContentModel model =
-                new XTCEContainerContentModel( container,
-                                               db_.getSpaceSystemTree(),
-                                               binaryData );
+            XTCEContainerContentModel model;
 
-            if ( model.isValid() == true ) {
-                return model;
+            if ( ( model = streamContainers_.get( container ) ) == null ) {
+
+                model = new XTCEContainerContentModel( container,
+                                                       db_.getSpaceSystemTree(),
+                                                       null,
+                                                       false );
+
+                streamContainers_.put( container, model );
+
+            }
+
+            if ( model.isProcessingCompatible( binaryData ) == true ) {
+                return new XTCEContainerContentModel( container,
+                                                      db_.getSpaceSystemTree(),
+                                                      binaryData );
             }
 
         }
@@ -251,126 +272,13 @@ public class XTCETMStream extends XTCENamedObject {
         return processStream( buffer.toByteArray() );
 
     }
-/*
-    public XTCETMContainer identifyContainer( BitSet rawBits ) {
-
-        return null;
-
-    }
-
-    public XTCETMContainer identifyContainer( byte[] rawBytes ) {
-
-        BitSet bits = XTCEFunctions.getBitSetFromStreamByteArray( rawBytes );
-
-        return identifyContainer( bits );
-
-    }
-
-    public XTCETMContainer identifyContainer( InputStream stream ) throws XTCEDatabaseException {
-
-        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-        int byteValue;
-
-        try {
-            while ( ( byteValue = stream.read() ) != -1 ) {
-                buffer.write( byteValue );
-            }
-        } catch ( Exception ex ) {
-            throw new XTCEDatabaseException( ex.getLocalizedMessage() );
-        }
-
-        return identifyContainer( buffer.toByteArray() );
-
-    }
-
-    public void printHashMap() {
-
-        Map<XTCETMContainer,
-                    Map<XTCETMContainer,
-                        List<XTCETMContainer>>> map = containerMap_;
-
-        for ( XTCETMContainer container : map.keySet() ) {
-            System.out.println( "Top Key: " + container.getInheritancePath() );
-            printParentKey( map.get( container ), container );
-        }
-
-    }
-
-    private void printParentKey( Map<XTCETMContainer, List<XTCETMContainer>> map,
-                                 XTCETMContainer                             keyContainer ) {
-
-        for ( XTCETMContainer container : map.keySet() ) {
-            System.out.println( "Key: " + container.getInheritancePath() );
-            List<XTCETMContainer> children = map.get( container );
-            printChildList( children );
-        }
-
-    }
-
-    private void printChildList( List<XTCETMContainer> children ) {
-
-        for ( XTCETMContainer child : children ) {
-            System.out.println( "   List Contains: " +
-                                child.getInheritancePath() );
-        }
-
-    }
-
-    private void buildHashMap() {
-
-        containerMap_ = new HashMap<>();
-
-        XTCETMContainer rootContainer = getStreamRootContainer();
-
-        Map<XTCETMContainer,
-            List<XTCETMContainer>> rootContent = new HashMap<>();
-
-        List<XTCETMContainer> children = new ArrayList<>();
-
-        containerMap_.put( rootContainer, rootContent );
-
-        applyContainerToHashMap( rootContainer, rootContent, children );
-
-    }
-
-    private void applyContainerToHashMap( XTCETMContainer                             currentContainer,
-                                          Map<XTCETMContainer, List<XTCETMContainer>> contentMap,
-                                          List<XTCETMContainer>                       contentList ) {
-
-        String currentIPath = currentContainer.getInheritancePath();
-
-        for ( XTCETMContainer container : streamContainers_ ) {
-            String containerIPath = container.getInheritancePath();
-            if ( containerIPath.equals( currentIPath ) == true ) {
-                continue;
-            } else if ( containerIPath.startsWith( currentIPath + "/" ) == false ) { // should not happen?
-                continue;
-            }
-            contentMap.put( container, contentList );
-            String test = containerIPath.replaceFirst( currentIPath, "" );
-            if ( test.lastIndexOf( "/" ) > 0 ) {
-                contentList.add( container );
-                Map<XTCETMContainer, List<XTCETMContainer>> newContent = new HashMap<>();
-                List<XTCETMContainer> children = new ArrayList<>();
-                applyContainerToHashMap( container, newContent, children );
-            }
-        }
-
-    }
-*/
 
     // Private Data Members
 
-    private final PCMStreamType         stream_;
-    private final XTCETMContainer       rootContainer_;
-    private final XTCEDatabase          db_;
-    private final List<XTCETMContainer> streamContainers_;
+    private final PCMStreamType   stream_;
+    private final XTCETMContainer rootContainer_;
+    private final XTCEDatabase    db_;
 
-/*
-    private Map<XTCETMContainer,
-                    Map<XTCETMContainer,
-                        List<XTCETMContainer>>> containerMap_;
-
-*/
+    private Map<XTCETMContainer, XTCEContainerContentModel> streamContainers_;
 
 }

@@ -208,7 +208,7 @@ public abstract class XTCETypedObject extends XTCENamedObject {
      * Not all types have an associated unit.  Arrays, Structures/Aggregates,
      * do not.
      *
-     * @todo Add Absolute/Relative time unit support.
+     * TODO: Add Absolute/Relative time unit support.
      *
      * <b>
      * This function currently only supports 1 Unit element in the

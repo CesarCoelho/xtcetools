@@ -3764,12 +3764,12 @@ public class XTCEViewer extends javax.swing.JFrame {
             tmStreamContentTree.setCellRenderer( new XTCEViewerContainerTreeCellRenderer() );
 
             for ( XTCETMContainer container : containers ) {
-                System.out.println( "Container " +
-                                    container.getName() +
-                                    " IPath " +
-                                    container.getInheritancePath() +
-                                    " CPath " +
-                                    container.getFullPath() );
+                //System.out.println( "Container " +
+                //                    container.getName() +
+                //                    " IPath " +
+                //                    container.getInheritancePath() +
+                //                    " CPath " +
+                //                    container.getFullPath() );
                 String[] fields =
                     container.getInheritancePath().split( "/" ); // NOI18N
                 XTCEViewerContainerTreeNode obj = rootObj;
