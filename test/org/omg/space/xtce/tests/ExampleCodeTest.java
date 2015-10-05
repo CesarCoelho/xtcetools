@@ -72,7 +72,7 @@ public class ExampleCodeTest {
         }
 
     }
-
+/*
     @Test
     public void testProcessContainerExample() {
 
@@ -89,8 +89,6 @@ public class ExampleCodeTest {
             ProcessBuilder proc = new ProcessBuilder( 
                 "java",
                 "-classpath",
-                //cwd + "/build/classes/org/omg/space/xtce/examples:" +
-                //cwd + "/build/classes/org/omg/space/xtce/toolkit:" +
                 "dist/XTCETools.jar",
                 "org.omg.space.xtce.examples.ProcessContainerExample",
                 "src/org/omg/space/xtce/database/BogusSAT-2.xml" );
@@ -103,7 +101,7 @@ public class ExampleCodeTest {
         }
 
     }
-
+*/
     private void run( ProcessBuilder proc ) throws IOException, InterruptedException {
 
         proc.redirectErrorStream( true );
