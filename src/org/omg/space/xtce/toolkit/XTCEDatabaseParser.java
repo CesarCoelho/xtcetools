@@ -110,6 +110,10 @@ public abstract class XTCEDatabaseParser {
     /** Retrieve the list of warnings and errors that were collected during
      * parsing of the XTCE document by the SAX parser.
      *
+     * @return List of strings that contain the warnings/errors when processing
+     * a document, or an empty list if there are none.  The return will never
+     * be null.
+     *
      */
 
     public List<String> getDocumentWarnings( ) {
@@ -215,7 +219,8 @@ public abstract class XTCEDatabaseParser {
      *
      */
 
-    protected SpaceSystemType newDatabase( String spaceSystemName ) throws XTCEDatabaseException {
+    protected SpaceSystemType newDatabase( String spaceSystemName )
+        throws XTCEDatabaseException {
 
         // TODO check on cleanup within the catch of this function.
 
@@ -282,6 +287,8 @@ public abstract class XTCEDatabaseParser {
      * be constructed.  This is needed for round trip editing, but it is slower
      * than just the pure JAXB implementation.
      *
+     * @return SpaceSystemType XTCE document element that was loaded.
+     *
      * @throws XTCEDatabaseException thrown in the event that the document
      * cannot be read or is not sufficiently valid to complete construction of
      * the internal data model.
@@ -291,7 +298,8 @@ public abstract class XTCEDatabaseParser {
     protected SpaceSystemType loadDatabase( File    dbFile,
                                             boolean validateOnLoad,
                                             boolean applyXIncludes,
-                                            boolean readOnly ) throws XTCEDatabaseException {
+                                            boolean readOnly )
+        throws XTCEDatabaseException {
 
         String path = null;
 
@@ -339,6 +347,8 @@ public abstract class XTCEDatabaseParser {
      * be constructed.  This is needed for round trip editing, but it is slower
      * than just the pure JAXB implementation.
      *
+     * @return SpaceSystemType XTCE document element that was loaded.
+     *
      * @throws XTCEDatabaseException thrown in the event that the document
      * cannot be read or is not sufficiently valid to complete construction of
      * the internal data model.
@@ -348,7 +358,8 @@ public abstract class XTCEDatabaseParser {
     protected SpaceSystemType loadDatabase( URL     dbLocation,
                                             boolean validateOnLoad,
                                             boolean applyXIncludes,
-                                            boolean readOnly ) throws XTCEDatabaseException {
+                                            boolean readOnly )
+        throws XTCEDatabaseException {
 
         try {
 
@@ -392,6 +403,8 @@ public abstract class XTCEDatabaseParser {
      * be constructed.  This is needed for round trip editing, but it is slower
      * than just the pure JAXB implementation.
      *
+     * @return SpaceSystemType XTCE document element that was loaded.
+     *
      * @throws XTCEDatabaseException thrown in the event that the document
      * cannot be read or is not sufficiently valid to complete construction of
      * the internal data model.
@@ -402,7 +415,8 @@ public abstract class XTCEDatabaseParser {
                                             String      path,
                                             boolean     validateOnLoad,
                                             boolean     applyXIncludes,
-                                            boolean     readOnly ) throws XTCEDatabaseException {
+                                            boolean     readOnly )
+        throws XTCEDatabaseException {
 
         try {
             jaxbContext_ =
@@ -453,7 +467,8 @@ public abstract class XTCEDatabaseParser {
     private SpaceSystemType loadReadOnlyDatabase( InputStream dbStream,
                                                   String      path,
                                                   boolean     validateOnLoad,
-                                                  boolean     applyXIncludes ) throws XTCEDatabaseException {
+                                                  boolean     applyXIncludes )
+        throws XTCEDatabaseException {
 
         String currentDir = System.getProperty( "user.dir" ); // NOI18N
 
@@ -540,7 +555,8 @@ public abstract class XTCEDatabaseParser {
     private SpaceSystemType loadEditableDatabase( InputStream dbStream,
                                                   String      path,
                                                   boolean     validateOnLoad,
-                                                  boolean     applyXIncludes ) throws XTCEDatabaseException {
+                                                  boolean     applyXIncludes )
+        throws XTCEDatabaseException {
 
         String currentDir = System.getProperty( "user.dir" ); // NOI18N
 
@@ -606,7 +622,8 @@ public abstract class XTCEDatabaseParser {
     protected void saveDatabase( File dbFile ) throws XTCEDatabaseException {
 
         if ( isReadOnly() == true ) {
-            throw new XTCEDatabaseException( XTCEFunctions.getText( "error_isreadonly" ) ); // NOI18N
+            throw new XTCEDatabaseException(
+                XTCEFunctions.getText( "error_isreadonly" ) ); // NOI18N
         }
 
         try {
@@ -643,7 +660,8 @@ public abstract class XTCEDatabaseParser {
     protected Element getDocumentElement() throws XTCEDatabaseException {
 
         if ( isReadOnly() == true ) {
-            throw new XTCEDatabaseException( XTCEFunctions.getText( "error_isreadonly" ) ); // NOI18N
+            throw new XTCEDatabaseException(
+                XTCEFunctions.getText( "error_isreadonly" ) ); // NOI18N
         }
 
         return domDocumentRoot_.getDocumentElement();

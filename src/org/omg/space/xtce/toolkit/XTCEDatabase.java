@@ -203,8 +203,8 @@ public final class XTCEDatabase extends XTCEDatabaseParser {
     public NodeList evaluateXPathQuery( String query ) throws XTCEDatabaseException {
 
         if ( isReadOnly() == true ) {
-            String message = "XPath cannot be used when loading Read-Only";
-            throw new XTCEDatabaseException( message );
+            throw new XTCEDatabaseException(
+                XTCEFunctions.getText( "error_xpath_readonly" ) ); // NOI18N
         }
 
         XPath xpath = XPathFactory.newInstance().newXPath();
@@ -237,7 +237,8 @@ public final class XTCEDatabase extends XTCEDatabaseParser {
     public void save( File dbFile ) throws XTCEDatabaseException {
 
         if ( getChanged() == false ) {
-            throw new XTCEDatabaseException( "No changes to save" );
+            throw new XTCEDatabaseException(
+                XTCEFunctions.getText( "error_save_nochange" ) ); // NOI18N
         }
 
         saveDatabase( dbFile );
@@ -684,8 +685,8 @@ public final class XTCEDatabase extends XTCEDatabaseParser {
 
         } catch ( NullPointerException ex ) {
             throw new XTCEDatabaseException(
-                XTCEFunctions.getText( "dialog_nolocatespacesystem_text" ) +
-                " '" + contPath + "'" );
+                XTCEFunctions.getText( "dialog_nolocatespacesystem_text" ) + // NOI18N
+                " '" + contPath + "'" ); // NOI18N
         }
 
     }
@@ -745,6 +746,8 @@ public final class XTCEDatabase extends XTCEDatabaseParser {
      * Similar functions exist on the XTCESpaceSystem objects.  This one is
      * intended to search the entire contents of the XTCE database file.
      *
+     * @param name String containing a specific stream name to locate.
+     *
      * @return XTCETMStream object if it exists in the document
      *
      * @throws XTCEDatabaseException in the event that the stream does not
@@ -764,7 +767,9 @@ public final class XTCEDatabase extends XTCEDatabaseParser {
 
        }
        
-       throw new XTCEDatabaseException( "Cannot locate stream '" + name + "'" );
+       throw new XTCEDatabaseException(
+            XTCEFunctions.getText( "error_stream_notfound" ) + // NOI18N
+            ": '" + name + "'" ); // NOI18N
 
     }
 

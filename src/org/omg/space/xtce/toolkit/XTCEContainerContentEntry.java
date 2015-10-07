@@ -339,13 +339,13 @@ public class XTCEContainerContentEntry implements Comparable {
     public String getEntryTypeString() {
         switch ( fieldType ) {
             case PARAMETER:
-                return "Parameter";
+                return "Parameter"; // NOI18N
             case ARGUMENT:
-                return "Argument";
+                return "Argument"; // NOI18N
             case CONTAINER:
-                return "Container";
+                return "Container"; // NOI18N
             case CONSTANT:
-                return "Constant";
+                return "Constant"; // NOI18N
         }
         return "";
     }
@@ -462,8 +462,8 @@ public class XTCEContainerContentEntry implements Comparable {
 
     public void setValue( ComparisonType compare ) {
 
-        String valueForm = ( compare.isUseCalibratedValue() ? "Calibrated" :
-                                                              "Uncalibrated" );
+        String valueForm = ( compare.isUseCalibratedValue() ? "Calibrated" : // NOI18N
+                                                              "Uncalibrated" ); // NOI18N
 
         entryValue = new XTCEContainerEntryValue( pReference,
                                                   compare.getValue(),
@@ -484,8 +484,8 @@ public class XTCEContainerContentEntry implements Comparable {
 
         entryValue = new XTCEContainerEntryValue( aReference,
                                                   argAssign.getArgumentValue(),
-                                                  "==",
-                                                  "Calibrated" );
+                                                  "==", // NOI18N
+                                                  "Calibrated" ); // NOI18N
 
     }
 
@@ -598,8 +598,8 @@ public class XTCEContainerContentEntry implements Comparable {
 
         String operator  = compare.getComparisonOperator();
         String value     = compare.getValue();
-        String valueForm = ( compare.isUseCalibratedValue() ? "Calibrated" :
-                                                              "Uncalibrated" );
+        String valueForm = ( compare.isUseCalibratedValue() ? "Calibrated" : // NOI18N
+                                                              "Uncalibrated" ); // NOI18N
 
         conditions.add( new XTCEContainerEntryValue( parameter,
                                                      value,

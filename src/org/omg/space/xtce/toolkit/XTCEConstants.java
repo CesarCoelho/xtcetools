@@ -44,7 +44,8 @@ public class XTCEConstants {
      *
      */
 
-    public static final String DEFAULT_SCHEMA_FILE = "SpaceSystemV1.2-27Feb2014-mods.xsd";
+    public static final String DEFAULT_SCHEMA_FILE =
+        "SpaceSystemV1.2-27Feb2014-mods.xsd";
 
     /** The URL representing the XTCE XML namespace from the Object Management
      * Group (OMG).
@@ -53,7 +54,8 @@ public class XTCEConstants {
      *
      */
 
-    public static final String XTCE_NAMESPACE      = "http://www.omg.org/space/xtce";
+    public static final String XTCE_NAMESPACE =
+        "http://www.omg.org/space/xtce";
 
     /** The Java Package declaration for the generated classes from the XTCE
      * schema.
@@ -63,6 +65,7 @@ public class XTCEConstants {
      *
      */
 
-    public static final String XTCE_PACKAGE        = "org.omg.space.xtce.database";
+    public static final String XTCE_PACKAGE =
+        "org.omg.space.xtce.database";
 
 }
