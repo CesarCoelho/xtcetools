@@ -899,7 +899,7 @@ public class XTCEViewerPreferences {
                 ++iii;
             }
             if ( iii == 0 ) {
-                return new ArrayList<String>();
+                return new ArrayList<>();
             }
 
             byte pieces[][] = new byte[iii][];
@@ -921,7 +921,7 @@ public class XTCEViewerPreferences {
             System.out.println( "ClassNotFoundException: " + ex.getLocalizedMessage() );
         }
 
-        return new ArrayList<String>();
+        return new ArrayList<>();
 
     }
 

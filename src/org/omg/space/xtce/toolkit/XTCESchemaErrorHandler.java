@@ -238,15 +238,14 @@ public class XTCESchemaErrorHandler implements ErrorHandler,
 
     /// List of the message strings that have been gathered
 
-    private List<String> messages;
-
-    private final String skipMsg_    =
+    private final List<String> messages;
+    private final String       skipMsg_    =
         XTCEFunctions.getText( "xml_fallback_ignore" ); // NOI18N
-    private final String warningMsg_ =
+    private final String       warningMsg_ =
         XTCEFunctions.getText( "xml_schema_warning" ) + ": "; // NOI18N
-    private final String errorMsg_   =
+    private final String       errorMsg_   =
         XTCEFunctions.getText( "xml_schema_error" ) + ": "; // NOI18N
-    private final String fatalMsg_   =
+    private final String       fatalMsg_   =
         XTCEFunctions.getText( "xml_schema_fatal" ) + ": "; // NOI18N
 
 }

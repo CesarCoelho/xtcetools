@@ -368,7 +368,7 @@ public class ParsingTest {
             List<String> messages =
                 XTCEDatabase.validateDocument( new File( file ), false );
 
-            if ( messages.size() == 0 ) {
+            if ( messages.isEmpty() == true ) {
                 Assert.fail( "Expected errors loading " + file );
             } else {
                 for ( String message : messages ) {
@@ -403,7 +403,7 @@ public class ParsingTest {
             List<String> messages =
                 XTCEDatabase.validateDocument( new File( file ), false );
 
-            if ( messages.size() == 0 ) {
+            if ( messages.isEmpty() == true ) {
                 Assert.fail( "Expected errors loading " + file );
             } else {
                 for ( String message : messages ) {

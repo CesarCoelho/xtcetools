@@ -175,7 +175,8 @@ abstract class XTCEContainerContentModelBase {
      *
      */
 
-    public BitSet extractRawValue( XTCEContainerContentEntry currentEntry ) throws XTCEDatabaseException {
+    public BitSet extractRawValue( XTCEContainerContentEntry currentEntry )
+        throws XTCEDatabaseException {
 
         BitSet result;
         int    bitLength;
@@ -432,20 +433,51 @@ abstract class XTCEContainerContentModelBase {
 
         String paramFullPath = item.getFullPath();
 
-        for ( XTCEContainerEntryValue valueObj : userValues_ ) {
-            if ( valueObj.getItemFullPath().equals( paramFullPath ) == true ) {
-                if ( valueObj.getComparisonForm().equals( form ) == true ) {
-                    String setValue = valueObj.getAssignedValue();
+        for ( XTCEContainerContentEntry entry : contentList_ ) {
+
+            if ( ( entry.getEntryType() != FieldType.PARAMETER ) &&
+                 ( entry.getEntryType() != FieldType.ARGUMENT  ) ) {
+                continue;
+            }
+
+            XTCEContainerEntryValue valueObj = entry.getValue();
+
+            if ( entry.getValue() == null ) {
+                continue;
+            }
+
+            if ( entry.getItemFullPath().equals( paramFullPath ) == true ) {
+                if ( valueObj.getOperator().equals( "==" ) == true ) {
                     try {
-                        return Long.parseLong( setValue );
+                        return Long.parseLong( valueObj.getCalibratedValue() );
                     } catch ( NumberFormatException ex ) {
                         warnings_.add(
                             "Numeric count not valid for Dynamic Repeat '" +
-                            setValue + "' for " + item.getName() );
+                            valueObj.getCalibratedValue() +
+                            "' for " + item.getName() );
                     }
                 }
+                warnings_.add(
+                    "No value for Dynamic Repeat counter item '" +
+                    item.getName() + "', assuming just 1" );
+                return 1;
             }
+
         }
+        //for ( XTCEContainerEntryValue valueObj : userValues_ ) {
+        //    if ( valueObj.getItemFullPath().equals( paramFullPath ) == true ) {
+        //        if ( valueObj.getComparisonForm().equals( form ) == true ) {
+        //            String setValue = valueObj.getAssignedValue();
+        //            try {
+        //                return Long.parseLong( setValue );
+        //            } catch ( NumberFormatException ex ) {
+        //                warnings_.add(
+        //                    "Numeric count not valid for Dynamic Repeat '" +
+        //                    setValue + "' for " + item.getName() );
+        //            }
+        //        }
+        //    }
+        //}
 
         return 1;
 
@@ -664,7 +696,8 @@ abstract class XTCEContainerContentModelBase {
     }
 
     protected XTCETMContainer findContainer( String          containerRef,
-                                             XTCENamedObject currentContainer ) throws XTCEDatabaseException {
+                                             XTCENamedObject currentContainer )
+        throws XTCEDatabaseException {
 
         String currentSpaceSystemPath = currentContainer.getSpaceSystemPath();
         String containerPath = XTCEFunctions.resolvePathReference( currentSpaceSystemPath,
@@ -685,7 +718,8 @@ abstract class XTCEContainerContentModelBase {
     }
 
     protected XTCETelecommand findTelecommand( String          metaCommandRef,
-                                               XTCENamedObject currentContainer ) throws XTCEDatabaseException {
+                                               XTCENamedObject currentContainer )
+        throws XTCEDatabaseException {
 
         String currentSpaceSystemPath = currentContainer.getSpaceSystemPath();
         String containerPath = XTCEFunctions.resolvePathReference( currentSpaceSystemPath,
@@ -920,7 +954,7 @@ abstract class XTCEContainerContentModelBase {
 
     protected void checkForOverlaps() {
 
-        HashMap<Long, String> usageMap = new HashMap<Long, String>();
+        HashMap<Long, String> usageMap = new HashMap<>();
         for ( XTCEContainerContentEntry entry : contentList_ ) {
             if ( ( entry.getStartBit().isEmpty()      == false ) &&
                  ( entry.getRawSizeInBits().isEmpty() == false ) ) {
@@ -980,7 +1014,7 @@ abstract class XTCEContainerContentModelBase {
     /// Parameter Members at depth.
 
     protected HashMap<String, XTCESpaceSystem> spaceSystemsHashTable_ =
-        new HashMap<String, XTCESpaceSystem>();
+        new HashMap<>();
 
     /// Total Size of this container in bits
 

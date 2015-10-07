@@ -1503,6 +1503,7 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 try {
                     XTCEViewerParameterDetailDialog dialog = new XTCEViewerParameterDetailDialog(new javax.swing.JFrame(), true, null);

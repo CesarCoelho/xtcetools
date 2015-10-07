@@ -539,7 +539,7 @@ public class XTCEContainerContentEntry implements Comparable {
     public List<XTCEContainerEntryValue> getConditionList() {
 
         if ( conditions == null ) {
-            return new ArrayList<XTCEContainerEntryValue>();
+            return new ArrayList<>();
         }
 
         return conditions;
@@ -571,7 +571,7 @@ public class XTCEContainerContentEntry implements Comparable {
         }
 
         if ( conditions == null ) {
-            conditions = new ArrayList<XTCEContainerEntryValue>();
+            conditions = new ArrayList<>();
         }
 
         conditions.addAll( allConditions );
@@ -593,7 +593,7 @@ public class XTCEContainerContentEntry implements Comparable {
     public void setCondition( XTCEParameter parameter, ComparisonType compare ) {
 
         if ( conditions == null ) {
-            conditions = new ArrayList<XTCEContainerEntryValue>();
+            conditions = new ArrayList<>();
         }
 
         String operator  = compare.getComparisonOperator();

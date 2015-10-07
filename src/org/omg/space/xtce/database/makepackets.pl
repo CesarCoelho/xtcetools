@@ -40,6 +40,20 @@ print FILE2 pack( "C3", 0x4c, 0xe4, 0xce ); # Solar_Array_Voltage_1 = 23.0, 2 = 
 
 close( FILE2 );
 
+open( FILE7, ">Container-CCSDS_SpacePacket3.bin" );
+binmode( FILE7 );
+
+print FILE7 pack( "n", 0x0003 ); # CCSDS_Packet_ID = TM, NotPresent, APID 1
+print FILE7 pack( "n", 0xceca ); # CCSDS_Packet_Sequence with standalone
+print FILE7 pack( "n", 0x0013 ); # CCSDS_Packet_Length = 19 (payload - 1)
+print FILE7 pack( "N", 0x00000001 ); # Basic_string_uint32 = 1
+print FILE7 pack( "N", 0x00000000 ); # Basic_string_uint32 = 0
+print FILE7 pack( "N", 0x0000ffff ); # Basic_string_uint32 = 65535
+print FILE7 pack( "N", 0x00005555 ); # Basic_string_uint32 = 21845
+print FILE7 pack( "N", 0x00001000 ); # Basic_string_uint32 = 4096
+
+close( FILE7 );
+
 open( FILE4, ">Container-CCSDS_SpacePacket1-Bad.bin" );
 binmode( FILE4 );
 
@@ -64,6 +78,23 @@ print FILE3 pack( "n", 0x00ee ); # TC_Packet_ID
 print FILE3 pack( "n", 0x5555 ); # TC_Packet_Sequence_Control
 
 close( FILE3 );
+
+open( FILE8, ">Container-ECSS_Service_1_Subservice_2.bin" );
+binmode( FILE8 );
+
+print FILE8 pack( "n", 0x0864 ); # CCSDS_Packet_ID = TM, Present, APID 100
+print FILE8 pack( "n", 0xcec9 ); # CCSDS_Packet_Sequence with standalone
+print FILE8 pack( "n", 0x001b ); # CCSDS_Packet_Length = 27 (payload - 1)
+print FILE8 pack( "C5", 0x10, 0x01, 0x02, 0xfe, 0x02 ); # PUS_Data_Field_Header (1,1)
+print FILE8 pack( "n", 0x00aa ); # TC_Packet_ID
+print FILE8 pack( "n", 0x0101 ); # TC_Packet_Sequence_Control
+print FILE8 pack( "n", 0x0005 ); # TC_Accept_Failure_Code = INCONSISTENT_APPL_DATA
+print FILE8 pack( "C", 0x0010 ); # TC_Parameter_Count = 16
+for ( my $iii = 0; $iii < 16; ++$iii ) {
+   print FILE8 pack( "C", $iii ); # TC_Parameter_Data
+}
+
+close( FILE8 );
 
 open( FILE5, ">Container-ECSS_3_25_HK-ECSS_SpacePacket2-NoInc.bin" );
 binmode( FILE5 );
@@ -105,7 +136,9 @@ system( "touch", "Container-10000Packets.bin" );
 for ( my $iii = 0; $iii < 10000; ++$iii ) {
 
    system( "cat Container-CCSDS_SpacePacket1.bin >> Container-10000Packets.bin" );
+   system( "cat Container-CCSDS_SpacePacket3.bin >> Container-10000Packets.bin" );
    system( "cat Container-ECSS_Service_1_Subservice_1.bin >> Container-10000Packets.bin" );
+   system( "cat Container-ECSS_Service_1_Subservice_2.bin >> Container-10000Packets.bin" );
    system( "cat Container-ECSS_3_25_HK-ECSS_SpacePacket2-NoInc.bin >> Container-10000Packets.bin" );
    system( "cat Container-ECSS_3_25_HK-ECSS_SpacePacket2-Inc.bin >> Container-10000Packets.bin" );
 

@@ -713,13 +713,13 @@ public class DecodingTest {
                                  "0x3ff4000000000000" );
 
             errors += checkPass( "1.25",
-                                 (double)1.25 );
+                                 1.25 );
 
             errors += checkPass( "12.1",
                                  "0x4028333333333333" );
 
             errors += checkPass( "12.1",
-                                 (double)12.1 );
+                                 12.1 );
 
             errors += checkPass( "5.0",
                                  "0x4014000000000000" );
