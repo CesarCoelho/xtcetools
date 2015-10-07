@@ -72,9 +72,9 @@ public class XTCECcsdsCucTimeHandler implements XTCEAbsoluteTimeType {
      */
 
     public XTCECcsdsCucTimeHandler() {
-        isoTimeFmt_   = "yyyy-MM-dd HH:mm:ss.SSS";
-        timeZone_     = "GMT";
-        epoch_        = "1958-01-01";
+        isoTimeFmt_   = "yyyy-MM-dd HH:mm:ss.SSS"; // NOI18N
+        timeZone_     = "GMT"; // NOI18N
+        epoch_        = "1958-01-01"; // NOI18N
         numSecBytes_  = 4;
         numFracBytes_ = 3;
     }
@@ -110,15 +110,16 @@ public class XTCECcsdsCucTimeHandler implements XTCEAbsoluteTimeType {
         numSecBytes_  = numSecBytes;
         numFracBytes_ = numFracBytes;
 
-        if ( ( epoch == null ) || ( epoch.equals( "TAI" ) == true ) ) {
-            epoch_ = "1958-01-01";
+        if ( ( epoch == null ) || ( epoch.equals( "TAI" ) == true ) ) { // NOI18N
+            epoch_ = "1958-01-01"; // NOI18N
         } else {
             epoch_ = epoch;
         }
 
-        if ( epoch_.matches( "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" ) == false ) {
-            throw new RuntimeException( "Cannot register because the Epoch " +
-                "string '" + epoch_ + "' is not properly formatted." );
+        if ( epoch_.matches( "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" ) == false ) { // NOI18N
+            throw new RuntimeException(
+                XTCEFunctions.getText( "error_time_badepoch" ) + // NOI18N
+                ": '" + epoch_ + "'" ); // NOI18N
         }
 
     }
@@ -159,12 +160,12 @@ public class XTCECcsdsCucTimeHandler implements XTCEAbsoluteTimeType {
             Epoch epc = instance.getReferenceTime().getEpoch();
 
             String docEpoch = epc.getValue();
-            if ( docEpoch.equals( "TAI" ) == true ) {
-                docEpoch = "1958-01-01";
+            if ( docEpoch.equals( "TAI" ) == true ) { // NOI18N
+                docEpoch = "1958-01-01"; // NOI18N
             }
 
             return ( ( enc.getSizeInBits().longValue()        == bits ) &&
-                     ( enc.getEncoding().equals( "unsigned" ) == true ) &&
+                     ( enc.getEncoding().equals( "unsigned" ) == true ) && // NOI18N
                      ( docEpoch.equals( epoch_ )              == true ) );
 
         } catch ( NullPointerException ex ) {
@@ -194,7 +195,7 @@ public class XTCECcsdsCucTimeHandler implements XTCEAbsoluteTimeType {
 
         String hex = XTCEFunctions.bitSetToHex( rawValue,
                                                 numSecBytes_ + numFracBytes_ );
-        hex = hex.replaceFirst( "0x", "" );
+        hex = hex.replaceFirst( "0x", "" ); // NOI18N
         while ( hex.length() > ( 2 * ( numSecBytes_ + numFracBytes_ ) ) ) {
             hex = hex.substring( 1 );
         }
@@ -207,12 +208,12 @@ public class XTCECcsdsCucTimeHandler implements XTCEAbsoluteTimeType {
         BigInteger secs = new BigInteger( hex.substring( 0,    sPos ), 16 );
         BigInteger fsec = new BigInteger( hex.substring( sPos, tPos ), 16 );
 
-        BigDecimal exp  = new BigDecimal( "2" ).pow( numFracBytes_ * 8 );
+        BigDecimal exp  = new BigDecimal( "2" ).pow( numFracBytes_ * 8 ); // NOI18N
         BigDecimal frac = new BigDecimal( fsec ).divide( exp );
 
         frac = frac.multiply( oneMillion_ );
 
-        DateFormat format = new SimpleDateFormat( "yyyy-MM-dd" );
+        DateFormat format = new SimpleDateFormat( "yyyy-MM-dd" ); // NOI18N
         format.setTimeZone( TimeZone.getTimeZone( timeZone_ ) );
 
         secs = secs.multiply( oneThousand_ );
@@ -256,8 +257,8 @@ public class XTCECcsdsCucTimeHandler implements XTCEAbsoluteTimeType {
     public String getCalibratedFromUncalibrated( String uncalValue ) {
 
         BigInteger usecs = null;
-        if ( uncalValue.startsWith( "0x" ) == true ) {
-            usecs = new BigInteger( uncalValue.replaceFirst( "0x", "" ), 16 );
+        if ( uncalValue.startsWith( "0x" ) == true ) { // NOI18N
+            usecs = new BigInteger( uncalValue.replaceFirst( "0x", "" ), 16 ); // NOI18N
         } else {
             usecs = new BigInteger( uncalValue );
         }
@@ -292,8 +293,8 @@ public class XTCECcsdsCucTimeHandler implements XTCEAbsoluteTimeType {
     public BitSet getRawFromUncalibrated( String uncalValue ) {
 
         BigInteger usecs = null;
-        if ( uncalValue.startsWith( "0x" ) == true ) {
-            usecs = new BigInteger( uncalValue.replaceFirst( "0x", "" ), 16 );
+        if ( uncalValue.startsWith( "0x" ) == true ) { // NOI18N
+            usecs = new BigInteger( uncalValue.replaceFirst( "0x", "" ), 16 ); // NOI18N
         } else {
             usecs = new BigInteger( uncalValue );
         }
@@ -302,7 +303,7 @@ public class XTCECcsdsCucTimeHandler implements XTCEAbsoluteTimeType {
 
         usecs = usecs.subtract( secs.multiply( oneThousand_ ).multiply( oneThousand_ ) );
 
-        DateFormat format = new SimpleDateFormat( "yyyy-MM-dd" );
+        DateFormat format = new SimpleDateFormat( "yyyy-MM-dd" ); // NOI18N
         format.setTimeZone( TimeZone.getTimeZone( timeZone_ ) );
 
         try {
@@ -385,8 +386,8 @@ public class XTCECcsdsCucTimeHandler implements XTCEAbsoluteTimeType {
 
     // Private Data Members
 
-    private static final BigInteger oneThousand_ = new BigInteger( "1000" );
-    private static final BigDecimal oneMillion_  = new BigDecimal( "1000000" );
+    private static final BigInteger oneThousand_ = new BigInteger( "1000" ); // NOI18N
+    private static final BigDecimal oneMillion_  = new BigDecimal( "1000000" ); // NOI18N
 
     private final String isoTimeFmt_;
     private final String timeZone_;

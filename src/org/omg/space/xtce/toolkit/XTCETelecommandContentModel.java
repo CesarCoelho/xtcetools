@@ -91,7 +91,7 @@ public class XTCETelecommandContentModel extends XTCEContainerContentModelBase {
 
         long startTime = System.currentTimeMillis();
 
-        warnings_ = new ArrayList<String>();
+        warnings_ = new ArrayList<>();
 
         RunningStartBit totalSize = new RunningStartBit();
 

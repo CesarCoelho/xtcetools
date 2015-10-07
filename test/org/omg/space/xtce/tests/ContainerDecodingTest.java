@@ -228,6 +228,241 @@ public class ContainerDecodingTest {
     }
 
     @Test
+    public void processContainerWithFixedRepeat() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        String containerName = "/BogusSAT/SC001/CCSDS_SpacePacket3";
+
+        String binFilename =
+            "src/org/omg/space/xtce/database/Container-CCSDS_SpacePacket3.bin";
+
+        try {
+
+            XTCETMContainer container = db_.getContainer( containerName );
+
+            XTCEContainerContentModel model =
+                db_.processContainer( container,
+                                      readBytesFromFile( binFilename ) );
+
+            long sizeInBytes = model.getTotalSize();
+
+            Assert.assertTrue( "Container size of " + containerName + " is " +
+                Long.toString( sizeInBytes ) + " but should be 208 bits",
+                sizeInBytes == 208 );
+
+            List<XTCEContainerContentEntry> entries = model.getContentList();
+
+            long items = 0;
+
+            for ( XTCEContainerContentEntry entry : entries ) {
+
+                if ( entry.getName().equals( "CCSDS_Packet_ID.Version" ) ) {
+                    ++items;
+                    checkEntry( entry, "3", "0", "==0{cal}", "0", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_ID.Type" ) ) {
+                    ++items;
+                    checkEntry( entry, "1", "3", "==TM{cal}", "", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_ID.SecHdrFlag" ) ) {
+                    ++items;
+                    checkEntry( entry, "1", "4", "==NotPresent{cal}", "", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_ID.APID" ) ) {
+                    ++items;
+                    checkEntry( entry, "11", "5", "==3{cal}", "2047", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_Sequence.GroupFlags" ) ) {
+                    ++items;
+                    checkEntry( entry, "2", "16", "==3{cal}", "3", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_Sequence.Count" ) ) {
+                    ++items;
+                    checkEntry( entry, "14", "18", "==3786{cal}", "", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_Length" ) ) {
+                    ++items;
+                    checkEntry( entry, "16", "32", "==19{cal}", "", "", "" );
+                } else if ( entry.getName().equals( "Basic_string_uint32" ) ) {
+                    ++items;
+                    if ( items == 8 ) {
+                        checkEntry( entry, "32", "48", "==1{cal}", "", "", "Repeat 1 of 5" );
+                    } else if ( items == 9 ) {
+                        checkEntry( entry, "32", "80", "==0{cal}", "", "", "Repeat 2 of 5" );
+                    } else if ( items == 10 ) {
+                        checkEntry( entry, "32", "112", "==65535{cal}", "", "", "Repeat 3 of 5" );
+                    } else if ( items == 11 ) {
+                        checkEntry( entry, "32", "144", "==21845{cal}", "", "", "Repeat 4 of 5" );
+                    } else if ( items == 12 ) {
+                        checkEntry( entry, "32", "176", "==4096{cal}", "", "", "Repeat 5 of 5" );
+                    }
+                }
+
+            }
+
+            Assert.assertTrue( "Container parameter count of " + containerName + " is " +
+                Long.toString( items ) + " but should be 12 items",
+                items == 12 );
+
+            assertOnWarnings( model );
+
+        } catch ( Exception ex ) {
+            //ex.printStackTrace();
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+    }
+
+    @Test
+    public void processContainerWithDynamicRepeat() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        String containerName = "/BogusSAT/SC001/ECSS_Service_1_Subservice_2";
+
+        String binFilename =
+            "src/org/omg/space/xtce/database/Container-ECSS_Service_1_Subservice_2.bin";
+
+        try {
+
+            XTCETMContainer container = db_.getContainer( containerName );
+
+            XTCEContainerContentModel model =
+                db_.processContainer( container,
+                                      readBytesFromFile( binFilename ) );
+
+            assertOnWarnings( model );
+
+            long sizeInBytes = model.getTotalSize();
+
+            Assert.assertTrue( "Container size of " + containerName + " is " +
+                Long.toString( sizeInBytes ) + " but should be 272 bits",
+                sizeInBytes == 272 );
+
+            List<XTCEContainerContentEntry> entries = model.getContentList();
+
+            for ( String warning : model.getWarnings() ) {
+                System.out.println( "Container Model Warning: " + warning );
+            }
+
+            long items = 0;
+
+            for ( XTCEContainerContentEntry entry : entries ) {
+
+                if ( entry.getName().equals( "CCSDS_Packet_ID.Version" ) ) {
+                    ++items;
+                    checkEntry( entry, "3", "0", "==0{cal}", "0", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_ID.Type" ) ) {
+                    ++items;
+                    checkEntry( entry, "1", "3", "==TM{cal}", "", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_ID.SecHdrFlag" ) ) {
+                    ++items;
+                    checkEntry( entry, "1", "4", "==Present{cal}", "", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_ID.APID" ) ) {
+                    ++items;
+                    checkEntry( entry, "11", "5", "==100{cal}", "2047", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_Sequence.GroupFlags" ) ) {
+                    ++items;
+                    checkEntry( entry, "2", "16", "==3{cal}", "3", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_Sequence.Count" ) ) {
+                    ++items;
+                    checkEntry( entry, "14", "18", "==3785{cal}", "", "", "" );
+                } else if ( entry.getName().equals( "CCSDS_Packet_Length" ) ) {
+                    ++items;
+                    checkEntry( entry, "16", "32", "==27{cal}", "", "", "" );
+                } else if ( entry.getName().equals( "PUS_Data_Field_Header.Spare1" ) ) {
+                    ++items;
+                    checkEntry( entry, "1", "48", "==0{cal}", "0", "", "" );
+                } else if ( entry.getName().equals( "PUS_Data_Field_Header.Version" ) ) {
+                    ++items;
+                    checkEntry( entry, "3", "49", "==1{cal}", "1", "", "" );
+                } else if ( entry.getName().equals( "PUS_Data_Field_Header.Spare4" ) ) {
+                    ++items;
+                    checkEntry( entry, "4", "52", "==0{cal}", "0", "", "" );
+                } else if ( entry.getName().equals( "PUS_Data_Field_Header.Service" ) ) {
+                    ++items;
+                    checkEntry( entry, "8", "56", "==1{cal}", "", "", "" );
+                } else if ( entry.getName().equals( "PUS_Data_Field_Header.Subservice" ) ) {
+                    ++items;
+                    checkEntry( entry, "8", "64", "==2{cal}", "", "", "" );
+                } else if ( entry.getName().equals( "PUS_Data_Field_Header.SeqCount" ) ) {
+                    ++items;
+                    checkEntry( entry, "8", "72", "==254{cal}", "", "", "" );
+                } else if ( entry.getName().equals( "PUS_Data_Field_Header.Destination" ) ) {
+                    ++items;
+                    checkEntry( entry, "8", "80", "==2{cal}", "", "", "" );
+                } else if ( entry.getName().equals( "PUS_Time" ) ) {
+                    ++items;
+                    checkEntry( entry, "64", "", "", "", "APPL_TIME_CODE!=NotUsed{cal}", "" );
+                } else if ( entry.getName().equals( "PUS_Error_Control_Field" ) ) {
+                    ++items;
+                    checkEntry( entry, "16", "", "", "", "TM_CHECKSUM_TYPE!=NotUsed{cal}", "" );
+                } else if ( entry.getName().equals( "TC_Packet_ID" ) ) {
+                    ++items;
+                    checkEntry( entry, "16", "88", "==170{cal}", "", "", "" );
+                } else if ( entry.getName().equals( "TC_Packet_Sequence_Control" ) ) {
+                    ++items;
+                    checkEntry( entry, "16", "104", "==257{cal}", "", "", "" );
+                } else if ( entry.getName().equals( "TC_Accept_Failure_Code" ) ) {
+                    ++items;
+                    checkEntry( entry, "16", "120", "==INCONSISTENT_APPL_DATA{cal}", "", "", "" );
+                } else if ( entry.getName().equals( "TC_Parameter_Count" ) ) {
+                    ++items;
+                    checkEntry( entry, "8", "136", "==16{cal}", "", "", "" );
+                } else if ( entry.getName().equals( "TC_Parameter_Data" ) ) {
+                    ++items;
+                    if ( items == 21 ) {
+                        checkEntry( entry, "8", "144", "==0{cal}", "", "", "Repeat 1 of 16" );
+                    } else if ( items == 22 ) {
+                        checkEntry( entry, "8", "152", "==1{cal}", "", "", "Repeat 2 of 16" );
+                    } else if ( items == 23 ) {
+                        checkEntry( entry, "8", "160", "==2{cal}", "", "", "Repeat 3 of 16" );
+                    } else if ( items == 24 ) {
+                        checkEntry( entry, "8", "168", "==3{cal}", "", "", "Repeat 4 of 16" );
+                    } else if ( items == 25 ) {
+                        checkEntry( entry, "8", "176", "==4{cal}", "", "", "Repeat 5 of 16" );
+                    } else if ( items == 26 ) {
+                        checkEntry( entry, "8", "184", "==5{cal}", "", "", "Repeat 6 of 16" );
+                    } else if ( items == 27 ) {
+                        checkEntry( entry, "8", "192", "==6{cal}", "", "", "Repeat 7 of 16" );
+                    } else if ( items == 28 ) {
+                        checkEntry( entry, "8", "200", "==7{cal}", "", "", "Repeat 8 of 16" );
+                    } else if ( items == 29 ) {
+                        checkEntry( entry, "8", "208", "==8{cal}", "", "", "Repeat 9 of 16" );
+                    } else if ( items == 30 ) {
+                        checkEntry( entry, "8", "216", "==9{cal}", "", "", "Repeat 10 of 16" );
+                    } else if ( items == 31 ) {
+                        checkEntry( entry, "8", "224", "==10{cal}", "", "", "Repeat 11 of 16" );
+                    } else if ( items == 32 ) {
+                        checkEntry( entry, "8", "232", "==11{cal}", "", "", "Repeat 12 of 16" );
+                    } else if ( items == 33 ) {
+                        checkEntry( entry, "8", "240", "==12{cal}", "", "", "Repeat 13 of 16" );
+                    } else if ( items == 34 ) {
+                        checkEntry( entry, "8", "248", "==13{cal}", "", "", "Repeat 14 of 16" );
+                    } else if ( items == 35 ) {
+                        checkEntry( entry, "8", "256", "==14{cal}", "", "", "Repeat 15 of 16" );
+                    } else if ( items == 36 ) {
+                        checkEntry( entry, "8", "264", "==15{cal}", "", "", "Repeat 16 of 16" );
+                    }
+                }
+
+            }
+
+            Assert.assertTrue( "Container parameter count of " + containerName + " is " +
+                Long.toString( items ) + " but should be 36 items",
+                items == 36 );
+
+            assertOnWarnings( model );
+
+        } catch ( Exception ex ) {
+            //ex.printStackTrace();
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+    }
+
+    @Test
     public void processContainerWithWrongInheritance() {
 
         final String methodName =

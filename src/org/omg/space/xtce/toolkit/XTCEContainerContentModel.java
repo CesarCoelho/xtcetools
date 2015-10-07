@@ -481,6 +481,8 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
                 if ( isEntryNeedingStartBit( content ) == true ) {
                     content.setStartBit( currentStartBit.get() );
                     currentStartBit.add( Long.parseLong( content.getRawSizeInBits() ) );
+                    content.setValue( (XTCEContainerEntryValue)null );
+                    applyBinaryValue( content );
                 }
             }
 

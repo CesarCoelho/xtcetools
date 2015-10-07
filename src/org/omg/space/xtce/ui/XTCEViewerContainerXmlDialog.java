@@ -200,6 +200,7 @@ public class XTCEViewerContainerXmlDialog extends javax.swing.JDialog {
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 try {
                     XTCEViewerContainerXmlDialog dialog = new XTCEViewerContainerXmlDialog(new javax.swing.JFrame(), true, null);

@@ -48,7 +48,8 @@ public class XTCEDatabaseExporterCsv extends XTCEDatabaseExporter {
      *
      */
 
-    public XTCEDatabaseExporterCsv( XTCEDatabase db, Properties properties ) throws XTCEDatabaseException {
+    public XTCEDatabaseExporterCsv( XTCEDatabase db, Properties properties )
+        throws XTCEDatabaseException {
 
         super( db, properties );
 
@@ -72,7 +73,8 @@ public class XTCEDatabaseExporterCsv extends XTCEDatabaseExporter {
      */
 
     @Override
-    public List<String> exportParameters( File outFile ) throws XTCEDatabaseException {
+    public List<String> exportParameters( File outFile )
+        throws XTCEDatabaseException {
 
         try {
 
@@ -168,7 +170,8 @@ public class XTCEDatabaseExporterCsv extends XTCEDatabaseExporter {
      */
 
     @Override
-    public List<String> exportContainers( File outFile ) throws XTCEDatabaseException {
+    public List<String> exportContainers( File outFile )
+        throws XTCEDatabaseException {
 
         ArrayList<String> warnings = new ArrayList<>();
 
@@ -332,12 +335,12 @@ public class XTCEDatabaseExporterCsv extends XTCEDatabaseExporter {
 
     private String getSpecialData( XTCEParameter parameter ) {
 
-        List<AncillaryData> list = parameter.getAncillaryData( "PARAMID = *" );
+        List<AncillaryData> list = parameter.getAncillaryData( "PARAMID = *" ); // NOI18N
         for ( AncillaryData data : list ) {
-            return data.getName().replaceFirst( "PARAMID = ", "" );
+            return data.getName().replaceFirst( "PARAMID = ", "" ); // NOI18N
         }
 
-        return "";
+        return ""; // NOI18N
 
     }
 

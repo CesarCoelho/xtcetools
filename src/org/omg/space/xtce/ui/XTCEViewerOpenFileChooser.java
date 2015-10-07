@@ -103,13 +103,13 @@ public class XTCEViewerOpenFileChooser extends JFileChooser {
 
     // Private Data Members
 
-    private JCheckBox xincludeCheckBox =
+    private final JCheckBox xincludeCheckBox =
         new JCheckBox( XTCEFunctions.getText( "file_chooser_xinclude_text" ) ); // NOI18N
 
-    private JCheckBox validateCheckBox =
+    private final JCheckBox validateCheckBox =
         new JCheckBox( XTCEFunctions.getText( "file_chooser_validate_text" ) ); // NOI18N
 
-    private JCheckBox readOnlyCheckBox =
+    private final JCheckBox readOnlyCheckBox =
         new JCheckBox( XTCEFunctions.getText( "file_chooser_readonly_text" ) ); // NOI18N
 
 }

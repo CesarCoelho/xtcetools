@@ -97,6 +97,18 @@ public class XTCEAlias {
                  ( this.getNameSpace().equals( that.getNameSpace() ) == true ) );
     }
 
+    /** Hash Code Operator
+     *
+     * @return int hash code based on the combination of the namespace and the
+     * alias names.
+     *
+     */
+
+    @Override
+    public int hashCode() {
+        return getFullAliasName().hashCode();
+    }
+
     // Private Data Members
 
     private String alias_     = null;

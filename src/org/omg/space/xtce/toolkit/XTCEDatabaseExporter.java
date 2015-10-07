@@ -63,13 +63,16 @@ public abstract class XTCEDatabaseExporter {
      *
      */
 
-    XTCEDatabaseExporter( XTCEDatabase db, Properties properties ) throws XTCEDatabaseException {
+    XTCEDatabaseExporter( XTCEDatabase db, Properties properties )
+        throws XTCEDatabaseException {
 
         if ( db == null ) {
-            throw new XTCEDatabaseException( XTCEFunctions.getText( "dialog_export_nulldb_message" ) );
+            throw new XTCEDatabaseException(
+                XTCEFunctions.getText( "dialog_export_nulldb_message" ) ); // NOI18N
         }
         if ( properties == null ) {
-            throw new XTCEDatabaseException( XTCEFunctions.getText( "dialog_export_nullproperties_message" ) );
+            throw new XTCEDatabaseException(
+                XTCEFunctions.getText( "dialog_export_nullproperties_message" ) ); // NOI18N
         }
         db_         = db;
         properties_ = properties;
@@ -78,24 +81,24 @@ public abstract class XTCEDatabaseExporter {
             properties_ = new Properties();
         }
 
-        if ( properties_.getProperty( "use_header_row" ) == null ) {
-            properties_.setProperty( "use_header_row", "true" );
+        if ( properties_.getProperty( "use_header_row" ) == null ) { // NOI18N
+            properties_.setProperty( "use_header_row", "true" ); // NOI18N
         }
 
-        if ( properties_.getProperty( "show_all_alias_namespaces" ) == null ) {
-            properties_.setProperty( "show_all_alias_namespaces", "true" );
+        if ( properties_.getProperty( "show_all_alias_namespaces" ) == null ) { // NOI18N
+            properties_.setProperty( "show_all_alias_namespaces", "true" ); // NOI18N
         }
 
-        if ( properties_.getProperty( "show_alias_namespaces" ) == null ) {
-            properties_.setProperty( "show_alias_namespaces", "true" );
+        if ( properties_.getProperty( "show_alias_namespaces" ) == null ) { // NOI18N
+            properties_.setProperty( "show_alias_namespaces", "true" ); // NOI18N
         }
 
-        if ( properties_.getProperty( "preferred_alias_namespace" ) == null ) {
-            properties_.setProperty( "preferred_alias_namespace", "" );
+        if ( properties_.getProperty( "preferred_alias_namespace" ) == null ) { // NOI18N
+            properties_.setProperty( "preferred_alias_namespace", "" ); // NOI18N
         }
 
-        if ( properties_.getProperty( "show_all_conditions" ) == null ) {
-            properties_.setProperty( "show_all_conditions", "false" );
+        if ( properties_.getProperty( "show_all_conditions" ) == null ) { // NOI18N
+            properties_.setProperty( "show_all_conditions", "false" ); // NOI18N
         }
 
     }
@@ -120,10 +123,11 @@ public abstract class XTCEDatabaseExporter {
      *
      */
 
-    public List<String> exportParameters( File outFile ) throws XTCEDatabaseException {
+    public List<String> exportParameters( File outFile )
+        throws XTCEDatabaseException {
 
         ArrayList<String> msg = new ArrayList<>();
-        msg.add( XTCEFunctions.getText( "dialog_export_notyetimplemented_text" ) );
+        msg.add( XTCEFunctions.getText( "dialog_export_notyetimplemented_text" ) ); // NOI18N
         return msg;
 
     }
@@ -148,10 +152,13 @@ public abstract class XTCEDatabaseExporter {
      *
      */
 
-    public List<String> exportContainers( File outFile ) throws XTCEDatabaseException {
+    public List<String> exportContainers( File outFile )
+        throws XTCEDatabaseException {
+
         ArrayList<String> msg = new ArrayList<>();
-        msg.add( XTCEFunctions.getText( "dialog_export_notyetimplemented_text" ) );
+        msg.add( XTCEFunctions.getText( "dialog_export_notyetimplemented_text" ) ); // NOI18N
         return msg;
+
     }
 
     /** Export the telecommands in the XTCE file represented by an XTCEDatabase
@@ -174,10 +181,13 @@ public abstract class XTCEDatabaseExporter {
      *
      */
 
-    public List<String> exportTelecommands( File outFile ) throws XTCEDatabaseException {
+    public List<String> exportTelecommands( File outFile )
+        throws XTCEDatabaseException {
+
         ArrayList<String> msg = new ArrayList<>();
-        msg.add( XTCEFunctions.getText( "dialog_export_notyetimplemented_text" ) );
+        msg.add( XTCEFunctions.getText( "dialog_export_notyetimplemented_text" ) ); // NOI18N
         return msg;
+
     }
 
     /// The instance of the XTCE Database object that contains the full data

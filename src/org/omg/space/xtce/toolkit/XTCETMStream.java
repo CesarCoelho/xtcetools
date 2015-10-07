@@ -85,9 +85,9 @@ public class XTCETMStream extends XTCENamedObject {
             VariableFrameStreamType vstream = (VariableFrameStreamType)stream_;
             ref = vstream.getContainerRef().getContainerRef();
         } else {
-            throw new XTCEDatabaseException( XTCEFunctions.getText( "error_stream_unsupported" ) +
-                                             ": '" + getName() +
-                                             "'" );
+            throw new XTCEDatabaseException( XTCEFunctions.getText( "error_stream_unsupported" ) + // NO18N
+                                             ": '" + getName() + // NO18N
+                                             "'" ); // NO18N
         }
 
         String sPath =
@@ -119,7 +119,7 @@ public class XTCETMStream extends XTCENamedObject {
      *
      */
 
-    public String getStreamRootContainerPath() {
+    public final String getStreamRootContainerPath() {
         return rootContainer_.getFullPath();
     }
 
@@ -130,7 +130,7 @@ public class XTCETMStream extends XTCENamedObject {
      *
      */
 
-    public XTCETMContainer getStreamRootContainer() {
+    public final XTCETMContainer getStreamRootContainer() {
         return rootContainer_;
     }
 
@@ -141,7 +141,7 @@ public class XTCETMStream extends XTCENamedObject {
      *
      */
 
-    public PCMStreamType getReference() {
+    public final PCMStreamType getReference() {
         return stream_;
     }
 
@@ -212,7 +212,9 @@ public class XTCETMStream extends XTCENamedObject {
 
         }
 
-        throw new XTCEDatabaseException( "Unable to process binary to desired stream" );
+        throw new XTCEDatabaseException(
+            XTCEFunctions.getText( "error_stream_binaryinvalid" ) +
+            ": '" + getName() + "'" );
 
     }
 
@@ -281,6 +283,145 @@ public class XTCETMStream extends XTCENamedObject {
         }
 
         return processStream( buffer.toByteArray() );
+
+    }
+
+    /** Function to decompose a binary data stream into a simple array of
+     * entries that an application can iterate over without the need to
+     * resolve XTCE data model references, included additional containers,
+     * base containers, and conditional processing.
+     *
+     * @param binaryData BitSet containing the container binary encoded data
+     * so that the output object contains entries with actual values from a
+     * real binary image.
+     *
+     * @param includeList List of XTCETMContainer objects to restrict the
+     * stream processing.  Only the containers in the provided list will result
+     * in an output.  This list should not include abstract containers from
+     * the inheritance tree or it may hide containers that are more specific.
+     *
+     * @return XTCEContainerContentModel representing this XTCETMContainer or
+     * null in the event that the bits do not represent a container on the
+     * included list argument to this method call.
+     *
+     * @throws XTCEDatabaseException thrown in the event that it is not
+     * possible to decompose the container completely due to bad references in
+     * the XTCE document.
+     *
+     */
+
+    public XTCEContainerContentModel processStream( BitSet                binaryData,
+                                                    List<XTCETMContainer> includeList )
+        throws XTCEDatabaseException {
+
+        for ( XTCETMContainer container : includeList ) {
+
+            XTCEContainerContentModel model;
+
+            if ( ( model = streamContainers_.get( container ) ) == null ) {
+
+                model = new XTCEContainerContentModel( container,
+                                                       db_.getSpaceSystemTree(),
+                                                       null,
+                                                       false );
+
+                streamContainers_.put( container, model );
+
+            }
+
+            if ( model.isProcessingCompatible( binaryData ) == true ) {
+                return new XTCEContainerContentModel( container,
+                                                      db_.getSpaceSystemTree(),
+                                                      binaryData );
+            }
+
+        }
+
+        return null;
+
+    }
+
+    /** Function to decompose a binary data stream into a simple array of
+     * entries that an application can iterate over without the need to
+     * resolve XTCE data model references, included additional containers,
+     * base containers, and conditional processing.
+     *
+     * This function is intended to accept the byte array that is read from
+     * a ByteArrayOutputStream.toByteArray() that is easily obtained when
+     * reading a binary file using a Java FileInputStream.
+     *
+     * @param bytes byte[] containing the container binary encoded data
+     * so that the output object contains entries with actual values from a
+     * real binary image.
+     *
+     * @param includeList List of XTCETMContainer objects to restrict the
+     * stream processing.  Only the containers in the provided list will result
+     * in an output.  This list should not include abstract containers from
+     * the inheritance tree or it may hide containers that are more specific.
+     *
+     * @return XTCEContainerContentModel representing this XTCETMContainer or
+     * null in the event that the bits do not represent a container on the
+     * included list argument to this method call.
+     *
+     * @throws XTCEDatabaseException thrown in the event that it is not
+     * possible to decompose the container completely due to bad references in
+     * the XTCE document.
+     *
+     */
+
+    public XTCEContainerContentModel processStream( byte[]                bytes,
+                                                    List<XTCETMContainer> includeList )
+        throws XTCEDatabaseException {
+
+        BitSet bits = XTCEFunctions.getBitSetFromStreamByteArray( bytes );
+
+        return processStream( bits, includeList );
+
+    }
+
+    /** Function to decompose a binary data stream into a simple array of
+     * entries that an application can iterate over without the need to
+     * resolve XTCE data model references, included additional containers,
+     * base containers, and conditional processing.
+     *
+     * This function is intended to accept a Java InputStream containing the
+     * bytes to use for the binary portion of the container.
+     *
+     * @param stream InputStream containing the container binary encoded data
+     * so that the output object contains entries with actual values from a
+     * real binary image.
+     *
+     * @param includeList List of XTCETMContainer objects to restrict the
+     * stream processing.  Only the containers in the provided list will result
+     * in an output.  This list should not include abstract containers from
+     * the inheritance tree or it may hide containers that are more specific.
+     *
+     * @return XTCEContainerContentModel representing this XTCETMContainer or
+     * null in the event that the bits do not represent a container on the
+     * included list argument to this method call.
+     *
+     * @throws XTCEDatabaseException thrown in the event that it is not
+     * possible to decompose the container completely due to bad references in
+     * the XTCE document, or if the stream throws an IOException.
+     *
+     */
+
+    public XTCEContainerContentModel processStream( InputStream           stream,
+                                                    List<XTCETMContainer> includeList )
+        throws XTCEDatabaseException {
+
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        int byteValue;
+
+        try {
+            while ( ( byteValue = stream.read() ) != -1 ) {
+                buffer.write( byteValue );
+            }
+        } catch ( Exception ex ) {
+            throw new XTCEDatabaseException( ex.getLocalizedMessage() );
+        }
+
+        return processStream( buffer.toByteArray(), includeList );
 
     }
 

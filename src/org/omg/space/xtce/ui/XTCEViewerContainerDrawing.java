@@ -97,7 +97,7 @@ public class XTCEViewerContainerDrawing extends JPanel {
 
         contentModel_        = contentModel;
         orientDrawingAs_     = orientDrawingAs;
-        entriesInUse_        = new ArrayList<DrawingEntry>();
+        entriesInUse_        = new ArrayList<>();
         showAllNamespaces_   = showAllNamespaces;
         showAliasNamespaces_ = showAliasNamespaces;
         preferredNamespace_  = preferredNamespace;
