@@ -113,7 +113,7 @@ public class XTCEContainerEntryValue {
      *
      */
 
-    public String getName() {
+    public final String getName() {
         return XTCEFunctions.getNameFromPathReferenceString( name_ );
     }
 
@@ -128,7 +128,7 @@ public class XTCEContainerEntryValue {
      *
      */
 
-    public String getItemFullPath() {
+    public final String getItemFullPath() {
         return name_;
     }
 
@@ -145,7 +145,7 @@ public class XTCEContainerEntryValue {
      *
      */
 
-    public List<String> getWarnings() {
+    public final List<String> getWarnings() {
 
         if ( itemValueObj_ == null ) {
             return new ArrayList<>();
@@ -163,7 +163,7 @@ public class XTCEContainerEntryValue {
      *
      */
 
-    public String getAssignedValue() {
+    public final String getAssignedValue() {
         return value_;
     }
 
@@ -175,7 +175,7 @@ public class XTCEContainerEntryValue {
      *
      */
 
-    public String getOperator() {
+    public final String getOperator() {
         return operator_;
     }
 
@@ -185,7 +185,7 @@ public class XTCEContainerEntryValue {
      *
      */
 
-    public String getComparisonForm() {
+    public final String getComparisonForm() {
         return form_;
     }
 
@@ -196,7 +196,7 @@ public class XTCEContainerEntryValue {
      *
      */
 
-    public String getCalibratedValue() {
+    public final String getCalibratedValue() {
 
         if ( form_.equals( "Calibrated" ) == true ) {
             return value_;
@@ -216,7 +216,7 @@ public class XTCEContainerEntryValue {
      *
      */
 
-    public String getUncalibratedValue() {
+    public final String getUncalibratedValue() {
 
         if ( form_.equals( "Uncalibrated" ) == true ) {
             return value_;
@@ -234,7 +234,7 @@ public class XTCEContainerEntryValue {
      *
      */
 
-    public BitSet getRawValue() {
+    public final BitSet getRawValue() {
 
         if ( rawValue_ != null ) {
             return rawValue_;
@@ -280,7 +280,7 @@ public class XTCEContainerEntryValue {
      *
      */
 
-    public boolean isCompatibleWith( XTCEContainerEntryValue that ) {
+    public final boolean isCompatibleWith( XTCEContainerEntryValue that ) {
 
         // if these are exactly the same object on the Java heap then they must
         // be compatible
@@ -378,7 +378,7 @@ public class XTCEContainerEntryValue {
 
     @Override
     public int hashCode() {
-        return toString().hashCode();
+        return ( name_ + toStringWithoutParameter_ ).hashCode();
     }
 
     /** Retrieve a string representation of the entry value that this object
@@ -403,7 +403,7 @@ public class XTCEContainerEntryValue {
      *
      */
 
-    public String toStringWithoutParameter() {
+    public final String toStringWithoutParameter() {
         return toStringWithoutParameter_;
     }
 

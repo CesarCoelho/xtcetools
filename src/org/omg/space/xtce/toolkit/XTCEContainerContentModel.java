@@ -116,7 +116,7 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
      *
      */
 
-    public XTCETMContainer getContainerReference() {
+    public final XTCETMContainer getContainerReference() {
         return container_;
     }
 
@@ -155,6 +155,20 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
 
     }
 
+    /** Retrieve the compatibility of this container with the raw bits provided
+     * by the caller to determine if this is the right model object to match
+     * the binary.
+     *
+     * @param rawBits BitSet containing the raw binary bits of a container.
+     *
+     * @return boolean indicating if this container matches the supplied binary
+     * based on the inheritance model restrictions.
+     *
+     * @throws XTCEDatabaseException thrown in the event that the container
+     * contents cannot be processed.
+     *
+     */
+
     public final boolean isProcessingCompatible( BitSet rawBits )
         throws XTCEDatabaseException {
 
@@ -162,27 +176,30 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
             processContainer();
         }
 
-        boolean matches = true;
-
         List<XTCEContainerContentEntry> entries = getContentList();
 
         for ( XTCEContainerContentEntry entry : entries ) {
+
             XTCEContainerEntryValue valueObj = entry.getValue();
+
             if ( ( valueObj                                      != null  ) &&
                  ( valueObj.toStringWithoutParameter().isEmpty() == false ) ) {
-                //System.out.println( valueObj.toString() );
+
                 BitSet raw = valueObj.getRawValue();
                 int    sb  = Integer.parseInt( entry.getStartBit() );
                 int    nb  = Integer.parseInt( entry.getRawSizeInBits() );
+
                 for ( int iii = 0; iii < nb; ++iii ) {
                     if ( rawBits.get( sb + nb - 1 - iii ) != raw.get( iii ) ) {
-                        matches = false;
+                        return false;
                     }
                 }
+
             }
+
         }
 
-        return matches;
+        return true;
 
     }
 

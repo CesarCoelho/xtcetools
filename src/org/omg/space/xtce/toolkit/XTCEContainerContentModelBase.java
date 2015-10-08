@@ -270,8 +270,8 @@ abstract class XTCEContainerContentModelBase {
             return true;
         }
 
-        FieldType entryType = entry.getEntryType();
-        long      satisfied = 0;
+        //FieldType entryType = entry.getEntryType();
+        long satisfied = 0;
 
         //System.out.println( "Conditions: " +
         //                    Long.toString( conditions.size() ) +
@@ -410,7 +410,6 @@ abstract class XTCEContainerContentModelBase {
 
             } catch ( Exception ex ) {
 
-                ex.printStackTrace();
                 warnings_.add( "Element RepeatEntry/DynamicEntry could not be evaluated for: " +
                                contentEntry.itemName +
                                " because: " +
@@ -430,6 +429,8 @@ abstract class XTCEContainerContentModelBase {
     }
 
     protected long dynamicCountFromUserValue( XTCENamedObject item, String form ) {
+
+        // this can probably work on contentValues_
 
         String paramFullPath = item.getFullPath();
 
@@ -1030,17 +1031,17 @@ abstract class XTCEContainerContentModelBase {
      *
      */
 
-    protected class RunningStartBit {
+    protected final class RunningStartBit {
 
-        public long get() {
+        public final long get() {
             return currentStartBit;
         }
 
-        public void set( long value ) {
+        public final void set( long value ) {
             currentStartBit = value;
         }
 
-        public void add( long sizeValue ) {
+        public final void add( long sizeValue ) {
             currentStartBit += sizeValue;
         }
 

@@ -50,7 +50,7 @@ public class XTCEValidRange {
      *
      */
 
-    public boolean isValidRangeApplied() {
+    public final boolean isValidRangeApplied() {
         return rangeApplied_;
     }
 
@@ -60,7 +60,7 @@ public class XTCEValidRange {
      *
      */
 
-    public String getLowValue() {
+    public final String getLowValue() {
         return lowValidValue_;
     }
 
@@ -70,7 +70,7 @@ public class XTCEValidRange {
      *
      */
 
-    public String getHighValue() {
+    public final String getHighValue() {
         return highValidValue_;
     }
 
@@ -81,7 +81,7 @@ public class XTCEValidRange {
      *
      */
 
-    public boolean isLowValueInclusive() {
+    public final boolean isLowValueInclusive() {
         return lowValidValueInclusive_;
     }
 
@@ -92,7 +92,7 @@ public class XTCEValidRange {
      *
      */
 
-    public boolean isHighValueInclusive() {
+    public final boolean isHighValueInclusive() {
         return highValidValueInclusive_;
     }
 
@@ -104,7 +104,7 @@ public class XTCEValidRange {
      *
      */
 
-    public boolean isLowValueCalibrated() {
+    public final boolean isLowValueCalibrated() {
         return lowAppliesToCalibrated_;
     }
 
@@ -116,7 +116,7 @@ public class XTCEValidRange {
      *
      */
 
-    public boolean isHighValueCalibrated() {
+    public final boolean isHighValueCalibrated() {
         return highAppliesToCalibrated_;
     }
 

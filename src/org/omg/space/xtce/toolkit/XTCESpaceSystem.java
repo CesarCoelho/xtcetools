@@ -80,7 +80,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
      *
      */
 
-    public SpaceSystemType getReference() {
+    public final SpaceSystemType getReference() {
         return reference_;
     }
 
@@ -90,7 +90,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
      *
      */
 
-    public List<String> getWarningsFromLastOperation() {
+    public final List<String> getWarningsFromLastOperation() {
         return warnings_;
     }
 
@@ -101,7 +101,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
      *
      */
 
-    public String getShortDescription() {
+    public final String getShortDescription() {
         return getPrimaryShortDescription( reference_ );
     }
 
@@ -119,7 +119,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
      *
      */
 
-    public void setShortDescription( String text ) {
+    public final void setShortDescription( String text ) {
         setPrimaryShortDescription( reference_, text );
     }
 
@@ -130,7 +130,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
      *
      */
 
-    public String getLongDescription() {
+    public final String getLongDescription() {
         return getPrimaryLongDescription( reference_ );
     }
 
@@ -148,7 +148,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
      *
      */
 
-    public void setLongDescription( String text ) {
+    public final void setLongDescription( String text ) {
         setPrimaryLongDescription( reference_, text );
     }
 
@@ -160,7 +160,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
      *
      */
 
-    public String getOperationalStatus() {
+    public final String getOperationalStatus() {
         if ( getReference().getOperationalStatus() == null ) {
             return ""; // NOI18N
         }
@@ -175,7 +175,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
      *
      */
 
-    public void setOperationalStatus( String text ) {
+    public final void setOperationalStatus( String text ) {
         if ( ( text == null ) || ( text.isEmpty() == true ) ) {
             getReference().setOperationalStatus( null );
         } else {
@@ -193,7 +193,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
      *
      */
 
-    public XTCESpaceSystemMetrics getMetrics() {
+    public final XTCESpaceSystemMetrics getMetrics() {
         return new XTCESpaceSystemMetrics( this );
     }
 
@@ -684,7 +684,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
     public List<XTCETMContainer> getContainers( String nameGlob ) {
 
-        warnings_ = new ArrayList<>();
+        warnings_.clear();
 
         ArrayList<XTCETMContainer> list = new ArrayList<>();
 
@@ -737,7 +737,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
     public List<XTCETMContainer> getInheritingContainers( String parentPath ) {
 
-        warnings_ = new ArrayList<>();
+        warnings_.clear();
 
         ArrayList<XTCETMContainer> list = new ArrayList<>();
 
@@ -790,7 +790,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
     public List<XTCETMContainer> getContainers() {
 
-        warnings_ = new ArrayList<>();
+        warnings_.clear();
 
         ArrayList<XTCETMContainer> list = new ArrayList<>();
 
@@ -833,7 +833,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
     public List<XTCETMStream> getStreams() {
 
-        warnings_ = new ArrayList<>();
+        warnings_.clear();
 
         ArrayList<XTCETMStream> list = new ArrayList<>();
 
@@ -1135,7 +1135,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
     private List<XTCEParameter> addParameters( List<Object> parameters ) {
 
-        warnings_ = new ArrayList<>();
+        warnings_.clear();
 
         ArrayList<XTCEParameter> list = new ArrayList<>();
 
@@ -1226,10 +1226,11 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
     // Private Data Members
 
-    private SpaceSystemType                reference_            = null;
-    private XTCEDatabase                   databaseReference_    = null;
+    private final SpaceSystemType reference_;
+    private final XTCEDatabase    databaseReference_;
+    private final List<String>    warnings_;
+
     private HashMap<String, XTCEParameter> tmParameterHashTable_ = null;
     private HashMap<String, XTCEParameter> tcParameterHashTable_ = null;
-    private List<String>                   warnings_             = null;
 
 }
