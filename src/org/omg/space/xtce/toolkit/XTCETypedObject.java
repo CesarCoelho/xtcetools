@@ -90,7 +90,9 @@ public abstract class XTCETypedObject extends XTCENamedObject {
         // content from getAncillaryData(), so no second null check needed.
 
         if ( typeObj.getAncillaryDataSet() != null ) {
-           typeAncDataList_ = typeObj.getAncillaryDataSet().getAncillaryData();
+            typeAncDataList_ = typeObj.getAncillaryDataSet().getAncillaryData();
+        } else {
+            typeAncDataList_ = null;
         }
 
     }
@@ -104,7 +106,7 @@ public abstract class XTCETypedObject extends XTCENamedObject {
      *
      */
 
-    public NameDescriptionType getTypeReference() {
+    public final NameDescriptionType getTypeReference() {
         return typeObj_;
     }
 
@@ -116,7 +118,7 @@ public abstract class XTCETypedObject extends XTCENamedObject {
      *
      */
 
-    public boolean isValid() {
+    public final boolean isValid() {
         return ( typeObj_ != null );
     }
 
@@ -225,7 +227,7 @@ public abstract class XTCETypedObject extends XTCENamedObject {
      *
      */
 
-    public String getUnits() {
+    public final String getUnits() {
 
         if ( typeObj_ == null ) {
             return "";
@@ -410,7 +412,7 @@ public abstract class XTCETypedObject extends XTCENamedObject {
      *
      */
 
-    public XTCEValidRange getValidRange() {
+    public final XTCEValidRange getValidRange() {
         return new XTCEValidRange( typeObj_ );
     }
 
@@ -469,7 +471,7 @@ public abstract class XTCETypedObject extends XTCENamedObject {
      *
      */
 
-    public String getEngineeringType() {
+    public final String getEngineeringType() {
 
         if ( typeObj_ != null ) {
             if ( typeObj_ instanceof EnumeratedDataType ) {
@@ -548,7 +550,7 @@ public abstract class XTCETypedObject extends XTCENamedObject {
      *
      */
 
-    public String getRawType() {
+    public final String getRawType() {
 
         if ( typeObj_ == null ) {
             return "";
@@ -602,7 +604,7 @@ public abstract class XTCETypedObject extends XTCENamedObject {
      *
      */
 
-    public String getRawBitOrder() {
+    public final String getRawBitOrder() {
 
         if ( typeObj_ == null ) {
             return "";
@@ -658,7 +660,7 @@ public abstract class XTCETypedObject extends XTCENamedObject {
      *
      */
 
-    public String getRawSizeInBits() {
+    public final String getRawSizeInBits() {
 
         if ( typeObj_ == null ) {
             return "";
@@ -756,7 +758,7 @@ public abstract class XTCETypedObject extends XTCENamedObject {
      *
      */
 
-    public List<ValueEnumerationType> getEnumerations() {
+    public final List<ValueEnumerationType> getEnumerations() {
 
         if ( typeObj_ == null ) {
             return null;
@@ -777,7 +779,7 @@ public abstract class XTCETypedObject extends XTCENamedObject {
      *
      */
 
-    public CalibratorType getDefaultCalibrator() {
+    public final CalibratorType getDefaultCalibrator() {
 
         if ( typeObj_ == null ) {
             return null;
@@ -859,7 +861,7 @@ public abstract class XTCETypedObject extends XTCENamedObject {
 
     // Private Data Members
 
-    private NameDescriptionType typeObj_         = null;
-    private List<AncillaryData> typeAncDataList_ = null;
+    private final NameDescriptionType typeObj_;
+    private final List<AncillaryData> typeAncDataList_;
 
 }

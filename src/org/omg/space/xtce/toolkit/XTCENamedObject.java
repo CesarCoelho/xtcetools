@@ -66,18 +66,19 @@ public abstract class XTCENamedObject implements Comparable {
                      String           path,
                      AliasSetType     aliasSet,
                      AncillaryDataSet ancDataSet ) {
-        name_      = name;
-        path_      = path;
-        aliasList_ = new ArrayList<>();
+
+        name_ = name;
+        path_ = path;
 
         // Member Elements do not have Aliases
-        if ( aliasSet != null ) {
-            populateAliasListFromReference( aliasSet );
-        }
+        aliasList_ = new ArrayList<>();
+        populateAliasListFromReference( aliasSet );
 
         // Member Elements do not have Ancillary Data
         if ( ancDataSet != null ) {
-            populateAncillaryListFromReference( ancDataSet );
+            ancDataList_ = ancDataSet.getAncillaryData();
+        } else {
+            ancDataList_ = null;
         }
 
     }
@@ -88,7 +89,7 @@ public abstract class XTCENamedObject implements Comparable {
      *
      */
 
-    public String getName() {
+    public final String getName() {
         return name_;
     }
 
@@ -100,7 +101,7 @@ public abstract class XTCENamedObject implements Comparable {
      *
      */
 
-    public String getFullPath() {
+    public final String getFullPath() {
         return path_ + "/" + getName();
     }
 
@@ -112,7 +113,7 @@ public abstract class XTCENamedObject implements Comparable {
      *
      */
 
-    public String getSpaceSystemPath() {
+    public final String getSpaceSystemPath() {
         return path_;
     }
 
@@ -125,7 +126,7 @@ public abstract class XTCENamedObject implements Comparable {
      *
      */
 
-    public String getSpaceSystemName() {
+    public final String getSpaceSystemName() {
         int idx = path_.lastIndexOf( '/' );
         return path_.substring( idx + 1 );
     }
@@ -152,7 +153,7 @@ public abstract class XTCENamedObject implements Comparable {
      *
      */
 
-    public List<XTCEAlias> getAliasSet() {
+    public final List<XTCEAlias> getAliasSet() {
         return aliasList_;
     }
 
@@ -176,7 +177,7 @@ public abstract class XTCENamedObject implements Comparable {
      *
      */
 
-    public String getAlias( String nameSpace ) {
+    public final String getAlias( String nameSpace ) {
 
         for ( XTCEAlias aliasEntry : aliasList_ ) {
             if ( aliasEntry.getNameSpace().equals( nameSpace ) == true ) {
@@ -256,7 +257,7 @@ public abstract class XTCENamedObject implements Comparable {
      *
      */
 
-    protected String getPrimaryShortDescription( DescriptionType obj ) {
+    protected final String getPrimaryShortDescription( DescriptionType obj ) {
         if ( obj == null || obj.getShortDescription() == null ) {
             return "";
         }
@@ -269,16 +270,17 @@ public abstract class XTCENamedObject implements Comparable {
      * @param obj DescriptionType base class from the JAXB generated classes
      * for this named object.
      *
-     * @param description String containing the text to set.
+     * @param desc String containing the text to set.
      *
      * @throws NullPointerException in the event that the DescriptionType is
      * null.  This method should not be used on an invalid object.
      *
      */
 
-    protected void setPrimaryShortDescription( DescriptionType obj, String description ) {
-        if ( description.isEmpty() == false ) {
-            obj.setShortDescription( description );
+    protected final void setPrimaryShortDescription( DescriptionType obj,
+                                                     String          desc ) {
+        if ( desc.isEmpty() == false ) {
+            obj.setShortDescription( desc );
         } else {
             obj.setShortDescription( null );
         }
@@ -295,7 +297,7 @@ public abstract class XTCENamedObject implements Comparable {
      *
      */
 
-    protected String getPrimaryLongDescription( DescriptionType obj ) {
+    protected final String getPrimaryLongDescription( DescriptionType obj ) {
         if ( obj == null || obj.getLongDescription() == null ) {
             return "";
         }
@@ -308,16 +310,17 @@ public abstract class XTCENamedObject implements Comparable {
      * @param obj DescriptionType base class from the JAXB generated classes
      * for this named object.
      *
-     * @param description String containing the text to set.
+     * @param desc String containing the text to set.
      *
      * @throws NullPointerException in the event that the DescriptionType is
      * null.  This method should not be used on an invalid object.
      *
      */
 
-    protected void setPrimaryLongDescription( DescriptionType obj, String description ) {
-        if ( description.isEmpty() == false ) {
-            obj.setLongDescription( description );
+    protected final void setPrimaryLongDescription( DescriptionType obj,
+                                                    String          desc ) {
+        if ( desc.isEmpty() == false ) {
+            obj.setLongDescription( desc );
         } else {
             obj.setLongDescription( null );
         }
@@ -332,55 +335,47 @@ public abstract class XTCENamedObject implements Comparable {
      *
      */
 
-    protected void populateAliasListFromReference( AliasSetType set ) {
+    protected final void populateAliasListFromReference( AliasSetType set ) {
 
-        ArrayList<XTCEAlias> result = new ArrayList<>();
-
-        if ( set != null ) {
-
-            List<AliasSetType.Alias> list = set.getAlias();
-
-            // loop through all the alias elements that were found
-
-            for ( AliasSetType.Alias entry : list ) {
-
-                // gather the alias info and add it to a temporary list
-                String name = ( entry.getAlias()     == null ? "" : entry.getAlias() );
-                String ns   = ( entry.getNameSpace() == null ? "" : entry.getNameSpace() );
-                XTCEAlias aliasObj = new XTCEAlias( name, ns );
-                boolean foundInCurrentElement = false;
-                for ( XTCEAlias existingObj : result ) {
-                    if ( existingObj.getNameSpace().equals( aliasObj.getNameSpace() ) == true ) {
-                        foundInCurrentElement = true;
-                        // TODO Warning of duplicate namespace in same element - ignoring
-                    }
-                }
-
-                // add them to the main list if they do not already exist, so
-                // this can support adding the lower priority type element for
-                // cases of typed objects
-
-                boolean foundInHigherScopeElement = false;
-                for ( XTCEAlias existingObj : aliasList_ ) {
-                    if ( existingObj.getNameSpace().equals( aliasObj.getNameSpace() ) == true ) {
-                        foundInHigherScopeElement = true;
-                    }
-                }
-                if ( ( foundInHigherScopeElement == false ) &&
-                     ( foundInCurrentElement     == false ) ) {
-                    result.add( aliasObj );
-                }
-
-            } // end of loop
-
+        if ( set == null ) {
+            return;
         }
 
-        aliasList_.addAll( result );
+        List<AliasSetType.Alias> list = set.getAlias();
 
-    }
+        // loop through all the alias elements that were found
 
-    protected void populateAncillaryListFromReference( AncillaryDataSet set ) {
-        ancDataList_ = set.getAncillaryData();
+        for ( AliasSetType.Alias entry : list ) {
+
+            // gather the alias info and add it to a temporary list
+            String name = ( entry.getAlias()     == null ? "" : entry.getAlias() );
+            String ns   = ( entry.getNameSpace() == null ? "" : entry.getNameSpace() );
+            XTCEAlias aliasObj = new XTCEAlias( name, ns );
+            boolean foundInCurrentElement = false;
+            for ( XTCEAlias existingObj : aliasList_ ) {
+                if ( existingObj.getNameSpace().equals( aliasObj.getNameSpace() ) == true ) {
+                    foundInCurrentElement = true;
+                    // TODO Warning of duplicate namespace in same element - ignoring
+                }
+            }
+
+            // add them to the main list if they do not already exist, so
+            // this can support adding the lower priority type element for
+            // cases of typed objects
+
+            boolean foundInHigherScopeElement = false;
+            for ( XTCEAlias existingObj : aliasList_ ) {
+                if ( existingObj.getNameSpace().equals( aliasObj.getNameSpace() ) == true ) {
+                    foundInHigherScopeElement = true;
+                }
+            }
+            if ( ( foundInHigherScopeElement == false ) &&
+                 ( foundInCurrentElement     == false ) ) {
+                aliasList_.add( aliasObj );
+            }
+
+        } // end of loop
+
     }
 
     /** Comparison Interface
@@ -441,9 +436,9 @@ public abstract class XTCENamedObject implements Comparable {
 
     // Private Data Members, which are all references
 
-    private String              name_        = null;
-    private String              path_        = null;
-    private List<XTCEAlias>     aliasList_   = null;
-    private List<AncillaryData> ancDataList_ = null;
+    private final String              name_;
+    private final String              path_;
+    private final List<XTCEAlias>     aliasList_;
+    private final List<AncillaryData> ancDataList_;
 
 }

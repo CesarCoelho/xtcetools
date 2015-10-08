@@ -45,6 +45,7 @@ public class AliasLogicTest {
         try {
            db_ = new XTCEDatabase( new File( file ), false, false, true );
         } catch ( Exception ex ) {
+            ex.printStackTrace();
             Assert.fail( ex.getLocalizedMessage() );
         }
 

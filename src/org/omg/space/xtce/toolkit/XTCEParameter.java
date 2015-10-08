@@ -104,7 +104,7 @@ public class XTCEParameter extends XTCETypedObject {
      *
      */
 
-    public String getTypeReferenceFullPath() {
+    public final String getTypeReferenceFullPath() {
 
         if ( isValid() == false ) {
             return "";
@@ -137,7 +137,7 @@ public class XTCEParameter extends XTCETypedObject {
      *
      */
 
-    public String getShortDescription() {
+    public final String getShortDescription() {
 
         String parameterDescription = "";
 
@@ -175,7 +175,7 @@ public class XTCEParameter extends XTCETypedObject {
      *
      */
 
-    public String getLongDescription() {
+    public final String getLongDescription() {
 
         String parameterDescription = "";
 
@@ -214,9 +214,9 @@ public class XTCEParameter extends XTCETypedObject {
      *
      */
 
-    public String getDescription() {
+    public final String getDescription() {
 
-        String parameterDescription = "";
+        String parameterDescription;
 
         if ( ( isMember() == true ) && ( getTypeReference() != null ) ) {
             parameterDescription = getTypeReference().getShortDescription();
@@ -260,7 +260,7 @@ public class XTCEParameter extends XTCETypedObject {
      *
      */
 
-    public String getDataSource() {
+    public final String getDataSource() {
 
         // we compensate here for the missing default value in the XTCE schema
         // for ParameterProperties/@dataSource
@@ -302,7 +302,7 @@ public class XTCEParameter extends XTCETypedObject {
      *
      */
 
-    public String getSystemName() {
+    public final String getSystemName() {
 
         try {
 
@@ -368,7 +368,7 @@ public class XTCEParameter extends XTCETypedObject {
      *
      */
 
-    public boolean isSettable() {
+    public final boolean isSettable() {
 
         try {
 
@@ -394,7 +394,7 @@ public class XTCEParameter extends XTCETypedObject {
      *
      */
 
-    public boolean isMember() {
+    public final boolean isMember() {
         return ( memberReference_ != null );
     }
 
@@ -406,7 +406,7 @@ public class XTCEParameter extends XTCETypedObject {
      *
      */
 
-    public boolean isParameter() {
+    public final boolean isParameter() {
         return ( reference_ != null );
     }
 
@@ -458,10 +458,10 @@ public class XTCEParameter extends XTCETypedObject {
 
     /// Reference to the Parameter object in JAXB
 
-    private Parameter                     reference_       = null;
+    private final Parameter reference_;
 
     /// Reference to the Member object in JAXB
 
-    private Member                        memberReference_ = null;
+    private final Member memberReference_;
 
 }
