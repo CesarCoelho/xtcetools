@@ -19,6 +19,8 @@ package org.omg.space.xtce.toolkit;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.xml.bind.JAXBElement;
+import javax.xml.namespace.QName;
 import org.omg.space.xtce.database.AbsoluteTimeDataType;
 import org.omg.space.xtce.database.AggregateDataType;
 import org.omg.space.xtce.database.AliasSetType;
@@ -814,6 +816,50 @@ public abstract class XTCETypedObject extends XTCENamedObject {
         }
 
         return null;
+
+    }
+
+    /** Retrieve an XML string that represents this typed object's "type"
+     * element.
+     *
+     * @return String containing the XML fragment.
+     *
+     * @throws XTCEDatabaseException in the event that the XML could not be
+     * marshaled to the string.
+     *
+     */
+
+    public String typeToXml() throws XTCEDatabaseException {
+
+        if ( getTypeReference() == null ) {
+            throw new XTCEDatabaseException(
+                getName() +
+                ": " + // NOI18N
+                XTCEFunctions.getText( "xml_marshal_notype" ) ); // NOI18N
+        }
+
+        try {
+
+            JAXBElement xmlElement =
+                new JAXBElement( new QName(typeObj_.getClass().getSimpleName()),
+                                 typeObj_.getClass(),
+                                 typeObj_ );
+
+            XTCEDocumentMarshaller mmm =
+                new XTCEDocumentMarshaller( typeObj_.getClass(), true );
+
+            return
+                XTCEFunctions.xmlPrettyPrint( mmm.marshalToXml( xmlElement ) );
+
+        } catch ( Exception ex ) {
+            throw new XTCEDatabaseException(
+                getName() +
+                ": " + // NOI18N
+                XTCEFunctions.getText( "xml_marshal_error_type" ) +
+                " '" +
+                ex.getCause() +
+                "'" );
+        }
 
     }
 

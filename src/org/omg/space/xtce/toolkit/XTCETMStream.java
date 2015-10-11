@@ -26,6 +26,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import javax.xml.bind.JAXBElement;
+import javax.xml.namespace.QName;
 import org.omg.space.xtce.database.AliasSetType;
 import org.omg.space.xtce.database.DescriptionType.AncillaryDataSet;
 import org.omg.space.xtce.database.FixedFrameStreamType;
@@ -422,6 +424,56 @@ public class XTCETMStream extends XTCENamedObject {
         }
 
         return processStream( buffer.toByteArray(), includeList );
+
+    }
+
+    /** Retrieve an XML string that represents this Stream element.
+     *
+     * @return String containing the XML fragment.
+     *
+     * @throws XTCEDatabaseException in the event that the elements being
+     * marshaled from the JAXB internal classes cannot make a valid document.
+     * Check the exception message for causality information.
+     *
+     */
+
+    public String toXml() throws XTCEDatabaseException {
+
+        try {
+
+            JAXBElement            xmlElement;
+            XTCEDocumentMarshaller mmm;
+
+            if ( stream_ instanceof VariableFrameStreamType ) {
+
+                xmlElement = new JAXBElement( new QName(VariableFrameStreamType.class.getSimpleName()),
+                                              VariableFrameStreamType.class,
+                                              stream_ );
+
+                mmm = new XTCEDocumentMarshaller( VariableFrameStreamType.class,
+                                                  true );
+
+            } else {
+
+                xmlElement = new JAXBElement( new QName(PCMStreamType.class.getSimpleName()),
+                                              PCMStreamType.class,
+                                              stream_ );
+
+                mmm = new XTCEDocumentMarshaller( PCMStreamType.class, true );
+
+            }
+
+            return XTCEFunctions.xmlPrettyPrint( mmm.marshalToXml( xmlElement ) );
+
+        } catch ( Exception ex ) {
+            throw new XTCEDatabaseException(
+                getName() +
+                ": " + // NOI18N
+                XTCEFunctions.getText( "xml_marshal_error_stream" ) + // NOI18N
+                " '" + // NOI18N
+                ex.getCause() +
+                "'" ); // NOI18N
+        }
 
     }
 

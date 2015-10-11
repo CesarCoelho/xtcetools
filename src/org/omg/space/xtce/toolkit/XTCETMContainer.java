@@ -208,6 +208,16 @@ public class XTCETMContainer extends XTCENamedObject {
 
     }
 
+    /** Retrieve an XML string that represents this Container element.
+     *
+     * @return String containing the XML fragment.
+     *
+     * @throws XTCEDatabaseException in the event that the elements being
+     * marshaled from the JAXB internal classes cannot make a valid document.
+     * Check the exception message for causality information.
+     *
+     */
+
     public String toXml() throws XTCEDatabaseException {
 
         try {
@@ -216,12 +226,19 @@ public class XTCETMContainer extends XTCENamedObject {
                                                           SequenceContainerType.class,
                                                           container_ );
 
-            XTCEDocumentMarshaller mmm = new XTCEDocumentMarshaller( SequenceContainerType.class, true );
+            XTCEDocumentMarshaller mmm =
+                new XTCEDocumentMarshaller( SequenceContainerType.class, true );
 
             return XTCEFunctions.xmlPrettyPrint( mmm.marshalToXml( xmlElement ) );
 
         } catch ( Exception ex ) {
-            throw new XTCEDatabaseException( "Failed to create XML from Parameter Object: " + ex.getCause() );
+            throw new XTCEDatabaseException(
+                getName() +
+                ": " + // NOI18N
+                XTCEFunctions.getText( "xml_marshal_error_container" ) + // NOI18N
+                " '" + // NOI18N
+                ex.getCause() +
+                "'" ); // NOI18N
         }
 
     }

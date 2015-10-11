@@ -384,6 +384,74 @@ public class XTCEFunctions {
 
     }
 
+    /** Retrieve a "cleaned up" hex string from a user input hexadecimal field.
+     *
+     * The output will have any leading "0x" removed, will be in lower case,
+     * will contain no whitespace, and no commas or semicolons.  At present,
+     * this function does not guarantee viability of the string from a
+     * "NumberFormatException" when parsing.
+     *
+     * @param inputText String containing user input text.
+     *
+     * @return String suitable for parsing the text in base 16.
+     *
+     */
+
+    public static String getCleanHexString( String inputText ) {
+
+        String text = inputText.replaceAll( " ,;\r?\n", "" );
+        text = text.toLowerCase();
+        if ( text.startsWith( "0x" ) == true ) {
+            text = text.replaceFirst( "0x", "" );
+        }
+        return text;
+
+    }
+
+    /** Retrieves a byte array from a hexadecimal stream represented by a
+     * string.
+     *
+     * @param hex String containing the user provided hexadecimal string.  It
+     * is recommended to call the "getCleanHexString()" on this text first.
+     *
+     * @return byte[] byte array of sufficient size to capture the hexadecimal
+     * string provided.
+     *
+     * @throws NumberFormatException if the string cannot be interpreted as a
+     * hex string by the Java Integer class.
+     *
+     */
+
+    public static byte[] getBytesFromHexString( String hex ) {
+
+        int byteCount = hex.length() / 2;
+        if ( hex.length() % 2 != 0 ) {
+            byteCount += 1;
+        }
+
+        byte[] bytes = new byte[byteCount];
+
+        for ( int iii = 0; iii < hex.length(); iii += 2 ) {
+
+            int start = iii;
+            int end   = iii + 2;
+            if ( end > ( hex.length() - 1 ) ) {
+                end -= 1;
+            }
+
+            String value = hex.substring( start, end );
+            if ( value.length() == 1 ) {
+                value = value + "0";
+            }
+
+            bytes[iii / 2] = (byte)Integer.parseInt( value, 16 );
+
+        }
+
+        return bytes;
+
+    }
+
     /** A matcher function that uses the glob style algorithm to determine if
      * a candidate string matches a glob style pattern.
      *
