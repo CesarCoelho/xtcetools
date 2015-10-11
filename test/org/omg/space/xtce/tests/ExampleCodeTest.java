@@ -83,7 +83,7 @@ public class ExampleCodeTest {
         }
 
     }
-/*
+
     @Test
     public void testProcessContainerExample() {
 
@@ -112,7 +112,7 @@ public class ExampleCodeTest {
         }
 
     }
-*/
+
     private void run( ProcessBuilder proc ) throws IOException, InterruptedException {
 
         proc.redirectErrorStream( true );
