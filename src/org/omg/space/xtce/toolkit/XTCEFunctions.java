@@ -399,7 +399,7 @@ public class XTCEFunctions {
 
     public static String getCleanHexString( String inputText ) {
 
-        String text = inputText.replaceAll( " ,;\r?\n", "" );
+        String text = inputText.replaceAll( "[ ,;\r\n]", "" );
         text = text.toLowerCase();
         if ( text.startsWith( "0x" ) == true ) {
             text = text.replaceFirst( "0x", "" );
