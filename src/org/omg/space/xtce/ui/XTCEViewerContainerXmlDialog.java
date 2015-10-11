@@ -20,9 +20,15 @@ package org.omg.space.xtce.ui;
 import java.awt.Frame;
 import org.omg.space.xtce.toolkit.XTCEDatabaseException;
 import java.awt.event.WindowEvent;
+import org.omg.space.xtce.toolkit.XTCEFunctions;
 import org.omg.space.xtce.toolkit.XTCETMContainer;
+import org.omg.space.xtce.toolkit.XTCETMStream;
 
-/**
+/** This class creates a dialog box to view the XML contents of a container
+ * or a stream.
+ *
+ * This dialog is compatible with any XTCENamedObject and will probably be
+ * renamed and migrated for that purpose at some point.
  *
  * @author David Overeem
  *
@@ -30,10 +36,8 @@ import org.omg.space.xtce.toolkit.XTCETMContainer;
 
 public class XTCEViewerContainerXmlDialog extends javax.swing.JDialog {
 
-    /** Constructor
-     *
-     * Creates new dialog window for showing the XTCE SequenceContainer element
-     * XML contents.
+    /** Creates new dialog window for showing the XTCE SequenceContainer
+     * element XML contents.
      *
      * @param parent Frame containing the parent window.
      *
@@ -49,12 +53,42 @@ public class XTCEViewerContainerXmlDialog extends javax.swing.JDialog {
                                   boolean         modal,
                                   XTCETMContainer container ) throws XTCEDatabaseException {
 
-        super(parent, modal);
+        super( parent, modal );
         initComponents();
         if ( container == null ) {
             return;
         }
         containerDefinitionText.setText( container.toXml() );
+        containerLabel.setText( XTCEFunctions.getText( "dialog_xmlsingle_container" ) );
+        pack();
+        setLocationRelativeTo( parent );
+
+    }
+
+    /** Creates new dialog window for showing the XTCE PCMStreamType element
+     * XML contents.
+     *
+     * @param parent Frame containing the parent window.
+     *
+     * @param modal Boolean indicating if this dialog should block the parent
+     * window interactions until dismissed.
+     *
+     * @param stream XTCETMStream object that will be used to extract the
+     * raw XML ASCII for display to the user in the dialog.
+     *
+     */
+
+    XTCEViewerContainerXmlDialog( Frame           parent,
+                                  boolean         modal,
+                                  XTCETMStream    stream ) throws XTCEDatabaseException {
+
+        super( parent, modal );
+        initComponents();
+        if ( stream == null ) {
+            return;
+        }
+        containerDefinitionText.setText( stream.toXml() );
+        containerLabel.setText( XTCEFunctions.getText( "dialog_xmlsingle_stream" ) );
         pack();
         setLocationRelativeTo( parent );
 
@@ -169,54 +203,6 @@ public class XTCEViewerContainerXmlDialog extends javax.swing.JDialog {
         // TODO : Do something useful here
         this.dispatchEvent( new WindowEvent(this, WindowEvent.WINDOW_CLOSING) );
     }//GEN-LAST:event_acceptButtonActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(XTCEViewerContainerXmlDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(XTCEViewerContainerXmlDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(XTCEViewerContainerXmlDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(XTCEViewerContainerXmlDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    XTCEViewerContainerXmlDialog dialog = new XTCEViewerContainerXmlDialog(new javax.swing.JFrame(), true, null);
-                    dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                        @Override
-                        public void windowClosing(java.awt.event.WindowEvent e) {
-                            System.exit(0);
-                        }
-                    });
-                    dialog.setVisible(true);
-                } catch ( XTCEDatabaseException ex ) {
-                    System.out.println( "Exception: " + ex.getLocalizedMessage() );
-                }
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton acceptButton;

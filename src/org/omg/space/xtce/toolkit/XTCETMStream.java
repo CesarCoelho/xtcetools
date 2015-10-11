@@ -26,10 +26,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import javax.xml.bind.JAXBElement;
+import javax.xml.namespace.QName;
 import org.omg.space.xtce.database.AliasSetType;
 import org.omg.space.xtce.database.DescriptionType.AncillaryDataSet;
 import org.omg.space.xtce.database.FixedFrameStreamType;
 import org.omg.space.xtce.database.PCMStreamType;
+import org.omg.space.xtce.database.SequenceContainerType;
 import org.omg.space.xtce.database.VariableFrameStreamType;
 
 /** Class the represent a telemetry stream from the XTCE data model.
@@ -422,6 +425,24 @@ public class XTCETMStream extends XTCENamedObject {
         }
 
         return processStream( buffer.toByteArray(), includeList );
+
+    }
+
+    public String toXml() throws XTCEDatabaseException {
+
+        try {
+
+            JAXBElement xmlElement = new JAXBElement( new QName(PCMStreamType.class.getSimpleName()),
+                                                          PCMStreamType.class,
+                                                          stream_ );
+
+            XTCEDocumentMarshaller mmm = new XTCEDocumentMarshaller( PCMStreamType.class, true );
+
+            return XTCEFunctions.xmlPrettyPrint( mmm.marshalToXml( xmlElement ) );
+
+        } catch ( Exception ex ) {
+            throw new XTCEDatabaseException( "Failed to create XML from Parameter Object: " + ex.getCause() );
+        }
 
     }
 

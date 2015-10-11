@@ -115,8 +115,9 @@ public class XTCEViewer extends javax.swing.JFrame {
         copyParameterCellMenuItem = new javax.swing.JMenuItem();
         copyParameterRowMenuItem = new javax.swing.JMenuItem();
         copyParameterTableMenuItem = new javax.swing.JMenuItem();
-        containerDetailPopupMenu = new javax.swing.JPopupMenu();
+        containerTreePopupMenu = new javax.swing.JPopupMenu();
         showContainerXmlMenuItem = new javax.swing.JMenuItem();
+        decodeContainerMenuItem = new javax.swing.JMenuItem();
         containerTablePopupMenu = new javax.swing.JPopupMenu();
         showItemXmlElementsMenuItem = new javax.swing.JMenuItem();
         goToEntryMenuItem = new javax.swing.JMenuItem();
@@ -178,6 +179,9 @@ public class XTCEViewer extends javax.swing.JFrame {
         containersTotal = new javax.swing.JTextField();
         messagesDialogPanel = new javax.swing.JScrollPane();
         messagesDialogText = new javax.swing.JTextArea();
+        streamTreePopupMenu = new javax.swing.JPopupMenu();
+        showStreamXmlMenuItem = new javax.swing.JMenuItem();
+        decodeStreamMenuItem = new javax.swing.JMenuItem();
         loadedFilenameLabel = new javax.swing.JLabel();
         loadedSchemaLabel = new javax.swing.JLabel();
         mainWindowPrimaryWorkspace = new javax.swing.JTabbedPane();
@@ -359,7 +363,15 @@ public class XTCEViewer extends javax.swing.JFrame {
                 showContainerXmlMenuItemActionPerformed(evt);
             }
         });
-        containerDetailPopupMenu.add(showContainerXmlMenuItem);
+        containerTreePopupMenu.add(showContainerXmlMenuItem);
+
+        decodeContainerMenuItem.setText(bundle.getString("options_popup_decodecontainer")); // NOI18N
+        decodeContainerMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                decodeContainerMenuItemActionPerformed(evt);
+            }
+        });
+        containerTreePopupMenu.add(decodeContainerMenuItem);
 
         showItemXmlElementsMenuItem.setText(bundle.getString("options_popup_showxmlelements")); // NOI18N
         showItemXmlElementsMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -729,6 +741,22 @@ public class XTCEViewer extends javax.swing.JFrame {
         messagesDialogText.setColumns(20);
         messagesDialogText.setRows(5);
         messagesDialogPanel.setViewportView(messagesDialogText);
+
+        showStreamXmlMenuItem.setText(bundle.getString("options_popup_showstreamxml")); // NOI18N
+        showStreamXmlMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                showStreamXmlMenuItemActionPerformed(evt);
+            }
+        });
+        streamTreePopupMenu.add(showStreamXmlMenuItem);
+
+        decodeStreamMenuItem.setText(bundle.getString("options_popup_decodestream")); // NOI18N
+        decodeStreamMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                decodeStreamMenuItemActionPerformed(evt);
+            }
+        });
+        streamTreePopupMenu.add(decodeStreamMenuItem);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("xtceview");
@@ -1797,7 +1825,7 @@ public class XTCEViewer extends javax.swing.JFrame {
     private void tmContainerTreeMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tmContainerTreeMousePressed
 
         if ( SwingUtilities.isRightMouseButton( evt ) == true ) {
-            containerDetailPopupMenu.show( tmContainerTree,
+            containerTreePopupMenu.show( tmContainerTree,
                                            evt.getX(),
                                            evt.getY() );
         }
@@ -3080,7 +3108,13 @@ public class XTCEViewer extends javax.swing.JFrame {
     }//GEN-LAST:event_copyParameterCellMenuItemActionPerformed
 
     private void tmStreamTreeMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tmStreamTreeMousePressed
-        // TODO add your handling code here:
+
+        if ( SwingUtilities.isRightMouseButton( evt ) == true ) {
+            streamTreePopupMenu.show( tmStreamTree,
+                                      evt.getX(),
+                                      evt.getY() );
+        }
+
     }//GEN-LAST:event_tmStreamTreeMousePressed
 
     private void tmStreamTreeValueChanged(javax.swing.event.TreeSelectionEvent evt) {//GEN-FIRST:event_tmStreamTreeValueChanged
@@ -3376,6 +3410,79 @@ public class XTCEViewer extends javax.swing.JFrame {
         drawContainerContentTable( valueList );
 */
     }//GEN-LAST:event_setRepeatCounterMenuItemActionPerformed
+
+    private void decodeContainerMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_decodeContainerMenuItemActionPerformed
+
+        XTCEViewerContainerTreeNode node =
+           (XTCEViewerContainerTreeNode)tmContainerTree.getLastSelectedPathComponent();
+        if ( node != null ) {
+            try {
+                XTCETMContainer container = node.getContainerReference();
+                XTCEViewerContainerContentDialog dialog =
+                    new XTCEViewerContainerContentDialog( this,
+                                                          false,
+                                                          container,
+                                                          xtceDatabaseFile,
+                                                          prefs );
+                dialog.setVisible( true );
+            //} catch ( XTCEDatabaseException ex ) {
+            //    logMsg( XTCEFunctions.generalErrorPrefix() + ex.getLocalizedMessage() );
+            } catch ( NullPointerException ex ) {
+                JOptionPane.showMessageDialog( this,
+                                               XTCEFunctions.getText( "dialog_selectedrownocontainer_text" ), // NOI18N
+                                               XTCEFunctions.getText( "general_error" ), // NOI18N
+                                               JOptionPane.ERROR_MESSAGE);
+            }
+        }
+
+    }//GEN-LAST:event_decodeContainerMenuItemActionPerformed
+
+    private void showStreamXmlMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showStreamXmlMenuItemActionPerformed
+
+        XTCEViewerStreamTreeNode node =
+           (XTCEViewerStreamTreeNode)tmStreamTree.getLastSelectedPathComponent();
+        if ( node != null ) {
+            try {
+                XTCETMStream stream = node.getStreamReference();
+                XTCEViewerContainerXmlDialog dialog = new XTCEViewerContainerXmlDialog( this, true, stream );
+                dialog.setVisible( true );
+            } catch ( XTCEDatabaseException ex ) {
+                logMsg( XTCEFunctions.generalErrorPrefix() + ex.getLocalizedMessage() );
+            } catch ( NullPointerException ex ) {
+                JOptionPane.showMessageDialog( this,
+                                               XTCEFunctions.getText( "dialog_selectedrownocontainer_text" ), // NOI18N
+                                               XTCEFunctions.getText( "general_error" ), // NOI18N
+                                               JOptionPane.ERROR_MESSAGE);
+            }
+        }
+
+    }//GEN-LAST:event_showStreamXmlMenuItemActionPerformed
+
+    private void decodeStreamMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_decodeStreamMenuItemActionPerformed
+
+        XTCEViewerStreamTreeNode node =
+           (XTCEViewerStreamTreeNode)tmStreamTree.getLastSelectedPathComponent();
+        if ( node != null ) {
+            try {
+                XTCETMStream stream = node.getStreamReference();
+                XTCEViewerContainerContentDialog dialog =
+                    new XTCEViewerContainerContentDialog( this,
+                                                          false,
+                                                          stream,
+                                                          xtceDatabaseFile,
+                                                          prefs );
+                dialog.setVisible( true );
+            //} catch ( XTCEDatabaseException ex ) {
+            //    logMsg( XTCEFunctions.generalErrorPrefix() + ex.getLocalizedMessage() );
+            } catch ( NullPointerException ex ) {
+                JOptionPane.showMessageDialog( this,
+                                               XTCEFunctions.getText( "dialog_selectedrownocontainer_text" ), // NOI18N
+                                               XTCEFunctions.getText( "general_error" ), // NOI18N
+                                               JOptionPane.ERROR_MESSAGE);
+            }
+        }
+
+    }//GEN-LAST:event_decodeStreamMenuItemActionPerformed
 
     public void goToParameter( String  parameterName,
                                String  spaceSystemName,
@@ -4666,13 +4773,13 @@ public class XTCEViewer extends javax.swing.JFrame {
     private javax.swing.JTextField argumentTypesTotal;
     private javax.swing.JTextField argumentsTotal;
     private javax.swing.JMenuItem cloneContainerDrawingMenuItem;
-    private javax.swing.JPopupMenu containerDetailPopupMenu;
     private javax.swing.JRadioButtonMenuItem containerDrawingLeftToRight;
     private javax.swing.JMenu containerDrawingOrientationMenu;
     private javax.swing.JPopupMenu containerDrawingPopupMenu;
     private javax.swing.JRadioButtonMenuItem containerDrawingTopToBottom;
     private javax.swing.JPanel containerExportPanel;
     private javax.swing.JPopupMenu containerTablePopupMenu;
+    private javax.swing.JPopupMenu containerTreePopupMenu;
     private javax.swing.JTextField containersTotal;
     private javax.swing.JMenuItem copyContainerCellMenuItem;
     private javax.swing.JMenuItem copyContainerRowMenuItem;
@@ -4681,6 +4788,8 @@ public class XTCEViewer extends javax.swing.JFrame {
     private javax.swing.JMenuItem copyParameterRowMenuItem;
     private javax.swing.JMenuItem copyParameterTableMenuItem;
     private javax.swing.JPanel databaseMetricsPanel;
+    private javax.swing.JMenuItem decodeContainerMenuItem;
+    private javax.swing.JMenuItem decodeStreamMenuItem;
     private javax.swing.JMenuItem deleteSpaceSystemMenuItem;
     private javax.swing.JScrollPane detailSpaceSystemPanelScrollPane;
     private javax.swing.JTree detailSpaceSystemTree;
@@ -4787,11 +4896,13 @@ public class XTCEViewer extends javax.swing.JFrame {
     private javax.swing.JMenuItem showItemXmlElementsMenuItem;
     private javax.swing.JMenuItem showParameterDetailsMenuItem;
     private javax.swing.JMenuItem showParameterUsageMenuItem;
+    private javax.swing.JMenuItem showStreamXmlMenuItem;
     private javax.swing.JMenuItem showXmlElementsMenuItem;
     private javax.swing.JPopupMenu spaceSystemDetailPopupMenu;
     private javax.swing.JLabel spaceSystemOverviewLabel;
     private javax.swing.JPanel spaceSystemOverviewPanel;
     private javax.swing.JTextField spaceSystemsTotal;
+    private javax.swing.JPopupMenu streamTreePopupMenu;
     private javax.swing.JTextField tcContainersTotal;
     private javax.swing.JScrollPane tcContentDrawingScrollPane;
     private javax.swing.JScrollPane tcContentScrollPane;
