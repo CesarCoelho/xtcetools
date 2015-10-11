@@ -428,6 +428,16 @@ public class XTCETMStream extends XTCENamedObject {
 
     }
 
+    /** Retrieve an XML string that represents this Stream element.
+     *
+     * @return String containing the XML fragment.
+     *
+     * @throws XTCEDatabaseException in the event that the elements being
+     * marshaled from the JAXB internal classes cannot make a valid document.
+     * Check the exception message for causality information.
+     *
+     */
+
     public String toXml() throws XTCEDatabaseException {
 
         try {
@@ -436,12 +446,19 @@ public class XTCETMStream extends XTCENamedObject {
                                                           PCMStreamType.class,
                                                           stream_ );
 
-            XTCEDocumentMarshaller mmm = new XTCEDocumentMarshaller( PCMStreamType.class, true );
+            XTCEDocumentMarshaller mmm =
+                new XTCEDocumentMarshaller( PCMStreamType.class, true );
 
             return XTCEFunctions.xmlPrettyPrint( mmm.marshalToXml( xmlElement ) );
 
         } catch ( Exception ex ) {
-            throw new XTCEDatabaseException( "Failed to create XML from Parameter Object: " + ex.getCause() );
+            throw new XTCEDatabaseException(
+                getName() +
+                ": " + // NOI18N
+                XTCEFunctions.getText( "xml_marshal_error_stream" ) + // NOI18N
+                " '" + // NOI18N
+                ex.getCause() +
+                "'" ); // NOI18N
         }
 
     }

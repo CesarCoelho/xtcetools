@@ -410,6 +410,17 @@ public class XTCEParameter extends XTCETypedObject {
         return ( reference_ != null );
     }
 
+    /** Retrieve an XML string that represents this Parameter or Member
+     * element.
+     *
+     * @return String containing the XML fragment.
+     *
+     * @throws XTCEDatabaseException in the event that the elements being
+     * marshaled from the JAXB internal classes cannot make a valid document.
+     * Check the exception message for causality information.
+     *
+     */
+
     public String toXml() throws XTCEDatabaseException {
 
         try {
@@ -429,29 +440,13 @@ public class XTCEParameter extends XTCETypedObject {
             }
 
         } catch ( Exception ex ) {
-            throw new XTCEDatabaseException( "Failed to create XML from Parameter Object: " + ex.getCause() );
-        }
-
-    }
-
-    public String typeToXml() throws XTCEDatabaseException {
-
-        if ( getTypeReference() == null ) {
-            throw new XTCEDatabaseException( "Parameter " +
-                                             getName() +
-                                             " has no type defined" );
-        }
-
-        try {
-
-            JAXBElement xmlElement = new JAXBElement( new QName(getTypeReference().getClass().getSimpleName()),
-                                                      getTypeReference().getClass(),
-                                                      getTypeReference() );
-            XTCEDocumentMarshaller mmm = new XTCEDocumentMarshaller( getTypeReference().getClass(), true );
-            return XTCEFunctions.xmlPrettyPrint( mmm.marshalToXml( xmlElement ) );
-
-        } catch ( Exception ex ) {
-            throw new XTCEDatabaseException( "Failed to create XML from Parameter Object: " + ex.getCause() );
+            throw new XTCEDatabaseException(
+                getName() +
+                ": " + // NOI18N
+                XTCEFunctions.getText( "xml_marshal_error_parameter" ) + // NOI18N
+                " '" + // NOI18N
+                ex.getCause() +
+                "'" ); // NOI18N
         }
 
     }

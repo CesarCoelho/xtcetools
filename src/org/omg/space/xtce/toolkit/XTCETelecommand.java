@@ -315,6 +315,16 @@ public class XTCETelecommand extends XTCENamedObject {
 
     }
 
+    /** Retrieve an XML string that represents this MetaCommand element.
+     *
+     * @return String containing the XML fragment.
+     *
+     * @throws XTCEDatabaseException in the event that the elements being
+     * marshaled from the JAXB internal classes cannot make a valid document.
+     * Check the exception message for causality information.
+     *
+     */
+
     public String toXml() throws XTCEDatabaseException {
 
         try {
@@ -343,7 +353,13 @@ public class XTCETelecommand extends XTCENamedObject {
             return XTCEFunctions.xmlPrettyPrint( mmm.marshalToXml( xmlElement ) );
 
         } catch ( Exception ex ) {
-            throw new XTCEDatabaseException( "Failed to create XML from MetaCommand Object: " + ex.getCause() );
+            throw new XTCEDatabaseException(
+                getName() +
+                ": " + // NOI18N
+                XTCEFunctions.getText( "xml_marshal_error_telecommand" ) + // NOI18N
+                " '" + // NOI18N
+                ex.getCause() +
+                "'" ); // NOI18N
         }
 
     }

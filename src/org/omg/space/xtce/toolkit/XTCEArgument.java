@@ -329,38 +329,13 @@ public class XTCEArgument extends XTCETypedObject {
             }
 
         } catch ( Exception ex ) {
-            throw new XTCEDatabaseException( "Failed to create XML from Argument Object: " + ex.getCause() );
-        }
-
-    }
-
-    /** Retrieve a string of the XML text for the Argument Type element that
-     * is used by this Argument.
-     *
-     * @return String containing the XML as formatted text.
-     *
-     * @throws XTCEDatabaseException in the event that the elements being
-     * marshaled from the JAXB internal classes cannot make a valid document.
-     * Check the exception message for causality information.
-     *
-     */
-
-    public String typeToXml() throws XTCEDatabaseException {
-
-        if ( getTypeReference() == null ) {
-            throw new XTCEDatabaseException( "Argument " + getName() + "has not type defined" );
-        }
-
-        try {
-
-            JAXBElement xmlElement = new JAXBElement( new QName(getTypeReference().getClass().getSimpleName()),
-                                                      getTypeReference().getClass(),
-                                                      getTypeReference() );
-            XTCEDocumentMarshaller mmm = new XTCEDocumentMarshaller( getTypeReference().getClass(), true );
-            return XTCEFunctions.xmlPrettyPrint( mmm.marshalToXml( xmlElement ) );
-
-        } catch ( Exception ex ) {
-            throw new XTCEDatabaseException( "Failed to create XML from Argument Object: " + ex.getCause() );
+            throw new XTCEDatabaseException(
+                getName() +
+                ": " + // NOI18N
+                XTCEFunctions.getText( "xml_marshal_error_argument" ) + // NOI18N
+                " '" + // NOI18N
+                ex.getCause() +
+                "'" ); // NOI18N
         }
 
     }
