@@ -32,7 +32,6 @@ import org.omg.space.xtce.database.AliasSetType;
 import org.omg.space.xtce.database.DescriptionType.AncillaryDataSet;
 import org.omg.space.xtce.database.FixedFrameStreamType;
 import org.omg.space.xtce.database.PCMStreamType;
-import org.omg.space.xtce.database.SequenceContainerType;
 import org.omg.space.xtce.database.VariableFrameStreamType;
 
 /** Class the represent a telemetry stream from the XTCE data model.
@@ -442,12 +441,27 @@ public class XTCETMStream extends XTCENamedObject {
 
         try {
 
-            JAXBElement xmlElement = new JAXBElement( new QName(PCMStreamType.class.getSimpleName()),
-                                                          PCMStreamType.class,
-                                                          stream_ );
+            JAXBElement            xmlElement;
+            XTCEDocumentMarshaller mmm;
 
-            XTCEDocumentMarshaller mmm =
-                new XTCEDocumentMarshaller( PCMStreamType.class, true );
+            if ( stream_ instanceof VariableFrameStreamType ) {
+
+                xmlElement = new JAXBElement( new QName(VariableFrameStreamType.class.getSimpleName()),
+                                              VariableFrameStreamType.class,
+                                              stream_ );
+
+                mmm = new XTCEDocumentMarshaller( VariableFrameStreamType.class,
+                                                  true );
+
+            } else {
+
+                xmlElement = new JAXBElement( new QName(PCMStreamType.class.getSimpleName()),
+                                              PCMStreamType.class,
+                                              stream_ );
+
+                mmm = new XTCEDocumentMarshaller( PCMStreamType.class, true );
+
+            }
 
             return XTCEFunctions.xmlPrettyPrint( mmm.marshalToXml( xmlElement ) );
 
