@@ -190,7 +190,7 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
         try {
             Integer candidate = Integer.parseInt( value );
             String rawEncoding = parameter_.getRawType();
-            if ( ( candidate.intValue() < 0 ) && ( rawEncoding.equals( "unsigned" ) == true ) ) {
+            if ( ( candidate < 0 ) && ( rawEncoding.equals( "unsigned" ) == true ) ) {
                 JOptionPane.showMessageDialog( this,
                                                "Negative value for enumeration specified on an unsigned parameter",
                                                XTCEFunctions.getText( "general_error" ),
@@ -209,7 +209,7 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
             try {
                 Integer candidate = Integer.parseInt( value );
                 String rawEncoding = parameter_.getRawType();
-                if ( ( candidate.intValue() < 0 ) && ( rawEncoding.equals( "unsigned" ) == true ) ) {
+                if ( ( candidate < 0 ) && ( rawEncoding.equals( "unsigned" ) == true ) ) {
                     JOptionPane.showMessageDialog( this,
                                                    "Negative maximum value for enumeration specified on an unsigned parameter",
                                                    XTCEFunctions.getText( "general_error" ),
@@ -369,8 +369,8 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
         List<SplinePointType> points = splineCal.getSplinePoint();
 
         for ( SplinePointType point : points ) {
-            Object rowData[] = { new Double( point.getRaw() ),
-                                 new Double( point.getCalibrated() ) };
+            Object rowData[] = { point.getRaw(),
+                                 point.getCalibrated() };
             tableModel.addRow( rowData );
         }
 

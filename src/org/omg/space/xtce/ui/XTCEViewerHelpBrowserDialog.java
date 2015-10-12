@@ -88,6 +88,7 @@ public class XTCEViewerHelpBrowserDialog extends JDialog {
         dismissButton_.setMinimumSize(new java.awt.Dimension(90, 25));
         dismissButton_.setPreferredSize(new java.awt.Dimension(90, 25));
         dismissButton_.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 dismissButtonActionPerformed(evt);
             }
@@ -98,6 +99,7 @@ public class XTCEViewerHelpBrowserDialog extends JDialog {
         backButton_.setMinimumSize(new java.awt.Dimension(90, 25));
         backButton_.setPreferredSize(new java.awt.Dimension(90, 25));
         backButton_.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 backButtonActionPerformed(evt);
             }
@@ -108,6 +110,7 @@ public class XTCEViewerHelpBrowserDialog extends JDialog {
         forwardButton_.setMinimumSize(new java.awt.Dimension(90, 25));
         forwardButton_.setPreferredSize(new java.awt.Dimension(90, 25));
         forwardButton_.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 forwardButtonActionPerformed(evt);
             }
@@ -180,6 +183,7 @@ public class XTCEViewerHelpBrowserDialog extends JDialog {
         ObservableList<WebHistory.Entry> entryList = history.getEntries();
         int currentIndex = history.getCurrentIndex();
         Platform.runLater( new Runnable() {
+            @Override
             public void run() {
                 try {
                     history.go( -1 );
@@ -204,6 +208,7 @@ public class XTCEViewerHelpBrowserDialog extends JDialog {
         ObservableList<WebHistory.Entry> entryList = history.getEntries();
         int currentIndex = history.getCurrentIndex();
         Platform.runLater( new Runnable() {
+            @Override
             public void run() {
                 try {
                     history.go( 1 );

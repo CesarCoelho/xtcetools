@@ -96,8 +96,7 @@ public class XTCETMStream extends XTCENamedObject {
             XTCEFunctions.resolvePathReference( spaceSystem.getFullPath(),
                                                 ref );
 
-        rootContainer_ = db_.getContainer( sPath );
-
+        rootContainer_    = db_.getContainer( sPath );
         streamContainers_ = new TreeMap<>();
 
         String iPath = getStreamRootContainer().getInheritancePath();
@@ -483,6 +482,7 @@ public class XTCETMStream extends XTCENamedObject {
     private final XTCETMContainer rootContainer_;
     private final XTCEDatabase    db_;
 
-    private Map<XTCETMContainer, XTCEContainerContentModel> streamContainers_;
+    private final Map<XTCETMContainer,
+                      XTCEContainerContentModel> streamContainers_;
 
 }

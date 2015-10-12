@@ -441,7 +441,7 @@ public class XTCEFunctions {
 
             String value = hex.substring( start, end );
             if ( value.length() == 1 ) {
-                value = value + "0";
+                value += "0";
             }
 
             bytes[iii / 2] = (byte)Integer.parseInt( value, 16 );

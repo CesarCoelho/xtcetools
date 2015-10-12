@@ -753,6 +753,55 @@ public class StaticFunctionsTest {
 
     }
 
+    @Test
+    public void getCleanHexString() {
+
+        String hex = " \t    0x 12 34 \r 56 \r\n 78 \f 99aabbccdd";
+
+        String fixed = XTCEFunctions.getCleanHexString( hex );
+
+        String expect = "1234567899aabbccdd";
+
+        Assert.assertTrue( "String should be '" + expect + "'",
+                           fixed.equals( expect ) == true );
+
+    }
+
+    @Test
+    public void getBytesFromHexString() {
+
+        String hex   = "123";
+        byte[] fixed = XTCEFunctions.getBytesFromHexString( hex );
+
+        if ( fixed[0] != (byte)0x12 ) {
+            Assert.fail( "First byte should be 0x12" );
+        }
+        if ( fixed[1] != (byte)0x30 ) {
+            Assert.fail( "Second byte should be 0x30" );
+        }
+
+        try {
+            hex          = " \t    0x 12 34 \r 56 \r\n 78 z\f 99aabbccdd";
+            hex          = XTCEFunctions.getCleanHexString( hex );
+            byte[] bytes = XTCEFunctions.getBytesFromHexString( hex );
+        } catch ( NumberFormatException ex ) {
+            // expected this, test passes
+            return;
+        }
+
+        Assert.fail( "Should have gotten an exception with 'z'" );
+
+    }
+
+    @Test
+    public void getMemoryUsageStatistics() {
+
+        // not sure how to test this than to otherwise call it...
+        String text = XTCEFunctions.getMemoryUsageStatistics();
+        System.out.println( text );
+
+    }
+    
     // cannot easily do the xmlPrettyPrint and getMemoryUsageStatistics
     // functions right now.  The formatMemoryQuantity is not public.
 

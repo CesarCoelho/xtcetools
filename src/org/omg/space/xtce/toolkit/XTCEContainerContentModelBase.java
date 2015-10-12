@@ -962,7 +962,7 @@ abstract class XTCEContainerContentModelBase {
                 long startBit   = Long.parseLong( entry.getStartBit() );
                 long sizeInBits = Long.parseLong( entry.getRawSizeInBits() );
                 for ( long iii = startBit; iii < ( startBit + sizeInBits ); ++iii ) {
-                    Long bit = Long.valueOf( iii );
+                    Long bit = iii;
                     if ( usageMap.containsKey( bit ) == true ) {
                         warnings_.add( "Container Item " +
                                        entry.itemName +
