@@ -76,6 +76,8 @@ public class XTCEViewerContainerContentDialog extends javax.swing.JDialog {
         tmContainer_ = container;
         tmStream_    = null;
 
+        setLocationRelativeTo( parent );
+
     }
 
     /** Constructs a new dialog window for a selected database stream
@@ -114,6 +116,8 @@ public class XTCEViewerContainerContentDialog extends javax.swing.JDialog {
         prefs_       = prefs;
         tmContainer_ = null;
         tmStream_    = stream;
+
+        setLocationRelativeTo( parent );
 
     }
 

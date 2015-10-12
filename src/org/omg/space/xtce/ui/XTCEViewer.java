@@ -129,6 +129,8 @@ public class XTCEViewer extends javax.swing.JFrame {
         containerDrawingPopupMenu = new javax.swing.JPopupMenu();
         saveContainerDrawingMenuItem = new javax.swing.JMenuItem();
         cloneContainerDrawingMenuItem = new javax.swing.JMenuItem();
+        showContainerDrawingXmlMenuItem = new javax.swing.JMenuItem();
+        decodeContainerDrawingMenuItem = new javax.swing.JMenuItem();
         parameterFieldExclusion = new javax.swing.ButtonGroup();
         parameterLocationExclusion = new javax.swing.ButtonGroup();
         exportParametersButtonGroup = new javax.swing.ButtonGroup();
@@ -445,6 +447,22 @@ public class XTCEViewer extends javax.swing.JFrame {
             }
         });
         containerDrawingPopupMenu.add(cloneContainerDrawingMenuItem);
+
+        showContainerDrawingXmlMenuItem.setText(bundle.getString("options_popup_showcontainerxml")); // NOI18N
+        showContainerDrawingXmlMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                showContainerDrawingXmlMenuItemActionPerformed(evt);
+            }
+        });
+        containerDrawingPopupMenu.add(showContainerDrawingXmlMenuItem);
+
+        decodeContainerDrawingMenuItem.setText(bundle.getString("options_popup_decodecontainer")); // NOI18N
+        decodeContainerDrawingMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                decodeContainerDrawingMenuItemActionPerformed(evt);
+            }
+        });
+        containerDrawingPopupMenu.add(decodeContainerDrawingMenuItem);
 
         exportParametersLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         exportParametersLabel.setText(bundle.getString("dialog_export_parameters_options_title")); // NOI18N
@@ -3484,6 +3502,18 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     }//GEN-LAST:event_decodeStreamMenuItemActionPerformed
 
+    private void showContainerDrawingXmlMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showContainerDrawingXmlMenuItemActionPerformed
+
+        showContainerXmlMenuItemActionPerformed( evt );
+
+    }//GEN-LAST:event_showContainerDrawingXmlMenuItemActionPerformed
+
+    private void decodeContainerDrawingMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_decodeContainerDrawingMenuItemActionPerformed
+
+        decodeContainerMenuItemActionPerformed( evt );
+
+    }//GEN-LAST:event_decodeContainerDrawingMenuItemActionPerformed
+
     public void goToParameter( String  parameterName,
                                String  spaceSystemName,
                                boolean isTelemetryParameter ) {
@@ -4788,6 +4818,7 @@ public class XTCEViewer extends javax.swing.JFrame {
     private javax.swing.JMenuItem copyParameterRowMenuItem;
     private javax.swing.JMenuItem copyParameterTableMenuItem;
     private javax.swing.JPanel databaseMetricsPanel;
+    private javax.swing.JMenuItem decodeContainerDrawingMenuItem;
     private javax.swing.JMenuItem decodeContainerMenuItem;
     private javax.swing.JMenuItem decodeStreamMenuItem;
     private javax.swing.JMenuItem deleteSpaceSystemMenuItem;
@@ -4891,6 +4922,7 @@ public class XTCEViewer extends javax.swing.JFrame {
     private javax.swing.JMenuItem saveContainerDrawingMenuItem;
     private javax.swing.JMenuItem setConditionTrueMenuItem;
     private javax.swing.JMenuItem setRepeatCounterMenuItem;
+    private javax.swing.JMenuItem showContainerDrawingXmlMenuItem;
     private javax.swing.JMenuItem showContainerXmlMenuItem;
     private javax.swing.JMenuItem showEncodeDecodeDialogMenuItem;
     private javax.swing.JMenuItem showItemXmlElementsMenuItem;
