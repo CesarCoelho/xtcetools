@@ -31,6 +31,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.omg.space.xtce.toolkit.XTCEFunctions;
 import org.omg.space.xtce.toolkit.XTCESchemaErrorHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
@@ -136,6 +137,50 @@ public class SchemaErrorHandlerTest {
 
             Assert.assertTrue( "expected warning count 2",
                                instance.getWarningCount() == 2 );
+
+        } catch ( NullPointerException nullex ) {
+            Assert.fail( "Did not catch null pointer exception" );
+        }
+
+    }
+
+    /**
+     * Test of warning method, of class XTCESchemaErrorHandler.
+     */
+
+    @Test
+    public void testSkippedWarning() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        final String skipMsg =
+            XTCEFunctions.getText( "xml_fallback_ignore" ); // NOI18N
+
+        SAXParseException ex = new SAXParseException( skipMsg + ": warning message",
+                                                      "publicid",
+                                                      "systemid",
+                                                      2,
+                                                      4 );
+
+        XTCESchemaErrorHandler instance = new XTCESchemaErrorHandler();
+        instance.warning( ex );
+
+        Assert.assertTrue( "expected error count 0",
+                            instance.getErrorCount() == 0 );
+
+        Assert.assertTrue( "expected warning count 0",
+                            instance.getWarningCount() == 0 );
+
+        try {
+
+            ex = null;
+            instance.warning( ex );
+
+            Assert.assertTrue( "expected warning count 1",
+                               instance.getWarningCount() == 1 );
 
         } catch ( NullPointerException nullex ) {
             Assert.fail( "Did not catch null pointer exception" );
@@ -286,6 +331,51 @@ public class SchemaErrorHandlerTest {
 
         Assert.assertTrue( "expected warning count 1",
                             instance.getWarningCount() == 1 );
+
+        try {
+
+            assertEquals( false, instance.handleEvent( null ) );
+
+            Assert.assertTrue( "expected error count 1",
+                               instance.getErrorCount() == 1 );
+
+        } catch ( NullPointerException nullex ) {
+            Assert.fail( "Did not catch null pointer exception" );
+        }
+
+    }
+
+    /**
+     * Test of handleEvent method, of class XTCESchemaErrorHandler.
+     */
+
+    @Test
+    public void testSkippedHandleEventWarning() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        final String skipMsg =
+            XTCEFunctions.getText( "xml_fallback_ignore" ); // NOI18N
+
+        ValidationEventLocator locator = new ValidationEventLocatorImpl();
+
+        ValidationEvent event = new ValidationEventImpl( ValidationEvent.WARNING,
+                                                         skipMsg + ": warning message",
+                                                         locator );
+
+        XTCESchemaErrorHandler instance = new XTCESchemaErrorHandler();
+        boolean expResult = true;
+        boolean result = instance.handleEvent( event );
+        assertEquals( expResult, result );
+
+        Assert.assertTrue( "expected error count 0",
+                            instance.getErrorCount() == 0 );
+
+        Assert.assertTrue( "expected warning count 0",
+                            instance.getWarningCount() == 0 );
 
         try {
 

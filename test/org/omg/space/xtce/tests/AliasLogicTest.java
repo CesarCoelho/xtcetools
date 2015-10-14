@@ -214,6 +214,88 @@ public class AliasLogicTest {
 
     }
 
+    @Test
+    public void testAliasComparison() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        try {
+
+            XTCEParameter parameter1 = db_.
+                                       getRootSpaceSystem().
+                                       getTelemetryParameter( "INT_WITH_MIXED_ALIAS" );
+
+            List<XTCEAlias> aliases1 = parameter1.getAliasSet();
+
+            XTCEParameter parameter2 = db_.
+                                       getRootSpaceSystem().
+                                       getTelemetryParameter( "INT_WITH_ALIAS" );
+
+            List<XTCEAlias> aliases2 = parameter2.getAliasSet();
+
+            System.out.println( "Alias 1a: " + aliases1.get( 0 ).getFullAliasName() );
+            System.out.println( "Alias 1b: " + aliases1.get( 1 ).getFullAliasName() );
+            System.out.println( "Alias 2a: " + aliases2.get( 0 ).getFullAliasName() );
+
+            Assert.assertFalse( "Aliases 1a and 2a should NOT be equal",
+                                aliases1.get( 1 ).equals( aliases2.get( 0 ) ) );
+
+            Assert.assertTrue( "Aliases 1a and 2a should be equal",
+                               aliases1.get( 0 ).equals( aliases2.get( 0 ) ) );
+
+            int hash1 = aliases1.get( 0 ).hashCode();
+            int hash2 = aliases2.get( 0 ).hashCode();
+            int hash3 = aliases1.get( 1 ).hashCode();
+
+            System.out.println( "Hash of 1a: " + Integer.toString( hash1 ) );
+            System.out.println( "Hash of 2a: " + Integer.toString( hash2 ) );
+            System.out.println( "Hash of 1b: " + Integer.toString( hash3 ) );
+
+            Assert.assertTrue( "Hashes for 1a and 2a should be equal",
+                               hash1 == hash2 );
+
+            Assert.assertFalse( "Hashes for 1b and 2a should NOT be equal",
+                                hash3 == hash2 );
+
+        } catch ( Throwable ex ) {
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+    }
+
+    @Test
+    public void testAliasEqualityForOtherObjects() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        try {
+
+            XTCEParameter parameter1 = db_.
+                                       getRootSpaceSystem().
+                                       getTelemetryParameter( "INT_WITH_MIXED_ALIAS" );
+
+            List<XTCEAlias> aliases1 = parameter1.getAliasSet();
+
+            Assert.assertTrue( "Alias object equals self is true",
+                               aliases1.get( 1 ).equals( aliases1.get( 1 ) ) );
+
+            Long myNumber = new Long( "1" );
+
+            Assert.assertFalse( "Alias object equals another object is false",
+                                aliases1.get( 1 ).equals( myNumber ) );
+
+        } catch ( Throwable ex ) {
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+    }
+
     private XTCEDatabase db_ = null;
 
 }
