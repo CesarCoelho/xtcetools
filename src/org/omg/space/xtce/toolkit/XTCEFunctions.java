@@ -757,12 +757,11 @@ public class XTCEFunctions {
         String unit = "K"; // NOI18N
         double quantity = amount / 1024.0;
 
-        if ( quantity > 1024 ) {
-            unit = "M"; // NOI18N
-            quantity /= 1024.0;
-        }
-        if ( quantity > 1024 ) {
+        if ( quantity > ( 1024 * 1024 ) ) {
             unit = "G"; // NOI18N
+            quantity /= ( 1024.0 * 1024.0 );
+        } else if ( quantity > 1024 ) {
+            unit = "M"; // NOI18N
             quantity /= 1024.0;
         }
 
