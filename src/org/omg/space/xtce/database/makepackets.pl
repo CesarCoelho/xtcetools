@@ -131,6 +131,10 @@ if ( -f "Container-10000Packets.bin" ) {
    system( "rm", "-f", "Container-10000Packets.bin" );
 }
 
+if ( -f "Container-UniquePackets.bin" ) {
+   system( "rm", "-f", "Container-UniquePackets.bin" );
+}
+
 system( "touch", "Container-10000Packets.bin" );
 
 for ( my $iii = 0; $iii < 10000; ++$iii ) {
@@ -142,7 +146,10 @@ for ( my $iii = 0; $iii < 10000; ++$iii ) {
    system( "cat Container-ECSS_3_25_HK-ECSS_SpacePacket2-NoInc.bin >> Container-10000Packets.bin" );
    system( "cat Container-ECSS_3_25_HK-ECSS_SpacePacket2-Inc.bin >> Container-10000Packets.bin" );
 
+   if ( $iii == 0 ) {
+      system( "cp", "-f", "Container-10000Packets.bin", "Container-UniquePackets.bin" );
+   }
+
 }
 
 exit( 0 );
-

@@ -257,12 +257,19 @@ public class XTCETMContainer extends XTCENamedObject {
 
     @Override
     public int compareTo( Object that ) {
-        return this.getInheritancePath().compareTo(((XTCETMContainer)that).getInheritancePath() );
+
+        if ( that instanceof String ) {
+            return this.iPath_.compareTo( (String)that );
+        }
+
+        return this.iPath_
+                   .compareTo( ( (XTCETMContainer)that ).iPath_ );
+
     }
 
     // Private Data Members
 
-    private String                iPath_     = null;
-    private SequenceContainerType container_ = null;
+    private final String                iPath_;
+    private final SequenceContainerType container_;
 
 }

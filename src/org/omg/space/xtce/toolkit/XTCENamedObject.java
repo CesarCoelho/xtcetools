@@ -410,10 +410,10 @@ public abstract class XTCENamedObject implements Comparable {
     public boolean equals( Object rhs ) {
 
         if ( rhs instanceof String ) {
-            return ( rhs.equals( this.path_ ) );
+            return ( rhs.equals( this.getFullPath() ) );
         } else if ( rhs instanceof XTCENamedObject ) {
             XTCENamedObject that = (XTCENamedObject)rhs;
-            return ( this.path_.equals( that.path_ ) );
+            return ( this.getFullPath().equals( that.getFullPath() ) );
         } else {
             return false;
         }
@@ -431,7 +431,7 @@ public abstract class XTCENamedObject implements Comparable {
 
     @Override
     public int hashCode() {
-        return this.path_.hashCode();
+        return getFullPath().hashCode();
     }
 
     // Private Data Members, which are all references

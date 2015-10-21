@@ -23,6 +23,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
 import junit.framework.Assert;
@@ -1316,6 +1317,274 @@ public class StreamProcessingTest {
 
     }
 
+    @Test
+    public void processPacketsIncludeOnly() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        String binFilename =
+            "src/org/omg/space/xtce/database/Container-UniquePackets.bin";
+
+        try {
+
+            XTCETMStream stream = db_.getStream( "CCSDS-TM" );
+
+            File binFile = new File( binFilename );
+
+            InputStream fstream = new FileInputStream( binFile );
+
+            int byteValue;
+
+            ByteArrayOutputStream buffer1 = new ByteArrayOutputStream();
+            ByteArrayOutputStream buffer2 = new ByteArrayOutputStream();
+            ByteArrayOutputStream buffer3 = new ByteArrayOutputStream();
+            ByteArrayOutputStream buffer4 = new ByteArrayOutputStream();
+            ByteArrayOutputStream buffer5 = new ByteArrayOutputStream();
+            ByteArrayOutputStream buffer6 = new ByteArrayOutputStream();
+
+            for ( int bbb = 0; bbb < 18; ++bbb ) {
+                if ( ( byteValue = fstream.read() ) != -1 ) {
+                    buffer1.write( byteValue );
+                }
+            }
+
+            for ( int bbb = 0; bbb < 26; ++bbb ) {
+                if ( ( byteValue = fstream.read() ) != -1 ) {
+                    buffer2.write( byteValue );
+                }
+            }
+
+            for ( int bbb = 0; bbb < 15; ++bbb ) {
+                if ( ( byteValue = fstream.read() ) != -1 ) {
+                    buffer3.write( byteValue );
+                }
+            }
+
+            for ( int bbb = 0; bbb < 34; ++bbb ) {
+                if ( ( byteValue = fstream.read() ) != -1 ) {
+                    buffer4.write( byteValue );
+                }
+            }
+
+            for ( int bbb = 0; bbb < 24; ++bbb ) {
+                if ( ( byteValue = fstream.read() ) != -1 ) {
+                    buffer5.write( byteValue );
+                }
+            }
+
+            for ( int bbb = 0; bbb < 26; ++bbb ) {
+                if ( ( byteValue = fstream.read() ) != -1 ) {
+                    buffer6.write( byteValue );
+                }
+            }
+
+            List<XTCETMContainer> allList = db_.getContainers();
+            List<XTCETMContainer> includeList = new ArrayList<>();
+            for ( XTCETMContainer container : allList ) {
+                if ( container.getName().equals( "CCSDS_SpacePacket1" ) == true ) {
+                    includeList.add( container );
+                } else if ( container.getName().equals( "ECSS_Service_1_Subservice_2" ) == true ) {
+                    includeList.add( container );
+                }
+            }
+
+            XTCEContainerContentModel model1 =
+                stream.processStreamIncludeOnly( buffer1.toByteArray(), includeList );
+
+            Assert.assertTrue( "Processing CCSDS-TM should have been valid " +
+                               "with file " + binFilename +
+                               " on container CCSDS_SpacePacket1",
+                               model1 != null );
+
+            assertOnWarnings( model1 );
+
+            XTCEContainerContentModel model2 =
+                stream.processStreamIncludeOnly( buffer2.toByteArray(), includeList );
+
+            Assert.assertTrue( "Processing CCSDS-TM should have been invalid " +
+                               "with file " + binFilename +
+                               " on container CCSDS_SpacePacket3",
+                               model2 == null );
+
+            XTCEContainerContentModel model3 =
+                stream.processStreamIncludeOnly( buffer3.toByteArray(), includeList );
+
+            Assert.assertTrue( "Processing CCSDS-TM should have been invalid " +
+                               "with file " + binFilename +
+                               " on container ECSS_Service_1_Subservice_1",
+                               model3 == null );
+
+            XTCEContainerContentModel model4 =
+                stream.processStreamIncludeOnly( buffer4.toByteArray(), includeList );
+
+            Assert.assertTrue( "Processing CCSDS-TM should have been valid " +
+                               "with file " + binFilename +
+                               " on container ECSS_Service_1_Subservice_2",
+                               model4 != null );
+
+            assertOnWarnings( model4 );
+
+            XTCEContainerContentModel model5 =
+                stream.processStreamIncludeOnly( buffer5.toByteArray(), includeList );
+
+            Assert.assertTrue( "Processing CCSDS-TM should have been invalid " +
+                               "with file " + binFilename +
+                               " on container ECSS_SpacePacket2 (noinc)",
+                               model5 == null );
+
+            XTCEContainerContentModel model6 =
+                stream.processStreamIncludeOnly( buffer6.toByteArray(), includeList );
+
+            Assert.assertTrue( "Processing CCSDS-TM should have been invalid " +
+                               "with file " + binFilename +
+                               " on container ECSS_SpacePacket2 (inc)",
+                               model6 == null );
+
+        } catch ( Exception ex ) {
+            //ex.printStackTrace();
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+    }
+
+    @Test
+    public void processPacketsWithExcludes() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        String binFilename =
+            "src/org/omg/space/xtce/database/Container-UniquePackets.bin";
+
+        try {
+
+            XTCETMStream stream = db_.getStream( "CCSDS-TM" );
+
+            File binFile = new File( binFilename );
+
+            InputStream fstream = new FileInputStream( binFile );
+
+            int byteValue;
+
+            ByteArrayOutputStream buffer1 = new ByteArrayOutputStream();
+            ByteArrayOutputStream buffer2 = new ByteArrayOutputStream();
+            ByteArrayOutputStream buffer3 = new ByteArrayOutputStream();
+            ByteArrayOutputStream buffer4 = new ByteArrayOutputStream();
+            ByteArrayOutputStream buffer5 = new ByteArrayOutputStream();
+            ByteArrayOutputStream buffer6 = new ByteArrayOutputStream();
+
+            for ( int bbb = 0; bbb < 18; ++bbb ) {
+                if ( ( byteValue = fstream.read() ) != -1 ) {
+                    buffer1.write( byteValue );
+                }
+            }
+
+            for ( int bbb = 0; bbb < 26; ++bbb ) {
+                if ( ( byteValue = fstream.read() ) != -1 ) {
+                    buffer2.write( byteValue );
+                }
+            }
+
+            for ( int bbb = 0; bbb < 15; ++bbb ) {
+                if ( ( byteValue = fstream.read() ) != -1 ) {
+                    buffer3.write( byteValue );
+                }
+            }
+
+            for ( int bbb = 0; bbb < 34; ++bbb ) {
+                if ( ( byteValue = fstream.read() ) != -1 ) {
+                    buffer4.write( byteValue );
+                }
+            }
+
+            for ( int bbb = 0; bbb < 24; ++bbb ) {
+                if ( ( byteValue = fstream.read() ) != -1 ) {
+                    buffer5.write( byteValue );
+                }
+            }
+
+            for ( int bbb = 0; bbb < 26; ++bbb ) {
+                if ( ( byteValue = fstream.read() ) != -1 ) {
+                    buffer6.write( byteValue );
+                }
+            }
+
+            List<XTCETMContainer> allList = db_.getContainers();
+            List<XTCETMContainer> excludeList = new ArrayList<>();
+            for ( XTCETMContainer container : allList ) {
+                if ( container.getName().equals( "CCSDS_SpacePacket3" ) == true ) {
+                    excludeList.add( container );
+                } else if ( container.getName().equals( "ECSS_Service_1_Subservice_1" ) == true ) {
+                    excludeList.add( container );
+                } else if ( container.getName().equals( "ECSS_SpacePacket2" ) == true ) {
+                    excludeList.add( container );
+                }
+            }
+
+            XTCEContainerContentModel model1 =
+                stream.processStreamWithExcludes( buffer1.toByteArray(), excludeList );
+
+            Assert.assertTrue( "Processing CCSDS-TM should have been valid " +
+                               "with file " + binFilename +
+                               " on container CCSDS_SpacePacket1",
+                               model1 != null );
+
+            assertOnWarnings( model1 );
+
+            XTCEContainerContentModel model2 =
+                stream.processStreamWithExcludes( buffer2.toByteArray(), excludeList );
+
+            Assert.assertTrue( "Processing CCSDS-TM should have been invalid " +
+                               "with file " + binFilename +
+                               " on container CCSDS_SpacePacket3",
+                               model2 == null );
+
+            XTCEContainerContentModel model3 =
+                stream.processStreamWithExcludes( buffer3.toByteArray(), excludeList );
+
+            Assert.assertTrue( "Processing CCSDS-TM should have been invalid " +
+                               "with file " + binFilename +
+                               " on container ECSS_Service_1_Subservice_1",
+                               model3 == null );
+
+            XTCEContainerContentModel model4 =
+                stream.processStreamWithExcludes( buffer4.toByteArray(), excludeList );
+
+            Assert.assertTrue( "Processing CCSDS-TM should have been valid " +
+                               "with file " + binFilename +
+                               " on container ECSS_Service_1_Subservice_2",
+                               model4 != null );
+
+            assertOnWarnings( model4 );
+
+            XTCEContainerContentModel model5 =
+                stream.processStreamWithExcludes( buffer5.toByteArray(), excludeList );
+
+            Assert.assertTrue( "Processing CCSDS-TM should have been invalid " +
+                               "with file " + binFilename +
+                               " on container ECSS_SpacePacket2 (noinc)",
+                               model5 == null );
+
+            XTCEContainerContentModel model6 =
+                stream.processStreamWithExcludes( buffer6.toByteArray(), excludeList );
+
+            Assert.assertTrue( "Processing CCSDS-TM should have been invalid " +
+                               "with file " + binFilename +
+                               " on container ECSS_SpacePacket2 (inc)",
+                               model6 == null );
+
+        } catch ( Exception ex ) {
+            //ex.printStackTrace();
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+    }
+
     private void checkEntry( XTCEContainerContentEntry entry,
                              String                    sizeInBits,
                              String                    startBit,
@@ -1454,6 +1723,6 @@ public class StreamProcessingTest {
 
     // Private Data Members
 
-    private XTCEDatabase  db_  = null;
+    private XTCEDatabase db_ = null;
 
 }

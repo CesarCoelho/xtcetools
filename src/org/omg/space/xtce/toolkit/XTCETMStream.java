@@ -22,10 +22,10 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 import javax.xml.bind.JAXBElement;
 import javax.xml.namespace.QName;
 import org.omg.space.xtce.database.AliasSetType;
@@ -97,7 +97,7 @@ public class XTCETMStream extends XTCENamedObject {
                                                 ref );
 
         rootContainer_    = db_.getContainer( sPath );
-        streamContainers_ = new TreeMap<>();
+        streamContainers_ = new HashMap<>();
 
         String iPath = getStreamRootContainer().getInheritancePath();
 
@@ -292,6 +292,12 @@ public class XTCETMStream extends XTCENamedObject {
      * resolve XTCE data model references, included additional containers,
      * base containers, and conditional processing.
      *
+     * This special case method permits the caller to use a subset of the
+     * containers that are a part of this stream.  The function will silently
+     * ignore containers passed in the "includeList" which are not a part of
+     * this stream.  If no matching container is found for the "binaryData",
+     * then the returned XTCEContainerContentModel will be null.
+     *
      * @param binaryData BitSet containing the container binary encoded data
      * so that the output object contains entries with actual values from a
      * real binary image.
@@ -311,11 +317,16 @@ public class XTCETMStream extends XTCENamedObject {
      *
      */
 
-    public XTCEContainerContentModel processStream( BitSet                binaryData,
-                                                    List<XTCETMContainer> includeList )
+    public XTCEContainerContentModel processStreamIncludeOnly( BitSet                binaryData,
+                                                               List<XTCETMContainer> includeList )
         throws XTCEDatabaseException {
 
         for ( XTCETMContainer container : includeList ) {
+
+            if ( ( streamContainers_.containsKey( container ) == false ) ||
+                 ( container.isAbstract()                     == true  ) ) {
+                continue;
+            }
 
             XTCEContainerContentModel model;
 
@@ -347,6 +358,12 @@ public class XTCETMStream extends XTCENamedObject {
      * resolve XTCE data model references, included additional containers,
      * base containers, and conditional processing.
      *
+     * This special case method permits the caller to use a subset of the
+     * containers that are a part of this stream.  The function will silently
+     * ignore containers passed in the "includeList" which are not a part of
+     * this stream.  If no matching container is found for the "binaryData",
+     * then the returned XTCEContainerContentModel will be null.
+     *
      * This function is intended to accept the byte array that is read from
      * a ByteArrayOutputStream.toByteArray() that is easily obtained when
      * reading a binary file using a Java FileInputStream.
@@ -370,13 +387,13 @@ public class XTCETMStream extends XTCENamedObject {
      *
      */
 
-    public XTCEContainerContentModel processStream( byte[]                bytes,
-                                                    List<XTCETMContainer> includeList )
+    public XTCEContainerContentModel processStreamIncludeOnly( byte[]                bytes,
+                                                               List<XTCETMContainer> includeList )
         throws XTCEDatabaseException {
 
         BitSet bits = XTCEFunctions.getBitSetFromStreamByteArray( bytes );
 
-        return processStream( bits, includeList );
+        return processStreamIncludeOnly( bits, includeList );
 
     }
 
@@ -384,6 +401,12 @@ public class XTCETMStream extends XTCENamedObject {
      * entries that an application can iterate over without the need to
      * resolve XTCE data model references, included additional containers,
      * base containers, and conditional processing.
+     *
+     * This special case method permits the caller to use a subset of the
+     * containers that are a part of this stream.  The function will silently
+     * ignore containers passed in the "includeList" which are not a part of
+     * this stream.  If no matching container is found for the "binaryData",
+     * then the returned XTCEContainerContentModel will be null.
      *
      * This function is intended to accept a Java InputStream containing the
      * bytes to use for the binary portion of the container.
@@ -407,8 +430,8 @@ public class XTCETMStream extends XTCENamedObject {
      *
      */
 
-    public XTCEContainerContentModel processStream( InputStream           stream,
-                                                    List<XTCETMContainer> includeList )
+    public XTCEContainerContentModel processStreamIncludeOnly( InputStream           stream,
+                                                               List<XTCETMContainer> includeList )
         throws XTCEDatabaseException {
 
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
@@ -422,7 +445,166 @@ public class XTCETMStream extends XTCENamedObject {
             throw new XTCEDatabaseException( ex.getLocalizedMessage() );
         }
 
-        return processStream( buffer.toByteArray(), includeList );
+        return processStreamIncludeOnly( buffer.toByteArray(), includeList );
+
+    }
+
+    /** Function to decompose a binary data stream into a simple array of
+     * entries that an application can iterate over without the need to
+     * resolve XTCE data model references, included additional containers,
+     * base containers, and conditional processing.
+     *
+     * This special case method permits the caller to use a subset of the
+     * containers that are a part of this stream.  The function will silently
+     * ignore containers passed in the "excludeList" which are not a part of
+     * this stream.  If no matching container is found for the "binaryData",
+     * then the returned XTCEContainerContentModel will be null.
+     *
+     * @param binaryData BitSet containing the container binary encoded data
+     * so that the output object contains entries with actual values from a
+     * real binary image.
+     *
+     * @param excludeList List of XTCETMContainer objects to restrict the
+     * stream processing.  Containers in this list will be ignored.  If there
+     * is no match for the binary data, then the model returned will be null.
+     *
+     * @return XTCEContainerContentModel representing this XTCETMContainer or
+     * null in the event that the bits do not represent a container on the
+     * included list argument to this method call.
+     *
+     * @throws XTCEDatabaseException thrown in the event that it is not
+     * possible to decompose the container completely due to bad references in
+     * the XTCE document.
+     *
+     */
+
+    public XTCEContainerContentModel processStreamWithExcludes( BitSet                binaryData,
+                                                                List<XTCETMContainer> excludeList )
+        throws XTCEDatabaseException {
+
+        for ( XTCETMContainer container : streamContainers_.keySet() ) {
+
+            if ( ( excludeList.contains( container ) == true ) ||
+                 ( container.isAbstract()            == true ) ) {
+                continue;
+            }
+
+            XTCEContainerContentModel model;
+
+            if ( ( model = streamContainers_.get( container ) ) == null ) {
+
+                model = new XTCEContainerContentModel( container,
+                                                       db_.getSpaceSystemTree(),
+                                                       null,
+                                                       false );
+
+                streamContainers_.put( container, model );
+
+            }
+
+            if ( model.isProcessingCompatible( binaryData ) == true ) {
+                return new XTCEContainerContentModel( container,
+                                                      db_.getSpaceSystemTree(),
+                                                      binaryData );
+            }
+
+        }
+
+        return null;
+
+    }
+
+    /** Function to decompose a binary data stream into a simple array of
+     * entries that an application can iterate over without the need to
+     * resolve XTCE data model references, included additional containers,
+     * base containers, and conditional processing.
+     *
+     * This special case method permits the caller to use a subset of the
+     * containers that are a part of this stream.  The function will silently
+     * ignore containers passed in the "excludeList" which are not a part of
+     * this stream.  If no matching container is found for the "binaryData",
+     * then the returned XTCEContainerContentModel will be null.
+     *
+     * This function is intended to accept the byte array that is read from
+     * a ByteArrayOutputStream.toByteArray() that is easily obtained when
+     * reading a binary file using a Java FileInputStream.
+     *
+     * @param bytes byte[] containing the container binary encoded data
+     * so that the output object contains entries with actual values from a
+     * real binary image.
+     *
+     * @param excludeList List of XTCETMContainer objects to restrict the
+     * stream processing.  Containers in this list will be ignored.  If there
+     * is no match for the binary data, then the model returned will be null.
+     *
+     * @return XTCEContainerContentModel representing this XTCETMContainer or
+     * null in the event that the bits do not represent a container on the
+     * included list argument to this method call.
+     *
+     * @throws XTCEDatabaseException thrown in the event that it is not
+     * possible to decompose the container completely due to bad references in
+     * the XTCE document.
+     *
+     */
+
+    public XTCEContainerContentModel processStreamWithExcludes( byte[]                bytes,
+                                                                List<XTCETMContainer> excludeList )
+        throws XTCEDatabaseException {
+
+        BitSet bits = XTCEFunctions.getBitSetFromStreamByteArray( bytes );
+
+        return processStreamWithExcludes( bits, excludeList );
+
+    }
+
+    /** Function to decompose a binary data stream into a simple array of
+     * entries that an application can iterate over without the need to
+     * resolve XTCE data model references, included additional containers,
+     * base containers, and conditional processing.
+     *
+     * This special case method permits the caller to use a subset of the
+     * containers that are a part of this stream.  The function will silently
+     * ignore containers passed in the "excludeList" which are not a part of
+     * this stream.  If no matching container is found for the "binaryData",
+     * then the returned XTCEContainerContentModel will be null.
+     *
+     * This function is intended to accept a Java InputStream containing the
+     * bytes to use for the binary portion of the container.
+     *
+     * @param stream InputStream containing the container binary encoded data
+     * so that the output object contains entries with actual values from a
+     * real binary image.
+     *
+     * @param excludeList List of XTCETMContainer objects to restrict the
+     * stream processing.  Containers in this list will be ignored.  If there
+     * is no match for the binary data, then the model returned will be null.
+     *
+     * @return XTCEContainerContentModel representing this XTCETMContainer or
+     * null in the event that the bits do not represent a container on the
+     * included list argument to this method call.
+     *
+     * @throws XTCEDatabaseException thrown in the event that it is not
+     * possible to decompose the container completely due to bad references in
+     * the XTCE document, or if the stream throws an IOException.
+     *
+     */
+
+    public XTCEContainerContentModel processStreamWithExcludes( InputStream           stream,
+                                                                List<XTCETMContainer> excludeList )
+        throws XTCEDatabaseException {
+
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        int byteValue;
+
+        try {
+            while ( ( byteValue = stream.read() ) != -1 ) {
+                buffer.write( byteValue );
+            }
+        } catch ( Exception ex ) {
+            throw new XTCEDatabaseException( ex.getLocalizedMessage() );
+        }
+
+        return processStreamWithExcludes( buffer.toByteArray(), excludeList );
 
     }
 
