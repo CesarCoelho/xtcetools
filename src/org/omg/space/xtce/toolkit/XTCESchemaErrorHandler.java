@@ -158,7 +158,7 @@ public class XTCESchemaErrorHandler implements ErrorHandler,
             return false;
         }
 
-        String msg = null;
+        String msg;
 
         switch ( event.getSeverity() ) {
 

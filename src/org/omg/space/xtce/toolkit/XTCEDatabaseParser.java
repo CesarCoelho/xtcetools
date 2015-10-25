@@ -178,8 +178,7 @@ public abstract class XTCEDatabaseParser {
             spf.setValidating( true );
             
             SAXParser parser = spf.newSAXParser();
-            parser.setProperty( "http://java.sun.com/xml/jaxp/properties/schemaLanguage", // NOI18N
-                                "http://www.w3.org/2001/XMLSchema" ); // NOI18N
+            parser.setProperty( sunSchema_, xsdUrl_ );
 
             XMLReader reader = parser.getXMLReader();
             reader.setErrorHandler( handler );
@@ -488,8 +487,7 @@ public abstract class XTCEDatabaseParser {
             spf.setValidating( validateOnLoad );
 
             SAXParser parser = spf.newSAXParser();
-            parser.setProperty( "http://java.sun.com/xml/jaxp/properties/schemaLanguage", // NOI18N
-                                "http://www.w3.org/2001/XMLSchema" ); // NOI18N
+            parser.setProperty( sunSchema_, xsdUrl_ );
 
             XMLReader reader = parser.getXMLReader();
             reader.setErrorHandler( handler );
@@ -519,6 +517,13 @@ public abstract class XTCEDatabaseParser {
 
         } catch ( UnmarshalException ex ) {
             throw new XTCEDatabaseException( handler.getMessages() );
+        } catch ( NumberFormatException ex ) {
+            String msg = "Observe validation.  Fatal error reading number " +
+                         " in document, " +
+                         ex.getLocalizedMessage();
+            List<String> msgs = handler.getMessages();
+            msgs.add( msg );
+            throw new XTCEDatabaseException( msgs );
         } catch ( Exception ex ) {
             throw new XTCEDatabaseException( ex ); 
         } finally {
@@ -575,7 +580,11 @@ public abstract class XTCEDatabaseParser {
 
             dbf.setXIncludeAware( applyXIncludes );
             dbf.setNamespaceAware( true );
-            dbf.setValidating( false );
+            dbf.setValidating( validateOnLoad );
+
+            if ( validateOnLoad == true ) {
+                dbf.setAttribute( sunSchema_, xsdUrl_ );
+            }
 
             DocumentBuilder db = dbf.newDocumentBuilder();
             db.setErrorHandler( handler );
@@ -602,6 +611,13 @@ public abstract class XTCEDatabaseParser {
 
         } catch ( UnmarshalException ex ) {
             throw new XTCEDatabaseException( handler.getMessages() );
+        } catch ( NumberFormatException ex ) {
+            String msg = "Observe validation.  Fatal error reading number " +
+                         " in document, " +
+                         ex.getLocalizedMessage();
+            List<String> msgs = handler.getMessages();
+            msgs.add( msg );
+            throw new XTCEDatabaseException( msgs );
         } catch ( Exception ex ) {
             throw new XTCEDatabaseException( ex );    
         } finally {
@@ -678,5 +694,11 @@ public abstract class XTCEDatabaseParser {
     private JAXBElement  jaxbElementRoot_ = null;
     private Document     domDocumentRoot_ = null;
     private Binder<Node> domBinder_       = null;
+
+    private static final String sunSchema_ =
+        "http://java.sun.com/xml/jaxp/properties/schemaLanguage";
+
+    private static final String xsdUrl_ =
+        "http://www.w3.org/2001/XMLSchema";
 
 }

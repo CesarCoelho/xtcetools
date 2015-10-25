@@ -397,6 +397,126 @@ public class ParsingTest {
     }
 
     @Test
+    public void testLoadingFileWithMarshalErrorsReadOnlyNoValidation() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        final String file =
+            "src/org/omg/space/xtce/database/UnitTest-BadAttr.xml";
+
+        try {
+
+            XTCEDatabase db = new XTCEDatabase( new File( file ),
+                                                false,  // validate on load
+                                                false,  // xinclude
+                                                true ); // read only
+
+            Assert.fail( "Expected throw when loading " + file );
+
+        } catch ( Exception ex ) {
+
+            System.out.println( "Expected Errors:" +
+                                System.getProperty( "line.separator" ) +
+                                ex.getLocalizedMessage() );
+
+        }
+
+    }
+
+    @Test
+    public void testLoadingFileWithMarshalErrorsReadOnlyWithValidation() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        final String file =
+            "src/org/omg/space/xtce/database/UnitTest-BadAttr.xml";
+
+        try {
+
+            XTCEDatabase db = new XTCEDatabase( new File( file ),
+                                                true,   // validate on load
+                                                false,  // xinclude
+                                                true ); // read only
+
+            Assert.fail( "Expected throw when loading " + file );
+
+        } catch ( Exception ex ) {
+
+            System.out.println( "Expected Errors:" +
+                                System.getProperty( "line.separator" ) +
+                                ex.getLocalizedMessage() );
+
+        }
+
+    }
+
+    @Test
+    public void testLoadingFileWithMarshalErrorsEditableNoValidation() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        final String file =
+            "src/org/omg/space/xtce/database/UnitTest-BadAttr.xml";
+
+        try {
+
+            XTCEDatabase db = new XTCEDatabase( new File( file ),
+                                                false,   // validate on load
+                                                false,   // xinclude
+                                                false ); // read only
+
+            Assert.fail( "Expected throw when loading " + file );
+
+        } catch ( Exception ex ) {
+
+            System.out.println( "Expected Errors:" +
+                                System.getProperty( "line.separator" ) +
+                                ex.getLocalizedMessage() );
+
+        }
+
+    }
+
+    @Test
+    public void testLoadingFileWithMarshalErrorsEditableWithValidation() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        final String file =
+            "src/org/omg/space/xtce/database/UnitTest-BadAttr.xml";
+
+        try {
+
+            XTCEDatabase db = new XTCEDatabase( new File( file ),
+                                                true,    // validate on load
+                                                false,   // xinclude
+                                                false ); // read only
+
+            Assert.fail( "Expected throw when loading " + file );
+
+        } catch ( Exception ex ) {
+
+            System.out.println( "Expected Errors:" +
+                                System.getProperty( "line.separator" ) +
+                                ex.getLocalizedMessage() );
+
+        }
+
+    }
+
+    @Test
     public void testStaticValidationFunctionBadlyFormed() {
 
         final String methodName =
