@@ -28,6 +28,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import org.omg.space.xtce.toolkit.XTCEConstants;
 import org.omg.space.xtce.toolkit.XTCEDatabase;
+import org.w3c.dom.Element;
 
 /**
  *
@@ -173,10 +174,16 @@ public class ParsingTest {
             Assert.assertTrue( "Loaded file should not have changed",
                                db.getChanged() == false );
 
+            try {
+                Element element = db.getDocumentElement();
+                Assert.fail( "getDocumentElement should throw on read-only" );
+            } catch ( Exception ex ) {
+                System.out.println( "Expected Exception: " +
+                                    ex.getLocalizedMessage() );
+            }
+
         } catch ( Exception ex ) {
-
             Assert.fail( "Unexpected exception: " + ex.getLocalizedMessage() );
-
         }
 
     }

@@ -673,7 +673,7 @@ public abstract class XTCEDatabaseParser {
      *
      */
 
-    protected Element getDocumentElement() throws XTCEDatabaseException {
+    public Element getDocumentElement() throws XTCEDatabaseException {
 
         if ( isReadOnly() == true ) {
             throw new XTCEDatabaseException(
