@@ -26,6 +26,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.omg.space.xtce.toolkit.XTCEConstants;
 import org.omg.space.xtce.toolkit.XTCEDatabase;
 
 /**
@@ -128,6 +129,49 @@ public class ParsingTest {
                                                 false ); // read only
 
             Assert.assertFalse( "Read Only Flag Set", db.isReadOnly() );
+
+        } catch ( Exception ex ) {
+
+            Assert.fail( "Unexpected exception: " + ex.getLocalizedMessage() );
+
+        }
+
+    }
+
+    @Test
+    public void testFileAccessorAttributes() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        final String file = "src/org/omg/space/xtce/database/UnitTests.xml";
+
+        try {
+
+            File fileIn = new File( file );
+
+            XTCEDatabase db = new XTCEDatabase( fileIn,
+                                                false,  // validate on load
+                                                false,  // xinclude
+                                                true ); // read only
+
+            File fileOut = db.getFilename();
+
+            Assert.assertTrue( "File opened should equal file out",
+                               fileIn.getAbsolutePath().equals( fileOut.getAbsolutePath() ) );
+
+            Assert.assertTrue( "Namespace should be '" +
+                               XTCEConstants.XTCE_NAMESPACE + "'",
+                               db.getNamespaceFromDocument().equals( XTCEConstants.XTCE_NAMESPACE ) );
+
+            Assert.assertTrue( "Default Schema should be '" +
+                               XTCEConstants.DEFAULT_SCHEMA_FILE + "'",
+                               db.getSchemaFromDocument().equals( XTCEConstants.DEFAULT_SCHEMA_FILE ) );
+
+            Assert.assertTrue( "Loaded file should not have changed",
+                               db.getChanged() == false );
 
         } catch ( Exception ex ) {
 
