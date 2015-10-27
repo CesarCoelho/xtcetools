@@ -87,7 +87,7 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
         longDescriptionField.setText( parameter.getLongDescription() );
         longDescriptionField.setCaretPosition( 0 );
         engineeringTypeComboField.setSelectedItem( parameter.getEngineeringType() );
-        if ( parameter.getRawType().isEmpty() == true ) {
+        if ( parameter.getRawTypeString().isEmpty() == true ) {
             encodingTypeComboField.setSelectedItem( "" );
             encodingTypeComboField.setEnabled( false );
             rawSizeTextField.setEnabled( false );
@@ -189,7 +189,7 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
 
         try {
             Integer candidate = Integer.parseInt( value );
-            String rawEncoding = parameter_.getRawType();
+            String rawEncoding = parameter_.getRawTypeString();
             if ( ( candidate < 0 ) && ( rawEncoding.equals( "unsigned" ) == true ) ) {
                 JOptionPane.showMessageDialog( this,
                                                "Negative value for enumeration specified on an unsigned parameter",
@@ -208,7 +208,7 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
         if ( ( maxValue != null ) && ( maxValue.isEmpty() == false ) ) {
             try {
                 Integer candidate = Integer.parseInt( value );
-                String rawEncoding = parameter_.getRawType();
+                String rawEncoding = parameter_.getRawTypeString();
                 if ( ( candidate < 0 ) && ( rawEncoding.equals( "unsigned" ) == true ) ) {
                     JOptionPane.showMessageDialog( this,
                                                    "Negative maximum value for enumeration specified on an unsigned parameter",

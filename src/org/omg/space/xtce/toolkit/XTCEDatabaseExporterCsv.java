@@ -102,19 +102,47 @@ public class XTCEDatabaseExporterCsv extends XTCEDatabaseExporter {
                                                               properties_.getProperty( "show_alias_namespaces" ).equals( "true" ), // NOI18N
                                                               properties_.getProperty( "preferred_alias_namespace" ) ); // NOI18N
 
+                    XTCEValidRange rangeObj = parameter.getValidRange();
+                    String lowValue    = "";
+                    String highValue   = "";
+                    String lowIncFlag  = "";
+                    String highIncFlag = "";
+                    if ( rangeObj.isValidRangeApplied() == true ) {
+                        if ( rangeObj.getLowValue().isEmpty() == false ) {
+                            lowValue   = rangeObj.getLowValue();
+                            lowIncFlag = ( rangeObj.isLowValueInclusive() == true ? "inc" : "exc" );
+                            if ( rangeObj.isLowValueCalibrated() == false ) {
+                                XTCEItemValue valueObj =
+                                    new XTCEItemValue( parameter );
+                                lowValue =
+                                    valueObj.getCalibratedFromUncalibrated( lowValue );
+                            }
+                        }
+                        if ( rangeObj.getHighValue().isEmpty() == false ) {
+                            highValue   = rangeObj.getHighValue();
+                            highIncFlag = ( rangeObj.isHighValueInclusive() == true ? "inc" : "exc" );
+                            if ( rangeObj.isHighValueCalibrated() == false ) {
+                                XTCEItemValue valueObj =
+                                    new XTCEItemValue( parameter );
+                                highValue =
+                                    valueObj.getCalibratedFromUncalibrated( highValue );
+                            }
+                        }
+                    }
+
                     stream.write( spaceSystem.getFullPath().getBytes() );
                     stream.write( ',' ); // NOI18N
                     stream.write( parameter.getName().getBytes() );
                     stream.write( ',' ); // NOI18N
                     stream.write( aliasText.getBytes() );
                     stream.write( ',' ); // NOI18N
-                    stream.write( parameter.getEngineeringType().getBytes() );
+                    stream.write( parameter.getEngineeringTypeString().getBytes() );
                     stream.write( ',' ); // NOI18N
                     stream.write( parameter.getUnits().getBytes() );
                     stream.write( ',' ); // NOI18N
                     stream.write( parameter.getRawSizeInBits().getBytes() );
                     stream.write( ',' ); // NOI18N
-                    stream.write( parameter.getRawType().getBytes() );
+                    stream.write( parameter.getRawTypeString().getBytes() );
                     stream.write( ',' ); // NOI18N
                     stream.write( parameter.getRawBitOrder().getBytes() );
                     stream.write( ',' ); // NOI18N
@@ -127,6 +155,14 @@ public class XTCEDatabaseExporterCsv extends XTCEDatabaseExporter {
                     stream.write( parameter.getChangeThreshold().getBytes() );
                     stream.write( ',' ); // NOI18N
                     stream.write( getSpecialData( parameter ).getBytes() );
+                    stream.write( ',' ); // NOI18N
+                    stream.write( lowValue.getBytes() );
+                    stream.write( ',' ); // NOI18N
+                    stream.write( lowIncFlag.getBytes() );
+                    stream.write( ',' ); // NOI18N
+                    stream.write( highValue.getBytes() );
+                    stream.write( ',' ); // NOI18N
+                    stream.write( highIncFlag.getBytes() );
                     stream.write( ',' ); // NOI18N
                     stream.write( '"' ); // NOI18N
                     stream.write( parameter.getDescription().getBytes() );
@@ -303,6 +339,10 @@ public class XTCEDatabaseExporterCsv extends XTCEDatabaseExporter {
         headerFields.add( XTCEFunctions.getText( "table_parameters_defaultvalue_col_label" ) ); // NOI18N
         headerFields.add( XTCEFunctions.getText( "table_parameters_changethreshold_label" ) ); // NOI18N
         headerFields.add( XTCEFunctions.getText( "table_parameters_id_label" ) ); // NOI18N
+        headerFields.add( XTCEFunctions.getText( "table_parameters_lowval_label" ) ); // NOI18N
+        headerFields.add( XTCEFunctions.getText( "table_parameters_lowinc_label" ) ); // NOI18N
+        headerFields.add( XTCEFunctions.getText( "table_parameters_highval_label" ) ); // NOI18N
+        headerFields.add( XTCEFunctions.getText( "table_parameters_highinc_label" ) ); // NOI18N
         headerFields.add( XTCEFunctions.getText( "table_parameters_desc_col_label" ) ); // NOI18N
         return headerFields;
 

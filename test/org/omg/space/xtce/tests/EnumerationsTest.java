@@ -24,6 +24,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.omg.space.xtce.toolkit.XTCEContainerContentEntry.FieldType;
+import org.omg.space.xtce.toolkit.XTCETypedObject.EngineeringType;
+import org.omg.space.xtce.toolkit.XTCETypedObject.RawType;
 
 /**
  *
@@ -78,6 +80,69 @@ public class EnumerationsTest {
 
         Assert.assertTrue( "Should have been 4 field types",
                            count == 4 );
+
+    }
+
+    @Test
+    public void checkEngineeringType() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        EngineeringType ft;
+
+        ft = EngineeringType.valueOf( "BOOLEAN" );
+
+        Assert.assertTrue( "String 'BOOLEAN' should work",
+                           ft == EngineeringType.BOOLEAN );
+
+        try {
+            ft = EngineeringType.valueOf( "FOOBAR" );
+            Assert.fail( "String 'FOOBAR' should not have worked" );
+        } catch ( Exception ex ) {
+            // expected an exception
+        }
+
+        EngineeringType[] fts = EngineeringType.values();
+
+        int count = fts.length;
+
+        Assert.assertTrue( "Should have been 14 field types",
+                           count == 14 );
+
+    }
+
+    @Test
+    public void checkRawType() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        RawType ft;
+
+        ft = RawType.valueOf( "twosComplement" );
+
+        Assert.assertTrue( "String 'twosComplement' should work",
+                           ft == RawType.twosComplement );
+
+        try {
+            ft = RawType.valueOf( "FOOBAR" );
+            Assert.fail( "String 'FOOBAR' should not have worked" );
+        } catch ( Exception ex ) {
+            // expected an exception
+        }
+
+        RawType[] fts = RawType.values();
+
+        int count = fts.length;
+
+        Assert.assertTrue( "Should have been 12 field types",
+                           count == 12 );
+
     }
 
 }

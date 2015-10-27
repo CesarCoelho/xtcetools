@@ -473,7 +473,7 @@ public abstract class XTCETypedObject extends XTCENamedObject {
      *
      */
 
-    public final String getEngineeringType() {
+    public final String getEngineeringTypeString() {
 
         if ( typeObj_ != null ) {
             if ( typeObj_ instanceof EnumeratedDataType ) {
@@ -502,6 +502,70 @@ public abstract class XTCETypedObject extends XTCENamedObject {
         }
 
         return "";
+
+    }
+
+    /** Accessor to return a descriptive name for the Engineering or Operator
+     * type of this Parameter, Argument, or Member represented by this object.
+     *
+     * The Type element is not a perfect mapping to the return value of this
+     * function.  The possible values are:
+     *
+     * <ul>
+     * <li>
+     * ENUMERATED - Represents Enumerated Type
+     * </li>
+     * <li>
+     * SIGNED - Represents Integer Type with signed="true"
+     * </li>
+     * <li>
+     * UNSIGNED - Represents Integer Type with signed="false"
+     * </li>
+     * <li>
+     * FLOAT32 - Represents Float Type with sizeInBits="32"
+     * </li>
+     * <li>
+     * FLOAT64 - Represents Float Type with sizeInBits="64"
+     * </li>
+     * <li>
+     * FLOAT128 - Represents Float Type with sizeInBits="128"
+     * </li>
+     * <li>
+     * STRUCTURE - Represents an Aggregate Type
+     * </li>
+     * <li>
+     * BINARY - Represents a Binary Type
+     * </li>
+     * <li>
+     * BOOLEAN - Represents a Boolean Type
+     * </li>
+     * <li>
+     * STRING - Represents a String Type
+     * </li>
+     * <li>
+     * TIME - Represents an Absolute Time Type
+     * </li>
+     * <li>
+     * DURATION - Represents a Relative Time Type
+     * </li>
+     * <li>
+     * ARRAY - Represents an Array Type
+     * </li>
+     * </ul>
+     *
+     * @return EngineeringType enumeration containing the abstracted name of
+     * the Engineering or Operator type associated with this Parameter,
+     * Argument, or Member.
+     *
+     */
+
+    public final EngineeringType getEngineeringType() {
+
+        String eType = getEngineeringTypeString();
+        if ( eType.isEmpty() == true ) {
+            return EngineeringType.UNKNOWN;
+        }
+        return EngineeringType.valueOf( eType );
 
     }
 
@@ -552,7 +616,7 @@ public abstract class XTCETypedObject extends XTCENamedObject {
      *
      */
 
-    public final String getRawType() {
+    public final String getRawTypeString() {
 
         if ( typeObj_ == null ) {
             return "";
@@ -595,6 +659,64 @@ public abstract class XTCETypedObject extends XTCENamedObject {
         }
 
         return "";
+
+    }
+
+    /** Retrieves a short name for the raw encoding type of this named and
+     * typed object in the XTCE data model.
+     *
+     * Currently recognized raw encoding types consist of:
+     *
+     * <ul>
+     * <li>
+     * unsigned - Unsigned Integer
+     * </li>
+     * <li>
+     * signMagnitude - Signed Integer using high bit to indicate sign
+     * </li>
+     * <li>
+     * onesComplement - Signed Integer using ones complement formula
+     * </li>
+     * <li>
+     * twosComplement - Signed Integer using twos complement formula
+     * </li>
+     * <li>
+     * BCD - Binary Coded Data
+     * </li>
+     * <li>
+     * packedBCD - Packed Binary Coded Data
+     * </li>
+     * <li>
+     * binary - Plain binary data field
+     * </li>
+     * <li>
+     * IEEE754_1985 - Most common floating point encoding approximation
+     * </li>
+     * <li>
+     * MILSTD_1750A - MIL Standard floating point encoding approximation
+     * </li>
+     * <li>
+     * UTF-8 - 8 Bit String Encoding
+     * </li>
+     * <li>
+     * UTF-16 - 16 Bit String Encoding (wide characters)
+     * </li>
+     * </ul>
+     *
+     * @return RawType enumeration containing the short type name.  The
+     * function endeavors to never return null.
+     *
+     */
+
+    public final RawType getRawType() {
+
+        String rType = getRawTypeString();
+        if ( rType.isEmpty() == true ) {
+            return RawType.UNKNOWN;
+        } else {
+            rType = rType.replaceAll( "-", "" );
+        }
+        return RawType.valueOf( rType );
 
     }
 
@@ -909,5 +1031,195 @@ public abstract class XTCETypedObject extends XTCENamedObject {
 
     private final NameDescriptionType typeObj_;
     private final List<AncillaryData> typeAncDataList_;
+
+
+    /** Enumeration representing the Calibrated/Engineering type of an item
+     * in the XTCE data model.
+     *
+     */
+
+    public enum EngineeringType {
+
+        /** Calibrated/Engineering type could not be determined.
+         *
+         */
+
+        UNKNOWN,
+
+        /** Calibrated/Engineering type is an Enumerated String.
+         *
+         */
+
+        ENUMERATED,
+
+        /** Calibrated/Engineering type is a signed integer.
+         *
+         */
+
+        SIGNED,
+
+        /** Calibrated/Engineering type is an unsigned integer.
+         *
+         */
+
+        UNSIGNED,
+
+        /** Calibrated/Engineering type is a single IEEE754 precision Floating
+         * Point number.
+         *
+         */
+
+        FLOAT32,
+
+        /** Calibrated/Engineering type is a double IEEE754 precision Floating
+         * Point number.
+         *
+         */
+
+        FLOAT64,
+
+        /** Calibrated/Engineering type is a quad IEEE754 precision Floating
+         * Point number.
+         *
+         */
+
+        FLOAT128,
+
+        /** Calibrated/Engineering type is an Aggregate or C style Structure.
+         *
+         */
+
+        STRUCTURE,
+
+        /** Calibrated/Engineering type is a simple binary value.
+         *
+         */
+
+        BINARY,
+
+        /** Calibrated/Engineering type is a Boolean String, which is a trivial
+         * two value case of an Enumerated type.
+         *
+         */
+
+        BOOLEAN,
+
+        /** Calibrated/Engineering type is a String value.
+         *
+         */
+
+        STRING,
+
+        /** Calibrated/Engineering type is an Absolute Time value.
+         *
+         */
+
+        TIME,
+
+        /** Calibrated/Engineering type is a duration, or relative time value.
+         *
+         */
+
+        DURATION,
+
+        /** Calibrated/Engineering type is an Array of an item of another type.
+         *
+         */
+
+        ARRAY;
+
+    }
+
+    /** Enumeration representing the Raw/Encoding type of an item in the
+     * XTCE data model.
+     *
+     */
+
+    public enum RawType {
+
+        /** Raw/Encoding type could not be determined.
+         *
+         */
+
+        UNKNOWN,
+
+        /** Raw/Encoding type is an integer of unsigned values.
+         *
+         */
+
+        unsigned,
+
+        /** Raw/Encoding type is an integer of signed values differentiated
+         * by the value of the most significant bit.
+         *
+         */
+
+        signMagnitude,
+
+        /** Raw/Encoding type is an integer of signed values differentiated
+         * by ones complement representation.
+         *
+         */
+
+        onesComplement,
+
+        /** Raw/Encoding type is an integer of signed values differentiated
+         * by twos complement representation.
+         *
+         */
+
+        twosComplement,
+
+        /** Raw/Encoding type is Binary Coded Data.
+         *
+         * NOTE: Not yet supported by this toolkit.
+         *
+         */
+
+        BCD,
+
+        /** Raw/Encoding type is Packed Binary Coded Data.
+         *
+         * NOTE: Not yet supported by this toolkit.
+         *
+         */
+
+        packedBCD,
+
+        /** Raw/Encoding type is simple binary data.
+         *
+         */
+
+        binary,
+
+        /** Raw/Encoding type is an IEEE 754 floating point value.
+         *
+         */
+
+        IEEE754_1985,
+
+        /** Raw/Encoding type is a MIL-STD 1750A floating point value.
+         *
+         * NOTE: Not yet supported by this toolkit.
+         *
+         */
+
+        MILSTD_1750A,
+
+        /** Raw/Encoding type is a UTF-8 encoding string value.
+         *
+         */
+
+        UTF8,
+
+        /** Raw/Encoding type is a UTF-16 encoding string value.
+         *
+         * NOTE: Only partially supported by this toolkit.
+         *
+         */
+
+        UTF16;
+
+    }
 
 }

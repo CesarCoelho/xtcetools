@@ -35,6 +35,8 @@ import org.omg.space.xtce.database.NameDescriptionType;
 import org.omg.space.xtce.database.PolynomialType;
 import org.omg.space.xtce.database.SplinePointType;
 import org.omg.space.xtce.database.ValueEnumerationType;
+import org.omg.space.xtce.toolkit.XTCETypedObject.EngineeringType;
+import org.omg.space.xtce.toolkit.XTCETypedObject.RawType;
 
 /** This class captures the attributes needed to encode or decode a raw value
  * to or from an engineering value and provides public methods to do these
@@ -96,7 +98,7 @@ public class XTCEItemValue {
         }
 
         // get the registered time handler if one exists
-        if ( euTypeName_.equals( "TIME" ) == true ) { // NOI18N
+        if ( euTypeName_ == EngineeringType.TIME ) {
             try {
                 AbsoluteTimeDataType timeXml =
                     (AbsoluteTimeDataType)itemObj_.getTypeReference();
@@ -222,7 +224,7 @@ public class XTCEItemValue {
             return "";
         }
 
-        if ( euTypeName_.equals( "TIME" ) == true ) { // NOI18N
+        if ( euTypeName_ == EngineeringType.TIME ) {
             if ( timeHandler_ != null ) {
                 return timeHandler_.getUncalibratedFromRaw( rawValue );
             } else {
@@ -232,57 +234,72 @@ public class XTCEItemValue {
 
         BigInteger numericValue = bitSetToNumber( rawValue );
 
-        if ( rawTypeName_.equals( "unsigned" ) == true ) {
-            return numericValue.toString();
-        } else if ( rawTypeName_.equals( "signMagnitude" ) == true ) {
-            int sizeInBits = rawSizeInBits_;
-            BigInteger halfValue = BigInteger.valueOf( 2 ).pow( sizeInBits - 1 );
-            if ( numericValue.compareTo( halfValue ) >= 0 ) {
-                numericValue = numericValue.subtract( halfValue ).negate();
-            }
-            return numericValue.toString();
-        } else if ( rawTypeName_.equals( "twosComplement" ) == true ) {
-            int sizeInBits = rawSizeInBits_;
-            BigInteger halfValue = BigInteger.valueOf( 2 ).pow( sizeInBits - 1 );
-            BigInteger fullValue = BigInteger.valueOf( 2 ).pow( sizeInBits );
-            if ( numericValue.compareTo( halfValue ) >= 0 ) {
-                numericValue = numericValue.subtract( fullValue );
-            }
-            return numericValue.toString();
-        } else if ( rawTypeName_.equals( "onesComplement" ) == true ) {
-            int sizeInBits = rawSizeInBits_;
-            BigInteger halfValue = BigInteger.valueOf( 2 ).pow( sizeInBits - 1 );
-            BigInteger fullValue = BigInteger.valueOf( 2 ).pow( sizeInBits );
-            if ( numericValue.compareTo( halfValue ) >= 0 ) {
-                numericValue = numericValue.subtract( fullValue ).add( BigInteger.ONE );
-            }
-            return numericValue.toString();
-        } else if ( rawTypeName_.equals( "IEEE754_1985" ) == true ) {
-            int sizeInBits = rawSizeInBits_;
-            if ( sizeInBits == 32 ) {
-                Float floatValue = Float.intBitsToFloat( numericValue.intValue() );
-                return floatValue.toString();
-            } else if ( sizeInBits == 64 ) {
-                Double doubleValue = Double.longBitsToDouble( numericValue.longValue() );
-                return doubleValue.toString();
-            } else {
-                warnings_.add( itemName_ + " Raw encoding " +
-                    rawTypeName_ + " using " +
-                    Integer.toString( rawSizeInBits_ ) + " bits " +
-                    "is not yet supported" );
-                return "";
-            }
-        } else if ( rawTypeName_.equals( "binary" ) == true ) {
-            return "0x" + numericValue.toString( 16 );
-        } else if ( rawTypeName_.equals( "UTF-8" ) == true ) {
-            return getUncalibratedFromRawString( "UTF-8", numericValue );
-        } else if ( rawTypeName_.equals( "UTF-16" ) == true ) {
-            return getUncalibratedFromRawString( "UTF-16", numericValue );
-        }
+        switch ( rawTypeName_ ) {
 
-        // not supported MILSTD_1750A, BCD, packedBCD
-        warnings_.add( itemName_ + " Raw encoding type " + rawTypeName_ +
-            " not yet supported" );
+            case unsigned:
+                return numericValue.toString();
+
+            case signMagnitude: {
+                int sizeInBits = rawSizeInBits_;
+                BigInteger halfValue = BigInteger.valueOf( 2 ).pow( sizeInBits - 1 );
+                if ( numericValue.compareTo( halfValue ) >= 0 ) {
+                    numericValue = numericValue.subtract( halfValue ).negate();
+                }
+                return numericValue.toString();
+            }
+
+            case twosComplement: {
+                int sizeInBits = rawSizeInBits_;
+                BigInteger halfValue = BigInteger.valueOf( 2 ).pow( sizeInBits - 1 );
+                BigInteger fullValue = BigInteger.valueOf( 2 ).pow( sizeInBits );
+                if ( numericValue.compareTo( halfValue ) >= 0 ) {
+                    numericValue = numericValue.subtract( fullValue );
+                }
+                return numericValue.toString();
+            }
+
+            case onesComplement: {
+                int sizeInBits = rawSizeInBits_;
+                BigInteger halfValue = BigInteger.valueOf( 2 ).pow( sizeInBits - 1 );
+                BigInteger fullValue = BigInteger.valueOf( 2 ).pow( sizeInBits );
+                if ( numericValue.compareTo( halfValue ) >= 0 ) {
+                    numericValue = numericValue.subtract( fullValue ).add( BigInteger.ONE );
+                }
+                return numericValue.toString();
+            }
+
+            case IEEE754_1985: {
+                int sizeInBits = rawSizeInBits_;
+                if ( sizeInBits == 32 ) {
+                    Float floatValue = Float.intBitsToFloat( numericValue.intValue() );
+                    return floatValue.toString();
+                } else if ( sizeInBits == 64 ) {
+                    Double doubleValue = Double.longBitsToDouble( numericValue.longValue() );
+                    return doubleValue.toString();
+                } else {
+                    warnings_.add( itemName_ + " Raw encoding " +
+                        rawTypeName_ + " using " +
+                        Integer.toString( rawSizeInBits_ ) + " bits " +
+                        "is not yet supported" );
+                }
+                break;
+            }
+
+            case binary:
+                return "0x" + numericValue.toString( 16 );
+
+            case UTF8:
+                return getUncalibratedFromRawString( "UTF-8", numericValue );
+
+            case UTF16:
+                return getUncalibratedFromRawString( "UTF-16", numericValue );
+
+            default:
+                // not supported MILSTD_1750A, BCD, packedBCD
+                warnings_.add( itemName_ + " Raw encoding type " +
+                               rawTypeName_ +" not yet supported" );
+
+        }
 
         return "";
 
@@ -305,43 +322,58 @@ public class XTCEItemValue {
 
         String calValue = applyCalibrator( uncalValue );
 
-        if ( ( euTypeName_.equals( "UNSIGNED" ) == true ) ||
-             ( euTypeName_.equals( "SIGNED" )   == true ) ) {
-            return getCalibratedFromIntegerString( calValue );
-        } else if ( ( euTypeName_.equals( "FLOAT32" )  == true ) ||
-                    ( euTypeName_.equals( "FLOAT64" )  == true ) ||
-                    ( euTypeName_.equals( "FLOAT128" ) == true ) ) {
-            return getCalibratedFromFloatString( calValue );
-        } else if ( euTypeName_.equals( "BOOLEAN" ) == true ) {
-            return getCalibratedFromBooleanNumericString( calValue );
-        } else if ( euTypeName_.equals( "ENUMERATED" ) == true ) {
-            return getCalibratedValueFromEnumeratedNumericString( calValue );
-        } else if ( euTypeName_.equals( "STRING" ) == true ) {
-            return calValue;
-        } else if ( euTypeName_.equals( "BINARY" ) == true ) {
-            // warnings for binary transformations?
-            // might need 0x protection over entire function
-            if ( calValue.startsWith( "0x" ) == true ) {
-                BigInteger intValue = new BigInteger( calValue.replaceFirst( "0x", "" ), 16 );
-                return "0x" + intValue.toString( 16 );
-            } else {
-                BigInteger intValue = new BigInteger( calValue );
-                return "0x" + intValue.toString( 16 );
-            }
-        } else if ( euTypeName_.equals( "TIME" ) == true ) {
-            try {
-                if ( timeHandler_ != null ) {
-                    return timeHandler_.getCalibratedFromUncalibrated( uncalValue );
+        switch ( euTypeName_ ) {
+
+            case UNSIGNED:
+            case SIGNED:
+                return getCalibratedFromIntegerString( calValue );
+
+            case FLOAT32:
+            case FLOAT64:
+            case FLOAT128:
+                return getCalibratedFromFloatString( calValue );
+
+            case BOOLEAN:
+                return getCalibratedFromBooleanNumericString( calValue );
+
+            case ENUMERATED:
+                return getCalibratedValueFromEnumeratedNumericString( calValue );
+
+            case STRING:
+                return calValue;
+
+            case BINARY:
+                // warnings for binary transformations?
+                // might need 0x protection over entire function
+                if ( calValue.startsWith( "0x" ) == true ) {
+                    BigInteger intValue =
+                        new BigInteger( calValue.replaceFirst( "0x", "" ), 16 );
+                    return "0x" + intValue.toString( 16 );
+                } else {
+                    BigInteger intValue = new BigInteger( calValue );
+                    return "0x" + intValue.toString( 16 );
                 }
-            } catch ( Exception ex ) {
-                warnings_.add( itemName_ + ex.getLocalizedMessage() );
-            }
-        } else if ( euTypeName_.equals( "DURATION" ) == true ) {
-            warnings_.add( itemName_ + " Relative Time Type is not " +
-                "yet supported" );
-        } else {
-            warnings_.add( itemName_ + " Type '" + euTypeName_ +
-                "' is not yet supported" );
+
+            case TIME:
+                try {
+                    if ( timeHandler_ != null ) {
+                        return timeHandler_.getCalibratedFromUncalibrated( uncalValue );
+                    }
+                } catch ( Exception ex ) {
+                    warnings_.add( itemName_ + ex.getLocalizedMessage() );
+                }
+                break;
+
+            case DURATION:
+                warnings_.add( itemName_ + " Relative Time Type is not " +
+                    "yet supported" );
+                break;
+
+            default:
+                warnings_.add( itemName_ + " Type '" + euTypeName_ +
+                    "' is not yet supported" );
+                break;
+
         }
 
         return "";
@@ -478,16 +510,16 @@ public class XTCEItemValue {
 
         try {
 
-            if ( euTypeName_.equals( "TIME" ) == true ) {
+            if ( euTypeName_ == EngineeringType.TIME ) {
                 if ( timeHandler_ != null ) {
                     return timeHandler_.getRawFromUncalibrated( uncalValue );
                 } else {
                     return new BitSet( rawSizeInBits_ );
                 }
-            } else if ( ( rawTypeName_.equals( "unsigned" )       == true ) ||
-                        ( rawTypeName_.equals( "signMagnitude" )  == true ) ||
-                        ( rawTypeName_.equals( "twosComplement" ) == true ) ||
-                        ( rawTypeName_.equals( "onesComplement" ) == true ) ) {
+            } else if ( ( rawTypeName_ == RawType.unsigned       ) ||
+                        ( rawTypeName_ == RawType.signMagnitude  ) ||
+                        ( rawTypeName_ == RawType.twosComplement ) ||
+                        ( rawTypeName_ == RawType.onesComplement ) ) {
                 String lowerCalValue = uncalValue.toLowerCase();
                 if ( lowerCalValue.startsWith( "0x" ) == true ) {
                     intValue = new BigInteger( lowerCalValue.replaceFirst( "0x", "" ), 16 );
@@ -496,7 +528,7 @@ public class XTCEItemValue {
                     intValue = new BigDecimal( lowerCalValue ).toBigIntegerExact();
                     return getRawFromUncalibrated( intValue );
                 }
-            } else if ( rawTypeName_.equals( "binary" ) == true ) {
+            } else if ( rawTypeName_ == RawType.binary ) {
                 // need to know EU type here!
                 if ( uncalValue.contains( "-" ) == true ) {
                     warnings_.add( itemName_ + " Invalid value for binary " +
@@ -506,7 +538,7 @@ public class XTCEItemValue {
                     String lowerCalValue = uncalValue.toLowerCase();
                     intValue = integerStringToBigInteger( lowerCalValue );
                 }
-            } else if ( rawTypeName_.equals( "IEEE754_1985" ) == true ) {
+            } else if ( rawTypeName_ == RawType.IEEE754_1985 ) {
                 String reasCalValue = uncalValue.toLowerCase();
                 if ( reasCalValue.startsWith( "0x" ) == true ) {
                     BigInteger temp = new BigInteger( reasCalValue.replaceFirst( "0x", "" ), 16 );
@@ -514,18 +546,18 @@ public class XTCEItemValue {
                 } else {
                     return getRawFromUncalibrated( new BigDecimal( reasCalValue ) );
                 }
-            } else if ( rawTypeName_.equals( "MILSTD_1750A" ) == true ) {
+            } else if ( rawTypeName_ == RawType.MILSTD_1750A ) {
                 warnings_.add( "Unsupported encoding type for " +
                                itemName_ +
                                " Encoding: " +
                                rawTypeName_ );
-            } else if ( rawTypeName_.equals( "UTF-8" ) == true ) {
+            } else if ( rawTypeName_ == RawType.UTF8 ) {
                 BigInteger retValue = BigInteger.ZERO;
                 if ( uncalValue.isEmpty() == false ) {
                     retValue = new BigInteger( uncalValue.getBytes( StandardCharsets.UTF_8 ) );
                 }
                 intValue = encodeUtfString( retValue );
-            } else if ( rawTypeName_.equals( "UTF-16" ) == true ) {
+            } else if ( rawTypeName_ == RawType.UTF16 ) {
                 BigInteger retValue = BigInteger.ZERO;
                 if ( uncalValue.isEmpty() == false ) {
                     retValue = new BigInteger( uncalValue.getBytes( StandardCharsets.UTF_16 ) );
@@ -534,7 +566,7 @@ public class XTCEItemValue {
                     retValue = new BigInteger( utf16_ );
                 }
                 intValue = encodeUtfString( retValue );
-            } else if ( euTypeName_.equals( "DURATION" ) == true ) {
+            } else if ( euTypeName_ == EngineeringType.DURATION ) {
                 // TODO Add DURATION Type
                 warnings_.add( "Relative Time Type Not Yet Supported for " +
                                itemName_ );
@@ -579,7 +611,7 @@ public class XTCEItemValue {
 
         // TODO Handle Byte order element ByteOrderList in the encoding
 
-        if ( euTypeName_.equals( "TIME" ) == true ) {
+        if ( euTypeName_ == EngineeringType.TIME ) {
             if ( timeHandler_ != null ) {
                 return timeHandler_.getRawFromUncalibrated( uncalValue.toString() );
             } else {
@@ -587,7 +619,7 @@ public class XTCEItemValue {
             }
         }
 
-        if ( rawTypeName_.equals( "unsigned" ) == true ) {
+        if ( rawTypeName_ == RawType.unsigned ) {
             BigInteger max = new BigInteger( "2" ).pow( rawSizeInBits_ );
             if ( uncalValue.compareTo( max ) == 1 ) {
                 warnings_.add( itemName_ + " overflow value '" + uncalValue +
@@ -596,7 +628,7 @@ public class XTCEItemValue {
             } else if ( isIntegerRawValueReasonable( uncalValue ) == false ) {
                 uncalValue = BigInteger.ZERO;
             }
-        } else if ( rawTypeName_.equals( "signMagnitude" ) == true ) {
+        } else if ( rawTypeName_ == RawType.signMagnitude ) {
             BigInteger max = new BigInteger( "2" ).pow( rawSizeInBits_ - 1 );
             BigInteger min = max.negate();
             if ( uncalValue.compareTo( max ) == 1 ) {
@@ -614,7 +646,7 @@ public class XTCEItemValue {
                 uncalValue = uncalValue.negate();
                 uncalValue = uncalValue.setBit( rawSizeInBits_ - 1 );
             }
-        } else if ( rawTypeName_.equals( "twosComplement" ) == true ) {
+        } else if ( rawTypeName_ == RawType.twosComplement ) {
             BigInteger max = new BigInteger( "2" ).pow( rawSizeInBits_ - 1 );
             BigInteger min = max.negate();
             if ( uncalValue.compareTo( max ) == 1 ) {
@@ -628,7 +660,7 @@ public class XTCEItemValue {
             } else if ( isIntegerRawValueReasonable( uncalValue ) == false ) {
                 uncalValue = BigInteger.ZERO;
             }
-        } else if ( rawTypeName_.equals( "onesComplement" ) == true ) {
+        } else if ( rawTypeName_ == RawType.onesComplement ) {
             BigInteger max = new BigInteger( "2" ).pow( rawSizeInBits_ - 1 );
             BigInteger min = max.negate();
             if ( uncalValue.compareTo( max ) == 1 ) {
@@ -645,9 +677,9 @@ public class XTCEItemValue {
             if ( uncalValue.compareTo( BigInteger.ZERO ) < 0 ) {
                 uncalValue = uncalValue.subtract( BigInteger.ONE );
             }
-        } else if ( rawTypeName_.equals( "binary" ) == true ) {
+        } else if ( rawTypeName_ == RawType.binary ) {
             // do nothing
-        } else if ( rawTypeName_.equals( "IEEE754_1985" ) == true ) {
+        } else if ( rawTypeName_ == RawType.IEEE754_1985 ) {
             if ( isFloatRawValueReasonable( uncalValue.doubleValue() ) == false ) {
                 uncalValue = BigInteger.ZERO;
             } else {
@@ -662,29 +694,29 @@ public class XTCEItemValue {
                                    rawTypeName_ );
                 }
             }
-        } else if ( rawTypeName_.equals( "MILSTD_1750A" ) == true ) {
+        } else if ( rawTypeName_ == RawType.MILSTD_1750A ) {
             warnings_.add( "Unsupported encoding type for " +
                            itemName_ +
                            " Encoding: " +
                            rawTypeName_ );
             uncalValue = BigInteger.ZERO;
-        } else if ( rawTypeName_.equals( "UTF-8" ) == true ) {
+        } else if ( rawTypeName_ == RawType.UTF8 ) {
             String chars = uncalValue.toString();
             BigInteger retValue = new BigInteger( chars.getBytes( StandardCharsets.UTF_8 ) );
             uncalValue = encodeUtfString( retValue );
-        } else if ( rawTypeName_.equals( "UTF-16" ) == true ) {
+        } else if ( rawTypeName_ == RawType.UTF16 ) {
             String chars = uncalValue.toString();
             BigInteger retValue = new BigInteger( chars.getBytes( StandardCharsets.UTF_16 ) );
             if ( retValue.equals( BigInteger.ZERO ) == true ) {
                 retValue = new BigInteger( utf16_ );
             }
             uncalValue = encodeUtfString( retValue );
-        } else if ( euTypeName_.equals( "TIME" ) == true ) {
+        } else if ( euTypeName_ == EngineeringType.TIME ) {
             // TODO Add TIME Type
             warnings_.add( "Absolute Time Type Not Yet Supported for " +
                            itemName_ );
             uncalValue = BigInteger.ZERO;
-        } else if ( euTypeName_.equals( "DURATION" ) == true ) {
+        } else if ( euTypeName_ == EngineeringType.DURATION ) {
             // TODO Add DURATION Type
             warnings_.add( "Relative Time Type Not Yet Supported for " +
                            itemName_ );
@@ -734,10 +766,10 @@ public class XTCEItemValue {
 
         BigInteger intValue = BigInteger.ZERO;
 
-        if ( ( rawTypeName_.equals( "unsigned" )       == true ) ||
-             ( rawTypeName_.equals( "signMagnitude" )  == true ) ||
-             ( rawTypeName_.equals( "twosComplement" ) == true ) ||
-             ( rawTypeName_.equals( "onesComplement" ) == true ) )   {
+        if ( ( rawTypeName_ == RawType.unsigned       ) ||
+             ( rawTypeName_ == RawType.signMagnitude  ) ||
+             ( rawTypeName_ == RawType.twosComplement ) ||
+             ( rawTypeName_ == RawType.onesComplement ) )   {
             try {
                 return getRawFromUncalibrated( uncalValue.toBigIntegerExact() );
             } catch ( NumberFormatException ex ) {
@@ -748,12 +780,12 @@ public class XTCEItemValue {
                                uncalValue +
                                "'" );
             }
-        } else if ( rawTypeName_.equals( "binary" ) == true ) {
+        } else if ( rawTypeName_ == RawType.binary ) {
             warnings_.add( "Unsupported encoding type for " +
                            itemName_ +
                            " Encoding: " +
                            rawTypeName_ );
-        } else if ( rawTypeName_.equals( "IEEE754_1985" ) == true ) {
+        } else if ( rawTypeName_ == RawType.IEEE754_1985 ) {
             if ( isFloatRawValueReasonable( uncalValue.doubleValue() ) == false ) {
                 intValue = BigInteger.ZERO;
             } else {
@@ -768,27 +800,27 @@ public class XTCEItemValue {
                                    rawTypeName_ );
                 }
             }
-        } else if ( rawTypeName_.equals( "MILSTD_1750A" ) == true ) {
+        } else if ( rawTypeName_ == RawType.MILSTD_1750A ) {
             warnings_.add( "Unsupported encoding type for " +
                            itemName_ +
                            " Encoding: " +
                            rawTypeName_ );
-        } else if ( rawTypeName_.equals( "UTF-8" ) == true ) {
+        } else if ( rawTypeName_ == RawType.UTF8 ) {
             String chars = uncalValue.toString();
             BigInteger retValue = new BigInteger( chars.getBytes( StandardCharsets.UTF_8 ) );
             intValue = encodeUtfString( retValue );
-        } else if ( rawTypeName_.equals( "UTF-16" ) == true ) {
+        } else if ( rawTypeName_ == RawType.UTF16 ) {
             String chars = uncalValue.toString();
             BigInteger retValue = new BigInteger( chars.getBytes( StandardCharsets.UTF_16 ) );
             if ( retValue.equals( BigInteger.ZERO ) == true ) {
                 retValue = new BigInteger( utf16_ );
             }
             intValue = encodeUtfString( retValue );
-        } else if ( euTypeName_.equals( "TIME" ) == true ) {
+        } else if ( euTypeName_ == EngineeringType.TIME ) {
             // TODO Add TIME Type
             warnings_.add( "Absolute Time Type Not Yet Supported for " +
                            itemName_ );
-        } else if ( euTypeName_.equals( "DURATION" ) == true ) {
+        } else if ( euTypeName_ == EngineeringType.DURATION ) {
             // TODO Add DURATION Type
             warnings_.add( "Relative Time Type Not Yet Supported for " +
                            itemName_ );
@@ -849,75 +881,94 @@ public class XTCEItemValue {
 
     public String getUncalibratedFromCalibrated( String euValue ) {
 
-        if ( euTypeName_.equals( "BOOLEAN" ) == true ) {
-            BigInteger integerValue = integerFromBooleanType( euValue );
-            return uncalibrateIntegerType( integerValue );
-        } else if ( euTypeName_.equals( "ENUMERATED" ) == true ) {
-            BigInteger integerValue = integerFromEnumerationType( euValue );
-            return uncalibrateIntegerType( integerValue );
-        } else if ( euTypeName_.equals( "STRING" ) == true ) {
-            return uncalibrateStringType( euValue );
-        } else if ( euTypeName_.equals( "BINARY" ) == true ) {
-            return "0x" + integerStringToBigInteger( euValue ).toString( 16 );
-        } else if ( euTypeName_.startsWith( "FLOAT" ) == true ) {
-            try {
-                if ( euValue.startsWith( "0x" ) == true ) {
-                    BigInteger intValue = new BigInteger( euValue.replaceFirst( "0x", "" ), 16 );
-                    return uncalibrateFloatType( new BigDecimal( intValue ) );
-                }
-                if ( euValue.startsWith( "0X" ) == true ) {
-                    BigInteger intValue = new BigInteger( euValue.replaceFirst( "0X", "" ), 16 );
-                    return uncalibrateFloatType( new BigDecimal( intValue ) );
-                }
-                return uncalibrateFloatType( new BigDecimal( euValue ) );
-            } catch ( NumberFormatException ex ) {
-                warnings_.add( itemName_ +
-                               " Invalid String value for uncalibrate " +
-                               "IEEE754_1985 of '" +
-                               euValue +
-                               "'" );
+        switch ( euTypeName_ ) {
+
+            case BOOLEAN: {
+                BigInteger integerValue = integerFromBooleanType( euValue );
+                return uncalibrateIntegerType( integerValue );
             }
-        } else if ( ( euTypeName_.equals( "UNSIGNED" ) == true ) ||
-                    ( euTypeName_.equals( "SIGNED" )   == true ) ) {
-            try {
-                if ( euValue.startsWith( "0x" ) == true ) {
-                    return uncalibrateIntegerType( new BigInteger( euValue.replaceFirst( "0x", "" ), 16 ) );
+
+            case ENUMERATED: {
+                BigInteger integerValue = integerFromEnumerationType( euValue );
+                return uncalibrateIntegerType( integerValue );
+            }
+
+            case STRING:
+                return uncalibrateStringType( euValue );
+
+            case BINARY:
+                return "0x" +
+                       integerStringToBigInteger( euValue ).toString( 16 );
+
+            case FLOAT32:
+            case FLOAT64:
+            case FLOAT128:
+                try {
+                    if ( euValue.startsWith( "0x" ) == true ) {
+                        BigInteger intValue = new BigInteger( euValue.replaceFirst( "0x", "" ), 16 );
+                        return uncalibrateFloatType( new BigDecimal( intValue ) );
+                    } else if ( euValue.startsWith( "0X" ) == true ) {
+                        BigInteger intValue = new BigInteger( euValue.replaceFirst( "0X", "" ), 16 );
+                        return uncalibrateFloatType( new BigDecimal( intValue ) );
+                    }
+                    return uncalibrateFloatType( new BigDecimal( euValue ) );
+                } catch ( NumberFormatException ex ) {
+                    warnings_.add( itemName_ +
+                                   " Invalid String value for uncalibrate " +
+                                   "IEEE754_1985 of '" +
+                                   euValue +
+                                   "'" );
                 }
-                if ( euValue.startsWith( "0X" ) == true ) {
-                    return uncalibrateIntegerType( new BigInteger( euValue.replaceFirst( "0X", "" ), 16 ) );
-                }
-                BigDecimal testValue = new BigDecimal( euValue );
-                if ( ( testValue.doubleValue() % 1 ) != 0 ) {
+                break;
+
+            case UNSIGNED:
+            case SIGNED:
+                try {
+                    if ( euValue.startsWith( "0x" ) == true ) {
+                        return uncalibrateIntegerType( new BigInteger( euValue.replaceFirst( "0x", "" ), 16 ) );
+                    } else if ( euValue.startsWith( "0X" ) == true ) {
+                        return uncalibrateIntegerType( new BigInteger( euValue.replaceFirst( "0X", "" ), 16 ) );
+                    }
+                    BigDecimal testValue = new BigDecimal( euValue );
+                    if ( ( testValue.doubleValue() % 1 ) != 0 ) {
+                        warnings_.add( itemName_ +
+                                       " Invalid Integer value for uncalibrate of '" +
+                                       euValue + "'" );
+                    } else {
+                        BigInteger intValue = testValue.toBigInteger();
+                        return uncalibrateIntegerType( intValue );
+                    }
+                } catch ( NumberFormatException ex ) {
                     warnings_.add( itemName_ +
                                    " Invalid Integer value for uncalibrate of '" +
-                                   euValue + "'" );
-                } else {
-                    BigInteger intValue = testValue.toBigInteger();
-                    return uncalibrateIntegerType( intValue );
+                                   euValue +
+                                   "'" );
                 }
-            } catch ( NumberFormatException ex ) {
-                warnings_.add( itemName_ +
-                               " Invalid Integer value for uncalibrate of '" +
-                               euValue +
-                               "'" );
-            }
-        } else if ( euTypeName_.equals( "TIME" ) == true ) {
-            try {
-                if ( timeHandler_ != null ) {
-                    return timeHandler_.getUncalibratedFromCalibrated( euValue );
+                break;
+
+            case TIME:
+                try {
+                    if ( timeHandler_ != null ) {
+                        return timeHandler_.getUncalibratedFromCalibrated( euValue );
+                    }
+                } catch ( Exception ex ) {
+                    warnings_.add( itemName_ + ex.getLocalizedMessage() );
                 }
-            } catch ( Exception ex ) {
-                warnings_.add( itemName_ + ex.getLocalizedMessage() );
-            }
-        } else if ( euTypeName_.equals( "DURATION" ) == true ) {
-            // TODO Add DURATION Type
-            warnings_.add( "Relative Time Type Not Yet Supported for " +
-                           itemName_ );
-        } else {
-            warnings_.add( "AGGREGATE and ARRAY types for item " +
-                           itemName_ +
-                           " cannot directly be encoded." + 
-                           "  Use their children instead" );
+                break;
+
+            case DURATION:
+                // TODO Add DURATION Type
+                warnings_.add( "Relative Time Type Not Yet Supported for " +
+                               itemName_ );
+                break;
+
+            default:
+                warnings_.add( "AGGREGATE and ARRAY types for item " +
+                               itemName_ +
+                               " cannot directly be encoded." + 
+                               "  Use their children instead" );
+                break;
+
         }
 
         return "";
@@ -1182,51 +1233,47 @@ public class XTCEItemValue {
 
     private String uncalibrateIntegerType( BigInteger calValue ) {
 
-        if ( ( rawTypeName_.equals( "unsigned" )       == true ) ||
-             ( rawTypeName_.equals( "signMagnitude" )  == true ) ||
-             ( rawTypeName_.equals( "twosComplement" ) == true ) ||
-             ( rawTypeName_.equals( "onesComplement" ) == true ) ) {
+        switch ( rawTypeName_ ) {
 
-            BigInteger uncalValue = integerEncodingUncalibrate( calValue );
-            if ( isIntegerRawValueReasonable( uncalValue ) == false ) {
-                return "0";
+            case unsigned:
+            case signMagnitude:
+            case twosComplement:
+            case onesComplement: {
+                BigInteger uncalValue = integerEncodingUncalibrate( calValue );
+                if ( isIntegerRawValueReasonable( uncalValue ) == false ) {
+                    return "0";
+                }
+                return uncalValue.toString();
             }
-            return uncalValue.toString();
 
-        } else if ( rawTypeName_.equals( "binary" ) == true ) {
+            case binary:
+                return calValue.toString();
 
-            return calValue.toString();
-
-        } else if ( rawTypeName_.equals( "IEEE754_1985" ) == true ) {
-
-            BigDecimal uncalValue =
-                floatEncodingUncalibrate( new BigDecimal( calValue ) );
-            if ( isFloatRawValueReasonable( uncalValue.doubleValue() ) == false ) {
-                return "0.0";
+            case IEEE754_1985: {
+                BigDecimal uncalValue =
+                    floatEncodingUncalibrate( new BigDecimal( calValue ) );
+                if ( isFloatRawValueReasonable( uncalValue.doubleValue() ) == false ) {
+                    return "0.0";
+                }
+                return Double.toString( uncalValue.doubleValue() );
             }
-            return Double.toString( uncalValue.doubleValue() );
 
-        } else if ( rawTypeName_.equals( "MILSTD_1750A" ) == true ) {
+            case MILSTD_1750A:
+                warnings_.add( "Unsupported encoding type for " +
+                               itemName_ +
+                               " Encoding: " +
+                               rawTypeName_ );
+                break;
 
-            warnings_.add( "Unsupported encoding type for " +
-                           itemName_ +
-                           " Encoding: " +
-                           rawTypeName_ );
+            case UTF8:
+            case UTF16:
+                return calValue.toString();
 
-        } else if ( rawTypeName_.equals( "UTF-8" ) == true ) {
-
-            return calValue.toString();
-
-        } else if ( rawTypeName_.equals( "UTF-16" ) == true ) {
-
-            return calValue.toString();
-
-        } else {
-
-            warnings_.add( "Unrecognized encoding type for " +
-                           itemName_ +
-                           " Encoding: " +
-                           rawTypeName_ );
+            default:
+                warnings_.add( "Unrecognized encoding type for " +
+                               itemName_ +
+                               " Encoding: " +
+                               rawTypeName_ );
 
         }
 
@@ -1236,51 +1283,47 @@ public class XTCEItemValue {
 
     private String uncalibrateFloatType( BigDecimal calValue ) {
 
-        if ( ( rawTypeName_.equals( "unsigned" )       == true ) ||
-             ( rawTypeName_.equals( "signMagnitude" )  == true ) ||
-             ( rawTypeName_.equals( "twosComplement" ) == true ) ||
-             ( rawTypeName_.equals( "onesComplement" ) == true ) ) {
+        switch ( rawTypeName_ ) {
 
-            BigInteger uncalValue = integerEncodingUncalibrate( calValue );
-            if ( isIntegerRawValueReasonable( uncalValue ) == false ) {
-                return "0";
+            case unsigned:
+            case signMagnitude:
+            case twosComplement:
+            case onesComplement: {
+                BigInteger uncalValue = integerEncodingUncalibrate( calValue );
+                if ( isIntegerRawValueReasonable( uncalValue ) == false ) {
+                    return "0";
+                }
+                return uncalValue.toString();
             }
-            return uncalValue.toString();
 
-        } else if ( rawTypeName_.equals( "binary" ) == true ) {
+            case binary:
+                return calValue.toString();
 
-            return calValue.toString();
-
-        } else if ( rawTypeName_.equals( "IEEE754_1985" ) == true ) {
-
-            BigDecimal uncalValue =
-                floatEncodingUncalibrate( calValue );
-            if ( isFloatRawValueReasonable( uncalValue.doubleValue() ) == false ) {
-                return "0.0";
+            case IEEE754_1985: {
+                BigDecimal uncalValue =
+                    floatEncodingUncalibrate( calValue );
+                if ( isFloatRawValueReasonable( uncalValue.doubleValue() ) == false ) {
+                    return "0.0";
+                }
+                return Double.toString( uncalValue.doubleValue() );
             }
-            return Double.toString( uncalValue.doubleValue() );
 
-        } else if ( rawTypeName_.equals( "MILSTD_1750A" ) == true ) {
+            case MILSTD_1750A:
+                warnings_.add( "Unsupported encoding type for " +
+                               itemName_ +
+                               " Encoding: " +
+                               rawTypeName_ );
+                break;
 
-            warnings_.add( "Unsupported encoding type for " +
-                           itemName_ +
-                           " Encoding: " +
-                           rawTypeName_ );
+            case UTF8:
+            case UTF16:
+                return calValue.toString();
 
-        } else if ( rawTypeName_.equals( "UTF-8" ) == true ) {
-
-            return calValue.toString();
-
-        } else if ( rawTypeName_.equals( "UTF-16" ) == true ) {
-
-            return calValue.toString();
-
-        } else {
-
-            warnings_.add( "Unrecognized encoding type for " +
-                           itemName_ +
-                           " Encoding: " +
-                           rawTypeName_ );
+            default:
+                warnings_.add( "Unrecognized encoding type for " +
+                               itemName_ +
+                               " Encoding: " +
+                               rawTypeName_ );
 
         }
 
@@ -1618,10 +1661,10 @@ public class XTCEItemValue {
         // do this, either.  It could operate on a byte[].
 
         if ( rawValue.compareTo( BigInteger.ZERO ) < 0 ) {
-            if ( rawTypeName_.equals( "signMagnitude" ) == true ) {
+            if ( rawTypeName_ == RawType.signMagnitude ) {
                 rawValue = rawValue.negate();
                 rawValue = rawValue.setBit( rawSizeInBits_ - 1 );
-            } else if ( rawTypeName_.equals( "onesComplement" ) == true ) {
+            } else if ( rawTypeName_ == RawType.onesComplement ) {
                 rawValue = rawValue.subtract( BigInteger.ONE );
             }
         }
@@ -2251,9 +2294,9 @@ public class XTCEItemValue {
         long    maxValue     = (long)Math.pow( 2, rawSizeInBits_ ) - 1;
 
         // if it is signed, then correct that range
-        if ( ( rawTypeName_.equals( "signMagnitude" ) == true ) ||
-             ( rawTypeName_.equals( "onesComplement" ) == true ) ||
-             ( rawTypeName_.equals( "twosComplement" ) == true ) ) {
+        if ( ( rawTypeName_ == RawType.signMagnitude  ) ||
+             ( rawTypeName_ == RawType.onesComplement ) ||
+             ( rawTypeName_ == RawType.twosComplement ) ) {
             minValue = -1 * (long)Math.pow( 2, ( rawSizeInBits_ - 1 ) );
             maxValue = (long)Math.pow( 2, ( rawSizeInBits_ - 1 ) ) - 1;
         }
@@ -2276,7 +2319,7 @@ public class XTCEItemValue {
         }
 
         // check the special negative case first
-        if ( rawTypeName_.equals( "unsigned" ) == true ) {
+        if ( rawTypeName_ == RawType.unsigned ) {
             if ( rawValue.signum() < 0 ) {
                 warnings_.add( "Unsigned value for item " +
                                itemName_ +
@@ -2462,7 +2505,7 @@ public class XTCEItemValue {
             root2 = root1;
         }
 
-        if ( rawTypeName_.equals( "unsigned" ) == true ) {
+        if ( rawTypeName_ == RawType.unsigned ) {
             // TODO worry about inclusive versus exclusive
             long minValue = 0;
             long maxValue = (long)Math.pow( 2, rawSizeInBits_  ) - 1;
@@ -2493,9 +2536,9 @@ public class XTCEItemValue {
                                rawTypeName_ );
                 return 0.0;
             }
-        } else if ( ( rawTypeName_.equals( "signMagnitude" ) == true ) ||
-                    ( rawTypeName_.equals( "onesComplement" ) == true ) ||
-                    ( rawTypeName_.equals( "twosComplement" ) == true ) ) {
+        } else if ( ( rawTypeName_ == RawType.signMagnitude  ) ||
+                    ( rawTypeName_ == RawType.twosComplement ) ||
+                    ( rawTypeName_ == RawType.onesComplement ) ) {
             // TODO worry about inclusive versus exclusive
             long minValue = -1 * (long)Math.pow( 2, ( rawSizeInBits_ - 1 ) );
             long maxValue = (long)Math.pow( 2, ( rawSizeInBits_ - 1 ) ) - 1;
@@ -2534,14 +2577,14 @@ public class XTCEItemValue {
 
     // Private Data Members
 
-    private String  itemName_;
-    private String  euTypeName_;
-    private String  rawTypeName_;
-    private int     rawSizeInBits_;
-    private String  rawBitOrder_;
-    private boolean validObject_;
-    private String  booleanZeroString_;
-    private String  booleanOneString_;
+    private String          itemName_;
+    private EngineeringType euTypeName_;
+    private RawType         rawTypeName_;
+    private int             rawSizeInBits_;
+    private String          rawBitOrder_;
+    private boolean         validObject_;
+    private String          booleanZeroString_;
+    private String          booleanOneString_;
 
     private List<String>               warnings_    = new ArrayList<>();
     private List<ValueEnumerationType> enums_       = null;

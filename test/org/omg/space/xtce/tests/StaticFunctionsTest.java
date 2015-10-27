@@ -28,7 +28,10 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.omg.space.xtce.database.AbsoluteTimeDataType;
+import org.omg.space.xtce.toolkit.XTCEAbsoluteTimeType;
 import org.omg.space.xtce.toolkit.XTCEAlias;
+import org.omg.space.xtce.toolkit.XTCECcsdsCucTimeHandler;
 import org.omg.space.xtce.toolkit.XTCEDatabase;
 import org.omg.space.xtce.toolkit.XTCEFunctions;
 import org.omg.space.xtce.toolkit.XTCEParameter;
@@ -444,6 +447,37 @@ public class StaticFunctionsTest {
     }
 
     @Test
+    public void makeAliasDisplayString_ForNoAliasNullPreferred() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        try {
+
+            XTCEParameter parameter = db_.
+                                      getRootSpaceSystem().
+                                      getTelemetryParameter( "INT_NO_ALIAS" );
+
+            String aliasDisplay =
+                XTCEFunctions.makeAliasDisplayString( parameter,
+                                                      true,
+                                                      true,
+                                                      null );
+
+            List<XTCEAlias> aliases = parameter.getAliasSet();
+
+            Assert.assertTrue( "Expected empty string but got " + aliasDisplay,
+                               aliasDisplay.isEmpty() == true );
+            
+        } catch ( Throwable ex ) {
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+    }
+
+    @Test
     public void makeAliasDisplayString_ForPreferredNoNamespaceAlias() {
 
         final String methodName =
@@ -765,6 +799,11 @@ public class StaticFunctionsTest {
         Assert.assertTrue( "String should be '" + expect + "'",
                            fixed.equals( expect ) == true );
 
+        hex = " \t  12 34 \r 56 \r\n 78 \f 99aabbccdd";
+
+        Assert.assertTrue( "String should be '" + expect + "'",
+                           fixed.equals( expect ) == true );
+
     }
 
     @Test
@@ -790,6 +829,56 @@ public class StaticFunctionsTest {
         }
 
         Assert.fail( "Should have gotten an exception with 'z'" );
+
+        hex = "aabb";
+        fixed = XTCEFunctions.getBytesFromHexString( hex );
+
+        if ( fixed[0] != (byte)0xaa ) {
+            Assert.fail( "First byte should be 0xaa" );
+        }
+        if ( fixed[1] != (byte)0xbb ) {
+            Assert.fail( "Second byte should be 0xbb" );
+        }
+
+    }
+
+    @Test
+    public void verifyDefaultTimeHandlerExists() {
+
+        try {
+
+            XTCEParameter parameter =
+                db_.getRootSpaceSystem().getTelemetryParameter( "CUC_TAI_TIME" );
+
+            AbsoluteTimeDataType xml =
+                (AbsoluteTimeDataType)parameter.getTypeReference();
+
+            XTCEAbsoluteTimeType handler =
+                 XTCEFunctions.getAbsoluteTimeHandler( xml );
+
+            Assert.assertTrue( "Handler should be found for CUC_TAI_TIME",
+                               handler.isApplicable( xml ) == true );
+
+        } catch ( Exception ex ) {
+            Assert.fail( "Default CCSDS time handler not registered: " +
+                         ex.getLocalizedMessage() );
+        }
+
+    }
+
+    @Test
+    public void verifyNewTimeHandlerRegistration() {
+
+        try {
+
+            XTCEAbsoluteTimeType instance = new XTCECcsdsCucTimeHandler();
+
+            XTCEFunctions.registerAbsoluteTimeHandler( instance );
+
+        } catch ( Exception ex ) {
+            Assert.fail( "Handler registration should not throw: " +
+                         ex.getLocalizedMessage() );
+        }
 
     }
 
