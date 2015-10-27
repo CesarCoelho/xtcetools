@@ -848,7 +848,7 @@ public class StaticFunctionsTest {
         try {
 
             XTCEParameter parameter =
-                db_.getRootSpaceSystem().getTelemetryParameter( "CUC_TAI_TIME" );
+                db_.getRootSpaceSystem().getTelemetryParameter( "CUC_GPS_TIME" );
 
             AbsoluteTimeDataType xml =
                 (AbsoluteTimeDataType)parameter.getTypeReference();
@@ -856,12 +856,34 @@ public class StaticFunctionsTest {
             XTCEAbsoluteTimeType handler =
                  XTCEFunctions.getAbsoluteTimeHandler( xml );
 
-            Assert.assertTrue( "Handler should be found for CUC_TAI_TIME",
+            Assert.assertTrue( "Handler should be found for CUC_GPS_TIME",
                                handler.isApplicable( xml ) == true );
 
         } catch ( Exception ex ) {
             Assert.fail( "Default CCSDS time handler not registered: " +
                          ex.getLocalizedMessage() );
+        }
+
+    }
+
+    @Test
+    public void verifyNoDefaultTimeHandlerExists() {
+
+        try {
+
+            XTCEParameter parameter =
+                db_.getRootSpaceSystem().getTelemetryParameter( "ODD_TIME" );
+
+            AbsoluteTimeDataType xml =
+                (AbsoluteTimeDataType)parameter.getTypeReference();
+
+            XTCEAbsoluteTimeType handler =
+                 XTCEFunctions.getAbsoluteTimeHandler( xml );
+
+            Assert.fail( "Handler should NOT be found for ODD_TIME" );
+
+        } catch ( Exception ex ) {
+            // expect exception
         }
 
     }
