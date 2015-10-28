@@ -80,8 +80,8 @@ public class XTCEItemValue {
         // unless exists
         NameDescriptionType typeObj = item.getTypeReference();
         if ( typeObj == null ) {
-            warnings_.add( itemName_ + " " +
-                           XTCEFunctions.getText( "error_encdec_notype" ) ); // NOI18N
+            warn( itemName_ + " " +
+                  XTCEFunctions.getText( "error_encdec_notype" ) ); // NOI18N
             validObject_ = false;
             return;
         }
@@ -91,9 +91,9 @@ public class XTCEItemValue {
             rawSizeInBits_ = Integer.parseInt( item.getRawSizeInBits() );
             validObject_   = true;
         } catch ( NumberFormatException ex ) {
-            warnings_.add( itemName_ + " " + // NOI18N
-                           XTCEFunctions.getText( "error_encdec_norawsize" ) + // NOI18N
-                           " '" + rawSizeInBits_ + "'" ); // NOI18N
+            warn( itemName_ + " " + // NOI18N
+                  XTCEFunctions.getText( "error_encdec_norawsize" ) + // NOI18N
+                  " '" + rawSizeInBits_ + "'" ); // NOI18N
             validObject_ = false;
         }
 
@@ -105,7 +105,7 @@ public class XTCEItemValue {
                 timeHandler_ =
                     XTCEFunctions.getAbsoluteTimeHandler( timeXml );
             } catch ( XTCEDatabaseException ex ) {
-                warnings_.add( itemName_ + " " + ex.getLocalizedMessage() );
+                warn( itemName_ + " " + ex.getLocalizedMessage() );
                 validObject_ = false;
                 return;
             }
@@ -151,6 +151,9 @@ public class XTCEItemValue {
      */
 
     public final List<String> getWarnings() {
+        if ( warnings_ == null ) {
+            return new ArrayList<>();
+        }
         return warnings_;
     }
 
@@ -161,7 +164,9 @@ public class XTCEItemValue {
      */
 
     public final void clearWarnings() {
-        warnings_.clear();
+        if ( warnings_ != null ) {
+            warnings_.clear();
+        }
     }
 
     /** Retrieve the Calibrated/Engineering value of this typed object when
@@ -188,7 +193,7 @@ public class XTCEItemValue {
     public String decode( BitSet rawValue ) {
 
         String uncalValue = getUncalibratedFromRaw( rawValue );
-        if ( warnings_.isEmpty() == false ) {
+        if ( warnings_ != null && warnings_.isEmpty() == false ) {
             return "";
         } else {
             return getCalibratedFromUncalibrated( uncalValue );
@@ -219,8 +224,8 @@ public class XTCEItemValue {
         clearWarnings();
 
         if ( rawBitOrder_.equals( "mostSignificantBitFirst" ) == false ) {
-            warnings_.add( itemName_ + " Raw encoding " + rawBitOrder_ +
-                " not yet supported" );
+            warn( itemName_ + " Raw encoding " + rawBitOrder_ +
+                   " not yet supported" );
             return "";
         }
 
@@ -277,10 +282,10 @@ public class XTCEItemValue {
                     Double doubleValue = Double.longBitsToDouble( numericValue.longValue() );
                     return doubleValue.toString();
                 } else {
-                    warnings_.add( itemName_ + " Raw encoding " +
-                        rawTypeName_ + " using " +
-                        Integer.toString( rawSizeInBits_ ) + " bits " +
-                        "is not yet supported" );
+                    warn( itemName_ + " Raw encoding " +
+                          rawTypeName_ + " using " +
+                          Integer.toString( rawSizeInBits_ ) + " bits " +
+                          "is not yet supported" );
                 }
                 break;
             }
@@ -296,8 +301,8 @@ public class XTCEItemValue {
 
             default:
                 // not supported MILSTD_1750A, BCD, packedBCD
-                warnings_.add( itemName_ + " Raw encoding type " +
-                               rawTypeName_ +" not yet supported" );
+                warn( itemName_ + " Raw encoding type " +
+                      rawTypeName_ +" not yet supported" );
 
         }
 
@@ -360,18 +365,17 @@ public class XTCEItemValue {
                         return timeHandler_.getCalibratedFromUncalibrated( uncalValue );
                     }
                 } catch ( Exception ex ) {
-                    warnings_.add( itemName_ + ex.getLocalizedMessage() );
+                    warn( itemName_ + ex.getLocalizedMessage() );
                 }
                 break;
 
             case DURATION:
-                warnings_.add( itemName_ + " Relative Time Type is not " +
-                    "yet supported" );
+                warn( itemName_ + " Relative Time Type is not yet supported" );
                 break;
 
             default:
-                warnings_.add( itemName_ + " Type '" + euTypeName_ +
-                    "' is not yet supported" );
+                warn( itemName_ + " Type '" + euTypeName_ +
+                      "' is not yet supported" );
                 break;
 
         }
@@ -531,9 +535,9 @@ public class XTCEItemValue {
             } else if ( rawTypeName_ == RawType.binary ) {
                 // need to know EU type here!
                 if ( uncalValue.contains( "-" ) == true ) {
-                    warnings_.add( itemName_ + " Invalid value for binary " +
-                        "encoding '" + uncalValue + "', negative has no " +
-                        "meaning in a binary context." );
+                    warn( itemName_ + " Invalid value for binary " +
+                          "encoding '" + uncalValue + "', negative has no " +
+                          "meaning in a binary context." );
                 } else {
                     String lowerCalValue = uncalValue.toLowerCase();
                     intValue = integerStringToBigInteger( lowerCalValue );
@@ -547,10 +551,8 @@ public class XTCEItemValue {
                     return getRawFromUncalibrated( new BigDecimal( reasCalValue ) );
                 }
             } else if ( rawTypeName_ == RawType.MILSTD_1750A ) {
-                warnings_.add( "Unsupported encoding type for " +
-                               itemName_ +
-                               " Encoding: " +
-                               rawTypeName_ );
+                warn( "Unsupported encoding type for " + itemName_ +
+                      " Encoding: " + rawTypeName_ );
             } else if ( rawTypeName_ == RawType.UTF8 ) {
                 BigInteger retValue = BigInteger.ZERO;
                 if ( uncalValue.isEmpty() == false ) {
@@ -568,29 +570,27 @@ public class XTCEItemValue {
                 intValue = encodeUtfString( retValue );
             } else if ( euTypeName_ == EngineeringType.DURATION ) {
                 // TODO Add DURATION Type
-                warnings_.add( "Relative Time Type Not Yet Supported for " +
-                               itemName_ );
+                warn( "Relative Time Type Not Yet Supported for " + itemName_ );
             } else {
-                warnings_.add( "AGGREGATE and ARRAY types for item " +
-                               itemName_ +
-                               " cannot directly be encoded." + 
-                               "  Use their children instead" );
+                warn( "AGGREGATE and ARRAY types for item " + itemName_ +
+                      " cannot directly be encoded." + 
+                      "  Use their children instead" );
             }
 
         } catch ( NumberFormatException ex ) {
-            warnings_.add( itemName_ +
-                           " Invalid String value for encoding " +
-                           rawTypeName_ +
-                           " of '" +
-                           uncalValue +
-                           "'" );
+            warn( itemName_ +
+                  " Invalid String value for encoding " +
+                  rawTypeName_ +
+                  " of '" +
+                  uncalValue +
+                  "'" );
         } catch ( ArithmeticException ex ) {
-            warnings_.add( itemName_ +
-                           " Invalid Decimal value for encoding " +
-                           rawTypeName_ +
-                           " of '" +
-                           uncalValue +
-                           "'" );
+            warn( itemName_ +
+                  " Invalid Decimal value for encoding " +
+                  rawTypeName_ +
+                  " of '" +
+                  uncalValue +
+                  "'" );
         }
 
         return makeBitSetFromBigInteger( intValue );
@@ -622,8 +622,8 @@ public class XTCEItemValue {
         if ( rawTypeName_ == RawType.unsigned ) {
             BigInteger max = new BigInteger( "2" ).pow( rawSizeInBits_ );
             if ( uncalValue.compareTo( max ) == 1 ) {
-                warnings_.add( itemName_ + " overflow value '" + uncalValue +
-                    "', larger than available encoding bits." );
+                warn( itemName_ + " overflow value '" + uncalValue +
+                      "', larger than available encoding bits." );
                 uncalValue = BigInteger.ZERO;
             } else if ( isIntegerRawValueReasonable( uncalValue ) == false ) {
                 uncalValue = BigInteger.ZERO;
@@ -632,12 +632,12 @@ public class XTCEItemValue {
             BigInteger max = new BigInteger( "2" ).pow( rawSizeInBits_ - 1 );
             BigInteger min = max.negate();
             if ( uncalValue.compareTo( max ) == 1 ) {
-                warnings_.add( itemName_ + " overflow value '" + uncalValue +
-                    "', larger than maximum value for encoding." );
+                warn( itemName_ + " overflow value '" + uncalValue +
+                      "', larger than maximum value for encoding." );
                 uncalValue = BigInteger.ZERO;
             } else if ( uncalValue.compareTo (min ) == -1 ) {
-                warnings_.add( itemName_ + " overflow value '" + uncalValue +
-                    "', smaller than minimum value for encoding." );
+                warn( itemName_ + " overflow value '" + uncalValue +
+                      "', smaller than minimum value for encoding." );
                 uncalValue = BigInteger.ZERO;
             } else if ( isIntegerRawValueReasonable( uncalValue ) == false ) {
                 uncalValue = BigInteger.ZERO;
@@ -650,12 +650,12 @@ public class XTCEItemValue {
             BigInteger max = new BigInteger( "2" ).pow( rawSizeInBits_ - 1 );
             BigInteger min = max.negate();
             if ( uncalValue.compareTo( max ) == 1 ) {
-                warnings_.add( itemName_ + " overflow value '" + uncalValue +
-                    "', larger than maximum value for encoding." );
+                warn( itemName_ + " overflow value '" + uncalValue +
+                      "', larger than maximum value for encoding." );
                 uncalValue = BigInteger.ZERO;
             } else if ( uncalValue.compareTo (min ) == -1 ) {
-                warnings_.add( itemName_ + " overflow value '" + uncalValue +
-                    "', smaller than minimum value for encoding." );
+                warn( itemName_ + " overflow value '" + uncalValue +
+                      "', smaller than minimum value for encoding." );
                 uncalValue = BigInteger.ZERO;
             } else if ( isIntegerRawValueReasonable( uncalValue ) == false ) {
                 uncalValue = BigInteger.ZERO;
@@ -664,12 +664,12 @@ public class XTCEItemValue {
             BigInteger max = new BigInteger( "2" ).pow( rawSizeInBits_ - 1 );
             BigInteger min = max.negate();
             if ( uncalValue.compareTo( max ) == 1 ) {
-                warnings_.add( itemName_ + " overflow value '" + uncalValue +
-                    "', larger than maximum value for encoding." );
+                warn( itemName_ + " overflow value '" + uncalValue +
+                      "', larger than maximum value for encoding." );
                 uncalValue = BigInteger.ZERO;
             } else if ( uncalValue.compareTo (min ) == -1 ) {
-                warnings_.add( itemName_ + " overflow value '" + uncalValue +
-                    "', smaller than minimum value for encoding." );
+                warn( itemName_ + " overflow value '" + uncalValue +
+                      "', smaller than minimum value for encoding." );
                 uncalValue = BigInteger.ZERO;
             } else if ( isIntegerRawValueReasonable( uncalValue ) == false ) {
                 uncalValue = BigInteger.ZERO;
@@ -688,17 +688,17 @@ public class XTCEItemValue {
                 } else if ( rawSizeInBits_ == 64 ) {
                     uncalValue = BigInteger.valueOf( Double.doubleToRawLongBits( uncalValue.doubleValue() ) );
                 } else if ( rawSizeInBits_ == 128 ) {
-                    warnings_.add( "Unsupported encoding type for " +
-                                   itemName_ +
-                                   " Encoding: " +
-                                   rawTypeName_ );
+                    warn( "Unsupported encoding type for " +
+                          itemName_ +
+                          " Encoding: " +
+                          rawTypeName_ );
                 }
             }
         } else if ( rawTypeName_ == RawType.MILSTD_1750A ) {
-            warnings_.add( "Unsupported encoding type for " +
-                           itemName_ +
-                           " Encoding: " +
-                           rawTypeName_ );
+            warn( "Unsupported encoding type for " +
+                  itemName_ +
+                  " Encoding: " +
+                  rawTypeName_ );
             uncalValue = BigInteger.ZERO;
         } else if ( rawTypeName_ == RawType.UTF8 ) {
             String chars = uncalValue.toString();
@@ -713,19 +713,17 @@ public class XTCEItemValue {
             uncalValue = encodeUtfString( retValue );
         } else if ( euTypeName_ == EngineeringType.TIME ) {
             // TODO Add TIME Type
-            warnings_.add( "Absolute Time Type Not Yet Supported for " +
-                           itemName_ );
+            warn( "Absolute Time Type Not Yet Supported for " + itemName_ );
             uncalValue = BigInteger.ZERO;
         } else if ( euTypeName_ == EngineeringType.DURATION ) {
             // TODO Add DURATION Type
-            warnings_.add( "Relative Time Type Not Yet Supported for " +
-                           itemName_ );
+            warn( "Relative Time Type Not Yet Supported for " + itemName_ );
             uncalValue = BigInteger.ZERO;
         } else {
-            warnings_.add( "AGGREGATE and ARRAY types for item " +
-                           itemName_ +
-                           " cannot directly be encoded." + 
-                           "  Use their children instead" );
+            warn( "AGGREGATE and ARRAY types for item " +
+                  itemName_ +
+                  " cannot directly be encoded." + 
+                  "  Use their children instead" );
             uncalValue = BigInteger.ZERO;
         }
 
@@ -773,18 +771,18 @@ public class XTCEItemValue {
             try {
                 return getRawFromUncalibrated( uncalValue.toBigIntegerExact() );
             } catch ( NumberFormatException ex ) {
-                warnings_.add( itemName_ +
-                               " Invalid Decimal value for encoding " +
-                               rawTypeName_ +
-                               " of '" +
-                               uncalValue +
-                               "'" );
+                warn( itemName_ +
+                      " Invalid Decimal value for encoding " +
+                      rawTypeName_ +
+                      " of '" +
+                      uncalValue +
+                      "'" );
             }
         } else if ( rawTypeName_ == RawType.binary ) {
-            warnings_.add( "Unsupported encoding type for " +
-                           itemName_ +
-                           " Encoding: " +
-                           rawTypeName_ );
+            warn( "Unsupported encoding type for " +
+                  itemName_ +
+                  " Encoding: " +
+                  rawTypeName_ );
         } else if ( rawTypeName_ == RawType.IEEE754_1985 ) {
             if ( isFloatRawValueReasonable( uncalValue.doubleValue() ) == false ) {
                 intValue = BigInteger.ZERO;
@@ -794,17 +792,17 @@ public class XTCEItemValue {
                 } else if ( rawSizeInBits_ == 64 ) {
                     intValue = BigInteger.valueOf( Double.doubleToRawLongBits( uncalValue.doubleValue() ) );
                 } else if ( rawSizeInBits_ == 128 ) {
-                    warnings_.add( "Unsupported encoding type for " +
-                                   itemName_ +
-                                   " Encoding: " +
-                                   rawTypeName_ );
+                    warn( "Unsupported encoding type for " +
+                          itemName_ +
+                          " Encoding: " +
+                          rawTypeName_ );
                 }
             }
         } else if ( rawTypeName_ == RawType.MILSTD_1750A ) {
-            warnings_.add( "Unsupported encoding type for " +
-                           itemName_ +
-                           " Encoding: " +
-                           rawTypeName_ );
+            warn( "Unsupported encoding type for " +
+                  itemName_ +
+                  " Encoding: " +
+                  rawTypeName_ );
         } else if ( rawTypeName_ == RawType.UTF8 ) {
             String chars = uncalValue.toString();
             BigInteger retValue = new BigInteger( chars.getBytes( StandardCharsets.UTF_8 ) );
@@ -818,17 +816,15 @@ public class XTCEItemValue {
             intValue = encodeUtfString( retValue );
         } else if ( euTypeName_ == EngineeringType.TIME ) {
             // TODO Add TIME Type
-            warnings_.add( "Absolute Time Type Not Yet Supported for " +
-                           itemName_ );
+            warn( "Absolute Time Type Not Yet Supported for " + itemName_ );
         } else if ( euTypeName_ == EngineeringType.DURATION ) {
             // TODO Add DURATION Type
-            warnings_.add( "Relative Time Type Not Yet Supported for " +
-                           itemName_ );
+            warn( "Relative Time Type Not Yet Supported for " + itemName_ );
         } else {
-            warnings_.add( "AGGREGATE and ARRAY types for item " +
-                           itemName_ +
-                           " cannot directly be encoded." + 
-                           "  Use their children instead" );
+            warn( "AGGREGATE and ARRAY types for item " +
+                  itemName_ +
+                  " cannot directly be encoded." + 
+                  "  Use their children instead" );
         }
 
         return makeBitSetFromBigInteger( intValue );
@@ -913,11 +909,11 @@ public class XTCEItemValue {
                     }
                     return uncalibrateFloatType( new BigDecimal( euValue ) );
                 } catch ( NumberFormatException ex ) {
-                    warnings_.add( itemName_ +
-                                   " Invalid String value for uncalibrate " +
-                                   "IEEE754_1985 of '" +
-                                   euValue +
-                                   "'" );
+                    warn( itemName_ +
+                          " Invalid String value for uncalibrate " +
+                          "IEEE754_1985 of '" +
+                          euValue +
+                          "'" );
                 }
                 break;
 
@@ -931,18 +927,18 @@ public class XTCEItemValue {
                     }
                     BigDecimal testValue = new BigDecimal( euValue );
                     if ( ( testValue.doubleValue() % 1 ) != 0 ) {
-                        warnings_.add( itemName_ +
-                                       " Invalid Integer value for uncalibrate of '" +
-                                       euValue + "'" );
+                        warn( itemName_ +
+                              " Invalid Integer value for uncalibrate of '" +
+                              euValue + "'" );
                     } else {
                         BigInteger intValue = testValue.toBigInteger();
                         return uncalibrateIntegerType( intValue );
                     }
                 } catch ( NumberFormatException ex ) {
-                    warnings_.add( itemName_ +
-                                   " Invalid Integer value for uncalibrate of '" +
-                                   euValue +
-                                   "'" );
+                    warn( itemName_ +
+                          " Invalid Integer value for uncalibrate of '" +
+                          euValue +
+                          "'" );
                 }
                 break;
 
@@ -952,21 +948,20 @@ public class XTCEItemValue {
                         return timeHandler_.getUncalibratedFromCalibrated( euValue );
                     }
                 } catch ( Exception ex ) {
-                    warnings_.add( itemName_ + ex.getLocalizedMessage() );
+                    warn( itemName_ + ex.getLocalizedMessage() );
                 }
                 break;
 
             case DURATION:
                 // TODO Add DURATION Type
-                warnings_.add( "Relative Time Type Not Yet Supported for " +
-                               itemName_ );
+                warn( "Relative Time Type Not Yet Supported for " + itemName_ );
                 break;
 
             default:
-                warnings_.add( "AGGREGATE and ARRAY types for item " +
-                               itemName_ +
-                               " cannot directly be encoded." + 
-                               "  Use their children instead" );
+                warn( "AGGREGATE and ARRAY types for item " +
+                      itemName_ +
+                      " cannot directly be encoded." + 
+                      "  Use their children instead" );
                 break;
 
         }
@@ -1081,11 +1076,8 @@ public class XTCEItemValue {
         } else if ( euValue.equals( booleanOneString_ ) == true ) {
             return BigInteger.ONE;
         } else {
-            warnings_.add( itemName_ +
-                           " Invalid EU Boolean value of " +
-                           "'" +
-                           euValue +
-                           "'" );
+            warn( itemName_ +
+                  " Invalid EU Boolean value of '" + euValue + "'" );
         }
 
         return BigInteger.ZERO;
@@ -1105,10 +1097,10 @@ public class XTCEItemValue {
     private String booleanTypeFromUncalibrated( double uncalValue ) {
 
         if ( ( uncalValue % 1 ) != 0 ) {
-            warnings_.add( itemName_ +
-                           " Invalid raw value of '" +
-                           Double.toString( uncalValue ) +
-                           "' for Boolean EU type" );
+            warn( itemName_ +
+                  " Invalid raw value of '" +
+                  Double.toString( uncalValue ) +
+                  "' for Boolean EU type" );
             return booleanZeroString_;
         }
 
@@ -1133,11 +1125,10 @@ public class XTCEItemValue {
         } else if ( uncalValue == 1 ) {
             return booleanOneString_;
         } else {
-            warnings_.add( itemName_ +
-                           " Invalid raw value of " +
-                           "'" +
-                           Long.toString( uncalValue ) +
-                           "' for Boolean EU type" );
+            warn( itemName_ +
+                  " Invalid raw value of '" +
+                  Long.toString( uncalValue ) +
+                  "' for Boolean EU type" );
             return booleanZeroString_;
         }
 
@@ -1173,25 +1164,23 @@ public class XTCEItemValue {
             }
 
             if ( enumItem.getMaxValue() != null ) {
-                warnings_.add( "Enumeration label '" +
-                               enumItem.getLabel() +
-                               "' for " +
-                               itemName_ +
-                               " has values '" +
-                               enumItem.getValue().toString() +
-                               "' through '" +
-                               enumItem.getMaxValue().toString() +
-                               "', using lowest possible value" );
+                warn( "Enumeration label '" +
+                      enumItem.getLabel() +
+                      "' for " +
+                      itemName_ +
+                      " has values '" +
+                      enumItem.getValue().toString() +
+                      "' through '" +
+                      enumItem.getMaxValue().toString() +
+                      "', using lowest possible value" );
             }
 
             return enumItem.getValue();
 
         }
 
-        warnings_.add( itemName_ +
-                       " Invalid EU Enumeration value of '" +
-                       euValue +
-                       "'" );
+        warn( itemName_ +
+              " Invalid EU Enumeration value of '" + euValue + "'" );
 
         return BigInteger.ZERO;
 
@@ -1222,10 +1211,8 @@ public class XTCEItemValue {
             }
         }
 
-        warnings_.add( itemName_ + " No enumeration label found for " +
-                       " value of '" +
-                       uncalValue.toString() +
-                       "'");
+        warn( itemName_ + " No enumeration label found for value of '" +
+              uncalValue.toString() + "'");
 
         return "";
 
@@ -1259,10 +1246,10 @@ public class XTCEItemValue {
             }
 
             case MILSTD_1750A:
-                warnings_.add( "Unsupported encoding type for " +
-                               itemName_ +
-                               " Encoding: " +
-                               rawTypeName_ );
+                warn( "Unsupported encoding type for " +
+                      itemName_ +
+                      " Encoding: " +
+                      rawTypeName_ );
                 break;
 
             case UTF8:
@@ -1270,10 +1257,10 @@ public class XTCEItemValue {
                 return calValue.toString();
 
             default:
-                warnings_.add( "Unrecognized encoding type for " +
-                               itemName_ +
-                               " Encoding: " +
-                               rawTypeName_ );
+                warn( "Unrecognized encoding type for " +
+                      itemName_ +
+                      " Encoding: " +
+                      rawTypeName_ );
 
         }
 
@@ -1309,10 +1296,10 @@ public class XTCEItemValue {
             }
 
             case MILSTD_1750A:
-                warnings_.add( "Unsupported encoding type for " +
-                               itemName_ +
-                               " Encoding: " +
-                               rawTypeName_ );
+                warn( "Unsupported encoding type for " +
+                      itemName_ +
+                      " Encoding: " +
+                      rawTypeName_ );
                 break;
 
             case UTF8:
@@ -1320,10 +1307,10 @@ public class XTCEItemValue {
                 return calValue.toString();
 
             default:
-                warnings_.add( "Unrecognized encoding type for " +
-                               itemName_ +
-                               " Encoding: " +
-                               rawTypeName_ );
+                warn( "Unrecognized encoding type for " +
+                      itemName_ +
+                      " Encoding: " +
+                      rawTypeName_ );
 
         }
 
@@ -1366,8 +1353,8 @@ public class XTCEItemValue {
             BigInteger retValue = new BigInteger( calValue );
             return retValue.toString();
         } catch ( NumberFormatException ex ) {
-            warnings_.add( itemName_ + " Calibrated value '" +
-                calValue + "' is not representative of an integer" );
+            warn( itemName_ + " Calibrated value '" +
+                  calValue + "' is not representative of an integer" );
         }
 
         return "";
@@ -1380,9 +1367,9 @@ public class XTCEItemValue {
             BigDecimal retValue = new BigDecimal( calValue );
             return retValue.toString();
         } catch ( NumberFormatException ex ) {
-            warnings_.add( itemName_ + " Calibrated value '" +
-                calValue + "' is not representative of a floating " +
-                "point number" );
+            warn( itemName_ + " Calibrated value '" +
+                  calValue + "' is not representative of a floating " +
+                  "point number" );
         }
 
         return "";
@@ -1401,13 +1388,13 @@ public class XTCEItemValue {
                 return booleanOneString_;
             }
 
-            warnings_.add( itemName_ + " Boolean undefined for " +
-                " uncalibrated value '" + uncalValue + "'" );
+            warn( itemName_ + " Boolean undefined for " +
+                  " uncalibrated value '" + uncalValue + "'" );
 
         } catch ( NumberFormatException ex ) {
-            warnings_.add( itemName_ + " uncalibrated value '" +
-                uncalValue + "' is not an integer number needed for an " +
-                "boolean type label" );
+            warn( itemName_ + " uncalibrated value '" +
+                  uncalValue + "' is not an integer number needed for an " +
+                  "boolean type label" );
         }
 
         return "";
@@ -1431,13 +1418,13 @@ public class XTCEItemValue {
                 }
             }
 
-            warnings_.add( itemName_ + " Enumeration undefined for " +
-                "uncalibrated value '" + uncalValue + "'" );
+            warn( itemName_ + " Enumeration undefined for " +
+                  "uncalibrated value '" + uncalValue + "'" );
 
         } catch ( NumberFormatException ex ) {
-            warnings_.add( itemName_ + " uncalibrated value '" +
-                uncalValue + "' is not an integer number needed for an " +
-                "enumerated type label" );
+            warn( itemName_ + " uncalibrated value '" +
+                  uncalValue + "' is not an integer number needed for an " +
+                  "enumerated type label" );
         }
 
         return "";
@@ -1481,7 +1468,7 @@ public class XTCEItemValue {
             double doubleValue = applySpline( xValue, order, extrapolate, points );
             return Double.toString( doubleValue );
         } else {
-            warnings_.add( itemName_ + " Unsupported calibrator form" );
+            warn( itemName_ + " Unsupported calibrator form" );
         }
 
         return "";
@@ -1563,10 +1550,10 @@ public class XTCEItemValue {
         // TODO: Support quadratics because I did it on the other side
 
         if ( order.intValue() > 1 ) {
-            warnings_.add( itemName_ + " Unsupported Spline " +
-                "order of approximation " + order.toString() +
-                ", only flat, linear, and quadratic (0, 1, 2) are " +
-                "supported." );
+            warn( itemName_ + " Unsupported Spline " +
+                  "order of approximation " + order.toString() +
+                  ", only flat, linear, and quadratic (0, 1, 2) are " +
+                  "supported." );
             return 0.0;
         }
 
@@ -1606,14 +1593,14 @@ public class XTCEItemValue {
 
         long bitLength = retValue.toByteArray().length * 8;
         if ( bitLength > rawSizeInBits_ ) {
-            warnings_.add( "String length for encoding " +
-                           rawTypeName_ +
-                           " item " +
-                           itemName_ +
-                           " is " +
-                           Long.toString( bitLength ) +
-                           " which exceeds fixed length size of " +
-                           Long.toString( rawSizeInBits_) );
+            warn( "String length for encoding " +
+                  rawTypeName_ +
+                  " item " +
+                  itemName_ +
+                  " is " +
+                  Long.toString( bitLength ) +
+                  " which exceeds fixed length size of " +
+                  Long.toString( rawSizeInBits_) );
         }
         if ( retValue.equals( BigInteger.ZERO ) == true ) {
             return retValue;
@@ -1796,10 +1783,10 @@ public class XTCEItemValue {
         }
 
         if ( bits.length() > rawSizeInBits_ ) {
-            warnings_.add( itemName_ + " raw binary length '" +
-                Integer.toString( bits.length() ) + "' overflows raw " +
-                "encoding length of '" + Integer.toString( rawSizeInBits_ ) +
-                "'" );
+            warn( itemName_ + " raw binary length '" +
+                  Integer.toString( bits.length() ) + "' overflows raw " +
+                  "encoding length of '" + Integer.toString( rawSizeInBits_ ) +
+                  "'" );
         }
 
         return new BigInteger( sb.toString(), 16 );
@@ -1865,8 +1852,8 @@ public class XTCEItemValue {
             }
 
         } catch ( NumberFormatException ex ) {
-            warnings_.add( itemName_ + " raw value provided '" + rawValue +
-                "' is not a properly formatted hex or integer." );
+            warn( itemName_ + " raw value provided '" + rawValue +
+                  "' is not a properly formatted hex or integer." );
         }
 
         return rawInteger;
@@ -1918,10 +1905,10 @@ public class XTCEItemValue {
                 }
                 double discriminant = Math.pow( bbb, 2 ) - ( 4.0 * aaa * ccc );
                 if ( discriminant < 0 ) {
-                    warnings_.add( "Polynomial Calibrator for " +
-                                   itemName_ +
-                                   " has no real roots for EU value " +
-                                   calValue.toString() );
+                    warn( "Polynomial Calibrator for " +
+                          itemName_ +
+                          " has no real roots for EU value " +
+                          calValue.toString() );
                     return BigDecimal.ZERO;
                 }
                 double posroot = Math.sqrt( discriminant );
@@ -1931,11 +1918,11 @@ public class XTCEItemValue {
                 double bestPick = findBestRoot( root1, root2 );
                 return new BigDecimal( bestPick );
             } else {
-                warnings_.add( "Polynomial Calibrator for " +
-                               itemName_ +
-                               " contains exponent power as high as " +
-                               Long.toString( maxExponent ) +
-                               ".  Not supported by this toolkit." );
+                warn( "Polynomial Calibrator for " +
+                      itemName_ +
+                      " contains exponent power as high as " +
+                      Long.toString( maxExponent ) +
+                      ".  Not supported by this toolkit." );
                 return BigDecimal.ZERO;
             }
         }
@@ -1964,11 +1951,11 @@ public class XTCEItemValue {
             if ( extrapolate == false ) {
                 if ( ( calValue.compareTo( minCalValue ) < 0 ) ||
                      ( calValue.compareTo( maxCalValue ) > 0 ) ) {
-                    warnings_.add( "Spline Calibrator for " +
-                                   itemName_ +
-                                   " does not bound calibrated value " +
-                                   calValue.toString() +
-                                   " and extrapolate is false" );
+                    warn( "Spline Calibrator for " +
+                          itemName_ +
+                          " does not bound calibrated value " +
+                          calValue.toString() +
+                          " and extrapolate is false" );
                     return BigDecimal.ZERO;
                 }
             }
@@ -2002,10 +1989,10 @@ public class XTCEItemValue {
                 }
             }
             if ( rawValue1 == null || rawValue2 == null ) {
-                warnings_.add( "Spline Calibrator for " +
-                               itemName_ +
-                               " does not bound calibrated value " +
-                               calValue.toString() );
+                warn( "Spline Calibrator for " +
+                      itemName_ +
+                      " does not bound calibrated value " +
+                      calValue.toString() );
                 return BigDecimal.ZERO;
             }
             //System.out.println( calValue.toString() +
@@ -2027,20 +2014,20 @@ public class XTCEItemValue {
                 //System.out.println( "Raw = " + Double.toString( rawValue ) );
                 return new BigDecimal( rawValue );
             } else {
-                warnings_.add( "Spline Calibrator for " +
-                               itemName_ +
-                               " contains interpolate order of " +
-                               Long.toString( interpolateOrder ) +
-                               ".  Not supported by this toolkit." );
+                warn( "Spline Calibrator for " +
+                      itemName_ +
+                      " contains interpolate order of " +
+                      Long.toString( interpolateOrder ) +
+                      ".  Not supported by this toolkit." );
                 return BigDecimal.ZERO;
             }
         }
 
         MathOperationCalibrator mathCal = defCal_.getMathOperationCalibrator();
         if ( mathCal != null ) {
-            warnings_.add( "MathOperationCalibrator for " +
-                           itemName_ +
-                           " not supported" );
+            warn( "MathOperationCalibrator for " +
+                  itemName_ +
+                  " not supported" );
             return BigDecimal.ZERO;
         }
 
@@ -2104,10 +2091,10 @@ public class XTCEItemValue {
                 }
                 double discriminant = Math.pow( bbb, 2 ) - ( 4.0 * aaa * ccc );
                 if ( discriminant < 0 ) {
-                    warnings_.add( "Polynomial Calibrator for " +
-                                   itemName_ +
-                                   " has no real roots for EU value " +
-                                   calValue.toString() );
+                    warn( "Polynomial Calibrator for " +
+                          itemName_ +
+                          " has no real roots for EU value " +
+                          calValue.toString() );
                     return BigInteger.ZERO;
                 }
                 double posroot = Math.sqrt( discriminant );
@@ -2117,11 +2104,11 @@ public class XTCEItemValue {
                 double bestPick = findBestRoot( root1, root2 );
                 return BigInteger.valueOf( Math.round( bestPick ) );
             } else {
-                warnings_.add( "Polynomial Calibrator for " +
-                               itemName_ +
-                               " contains exponent power as high as " +
-                               Long.toString( maxExponent ) +
-                               ".  Not supported by this toolkit." );
+                warn( "Polynomial Calibrator for " +
+                      itemName_ +
+                      " contains exponent power as high as " +
+                      Long.toString( maxExponent ) +
+                      ".  Not supported by this toolkit." );
                 return BigInteger.ZERO;
             }
         }
@@ -2150,11 +2137,11 @@ public class XTCEItemValue {
             if ( extrapolate == false ) {
                 if ( ( calValue.compareTo( minCalValue ) < 0 ) ||
                      ( calValue.compareTo( maxCalValue ) > 0 ) ) {
-                    warnings_.add( "Spline Calibrator for " +
-                                   itemName_ +
-                                   " does not bound calibrated value " +
-                                   calValue.toString() +
-                                   " and extrapolate is false" );
+                    warn( "Spline Calibrator for " +
+                          itemName_ +
+                          " does not bound calibrated value " +
+                          calValue.toString() +
+                          " and extrapolate is false" );
                     return BigInteger.ZERO;
                 }
             }
@@ -2188,10 +2175,10 @@ public class XTCEItemValue {
                 }
             }
             if ( rawValue1 == null || rawValue2 == null ) {
-                warnings_.add( "Spline Calibrator for " +
-                               itemName_ +
-                               " does not bound calibrated value " +
-                               calValue.toString() );
+                warn( "Spline Calibrator for " +
+                      itemName_ +
+                      " does not bound calibrated value " +
+                      calValue.toString() );
                 return BigInteger.ZERO;
             }
             //System.out.println( calValue.toString() +
@@ -2213,20 +2200,20 @@ public class XTCEItemValue {
                 //System.out.println( "Raw = " + Double.toString( rawValue ) );
                 return new BigDecimal( rawValue ).toBigInteger();
             } else {
-                warnings_.add( "Spline Calibrator for " +
-                               itemName_ +
-                               " contains interpolate order of " +
-                               Long.toString( interpolateOrder ) +
-                               ".  Not supported by this toolkit." );
+                warn( "Spline Calibrator for " +
+                      itemName_ +
+                      " contains interpolate order of " +
+                      Long.toString( interpolateOrder ) +
+                      ".  Not supported by this toolkit." );
                 return BigInteger.ZERO;
             }
         }
 
         MathOperationCalibrator mathCal = defCal_.getMathOperationCalibrator();
         if ( mathCal != null ) {
-            warnings_.add( "MathOperationCalibrator for " +
-                           itemName_ +
-                           " not supported" );
+            warn( "MathOperationCalibrator for " +
+                  itemName_ +
+                  " not supported" );
             return BigInteger.ZERO;
         }
 
@@ -2321,11 +2308,11 @@ public class XTCEItemValue {
         // check the special negative case first
         if ( rawTypeName_ == RawType.unsigned ) {
             if ( rawValue.signum() < 0 ) {
-                warnings_.add( "Unsigned value for item " +
-                               itemName_ +
-                               " is " +
-                               rawValue.toString() +
-                               " which cannot be negative" );
+                warn( "Unsigned value for item " +
+                      itemName_ +
+                      " is " +
+                      rawValue.toString() +
+                      " which cannot be negative" );
                 return false;
             }
         }
@@ -2335,26 +2322,24 @@ public class XTCEItemValue {
         // check for the boundary conditions with the minimum first
         if ( minInclusive == false ) {
             if ( minValue >= rawValue.longValue() ) {
-                warnings_.add( rawTypeName_ +
-                               " encoding value for item " +
-                               itemName_ +
-                               " is " +
-                               rawValue.toString() +
-                               ", which is less than or equal to the " +
-                               "minimum value " +
-                               Long.toString( minValue ) );
+                warn( rawTypeName_ +
+                      " encoding value for item " +
+                      itemName_ +
+                      " is " +
+                      rawValue.toString() +
+                      ", which is less than or equal to the minimum value " +
+                      Long.toString( minValue ) );
                 return false;
             }
         } else {
             if ( minValue > rawValue.longValue() ) {
-                warnings_.add( rawTypeName_ +
-                               " encoding value for item " +
-                               itemName_ +
-                               " is " +
-                               rawValue.toString() +
-                               ", which is less than the " +
-                               "minimum value " +
-                               Long.toString( minValue ) );
+                warn( rawTypeName_ +
+                      " encoding value for item " +
+                      itemName_ +
+                      " is " +
+                      rawValue.toString() +
+                      ", which is less than the minimum value " +
+                      Long.toString( minValue ) );
                 return false;
             }
         }
@@ -2362,26 +2347,24 @@ public class XTCEItemValue {
         // check for the boundary conditions with the maximum
         if ( maxInclusive == false ) {
             if ( maxValue <= rawValue.longValue() ) {
-                warnings_.add( rawTypeName_ +
-                               " encoding value for item " +
-                               itemName_ +
-                               " is " +
-                               rawValue.toString() +
-                               ", which is greater than or equal to the " +
-                               "maximum value " +
-                               Long.toString( maxValue ) );
+                warn( rawTypeName_ +
+                      " encoding value for item " +
+                      itemName_ +
+                      " is " +
+                      rawValue.toString() +
+                      ", which is greater than or equal to the maximum value " +
+                      Long.toString( maxValue ) );
                 return false;
             }
         } else {
             if ( maxValue < rawValue.longValue() ) {
-                warnings_.add( rawTypeName_ +
-                               " encoding value for item " +
-                               itemName_ +
-                               " is " +
-                               rawValue.toString() +
-                               ", which is greater than the " +
-                               "maximum value " +
-                               Long.toString( maxValue ) );
+                warn( rawTypeName_ +
+                      " encoding value for item " +
+                      itemName_ +
+                      " is " +
+                      rawValue.toString() +
+                      ", which is greater than the maximum value " +
+                      Long.toString( maxValue ) );
                 return false;
             }
         }
@@ -2435,26 +2418,24 @@ public class XTCEItemValue {
         // check for the boundary conditions with the minimum first
         if ( minInclusive == false ) {
             if ( minValue >= rawValue ) {
-                warnings_.add( rawTypeName_ +
-                               " encoding value for item " +
-                               itemName_ +
-                               " is " +
-                               Double.toString( rawValue ) +
-                               ", which is less than or equal to the " +
-                               "minimum value " +
-                               Double.toString( minValue ) );
+                warn( rawTypeName_ +
+                      " encoding value for item " +
+                      itemName_ +
+                      " is " +
+                      Double.toString( rawValue ) +
+                      ", which is less than or equal to the minimum value " +
+                      Double.toString( minValue ) );
                 return false;
             }
         } else {
             if ( minValue > rawValue ) {
-                warnings_.add( rawTypeName_ +
-                               " encoding value for item " +
-                               itemName_ +
-                               " is " +
-                               Double.toString( rawValue ) +
-                               ", which is less than the " +
-                               "minimum value " +
-                               Double.toString( minValue ) );
+                warn( rawTypeName_ +
+                      " encoding value for item " +
+                      itemName_ +
+                      " is " +
+                      Double.toString( rawValue ) +
+                      ", which is less than the minimum value " +
+                      Double.toString( minValue ) );
                 return false;
             }
         }
@@ -2462,26 +2443,24 @@ public class XTCEItemValue {
         // check for the boundary conditions with the maximum
         if ( maxInclusive == false ) {
             if ( maxValue <= rawValue ) {
-                warnings_.add( rawTypeName_ +
-                               " encoding value for item " +
-                               itemName_ +
-                               " is " +
-                               Double.toString( rawValue ) +
-                               ", which is greater than or equal to the " +
-                               "maximum value " +
-                               Double.toString( maxValue ) );
+                warn( rawTypeName_ +
+                      " encoding value for item " +
+                      itemName_ +
+                      " is " +
+                      Double.toString( rawValue ) +
+                      ", which is greater than or equal to the maximum value " +
+                      Double.toString( maxValue ) );
                 return false;
             }
         } else {
             if ( maxValue < rawValue ) {
-                warnings_.add( rawTypeName_ +
-                               " encoding value for item " +
-                               itemName_ +
-                               " is " +
-                               Double.toString( rawValue ) +
-                               ", which is greater than the " +
-                               "maximum value " +
-                               Double.toString( maxValue ) );
+                warn( rawTypeName_ +
+                      " encoding value for item " +
+                      itemName_ +
+                      " is " +
+                      Double.toString( rawValue ) +
+                      ", which is greater than the maximum value " +
+                      Double.toString( maxValue ) );
                 return false;
             }
         }
@@ -2522,18 +2501,18 @@ public class XTCEItemValue {
             } else if ( ( root2 >= minValue ) && ( root2 <= maxValue ) ) {
                 return root2;
             } else {
-                warnings_.add( "Polynomial Calibrator for " +
-                               itemName_ +
-                               " contains roots of " +
-                               Double.toString( root1 ) +
-                               " and " +
-                               Double.toString( root2 ) +
-                               ", neither of which are in the range of " +
-                               Long.toString( minValue ) +
-                               " to " +
-                               Long.toString( maxValue ) +
-                               " for encoding " +
-                               rawTypeName_ );
+                warn( "Polynomial Calibrator for " +
+                      itemName_ +
+                      " contains roots of " +
+                      Double.toString( root1 ) +
+                      " and " +
+                      Double.toString( root2 ) +
+                      ", neither of which are in the range of " +
+                      Long.toString( minValue ) +
+                      " to " +
+                      Long.toString( maxValue ) +
+                      " for encoding " +
+                      rawTypeName_ );
                 return 0.0;
             }
         } else if ( ( rawTypeName_ == RawType.signMagnitude  ) ||
@@ -2555,18 +2534,18 @@ public class XTCEItemValue {
             } else if ( ( root2 >= minValue ) && ( root2 <= maxValue ) ) {
                 return root2;
             } else {
-                warnings_.add( "Polynomial Calibrator for " +
-                               itemName_ +
-                               " contains roots of " +
-                               Double.toString( root1 ) +
-                               " and " +
-                               Double.toString( root2 ) +
-                               ", neither of which are in the range of " +
-                               Long.toString( minValue ) +
-                               " to " +
-                               Long.toString( maxValue ) +
-                               " for encoding " +
-                               rawTypeName_ );
+                warn( "Polynomial Calibrator for " +
+                      itemName_ +
+                      " contains roots of " +
+                      Double.toString( root1 ) +
+                      " and " +
+                      Double.toString( root2 ) +
+                      ", neither of which are in the range of " +
+                      Long.toString( minValue ) +
+                      " to " +
+                      Long.toString( maxValue ) +
+                      " for encoding " +
+                      rawTypeName_ );
                 return 0.0;
             }
         }
@@ -2574,6 +2553,15 @@ public class XTCEItemValue {
 
     }
 
+    private void warn( String warning ) {
+
+        if ( warnings_ == null ) {
+            warnings_ = new ArrayList<>();
+        }
+
+        warnings_.add( warning );
+
+    }
 
     // Private Data Members
 
@@ -2586,11 +2574,11 @@ public class XTCEItemValue {
     private String          booleanZeroString_;
     private String          booleanOneString_;
 
-    private List<String>               warnings_    = new ArrayList<>();
-    private List<ValueEnumerationType> enums_       = null;
-    private CalibratorType             defCal_      = null;
-    private XTCEValidRange             validRange_  = null;
-    private XTCETypedObject            itemObj_     = null;
+    private List<String>               warnings_ = null;
+    private List<ValueEnumerationType> enums_;
+    private CalibratorType             defCal_;
+    private XTCEValidRange             validRange_;
+    private XTCETypedObject            itemObj_;
     private XTCEAbsoluteTimeType       timeHandler_ = null;
 
     private static final byte[] utf16_ = new byte[] { (byte)0xfe, (byte)0xff };
