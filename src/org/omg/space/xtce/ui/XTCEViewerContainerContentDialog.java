@@ -28,6 +28,8 @@ import org.omg.space.xtce.toolkit.XTCEDatabase;
 import org.omg.space.xtce.toolkit.XTCEFunctions;
 import org.omg.space.xtce.toolkit.XTCETMContainer;
 import org.omg.space.xtce.toolkit.XTCETMStream;
+import org.omg.space.xtce.toolkit.XTCETypedObject;
+import org.omg.space.xtce.toolkit.XTCETypedObject.EngineeringType;
 
 /** XTCE Viewer/Browser dialog window for displaying processed content of a
  * binary data stream.
@@ -301,7 +303,7 @@ public class XTCEViewerContainerContentDialog extends javax.swing.JDialog {
             switch ( entry.getEntryType() ) {
 
                 case PARAMETER:
-                    if ( entry.getParameter().getEngineeringType().equals( "STRUCTURE" ) == false ) {
+                    if ( entry.getParameter().getEngineeringType() != EngineeringType.STRUCTURE ) {
                         entryPanel.add( new XTCEViewerContainerContentRow( entry,
                                                                            showAllNamespaces,
                                                                            showNamespaces,
@@ -310,7 +312,7 @@ public class XTCEViewerContainerContentDialog extends javax.swing.JDialog {
                     break;
 
                 case ARGUMENT:
-                    if ( entry.getArgument().getEngineeringType().equals( "STRUCTURE" ) == false ) {
+                    if ( entry.getArgument().getEngineeringType() != EngineeringType.STRUCTURE ) {
                         entryPanel.add( new XTCEViewerContainerContentRow( entry,
                                                                            showAllNamespaces,
                                                                            showNamespaces,

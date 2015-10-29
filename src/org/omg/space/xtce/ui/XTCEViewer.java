@@ -4052,10 +4052,10 @@ public class XTCEViewer extends javax.swing.JFrame {
 
             Object rowData[] = { parameter.getName(),
                                  aliasString,
-                                 parameter.getEngineeringType(),
+                                 parameter.getEngineeringTypeString(),
                                  parameter.getUnits(),
                                  parameter.getRawSizeInBits(),
-                                 parameter.getRawType(),
+                                 parameter.getRawTypeString(),
                                  parameter.getDataSource(),
                                  parameter.isSettable(),
                                  parameter.getInitialValue(),

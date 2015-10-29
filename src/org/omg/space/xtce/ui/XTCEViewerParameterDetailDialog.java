@@ -39,6 +39,8 @@ import org.omg.space.xtce.database.PolynomialType;
 import org.omg.space.xtce.database.SplinePointType;
 import org.omg.space.xtce.database.ValueEnumerationType;
 import org.omg.space.xtce.toolkit.XTCEFunctions;
+import org.omg.space.xtce.toolkit.XTCETypedObject;
+import org.omg.space.xtce.toolkit.XTCETypedObject.EngineeringType;
 import org.omg.space.xtce.toolkit.XTCEValidRange;
 //import org.scilab.forge.jlatexmath.TeXConstants;
 //import org.scilab.forge.jlatexmath.TeXFormula;
@@ -86,7 +88,7 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
         shortDescriptionField.setCaretPosition( 0 );
         longDescriptionField.setText( parameter.getLongDescription() );
         longDescriptionField.setCaretPosition( 0 );
-        engineeringTypeComboField.setSelectedItem( parameter.getEngineeringType() );
+        engineeringTypeComboField.setSelectedItem( parameter.getEngineeringTypeString() );
         if ( parameter.getRawTypeString().isEmpty() == true ) {
             encodingTypeComboField.setSelectedItem( "" );
             encodingTypeComboField.setEnabled( false );
@@ -95,7 +97,7 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
             bitOrderComboField.setEnabled( false );
             
         } else {
-            encodingTypeComboField.setSelectedItem( parameter.getRawType() );
+            encodingTypeComboField.setSelectedItem( parameter.getRawTypeString() );
             rawSizeTextField.setText( parameter.getRawSizeInBits() );
             bitOrderComboField.setSelectedItem( parameter.getRawBitOrder() );
         }
@@ -119,7 +121,7 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
 
     private void writeEnumerationTable( boolean hex ) {
 
-        if ( parameter_.getEngineeringType().equals( "ENUMERATED" ) == true ) {
+        if ( parameter_.getEngineeringType() == EngineeringType.ENUMERATED ) {
             DefaultTableModel tableModel = (DefaultTableModel)enumerationTable.getModel();
             tableModel.setRowCount( 0 );
             List<ValueEnumerationType> enumerations = parameter_.getEnumerations();
@@ -142,7 +144,7 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
                                      valueEnum.getShortDescription() };
                 tableModel.addRow( rowData );
             }
-        } else if ( parameter_.getEngineeringType().equals( "BOOLEAN" ) == true ) {
+        } else if ( parameter_.getEngineeringType() == EngineeringType.BOOLEAN ) {
             DefaultTableModel tableModel = (DefaultTableModel)enumerationTable.getModel();
             tableModel.setRowCount( 0 );
             String values[] = { ((BooleanParameterType)parameter_.getTypeReference()).getZeroStringValue(),
