@@ -1959,6 +1959,8 @@ public class XTCEItemValue {
                     return BigDecimal.ZERO;
                 }
             }
+            // shema requires two spline points minimum, so this should never
+            // hit a null case where a spline point is not found.
             BigDecimal rawValue1 = null;
             BigDecimal rawValue2 = null;
             BigDecimal calValue1 = null;
