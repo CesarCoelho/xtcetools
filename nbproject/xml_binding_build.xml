@@ -18,6 +18,7 @@
                 <pathelement path="${jaxbwiz.xjcrun.classpath}"/>
             </classpath>
             <arg value="-xmlschema"/>
+            <arg value="-npa"/>
             <arg value="-verbose"/>
             <schema file="xml-resources/jaxb/XTCE/SpaceSystemV1.2-27Feb2014-mods.xsd"/>
             <depends file="xml-resources/jaxb/XTCE/SpaceSystemV1.2-27Feb2014-mods.xsd"/>
