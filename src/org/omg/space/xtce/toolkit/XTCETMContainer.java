@@ -181,8 +181,14 @@ public class XTCETMContainer extends XTCENamedObject {
 
         try {
 
+            List<SequenceEntryType> entries =
+                container_.getEntryList()
+                          .getParameterRefEntryOrParameterSegmentRefEntryOrContainerRefEntry();
+
             String       name        = parameter.getFullPath();
             List<String> memberPaths = null;
+
+            // handle the case where a parameter is a memeber element
 
             if ( parameter.isMember() == true ) {
 
@@ -199,8 +205,7 @@ public class XTCETMContainer extends XTCENamedObject {
 
             }
 
-            List<SequenceEntryType> entries =
-                container_.getEntryList().getParameterRefEntryOrParameterSegmentRefEntryOrContainerRefEntry();
+            // search for a reference to the parameter
 
             for ( SequenceEntryType entry : entries ) {
 
