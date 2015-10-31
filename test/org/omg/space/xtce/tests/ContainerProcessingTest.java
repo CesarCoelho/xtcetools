@@ -170,7 +170,7 @@ public class ContainerProcessingTest {
 
             List<XTCETMContainer> containers = db_.getContainers();
 
-            long expected = 17;
+            long expected = 18;
 
             Assert.assertTrue( "Should have found " +
                 Long.toString( expected ) + " containers, but found instead " +
@@ -198,7 +198,7 @@ public class ContainerProcessingTest {
 
             List<XTCETMContainer> containers = ss.getContainers();
 
-            long expected = 10;
+            long expected = 11;
 
             Assert.assertTrue( "Should have found " +
                 Long.toString( expected ) + " containers, but found instead " +

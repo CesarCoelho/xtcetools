@@ -95,13 +95,19 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
             rawSizeTextField.setEnabled( false );
             bitOrderComboField.setSelectedItem( "" );
             bitOrderComboField.setEnabled( false );
-            
+            changeThresholdTextField.setEnabled( false );
         } else {
             encodingTypeComboField.setSelectedItem( parameter.getRawTypeString() );
             rawSizeTextField.setText( parameter.getRawSizeInBits() );
             bitOrderComboField.setSelectedItem( parameter.getRawBitOrder() );
+            changeThresholdTextField.setText( parameter.getChangeThreshold() );
         }
-        defaultValueTextField.setText( parameter.getInitialValue() );
+        if ( ( parameter.getEngineeringType() == EngineeringType.ARRAY     ) ||
+             ( parameter.getEngineeringType() == EngineeringType.STRUCTURE ) ) {
+            defaultValueTextField.setEnabled( false );
+        } else {
+            defaultValueTextField.setText( parameter.getInitialValue() );
+        }
         if ( parameter.getTypeReference() != null ) {
             parameterTypeReferenceText.setText( parameter.getTypeReferenceFullPath() );
             xtceTypeNameTextField.setText( parameter.getTypeReference().getName() );

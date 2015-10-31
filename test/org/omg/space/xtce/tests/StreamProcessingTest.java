@@ -259,7 +259,7 @@ public class StreamProcessingTest {
 
             XTCETMStream stream = db_.getStream( "CCSDS-TM" );
 
-            long expected = 12;
+            long expected = 13;
             long found    = 0;
 
             Assert.assertTrue( "Should have found CCSDS-TM stream",
