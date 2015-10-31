@@ -17,6 +17,7 @@
 
 package org.omg.space.xtce.toolkit;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.JAXBElement;
 import javax.xml.namespace.QName;
@@ -180,22 +181,47 @@ public class XTCETMContainer extends XTCENamedObject {
 
         try {
 
+            String       name        = parameter.getFullPath();
+            List<String> memberPaths = null;
+
+            if ( parameter.isMember() == true ) {
+
+                name        = name.replaceAll( "\\.", "/" );
+                memberPaths = new ArrayList<>();
+
+                String path =
+                    XTCEFunctions.getPathNameFromReferenceString( name );
+
+                while ( path.isEmpty() == false ) {
+                    memberPaths.add( path );
+                    path = XTCEFunctions.getPathNameFromReferenceString( path );
+                }
+
+            }
+
             List<SequenceEntryType> entries =
                 container_.getEntryList().getParameterRefEntryOrParameterSegmentRefEntryOrContainerRefEntry();
 
             for ( SequenceEntryType entry : entries ) {
 
-                //System.out.println( entry.getClass().toString() );
                 if ( entry instanceof ParameterRefEntryType ) {
+
                     String parameterRef =
                         ((ParameterRefEntryType)entry).getParameterRef();
                     String entryFullPath =
                         XTCEFunctions.resolvePathReference( getSpaceSystemPath(),
                                                             parameterRef );
-                    //System.out.println( entryFullPath );
-                    if ( parameter.getFullPath().equals( entryFullPath ) == true ) {
+
+                    if ( name.equals( entryFullPath ) == true ) {
                         return true;
+                    } else if ( memberPaths != null ) {
+                        for ( String path : memberPaths ) {
+                            if ( path.equals( entryFullPath ) == true ) {
+                                return true;
+                            }
+                        }
                     }
+
                 }
 
             }
