@@ -4241,6 +4241,8 @@ public class XTCEViewer extends javax.swing.JFrame {
             tree = tmParameterSpaceSystemTree;
         } else if ( idx == 2 ) {
             tree = tcParameterSpaceSystemTree;
+        } else if ( idx == 4 ) {
+            tree = tcDefinitionsSpaceSystemTree;
         }
 
         return tree;
