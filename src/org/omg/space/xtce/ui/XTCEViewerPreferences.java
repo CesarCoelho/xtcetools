@@ -437,8 +437,8 @@ public class XTCEViewerPreferences {
                 @Override
                 public void actionPerformed( ActionEvent evt ) {
                     viewer.openFile( example1,
-                                     false,
                                      true,
+                                     false,
                                      false );
                 }
             });
@@ -447,7 +447,7 @@ public class XTCEViewerPreferences {
                 @Override
                 public void actionPerformed( ActionEvent evt ) {
                     viewer.openFile( example2,
-                                     false,
+                                     true,
                                      true,
                                      false );
                 }
@@ -463,7 +463,7 @@ public class XTCEViewerPreferences {
                     public void actionPerformed( ActionEvent evt ) {
                         viewer.openFile( actionFile,
                                          true,
-                                         true,
+                                         false,
                                          false );
                     }
                 });
