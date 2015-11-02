@@ -801,6 +801,8 @@ public class StaticFunctionsTest {
 
         hex = " \t  12 34 \r 56 \r\n 78 \f 99aabbccdd";
 
+        fixed = XTCEFunctions.getCleanHexString( hex );
+
         Assert.assertTrue( "String should be '" + expect + "'",
                            fixed.equals( expect ) == true );
 
