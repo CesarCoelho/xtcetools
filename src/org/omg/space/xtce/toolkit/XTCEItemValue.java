@@ -224,16 +224,20 @@ public class XTCEItemValue {
         clearWarnings();
 
         if ( rawBitOrder_.equals( "mostSignificantBitFirst" ) == false ) {
-            warn( itemName_ + " Raw encoding " + rawBitOrder_ +
-                   " not yet supported" );
-            return "";
+            warn( itemName_ +
+                  " " + // NOI18N
+                  XTCEFunctions.getText( "error_encdec_rawbitorder" ) + // NOI18N
+                  ": '" + // NOI18N
+                  rawBitOrder_ +
+                  "'" ); // NOI18N
+            return ""; // NOI18N
         }
 
         if ( euTypeName_ == EngineeringType.TIME ) {
             if ( timeHandler_ != null ) {
                 return timeHandler_.getUncalibratedFromRaw( rawValue );
             } else {
-                return "0x00";
+                return "0x00"; // NOI18N
             }
         }
 
@@ -282,31 +286,40 @@ public class XTCEItemValue {
                     Double doubleValue = Double.longBitsToDouble( numericValue.longValue() );
                     return doubleValue.toString();
                 } else {
-                    warn( itemName_ + " Raw encoding " +
-                          rawTypeName_ + " using " +
-                          Integer.toString( rawSizeInBits_ ) + " bits " +
-                          "is not yet supported" );
+                    warn( itemName_ +
+                          " " + // NOI18N
+                          XTCEFunctions.getText( "error_encdec_rawenctype" ) + // NOI18N
+                          ": " + // NOI18N
+                          rawTypeName_ +
+                          " (" + // NOI18N
+                          Integer.toString( rawSizeInBits_ ) +
+                          " " + // NOI18N
+                          XTCEFunctions.getText( "general_bits" ) + // NOI18N
+                          ")" ); // NOI18N
                 }
                 break;
             }
 
             case binary:
-                return "0x" + numericValue.toString( 16 );
+                return "0x" + numericValue.toString( 16 ); // NOI18N
 
             case UTF8:
-                return getUncalibratedFromRawString( "UTF-8", numericValue );
+                return getUncalibratedFromRawString( "UTF-8", numericValue ); // NOI18N
 
             case UTF16:
-                return getUncalibratedFromRawString( "UTF-16", numericValue );
+                return getUncalibratedFromRawString( "UTF-16", numericValue ); // NOI18N
 
             default:
                 // not supported MILSTD_1750A, BCD, packedBCD
-                warn( itemName_ + " Raw encoding type " +
-                      rawTypeName_ +" not yet supported" );
+                warn( itemName_ +
+                      " " + // NOI18N
+                      XTCEFunctions.getText( "error_encdec_rawtypenotsupported" ) + // NOI18N
+                      ": " + // NOI18N
+                      rawTypeName_ );
 
         }
 
-        return "";
+        return ""; // NOI18N
 
     }
 
@@ -350,13 +363,13 @@ public class XTCEItemValue {
             case BINARY:
                 // warnings for binary transformations?
                 // might need 0x protection over entire function
-                if ( calValue.startsWith( "0x" ) == true ) {
+                if ( calValue.startsWith( "0x" ) == true ) { // NOI18N
                     BigInteger intValue =
-                        new BigInteger( calValue.replaceFirst( "0x", "" ), 16 );
-                    return "0x" + intValue.toString( 16 );
+                        new BigInteger( calValue.replaceFirst( "0x", "" ), 16 ); // NOI18N
+                    return "0x" + intValue.toString( 16 ); // NOI18N
                 } else {
                     BigInteger intValue = new BigInteger( calValue );
-                    return "0x" + intValue.toString( 16 );
+                    return "0x" + intValue.toString( 16 ); // NOI18N
                 }
 
             case TIME:
@@ -369,18 +382,17 @@ public class XTCEItemValue {
                 }
                 break;
 
-            case DURATION:
-                warn( itemName_ + " Relative Time Type is not yet supported" );
-                break;
-
             default:
-                warn( itemName_ + " Type '" + euTypeName_ +
-                      "' is not yet supported" );
+                warn( itemName_ +
+                      " " + // NOI18N
+                      XTCEFunctions.getText( "error_encdec_engtypenotsupported" ) + // NOI18N
+                      ": " + // NOI18N
+                      euTypeName_ );
                 break;
 
         }
 
-        return "";
+        return ""; // NOI18N
 
     }
 
@@ -525,8 +537,8 @@ public class XTCEItemValue {
                         ( rawTypeName_ == RawType.twosComplement ) ||
                         ( rawTypeName_ == RawType.onesComplement ) ) {
                 String lowerCalValue = uncalValue.toLowerCase();
-                if ( lowerCalValue.startsWith( "0x" ) == true ) {
-                    intValue = new BigInteger( lowerCalValue.replaceFirst( "0x", "" ), 16 );
+                if ( lowerCalValue.startsWith( "0x" ) == true ) { // NOI18N
+                    intValue = new BigInteger( lowerCalValue.replaceFirst( "0x", "" ), 16 ); // NOI18N
                     return getRawFromUncalibrated( intValue );
                 } else {
                     intValue = new BigDecimal( lowerCalValue ).toBigIntegerExact();
@@ -534,7 +546,7 @@ public class XTCEItemValue {
                 }
             } else if ( rawTypeName_ == RawType.binary ) {
                 // need to know EU type here!
-                if ( uncalValue.contains( "-" ) == true ) {
+                if ( uncalValue.contains( "-" ) == true ) { // NOI18N
                     warn( itemName_ + " Invalid value for binary " +
                           "encoding '" + uncalValue + "', negative has no " +
                           "meaning in a binary context." );
@@ -544,8 +556,8 @@ public class XTCEItemValue {
                 }
             } else if ( rawTypeName_ == RawType.IEEE754_1985 ) {
                 String reasCalValue = uncalValue.toLowerCase();
-                if ( reasCalValue.startsWith( "0x" ) == true ) {
-                    BigInteger temp = new BigInteger( reasCalValue.replaceFirst( "0x", "" ), 16 );
+                if ( reasCalValue.startsWith( "0x" ) == true ) { // NOI18N
+                    BigInteger temp = new BigInteger( reasCalValue.replaceFirst( "0x", "" ), 16 ); // NOI18N
                     return getRawFromUncalibrated( new BigDecimal( temp ) );
                 } else {
                     return getRawFromUncalibrated( new BigDecimal( reasCalValue ) );

@@ -983,6 +983,120 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
     }
 
+    /** Retrieve a Parameter Type Element from this SpaceSystem element if it
+     * exists.
+     *
+     * This function should generally not be needed.  If it is necessary to use
+     * this function, then there is probably a missing abstraction in this API
+     * that needs to be added to be more complete an implementation for your
+     * use case.
+     *
+     * @param typeName String name of the type element to find.
+     *
+     * @return NameDescriptionType base class of the XTCE data model elements
+     * or a null pointer if it is not found.
+     *
+     */
+
+    public NameDescriptionType getTMParameterTypeReference( String typeName ) {
+
+        try {
+
+            List<NameDescriptionType> types =
+                reference_.getTelemetryMetaData()
+                          .getParameterTypeSet()
+                          .getStringParameterTypeOrEnumeratedParameterTypeOrIntegerParameterType();
+
+            for ( NameDescriptionType typeObj : types ) {
+                if ( typeObj.getName().equals( typeName ) == true ) {
+                    return typeObj;
+                }
+            }
+
+        } catch ( NullPointerException ex ) {
+            // this is okay since there might not be any
+        }
+
+        return null;
+
+    }
+
+    /** Retrieve a Parameter Type Element from this SpaceSystem element if it
+     * exists.
+     *
+     * This function should generally not be needed.  If it is necessary to use
+     * this function, then there is probably a missing abstraction in this API
+     * that needs to be added to be more complete an implementation for your
+     * use case.
+     *
+     * @param typeName String name of the type element to find.
+     *
+     * @return NameDescriptionType base class of the XTCE data model elements
+     * or a null pointer if it is not found.
+     *
+     */
+
+    public NameDescriptionType getTCParameterTypeReference( String typeName ) {
+
+        try {
+
+            List<NameDescriptionType> types =
+                reference_.getCommandMetaData()
+                          .getParameterTypeSet()
+                          .getStringParameterTypeOrEnumeratedParameterTypeOrIntegerParameterType();
+
+            for ( NameDescriptionType typeObj : types ) {
+                if ( typeObj.getName().equals( typeName ) == true ) {
+                    return typeObj;
+                }
+            }
+
+        } catch ( NullPointerException ex ) {
+            // this is okay since there might not be any
+        }
+
+        return null;
+
+    }
+
+    /** Retrieve an Argument Type Element from this SpaceSystem element if it
+     * exists.
+     *
+     * This function should generally not be needed.  If it is necessary to use
+     * this function, then there is probably a missing abstraction in this API
+     * that needs to be added to be more complete an implementation for your
+     * use case.
+     *
+     * @param typeName String name of the type element to find.
+     *
+     * @return NameDescriptionType base class of the XTCE data model elements
+     * or a null pointer if it is not found.
+     *
+     */
+
+    public NameDescriptionType getArgumentTypeReference( String typeName ) {
+
+        try {
+
+            List<NameDescriptionType> types =
+                reference_.getCommandMetaData()
+                          .getArgumentTypeSet()
+                          .getStringArgumentTypeOrEnumeratedArgumentTypeOrIntegerArgumentType();
+
+            for ( NameDescriptionType typeObj : types ) {
+                if ( typeObj.getName().equals( typeName ) == true ) {
+                    return typeObj;
+                }
+            }
+
+        } catch ( NullPointerException ex ) {
+            // this is okay since there might not be any
+        }
+
+        return null;
+
+    }
+
     /** Private method to initialize the hash table of TM or TM parameters.
      * 
      * @param list List of XTCEParameters that have been located/modeled.

@@ -22,7 +22,10 @@ import java.util.BitSet;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import org.omg.space.xtce.database.ArrayParameterRefEntryType;
+import org.omg.space.xtce.database.ArrayParameterRefEntryType.DimensionList;
 import org.omg.space.xtce.database.ComparisonType;
+import org.omg.space.xtce.database.IntegerValueType;
 import org.omg.space.xtce.database.MatchCriteriaType;
 import org.omg.space.xtce.database.RepeatType;
 import org.omg.space.xtce.database.SequenceEntryType;
@@ -355,6 +358,78 @@ abstract class XTCEContainerContentModelBase {
         for ( XTCEContainerContentEntry item : tempList ) {
             item.setStartBit( "" );
         }
+
+    }
+
+    protected long addArrayEntryDescription( ArrayParameterRefEntryType refEntry,
+                                             XTCEContainerContentEntry  contentEntry ) {
+
+        DimensionList dimListElement = refEntry.getDimensionList();
+
+        if ( dimListElement.getSize() == null ) {
+            warnings_.add( "Element DimensionList/Dimension not yet supported for: " +
+                           contentEntry.itemName );
+            return 1;
+        }
+
+        IntegerValueType dimSizeElement = dimListElement.getSize();
+
+        if ( dimSizeElement.getFixedValue() != null ) {
+
+            return Long.parseLong( dimSizeElement.getFixedValue() );
+
+        } else if ( dimSizeElement.getDynamicValue() != null ) {
+
+            try {
+
+                String  parameterRef = dimSizeElement.
+                                       getDynamicValue().
+                                       getParameterInstanceRef().
+                                       getParameterRef();
+
+                boolean useCalValue  = dimSizeElement.
+                                       getDynamicValue().
+                                       getParameterInstanceRef().
+                                       isUseCalibratedValue();
+
+                XTCEParameter parameterInstance;
+
+                // TODO: Telecommand container support will be needed here
+
+                if ( contentEntry.getTelemetryContainer() != null ) {
+                    parameterInstance = findParameter( parameterRef,
+                                                       contentEntry.getTelemetryContainer() );
+                } else if ( contentEntry.getHoldingContainer() != null ) {
+                    parameterInstance = findParameter( parameterRef,
+                                                       contentEntry.getHoldingContainer() );
+                } else {
+                    throw new XTCEDatabaseException( "Entry type not yet supported" );
+                }
+
+                //contentEntry.setRepeatparameterInfo( "==" +
+                //                                     parameterInstance.getName() +
+                //                                     ( useCalValue == true ? "{cal}" : "{uncal}" ) );
+
+                return dynamicCountFromUserValue( parameterInstance,
+                                                  ( useCalValue == true ? "Calibrated" : "Uncalibrated" ) );
+
+            } catch ( Exception ex ) {
+
+                warnings_.add( "Element DimensionList/Size/DynamicValue could not be evaluated for: " +
+                               contentEntry.itemName +
+                               " because: " +
+                               ex.getLocalizedMessage() );
+
+            }
+
+        } else {
+
+            warnings_.add( "Element DimensionList/Size/DiscreteLookupList not yet supported for: " +
+                           contentEntry.itemName );
+
+        }
+
+        return 1;
 
     }
 

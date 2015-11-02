@@ -433,13 +433,13 @@ public class XTCEFunctions {
 
         for ( int iii = 0; iii < hex.length(); iii += 2 ) {
 
-            int start = iii;
-            int end   = iii + 2;
-            if ( end > ( hex.length() - 1 ) ) {
-                end -= 1;
+            int startIdx = iii;
+            int endIdx   = iii + 2;
+            if ( endIdx > hex.length() ) {
+                endIdx = hex.length();
             }
 
-            String value = hex.substring( start, end );
+            String value = hex.substring( startIdx, endIdx );
             if ( value.length() == 1 ) {
                 value += "0";
             }

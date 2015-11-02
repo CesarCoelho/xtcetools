@@ -398,6 +398,20 @@ public class XTCEParameter extends XTCETypedObject {
         return ( memberReference_ != null );
     }
 
+    /** Retrieve the underlying Member element from the XTCE data model.
+     *
+     * Use the isMember() method to test whether this is a member before using
+     * this method.
+     *
+     * @return Member element or a null in the event that this is not a
+     * Member of an aggregate.
+     *
+     */
+
+    final Member getMemberReference() {
+        return memberReference_;
+    }
+
     /** Accessor to determine if this XTCEParameter object represents a
      * Parameter element in the XTCE data model.
      *
@@ -408,6 +422,20 @@ public class XTCEParameter extends XTCETypedObject {
 
     public final boolean isParameter() {
         return ( reference_ != null );
+    }
+
+    /** Retrieve the underlying Parameter element from the XTCE data model.
+     *
+     * Use the isParameter() method to test whether this is a member before
+     * using this method.
+     *
+     * @return Parameter element or a null in the event that this is not a
+     * Parameter.
+     *
+     */
+
+    final Parameter getParameterReference() {
+        return reference_;
     }
 
     /** Retrieve an XML string that represents this Parameter or Member

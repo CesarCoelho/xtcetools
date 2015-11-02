@@ -2730,6 +2730,10 @@ public class XTCEViewer extends javax.swing.JFrame {
                 XTCEViewerFunctions.selectSpaceSystemFromTree( tmParameterSpaceSystemTree,
                                                                parameterPath,
                                                                false );
+                // this is for ARRAY support only
+                if ( parameterName.contains( "[" ) == true ) {
+                    parameterName = parameterName.replaceAll( "\\[[0-9]+\\]", "" ); 
+                }
                 selectParameterFromTable( tmParametersTable,
                                           parameterName,
                                           true );

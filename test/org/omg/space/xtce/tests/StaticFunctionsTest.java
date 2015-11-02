@@ -819,6 +819,63 @@ public class StaticFunctionsTest {
             Assert.fail( "Second byte should be 0x30" );
         }
 
+        hex = "1234";
+        fixed = XTCEFunctions.getBytesFromHexString( hex );
+
+        if ( fixed[0] != (byte)0x12 ) {
+            Assert.fail( "First byte should be 0x12" );
+        }
+        if ( fixed[1] != (byte)0x34 ) {
+            Assert.fail( "Second byte should be 0x34" );
+        }
+
+        hex = "1234aabbccdd";
+        fixed = XTCEFunctions.getBytesFromHexString( hex );
+
+        if ( fixed[0] != (byte)0x12 ) {
+            Assert.fail( "First byte should be 0x12" );
+        }
+        if ( fixed[1] != (byte)0x34 ) {
+            Assert.fail( "Second byte should be 0x34" );
+        }
+        if ( fixed[2] != (byte)0xaa ) {
+            Assert.fail( "Third byte should be 0x12" );
+        }
+        if ( fixed[3] != (byte)0xbb ) {
+            Assert.fail( "Fourth byte should be 0x34" );
+        }
+        if ( fixed[4] != (byte)0xcc ) {
+            Assert.fail( "Fifth byte should be 0x12" );
+        }
+        if ( fixed[5] != (byte)0xdd ) {
+            Assert.fail( "Sixth byte should be 0x34" );
+        }
+
+        hex = "1234aabbccdde";
+        fixed = XTCEFunctions.getBytesFromHexString( hex );
+
+        if ( fixed[0] != (byte)0x12 ) {
+            Assert.fail( "First byte should be 0x12" );
+        }
+        if ( fixed[1] != (byte)0x34 ) {
+            Assert.fail( "Second byte should be 0x34" );
+        }
+        if ( fixed[2] != (byte)0xaa ) {
+            Assert.fail( "Third byte should be 0x12" );
+        }
+        if ( fixed[3] != (byte)0xbb ) {
+            Assert.fail( "Fourth byte should be 0x34" );
+        }
+        if ( fixed[4] != (byte)0xcc ) {
+            Assert.fail( "Fifth byte should be 0x12" );
+        }
+        if ( fixed[5] != (byte)0xdd ) {
+            Assert.fail( "Sixth byte should be 0x34" );
+        }
+        if ( fixed[6] != (byte)0xe0 ) {
+            Assert.fail( "Seventh byte should be 0xe0" );
+        }
+
         try {
             hex          = " \t    0x 12 34 \r 56 \r\n 78 z\f 99aabbccdd";
             hex          = XTCEFunctions.getCleanHexString( hex );

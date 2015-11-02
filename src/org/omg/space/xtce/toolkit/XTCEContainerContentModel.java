@@ -21,11 +21,13 @@ import java.util.BitSet;
 import java.util.List;
 import org.omg.space.xtce.database.AggregateDataType;
 import org.omg.space.xtce.database.AggregateDataType.MemberList.Member;
+import org.omg.space.xtce.database.ArrayDataTypeType;
 import org.omg.space.xtce.database.ArrayParameterRefEntryType;
 import org.omg.space.xtce.database.ContainerRefEntryType;
 import org.omg.space.xtce.database.ContainerSegmentRefEntryType;
 import org.omg.space.xtce.database.IndirectParameterRefEntryType;
 import org.omg.space.xtce.database.MatchCriteriaType;
+import org.omg.space.xtce.database.NameDescriptionType;
 import org.omg.space.xtce.database.ParameterRefEntryType;
 import org.omg.space.xtce.database.ParameterSegmentRefEntryType;
 import org.omg.space.xtce.database.SequenceContainerType.BaseContainer;
@@ -328,8 +330,20 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
 
             } else if ( entry.getClass() == ArrayParameterRefEntryType.class ) {
 
-                String nameRef = ((ArrayParameterRefEntryType)entry).getParameterRef();
-                warnings_.add( "Element ArrayParameterRefEntryType not yet supported for: " + nameRef );
+                if ( ( includedContainer                              != null  ) && 
+                     ( includedContainer.getConditionList().isEmpty() == false ) ) {
+                    addArrayParameter( (ArrayParameterRefEntryType)entry,
+                                  currentStartBit,
+                                  containerStartBit,
+                                  container,
+                                  includedContainer.getConditionList() );
+                } else {
+                    addArrayParameter( (ArrayParameterRefEntryType)entry,
+                                  currentStartBit,
+                                  containerStartBit,
+                                  container,
+                                  null );
+                }
 
             } else if ( entry.getClass() == ParameterSegmentRefEntryType.class ) {
 
@@ -434,6 +448,169 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
 
     }
 
+    private void addArrayParameter( ArrayParameterRefEntryType    pRefEntry,
+                                    RunningStartBit               currentStartBit,
+                                    long                          containerStartBit,
+                                    XTCETMContainer               container,
+                                    List<XTCEContainerEntryValue> includedConditionsList )
+        throws XTCEDatabaseException {
+
+        String nameRef = pRefEntry.getParameterRef();
+        //System.out.println( "Identified Parameter " +
+        //                    nameRef +
+        //                    " cur start bit " +
+        //                    Long.toString( currentStartBit.get() ) +
+        //                    " cont start bit " +
+        //                    Long.toString( containerStartBit ) );
+
+        XTCEParameter pObj = findParameter( nameRef, container );
+        XTCEContainerContentEntry content =
+            new XTCEContainerContentEntry( pObj, container );
+
+        if ( includedConditionsList != null ) {
+            content.setConditionList( includedConditionsList, false );
+        }
+        addIncludeConditions( pRefEntry, container, content );
+        // NOT FOR ARRAYS
+        //applyUserValue( content );
+        evaluateIncludeConditions( content );
+        //if ( content.isCurrentlyInUse() == true ) {
+        //    addStartBit( pRefEntry, content, currentStartBit, containerStartBit );
+            //applyBinaryValue( content );
+        //}
+
+        long repeatCount = addRepeatEntryDescription( pRefEntry, content );
+
+        for ( int iii = 0; iii < repeatCount; ++iii ) {
+
+            if ( repeatCount != 1 ) {
+                content.setRepeatparameterInfo( "Repeat " +
+                                                Long.toString( iii + 1 ) +
+                                                " of " +
+                                                Long.toString( repeatCount ) );
+            }
+
+            contentList_.add( content );
+
+            // short circuit the depth into members when the parameter is not
+            // currently applied
+
+            if ( ( showAllConditions_         == false ) &&
+                 ( content.isCurrentlyInUse() == false ) ) {
+                return;
+            }
+
+            String aptFullPath = pObj.getTypeReferenceFullPath();
+            String aptPath     = XTCEFunctions.getPathNameFromReferenceString( aptFullPath );
+            String aptName     = XTCEFunctions.getNameFromPathReferenceString( aptFullPath );
+
+            NameDescriptionType aptRef = null;
+
+            for ( XTCESpaceSystem ss : spaceSystems_ ) {
+                if ( ss.getFullPath().equals( aptPath ) == true ) {
+                    String arrayTypeRef  = ((ArrayDataTypeType)ss.getTMParameterTypeReference( aptName )).getArrayTypeRef();
+                    String arrayFullPath = XTCEFunctions.resolvePathReference( aptPath, arrayTypeRef );
+                    String arrayTypeName = XTCEFunctions.getNameFromPathReferenceString( arrayFullPath );
+                    String arrayTypePath = XTCEFunctions.getPathNameFromReferenceString( arrayFullPath );
+                    for ( XTCESpaceSystem ss2 : spaceSystems_ ) {
+                        if ( ss2.getFullPath().equals( arrayTypePath ) == true ) {
+                            aptRef = ss2.getTMParameterTypeReference( arrayTypeName );
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+
+            if ( aptRef == null ) {
+                warnings_.add( "No type reference found for Array Parameter " +
+                               pObj.getName() );
+                return;
+            }
+
+            long arrayLength = addArrayEntryDescription( pRefEntry, content );
+
+            for ( int jjj = 0; jjj < arrayLength; ++jjj ) {
+
+                XTCEParameter arrayParameterObject;
+
+                if ( pObj.isParameter() == true ) {
+                    arrayParameterObject =
+                        new XTCEParameter( pObj.getName() + "[" + Long.toString( jjj ) + "]",
+                                           pObj.getSpaceSystemPath(),
+                                           pObj.getParameterReference(),
+                                           aptRef );
+                } else {
+                    arrayParameterObject =
+                        new XTCEParameter( pObj.getName() + "[" + Long.toString( jjj ) + "]",
+                                           pObj.getSpaceSystemPath(),
+                                           pObj.getMemberReference(),
+                                           aptRef );
+                }
+
+                XTCEContainerContentEntry arrayContent =
+                    new XTCEContainerContentEntry( arrayParameterObject, container );
+
+                contentList_.add( arrayContent );
+
+                if ( includedConditionsList != null ) {
+                    arrayContent.setConditionList( includedConditionsList, false );
+                }
+                addIncludeConditions( pRefEntry, container, arrayContent );
+                //applyUserValue( arrayContent ); // NOT YET FOR ARRAY CONTENTS
+                evaluateIncludeConditions( arrayContent );
+                // when doing a repeat entry, the leading distance from the
+                // reference location only applies to the first one, additional
+                // distances are covered by the Offset element - not supported
+                if ( arrayContent.isCurrentlyInUse() == true ) {
+                    if ( ( jjj == 0 ) && ( iii == 0 ) ) {
+                        addStartBit( pRefEntry, arrayContent, currentStartBit, containerStartBit );
+                    } else {
+                        // to support RepeatEntry/Offset, add function here
+                        arrayContent.setStartBit( currentStartBit.get() );
+                        currentStartBit.add( Long.parseLong( arrayContent.getRawSizeInBits() ) );
+                    }
+                    //applyBinaryValue( arrayContent ); // NOT YET FOR ARRAY CONTENTS
+                }
+
+                if ( arrayParameterObject.getTypeReference().getClass() == AggregateDataType.class ) {
+                   // doesnt need container start bit because they are always previousEntry & 0
+                   addMembers( arrayParameterObject, currentStartBit, container, arrayContent );
+                }
+
+                // need a deep copy of the content if this is NOT the last
+                //if ( jjj < ( arrayLength - 1 ) ) {
+                //    arrayContent = arrayContent.deepCopy();
+                //    // deep copy include is previousEntry 0 right now, but we need
+                //    // to eventually consider repeat offset
+                //    if ( isEntryNeedingStartBit( arrayContent ) == true ) {
+                //        arrayContent.setStartBit( currentStartBit.get() );
+                //        currentStartBit.add( Long.parseLong( arrayContent.getRawSizeInBits() ) );
+                //        arrayContent.setValue( (XTCEContainerEntryValue)null );
+                //        // applyBinaryValue( arrayContent ); // NOT YET FOR ARRAY CONTENTS
+                //    }
+                //}
+
+            }
+
+            // need a deep copy of the content if this is NOT the last
+            if ( iii < ( repeatCount - 1 ) ) {
+                content = content.deepCopy();
+                // deep copy include is previousEntry 0 right now, but we need
+                // to eventually consider repeat offset - this case of arrays
+                // probably will never call this
+                //if ( isEntryNeedingStartBit( content ) == true ) {
+                    //content.setStartBit( currentStartBit.get() );
+                    //currentStartBit.add( Long.parseLong( content.getRawSizeInBits() ) );
+                    //content.setValue( (XTCEContainerEntryValue)null );
+                    //applyBinaryValue( content );
+                //}
+            }
+
+        }
+
+    }
+
     private void addParameter( ParameterRefEntryType         pRefEntry,
                                RunningStartBit               currentStartBit,
                                long                          containerStartBit,
@@ -496,6 +673,7 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
                 // deep copy include is previousEntry 0 right now, but we need
                 // to eventually consider repeat offset
                 if ( isEntryNeedingStartBit( content ) == true ) {
+                    // to support RepeatEntry/Offset, add function here
                     content.setStartBit( currentStartBit.get() );
                     currentStartBit.add( Long.parseLong( content.getRawSizeInBits() ) );
                     content.setValue( (XTCEContainerEntryValue)null );

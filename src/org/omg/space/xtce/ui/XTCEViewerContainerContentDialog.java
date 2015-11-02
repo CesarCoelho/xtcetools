@@ -28,7 +28,6 @@ import org.omg.space.xtce.toolkit.XTCEDatabase;
 import org.omg.space.xtce.toolkit.XTCEFunctions;
 import org.omg.space.xtce.toolkit.XTCETMContainer;
 import org.omg.space.xtce.toolkit.XTCETMStream;
-import org.omg.space.xtce.toolkit.XTCETypedObject;
 import org.omg.space.xtce.toolkit.XTCETypedObject.EngineeringType;
 
 /** XTCE Viewer/Browser dialog window for displaying processed content of a
