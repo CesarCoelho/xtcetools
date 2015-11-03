@@ -57,6 +57,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
+import org.omg.space.xtce.toolkit.XTCEAbsoluteTimeType;
 import org.omg.space.xtce.toolkit.XTCEContainerContentEntry.FieldType;
 import org.omg.space.xtce.toolkit.XTCEContainerEntryValue;
 import org.omg.space.xtce.toolkit.XTCEFunctions;
@@ -4652,6 +4653,25 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     }
 
+    private static void applyTimeHandlers( String[] handlers ) {
+
+        for ( String handler : handlers ) {
+
+            try {
+                XTCEAbsoluteTimeType timeHandler =
+                    (XTCEAbsoluteTimeType)Class.forName( handler ).newInstance();
+                XTCEFunctions.registerAbsoluteTimeHandler( timeHandler );
+            } catch ( Throwable ex ) {
+                System.err.println( "Unable to register requested time handler: " +
+                                    handler +
+                                    " because " +
+                                    ex.getLocalizedMessage() );
+            }
+
+        }
+
+    }
+
     /** Display a usage message to the user when the user is using this tool
      * with command line arguments.
      *
@@ -4763,6 +4783,10 @@ public class XTCEViewer extends javax.swing.JFrame {
                                 readOnly = false;
                             } else if ( args[iii].equals( "--readonly" ) == true ) {
                                 readOnly = true;
+                            } else if ( args[iii].startsWith( "--timehandlers=" ) == true ) {
+                                String argvalue = args[iii].replaceFirst( "--timehandlers=", "" );
+                                String[] handlers = argvalue.split( ";" );
+                                applyTimeHandlers( handlers );
                             } else {
                                 System.err.println(
                                     XTCEFunctions.getText( "general_unrecognizedarg" ) +
@@ -4775,6 +4799,10 @@ public class XTCEViewer extends javax.swing.JFrame {
                                       useXInclude,
                                       validateOnLoad,
                                       readOnly);
+                    } else if ( args[0].startsWith( "--timehandlers=" ) == true ) {
+                        String argvalue = args[0].replaceFirst( "--timehandlers=", "" );
+                        String[] handlers = argvalue.split( ";" );
+                        applyTimeHandlers( handlers );
                     } else {
                         System.err.println(
                             XTCEFunctions.getText( "file_chooser_noload_text" ) +

@@ -56,6 +56,7 @@ public class XTCEViewerParameterXmlDialog extends javax.swing.JDialog {
         }
         parameterDefinitionText.setText( parameter.toXml() );
         parameterTypeDefinitionText.setText( parameter.typeToXml() );
+        setTitle( "Parameter XML: " + parameter.getName() );
         pack();
         setLocationRelativeTo( parent );
 

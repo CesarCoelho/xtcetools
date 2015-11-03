@@ -60,6 +60,7 @@ public class XTCEViewerContainerXmlDialog extends javax.swing.JDialog {
         }
         containerDefinitionText.setText( container.toXml() );
         containerLabel.setText( XTCEFunctions.getText( "dialog_xmlsingle_container" ) );
+        setTitle( "Container XML: " + container.getName() );
         pack();
         setLocationRelativeTo( parent );
 
