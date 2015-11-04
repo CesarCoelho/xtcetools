@@ -6,8 +6,6 @@
     </Component>
     <Component class="javax.swing.ButtonGroup" name="parameterCategoryButtonGroup">
     </Component>
-    <Component class="javax.swing.ButtonGroup" name="buttonGroup1">
-    </Component>
   </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="2"/>
@@ -168,6 +166,9 @@
                   <ResourceString bundle="org/omg/space/xtce/toolkit/MessagesBundle.properties" key="dialog_findparameter_asalias_radiobuttom" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="parameterFindByAliasRadioButtonItemStateChanged"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JRadioButton" name="telemetryParameterRadioButton">
               <Properties>
@@ -179,6 +180,9 @@
                   <ResourceString bundle="org/omg/space/xtce/toolkit/MessagesBundle.properties" key="dialog_metrics_tmparameters_text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="telemetryParameterRadioButtonItemStateChanged"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JRadioButton" name="parameterFindByNameRadioButton">
               <Properties>
@@ -190,6 +194,9 @@
                   <ResourceString bundle="org/omg/space/xtce/toolkit/MessagesBundle.properties" key="dialog_findparameter_asname_radiobutton" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="parameterFindByNameRadioButtonItemStateChanged"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JRadioButton" name="telecommandParameterRadioButton">
               <Properties>
@@ -200,6 +207,9 @@
                   <ResourceString bundle="org/omg/space/xtce/toolkit/MessagesBundle.properties" key="dialog_metrics_tcparameters_text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="telecommandParameterRadioButtonItemStateChanged"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
