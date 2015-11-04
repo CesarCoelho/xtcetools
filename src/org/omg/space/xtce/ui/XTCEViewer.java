@@ -4653,7 +4653,26 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     }
 
-    private static void applyTimeHandlers( String[] handlers ) {
+    private static void applyTimeHandlers( String arg ) {
+
+        String argvalue = arg.replaceFirst( "--timehandlers=", "" );
+        String[] pair   = argvalue.split( "," );
+
+        if ( pair.length == 2 ) {
+            String[] extlibs = pair[1].split( ":" );
+            for ( String extlib : extlibs ) {
+                try {
+                    System.loadLibrary( extlib );
+                } catch ( Throwable ex ) {
+                    System.err.println( "Unable to load requested library: " +
+                                        extlib +
+                                        " because " +
+                                        ex.getLocalizedMessage() );
+                }
+            }
+        }
+
+        String[] handlers = pair[0].split( ":" );
 
         for ( String handler : handlers ) {
 
@@ -4784,9 +4803,7 @@ public class XTCEViewer extends javax.swing.JFrame {
                             } else if ( args[iii].equals( "--readonly" ) == true ) {
                                 readOnly = true;
                             } else if ( args[iii].startsWith( "--timehandlers=" ) == true ) {
-                                String argvalue = args[iii].replaceFirst( "--timehandlers=", "" );
-                                String[] handlers = argvalue.split( ";" );
-                                applyTimeHandlers( handlers );
+                                applyTimeHandlers( args[iii] );
                             } else {
                                 System.err.println(
                                     XTCEFunctions.getText( "general_unrecognizedarg" ) +
@@ -4800,9 +4817,7 @@ public class XTCEViewer extends javax.swing.JFrame {
                                       validateOnLoad,
                                       readOnly);
                     } else if ( args[0].startsWith( "--timehandlers=" ) == true ) {
-                        String argvalue = args[0].replaceFirst( "--timehandlers=", "" );
-                        String[] handlers = argvalue.split( ";" );
-                        applyTimeHandlers( handlers );
+                        applyTimeHandlers( args[0] );
                     } else {
                         System.err.println(
                             XTCEFunctions.getText( "file_chooser_noload_text" ) +
