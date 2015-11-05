@@ -2886,7 +2886,7 @@ public class XTCEViewer extends javax.swing.JFrame {
 
         if ( tmContainerDrawingScrollPane.getViewport().getView() == null ) {
             JOptionPane.showMessageDialog( this,
-                                           "No Container Selected",
+                                           XTCEFunctions.getText( "rightclick_container_noselection_message" ), // NOI18N
                                            XTCEFunctions.getText( "general_error" ), // NOI18N
                                            JOptionPane.ERROR_MESSAGE);
             return;
