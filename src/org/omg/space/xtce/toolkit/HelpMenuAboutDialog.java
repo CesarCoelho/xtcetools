@@ -21,15 +21,20 @@ import java.awt.event.WindowEvent;
 import java.io.InputStream;
 import javax.swing.JTextArea;
 
-/**
+/** This class contains the Help Menu Dialog for the About/Version item.
  *
  * @author dovereem
  */
 
 public class HelpMenuAboutDialog extends javax.swing.JDialog {
 
-    /**
-     * Creates new form HelpMenuAboutDialog
+    /** Constructor to instantiate the dialog box.
+     *
+     * @param parent Frame object containing the parent window.
+     *
+     * @param modal boolean indicating if this dialog should block interaction
+     * with the parent window.
+     *
      */
 
     public HelpMenuAboutDialog(java.awt.Frame parent, boolean modal) {
@@ -41,6 +46,16 @@ public class HelpMenuAboutDialog extends javax.swing.JDialog {
         setLocationRelativeTo( parent );
 
     }
+
+    /** Private method to read a text data file from the Classpath because it
+     * will be inside the deployed JAR file.
+     *
+     * @param file String containing the name of the file to load, relative to
+     * the root of the JAR file.
+     *
+     * @param textField JTextArea from the dialog to place the loaded text.
+     *
+     */
 
     private void addTextToTextArea( String file, JTextArea textField ) {
 
