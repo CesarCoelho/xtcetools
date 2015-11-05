@@ -15,18 +15,19 @@
  * 
  */
 
-package org.omg.space.xtce.toolkit;
+package org.omg.space.xtce.ui;
 
 import java.awt.event.WindowEvent;
 import java.io.InputStream;
 import javax.swing.JTextArea;
+import org.omg.space.xtce.toolkit.XTCEFunctions;
 
 /** This class contains the Help Menu Dialog for the About/Version item.
  *
  * @author dovereem
  */
 
-public class HelpMenuAboutDialog extends javax.swing.JDialog {
+public class XTCEViewerHelpMenuAboutDialog extends javax.swing.JDialog {
 
     /** Constructor to instantiate the dialog box.
      *
@@ -37,7 +38,7 @@ public class HelpMenuAboutDialog extends javax.swing.JDialog {
      *
      */
 
-    public HelpMenuAboutDialog(java.awt.Frame parent, boolean modal) {
+    public XTCEViewerHelpMenuAboutDialog(java.awt.Frame parent, boolean modal) {
 
         super(parent, modal);
         initComponents();
@@ -102,7 +103,6 @@ public class HelpMenuAboutDialog extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/omg/space/xtce/toolkit/MessagesBundle"); // NOI18N
         setTitle(bundle.getString("dialog_about_title")); // NOI18N
-        setMaximumSize(new java.awt.Dimension(520, 2147483647));
         setMinimumSize(new java.awt.Dimension(520, 0));
 
         dismissButton.setText(bundle.getString("general_dismiss_text")); // NOI18N
@@ -205,20 +205,21 @@ public class HelpMenuAboutDialog extends javax.swing.JDialog {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(HelpMenuAboutDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(XTCEViewerHelpMenuAboutDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(HelpMenuAboutDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(XTCEViewerHelpMenuAboutDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(HelpMenuAboutDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(XTCEViewerHelpMenuAboutDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(HelpMenuAboutDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(XTCEViewerHelpMenuAboutDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                HelpMenuAboutDialog dialog = new HelpMenuAboutDialog(new javax.swing.JFrame(), true);
+                XTCEViewerHelpMenuAboutDialog dialog = new XTCEViewerHelpMenuAboutDialog(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

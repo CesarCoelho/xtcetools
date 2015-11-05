@@ -57,7 +57,6 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
-import org.omg.space.xtce.toolkit.HelpMenuAboutDialog;
 import org.omg.space.xtce.toolkit.XTCEAbsoluteTimeType;
 import org.omg.space.xtce.toolkit.XTCEContainerContentEntry.FieldType;
 import org.omg.space.xtce.toolkit.XTCEContainerEntryValue;
@@ -3074,7 +3073,7 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     private void mainWindowHelpAboutMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mainWindowHelpAboutMenuItemActionPerformed
 
-        HelpMenuAboutDialog dialog = new HelpMenuAboutDialog( this, true );
+        XTCEViewerHelpMenuAboutDialog dialog = new XTCEViewerHelpMenuAboutDialog( this, true );
         dialog.setVisible( true );
 
     }//GEN-LAST:event_mainWindowHelpAboutMenuItemActionPerformed
