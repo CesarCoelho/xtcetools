@@ -3278,7 +3278,7 @@ public class XTCEViewer extends javax.swing.JFrame {
         if ( fileOpenWarning() == true ) return;
 
         int value = JOptionPane.showConfirmDialog( this,
-                                                   parameterExportPanel,
+                                                   containerExportPanel,
                                                    XTCEFunctions.getText( "dialog_exportcontainers_text" ), // NOI18N
                                                    JOptionPane.OK_CANCEL_OPTION );
         if ( value == JOptionPane.CANCEL_OPTION ) {
@@ -3287,13 +3287,13 @@ public class XTCEViewer extends javax.swing.JFrame {
 
         String fileExtensionDescription = XTCEFunctions.getText( "file_chooser_csv_text" ); // NOI18N
         String fileExtensionPattern     = "csv"; // NOI18N
-        if ( exportParametersCppRadioButton.isSelected() == true ) {
+        if ( exportContainersCppRadioButton.isSelected() == true ) {
             fileExtensionDescription = XTCEFunctions.getText( "file_chooser_cpp_text" ); // NOI18N
             fileExtensionPattern     = "h"; // NOI18N
-        } else if ( exportParametersCometRadioButton.isSelected() == true ) {
+        } else if ( exportContainersCometRadioButton.isSelected() == true ) {
             fileExtensionDescription = XTCEFunctions.getText( "file_chooser_oscomet_text" ); // NOI18N
             fileExtensionPattern     = "def"; // NOI18N
-        } else if ( exportParametersInControlRadioButton.isSelected() == true ) {
+        } else if ( exportContainersInControlRadioButton.isSelected() == true ) {
             fileExtensionDescription = XTCEFunctions.getText( "file_chooser_incontrol_text" ); // NOI18N
             fileExtensionPattern     = "xml"; // NOI18N
         }
@@ -3305,19 +3305,19 @@ public class XTCEViewer extends javax.swing.JFrame {
         int status = chooser.showSaveDialog( this );
         if (status == JFileChooser.APPROVE_OPTION) {
             File exportFile = chooser.getSelectedFile();
-            if ( exportParametersCsvRadioButton.isSelected() == true ) {
+            if ( exportContainersCsvRadioButton.isSelected() == true ) {
                 if ( exportFile.getName().endsWith( ".csv" ) == false ) { // NOI18N
                     exportFile = new File( exportFile.getAbsolutePath() + ".csv" ); // NOI18N
                 }
-            } else if ( exportParametersCppRadioButton.isSelected() == true ) {
+            } else if ( exportContainersCppRadioButton.isSelected() == true ) {
                 if ( exportFile.getName().endsWith( ".h" ) == false ) { // NOI18N
                     exportFile = new File( exportFile.getAbsolutePath() + ".h" ); // NOI18N
                 }
-            } else if ( exportParametersCometRadioButton.isSelected() == true ) {
+            } else if ( exportContainersCometRadioButton.isSelected() == true ) {
                 if ( exportFile.getName().endsWith( ".def" ) == false ) { // NOI18N
                     exportFile = new File( exportFile.getAbsolutePath() + ".def" ); // NOI18N
                 }
-            } else if ( exportParametersInControlRadioButton.isSelected() == true ) {
+            } else if ( exportContainersInControlRadioButton.isSelected() == true ) {
                 if ( exportFile.getName().endsWith( ".xml" ) == false ) { // NOI18N
                     exportFile = new File( exportFile.getAbsolutePath() + ".xml" ); // NOI18N
                 }
@@ -3333,28 +3333,28 @@ public class XTCEViewer extends javax.swing.JFrame {
             Properties configProperties = new Properties();
             configProperties.setProperty( "file_extension_description", fileExtensionDescription ); // NOI18N
             configProperties.setProperty( "file_extension_pattern", fileExtensionPattern ); // NOI18N
-            configProperties.setProperty( "use_header_row", ( exportParametersIncludeHeaderRowCheckbox.isSelected() == true ? "true" : "false" ) ); // NOI18N
-            configProperties.setProperty( "use_namespaces", ( exportParametersUseNamespacesCheckbox.isSelected() == true ? "true" : "false" ) ); // NOI18N
+            configProperties.setProperty( "use_header_row", ( exportContainersIncludeHeaderRowCheckbox.isSelected() == true ? "true" : "false" ) ); // NOI18N
+            configProperties.setProperty( "use_namespaces", ( exportContainersUseNamespacesCheckbox.isSelected() == true ? "true" : "false" ) ); // NOI18N
             configProperties.setProperty( "show_all_alias_namespaces", ( prefs.getShowAllAliasNamespacesOption() == true ? "true" : "false" ) ); // NOI18N
             configProperties.setProperty( "show_alias_namespaces", ( prefs.getShowAliasNamespacesOption() == true ? "true" : "false" ) ); // NOI18N
             configProperties.setProperty( "preferred_alias_namespace", prefs.getPreferredAliasNamespaceOption() ); // NOI18N
             configProperties.setProperty( "show_all_conditions", ( prefs.getShowAllContainerConditionalsOption() == true ? "true" : "false" ) ); // NOI18N
             try {
                 XTCEDatabaseExporter dbExport = null;
-                if ( exportParametersCsvRadioButton.isSelected() == true ) {
+                if ( exportContainersCsvRadioButton.isSelected() == true ) {
                     dbExport = new XTCEDatabaseExporterCsv( xtceDatabaseFile, configProperties );
                     dbExport.exportContainers( exportFile );
-                } else if ( exportParametersCppRadioButton.isSelected() == true ) {
+                } else if ( exportContainersCppRadioButton.isSelected() == true ) {
                     logMsg( XTCEFunctions.getText( "general_warning" ) + // NOI18N
                             XTCEFunctions.getText( "dialog_export_notyetimplemented_text" ) + // NOI18N
                             " " + // NOI18N
                             fileExtensionDescription );
-                } else if ( exportParametersCometRadioButton.isSelected() == true ) {
+                } else if ( exportContainersCometRadioButton.isSelected() == true ) {
                     logMsg( XTCEFunctions.getText( "general_warning" ) + // NOI18N
                             XTCEFunctions.getText( "dialog_export_notyetimplemented_text" ) + // NOI18N
                             " " + // NOI18N
                             fileExtensionDescription );
-                } else if ( exportParametersInControlRadioButton.isSelected() == true ) {
+                } else if ( exportContainersInControlRadioButton.isSelected() == true ) {
                     logMsg( XTCEFunctions.getText( "general_warning" ) + // NOI18N
                             XTCEFunctions.getText( "dialog_export_notyetimplemented_text" ) + // NOI18N
                             " " + // NOI18N
@@ -4754,9 +4754,7 @@ public class XTCEViewer extends javax.swing.JFrame {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
-                //System.out.println( info.getName() );
             }
-            //System.setProperty( "apple.laf.useScreenMenuBar", "true" );
         } catch (ClassNotFoundException ex) {
             java.util.logging.Logger.getLogger(XTCEViewer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
@@ -4768,13 +4766,23 @@ public class XTCEViewer extends javax.swing.JFrame {
         }
         //</editor-fold>
 
-        //Properties props = System.getProperties();
-        //Enumeration<?> keys = props.propertyNames();
-        //while ( keys.hasMoreElements() == true ) {
-        //    String key = (String)keys.nextElement();
-        //    System.out.println( key + " = " + props.getProperty( key ) );
-        //}
-        
+        /*
+        Properties props = System.getProperties();
+        Enumeration<?> keys = props.propertyNames();
+        while ( keys.hasMoreElements() == true ) {
+            String key = (String)keys.nextElement();
+            System.out.println( key + " = " + props.getProperty( key ) ); // NOI18N
+        }
+
+        try {
+            if ( System.getProperty( "os.name" ).equals( "Mac OS X" ) == true ) { // NOI18N
+                System.setProperty( "apple.laf.useScreenMenuBar", "true" ); // NOI18N
+                //System.setProperty( "apple.awt.brushMetalLook", "true" ); // NOI18N
+            }
+        } catch ( Throwable ex ) {
+            // do nothing and proceed in default mode
+        }*/
+
         /* Create and display the form */
         java.awt.EventQueue.invokeLater( new Runnable() {
 
@@ -4827,6 +4835,7 @@ public class XTCEViewer extends javax.swing.JFrame {
                     }
                 }
 
+                app.setLocationByPlatform( true );
                 app.setVisible( true );
 
             }
