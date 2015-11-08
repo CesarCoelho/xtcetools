@@ -232,7 +232,7 @@ public abstract class XTCETypedObject extends XTCENamedObject {
     public final String getUnits() {
 
         if ( typeObj_ == null ) {
-            return "";
+            return ""; // NOI18N
         }
 
         List<UnitType> unitList = null;
@@ -249,12 +249,12 @@ public abstract class XTCETypedObject extends XTCENamedObject {
         if ( ( unitList != null ) && ( unitList.size() > 0 ) ) {
             String units = unitList.get( 0 ).getContent();
             if ( unitList.get( 0 ).getDescription() != null ) {
-                units = units + ":" + unitList.get( 0 ).getDescription();
+                units = units + ":" + unitList.get( 0 ).getDescription(); // NOI18N
             }
             return units;
         }
 
-        return "";
+        return ""; // NOI18N
 
     }
 
@@ -288,9 +288,9 @@ public abstract class XTCETypedObject extends XTCENamedObject {
                 BinaryDataType tRef = (BinaryDataType)typeObj_;
                 if ( tRef.getInitialValue() != null ) {
                     byte[] bytes = tRef.getInitialValue();
-                    StringBuilder out = new StringBuilder( "0x" );
+                    StringBuilder out = new StringBuilder( "0x" ); // NOI18N
                     for ( byte singleByte : bytes ) {
-                        out.append( String.format( "%02x", singleByte ) );
+                        out.append( String.format( "%02x", singleByte ) ); // NOI18N
                     }
                     return out.toString();
                 }
@@ -317,7 +317,7 @@ public abstract class XTCETypedObject extends XTCENamedObject {
             }
         }
 
-        return "";
+        return ""; // NOI18N
 
     }
 
@@ -338,7 +338,7 @@ public abstract class XTCETypedObject extends XTCENamedObject {
     public String getChangeThreshold() {
 
         if ( typeObj_ == null ) {
-            return "";
+            return ""; // NOI18N
         }
 
         if ( isBaseDataType() == true ) {
@@ -352,7 +352,7 @@ public abstract class XTCETypedObject extends XTCENamedObject {
                                         getChangeThreshold().
                                         toString();
                     } else {
-                        return "";
+                        return ""; // NOI18N
                     }
                 } else if ( pTypeRef.getFloatDataEncoding() != null ) {
                     if ( pTypeRef.getFloatDataEncoding().getChangeThreshold() != null ) {
@@ -360,12 +360,12 @@ public abstract class XTCETypedObject extends XTCENamedObject {
                                         getChangeThreshold().
                                         toString();
                     } else {
-                        return "";
+                        return ""; // NOI18N
                     }
                 } else if ( pTypeRef.getBinaryDataEncoding() != null ) {
-                    return "";
+                    return ""; // NOI18N
                 } else if ( pTypeRef.getStringDataEncoding() != null ) {
-                    return "";
+                    return ""; // NOI18N
                 }
             }
 
@@ -382,7 +382,7 @@ public abstract class XTCETypedObject extends XTCENamedObject {
                                             getChangeThreshold().
                                             toString();
                         } else {
-                            return "";
+                            return ""; // NOI18N
                         }
                     } else if ( pTypeRef.getEncoding().getFloatDataEncoding() != null ) {
                         if ( pTypeRef.getEncoding().getFloatDataEncoding().getChangeThreshold() != null ) {
@@ -391,19 +391,19 @@ public abstract class XTCETypedObject extends XTCENamedObject {
                                             getChangeThreshold().
                                             toString();
                         } else {
-                            return "";
+                            return ""; // NOI18N
                         }
                     } else if ( pTypeRef.getEncoding().getBinaryDataEncoding() != null ) {
-                        return "";
+                        return ""; // NOI18N
                     } else if ( pTypeRef.getEncoding().getStringDataEncoding() != null ) {
-                        return "";
+                        return ""; // NOI18N
                     }
                 }
             }
 
         }
 
-        return "";
+        return ""; // NOI18N
 
     }
 
@@ -477,31 +477,31 @@ public abstract class XTCETypedObject extends XTCENamedObject {
 
         if ( typeObj_ != null ) {
             if ( typeObj_ instanceof EnumeratedDataType ) {
-                return "ENUMERATED";
+                return "ENUMERATED"; // NOI18N
             } else if ( typeObj_ instanceof IntegerDataType ) {
                 IntegerDataType tRef = (IntegerDataType)typeObj_;
-                return ( tRef.isSigned() == true ? "SIGNED" : "UNSIGNED" );
+                return ( tRef.isSigned() == true ? "SIGNED" : "UNSIGNED" ); // NOI18N
             } else if ( typeObj_ instanceof FloatDataType ) {
                 FloatDataType tRef = (FloatDataType)typeObj_;
-                return "FLOAT" + tRef.getSizeInBits().toString();
+                return "FLOAT" + tRef.getSizeInBits().toString(); // NOI18N
             } else if ( typeObj_.getClass() == AggregateDataType.class ) {
-                return "STRUCTURE";
+                return "STRUCTURE"; // NOI18N
             } else if ( typeObj_ instanceof BinaryDataType ) {
-                return "BINARY";
+                return "BINARY"; // NOI18N
             } else if ( typeObj_ instanceof BooleanDataType ) {
-                return "BOOLEAN";
+                return "BOOLEAN"; // NOI18N
             } else if ( typeObj_ instanceof StringDataType ) {
-                return "STRING";
+                return "STRING"; // NOI18N
             } else if ( typeObj_ instanceof AbsoluteTimeDataType ) {
-                return "TIME";
+                return "TIME"; // NOI18N
             } else if ( typeObj_ instanceof RelativeTimeDataType ) {
-                return "DURATION";
+                return "DURATION"; // NOI18N
             } else if ( typeObj_ instanceof ArrayDataTypeType ) {
-                return "ARRAY";
+                return "ARRAY"; // NOI18N
             }
         }
 
-        return "";
+        return ""; // NOI18N
 
     }
 
@@ -619,7 +619,7 @@ public abstract class XTCETypedObject extends XTCENamedObject {
     public final String getRawTypeString() {
 
         if ( typeObj_ == null ) {
-            return "";
+            return ""; // NOI18N
         }
 
         if ( isBaseDataType() == true ) {
@@ -632,7 +632,7 @@ public abstract class XTCETypedObject extends XTCENamedObject {
                 } else if ( pTypeRef.getFloatDataEncoding() != null ) {
                     return pTypeRef.getFloatDataEncoding().getEncoding();
                 } else if ( pTypeRef.getBinaryDataEncoding() != null ) {
-                    return "binary";
+                    return "binary"; // NOI18N
                 } else if ( pTypeRef.getStringDataEncoding() != null ) {
                     return pTypeRef.getStringDataEncoding().getEncoding();
                 }
@@ -649,7 +649,7 @@ public abstract class XTCETypedObject extends XTCENamedObject {
                     } else if ( pTypeRef.getEncoding().getFloatDataEncoding() != null ) {
                         return pTypeRef.getEncoding().getFloatDataEncoding().getEncoding();
                     } else if ( pTypeRef.getEncoding().getBinaryDataEncoding() != null ) {
-                        return "binary";
+                        return "binary"; // NOI18N
                     } else if ( pTypeRef.getEncoding().getStringDataEncoding() != null ) {
                         return pTypeRef.getEncoding().getStringDataEncoding().getEncoding();
                     }
@@ -658,7 +658,7 @@ public abstract class XTCETypedObject extends XTCENamedObject {
 
         }
 
-        return "";
+        return ""; // NOI18N
 
     }
 
@@ -714,7 +714,7 @@ public abstract class XTCETypedObject extends XTCENamedObject {
         if ( rType.isEmpty() == true ) {
             return RawType.UNKNOWN;
         } else {
-            rType = rType.replaceAll( "-", "" );
+            rType = rType.replaceAll( "-", "" ); // NOI18N
         }
         return RawType.valueOf( rType );
 
@@ -731,7 +731,7 @@ public abstract class XTCETypedObject extends XTCENamedObject {
     public final String getRawBitOrder() {
 
         if ( typeObj_ == null ) {
-            return "";
+            return ""; // NOI18N
         }
 
         if ( isBaseDataType() == true ) {
@@ -770,7 +770,7 @@ public abstract class XTCETypedObject extends XTCENamedObject {
 
         }
 
-        return "mostSignificantBitFirst";
+        return "mostSignificantBitFirst"; // NOI18N
 
     }
 
@@ -787,7 +787,7 @@ public abstract class XTCETypedObject extends XTCENamedObject {
     public final String getRawSizeInBits() {
 
         if ( typeObj_ == null ) {
-            return "";
+            return ""; // NOI18N
         }
 
         if ( isBaseDataType() == true ) {
@@ -805,7 +805,7 @@ public abstract class XTCETypedObject extends XTCENamedObject {
                         if ( sizeDetail.getFixedValue() != null ) {
                             return sizeDetail.getFixedValue();
                         } else {
-                            return "dynamic";
+                            return "dynamic"; // NOI18N
                         }
                     }
                 } else if ( pTypeRef.getStringDataEncoding() != null ) {
@@ -816,10 +816,10 @@ public abstract class XTCETypedObject extends XTCENamedObject {
                             if ( sizeDetail.getFixedValue() != null ) {
                                 return sizeDetail.getFixedValue();
                             } else {
-                                return "dynamic";
+                                return "dynamic"; // NOI18N
                             }
                         } else {
-                            return "dynamic";
+                            return "dynamic"; // NOI18N
                         }
                     }
                 }
@@ -841,7 +841,7 @@ public abstract class XTCETypedObject extends XTCENamedObject {
                             if ( sizeDetail.getFixedValue() != null ) {
                                 return sizeDetail.getFixedValue();
                             } else {
-                                return "dynamic";
+                                return "dynamic"; // NOI18N
                             }
                         }
                     } else if ( pTypeRef.getEncoding().getStringDataEncoding() != null ) {
@@ -852,10 +852,10 @@ public abstract class XTCETypedObject extends XTCENamedObject {
                                 if ( sizeDetail.getFixedValue() != null ) {
                                     return sizeDetail.getFixedValue();
                                 } else {
-                                    return "dynamic";
+                                    return "dynamic"; // NOI18N
                                 }
                             } else {
-                                return "dynamic";
+                                return "dynamic"; // NOI18N
                             }
                         }
                     }
@@ -864,7 +864,7 @@ public abstract class XTCETypedObject extends XTCENamedObject {
 
         }
 
-        return "";
+        return ""; // NOI18N
 
     }
 
@@ -977,10 +977,10 @@ public abstract class XTCETypedObject extends XTCENamedObject {
             throw new XTCEDatabaseException(
                 getName() +
                 ": " + // NOI18N
-                XTCEFunctions.getText( "xml_marshal_error_type" ) +
-                " '" +
+                XTCEFunctions.getText( "xml_marshal_error_type" ) + // NOI18N
+                " '" + // NOI18N
                 ex.getCause() +
-                "'" );
+                "'" ); // NOI18N
         }
 
     }

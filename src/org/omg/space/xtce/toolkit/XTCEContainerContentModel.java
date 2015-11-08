@@ -347,22 +347,39 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
 
             } else if ( entry.getClass() == ParameterSegmentRefEntryType.class ) {
 
-                String nameRef = ((ParameterSegmentRefEntryType)entry).getParameterRef();
-                warnings_.add( "Element ParameterSegmentRefEntryType not yet supported for: " + nameRef );
+                String nameRef =
+                    ((ParameterSegmentRefEntryType)entry).getParameterRef();
+                warnings_.add( "'ParameterSegmentRefEntry' " + // NOI18N
+                               XTCEFunctions.getText( "xml_element_not_yet_supported" ) + // NOI18N
+                               " " + // NOI18N
+                               nameRef );
 
             } else if ( entry.getClass() == ContainerSegmentRefEntryType.class ) {
 
-                String nameRef = ((ContainerSegmentRefEntryType)entry).getContainerRef();
-                warnings_.add( "Element ContainerSegmentRefEntryType not yet supported for: " + nameRef );
+                String nameRef =
+                    ((ContainerSegmentRefEntryType)entry).getContainerRef();
+                warnings_.add( "'ContainerSegmentRefEntry' " + // NOI18N
+                               XTCEFunctions.getText( "xml_element_not_yet_supported" ) + // NOI18N
+                               " " + // NOI18N
+                               nameRef );
 
             } else if ( entry.getClass() == StreamSegmentEntryType.class ) {
 
-                String nameRef = ((StreamSegmentEntryType)entry).getStreamRef();
-                warnings_.add( "Element StreamSegmentEntryType not yet supported for: " + nameRef );
+                String nameRef =
+                    ((StreamSegmentEntryType)entry).getStreamRef();
+                warnings_.add( "'StreamSegmentEntry' " + // NOI18N
+                               XTCEFunctions.getText( "xml_element_not_yet_supported" ) + // NOI18N
+                               " " + // NOI18N
+                               nameRef );
 
             } else if ( entry.getClass() == IndirectParameterRefEntryType.class ) {
 
-                warnings_.add( "Element IndirectParameterRefEntryType not yet supported" );
+                String nameRef =
+                    ((IndirectParameterRefEntryType)entry).getParameterInstance().getParameterRef();
+                warnings_.add( "'IndirectParameterRefEntry' " + // NOI18N
+                               XTCEFunctions.getText( "xml_element_not_yet_supported" ) + // NOI18N
+                               " " + // NOI18N
+                               nameRef );
 
             }
 
@@ -407,10 +424,8 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
         for ( int iii = 0; iii < repeatCount; ++iii ) {
 
             if ( repeatCount != 1 ) {
-                nextIncludedContent.setRepeatparameterInfo( "Repeat " +
-                                                            Long.toString( iii + 1 ) +
-                                                            " of " +
-                                                            Long.toString( repeatCount ) );
+                nextIncludedContent.setRepeatparameterInfo(
+                    XTCEFunctions.makeRepeatString( iii + 1, repeatCount ) );
             }
 
             //System.out.println( "Identified Container " +
@@ -484,10 +499,8 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
         for ( int iii = 0; iii < repeatCount; ++iii ) {
 
             if ( repeatCount != 1 ) {
-                content.setRepeatparameterInfo( "Repeat " +
-                                                Long.toString( iii + 1 ) +
-                                                " of " +
-                                                Long.toString( repeatCount ) );
+                content.setRepeatparameterInfo(
+                    XTCEFunctions.makeRepeatString( iii + 1, repeatCount ) );
             }
 
             contentList_.add( content );
@@ -523,7 +536,8 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
             }
 
             if ( aptRef == null ) {
-                warnings_.add( "No type reference found for Array Parameter " +
+                warnings_.add( XTCEFunctions.getText( "xml_array_type_not_found" ) + // NOI18N
+                               " " + // NOI18N
                                pObj.getName() );
                 return;
             }
@@ -536,13 +550,19 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
 
                 if ( pObj.isParameter() == true ) {
                     arrayParameterObject =
-                        new XTCEParameter( pObj.getName() + "[" + Long.toString( jjj ) + "]",
+                        new XTCEParameter( pObj.getName() +
+                                           "[" + // NOI18N
+                                           Long.toString( jjj ) +
+                                           "]", // NOI18N
                                            pObj.getSpaceSystemPath(),
                                            pObj.getParameterReference(),
                                            aptRef );
                 } else {
                     arrayParameterObject =
-                        new XTCEParameter( pObj.getName() + "[" + Long.toString( jjj ) + "]",
+                        new XTCEParameter( pObj.getName() +
+                                           "[" + // NOI18N
+                                           Long.toString( jjj ) +
+                                           "]", // NOI18N
                                            pObj.getSpaceSystemPath(),
                                            pObj.getMemberReference(),
                                            aptRef );
@@ -646,10 +666,8 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
         for ( int iii = 0; iii < repeatCount; ++iii ) {
 
             if ( repeatCount != 1 ) {
-                content.setRepeatparameterInfo( "Repeat " +
-                                                Long.toString( iii + 1 ) +
-                                                " of " +
-                                                Long.toString( repeatCount ) );
+                content.setRepeatparameterInfo(
+                    XTCEFunctions.makeRepeatString( iii + 1, repeatCount ) );
             }
 
             contentList_.add( content );
@@ -696,7 +714,7 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
 
         for ( Member member : members ) {
 
-            String newPath = parameter.getFullPath() + "." + member.getName();
+            String newPath = parameter.getFullPath() + "." + member.getName(); // NOI18N
             //System.out.println( "Identified Member " + newPath );
 
             XTCEParameter mObj = findParameter( newPath, container );

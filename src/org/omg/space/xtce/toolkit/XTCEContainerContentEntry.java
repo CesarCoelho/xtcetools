@@ -177,7 +177,7 @@ public class XTCEContainerContentEntry implements Comparable {
                                String          value,
                                XTCETelecommand tcContainer ) {
 
-        itemName    = ""; // not used yet??
+        itemName    = ""; // NOI18N
         fieldType   = FieldType.CONSTANT;
         telecommand = tcContainer;
         fixedSize   = size;
@@ -347,7 +347,7 @@ public class XTCEContainerContentEntry implements Comparable {
             case CONSTANT:
                 return "Constant"; // NOI18N
         }
-        return "";
+        return ""; // NOI18N
     }
 
     /** Retrieve the type of entry that this object represents in the overall
@@ -378,7 +378,7 @@ public class XTCEContainerContentEntry implements Comparable {
         } else if ( fieldType == FieldType.CONSTANT ) {
             return fixedSize;
         }
-        return "";
+        return ""; // NOI18N
     }
 
     /** Retrieve the initial/default value for this entry in the container
@@ -400,7 +400,7 @@ public class XTCEContainerContentEntry implements Comparable {
         } else if ( fieldType == FieldType.CONSTANT ) {
             return entryValue.toStringWithoutParameter();
         }
-        return "";
+        return ""; // NOI18N
     }
 
     /** Retrieve the start bit that this entry occupies in the container
@@ -514,14 +514,14 @@ public class XTCEContainerContentEntry implements Comparable {
     public String getConditions() {
 
         if ( ( conditions == null ) || ( conditions.isEmpty() ) ) {
-            return "";
+            return ""; // NOI18N
         }
 
         StringBuilder string = new StringBuilder();
 
         for ( XTCEContainerEntryValue condition : conditions ) {
             string.append( condition.toString() );
-            string.append( "," );
+            string.append( "," ); // NOI18N
         }
 
         return string.deleteCharAt( string.length() - 1).toString();
@@ -728,7 +728,7 @@ public class XTCEContainerContentEntry implements Comparable {
     /// This attribute is the name of the Parameter or Argument or an empty
     /// string if this field is an immutable constant in the container.
 
-    String itemName = "";
+    String itemName = ""; // NOI18N
 
     /// This attribute indicates which kind of field this entry refers to, with
     /// valid values of Parameter, Argument, Container, or Constant.
@@ -738,7 +738,7 @@ public class XTCEContainerContentEntry implements Comparable {
     /// The start bit of this entry in the content of the container, or an
     /// empty string if the start bit is not applicable for this entry.
 
-    String startBit = "";
+    String startBit = ""; // NOI18N
 
     /// Size of a fixed/constant field in the telecommand encoding
 
@@ -757,7 +757,7 @@ public class XTCEContainerContentEntry implements Comparable {
 
     /// This is the repeat entry parameter count condition
 
-    String repeatParameter = "";
+    String repeatParameter = ""; // NOI18N
 
     /// In the event that the fieldType = "Parameter", then this reference will
     /// contain the XTCEParameter object representing the Parameter.

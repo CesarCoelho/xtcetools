@@ -61,16 +61,17 @@ public class XTCEViewerAliasNamespaceDialog extends javax.swing.JDialog {
         cancelButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Select Alias Namespace");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/omg/space/xtce/toolkit/MessagesBundle"); // NOI18N
+        setTitle(bundle.getString("dialog_namespace_title")); // NOI18N
 
         instructionLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        instructionLabel1.setText("Choose the namespace to prefer on the display.");
+        instructionLabel1.setText(bundle.getString("dialog_namespace_instr1")); // NOI18N
 
         instructionLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        instructionLabel2.setText("Check the box to show all Aliases defined for Parameters/Arguments.");
+        instructionLabel2.setText(bundle.getString("dialog_namespace_instr3")); // NOI18N
 
         instructionLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        instructionLabel3.setText("OR");
+        instructionLabel3.setText(bundle.getString("dialog_namespace_instr2")); // NOI18N
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -99,7 +100,7 @@ public class XTCEViewerAliasNamespaceDialog extends javax.swing.JDialog {
                 .addContainerGap())
         );
 
-        nameSpaceLabel.setText("NameSpace");
+        nameSpaceLabel.setText(bundle.getString("dialog_namespace_entry")); // NOI18N
 
         nameSpaceField.setEnabled(false);
 
@@ -125,7 +126,7 @@ public class XTCEViewerAliasNamespaceDialog extends javax.swing.JDialog {
         );
 
         showAllCheckbox.setSelected(true);
-        showAllCheckbox.setText("Show All Namespaces");
+        showAllCheckbox.setText(bundle.getString("dialog_namespace_showall")); // NOI18N
         showAllCheckbox.setToolTipText("");
         showAllCheckbox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -133,7 +134,7 @@ public class XTCEViewerAliasNamespaceDialog extends javax.swing.JDialog {
             }
         });
 
-        okButton.setText("OK");
+        okButton.setText(bundle.getString("general_accept_text")); // NOI18N
         okButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         okButton.setMaximumSize(new java.awt.Dimension(75, 25));
         okButton.setMinimumSize(new java.awt.Dimension(75, 25));
@@ -144,7 +145,7 @@ public class XTCEViewerAliasNamespaceDialog extends javax.swing.JDialog {
             }
         });
 
-        cancelButton.setText("Cancel");
+        cancelButton.setText(bundle.getString("general_dismiss_text")); // NOI18N
         cancelButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         cancelButton.setMaximumSize(new java.awt.Dimension(75, 25));
         cancelButton.setMinimumSize(new java.awt.Dimension(75, 25));
@@ -160,9 +161,9 @@ public class XTCEViewerAliasNamespaceDialog extends javax.swing.JDialog {
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(okButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
-                .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(okButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -181,13 +182,10 @@ public class XTCEViewerAliasNamespaceDialog extends javax.swing.JDialog {
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(showAllCheckbox))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(showAllCheckbox, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(

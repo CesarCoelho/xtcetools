@@ -32,6 +32,7 @@ import org.omg.space.xtce.toolkit.XTCEContainerContentModel;
 import org.omg.space.xtce.toolkit.XTCEContainerEntryValue;
 import org.omg.space.xtce.toolkit.XTCEDatabase;
 import org.omg.space.xtce.toolkit.XTCEDatabaseException;
+import org.omg.space.xtce.toolkit.XTCEFunctions;
 import org.omg.space.xtce.toolkit.XTCEParameter;
 import org.omg.space.xtce.toolkit.XTCESpaceSystem;
 import org.omg.space.xtce.toolkit.XTCETMContainer;
@@ -729,15 +730,15 @@ public class ContainerProcessingTest {
                 } else if ( entry.getName().equals( "Basic_string_uint32" ) ) {
                     ++items;
                     if ( items == 8 ) {
-                        checkEntry( entry, "32", "48", "", "", "", "Repeat 1 of 5" );
+                        checkEntry( entry, "32", "48", "", "", "", XTCEFunctions.makeRepeatString( 1, 5 ) );
                     } else if ( items == 9 ) {
-                        checkEntry( entry, "32", "80", "", "", "", "Repeat 2 of 5" );
+                        checkEntry( entry, "32", "80", "", "", "", XTCEFunctions.makeRepeatString( 2, 5 ) );
                     } else if ( items == 10 ) {
-                        checkEntry( entry, "32", "112", "", "", "", "Repeat 3 of 5" );
+                        checkEntry( entry, "32", "112", "", "", "", XTCEFunctions.makeRepeatString( 3, 5 ) );
                     } else if ( items == 11 ) {
-                        checkEntry( entry, "32", "144", "", "", "", "Repeat 4 of 5" );
+                        checkEntry( entry, "32", "144", "", "", "", XTCEFunctions.makeRepeatString( 4, 5 ) );
                     } else if ( items == 12 ) {
-                        checkEntry( entry, "32", "176", "", "", "", "Repeat 5 of 5" );
+                        checkEntry( entry, "32", "176", "", "", "", XTCEFunctions.makeRepeatString( 5, 5 ) );
                     }
                 }
 
@@ -863,11 +864,11 @@ public class ContainerProcessingTest {
                 } else if ( entry.getName().equals( "TC_Parameter_Data" ) ) {
                     ++items;
                     if ( items == 21 ) {
-                        checkEntry( entry, "8", "144", "", "", "", "Repeat 1 of 3" );
+                        checkEntry( entry, "8", "144", "", "", "", XTCEFunctions.makeRepeatString( 1, 3 ) );
                     } else if ( items == 22 ) {
-                        checkEntry( entry, "8", "152", "", "", "", "Repeat 2 of 3" );
+                        checkEntry( entry, "8", "152", "", "", "", XTCEFunctions.makeRepeatString( 2, 3 ) );
                     } else if ( items == 23 ) {
-                        checkEntry( entry, "8", "160", "", "", "", "Repeat 3 of 3" );
+                        checkEntry( entry, "8", "160", "", "", "", XTCEFunctions.makeRepeatString( 3, 3 ) );
                     }
                 }
 

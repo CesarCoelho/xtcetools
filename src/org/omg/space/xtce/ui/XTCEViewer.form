@@ -2589,7 +2589,9 @@
     </Container>
     <Component class="javax.swing.JLabel" name="messagesOutputLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Messages"/>
+        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+          <ResourceString bundle="org/omg/space/xtce/toolkit/MessagesBundle.properties" key="messages_label" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+        </Property>
       </Properties>
       <AccessibilityProperties>
         <Property name="AccessibleContext.accessibleName" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">

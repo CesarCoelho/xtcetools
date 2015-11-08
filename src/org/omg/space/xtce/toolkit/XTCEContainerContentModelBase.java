@@ -190,9 +190,13 @@ abstract class XTCEContainerContentModelBase {
             result    = new BitSet( bitLength );
 
         } catch ( NumberFormatException ex ) {
-            throw new XTCEDatabaseException( currentEntry.itemName +
-                " does not have a raw value because it does not have a " +
-                "numeric size in bits" );
+            throw new XTCEDatabaseException(
+                XTCEFunctions.getText( "error_encdec_noraw_nosizeinbits" ) + // NOI18N
+                " " + // NOI18N
+                currentEntry.itemName +
+                " (" + // NOI18N
+                XTCEFunctions.getText( "general_numberexception" ) + // NOI18N
+                " )" ); // NOI18N
         }
 
         if ( binaryValues_ == null ) {
@@ -206,17 +210,43 @@ abstract class XTCEContainerContentModelBase {
 
             int startBit = Integer.parseInt( currentEntry.getStartBit() );
             if ( startBit > availBitsLastIndex ) {
-                throw new XTCEDatabaseException( "Binary too small to " +
-                    "extract " + currentEntry.itemName + " (size " +
-                    Integer.toString( availBits ) + " with start bit of " +
-                    Integer.toString( startBit ) + ")" );
+                throw new XTCEDatabaseException(
+                    XTCEFunctions.getText( "error_encdec_binarytoosmall" ) + // NOI18N
+                    " '" + // NOI18N
+                    currentEntry.itemName +
+                    "' (" + // NOI18N
+                    XTCEFunctions.getText( "error_encdec_binarysize" ) + // NOI18N
+                    " " + // NOI18N
+                    Integer.toString( availBits ) +
+                    " " + // NOI18N
+                    XTCEFunctions.getText( "error_encdec_itemstart" ) + // NOI18N
+                    " " + // NOI18N
+                    Integer.toString( startBit ) +
+                    " " + // NOI18N
+                    XTCEFunctions.getText( "error_encdec_itemlength" ) + // NOI18N
+                    " " + // NOI18N
+                    Integer.toString( bitLength ) +
+                    ")" ); // NOI18N
             }
 
             if ( ( startBit + bitLength ) > availBits ) {
-                throw new XTCEDatabaseException( "Binary too small to " +
-                    "extract " + currentEntry.itemName + " (size " +
-                    Integer.toString( availBits ) + " with entry size of " +
-                    Integer.toString( startBit + bitLength ) + ")" );
+                throw new XTCEDatabaseException(
+                    XTCEFunctions.getText( "error_encdec_binarytoosmall" ) + // NOI18N
+                    " '" + // NOI18N
+                    currentEntry.itemName +
+                    "' (" + // NOI18N
+                    XTCEFunctions.getText( "error_encdec_binarysize" ) + // NOI18N
+                    " " + // NOI18N
+                    Integer.toString( availBits ) +
+                    " " + // NOI18N
+                    XTCEFunctions.getText( "error_encdec_itemstart" ) + // NOI18N
+                    " " + // NOI18N
+                    Integer.toString( startBit ) +
+                    " " + // NOI18N
+                    XTCEFunctions.getText( "error_encdec_itemlength" ) + // NOI18N
+                    " " + // NOI18N
+                    Integer.toString( bitLength ) +
+                    ")" ); // NOI18N
             }
 
             for ( int iii = 0; iii < bitLength; ++iii ) {
@@ -224,8 +254,10 @@ abstract class XTCEContainerContentModelBase {
             }
 
         } catch ( NumberFormatException ex ) {
-            throw new XTCEDatabaseException( currentEntry.itemName +
-                " Raw value not applicable or has not been set" );
+            throw new XTCEDatabaseException(
+                XTCEFunctions.getText( "error_encdec_nostartbit" ) + // NOI18N
+                " " + // NOI18N
+                currentEntry.itemName );
         }
 
         //int bitCount = bitLength;
@@ -267,13 +299,13 @@ abstract class XTCEContainerContentModelBase {
         final List<XTCEContainerEntryValue> conditions =
             entry.getConditionList();
 
-        // short circuit if there are no conditionals to evaluate
+        // short circuit if there are no conditionals to evaluate, in which
+        // case the conditions can be said to always be satisfied
 
         if ( conditions.isEmpty() == true ) {
             return true;
         }
 
-        //FieldType entryType = entry.getEntryType();
         long satisfied = 0;
 
         //System.out.println( "Conditions: " +
@@ -286,46 +318,12 @@ abstract class XTCEContainerContentModelBase {
             // TODO Make this so constant parameters will evaluate even if they are
             // not on the table.
 
-            //String ref  = condition.getItemFullPath();
-            //String name = XTCEFunctions.getNameFromPathReferenceString( ref );
-            //String path = XTCEFunctions.getPathNameFromReferenceString( ref );
-
-            //XTCESpaceSystem spaceSystem = spaceSystemsHashTable_.get( path );
-            //if ( spaceSystem != null ) {
-            //    if ( spaceSystem.isTelemetryParameter( name ) == true ) {
-            //        try {
-            //            XTCEParameter parameter = spaceSystem.getTelemetryParameter( name );
-            //            if ( parameter.getDataSource().equals( "constant" ) == true ) {
-            //                XTCEContainerEntryValue val =
-            //                    new XTCEContainerEntryValue( parameter, parameter.getInitialValue(), "==", "Calibrated" );
-            //                if ( val.toStringWithoutParameter().equals( condition.toStringWithoutParameter() ) == true ) {
-            //                    ++satisfied;
-            //                    continue;
-            //                }
-            //            }
-            //        } catch ( XTCEDatabaseException ex ) {
-            //            // this can't happen because if the true test above
-            //        }
-            //    }
-            //}
-
             for ( final XTCEContainerEntryValue listEntry : contentValues_ ) {
                 if ( listEntry.isCompatibleWith( condition ) == true ) {
                     ++satisfied;
                 }
-                //final String entryValue    = listEntry.getValue();
-                //final String parameterName = listEntry.getItemFullPath();
-                //if ( ( entryValue == null ) || ( entryValue.isEmpty() == true ) ) {
-                //    continue;
-                //}
-                //System.out.println( parameterName + " and " + condition.getItemFullPath() );
-                //if ( parameterName.equals( condition.getItemFullPath() ) == false ) {
-                //    continue;
-                //}
-                //if ( entryValue.equals( condition.toStringWithoutParameter() ) == true ) {
-                //    ++satisfied;
-                //}
             }
+
         }
 
         //System.out.println( "Conditions Satisfied " +
@@ -356,7 +354,7 @@ abstract class XTCEContainerContentModelBase {
         Collections.sort( contentList_ );
 
         for ( XTCEContainerContentEntry item : tempList ) {
-            item.setStartBit( "" );
+            item.setStartBit( "" ); // NOI18N
         }
 
     }
@@ -367,7 +365,9 @@ abstract class XTCEContainerContentModelBase {
         DimensionList dimListElement = refEntry.getDimensionList();
 
         if ( dimListElement.getSize() == null ) {
-            warnings_.add( "Element DimensionList/Dimension not yet supported for: " +
+            warnings_.add( "'DimensionList/Dimension' " + // NOI18N
+                           XTCEFunctions.getText( "xml_element_not_yet_supported" ) + // NOI18N
+                           " " + // NOI18N
                            contentEntry.itemName );
             return 1;
         }
@@ -403,7 +403,8 @@ abstract class XTCEContainerContentModelBase {
                     parameterInstance = findParameter( parameterRef,
                                                        contentEntry.getHoldingContainer() );
                 } else {
-                    throw new XTCEDatabaseException( "Entry type not yet supported" );
+                    throw new XTCEDatabaseException(
+                        XTCEFunctions.getText( "error_encdec_entrynotsupported" ) ); // NOI18N
                 }
 
                 //contentEntry.setRepeatparameterInfo( "==" +
@@ -411,20 +412,26 @@ abstract class XTCEContainerContentModelBase {
                 //                                     ( useCalValue == true ? "{cal}" : "{uncal}" ) );
 
                 return dynamicCountFromUserValue( parameterInstance,
-                                                  ( useCalValue == true ? "Calibrated" : "Uncalibrated" ) );
+                                                  ( useCalValue == true ? "Calibrated" : "Uncalibrated" ) ); // NOI18N
 
             } catch ( Exception ex ) {
 
-                warnings_.add( "Element DimensionList/Size/DynamicValue could not be evaluated for: " +
+                warnings_.add( "'DimensionList/Size/DynamicValue' " + // NOI18N
+                               XTCEFunctions.getText( "xml_element_error_evaluation" ) + // NOI18N
+                               " " + // NOI18N
                                contentEntry.itemName +
-                               " because: " +
+                               " " + // NOI18N
+                               XTCEFunctions.getText( "general_because" ) + // NOI18N
+                               " " + // NOI18N
                                ex.getLocalizedMessage() );
 
             }
 
         } else {
 
-            warnings_.add( "Element DimensionList/Size/DiscreteLookupList not yet supported for: " +
+            warnings_.add( "'DimensionList/Size/DiscreteLookupList' " + // NOI18N
+                           XTCEFunctions.getText( "xml_element_not_yet_supported" ) + // NOI18N
+                           " " + // NOI18N
                            contentEntry.itemName );
 
         }
@@ -473,28 +480,35 @@ abstract class XTCEContainerContentModelBase {
                     parameterInstance = findParameter( parameterRef,
                                                        contentEntry.getHoldingContainer() );
                 } else {
-                    throw new XTCEDatabaseException( "Entry type not yet supported" );
+                    throw new XTCEDatabaseException(
+                        XTCEFunctions.getText( "error_encdec_entrynotsupported" ) ); // NOI18N
                 }
 
-                contentEntry.setRepeatparameterInfo( "==" +
+                contentEntry.setRepeatparameterInfo( "==" + // NOI18N
                                                      parameterInstance.getName() +
-                                                     ( useCalValue == true ? "{cal}" : "{uncal}" ) );
+                                                     ( useCalValue == true ? "{cal}" : "{uncal}" ) ); // NOI18N
 
                 return dynamicCountFromUserValue( parameterInstance,
-                                                  ( useCalValue == true ? "Calibrated" : "Uncalibrated" ) );
+                                                  ( useCalValue == true ? "Calibrated" : "Uncalibrated" ) ); // NOI18N
 
             } catch ( Exception ex ) {
 
-                warnings_.add( "Element RepeatEntry/DynamicEntry could not be evaluated for: " +
+                warnings_.add( "'RepeatEntry/DynamicEntry' " + // NOI18N
+                               XTCEFunctions.getText( "xml_element_error_evaluation" ) + // NOI18N
+                               " " + // NOI18N
                                contentEntry.itemName +
-                               " because: " +
+                               " " + // NOI18N
+                               XTCEFunctions.getText( "general_because" ) + // NOI18N
+                               " " + // NOI18N
                                ex.getLocalizedMessage() );
 
             }
 
         } else {
 
-            warnings_.add( "Element RepeatEntry/DiscreteLookupList not yet supported for: " +
+            warnings_.add( "'RepeatEntry/DiscreteLookupList' " + // NOI18N
+                           XTCEFunctions.getText( "xml_element_not_yet_supported" ) + // NOI18N
+                           " " + // NOI18N
                            contentEntry.itemName );
 
         }
@@ -523,37 +537,35 @@ abstract class XTCEContainerContentModelBase {
             }
 
             if ( entry.getItemFullPath().equals( paramFullPath ) == true ) {
-                if ( valueObj.getOperator().equals( "==" ) == true ) {
+
+                if ( valueObj.getOperator().equals( "==" ) == true ) { // NOI18N
                     try {
                         return Long.parseLong( valueObj.getCalibratedValue() );
                     } catch ( NumberFormatException ex ) {
                         warnings_.add(
-                            "Numeric count not valid for Dynamic Repeat '" +
+                            XTCEFunctions.getText( "xml_dynamic_count_numeric_error" ) + // NOI18N
+                            " " + // NOI18N
+                            item.getName() +
+                            " (" + // NOI18N
+                            XTCEFunctions.getText( "general_value" ) + // NOI18N
+                            " '" + // NOI18N
                             valueObj.getCalibratedValue() +
-                            "' for " + item.getName() );
+                            "')" ); // NOI18N
+                        return 1;
                     }
                 }
+
                 warnings_.add(
-                    "No value for Dynamic Repeat counter item '" +
-                    item.getName() + "', assuming just 1" );
+                    XTCEFunctions.getText( "xml_dynamic_count_missing_error" ) + // NOI18N
+                    " " + // NOI18N
+                    item.getName() +
+                    ", " + // NOI18N
+                    XTCEFunctions.getText( "xml_dynamic_count_assume1" ) ); // NOI18N
                 return 1;
+
             }
 
         }
-        //for ( XTCEContainerEntryValue valueObj : userValues_ ) {
-        //    if ( valueObj.getItemFullPath().equals( paramFullPath ) == true ) {
-        //        if ( valueObj.getComparisonForm().equals( form ) == true ) {
-        //            String setValue = valueObj.getAssignedValue();
-        //            try {
-        //                return Long.parseLong( setValue );
-        //            } catch ( NumberFormatException ex ) {
-        //                warnings_.add(
-        //                    "Numeric count not valid for Dynamic Repeat '" +
-        //                    setValue + "' for " + item.getName() );
-        //            }
-        //        }
-        //    }
-        //}
 
         return 1;
 
@@ -563,18 +575,12 @@ abstract class XTCEContainerContentModelBase {
                                       MatchCriteriaType restrictions,
                                       String            parentSpaceSystemPath ) {
 
-        //System.out.println( container.getName() );
-        //System.out.println( container.getFullPath() );
-
         if ( parentSpaceSystemPath == null ) {
             //System.out.println( "first one, returning" );
             return;
         }
 
-        //System.out.println( parentSpaceSystemPath );
-
         if ( restrictions == null ) {
-            //System.out.println( "no restrictions, returning" );
             return;
         }
 
@@ -593,21 +599,24 @@ abstract class XTCEContainerContentModelBase {
 
         } else if ( restrictions.getBooleanExpression() != null ) {
 
-            warnings_.add( "Element RestrictionCriteria/BooleanExpression in container " +
-                           container.getName() +
-                           " is not yet supported" );
+            warnings_.add( "'RestrictionCriteria/BooleanExpression' " + // NOI18N
+                           XTCEFunctions.getText( "xml_element_not_yet_supported" ) + // NOI18N
+                           " " + // NOI18N
+                           container.getName() );
 
         } else if ( restrictions.getCustomAlgorithm() != null ) {
 
-            warnings_.add( "Element RestrictionCriteria/CustomAlgorithm in container " +
-                           container.getName() +
-                           " is not yet supported" );
+            warnings_.add( "'RestrictionCriteria/CustomAlgorithm' " + // NOI18N
+                           XTCEFunctions.getText( "xml_element_not_yet_supported" ) + // NOI18N
+                           " " + // NOI18N
+                           container.getName() );
 
         } else {
 
-            warnings_.add( "Element RestrictionCriteria in container " +
-                           container.getName() +
-                           " is incomplete" );
+            warnings_.add( "'RestrictionCriteria' " + // NOI18N
+                           XTCEFunctions.getText( "xml_incomplete_element" ) + // NOI18N
+                           " " + // NOI18N
+                           container.getName() );
 
         }
 
@@ -630,12 +639,21 @@ abstract class XTCEContainerContentModelBase {
                             new XTCEContainerEntryValue( entry.getParameter(),
                                                          compare.getValue(),
                                                          compare.getComparisonOperator(),
-                                                         ( compare.isUseCalibratedValue() ? "Calibrated" : "Uncalibrated" ) );
+                                                         ( compare.isUseCalibratedValue() ? "Calibrated" : "Uncalibrated" ) ); // NOI18N
                         if ( entry.getValue() != null ) {
                             if ( entry.getValue().isCompatibleWith( valueObj ) == false ) {
-                                warnings_.add( entry.getName() + " binary value " +
-                                    "applied violates restricted value, perhaps this " +
-                                    "is the wrong container." );
+                                warnings_.add( entry.getName() +
+                                    ": " + // NOI18N
+                                    XTCEFunctions.getText( "error_encdec_value_violation" ) + // NOI18N
+                                    " (" + // NOI18N
+                                    XTCEFunctions.getText( "error_encdec_value_request" ) + // NOI18N
+                                    " '" + // NOI18N
+                                    entry.getValue().getCalibratedValue() +
+                                    "' " + // NOI18N
+                                    XTCEFunctions.getText( "error_encdec_value_restriction" ) + // NOI18N
+                                    " '" + // NOI18N
+                                    valueObj.getCalibratedValue() +
+                                    "')" ); // NOI18N
                                 found = true;
                                 valid_ = false;
                                 continue;
@@ -649,14 +667,25 @@ abstract class XTCEContainerContentModelBase {
             }
 
             if ( found == false ) {
-                throw new XTCEDatabaseException( "Parameter does not appear in container" );
+                throw new XTCEDatabaseException(
+                    XTCEFunctions.getText( "error_encdec_restrict_param" ) + // NOI18N
+                    " " + // NOI18N
+                    compareParameter.getName() +
+                    " " + // NOI18N
+                    XTCEFunctions.getText( "error_encdec_restrict_cont" ) + // NOI18N
+                    " " + // NOI18N
+                    container.getName() );
             }
 
         } catch ( XTCEDatabaseException ex ) {
 
-            warnings_.add( "Adding Restriction failed for " +
+            warnings_.add(
+                XTCEFunctions.getText( "error_encdec_restrict_failed" ) + // NOI18N
+                " " + // NOI18N
                 compare.getParameterRef() +
-                " Reason: " +
+                ", " + // NOI18N
+                XTCEFunctions.getText( "general_because" ) + // NOI18N
+                " " + // NOI18N
                 ex.getLocalizedMessage() );
 
         }
@@ -686,21 +715,24 @@ abstract class XTCEContainerContentModelBase {
 
         } else if ( entry.getIncludeCondition().getBooleanExpression() != null ) {
 
-            warnings_.add( "Element IncludeCondition/BooleanExpression in container " +
-                           container.getName() +
-                           " is not yet supported" );
+            warnings_.add( "'IncludeCondition/BooleanExpression' " + // NOI18N
+                           XTCEFunctions.getText( "xml_element_not_yet_supported" ) + // NOI18N
+                           " " + // NOI18N
+                           container.getName() );
 
         } else if ( entry.getIncludeCondition().getCustomAlgorithm() != null ) {
 
-            warnings_.add( "Element IncludeCondition/CustomAlgorithm in container " +
-                           container.getName() +
-                           " is not yet supported" );
+            warnings_.add( "'IncludeCondition/CustomAlgorithm' " + // NOI18N
+                           XTCEFunctions.getText( "xml_element_not_yet_supported" ) + // NOI18N
+                           " " + // NOI18N
+                           container.getName() );
 
         } else {
 
-            warnings_.add( "Element IncludeCondition in container " +
-                           container.getName() +
-                           " is incomplete" );
+            warnings_.add( "'IncludeCondition' " + // NOI18N
+                           XTCEFunctions.getText( "xml_incomplete_element" ) + // NOI18N
+                           " " + // NOI18N
+                           container.getName() );
 
         }
 
@@ -712,16 +744,20 @@ abstract class XTCEContainerContentModelBase {
 
         try {
 
-            XTCEParameter compareParameter = findParameter( compare.getParameterRef(),
-                                                            container );
+            XTCEParameter compareParameter =
+                findParameter( compare.getParameterRef(), container );
 
             content.setCondition( compareParameter, compare );
 
         } catch ( XTCEDatabaseException ex ) {
 
-            warnings_.add( "Adding Include Condition failed for " +
+            warnings_.add(
+                XTCEFunctions.getText( "error_encdec_include_failed" ) + // NOI18N
+                " " + // NOI18N
                 compare.getParameterRef() +
-                " Reason: " +
+                ", " + // NOI18N
+                XTCEFunctions.getText( "general_because" ) + // NOI18N
+                " " + // NOI18N
                 ex.getLocalizedMessage() );
 
         }
@@ -733,7 +769,8 @@ abstract class XTCEContainerContentModelBase {
     }
 
     protected XTCEParameter findParameter( String          parameterRef,
-                                           XTCENamedObject currentContainer ) throws XTCEDatabaseException {
+                                           XTCENamedObject currentContainer )
+        throws XTCEDatabaseException {
 
         String currentSpaceSystemPath = currentContainer.getSpaceSystemPath();
         String parameterPath = XTCEFunctions.resolvePathReference( currentSpaceSystemPath,
@@ -752,9 +789,9 @@ abstract class XTCEContainerContentModelBase {
                 }
             }
 
-            idx = parameterPath.lastIndexOf( '/' );
+            idx = parameterPath.lastIndexOf( '/' ); // NOI18N
             if ( idx > 0 ) {
-                parameterPath = parameterPath.substring( 0, idx ) + "." + parameterPath.substring( idx + 1 );
+                parameterPath = parameterPath.substring( 0, idx ) + "." + parameterPath.substring( idx + 1 ); // NOI18N
                 //System.out.println( "New search path " + parameterPath );
                 parameterPath = XTCEFunctions.resolvePathReference( currentSpaceSystemPath,
                                                                     parameterPath );
@@ -764,10 +801,14 @@ abstract class XTCEContainerContentModelBase {
 
         } while ( idx > 0 );
 
-        throw new XTCEDatabaseException( "Cannot find Parameter Reference " +
-                                         parameterRef +
-                                         " in container " +
-                                         currentContainer.getName() );
+        throw new XTCEDatabaseException(
+            XTCEFunctions.getText( "error_encdec_cannot_find_parameter" ) + // NOI18N
+            " " + // NOI18N
+            parameterRef +
+            " " + // NOI18N
+            XTCEFunctions.getText( "error_encdec_in_container" ) + // NOI18N
+            " " + // NOI18N
+            currentContainer.getName() );
 
     }
 
@@ -786,10 +827,14 @@ abstract class XTCEContainerContentModelBase {
             return spaceSystem.getContainer( containerName );
         }
 
-        throw new XTCEDatabaseException( "Space System " +
-                                         spaceSystemPath +
-                                         " not found when looking for container " +
-                                         containerName );
+        throw new XTCEDatabaseException(
+            XTCEFunctions.getText( "ss_name_text" ) + // NOI18N
+            " " + // NOI18N
+            spaceSystemPath +
+            " " + // NOI18N
+            XTCEFunctions.getText( "error_encdec_looking_for_container" ) + // NOI18N
+            " " + // NOI18N
+            containerName );
 
     }
 
@@ -808,10 +853,14 @@ abstract class XTCEContainerContentModelBase {
             return spaceSystem.getTelecommand( containerName );
         }
 
-        throw new XTCEDatabaseException( "Space System " +
-                                         spaceSystemPath +
-                                         " not found when looking for telecommand " +
-                                         containerName );
+        throw new XTCEDatabaseException(
+            XTCEFunctions.getText( "ss_name_text" ) + // NOI18N
+            " " + // NOI18N
+            spaceSystemPath +
+            " " + // NOI18N
+            XTCEFunctions.getText( "error_encdec_looking_for_telecommand" ) + // NOI18N
+            " " + // NOI18N
+            containerName );
 
     }
 
@@ -837,9 +886,18 @@ abstract class XTCEContainerContentModelBase {
                                                  rawValue );
                 if ( entry.getValue() != null ) {
                     if ( entry.getValue().isCompatibleWith( valueObj ) == false ) {
-                        warnings_.add( entry.getName() + " binary value " +
-                            "applied violates restricted value, perhaps this " +
-                            "is the wrong container." );
+                        warnings_.add( entry.getName() +
+                            ": " + // NOI18N
+                            XTCEFunctions.getText( "error_encdec_value_violation" ) + // NOI18N
+                            " (" + // NOI18N
+                            XTCEFunctions.getText( "error_encdec_value_request" ) + // NOI18N
+                            " '" + // NOI18N
+                            entry.getValue().getCalibratedValue() +
+                            "' " + // NOI18N
+                            XTCEFunctions.getText( "error_encdec_value_restriction" ) + // NOI18N
+                            " '" + // NOI18N
+                            valueObj.getCalibratedValue() +
+                            "')" ); // NOI18N
                         valid_ = false;
                         return;
                     }
@@ -852,9 +910,18 @@ abstract class XTCEContainerContentModelBase {
                                                  rawValue );
                 if ( entry.getValue() != null ) {
                     if ( entry.getValue().isCompatibleWith( valueObj ) == false ) {
-                        warnings_.add( entry.getName() + " binary value " +
-                            "applied violates restricted value, perhaps this " +
-                            "is the wrong container." );
+                        warnings_.add( entry.getName() +
+                            ": " + // NOI18N
+                            XTCEFunctions.getText( "error_encdec_value_violation" ) + // NOI18N
+                            " (" + // NOI18N
+                            XTCEFunctions.getText( "error_encdec_value_request" ) + // NOI18N
+                            " '" + // NOI18N
+                            entry.getValue().getCalibratedValue() +
+                            "' " + // NOI18N
+                            XTCEFunctions.getText( "error_encdec_value_restriction" ) + // NOI18N
+                            " '" + // NOI18N
+                            valueObj.getCalibratedValue() +
+                            "')" ); // NOI18N
                         valid_ = false;
                         return;
                     }
@@ -883,9 +950,18 @@ abstract class XTCEContainerContentModelBase {
                 if ( valueObj.getItemFullPath().equals( entry.getParameter().getFullPath() ) == true ) {
                     if ( entry.getValue() != null ) {
                         if ( entry.getValue().isCompatibleWith( valueObj ) == false ) {
-                            warnings_.add( entry.getName() + " user value " +
-                                "applied violates restricted value, perhaps this " +
-                                "is the wrong container." );
+                            warnings_.add( entry.getName() +
+                                ": " + // NOI18N
+                                XTCEFunctions.getText( "error_encdec_value_violation" ) + // NOI18N
+                                " (" + // NOI18N
+                                XTCEFunctions.getText( "error_encdec_value_request" ) + // NOI18N
+                                " '" + // NOI18N
+                                entry.getValue().getCalibratedValue() +
+                                "' " + // NOI18N
+                                XTCEFunctions.getText( "error_encdec_value_restriction" ) + // NOI18N
+                                " '" + // NOI18N
+                                valueObj.getCalibratedValue() +
+                                "')" ); // NOI18N
                             valid_ = false;
                             return;
                         }
@@ -900,9 +976,18 @@ abstract class XTCEContainerContentModelBase {
                 if ( valueObj.getItemFullPath().equals( entry.getArgument().getFullPath() ) == true ) {
                     if ( entry.getValue() != null ) {
                         if ( entry.getValue().isCompatibleWith( valueObj ) == false ) {
-                            warnings_.add( entry.getName() + " user value " +
-                                "applied violates restricted value, perhaps this " +
-                                "is the wrong container." );
+                            warnings_.add( entry.getName() +
+                                ": " + // NOI18N
+                                XTCEFunctions.getText( "error_encdec_value_violation" ) + // NOI18N
+                                " (" + // NOI18N
+                                XTCEFunctions.getText( "error_encdec_value_request" ) + // NOI18N
+                                " '" + // NOI18N
+                                entry.getValue().getCalibratedValue() +
+                                "' " + // NOI18N
+                                XTCEFunctions.getText( "error_encdec_value_restriction" ) + // NOI18N
+                                " '" + // NOI18N
+                                valueObj.getCalibratedValue() +
+                                "')" ); // NOI18N
                             valid_ = false;
                             return;
                         }
@@ -923,17 +1008,23 @@ abstract class XTCEContainerContentModelBase {
                                 long                      containerStartBit ) {
 
         // not present means 0 from previous entry
-        String refLocation = "previousEntry";
-        String offsetInBits = "0";
+        String refLocation = "previousEntry"; // NOI18N
+        String offsetInBits = "0"; // NOI18N
 
         if ( pRefEntry.getLocationInContainerInBits() != null ) {
             refLocation = pRefEntry.getLocationInContainerInBits().getReferenceLocation();
             if ( pRefEntry.getLocationInContainerInBits().getFixedValue() != null ) {
                 offsetInBits = pRefEntry.getLocationInContainerInBits().getFixedValue();
             } else if ( pRefEntry.getLocationInContainerInBits().getDynamicValue() != null ) {
-                warnings_.add( "Element LocationInContainerInBits/DynamicValue not yet supported for: " + contentEntry.itemName );
+                warnings_.add( "'LocationInContainerInBits/DynamicValue' " + // NOI18N
+                               XTCEFunctions.getText( "xml_element_not_yet_supported" ) + // NOI18N
+                               " " + // NOI18N
+                               contentEntry.itemName );
             } else if ( pRefEntry.getLocationInContainerInBits().getDiscreteLookupList() != null ) {
-                warnings_.add( "Element LocationInContainerInBits/DiscreteLookupList not yet supported for: " + contentEntry.itemName );
+                warnings_.add( "'LocationInContainerInBits/DiscreteLookupList' " + // NOI18N
+                               XTCEFunctions.getText( "xml_element_not_yet_supported" ) + // NOI18N
+                               " " + // NOI18N
+                               contentEntry.itemName );
             }
         }
 
@@ -943,28 +1034,31 @@ abstract class XTCEContainerContentModelBase {
             rawSizeInBitsLong = Long.parseLong( contentEntry.getRawSizeInBits() );
         }
 
-        if ( refLocation.equals( "previousEntry" ) == true ) {
+        if ( refLocation.equals( "previousEntry" ) == true ) { // NOI18N
             long start = currentStartBit.get() + offsetInBitsLong;
             //System.out.println( "previousEntry offset resolved to " + Long.toString( start ) );
             if ( isEntryNeedingStartBit( contentEntry ) == true ) {
                 contentEntry.setStartBit( start );
             }
             currentStartBit.set( start + rawSizeInBitsLong );
-        } else if ( refLocation.equals( "containerStart" ) == true ) {
+        } else if ( refLocation.equals( "containerStart" ) == true ) { // NOI18N
             long start = containerStartBit + offsetInBitsLong;
             //System.out.println( "containerStart offset resolved to " + Long.toString( start ) );
             if ( isEntryNeedingStartBit( contentEntry ) == true ) {
                 contentEntry.setStartBit( start );
             }
             currentStartBit.set( start + rawSizeInBitsLong );
-        } else if ( refLocation.equals( "containerEnd") == true ) {
+        } else if ( refLocation.equals( "containerEnd") == true ) { // NOI18N
             if ( isEntryNeedingStartBit( contentEntry ) == true ) {
-                contentEntry.setStartBit( "E" + Long.toString( offsetInBitsLong ) );
+                contentEntry.setStartBit( "E" + Long.toString( offsetInBitsLong ) ); // NOI18N
             }
             // do not set the entry to follow here???
             // could be a problem if someone does previousEntry...
-        } else if ( refLocation.equals( "nextEntry" ) == true ){
-            warnings_.add( "Element LocationInContainerInBits/@nextEntry not yet supported for: " + contentEntry.itemName );
+        } else if ( refLocation.equals( "nextEntry" ) == true ) { // NOI18N
+            warnings_.add( "'LocationInContainerInBits/@nextEntry' " + // NOI18N
+                           XTCEFunctions.getText( "xml_element_not_yet_supported" ) + // NOI18N
+                           " " + // NOI18N
+                           contentEntry.itemName );
         }
 
     }
@@ -984,7 +1078,7 @@ abstract class XTCEContainerContentModelBase {
 
         for ( int iii = contentList_.size() - 1; iii > containerStartIndex; --iii ) {
             if ( ( contentList_.get( iii ).getStartBit().isEmpty()         == false ) &&
-                 ( contentList_.get( iii ).getStartBit().startsWith( "E" ) == false ) ) {
+                 ( contentList_.get( iii ).getStartBit().startsWith( "E" ) == false ) ) { // NOI18N
                 long startBit   = Long.parseLong( contentList_.get( iii ).getStartBit() );
                 long sizeInBits = Long.parseLong( contentList_.get( iii ).getRawSizeInBits() );
                 if ( containerEndBit < ( startBit + sizeInBits ) ) {
@@ -1005,7 +1099,7 @@ abstract class XTCEContainerContentModelBase {
         //System.out.println( "Processing end from index " + Long.toString( containerStartIndex + 1 ) + " to " + Long.toString( contentList_.size() - 1 ) );
 
         for ( int iii = contentList_.size() - 1; iii > containerStartIndex; --iii ) {
-            if ( contentList_.get( iii ).getStartBit().startsWith( "E" ) == true ) {
+            if ( contentList_.get( iii ).getStartBit().startsWith( "E" ) == true ) { // NOI18N
                 endList.add( contentList_.get( iii ) );
                 contentList_.remove( contentList_.get( iii ) );
             }
@@ -1015,7 +1109,7 @@ abstract class XTCEContainerContentModelBase {
         // them back to the content list at the end.
 
         for ( XTCEContainerContentEntry entry : endList ) {
-            String sb      = entry.getStartBit().replaceFirst( "E", "" );
+            String sb      = entry.getStartBit().replaceFirst( "E", "" ); // NOI18N
             long   offset  = Long.parseLong( sb );
             long   rawsize = Long.parseLong( entry.getRawSizeInBits() );
             entry.setStartBit( containerEndBit - offset );
@@ -1039,11 +1133,16 @@ abstract class XTCEContainerContentModelBase {
                 for ( long iii = startBit; iii < ( startBit + sizeInBits ); ++iii ) {
                     Long bit = iii;
                     if ( usageMap.containsKey( bit ) == true ) {
-                        warnings_.add( "Container Item " +
+                        warnings_.add( XTCEFunctions.getText( "warning_encdec_containeritem" ) + // NOI18N
+                                       " " + // NOI18N
                                        entry.itemName +
-                                       " overlaps " +
+                                       " " + // NOI18N
+                                       XTCEFunctions.getText( "warning_encdec_overlapsitem" ) + // NOI18N
+                                       " " + // NOI18N
                                        usageMap.get( bit ) +
-                                       " at bit " +
+                                       " " + // NOI18N
+                                       XTCEFunctions.getText( "warning_encdec_atbitpos" ) + // NOI18N
+                                       " " + // NOI18N
                                        bit.toString() );
                     } else {
                         usageMap.put( bit, entry.itemName );
@@ -1099,7 +1198,7 @@ abstract class XTCEContainerContentModelBase {
     /// Flag indicating if false conditional containers should be drilled into
     /// when processing, saves a lot of time if not done for certain packets.
 
-    boolean showAllConditions_ = false;
+    protected boolean showAllConditions_ = false;
 
     /** This class is a holder for the running start bit so that it can be
      * updated in a reference that is passed down several functions deep.

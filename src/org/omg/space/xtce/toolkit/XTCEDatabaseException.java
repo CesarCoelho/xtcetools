@@ -127,7 +127,7 @@ public class XTCEDatabaseException extends Exception {
         for ( int iii = 0; iii < messages.size(); ++iii ) {
            sb.append( messages.get( iii ) );
            if ( iii < ( messages.size() - 1 ) ) {
-               sb.append( "\n" );
+               sb.append( System.getProperty( "line.separator" ) ); // NOI18N
            }
         }
         return sb.toString();

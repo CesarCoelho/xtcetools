@@ -102,7 +102,7 @@ public abstract class XTCENamedObject implements Comparable {
      */
 
     public final String getFullPath() {
-        return path_ + "/" + getName();
+        return path_ + "/" + getName(); // NOI18N
     }
 
     /** Retrieve the Space System path that contains this object in the XTCE
@@ -127,7 +127,7 @@ public abstract class XTCENamedObject implements Comparable {
      */
 
     public final String getSpaceSystemName() {
-        int idx = path_.lastIndexOf( '/' );
+        int idx = path_.lastIndexOf( '/' ); // NOI18N
         return path_.substring( idx + 1 );
     }
 
@@ -299,7 +299,7 @@ public abstract class XTCENamedObject implements Comparable {
 
     protected final String getPrimaryLongDescription( DescriptionType obj ) {
         if ( obj == null || obj.getLongDescription() == null ) {
-            return "";
+            return ""; // NOI18N
         }
         return obj.getLongDescription();
     }
@@ -348,8 +348,8 @@ public abstract class XTCENamedObject implements Comparable {
         for ( AliasSetType.Alias entry : list ) {
 
             // gather the alias info and add it to a temporary list
-            String name = ( entry.getAlias()     == null ? "" : entry.getAlias() );
-            String ns   = ( entry.getNameSpace() == null ? "" : entry.getNameSpace() );
+            String name = ( entry.getAlias()     == null ? "" : entry.getAlias() ); // NOI18N
+            String ns   = ( entry.getNameSpace() == null ? "" : entry.getNameSpace() ); // NOI18N
             XTCEAlias aliasObj = new XTCEAlias( name, ns );
             boolean foundInCurrentElement = false;
             for ( XTCEAlias existingObj : aliasList_ ) {

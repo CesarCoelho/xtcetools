@@ -68,7 +68,10 @@ public class XTCEDocumentMarshaller {
             //writer.setPrefix( "xtce", XTCEConstants.XTCE_NAMESPACE );
 
         } catch ( Exception ex ) {
-            throw new XTCEDatabaseException( "Unable to create JAXB XML Context: " + ex.getCause() );
+            throw new XTCEDatabaseException(
+                XTCEFunctions.getText( "xml_jaxbcontext_error" ) + // NOI18N
+                ": " + // NOI18N
+                ex.getLocalizedMessage() );
         }
 
     }
@@ -84,7 +87,10 @@ public class XTCEDocumentMarshaller {
             //Element element = doc.getDocumentElement();
             return stream.toString();
         } catch ( Exception ex ) {
-            throw new XTCEDatabaseException( "Failed to create XML string from element" );
+            throw new XTCEDatabaseException(
+                XTCEFunctions.getText( "xml_marshal_error_string" ) + // NOI18N
+                " " + // NOI18N
+                ex.getLocalizedMessage() );
         }
 
     }

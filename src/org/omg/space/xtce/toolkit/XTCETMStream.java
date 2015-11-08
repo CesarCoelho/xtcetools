@@ -214,8 +214,8 @@ public class XTCETMStream extends XTCENamedObject {
         }
 
         throw new XTCEDatabaseException(
-            XTCEFunctions.getText( "error_stream_binaryinvalid" ) +
-            ": '" + getName() + "'" );
+            XTCEFunctions.getText( "error_stream_binaryinvalid" ) + // NOI18N
+            ": '" + getName() + "'" ); // NOI18N
 
     }
 

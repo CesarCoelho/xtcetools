@@ -281,7 +281,7 @@ public class XTCEFunctions {
 
         String candidate = fullPath.toString();
 
-        return candidate.replaceAll( "/+", "/" );
+        return candidate.replaceAll( "/+", "/" ); // NOI18N
 
     }
 
@@ -301,7 +301,7 @@ public class XTCEFunctions {
 
         int idx  = filepath.lastIndexOf( '/' ); // NOI18N
         if ( idx == -1 ) {
-            return "";
+            return ""; // NOI18N
         }
         return filepath.substring( 0, idx );
 
@@ -321,7 +321,7 @@ public class XTCEFunctions {
 
     public static String getNameFromPathReferenceString( String filepath ) {
 
-        int idx  = filepath.lastIndexOf( '/' );
+        int idx  = filepath.lastIndexOf( '/' ); // NOI18N
         if ( idx == -1 ) {
             return filepath;
         }
@@ -360,7 +360,7 @@ public class XTCEFunctions {
                                                  String          preferredNamespace ) {
 
         if ( preferredNamespace == null ) {
-            preferredNamespace = "";
+            preferredNamespace = ""; // NOI18N
         }
 
         List<XTCEAlias> aliasList    = parameter.getAliasSet();
@@ -370,7 +370,7 @@ public class XTCEFunctions {
             if ( ( showAllNamespaces                                 == true ) ||
                  ( preferredNamespace.equals( entry.getNameSpace() ) == true ) ) {
                 if ( aliasDisplay.length() > 0 ) {
-                    aliasDisplay.append( ' ' );
+                    aliasDisplay.append( ' ' ); // NOI18N
                 }
                 if ( showAliasNamespaces == true ) {
                     aliasDisplay.append( entry.getFullAliasName() );
@@ -399,10 +399,10 @@ public class XTCEFunctions {
 
     public static String getCleanHexString( String inputText ) {
 
-        String text = inputText.replaceAll( "[ ,;\r\f\n\t]", "" );
+        String text = inputText.replaceAll( "[ ,;\r\f\n\t]", "" ); // NOI18N
         text = text.toLowerCase();
-        if ( text.startsWith( "0x" ) == true ) {
-            text = text.replaceFirst( "0x", "" );
+        if ( text.startsWith( "0x" ) == true ) { // NOI18N
+            text = text.replaceFirst( "0x", "" ); // NOI18N
         }
         return text;
 
@@ -441,7 +441,7 @@ public class XTCEFunctions {
 
             String value = hex.substring( startIdx, endIdx );
             if ( value.length() == 1 ) {
-                value += "0";
+                value += "0"; // NOI18N
             }
 
             bytes[iii / 2] = (byte)Integer.parseInt( value, 16 );
@@ -475,7 +475,7 @@ public class XTCEFunctions {
     public static boolean matchesUsingGlob( String text, String glob ) {
 
         String rest = null;
-        int pos = glob.indexOf( '*' );
+        int pos = glob.indexOf( '*' ); // NOI18N
         if ( pos != -1 ) {
             rest = glob.substring( pos + 1 );
             glob = glob.substring( 0, pos );
@@ -487,7 +487,7 @@ public class XTCEFunctions {
 
         // handle the part up to the first *
         for ( int iii = 0; iii < glob.length(); ++iii ) {
-            if ( ( glob.charAt( iii ) != '?' ) &&
+            if ( ( glob.charAt( iii ) != '?' ) && // NOI18N
                  ( ! glob.substring( iii, iii + 1 ).equalsIgnoreCase(text.substring( iii, iii + 1 ) ) ) ) {
                 return false;
             }
@@ -642,7 +642,7 @@ public class XTCEFunctions {
                         transformer.transform( source, target );
                         resultsText.append( out.toString() );
                 }
-                resultsText.append( '\n' ); // NOI18N
+                resultsText.append( System.getProperty( "line.separator" ) ); // NOI18N
             }
 
             return resultsText.toString();
@@ -739,6 +739,37 @@ public class XTCEFunctions {
 
     }
 
+    /** This function makes the repeat parameter/argument string, taking into
+     * account the internationalization.
+     *
+     * @param count long containing the current item count.
+     *
+     * @param total long total number of items.
+     *
+     * @return String containing the internationalized text.
+     *
+     */
+
+    public static String makeRepeatString( long count, long total ) {
+
+        if ( repeatText_.isEmpty() == true ) {
+            repeatText_ = XTCEFunctions.getText( "general_repeat" ); // NOI18N
+            ofText_     = XTCEFunctions.getText( "general_of" ); // NOI18N
+        }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append( repeatText_ );
+        sb.append( " " ); // NOI18N
+        sb.append( Long.toString( count ) );
+        sb.append( " " ); // NOI18N
+        sb.append( ofText_ );
+        sb.append( " " ); // NOI18N
+        sb.append( Long.toString( total ) );
+
+        return sb.toString();
+
+    }
+
     /** Private method to format the amount of memory provided in bytes to an
      * output that used K, M, or G depending on the size of the amount.
      *
@@ -783,9 +814,9 @@ public class XTCEFunctions {
 
         if ( absTimeHandlersInitialized_ == false ) {
             absTimeHandlers_.add( new XTCEPosixTimeHandler() );
-            absTimeHandlers_.add( new XTCECcsdsCucTimeHandler( "yyyy-MM-dd HH:mm:ss.SSS",
-                                                               "GMT",
-                                                               "1980-01-06", 
+            absTimeHandlers_.add( new XTCECcsdsCucTimeHandler( "yyyy-MM-dd HH:mm:ss.SSS", // NOI18N
+                                                               "GMT", // NOI18N
+                                                               "1980-01-06", // NOI18N
                                                                4,
                                                                3 ) );
             absTimeHandlersInitialized_ = true;
@@ -793,11 +824,17 @@ public class XTCEFunctions {
 
     }
 
-    private static ResourceBundle messages_      = null;
-    private static String         propLocation_  = "org.omg.space.xtce.toolkit.MessagesBundle"; // NOI18N
+    private static ResourceBundle messages_ = null;
+
+    private static final String propLocation_ =
+        "org.omg.space.xtce.toolkit.MessagesBundle"; // NOI18N
 
     private static boolean absTimeHandlersInitialized_ = false;
 
-    private static List<XTCEAbsoluteTimeType> absTimeHandlers_ = new ArrayList<>();
+    private static final List<XTCEAbsoluteTimeType> absTimeHandlers_ =
+        new ArrayList<>();
+
+    private static String repeatText_ = "";
+    private static String ofText_     = "";
 
 }

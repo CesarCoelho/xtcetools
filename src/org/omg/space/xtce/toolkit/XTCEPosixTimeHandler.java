@@ -68,8 +68,8 @@ public class XTCEPosixTimeHandler implements XTCEAbsoluteTimeType {
      */
 
     public XTCEPosixTimeHandler() {
-        isoTimeFmt_  = "yyyy-MM-dd HH:mm:ss.SSS";
-        timeZone_    = "GMT";
+        isoTimeFmt_  = "yyyy-MM-dd HH:mm:ss.SSS"; // NOI18N
+        timeZone_    = "GMT"; // NOI18N
     }
 
     /** Constructor that permits changing the default time format and the
@@ -121,8 +121,8 @@ public class XTCEPosixTimeHandler implements XTCEAbsoluteTimeType {
             Epoch epc = instance.getReferenceTime().getEpoch();
 
             return ( ( enc.getSizeInBits().longValue()        == 64   ) &&
-                     ( enc.getEncoding().equals( "unsigned" ) == true ) &&
-                     ( epc.getValue().equals( "1970-01-01" )  == true ) );
+                     ( enc.getEncoding().equals( "unsigned" ) == true ) && // NOI18N
+                     ( epc.getValue().equals( "1970-01-01" )  == true ) ); // NOI18N
 
         } catch ( NullPointerException ex ) {
             // no match if a null pointer is caught
@@ -157,14 +157,14 @@ public class XTCEPosixTimeHandler implements XTCEAbsoluteTimeType {
 
         String hex = XTCEFunctions.bitSetToHex( rawValue, 8 );
 
-        hex = hex.replaceFirst( "0x", "" );
+        hex = hex.replaceFirst( "0x", "" ); // NOI18N
 
         BigInteger secs = new BigInteger( hex.substring( 0,  8 ), 16 );
         BigInteger usec = new BigInteger( hex.substring( 8, 16 ), 16 );
 
         secs = secs.multiply( oneThousand_ ).multiply( oneThousand_ );
 
-        return "0x" + secs.add( usec ).toString( 16 );
+        return "0x" + secs.add( usec ).toString( 16 ); // NOI18N
 
     }
 
@@ -191,8 +191,8 @@ public class XTCEPosixTimeHandler implements XTCEAbsoluteTimeType {
     public String getCalibratedFromUncalibrated( String uncalValue ) {
 
         BigInteger usecs = null;
-        if ( uncalValue.startsWith( "0x" ) == true ) {
-            usecs = new BigInteger( uncalValue.replaceFirst( "0x", "" ), 16 );
+        if ( uncalValue.startsWith( "0x" ) == true ) { // NOI18N
+            usecs = new BigInteger( uncalValue.replaceFirst( "0x", "" ), 16 ); // NOI18N
         } else {
             usecs = new BigInteger( uncalValue );
         }
@@ -233,8 +233,8 @@ public class XTCEPosixTimeHandler implements XTCEAbsoluteTimeType {
     public BitSet getRawFromUncalibrated( String uncalValue ) {
 
         BigInteger usecs = null;
-        if ( uncalValue.startsWith( "0x" ) == true ) {
-            usecs = new BigInteger( uncalValue.replaceFirst( "0x", "" ), 16 );
+        if ( uncalValue.startsWith( "0x" ) == true ) { // NOI18N
+            usecs = new BigInteger( uncalValue.replaceFirst( "0x", "" ), 16 ); // NOI18N
         } else {
             usecs = new BigInteger( uncalValue );
         }
@@ -242,11 +242,11 @@ public class XTCEPosixTimeHandler implements XTCEAbsoluteTimeType {
         BigInteger secs = usecs.divide( oneThousand_ ).divide( oneThousand_ );
         usecs = usecs.subtract( secs.multiply( oneThousand_ ).multiply( oneThousand_ ) );
 
-        String hexSeconds = String.format( "%8s", secs.toString( 16 ) );
-        String hexUsecs   = String.format( "%8s", usecs.toString( 16 ) );
+        String hexSeconds = String.format( "%8s", secs.toString( 16 ) ); // NOI18N
+        String hexUsecs   = String.format( "%8s", usecs.toString( 16 ) ); // NOI18N
 
-        hexSeconds = hexSeconds.replaceAll( " ", "0" );
-        hexUsecs   = hexUsecs.replaceAll( " ", "0" );
+        hexSeconds = hexSeconds.replaceAll( " ", "0" ); // NOI18N
+        hexUsecs   = hexUsecs.replaceAll( " ", "0" ); // NOI18N
 
         BigInteger rawInteger = new BigInteger( hexSeconds + hexUsecs, 16 );
 
@@ -286,7 +286,7 @@ public class XTCEPosixTimeHandler implements XTCEAbsoluteTimeType {
         try {
             Date       javadate = format.parse( euValue );
             BigInteger msec     = BigInteger.valueOf( javadate.getTime() );
-            return "0x" + msec.multiply( oneThousand_ ).toString( 16 );
+            return "0x" + msec.multiply( oneThousand_ ).toString( 16 ); // NOI18N
         } catch ( ParseException ex ) {
             throw new RuntimeException( ex.getLocalizedMessage() );
         }
@@ -295,7 +295,7 @@ public class XTCEPosixTimeHandler implements XTCEAbsoluteTimeType {
 
     // Private Data Members
 
-    private static final BigInteger oneThousand_ = new BigInteger( "1000" );
+    private static final BigInteger oneThousand_ = new BigInteger( "1000" ); // NOI18N
 
     private final String isoTimeFmt_;
     private final String timeZone_;

@@ -40,7 +40,7 @@ public class XTCENamespaceContext implements NamespaceContext {
     @Override
     public String getNamespaceURI( String prefix ) {
 
-        if ( prefix.equals( "xtce" ) == true ) {
+        if ( prefix.equals( "xtce" ) == true ) { // NOI18N
             return XTCEConstants.XTCE_NAMESPACE;
         }
 
@@ -60,7 +60,7 @@ public class XTCENamespaceContext implements NamespaceContext {
     @Override
     public Iterator getPrefixes( String val ) {
 
-        throw new IllegalAccessError( "Not implemented!" );
+        throw new IllegalAccessError( XTCEFunctions.getText( "general_not_implemented" ) );
 
     }
 
@@ -76,10 +76,10 @@ public class XTCENamespaceContext implements NamespaceContext {
     public String getPrefix( String uri ) {
 
         if ( uri.equals( XTCEConstants.XTCE_NAMESPACE ) == true ) {
-            return "xtce";
+            return "xtce"; // NOI18N
         }
 
-        throw new IllegalAccessError( "Not implemented!" );
+        throw new IllegalAccessError( XTCEFunctions.getText( "general_not_implemented" ) );
 
     }
 

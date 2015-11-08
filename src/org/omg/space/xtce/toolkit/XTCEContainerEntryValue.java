@@ -57,7 +57,7 @@ public class XTCEContainerEntryValue {
         form_                     = form;
         item_                     = item;
         toStringWithoutParameter_ = operator_ + value_ +
-            ( form_.equals( "Calibrated" ) == true ? "{cal}" : "{uncal}" );
+            ( form_.equals( "Calibrated" ) == true ? "{cal}" : "{uncal}" ); // NOI18N
 
     }
 
@@ -72,11 +72,11 @@ public class XTCEContainerEntryValue {
 
     public XTCEContainerEntryValue( String value ) {
 
-        name_                     = "";
+        name_                     = ""; // NOI18N
         value_                    = value;
-        operator_                 = "==";
-        form_                     = "Calibrated";
-        toStringWithoutParameter_ = operator_ + value_ + "{cal}";
+        operator_                 = "=="; // NOI18N
+        form_                     = "Calibrated"; // NOI18N
+        toStringWithoutParameter_ = operator_ + value_ + "{cal}"; // NOI18N
 
     }
 
@@ -100,9 +100,9 @@ public class XTCEContainerEntryValue {
         itemValueObj_             = new XTCEItemValue( item );
         rawValue_                 = rawValue;
         value_                    = itemValueObj_.decode( rawValue );
-        operator_                 = "==";
-        form_                     = "Calibrated";
-        toStringWithoutParameter_ = operator_ + value_ + "{cal}";
+        operator_                 = "=="; // NOI18N
+        form_                     = "Calibrated"; // NOI18N
+        toStringWithoutParameter_ = operator_ + value_ + "{cal}"; // NOI18N
 
     }
 
@@ -198,7 +198,7 @@ public class XTCEContainerEntryValue {
 
     public final String getCalibratedValue() {
 
-        if ( form_.equals( "Calibrated" ) == true ) {
+        if ( form_.equals( "Calibrated" ) == true ) { // NOI18N
             return value_;
         } else {
             if ( itemValueObj_ == null ) {
@@ -218,7 +218,7 @@ public class XTCEContainerEntryValue {
 
     public final String getUncalibratedValue() {
 
-        if ( form_.equals( "Uncalibrated" ) == true ) {
+        if ( form_.equals( "Uncalibrated" ) == true ) { // NOI18N
             return value_;
         } else {
             if ( itemValueObj_ == null ) {
@@ -248,21 +248,6 @@ public class XTCEContainerEntryValue {
         return itemValueObj_.getRawFromUncalibrated( uncalValue );
 
     }
-
-/* Right now these are not used but were prototyped for the repeat set case
-
-    public void setValue( String value ) {
-        value_ = value;
-    }
-
-    public void setOperator( String operator ) {
-        operator_ = operator;
-    }
-
-    public void setComparisonForm( String form ) {
-        form_ = form;
-    }
-*/
 
     /** Compatibility Operator
      *
@@ -306,7 +291,7 @@ public class XTCEContainerEntryValue {
         // the comparison on the new temporary
 
         } else {
-            if ( this.form_.equals( "Uncalibrated" ) == true ) {
+            if ( this.form_.equals( "Uncalibrated" ) == true ) { // NOI18N
                 if ( itemValueObj_ == null ) {
                     itemValueObj_ = new XTCEItemValue( item_ );
                 }
@@ -316,7 +301,7 @@ public class XTCEContainerEntryValue {
                     new XTCEContainerEntryValue( item_,
                                                  correctedValue,
                                                  operator_,
-                                                 "Calibrated" );
+                                                 "Calibrated" ); // NOI18N
                 return newObject.checkValuesCompatible( that.value_,
                                                         that.operator_ );
             } else {
@@ -329,7 +314,7 @@ public class XTCEContainerEntryValue {
                     new XTCEContainerEntryValue( that.item_,
                                                  correctedValue,
                                                  that.operator_,
-                                                 "Calibrated" );
+                                                 "Calibrated" ); // NOI18N
                 return checkValuesCompatible( newObject.value_,
                                               newObject.operator_ );
             }
@@ -410,16 +395,16 @@ public class XTCEContainerEntryValue {
     private boolean checkValuesCompatible( String otherValue,
                                            String otherOperator ) {
 
-        if ( operator_.equals( "==" ) == true ) {
-            if ( otherOperator.equals( "==" ) == true ) {
+        if ( operator_.equals( "==" ) == true ) { // NOI18N
+            if ( otherOperator.equals( "==" ) == true ) { // NOI18N
                 return value_.equals( otherValue );
-            } else if ( otherOperator.equals( "!=" ) == true ) {
+            } else if ( otherOperator.equals( "!=" ) == true ) { // NOI18N
                 return ! value_.equals( otherValue );
             }
-        } else if ( operator_.equals( "!=" ) == true ) {
-            if ( otherOperator.equals( "==" ) == true ) {
+        } else if ( operator_.equals( "!=" ) == true ) { // NOI18N
+            if ( otherOperator.equals( "==" ) == true ) { // NOI18N
                 return ! value_.equals( otherValue );
-            } else if ( otherOperator.equals( "!=" ) == true ) {
+            } else if ( otherOperator.equals( "!=" ) == true ) { // NOI18N
                 return value_.equals( otherValue );
             }
         }

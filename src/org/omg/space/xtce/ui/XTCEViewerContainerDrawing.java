@@ -234,7 +234,7 @@ public class XTCEViewerContainerDrawing extends JPanel {
             String msg = XTCEFunctions.getText( "error_cannot_save_image" ) + // NOI18N
                          " '" + fileName + "', " + // NOI18N
                          XTCEFunctions.getText( "general_because" ) + // NOI18N
-                         ": ";
+                         ": "; // NOI18N
             throw new XTCEDatabaseException( msg + ex.getLocalizedMessage() );
 
         }
@@ -261,7 +261,11 @@ public class XTCEViewerContainerDrawing extends JPanel {
         if ( contentModel_.getContentList().size() > 256 ) {
             totalSizeX_ = 250;
             totalSizeY_ = 100;
-            ggg.drawString( "Drawing not shown for rows > 256", 25, 25 );
+            ggg.drawString( XTCEFunctions.getText( "warning_drawing_too_wide" ) + // NOI18N
+                            " " + // NOI18N
+                            Integer.toString( 256 ),
+                            25,
+                            25 );
             return;
         }
 
@@ -316,10 +320,10 @@ public class XTCEViewerContainerDrawing extends JPanel {
 
             String parameterDesc = itemName;
             if ( itemAliases.isEmpty() == false ) {
-                parameterDesc += " (" + itemAliases + ")";
+                parameterDesc += " (" + itemAliases + ")"; // NOI18N
             }
             if ( itemValue.isEmpty() == false ) {
-                parameterDesc += " " + itemValue;
+                parameterDesc += " " + itemValue; // NOI18N
             }
             int textPosX = aLineRightX + scale( 1 );
             int textPosY = aLineRightY;
@@ -346,7 +350,9 @@ public class XTCEViewerContainerDrawing extends JPanel {
         
         int textxpos = rectBaseX_ - 75;
         int textypos = liney1;
-        ggg.drawString( "Bytes", textxpos, textypos );
+        ggg.drawString( XTCEFunctions.getText( "general_bytes" ), // NOI18N
+                        textxpos,
+                        textypos );
 
         int bitCountInBytes = (int)contentModel_.getTotalSize() +
                               ( (int)contentModel_.getTotalSize() % 8 );
@@ -364,11 +370,17 @@ public class XTCEViewerContainerDrawing extends JPanel {
 
         int xpostotal = rectBaseX_ - 75;
         int ypostotal = rectBaseY_ + scale( 35 );
-        String totalsMessage = "Total Bytes: " +
-            Integer.toString( bitCountInBytes / 8 ) + " Bits: " +
+        String totalsMessage = XTCEFunctions.getText( "general_totalbytes" ) + // NOI18N
+            ": " + // NOI18N
+            Integer.toString( bitCountInBytes / 8 ) +
+            " " + // NOI18N
+            XTCEFunctions.getText( "general_bits_cap" ) + // NOI18N
+            ": " + // NOI18N
             Long.toString( contentModel_.getTotalSize() );
         ggg.drawString( totalsMessage, xpostotal, ypostotal);
-        ggg.drawString( "Bits", xpostotal, rectBaseY_ + ( scale( 15 ) / 2 ) );
+        ggg.drawString( XTCEFunctions.getText( "general_bits_cap" ), // NOI18N
+                        xpostotal,
+                        rectBaseY_ + ( scale( 15 ) / 2 ) );
 
         totalSizeX_ = rectBaseX_ + linex2 + 25;
 
@@ -384,7 +396,10 @@ public class XTCEViewerContainerDrawing extends JPanel {
 
         int textxpos = linex2;
         int textypos = liney2 + 25;
-        drawCenteredString( ggg, "Bytes", textxpos, textypos );
+        drawCenteredString( ggg,
+                            XTCEFunctions.getText( "general_bytes" ), // NOI18N
+                            textxpos,
+                            textypos );
 
         int bitCountInBytes = (int)contentModel_.getTotalSize() +
                               ( (int)contentModel_.getTotalSize() % 8 );
@@ -416,7 +431,7 @@ public class XTCEViewerContainerDrawing extends JPanel {
 
     private void drawParameters( Graphics ggg ) {
 
-        String previousContainerName = "";
+        String previousContainerName = ""; // NOI18N
         int    previousContainerEnd  = 0;
 
         DrawingEntry lastEntry  = entriesInUse_.get( entriesInUse_.size() - 1 );
@@ -492,7 +507,9 @@ public class XTCEViewerContainerDrawing extends JPanel {
 
         int textxpos = rectBaseX_ - 75;
         int textypos = cliney1;
-        ggg.drawString( "Containers", textxpos, textypos );
+        ggg.drawString( XTCEFunctions.getText( "general_containers" ), // NOI18N
+                        textxpos,
+                        textypos );
 
     }
 
@@ -513,7 +530,7 @@ public class XTCEViewerContainerDrawing extends JPanel {
 
     private void drawTopToBottomRectangles( Graphics ggg ) {
 
-        String previousContainerName = "";
+        String previousContainerName = ""; // NOI18N
         int    previousContainerEnd  = 0;
 
         DrawingEntry lastEntry  = entriesInUse_.get( entriesInUse_.size() - 1 );
@@ -521,7 +538,7 @@ public class XTCEViewerContainerDrawing extends JPanel {
 
         for ( DrawingEntry entry : entriesInUse_ ) {
 
-            String itemValue = "";
+            String itemValue = ""; // NOI18N
             if ( entry.itemEntryObj.getValue() != null ) {
                 itemValue = entry.itemEntryObj
                                  .getValue()
@@ -542,9 +559,9 @@ public class XTCEViewerContainerDrawing extends JPanel {
             int height = itemSizeInt * 15;
             ggg.drawRect( leftTopX, leftTopY, width, height );
 
-            String bits = itemSize + " bit";
+            String bits = itemSize + " bit"; // NOI18N
             if ( itemSizeInt > 1 ) {
-                bits += "s";
+                bits += "s"; // NOI18N
             }
             int posX = leftTopX - scale( 5 );
             int posY = leftTopY + ( height / 2 );
@@ -552,14 +569,14 @@ public class XTCEViewerContainerDrawing extends JPanel {
 
             String parameterDesc = itemName;
             if ( itemAliases.isEmpty() == false ) {
-                parameterDesc += " (" + itemAliases + ")";
+                parameterDesc += " (" + itemAliases + ")"; // NOI18N
             }
 
             int textPosX = leftTopX + ( width / 2 );
             int textPosY = leftTopY + ( height / 2 );
 
             if ( itemValue.isEmpty() == false ) {
-                parameterDesc += " " + itemValue;
+                parameterDesc += " " + itemValue; // NOI18N
             }
 
             drawCenteredString( ggg, parameterDesc, textPosX, textPosY );
@@ -817,9 +834,9 @@ public class XTCEViewerContainerDrawing extends JPanel {
 
         for ( XTCEContainerContentEntry entry : contentModel_.getContentList() ) {
 
-            String containerName = "";
-            String itemName      = "";
-            String itemAliases   = "";
+            String containerName = ""; // NOI18N
+            String itemName      = ""; // NOI18N
+            String itemAliases   = ""; // NOI18N
             if ( entry.getEntryType() == FieldType.PARAMETER ) {
                 itemName      = entry.getParameter().getName();
                 containerName = entry.getHoldingContainer().getName();

@@ -1371,7 +1371,7 @@ public class XTCEViewer extends javax.swing.JFrame {
         messagesText.setText(bundle.getString("no_messages_text")); // NOI18N
         mainWindowMessageScrollingPane.setViewportView(messagesText);
 
-        messagesOutputLabel.setText("Messages");
+        messagesOutputLabel.setText(bundle.getString("messages_label")); // NOI18N
 
         mainWindowFileMenu.setText(bundle.getString("file_menu_label")); // NOI18N
 

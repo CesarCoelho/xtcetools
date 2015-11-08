@@ -103,14 +103,14 @@ public class XTCEDatabaseExporterCsv extends XTCEDatabaseExporter {
                                                               properties_.getProperty( "preferred_alias_namespace" ) ); // NOI18N
 
                     XTCEValidRange rangeObj = parameter.getValidRange();
-                    String lowValue    = "";
-                    String highValue   = "";
-                    String lowIncFlag  = "";
-                    String highIncFlag = "";
+                    String lowValue    = ""; // NOI18N
+                    String highValue   = ""; // NOI18N
+                    String lowIncFlag  = ""; // NOI18N
+                    String highIncFlag = ""; // NOI18N
                     if ( rangeObj.isValidRangeApplied() == true ) {
                         if ( rangeObj.getLowValue().isEmpty() == false ) {
                             lowValue   = rangeObj.getLowValue();
-                            lowIncFlag = ( rangeObj.isLowValueInclusive() == true ? "inc" : "exc" );
+                            lowIncFlag = ( rangeObj.isLowValueInclusive() == true ? "inc" : "exc" ); // NOI18N
                             if ( rangeObj.isLowValueCalibrated() == false ) {
                                 XTCEItemValue valueObj =
                                     new XTCEItemValue( parameter );
@@ -120,7 +120,7 @@ public class XTCEDatabaseExporterCsv extends XTCEDatabaseExporter {
                         }
                         if ( rangeObj.getHighValue().isEmpty() == false ) {
                             highValue   = rangeObj.getHighValue();
-                            highIncFlag = ( rangeObj.isHighValueInclusive() == true ? "inc" : "exc" );
+                            highIncFlag = ( rangeObj.isHighValueInclusive() == true ? "inc" : "exc" ); // NOI18N
                             if ( rangeObj.isHighValueCalibrated() == false ) {
                                 XTCEItemValue valueObj =
                                     new XTCEItemValue( parameter );
@@ -263,10 +263,10 @@ public class XTCEDatabaseExporterCsv extends XTCEDatabaseExporter {
                         description   = entry.getTelemetryContainer().getDescription();
                     } else {
                         containerName = "UNDEFINED"; // NOI18N
-                        description   = "";
+                        description   = ""; // NOI18N
                     }
 
-                    String rValue = "";
+                    String rValue = ""; // NOI18N
                     if ( entry.getValue() != null ) {
                         rValue = entry.getValue().toStringWithoutParameter();
                     }

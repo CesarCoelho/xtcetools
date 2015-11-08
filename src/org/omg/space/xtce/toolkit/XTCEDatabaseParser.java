@@ -518,9 +518,12 @@ public abstract class XTCEDatabaseParser {
         } catch ( UnmarshalException ex ) {
             throw new XTCEDatabaseException( handler.getMessages() );
         } catch ( NumberFormatException ex ) {
-            String msg = "Observe validation.  Fatal error reading number " +
-                         " in document, " +
-                         ex.getLocalizedMessage();
+            String msg = XTCEFunctions.getText( "general_error" ) + // NOI18N
+                         ": " + // NOI18N
+                         XTCEFunctions.getText( "general_numberexception" ) + // NOI18N
+                         " '" + // NOI18N
+                         ex.getLocalizedMessage() +
+                         "'"; // NOI18N
             List<String> msgs = handler.getMessages();
             msgs.add( msg );
             throw new XTCEDatabaseException( msgs );
@@ -612,9 +615,12 @@ public abstract class XTCEDatabaseParser {
         } catch ( UnmarshalException ex ) {
             throw new XTCEDatabaseException( handler.getMessages() );
         } catch ( NumberFormatException ex ) {
-            String msg = "Observe validation.  Fatal error reading number " +
-                         " in document, " +
-                         ex.getLocalizedMessage();
+            String msg = XTCEFunctions.getText( "general_error" ) + // NOI18N
+                         ": " + // NOI18N
+                         XTCEFunctions.getText( "general_numberexception" ) + // NOI18N
+                         " '" + // NOI18N
+                         ex.getLocalizedMessage() +
+                         "'"; // NOI18N
             List<String> msgs = handler.getMessages();
             msgs.add( msg );
             throw new XTCEDatabaseException( msgs );
@@ -626,7 +632,7 @@ public abstract class XTCEDatabaseParser {
 
     }
 
-    /** Method to write the current XTCE Docuent in memory to a File object.
+    /** Method to write the current XTCE Document in memory to a File object.
      *
      * @param dbFile File containing the location to write the database XML.
      *
@@ -696,9 +702,9 @@ public abstract class XTCEDatabaseParser {
     private Binder<Node> domBinder_       = null;
 
     private static final String sunSchema_ =
-        "http://java.sun.com/xml/jaxp/properties/schemaLanguage";
+        "http://java.sun.com/xml/jaxp/properties/schemaLanguage"; // NOI18N
 
     private static final String xsdUrl_ =
-        "http://www.w3.org/2001/XMLSchema";
+        "http://www.w3.org/2001/XMLSchema"; // NOI18N
 
 }

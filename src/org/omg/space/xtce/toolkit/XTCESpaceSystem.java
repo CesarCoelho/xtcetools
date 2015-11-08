@@ -901,7 +901,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
             getMetaCommandOrMetaCommandRefOrBlockMetaCommand();
 
         for ( Object metacommand : metacommands ) {
-            String foundName = null;
+            String foundName;
             if ( metacommand.getClass() == MetaCommandType.class ) {
                 foundName = ((NameDescriptionType)metacommand).getName();
             } else if ( metacommand.getClass() == BlockMetaCommand.class ) {

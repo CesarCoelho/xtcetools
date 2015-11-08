@@ -192,7 +192,7 @@ public class XTCETMContainer extends XTCENamedObject {
 
             if ( parameter.isMember() == true ) {
 
-                name        = name.replaceAll( "\\.", "/" );
+                name        = name.replaceAll( "\\.", "/" ); // NOI18N
                 memberPaths = new ArrayList<>();
 
                 String path =

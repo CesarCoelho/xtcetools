@@ -113,7 +113,7 @@ public class XTCEArgument extends XTCETypedObject {
     public String getTypeReferenceFullPath() {
 
         if ( isValid() == false ) {
-            return "";
+            return ""; // NOI18N
         }
 
         if ( reference_ != null ) {
@@ -124,7 +124,7 @@ public class XTCEArgument extends XTCETypedObject {
                                                        memberReference_.getTypeRef() );
         }
 
-        return "";
+        return ""; // NOI18N
 
     }
 
@@ -145,7 +145,7 @@ public class XTCEArgument extends XTCETypedObject {
 
     public String getShortDescription() {
 
-        String parameterDescription = "";
+        String parameterDescription = ""; // NOI18N
 
         if ( ( isMember() == true ) && ( getTypeReference() != null ) ) {
             parameterDescription = getTypeReference().getShortDescription();
@@ -159,7 +159,7 @@ public class XTCEArgument extends XTCETypedObject {
         }
 
         if ( parameterDescription == null ) {
-            parameterDescription = "";
+            parameterDescription = ""; // NOI18N
         }
 
         return parameterDescription;
@@ -183,7 +183,7 @@ public class XTCEArgument extends XTCETypedObject {
 
     public String getLongDescription() {
 
-        String parameterDescription = "";
+        String parameterDescription = ""; // NOI18N
 
         if ( ( isMember() == true ) && ( getTypeReference() != null ) ) {
             parameterDescription = getTypeReference().getLongDescription();
@@ -197,7 +197,7 @@ public class XTCEArgument extends XTCETypedObject {
         }
 
         if ( parameterDescription == null ) {
-            parameterDescription = "";
+            parameterDescription = ""; // NOI18N
         }
 
         return parameterDescription;
@@ -222,7 +222,7 @@ public class XTCEArgument extends XTCETypedObject {
 
     public String getDescription() {
 
-        String parameterDescription = "";
+        String parameterDescription = ""; // NOI18N
 
         if ( ( isMember() == true ) && ( getTypeReference() != null ) ) {
             parameterDescription = getTypeReference().getShortDescription();
@@ -245,7 +245,7 @@ public class XTCEArgument extends XTCETypedObject {
         }
 
         if ( parameterDescription == null ) {
-            parameterDescription = "";
+            parameterDescription = ""; // NOI18N
         }
         return parameterDescription;
 

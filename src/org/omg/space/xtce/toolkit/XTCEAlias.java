@@ -68,7 +68,7 @@ public class XTCEAlias {
      */
 
     public String getFullAliasName() {
-        return nameSpace_ + "::" + alias_;
+        return nameSpace_ + "::" + alias_; // NOI18N
     }
 
     /** Equality Operator

@@ -70,15 +70,13 @@ public abstract class XTCEDatabaseExporter {
             throw new XTCEDatabaseException(
                 XTCEFunctions.getText( "dialog_export_nulldb_message" ) ); // NOI18N
         }
-        if ( properties == null ) {
-            throw new XTCEDatabaseException(
-                XTCEFunctions.getText( "dialog_export_nullproperties_message" ) ); // NOI18N
-        }
-        db_         = db;
-        properties_ = properties;
 
-        if ( properties_ == null ) {
+        db_ = db;
+
+        if ( properties == null ) {
             properties_ = new Properties();
+        } else {
+            properties_ = properties;
         }
 
         if ( properties_.getProperty( "use_header_row" ) == null ) { // NOI18N
@@ -193,10 +191,10 @@ public abstract class XTCEDatabaseExporter {
     /// The instance of the XTCE Database object that contains the full data
     /// model.
 
-    protected XTCEDatabase db_         = null;
+    protected final XTCEDatabase db_;
 
     /// A list of properties to affect the behavior of the export.
 
-    protected Properties   properties_ = null;
+    protected final Properties properties_;
 
 }

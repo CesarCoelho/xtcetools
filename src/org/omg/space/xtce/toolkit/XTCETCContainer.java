@@ -124,18 +124,6 @@ public class XTCETCContainer extends XTCENamedObject {
         setPrimaryLongDescription( container_, description );
     }
 
-    /** Comparison method used to order the XTCETCContainer objects when sorted
-     * based upon their inheritance path rather than the Space System path.
-     *
-     * Sorting by inheritance path is used by the graphical interface for the
-     * generation of tree nodes.
-     *
-     * @param that XTCETCContainer object to compare to.
-     *
-     * @return Integer value of -1, 0, or 1.
-     *
-     */
-
     /** Retrieves the preferred effective description of this Container in the
      * XTCE data model.
      *
@@ -159,12 +147,25 @@ public class XTCETCContainer extends XTCENamedObject {
 
     }
 
+    /** Comparison method used to order the XTCETCContainer objects when sorted
+     * based upon their inheritance path rather than the Space System path.
+     *
+     * Sorting by inheritance path is used by the graphical interface for the
+     * generation of tree nodes.
+     *
+     * @param that XTCETCContainer object to compare to.
+     *
+     * @return Integer value of -1, 0, or 1.
+     *
+     */
+
     @Override
     public int compareTo( Object that ) {
-        return this.getInheritancePath().compareTo(((XTCETCContainer)that).getInheritancePath() );
+        return this.getInheritancePath()
+                   .compareTo(((XTCETCContainer)that).getInheritancePath() );
     }
 
-    private String               iPath_     = null;
-    private CommandContainerType container_ = null;
+    private final String               iPath_;
+    private final CommandContainerType container_;
 
 }

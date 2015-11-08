@@ -395,7 +395,6 @@ public final class XTCEDatabase extends XTCEDatabaseParser {
                 for ( int jjj = 0; jjj < list.size(); ++jjj ) {
                     if ( list.get( jjj ).getName().equals( nameOnly ) == true ) {
                         list.remove( jjj );
-                        jjj = list.size();
                         setChanged( true );
                         spaceSystemCache = null;
                         return;

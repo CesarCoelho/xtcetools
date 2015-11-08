@@ -230,7 +230,7 @@ public class XTCECcsdsCucTimeHandler implements XTCEAbsoluteTimeType {
 
         secs = secs.multiply( oneThousand_ );
 
-        return "0x" + secs.add( frac.toBigInteger() ).toString( 16 );
+        return "0x" + secs.add( frac.toBigInteger() ).toString( 16 ); // NOI18N
 
     }
 
@@ -321,20 +321,20 @@ public class XTCECcsdsCucTimeHandler implements XTCEAbsoluteTimeType {
         //System.out.println( "Remaining microseconds: 0x" + usecs.toString( 16 ) );
 
         BigDecimal frac = new BigDecimal( usecs ).divide( oneMillion_ );
-        frac = frac.multiply( new BigDecimal( "2.0" ).pow( numFracBytes_ * 8 ) );
+        frac = frac.multiply( new BigDecimal( "2.0" ).pow( numFracBytes_ * 8 ) ); // NOI18N
 
         //System.out.println( "Fraction: " + frac.toString() );
         //System.out.println( "HexFraction 0x" + frac.toBigInteger().toString( 16 ) );
 
         String hexSeconds = secs.toString( 16 );
         while ( hexSeconds.length() < ( numSecBytes_ * 2 ) ) {
-            hexSeconds = "0" + hexSeconds;
+            hexSeconds = "0" + hexSeconds; // NOI18N
         }
 
         
         String hexUsecs = frac.toBigInteger().toString( 16 );
         while ( hexUsecs.length() < ( numFracBytes_ * 2 ) ) {
-            hexUsecs = "0" + hexUsecs;
+            hexUsecs = "0" + hexUsecs; // NOI18N
         }
 
         //System.out.println( "Temp: 0x" + hexSeconds + hexUsecs );

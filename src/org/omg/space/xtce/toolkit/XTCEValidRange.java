@@ -198,7 +198,7 @@ public class XTCEValidRange {
                 setFloatValidRange( rangeElement );
             }
         } else if ( typeObj instanceof BooleanDataType ) {
-            setValidRange( "0", "1", true, true, false, false );
+            setValidRange( "0", "1", true, true, false, false ); // NOI18N
         }
 
     }
@@ -217,7 +217,7 @@ public class XTCEValidRange {
         // it is inclusive or exclusive.  We leave it an empty string if it is
         // not applicable to this item.
         boolean minInclusive = true;
-        String  minValue     = "";
+        String  minValue     = ""; // NOI18N
         Double  min          = rangeElement.getMinInclusive();
         if ( min == null ) {
             min = rangeElement.getMinExclusive();
@@ -233,7 +233,7 @@ public class XTCEValidRange {
         // it is inclusive or exclusive.  We leave it an empty string if it is
         // not applicable to this item.
         boolean maxInclusive = true;
-        String  maxValue     = "";
+        String  maxValue     = ""; // NOI18N
         Double  max          = rangeElement.getMaxInclusive();
         if ( max == null ) {
             max = rangeElement.getMinExclusive();
@@ -259,8 +259,8 @@ public class XTCEValidRange {
 
     private NameDescriptionType typeObj_;
     private boolean             rangeApplied_            = false;
-    private String              lowValidValue_           = "";
-    private String              highValidValue_          = "";
+    private String              lowValidValue_           = ""; // NOI18N
+    private String              highValidValue_          = ""; // NOI18N
     private boolean             lowValidValueInclusive_  = true;
     private boolean             highValidValueInclusive_ = true;
     private boolean             lowAppliesToCalibrated_  = false;

@@ -107,7 +107,7 @@ public class XTCEParameter extends XTCETypedObject {
     public final String getTypeReferenceFullPath() {
 
         if ( isValid() == false ) {
-            return "";
+            return ""; // NOI18N
         }
 
         if ( reference_ != null ) {
@@ -118,7 +118,7 @@ public class XTCEParameter extends XTCETypedObject {
                                                        memberReference_.getTypeRef() );
         }
 
-        return "";
+        return ""; // NOI18N
 
     }
 
@@ -139,7 +139,7 @@ public class XTCEParameter extends XTCETypedObject {
 
     public final String getShortDescription() {
 
-        String parameterDescription = "";
+        String parameterDescription = ""; // NOI18N
 
         if ( ( isMember() == true ) && ( getTypeReference() != null ) ) {
             parameterDescription = getTypeReference().getShortDescription();
@@ -153,7 +153,7 @@ public class XTCEParameter extends XTCETypedObject {
         }
 
         if ( parameterDescription == null ) {
-            parameterDescription = "";
+            parameterDescription = ""; // NOI18N
         }
 
         return parameterDescription;
@@ -177,7 +177,7 @@ public class XTCEParameter extends XTCETypedObject {
 
     public final String getLongDescription() {
 
-        String parameterDescription = "";
+        String parameterDescription = ""; // NOI18N
 
         if ( ( isMember() == true ) && ( getTypeReference() != null ) ) {
             parameterDescription = getTypeReference().getLongDescription();
@@ -191,7 +191,7 @@ public class XTCEParameter extends XTCETypedObject {
         }
 
         if ( parameterDescription == null ) {
-            parameterDescription = "";
+            parameterDescription = ""; // NOI18N
         }
 
         return parameterDescription;
@@ -239,7 +239,7 @@ public class XTCEParameter extends XTCETypedObject {
         }
 
         if ( parameterDescription == null ) {
-            parameterDescription = "";
+            parameterDescription = ""; // NOI18N
         }
         return parameterDescription;
 
@@ -265,7 +265,7 @@ public class XTCEParameter extends XTCETypedObject {
         // we compensate here for the missing default value in the XTCE schema
         // for ParameterProperties/@dataSource
 
-        String dataSource = "telemetered";
+        String dataSource = "telemetered"; // NOI18N
 
         try {
 
@@ -280,7 +280,8 @@ public class XTCEParameter extends XTCETypedObject {
             }
 
         } catch ( NullPointerException ex ) {
-            // this is okay when the Parameter is a Member or the dataSource attribute is not present
+            // this is okay when the Parameter is a Member or the dataSource
+            // attribute is not present
         }
 
         return dataSource;
@@ -308,12 +309,12 @@ public class XTCEParameter extends XTCETypedObject {
 
             if ( isMember() == true ) {
                 if ( memberReference_.getParameterProperties().getSystemName() == null ) {
-                    return "";
+                    return ""; // NOI18N
                 }
                 return memberReference_.getParameterProperties().getSystemName();
             } else if ( isParameter() == true ) {
                 if ( reference_.getParameterProperties().getSystemName() == null ) {
-                    return "";
+                    return ""; // NOI18N
                 }
                 return reference_.getParameterProperties().getSystemName();
             }
@@ -322,7 +323,7 @@ public class XTCEParameter extends XTCETypedObject {
             // this is okay when the SystemName element is not present
         }
 
-        return "";
+        return ""; // NOI18N
 
     }
 

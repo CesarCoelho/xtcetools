@@ -284,15 +284,15 @@ public class ContainerDecodingTest {
                 } else if ( entry.getName().equals( "Basic_string_uint32" ) ) {
                     ++items;
                     if ( items == 8 ) {
-                        checkEntry( entry, "32", "48", "==1{cal}", "", "", "Repeat 1 of 5" );
+                        checkEntry( entry, "32", "48", "==1{cal}", "", "", XTCEFunctions.makeRepeatString( 1, 5 ) );
                     } else if ( items == 9 ) {
-                        checkEntry( entry, "32", "80", "==0{cal}", "", "", "Repeat 2 of 5" );
+                        checkEntry( entry, "32", "80", "==0{cal}", "", "", XTCEFunctions.makeRepeatString( 2, 5 ) );
                     } else if ( items == 10 ) {
-                        checkEntry( entry, "32", "112", "==65535{cal}", "", "", "Repeat 3 of 5" );
+                        checkEntry( entry, "32", "112", "==65535{cal}", "", "", XTCEFunctions.makeRepeatString( 3, 5 ) );
                     } else if ( items == 11 ) {
-                        checkEntry( entry, "32", "144", "==21845{cal}", "", "", "Repeat 4 of 5" );
+                        checkEntry( entry, "32", "144", "==21845{cal}", "", "", XTCEFunctions.makeRepeatString( 4, 5 ) );
                     } else if ( items == 12 ) {
-                        checkEntry( entry, "32", "176", "==4096{cal}", "", "", "Repeat 5 of 5" );
+                        checkEntry( entry, "32", "176", "==4096{cal}", "", "", XTCEFunctions.makeRepeatString( 5, 5 ) );
                     }
                 }
 
@@ -413,37 +413,37 @@ public class ContainerDecodingTest {
                 } else if ( entry.getName().equals( "TC_Parameter_Data" ) ) {
                     ++items;
                     if ( items == 21 ) {
-                        checkEntry( entry, "8", "144", "==0{cal}", "", "", "Repeat 1 of 16" );
+                        checkEntry( entry, "8", "144", "==0{cal}", "", "", XTCEFunctions.makeRepeatString( 1, 16 ) );
                     } else if ( items == 22 ) {
-                        checkEntry( entry, "8", "152", "==1{cal}", "", "", "Repeat 2 of 16" );
+                        checkEntry( entry, "8", "152", "==1{cal}", "", "", XTCEFunctions.makeRepeatString( 2, 16 ) );
                     } else if ( items == 23 ) {
-                        checkEntry( entry, "8", "160", "==2{cal}", "", "", "Repeat 3 of 16" );
+                        checkEntry( entry, "8", "160", "==2{cal}", "", "", XTCEFunctions.makeRepeatString( 3, 16 ) );
                     } else if ( items == 24 ) {
-                        checkEntry( entry, "8", "168", "==3{cal}", "", "", "Repeat 4 of 16" );
+                        checkEntry( entry, "8", "168", "==3{cal}", "", "", XTCEFunctions.makeRepeatString( 4, 16 ) );
                     } else if ( items == 25 ) {
-                        checkEntry( entry, "8", "176", "==4{cal}", "", "", "Repeat 5 of 16" );
+                        checkEntry( entry, "8", "176", "==4{cal}", "", "", XTCEFunctions.makeRepeatString( 5, 16 ) );
                     } else if ( items == 26 ) {
-                        checkEntry( entry, "8", "184", "==5{cal}", "", "", "Repeat 6 of 16" );
+                        checkEntry( entry, "8", "184", "==5{cal}", "", "", XTCEFunctions.makeRepeatString( 6, 16 ) );
                     } else if ( items == 27 ) {
-                        checkEntry( entry, "8", "192", "==6{cal}", "", "", "Repeat 7 of 16" );
+                        checkEntry( entry, "8", "192", "==6{cal}", "", "", XTCEFunctions.makeRepeatString( 7, 16 ) );
                     } else if ( items == 28 ) {
-                        checkEntry( entry, "8", "200", "==7{cal}", "", "", "Repeat 8 of 16" );
+                        checkEntry( entry, "8", "200", "==7{cal}", "", "", XTCEFunctions.makeRepeatString( 8, 16 ) );
                     } else if ( items == 29 ) {
-                        checkEntry( entry, "8", "208", "==8{cal}", "", "", "Repeat 9 of 16" );
+                        checkEntry( entry, "8", "208", "==8{cal}", "", "", XTCEFunctions.makeRepeatString( 9, 16 ) );
                     } else if ( items == 30 ) {
-                        checkEntry( entry, "8", "216", "==9{cal}", "", "", "Repeat 10 of 16" );
+                        checkEntry( entry, "8", "216", "==9{cal}", "", "", XTCEFunctions.makeRepeatString( 10, 16 ) );
                     } else if ( items == 31 ) {
-                        checkEntry( entry, "8", "224", "==10{cal}", "", "", "Repeat 11 of 16" );
+                        checkEntry( entry, "8", "224", "==10{cal}", "", "", XTCEFunctions.makeRepeatString( 11, 16 ) );
                     } else if ( items == 32 ) {
-                        checkEntry( entry, "8", "232", "==11{cal}", "", "", "Repeat 12 of 16" );
+                        checkEntry( entry, "8", "232", "==11{cal}", "", "", XTCEFunctions.makeRepeatString( 12, 16 ));
                     } else if ( items == 33 ) {
-                        checkEntry( entry, "8", "240", "==12{cal}", "", "", "Repeat 13 of 16" );
+                        checkEntry( entry, "8", "240", "==12{cal}", "", "", XTCEFunctions.makeRepeatString( 13, 16 ) );
                     } else if ( items == 34 ) {
-                        checkEntry( entry, "8", "248", "==13{cal}", "", "", "Repeat 14 of 16" );
+                        checkEntry( entry, "8", "248", "==13{cal}", "", "", XTCEFunctions.makeRepeatString( 14, 16 ) );
                     } else if ( items == 35 ) {
-                        checkEntry( entry, "8", "256", "==14{cal}", "", "", "Repeat 15 of 16" );
+                        checkEntry( entry, "8", "256", "==14{cal}", "", "", XTCEFunctions.makeRepeatString( 15, 16 ) );
                     } else if ( items == 36 ) {
-                        checkEntry( entry, "8", "264", "==15{cal}", "", "", "Repeat 16 of 16" );
+                        checkEntry( entry, "8", "264", "==15{cal}", "", "", XTCEFunctions.makeRepeatString( 16, 16 ) );
                     }
                 }
 

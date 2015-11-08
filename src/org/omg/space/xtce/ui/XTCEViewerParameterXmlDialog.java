@@ -100,6 +100,8 @@ public class XTCEViewerParameterXmlDialog extends javax.swing.JDialog {
         buttonPanel.setMaximumSize(new java.awt.Dimension(32767, 47));
         buttonPanel.setMinimumSize(new java.awt.Dimension(0, 47));
 
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/omg/space/xtce/toolkit/MessagesBundle"); // NOI18N
+        acceptButton.setText(bundle.getString("general_accept_text")); // NOI18N
         acceptButton.setLabel("Accept");
         acceptButton.setMaximumSize(new java.awt.Dimension(100, 25));
         acceptButton.setMinimumSize(new java.awt.Dimension(100, 25));
@@ -110,6 +112,7 @@ public class XTCEViewerParameterXmlDialog extends javax.swing.JDialog {
             }
         });
 
+        dismissButton.setText(bundle.getString("general_dismiss_text")); // NOI18N
         dismissButton.setLabel("Dismiss");
         dismissButton.setMaximumSize(new java.awt.Dimension(100, 25));
         dismissButton.setMinimumSize(new java.awt.Dimension(100, 25));
@@ -149,14 +152,10 @@ public class XTCEViewerParameterXmlDialog extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(buttonPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(parameterTypeLabel)
-                            .addComponent(parameterLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(parameterTypeLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(parameterLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane1))
                         .addContainerGap())))
