@@ -62,10 +62,10 @@ public abstract class XTCENamedObject implements Comparable {
      *
      */
 
-    XTCENamedObject( String           name,
-                     String           path,
-                     AliasSetType     aliasSet,
-                     AncillaryDataSet ancDataSet ) {
+    XTCENamedObject( final String           name,
+                     final String           path,
+                     final AliasSetType     aliasSet,
+                     final AncillaryDataSet ancDataSet ) {
 
         name_ = name;
         path_ = path;
@@ -177,7 +177,7 @@ public abstract class XTCENamedObject implements Comparable {
      *
      */
 
-    public final String getAlias( String nameSpace ) {
+    public final String getAlias( final String nameSpace ) {
 
         for ( XTCEAlias aliasEntry : aliasList_ ) {
             if ( aliasEntry.getNameSpace().equals( nameSpace ) == true ) {
@@ -228,7 +228,7 @@ public abstract class XTCENamedObject implements Comparable {
      *
      */
 
-    public List<AncillaryData> getAncillaryData( String nameGlob ) {
+    public List<AncillaryData> getAncillaryData( final String nameGlob ) {
 
         ArrayList<AncillaryData> list = new ArrayList<>();
 
@@ -257,7 +257,7 @@ public abstract class XTCENamedObject implements Comparable {
      *
      */
 
-    protected final String getPrimaryShortDescription( DescriptionType obj ) {
+    protected final String getPrimaryShortDescription( final DescriptionType obj ) {
         if ( obj == null || obj.getShortDescription() == null ) {
             return "";
         }
@@ -277,8 +277,8 @@ public abstract class XTCENamedObject implements Comparable {
      *
      */
 
-    protected final void setPrimaryShortDescription( DescriptionType obj,
-                                                     String          desc ) {
+    protected final void setPrimaryShortDescription( final DescriptionType obj,
+                                                     final String          desc ) {
         if ( desc.isEmpty() == false ) {
             obj.setShortDescription( desc );
         } else {
@@ -297,7 +297,7 @@ public abstract class XTCENamedObject implements Comparable {
      *
      */
 
-    protected final String getPrimaryLongDescription( DescriptionType obj ) {
+    protected final String getPrimaryLongDescription( final DescriptionType obj ) {
         if ( obj == null || obj.getLongDescription() == null ) {
             return ""; // NOI18N
         }
@@ -317,8 +317,8 @@ public abstract class XTCENamedObject implements Comparable {
      *
      */
 
-    protected final void setPrimaryLongDescription( DescriptionType obj,
-                                                    String          desc ) {
+    protected final void setPrimaryLongDescription( final DescriptionType obj,
+                                                    final String          desc ) {
         if ( desc.isEmpty() == false ) {
             obj.setLongDescription( desc );
         } else {
@@ -335,7 +335,7 @@ public abstract class XTCENamedObject implements Comparable {
      *
      */
 
-    protected final void populateAliasListFromReference( AliasSetType set ) {
+    protected final void populateAliasListFromReference( final AliasSetType set ) {
 
         if ( set == null ) {
             return;

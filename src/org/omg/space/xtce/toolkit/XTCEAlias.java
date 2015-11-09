@@ -36,7 +36,7 @@ public class XTCEAlias {
      *
      */
 
-    XTCEAlias( String alias, String nameSpace ) {
+    XTCEAlias( final String alias, final String nameSpace ) {
         alias_     = alias;
         nameSpace_ = nameSpace;
     }
@@ -111,7 +111,7 @@ public class XTCEAlias {
 
     // Private Data Members
 
-    private String alias_     = null;
-    private String nameSpace_ = null;
+    private final String alias_;
+    private final String nameSpace_;
 
 }

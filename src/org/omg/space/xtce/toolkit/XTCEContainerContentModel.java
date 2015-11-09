@@ -456,7 +456,11 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
             // need a deep copy of the content if this is NOT the last
             if ( iii < ( repeatCount - 1 ) ) {
                 containerStartBit   = currentStartBit.get();
-                nextIncludedContent = nextIncludedContent.deepCopy();
+                try {
+                    nextIncludedContent = (XTCEContainerContentEntry)nextIncludedContent.clone();
+                } catch ( CloneNotSupportedException ex ) {
+                    // do nothing, it will not happen
+                }
             }
 
         }
@@ -615,7 +619,11 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
 
             // need a deep copy of the content if this is NOT the last
             if ( iii < ( repeatCount - 1 ) ) {
-                content = content.deepCopy();
+                try {
+                    content = (XTCEContainerContentEntry)content.clone();
+                } catch ( CloneNotSupportedException ex ) {
+                    // do nothing, it will not happen
+                }
                 // deep copy include is previousEntry 0 right now, but we need
                 // to eventually consider repeat offset - this case of arrays
                 // probably will never call this
@@ -687,7 +695,11 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
 
             // need a deep copy of the content if this is NOT the last
             if ( iii < ( repeatCount - 1 ) ) {
-                content = content.deepCopy();
+                try {
+                    content = (XTCEContainerContentEntry)content.clone();
+                } catch ( CloneNotSupportedException ex ) {
+                    // do nothing, it will not happen
+                }
                 // deep copy include is previousEntry 0 right now, but we need
                 // to eventually consider repeat offset
                 if ( isEntryNeedingStartBit( content ) == true ) {

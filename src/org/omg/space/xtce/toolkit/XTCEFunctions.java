@@ -68,7 +68,7 @@ public class XTCEFunctions {
      *
      */
 
-    public static void registerAbsoluteTimeHandler( XTCEAbsoluteTimeType instance ) {
+    public static void registerAbsoluteTimeHandler( final XTCEAbsoluteTimeType instance ) {
 
         ensureDefaultRegistration();
 
@@ -93,7 +93,7 @@ public class XTCEFunctions {
      *
      */
 
-    public static XTCEAbsoluteTimeType getAbsoluteTimeHandler( AbsoluteTimeDataType element ) throws XTCEDatabaseException {
+    public static XTCEAbsoluteTimeType getAbsoluteTimeHandler( final AbsoluteTimeDataType element ) throws XTCEDatabaseException {
 
         ensureDefaultRegistration();
 
@@ -129,7 +129,7 @@ public class XTCEFunctions {
      *
      */
 
-    public static BitSet getBitSetFromByteArray( byte[] bytes ) {
+    public static BitSet getBitSetFromByteArray( final byte[] bytes ) {
 
         //BitSet bits = new BitSet( bytes.length * 8 );
 
@@ -159,7 +159,7 @@ public class XTCEFunctions {
      *
      */
 
-    public static BitSet getBitSetFromStreamByteArray( byte[] bytes ) {
+    public static BitSet getBitSetFromStreamByteArray( final byte[] bytes ) {
 
         BitSet bits = new BitSet( bytes.length * 8 );
 
@@ -217,7 +217,7 @@ public class XTCEFunctions {
      *
      */
 
-    public static String bitSetToHex( BitSet bits, int minBytes ) {
+    public static String bitSetToHex( final BitSet bits, final int minBytes ) {
 
         StringBuilder sb = new StringBuilder( "0x" ); // NOI18N
 
@@ -254,8 +254,8 @@ public class XTCEFunctions {
      *
      */
 
-    public static String resolvePathReference( String currentPath,
-                                               String pathReference ) {
+    public static String resolvePathReference( final String currentPath,
+                                               final String pathReference ) {
 
         // TODO: This function takes a big performance hit.
 
@@ -297,7 +297,7 @@ public class XTCEFunctions {
      *
      */
 
-    public static String getPathNameFromReferenceString( String filepath ) {
+    public static String getPathNameFromReferenceString( final String filepath ) {
 
         int idx  = filepath.lastIndexOf( '/' ); // NOI18N
         if ( idx == -1 ) {
@@ -319,7 +319,7 @@ public class XTCEFunctions {
      *
      */
 
-    public static String getNameFromPathReferenceString( String filepath ) {
+    public static String getNameFromPathReferenceString( final String filepath ) {
 
         int idx  = filepath.lastIndexOf( '/' ); // NOI18N
         if ( idx == -1 ) {
@@ -354,21 +354,23 @@ public class XTCEFunctions {
      *
      */
 
-    public static String makeAliasDisplayString( XTCENamedObject parameter,
-                                                 boolean         showAllNamespaces,
-                                                 boolean         showAliasNamespaces,
-                                                 String          preferredNamespace ) {
+    public static String makeAliasDisplayString( final XTCENamedObject parameter,
+                                                 final boolean         showAllNamespaces,
+                                                 final boolean         showAliasNamespaces,
+                                                 final String          preferredNamespace ) {
 
-        if ( preferredNamespace == null ) {
-            preferredNamespace = ""; // NOI18N
+        String myPreferredNamespace = preferredNamespace;
+
+        if ( myPreferredNamespace == null ) {
+            myPreferredNamespace = ""; // NOI18N
         }
 
         List<XTCEAlias> aliasList    = parameter.getAliasSet();
         StringBuilder   aliasDisplay = new StringBuilder();
 
         for ( XTCEAlias entry : aliasList ) {
-            if ( ( showAllNamespaces                                 == true ) ||
-                 ( preferredNamespace.equals( entry.getNameSpace() ) == true ) ) {
+            if ( ( showAllNamespaces                                   == true ) ||
+                 ( myPreferredNamespace.equals( entry.getNameSpace() ) == true ) ) {
                 if ( aliasDisplay.length() > 0 ) {
                     aliasDisplay.append( ' ' ); // NOI18N
                 }
@@ -397,7 +399,7 @@ public class XTCEFunctions {
      *
      */
 
-    public static String getCleanHexString( String inputText ) {
+    public static String getCleanHexString( final String inputText ) {
 
         String text = inputText.replaceAll( "[ ,;\r\f\n\t]", "" ); // NOI18N
         text = text.toLowerCase();
@@ -422,7 +424,7 @@ public class XTCEFunctions {
      *
      */
 
-    public static byte[] getBytesFromHexString( String hex ) {
+    public static byte[] getBytesFromHexString( final String hex ) {
 
         int byteCount = hex.length() / 2;
         if ( hex.length() % 2 != 0 ) {
@@ -472,7 +474,7 @@ public class XTCEFunctions {
      *
      */
 
-    public static boolean matchesUsingGlob( String text, String glob ) {
+    public static boolean matchesUsingGlob( final String text, String glob ) {
 
         String rest = null;
         int pos = glob.indexOf( '*' ); // NOI18N
@@ -518,7 +520,7 @@ public class XTCEFunctions {
      *
      */
 
-    public static String getText( String key ) {
+    public static String getText( final String key ) {
 
         if ( messages_ == null ) {
             setLocalePreference( Locale.getDefault() );
@@ -538,7 +540,7 @@ public class XTCEFunctions {
      *
      */
 
-    public static boolean setLocalePreference( Locale userLocale ) {
+    public static boolean setLocalePreference( final Locale userLocale ) {
 
         try {
             messages_ = ResourceBundle.getBundle( propLocation_, userLocale );
@@ -563,7 +565,7 @@ public class XTCEFunctions {
      *
      */
 
-    public static boolean checkLocaleAvailable( Locale userLocale ) {
+    public static boolean checkLocaleAvailable( final Locale userLocale ) {
 
         try {
             ResourceBundle.getBundle( propLocation_, userLocale );
@@ -611,7 +613,7 @@ public class XTCEFunctions {
      *
      */
 
-    public static String xmlPrettyPrint( NodeList nodes ) throws XTCEDatabaseException {
+    public static String xmlPrettyPrint( final NodeList nodes ) throws XTCEDatabaseException {
 
         InputStream stream = ClassLoader.getSystemResourceAsStream(
             "org/omg/space/xtce/toolkit/prettyprint.xsl" ); // NOI18N
@@ -668,7 +670,7 @@ public class XTCEFunctions {
      *
      */
 
-    public static String xmlPrettyPrint( String xmlText ) throws XTCEDatabaseException {
+    public static String xmlPrettyPrint( final String xmlText ) throws XTCEDatabaseException {
 
         InputStream stream = ClassLoader.getSystemResourceAsStream(
             "org/omg/space/xtce/toolkit/prettyprint.xsl" ); // NOI18N
@@ -750,7 +752,8 @@ public class XTCEFunctions {
      *
      */
 
-    public static String makeRepeatString( long count, long total ) {
+    public static String makeRepeatString( final long count,
+                                           final long total ) {
 
         if ( repeatText_.isEmpty() == true ) {
             repeatText_ = XTCEFunctions.getText( "general_repeat" ); // NOI18N
@@ -783,7 +786,7 @@ public class XTCEFunctions {
      *
      */
 
-    private static String formatMemoryQuantity( long amount ) {
+    private static String formatMemoryQuantity( final long amount ) {
 
         String unit = "K"; // NOI18N
         double quantity = amount / 1024.0;

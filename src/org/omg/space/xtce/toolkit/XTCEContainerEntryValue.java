@@ -46,10 +46,10 @@ public class XTCEContainerEntryValue {
      *
      */
 
-    public XTCEContainerEntryValue( XTCETypedObject item,
-                                    String          value,
-                                    String          operator,
-                                    String          form ) {
+    public XTCEContainerEntryValue( final XTCETypedObject item,
+                                    final String          value,
+                                    final String          operator,
+                                    final String          form ) {
 
         name_                     = item.getFullPath();
         value_                    = value;
@@ -70,7 +70,7 @@ public class XTCEContainerEntryValue {
      *
      */
 
-    public XTCEContainerEntryValue( String value ) {
+    public XTCEContainerEntryValue( final String value ) {
 
         name_                     = ""; // NOI18N
         value_                    = value;
@@ -92,8 +92,8 @@ public class XTCEContainerEntryValue {
      *
      */
 
-    public XTCEContainerEntryValue( XTCETypedObject item,
-                                    BitSet          rawValue ) {
+    public XTCEContainerEntryValue( final XTCETypedObject item,
+                                    final BitSet          rawValue ) {
 
         item_                     = item;
         name_                     = item.getFullPath();
@@ -265,7 +265,7 @@ public class XTCEContainerEntryValue {
      *
      */
 
-    public final boolean isCompatibleWith( XTCEContainerEntryValue that ) {
+    public final boolean isCompatibleWith( final XTCEContainerEntryValue that ) {
 
         // if these are exactly the same object on the Java heap then they must
         // be compatible
@@ -392,8 +392,8 @@ public class XTCEContainerEntryValue {
         return toStringWithoutParameter_;
     }
 
-    private boolean checkValuesCompatible( String otherValue,
-                                           String otherOperator ) {
+    private boolean checkValuesCompatible( final String otherValue,
+                                           final String otherOperator ) {
 
         if ( operator_.equals( "==" ) == true ) { // NOI18N
             if ( otherOperator.equals( "==" ) == true ) { // NOI18N

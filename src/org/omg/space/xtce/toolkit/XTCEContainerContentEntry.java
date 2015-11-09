@@ -29,17 +29,7 @@ import org.omg.space.xtce.database.MetaCommandType.BaseMetaCommand.ArgumentAssig
  *
  */
 
-public class XTCEContainerContentEntry implements Comparable {
-
-    /** Private Default Constructor
-     *
-     * This is for the deepCopy() method.
-     *
-     */
-
-    private XTCEContainerContentEntry() {
-
-    }
+public class XTCEContainerContentEntry implements Comparable, Cloneable {
 
     /** Constructor
      *
@@ -54,13 +44,17 @@ public class XTCEContainerContentEntry implements Comparable {
      *
      */
 
-    XTCEContainerContentEntry( XTCEParameter   parameter,
-                               XTCETMContainer holdingContainer ) {
+    XTCEContainerContentEntry( final XTCEParameter   parameter,
+                               final XTCETMContainer holdingContainer ) {
 
-        itemName   = parameter.getName(); // not used yet??
-        fieldType  = FieldType.PARAMETER;
-        pReference = parameter;
-        hContainer = holdingContainer;
+        fieldType       = FieldType.PARAMETER;
+        pReference      = parameter;
+        hContainer      = holdingContainer;
+        tmContReference = null;
+        tcContReference = null;
+        aReference      = null;
+        telecommand     = null;
+        fixedSize       = "";
 
     }
 
@@ -77,14 +71,17 @@ public class XTCEContainerContentEntry implements Comparable {
      *
      */
 
-    XTCEContainerContentEntry( XTCETMContainer container,
-                               XTCETMContainer holdingContainer ) {
+    XTCEContainerContentEntry( final XTCETMContainer container,
+                               final XTCETMContainer holdingContainer ) {
 
-        itemName        = container.getName(); // not used yet??
         fieldType       = FieldType.CONTAINER;
         pReference      = null;
         tmContReference = container;
         hContainer      = holdingContainer;
+        tcContReference = null;
+        aReference      = null;
+        telecommand     = null;
+        fixedSize       = "";
 
     }
 
@@ -101,13 +98,17 @@ public class XTCEContainerContentEntry implements Comparable {
      *
      */
 
-    XTCEContainerContentEntry( XTCEParameter   parameter,
-                               XTCETelecommand tcContainer ) {
+    XTCEContainerContentEntry( final XTCEParameter   parameter,
+                               final XTCETelecommand tcContainer ) {
 
-        itemName    = parameter.getName(); // not used yet??
-        fieldType   = FieldType.PARAMETER;
-        pReference  = parameter;
-        telecommand = tcContainer;
+        fieldType       = FieldType.PARAMETER;
+        pReference      = parameter;
+        hContainer      = null;
+        tmContReference = null;
+        tcContReference = null;
+        aReference      = null;
+        telecommand     = tcContainer;
+        fixedSize       = "";
 
     }
 
@@ -124,13 +125,17 @@ public class XTCEContainerContentEntry implements Comparable {
      *
      */
 
-    XTCEContainerContentEntry( XTCEArgument    argument,
-                               XTCETelecommand tcContainer ) {
+    XTCEContainerContentEntry( final XTCEArgument    argument,
+                               final XTCETelecommand tcContainer ) {
 
-        itemName    = argument.getName(); // not used yet??
-        fieldType   = FieldType.ARGUMENT;
-        aReference  = argument;
-        telecommand = tcContainer;
+        fieldType       = FieldType.ARGUMENT;
+        pReference      = null;
+        hContainer      = null;
+        tmContReference = null;
+        tcContReference = null;
+        aReference      = argument;
+        telecommand     = tcContainer;
+        fixedSize       = "";
 
     }
 
@@ -147,13 +152,17 @@ public class XTCEContainerContentEntry implements Comparable {
      *
      */
 
-    XTCEContainerContentEntry( XTCETCContainer container,
-                               XTCETelecommand tcContainer ) {
+    XTCEContainerContentEntry( final XTCETCContainer container,
+                               final XTCETelecommand tcContainer ) {
 
-        itemName         = container.getName(); // not used yet??
         fieldType        = FieldType.CONTAINER;
+        pReference       = null;
+        hContainer       = null;
+        tmContReference  = null;
+        aReference       = null;
         tcContReference  = container;
         telecommand      = tcContainer;
+        fixedSize        = "";
 
     }
 
@@ -173,16 +182,22 @@ public class XTCEContainerContentEntry implements Comparable {
      *
      */
 
-    XTCEContainerContentEntry( String          size,
-                               String          value,
-                               XTCETelecommand tcContainer ) {
+    XTCEContainerContentEntry( final String          size,
+                               final String          value,
+                               final XTCETelecommand tcContainer ) {
 
-        itemName    = ""; // NOI18N
-        fieldType   = FieldType.CONSTANT;
-        telecommand = tcContainer;
-        fixedSize   = size;
+        fieldType       = FieldType.CONSTANT;
+        pReference      = null;
+        hContainer      = null;
+        tmContReference = null;
+        tcContReference = null;
+        aReference      = null;
+        telecommand     = tcContainer;
+        fixedSize       = size;
+
         long tempValueLong = Long.parseLong( value, 16 );
-        entryValue  = new XTCEContainerEntryValue( Long.toString( tempValueLong ) );
+        entryValue =
+            new XTCEContainerEntryValue( Long.toString( tempValueLong ) );
 
     }
 
@@ -193,9 +208,23 @@ public class XTCEContainerContentEntry implements Comparable {
      *
      */
 
-    public String getName() {
-        return
-            XTCEFunctions.getNameFromPathReferenceString( getItemFullPath() );
+    public final String getName() {
+
+        switch ( fieldType ) {
+            case PARAMETER:
+                return pReference.getName();
+            case ARGUMENT:
+                return aReference.getName();
+            case CONTAINER:
+                if ( tmContReference != null ) {
+                    return tmContReference.getName();
+                } else if ( tcContReference != null ) {
+                    return tcContReference.getName();
+                }
+        }
+
+        return "";
+
     }
 
     /** Retrieve the Fully Qualified Name of the item for which this entry is
@@ -205,19 +234,23 @@ public class XTCEContainerContentEntry implements Comparable {
      *
      */
 
-    public String getItemFullPath() {
-        if ( fieldType == FieldType.PARAMETER ) {
-            return pReference.getFullPath();
-        } else if ( fieldType == FieldType.ARGUMENT ) {
-            return aReference.getFullPath();
-        } else if ( fieldType == FieldType.CONTAINER ) {
-            if ( tmContReference != null ) {
-                return tmContReference.getFullPath();
-            } else if ( tcContReference != null ) {
-                return tcContReference.getFullPath();
-            }
+    public final String getItemFullPath() {
+
+        switch ( fieldType ) {
+            case PARAMETER:
+                return pReference.getFullPath();
+            case ARGUMENT:
+                return aReference.getFullPath();
+            case CONTAINER:
+                if ( tmContReference != null ) {
+                    return tmContReference.getFullPath();
+                } else if ( tcContReference != null ) {
+                    return tcContReference.getFullPath();
+                }
         }
+
         return "";
+
     }
 
     /** Retrieve the XTCETMContainer that is represented by this entry, or a
@@ -234,7 +267,7 @@ public class XTCEContainerContentEntry implements Comparable {
      *
      */
 
-    public XTCETMContainer getTelemetryContainer() {
+    public final XTCETMContainer getTelemetryContainer() {
         return tmContReference;
     }
 
@@ -252,7 +285,7 @@ public class XTCEContainerContentEntry implements Comparable {
      *
      */
 
-    public XTCETCContainer getTelecommandContainer() {
+    public final XTCETCContainer getTelecommandContainer() {
         return tcContReference;
     }
 
@@ -271,7 +304,7 @@ public class XTCEContainerContentEntry implements Comparable {
      *
      */
 
-    public XTCETMContainer getHoldingContainer() {
+    public final XTCETMContainer getHoldingContainer() {
         return hContainer;
     }
 
@@ -289,7 +322,7 @@ public class XTCEContainerContentEntry implements Comparable {
      *
      */
 
-    public XTCEParameter getParameter() {
+    public final XTCEParameter getParameter() {
         return pReference;
     }
 
@@ -307,7 +340,7 @@ public class XTCEContainerContentEntry implements Comparable {
      *
      */
 
-    public XTCEArgument getArgument() {
+    public final XTCEArgument getArgument() {
         return aReference;
     }
 
@@ -325,7 +358,7 @@ public class XTCEContainerContentEntry implements Comparable {
      *
      */
 
-    public XTCETelecommand getTelecommand() {
+    public final XTCETelecommand getTelecommand() {
         return telecommand;
     }
 
@@ -336,7 +369,8 @@ public class XTCEContainerContentEntry implements Comparable {
      *
      */
 
-    public String getEntryTypeString() {
+    public final String getEntryTypeString() {
+
         switch ( fieldType ) {
             case PARAMETER:
                 return "Parameter"; // NOI18N
@@ -347,7 +381,9 @@ public class XTCEContainerContentEntry implements Comparable {
             case CONSTANT:
                 return "Constant"; // NOI18N
         }
+
         return ""; // NOI18N
+
     }
 
     /** Retrieve the type of entry that this object represents in the overall
@@ -357,7 +393,7 @@ public class XTCEContainerContentEntry implements Comparable {
      *
      */
 
-    public FieldType getEntryType() {
+    public final FieldType getEntryType() {
         return fieldType;
     }
 
@@ -370,15 +406,19 @@ public class XTCEContainerContentEntry implements Comparable {
      *
      */
 
-    public String getRawSizeInBits() {
-        if ( fieldType == FieldType.PARAMETER ) {
-            return pReference.getRawSizeInBits();
-        } else if ( fieldType == FieldType.ARGUMENT ) {
-            return aReference.getRawSizeInBits();
-        } else if ( fieldType == FieldType.CONSTANT ) {
-            return fixedSize;
+    public final String getRawSizeInBits() {
+
+        switch ( fieldType ) {
+            case PARAMETER:
+                return pReference.getRawSizeInBits();
+            case ARGUMENT:
+                return aReference.getRawSizeInBits();
+            case CONSTANT:
+                return fixedSize;
         }
+
         return ""; // NOI18N
+
     }
 
     /** Retrieve the initial/default value for this entry in the container
@@ -392,14 +432,17 @@ public class XTCEContainerContentEntry implements Comparable {
      *
      */
 
-    public String getInitialValue() {
-        if ( fieldType == FieldType.PARAMETER ) {
-            return pReference.getInitialValue();
-        } else if ( fieldType == FieldType.ARGUMENT ) {
-            return aReference.getInitialValue();
-        } else if ( fieldType == FieldType.CONSTANT ) {
-            return entryValue.toStringWithoutParameter();
+    public final String getInitialValue() {
+
+        switch ( fieldType ) {
+            case PARAMETER:
+                return pReference.getInitialValue();
+            case ARGUMENT:
+                return aReference.getInitialValue();
+            case CONSTANT:
+                return entryValue.toStringWithoutParameter();
         }
+
         return ""; // NOI18N
     }
 
@@ -412,7 +455,7 @@ public class XTCEContainerContentEntry implements Comparable {
      *
      */
 
-    public String getStartBit() {
+    public final String getStartBit() {
         return startBit;
     }
 
@@ -422,7 +465,7 @@ public class XTCEContainerContentEntry implements Comparable {
      *
      */
 
-    public void setStartBit( long startBitValue ) {
+    public final void setStartBit( final long startBitValue ) {
         startBit = Long.toString( startBitValue );
     }
 
@@ -432,7 +475,7 @@ public class XTCEContainerContentEntry implements Comparable {
      *
      */
 
-    public void setStartBit( String startBitValue ) {
+    public final void setStartBit( final String startBitValue ) {
         startBit = startBitValue;
     }
 
@@ -444,12 +487,8 @@ public class XTCEContainerContentEntry implements Comparable {
      *
      */
 
-    public XTCEContainerEntryValue getValue() {
+    public final XTCEContainerEntryValue getValue() {
         return entryValue;
-        //if ( entryValue != null ) {
-        //    return entryValue.toStringWithoutParameter();
-        //}
-        //return "";
     }
 
     /** Sets a value for this entry based on a RestrictionCriteria by passing
@@ -460,7 +499,7 @@ public class XTCEContainerContentEntry implements Comparable {
      *
      */
 
-    public void setValue( ComparisonType compare ) {
+    public final void setValue( final ComparisonType compare ) {
 
         String valueForm = ( compare.isUseCalibratedValue() ? "Calibrated" : // NOI18N
                                                               "Uncalibrated" ); // NOI18N
@@ -480,7 +519,7 @@ public class XTCEContainerContentEntry implements Comparable {
      *
      */
 
-    public void setValue ( ArgumentAssignment argAssign ) {
+    public final void setValue ( final ArgumentAssignment argAssign ) {
 
         entryValue = new XTCEContainerEntryValue( aReference,
                                                   argAssign.getArgumentValue(),
@@ -498,7 +537,7 @@ public class XTCEContainerContentEntry implements Comparable {
      *
      */
 
-    public void setValue ( XTCEContainerEntryValue userValue ) {
+    public final void setValue ( final XTCEContainerEntryValue userValue ) {
         entryValue = userValue;
     }
 
@@ -511,7 +550,7 @@ public class XTCEContainerContentEntry implements Comparable {
      *
      */
 
-    public String getConditions() {
+    public final String getConditions() {
 
         if ( ( conditions == null ) || ( conditions.isEmpty() ) ) {
             return ""; // NOI18N
@@ -536,7 +575,7 @@ public class XTCEContainerContentEntry implements Comparable {
      *
      */
 
-    public List<XTCEContainerEntryValue> getConditionList() {
+    public final List<XTCEContainerEntryValue> getConditionList() {
 
         if ( conditions == null ) {
             return new ArrayList<>();
@@ -563,8 +602,8 @@ public class XTCEContainerContentEntry implements Comparable {
      *
      */
 
-    public void setConditionList( List<XTCEContainerEntryValue> allConditions,
-                                  boolean                       entryInUse ) {
+    public final void setConditionList( final List<XTCEContainerEntryValue> allConditions,
+                                        final boolean                       entryInUse ) {
 
         if ( allConditions == null ) {
             return;
@@ -590,7 +629,8 @@ public class XTCEContainerContentEntry implements Comparable {
      *
      */
 
-    public void setCondition( XTCEParameter parameter, ComparisonType compare ) {
+    public final void setCondition( final XTCEParameter  parameter,
+                                    final ComparisonType compare ) {
 
         if ( conditions == null ) {
             conditions = new ArrayList<>();
@@ -619,7 +659,7 @@ public class XTCEContainerContentEntry implements Comparable {
      *
      */
 
-    public String getRepeatParameterInfo() {
+    public final String getRepeatParameterInfo() {
         return repeatParameter;
     }
 
@@ -635,7 +675,7 @@ public class XTCEContainerContentEntry implements Comparable {
      *
      */
 
-    public void setRepeatparameterInfo( String repeatString ) {
+    public final void setRepeatparameterInfo( final String repeatString ) {
         repeatParameter = repeatString;
     }
 
@@ -648,26 +688,14 @@ public class XTCEContainerContentEntry implements Comparable {
      *
      * @return XTCEContainerContentEntry copy of this entry.
      *
+     * @throws CloneNotSupportedException in the event that this object cannot
+     * be cloned.
+     *
      */
 
-    public XTCEContainerContentEntry deepCopy() {
-        XTCEContainerContentEntry newOne = new XTCEContainerContentEntry();
-        newOne.itemName           = itemName;
-        newOne.fieldType          = fieldType;
-        newOne.startBit           = startBit;
-        newOne.fixedSize          = fixedSize;
-        newOne.entryValue         = entryValue;
-        newOne.conditions         = conditions;
-        newOne.repeatParameter    = repeatParameter;
-        newOne.pReference         = pReference;
-        newOne.tmContReference    = tmContReference;
-        newOne.hContainer         = hContainer;
-        newOne.aReference         = aReference;
-        newOne.tcContReference    = tcContReference;
-        newOne.telecommand        = telecommand;
-        newOne.isCurrentlyApplied = isCurrentlyApplied;
-        return newOne;
-        
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 
     /** Retrieve the "in use" attribute of this entry.
@@ -680,8 +708,23 @@ public class XTCEContainerContentEntry implements Comparable {
      *
      */
 
-    public boolean isCurrentlyInUse() {
+    public final boolean isCurrentlyInUse() {
         return isCurrentlyApplied;
+    }
+
+    /** Sets the "in use" attribute of this entry.
+     *
+     * The "in use" attribute tells the caller if this entry is currently an
+     * active participant in the container.  An entry is not in use when it has
+     * a conditional that is NOT satisfied.
+     *
+     * @param useFlag boolean indicating that this entry is currently used in
+     * the container definition for which it is included.
+     *
+     */
+
+    public final void setCurrentlyInUse( final boolean useFlag ) {
+        isCurrentlyApplied = useFlag;
     }
 
     /** Comparison Operator
@@ -700,12 +743,15 @@ public class XTCEContainerContentEntry implements Comparable {
 
     @Override
     public int compareTo( Object obj ) {
+
         if ( (Object)this == obj ) {
             return 0;
         }
+
         XTCEContainerContentEntry that = (XTCEContainerContentEntry)obj;
         boolean thisEmpty = this.getStartBit().isEmpty();
         boolean thatEmpty = that.getStartBit().isEmpty();
+
         if ( ( thisEmpty == true ) && ( thatEmpty == true ) ) {
             return 0;
         } else if ( thisEmpty == true ) {
@@ -723,75 +769,71 @@ public class XTCEContainerContentEntry implements Comparable {
                 return 0;
             }
         }
+
     }
-
-    /// This attribute is the name of the Parameter or Argument or an empty
-    /// string if this field is an immutable constant in the container.
-
-    String itemName = ""; // NOI18N
 
     /// This attribute indicates which kind of field this entry refers to, with
     /// valid values of Parameter, Argument, Container, or Constant.
 
-    FieldType fieldType;
-
-    /// The start bit of this entry in the content of the container, or an
-    /// empty string if the start bit is not applicable for this entry.
-
-    String startBit = ""; // NOI18N
+    private final FieldType fieldType;
 
     /// Size of a fixed/constant field in the telecommand encoding
 
-    String fixedSize = null;
-
-    /// This is the container to hold the value for this entry in the content
-    /// when the value is assigned by a RestrictionCriteria or by the user to
-    /// perhaps enable an IncludeCondition to be true.
-
-    XTCEContainerEntryValue entryValue = null;
-
-    /// This is the container to hold the conditions for this entry, which is
-    /// a list of entries varying other Parameters and values.
-
-    List<XTCEContainerEntryValue> conditions = null;
-
-    /// This is the repeat entry parameter count condition
-
-    String repeatParameter = ""; // NOI18N
+    private final String fixedSize;
 
     /// In the event that the fieldType = "Parameter", then this reference will
     /// contain the XTCEParameter object representing the Parameter.
 
-    XTCEParameter pReference = null;
+    private final XTCEParameter pReference;
 
     /// In the event that the fieldType = "Container", then this reference will
     /// contain the XTCETMContainer object representing the Container.
 
-    XTCETMContainer tmContReference = null;
+    private final XTCETMContainer tmContReference;
 
     /// This is the immediate parent XTCETMContainer that defines this entry.
 
-    XTCETMContainer hContainer = null;
+    private final XTCETMContainer hContainer;
 
     /// In the event that the fieldType = "Argument", then this reference will
     /// contain the XTCEArgument object representing the Argument.
 
-    XTCEArgument aReference = null;
+    private final XTCEArgument aReference;
 
     /// In the event that the fieldType = "Container", then this reference will
     /// contain the XTCETMContainer object representing the Container.
 
-    XTCETCContainer tcContReference = null;
+    private final XTCETCContainer tcContReference;
 
     /// This is the telecommand parent container.
 
-    XTCETelecommand telecommand = null;
+    private final XTCETelecommand telecommand;
 
     /// This flag indicates if the entry is currently applicable on the output,
     /// which is false if there is an include condition and that condition is
     /// not currently true.
 
-    boolean isCurrentlyApplied = true;
+    private boolean isCurrentlyApplied = true;
+
+    /// The start bit of this entry in the content of the container, or an
+    /// empty string if the start bit is not applicable for this entry.
+
+    private String startBit = ""; // NOI18N
+
+    /// This is the container to hold the value for this entry in the content
+    /// when the value is assigned by a RestrictionCriteria or by the user to
+    /// perhaps enable an IncludeCondition to be true.
+
+    private XTCEContainerEntryValue entryValue = null;
+
+    /// This is the container to hold the conditions for this entry, which is
+    /// a list of entries varying other Parameters and values.
+
+    private List<XTCEContainerEntryValue> conditions = null;
+
+    /// This is the repeat entry parameter count condition
+
+    private String repeatParameter = ""; // NOI18N
 
     /** Enumeration type to describe the nature of an entry item on a container
      * or telecommand table and/or drawing.

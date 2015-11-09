@@ -61,7 +61,10 @@ public class XTCEArgument extends XTCETypedObject {
      *
      */
 
-    XTCEArgument( String name, String path, Argument pRef, NameDescriptionType ptRef ) {
+    XTCEArgument( final String              name,
+                  final String              path,
+                  final Argument            pRef,
+                  final NameDescriptionType ptRef ) {
 
         super( name,
                path,
@@ -93,7 +96,10 @@ public class XTCEArgument extends XTCETypedObject {
      *
      */
 
-    XTCEArgument( String name, String path, Member pRef, NameDescriptionType ptRef ) {
+    XTCEArgument( final String              name,
+                  final String              path,
+                  final Member              pRef,
+                  final NameDescriptionType ptRef ) {
 
         super( name, path, null, null, ptRef );
 
@@ -342,7 +348,7 @@ public class XTCEArgument extends XTCETypedObject {
 
     // Private Data Members
 
-    private Argument reference_       = null;
-    private Member   memberReference_ = null;
+    private final Argument reference_;
+    private final Member   memberReference_;
 
 }

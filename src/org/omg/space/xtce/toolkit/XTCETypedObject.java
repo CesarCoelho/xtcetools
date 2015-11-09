@@ -71,15 +71,43 @@ public abstract class XTCETypedObject extends XTCENamedObject {
      *
      */
 
-    XTCETypedObject( String              name,
-                     String              spaceSystemPath,
-                     AliasSetType        obj,
-                     AncillaryDataSet    anc,
-                     NameDescriptionType typeObj ) {
+    XTCETypedObject( final String              name,
+                     final String              spaceSystemPath,
+                     final AliasSetType        obj,
+                     final AncillaryDataSet    anc,
+                     final NameDescriptionType typeObj ) {
 
         super( name, spaceSystemPath, obj, anc );
 
         typeObj_ = typeObj;
+
+        if ( typeObj_ != null ) {
+            if ( typeObj_ instanceof EnumeratedDataType ) {
+                dataType_ = DataType.EnumeratedDataType;
+            } else if ( typeObj_ instanceof IntegerDataType ) {
+                dataType_ = DataType.IntegerDataType;
+            } else if ( typeObj_ instanceof FloatDataType ) {
+                dataType_ = DataType.FloatDataType;
+            } else if ( typeObj_ instanceof BinaryDataType ) {
+                dataType_ = DataType.BinaryDataType;
+            } else if ( typeObj_ instanceof BooleanDataType ) {
+                dataType_ = DataType.BooleanDataType;
+            } else if ( typeObj_ instanceof StringDataType ) {
+                dataType_ = DataType.StringDataType;
+            } else if ( typeObj_ instanceof AggregateDataType ) {
+                dataType_ = DataType.AggregateDataType;
+            } else if ( typeObj_ instanceof AbsoluteTimeDataType ) {
+                dataType_ = DataType.AbsoluteTimeDataType;
+            } else if ( typeObj_ instanceof RelativeTimeDataType ) {
+                dataType_ = DataType.RelativeTimeDataType;
+            } else if ( typeObj_ instanceof ArrayDataTypeType ) {
+                dataType_ = DataType.ArrayDataTypeType;
+            } else {
+                dataType_ = null;
+            }
+        } else {
+            dataType_ = null;
+        }
 
         // this overloads the previously defined alias list that was determined
         // from the named object with additions from the typed object.
@@ -196,7 +224,7 @@ public abstract class XTCETypedObject extends XTCENamedObject {
      */
 
     @Override
-    public List<AncillaryData> getAncillaryData( String nameGlob ) {
+    public List<AncillaryData> getAncillaryData( final String nameGlob ) {
 
         ArrayList<AncillaryData> list = new ArrayList<>();
 
@@ -268,23 +296,33 @@ public abstract class XTCETypedObject extends XTCENamedObject {
 
     protected String getInitialValue() {
 
-        if ( typeObj_ != null ) {
-            if ( typeObj_ instanceof EnumeratedDataType ) {
-                EnumeratedDataType tRef = (EnumeratedDataType)typeObj_;
-                if ( tRef.getInitialValue() != null ) {
-                    return tRef.getInitialValue();
-                }
-            } else if ( typeObj_ instanceof IntegerDataType ) {
+        switch ( dataType_ ) {
+
+            case IntegerDataType: {
                 IntegerDataType tRef = (IntegerDataType)typeObj_;
                 if ( tRef.getInitialValue() != null ) {
                     return tRef.getInitialValue();
                 }
-            } else if ( typeObj_ instanceof FloatDataType ) {
+                break;
+            }
+
+            case EnumeratedDataType: {
+                EnumeratedDataType tRef = (EnumeratedDataType)typeObj_;
+                if ( tRef.getInitialValue() != null ) {
+                    return tRef.getInitialValue();
+                }
+                break;
+            }
+
+            case FloatDataType: {
                 FloatDataType tRef = (FloatDataType)typeObj_;
                 if ( tRef.getInitialValue() != null ) {
                     return tRef.getInitialValue().toString();
                 }
-            } else if ( typeObj_ instanceof BinaryDataType ) {
+                break;
+            }
+
+            case BinaryDataType: {
                 BinaryDataType tRef = (BinaryDataType)typeObj_;
                 if ( tRef.getInitialValue() != null ) {
                     byte[] bytes = tRef.getInitialValue();
@@ -294,27 +332,41 @@ public abstract class XTCETypedObject extends XTCENamedObject {
                     }
                     return out.toString();
                 }
-            } else if ( typeObj_ instanceof BooleanDataType ) {
+                break;
+            }
+
+            case BooleanDataType: {
                 BooleanDataType tRef = (BooleanDataType)typeObj_;
                 if ( tRef.getInitialValue() != null ) {
                     return tRef.getInitialValue();
                 }
-            } else if ( typeObj_ instanceof StringDataType ) {
+                break;
+            }
+
+            case StringDataType: {
                 StringDataType tRef = (StringDataType)typeObj_;
                 if ( tRef.getInitialValue() != null ) {
                     return tRef.getInitialValue();
                 }
-            } else if ( typeObj_ instanceof AbsoluteTimeDataType ) {
+                break;
+            }
+
+            case AbsoluteTimeDataType: {
                 AbsoluteTimeDataType tRef = (AbsoluteTimeDataType)typeObj_;
                 if ( tRef.getInitialValue() != null ) {
                     return tRef.getInitialValue().toString();
                 }
-            } else if ( typeObj_ instanceof RelativeTimeDataType ) {
+                break;
+            }
+
+            case RelativeTimeDataType: {
                 RelativeTimeDataType tRef = (RelativeTimeDataType)typeObj_;
                 if ( tRef.getInitialValue() != null ) {
                     return tRef.getInitialValue().toString();
                 }
+                break;
             }
+
         }
 
         return ""; // NOI18N
@@ -475,33 +527,45 @@ public abstract class XTCETypedObject extends XTCENamedObject {
 
     public final String getEngineeringTypeString() {
 
-        if ( typeObj_ != null ) {
-            if ( typeObj_ instanceof EnumeratedDataType ) {
-                return "ENUMERATED"; // NOI18N
-            } else if ( typeObj_ instanceof IntegerDataType ) {
+        switch ( dataType_ ) {
+
+            case IntegerDataType: {
                 IntegerDataType tRef = (IntegerDataType)typeObj_;
                 return ( tRef.isSigned() == true ? "SIGNED" : "UNSIGNED" ); // NOI18N
-            } else if ( typeObj_ instanceof FloatDataType ) {
+            }
+
+            case EnumeratedDataType:
+                return "ENUMERATED"; // NOI18N
+
+            case FloatDataType: {
                 FloatDataType tRef = (FloatDataType)typeObj_;
                 return "FLOAT" + tRef.getSizeInBits().toString(); // NOI18N
-            } else if ( typeObj_.getClass() == AggregateDataType.class ) {
-                return "STRUCTURE"; // NOI18N
-            } else if ( typeObj_ instanceof BinaryDataType ) {
-                return "BINARY"; // NOI18N
-            } else if ( typeObj_ instanceof BooleanDataType ) {
-                return "BOOLEAN"; // NOI18N
-            } else if ( typeObj_ instanceof StringDataType ) {
-                return "STRING"; // NOI18N
-            } else if ( typeObj_ instanceof AbsoluteTimeDataType ) {
-                return "TIME"; // NOI18N
-            } else if ( typeObj_ instanceof RelativeTimeDataType ) {
-                return "DURATION"; // NOI18N
-            } else if ( typeObj_ instanceof ArrayDataTypeType ) {
-                return "ARRAY"; // NOI18N
             }
-        }
 
-        return ""; // NOI18N
+            case BinaryDataType:
+                return "BINARY"; // NOI18N
+
+            case AggregateDataType:
+                return "STRUCTURE"; // NOI18N
+
+            case BooleanDataType:
+                return "BOOLEAN"; // NOI18N
+
+            case StringDataType:
+                return "STRING"; // NOI18N
+
+            case AbsoluteTimeDataType:
+                return "TIME"; // NOI18N
+
+            case RelativeTimeDataType:
+                return "DURATION"; // NOI18N
+
+            case ArrayDataTypeType:
+                return "ARRAY"; // NOI18N
+
+            default:
+                return ""; // NOI18N
+        }
 
     }
 
@@ -886,7 +950,7 @@ public abstract class XTCETypedObject extends XTCENamedObject {
 
         if ( typeObj_ == null ) {
             return null;
-        } else if ( typeObj_ instanceof EnumeratedDataType ) {
+        } else if ( dataType_ == DataType.EnumeratedDataType ) {
             return ((EnumeratedDataType)typeObj_).getEnumerationList()
                                                  .getEnumeration();
         }
@@ -995,16 +1059,17 @@ public abstract class XTCETypedObject extends XTCENamedObject {
 
     private boolean isBaseDataType() {
 
-        if ( typeObj_ == null ) {
-            return false;
+        switch ( dataType_ ) {
+            case IntegerDataType:
+            case EnumeratedDataType:
+            case FloatDataType:
+            case BinaryDataType:
+            case StringDataType:
+            case BooleanDataType:
+                return true;
+            default:
+                return false;
         }
-
-        return ( ( typeObj_ instanceof IntegerDataType    ) ||
-                 ( typeObj_ instanceof EnumeratedDataType ) ||
-                 ( typeObj_ instanceof FloatDataType      ) ||
-                 ( typeObj_ instanceof BinaryDataType     ) ||
-                 ( typeObj_ instanceof BooleanDataType    ) ||
-                 ( typeObj_ instanceof StringDataType     ) );
 
     }
 
@@ -1018,12 +1083,13 @@ public abstract class XTCETypedObject extends XTCENamedObject {
 
     private boolean isBaseTimeDataType() {
 
-        if ( typeObj_ == null ) {
-            return false;
+        switch ( dataType_ ) {
+            case AbsoluteTimeDataType:
+            case RelativeTimeDataType:
+                return true;
+            default:
+                return false;
         }
-
-        return ( ( typeObj_ instanceof AbsoluteTimeDataType ) ||
-                 ( typeObj_ instanceof RelativeTimeDataType ) );
 
     }
 
@@ -1031,6 +1097,7 @@ public abstract class XTCETypedObject extends XTCENamedObject {
 
     private final NameDescriptionType typeObj_;
     private final List<AncillaryData> typeAncDataList_;
+    private final DataType            dataType_;
 
 
     /** Enumeration representing the Calibrated/Engineering type of an item
@@ -1219,6 +1286,27 @@ public abstract class XTCETypedObject extends XTCENamedObject {
          */
 
         UTF16;
+
+    }
+
+    /** Private enumeration to capture the actual XTCE element data type for
+     * this typed object, so that reflection is only performed once in the
+     * constructor instead of in several methods.
+     *
+     */
+
+    private enum DataType {
+
+        IntegerDataType,
+        EnumeratedDataType,
+        FloatDataType,
+        BinaryDataType,
+        BooleanDataType,
+        StringDataType,
+        AbsoluteTimeDataType,
+        RelativeTimeDataType,
+        AggregateDataType,
+        ArrayDataTypeType;
 
     }
 

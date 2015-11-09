@@ -60,7 +60,9 @@ public class XTCESpaceSystem extends XTCENamedObject {
      *
      */
 
-    XTCESpaceSystem( String path, SpaceSystemType ssRef, XTCEDatabase dbRef ) {
+    XTCESpaceSystem( final String          path,
+                     final SpaceSystemType ssRef,
+                     final XTCEDatabase    dbRef ) {
 
         super( ssRef.getName(),
                XTCEFunctions.getPathNameFromReferenceString( path ),
@@ -119,7 +121,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
      *
      */
 
-    public final void setShortDescription( String text ) {
+    public final void setShortDescription( final String text ) {
         setPrimaryShortDescription( reference_, text );
     }
 
@@ -148,7 +150,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
      *
      */
 
-    public final void setLongDescription( String text ) {
+    public final void setLongDescription( final String text ) {
         setPrimaryLongDescription( reference_, text );
     }
 
@@ -175,7 +177,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
      *
      */
 
-    public final void setOperationalStatus( String text ) {
+    public final void setOperationalStatus( final String text ) {
         if ( ( text == null ) || ( text.isEmpty() == true ) ) {
             getReference().setOperationalStatus( null );
         } else {
@@ -239,11 +241,11 @@ public class XTCESpaceSystem extends XTCENamedObject {
      *
      */
 
-    public void setHeaderAttributes( String version,
-                                     String date,
-                                     String classification,
-                                     String instructions,
-                                     String validation ) {
+    public void setHeaderAttributes( final String version,
+                                     final String date,
+                                     final String classification,
+                                     final String instructions,
+                                     final String validation ) {
 
         // first check for the case where we clear the Header element
         if ( ( ( version        == null ) || ( version.isEmpty()        == true ) ) &&
@@ -313,7 +315,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
      *
      */
 
-    public boolean isTelemetryParameter( String name ) {
+    public boolean isTelemetryParameter( final String name ) {
 
         if ( tmParameterHashTable_ != null ) {
             XTCEParameter parameter = tmParameterHashTable_.get( name );
@@ -360,7 +362,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
      *
      */
 
-    public boolean isTelecommandParameter( String name ) {
+    public boolean isTelecommandParameter( final String name ) {
 
         if ( tcParameterHashTable_ != null ) {
             XTCEParameter parameter = tcParameterHashTable_.get( name );
@@ -411,7 +413,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
      *
      */
 
-    public XTCEParameter getTelemetryParameter( String name ) throws XTCEDatabaseException {
+    public XTCEParameter getTelemetryParameter( final String name ) throws XTCEDatabaseException {
 
         if ( tmParameterHashTable_ != null ) {
             XTCEParameter parameter = tmParameterHashTable_.get( name );
@@ -480,7 +482,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
      *
      */
 
-    public XTCEParameter getTelecommandParameter( String name ) throws XTCEDatabaseException {
+    public XTCEParameter getTelecommandParameter( final String name ) throws XTCEDatabaseException {
 
 
         if ( tcParameterHashTable_ != null ) {
@@ -636,7 +638,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
      *
      */
 
-    public XTCETMContainer getContainer( String nameOrPath ) throws XTCEDatabaseException {
+    public XTCETMContainer getContainer( final String nameOrPath ) throws XTCEDatabaseException {
 
         try {
 
@@ -682,7 +684,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
      *
      */
 
-    public List<XTCETMContainer> getContainers( String nameGlob ) {
+    public List<XTCETMContainer> getContainers( final String nameGlob ) {
 
         warnings_.clear();
 
@@ -735,7 +737,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
      *
      */
 
-    public List<XTCETMContainer> getInheritingContainers( String parentPath ) {
+    public List<XTCETMContainer> getInheritingContainers( final String parentPath ) {
 
         warnings_.clear();
 
@@ -890,7 +892,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
      *
      */
 
-    public XTCETelecommand getTelecommand( String nameOrPath ) throws XTCEDatabaseException {
+    public XTCETelecommand getTelecommand( final String nameOrPath ) throws XTCEDatabaseException {
 
         String name = XTCEFunctions.getNameFromPathReferenceString( nameOrPath );
 
@@ -998,7 +1000,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
      *
      */
 
-    public NameDescriptionType getTMParameterTypeReference( String typeName ) {
+    public NameDescriptionType getTMParameterTypeReference( final String typeName ) {
 
         try {
 
@@ -1036,7 +1038,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
      *
      */
 
-    public NameDescriptionType getTCParameterTypeReference( String typeName ) {
+    public NameDescriptionType getTCParameterTypeReference( final String typeName ) {
 
         try {
 
@@ -1074,7 +1076,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
      *
      */
 
-    public NameDescriptionType getArgumentTypeReference( String typeName ) {
+    public NameDescriptionType getArgumentTypeReference( final String typeName ) {
 
         try {
 
@@ -1106,7 +1108,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
      *
      */
 
-    private HashMap<String, XTCEParameter> ensureHashTable( List<XTCEParameter> list ) {
+    private HashMap<String, XTCEParameter> ensureHashTable( final List<XTCEParameter> list ) {
 
         //System.out.println( "Creating Hash Table in " + getFullPath() );
         HashMap<String, XTCEParameter> table = new HashMap<>( list.size() );
@@ -1117,7 +1119,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
     }
 
-    private String makeContainerInheritanceString( SequenceContainerType container ) throws XTCEDatabaseException {
+    private String makeContainerInheritanceString( final SequenceContainerType container ) throws XTCEDatabaseException {
 
         // optimization would be good to have here.
 
@@ -1144,7 +1146,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
     }
 
-    private String makeTelecommandInheritanceString( Object metacommand ) throws XTCEDatabaseException {
+    private String makeTelecommandInheritanceString( final Object metacommand ) throws XTCEDatabaseException {
 
         if ( metacommand.getClass() != MetaCommandType.class ) {
             /// @todo BlockMetaCommand
@@ -1175,7 +1177,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
     }
 
-    private SequenceContainerType getContainerElement( String ssPath ) throws XTCEDatabaseException {
+    private SequenceContainerType getContainerElement( final String ssPath ) throws XTCEDatabaseException {
 
         String name = XTCEFunctions.getNameFromPathReferenceString( ssPath );
         String path = XTCEFunctions.getPathNameFromReferenceString( ssPath );
@@ -1208,7 +1210,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
     }
 
-    private MetaCommandType getMetaCommandElement( String ssPath ) throws XTCEDatabaseException {
+    private MetaCommandType getMetaCommandElement( final String ssPath ) throws XTCEDatabaseException {
 
         String name = XTCEFunctions.getNameFromPathReferenceString( ssPath );
         String path = XTCEFunctions.getPathNameFromReferenceString( ssPath );
@@ -1247,7 +1249,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
     }
 
-    private List<XTCEParameter> addParameters( List<Object> parameters ) {
+    private List<XTCEParameter> addParameters( final List<Object> parameters ) {
 
         warnings_.clear();
 
@@ -1296,9 +1298,9 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
     }
 
-    private void addMembers( String              basename,
-                             AggregateDataType   type,
-                             List<XTCEParameter> list ) {
+    private void addMembers( final String              basename,
+                             final AggregateDataType   type,
+                             final List<XTCEParameter> list ) {
 
         // this function need not clear the warnings because it is only called
         // from the addParameters method.

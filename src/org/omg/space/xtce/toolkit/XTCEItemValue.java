@@ -67,7 +67,7 @@ public class XTCEItemValue {
      *
      */
 
-    public XTCEItemValue( XTCETypedObject item ) {
+    public XTCEItemValue( final XTCETypedObject item ) {
 
         // first gather the general attributes that are common
         itemName_    = item.getName();
@@ -190,7 +190,7 @@ public class XTCEItemValue {
      * 
      */
 
-    public String decode( BitSet rawValue ) {
+    public String decode( final BitSet rawValue ) {
 
         String uncalValue = getUncalibratedFromRaw( rawValue );
         if ( warnings_ != null && warnings_.isEmpty() == false ) {
@@ -219,7 +219,7 @@ public class XTCEItemValue {
      *
      */
 
-    public String getUncalibratedFromRaw( BitSet rawValue ) {
+    public String getUncalibratedFromRaw( final BitSet rawValue ) {
 
         clearWarnings();
 
@@ -334,7 +334,7 @@ public class XTCEItemValue {
      *
      */
 
-    public String getCalibratedFromUncalibrated( String uncalValue ) {
+    public String getCalibratedFromUncalibrated( final String uncalValue ) {
 
         clearWarnings();
 
@@ -416,7 +416,7 @@ public class XTCEItemValue {
      * 
      */
 
-    public BitSet encode( String euValue ) {
+    public BitSet encode( final String euValue ) {
 
         BitSet rawValue   = new BitSet( rawSizeInBits_ );
         String uncalValue = getUncalibratedFromCalibrated( euValue );
@@ -444,7 +444,7 @@ public class XTCEItemValue {
      * 
      */
 
-    public BitSet encode( long euValue ) {
+    public BitSet encode( final long euValue ) {
 
         BitSet rawValue   = new BitSet( rawSizeInBits_ );
         String uncalValue = getUncalibratedFromCalibrated( euValue );
@@ -472,7 +472,7 @@ public class XTCEItemValue {
      * 
      */
 
-    public BitSet encode( double euValue ) {
+    public BitSet encode( final double euValue ) {
 
         BitSet rawValue   = new BitSet( rawSizeInBits_ );
         String uncalValue = getUncalibratedFromCalibrated( euValue );
@@ -500,7 +500,7 @@ public class XTCEItemValue {
      * 
      */
 
-    public BitSet encode( float euValue ) {
+    public BitSet encode( final float euValue ) {
 
         BitSet rawValue   = new BitSet( rawSizeInBits_ );
         String uncalValue = getUncalibratedFromCalibrated( euValue );
@@ -518,7 +518,7 @@ public class XTCEItemValue {
      *
      */
 
-    public BitSet getRawFromUncalibrated( String uncalValue ) {
+    public BitSet getRawFromUncalibrated( final String uncalValue ) {
 
         // TODO Handle Byte order element ByteOrderList in the encoding
 
@@ -753,7 +753,7 @@ public class XTCEItemValue {
      *
      */
 
-    public BitSet getRawFromUncalibrated( long uncalValue ) {
+    public BitSet getRawFromUncalibrated( final long uncalValue ) {
 
         BigInteger intValue = BigInteger.valueOf( uncalValue );
         return getRawFromUncalibrated( intValue );
@@ -770,7 +770,7 @@ public class XTCEItemValue {
      *
      */
 
-    public BitSet getRawFromUncalibrated( BigDecimal uncalValue ) {
+    public BitSet getRawFromUncalibrated( final BigDecimal uncalValue ) {
 
         // TODO Handle Byte order element ByteOrderList in the encoding
 
@@ -853,7 +853,7 @@ public class XTCEItemValue {
      *
      */
 
-    public BitSet getRawFromUncalibrated( double uncalValue ) {
+    public BitSet getRawFromUncalibrated( final double uncalValue ) {
 
         BigDecimal decimalValue = new BigDecimal( uncalValue );
         return getRawFromUncalibrated( decimalValue );
@@ -870,7 +870,7 @@ public class XTCEItemValue {
      *
      */
 
-    public BitSet getRawFromUncalibrated( float uncalValue ) {
+    public BitSet getRawFromUncalibrated( final float uncalValue ) {
 
         BigDecimal decimalValue = new BigDecimal( uncalValue );
         return getRawFromUncalibrated( decimalValue );
@@ -887,7 +887,7 @@ public class XTCEItemValue {
      *
      */
 
-    public String getUncalibratedFromCalibrated( String euValue ) {
+    public String getUncalibratedFromCalibrated( final String euValue ) {
 
         switch ( euTypeName_ ) {
 
@@ -992,7 +992,7 @@ public class XTCEItemValue {
      *
      */
 
-    public String getUncalibratedFromCalibrated( BigInteger euValue ) {
+    public String getUncalibratedFromCalibrated( final BigInteger euValue ) {
 
         return getUncalibratedFromCalibrated( euValue.toString() );
 
@@ -1008,7 +1008,7 @@ public class XTCEItemValue {
      *
      */
 
-    public String getUncalibratedFromCalibrated( long euValue ) {
+    public String getUncalibratedFromCalibrated( final long euValue ) {
 
         BigInteger intValue = BigInteger.valueOf( euValue );
         return getUncalibratedFromCalibrated( intValue );
@@ -1025,7 +1025,7 @@ public class XTCEItemValue {
      *
      */
 
-    public String getUncalibratedFromCalibrated( BigDecimal euValue ) {
+    public String getUncalibratedFromCalibrated( final BigDecimal euValue ) {
 
         return getUncalibratedFromCalibrated( euValue.doubleValue() );
 
@@ -1041,7 +1041,7 @@ public class XTCEItemValue {
      *
      */
 
-    public String getUncalibratedFromCalibrated( double euValue ) {
+    public String getUncalibratedFromCalibrated( final double euValue ) {
 
         return getUncalibratedFromCalibrated( Double.toString( euValue ) );
 
@@ -1057,7 +1057,7 @@ public class XTCEItemValue {
      *
      */
 
-    public String getUncalibratedFromCalibrated( float euValue ) {
+    public String getUncalibratedFromCalibrated( final float euValue ) {
 
         return getUncalibratedFromCalibrated( Float.toString( euValue ) );
 
@@ -1081,7 +1081,7 @@ public class XTCEItemValue {
      *
      */
 
-    private BigInteger integerFromBooleanType( String euValue ) {
+    private BigInteger integerFromBooleanType( final String euValue ) {
 
         if ( euValue.equals( booleanZeroString_ ) == true ) {
             return BigInteger.ZERO;
@@ -1106,7 +1106,7 @@ public class XTCEItemValue {
      *
      */
 
-    private String booleanTypeFromUncalibrated( double uncalValue ) {
+    private String booleanTypeFromUncalibrated( final double uncalValue ) {
 
         if ( ( uncalValue % 1 ) != 0 ) {
             warn( itemName_ +
@@ -1130,7 +1130,7 @@ public class XTCEItemValue {
      *
      */
 
-    private String booleanTypeFromUncalibrated( long uncalValue ) {
+    private String booleanTypeFromUncalibrated( final long uncalValue ) {
 
         if ( uncalValue == 0 ) {
             return booleanZeroString_;
@@ -1167,7 +1167,7 @@ public class XTCEItemValue {
      *
      */
 
-    private BigInteger integerFromEnumerationType( String euValue ) {
+    private BigInteger integerFromEnumerationType( final String euValue ) {
 
         for ( ValueEnumerationType enumItem : enums_ ) {
 
@@ -1209,7 +1209,7 @@ public class XTCEItemValue {
      *
      */
 
-    private String enumeratedTypeFromUncalibrated( BigInteger uncalValue ) {
+    private String enumeratedTypeFromUncalibrated( final BigInteger uncalValue ) {
 
         for ( ValueEnumerationType enumItem : enums_ ) {
             BigInteger value    = enumItem.getValue();
@@ -1230,7 +1230,7 @@ public class XTCEItemValue {
 
     }
 
-    private String uncalibrateIntegerType( BigInteger calValue ) {
+    private String uncalibrateIntegerType( final BigInteger calValue ) {
 
         switch ( rawTypeName_ ) {
 
@@ -1280,7 +1280,7 @@ public class XTCEItemValue {
 
     }
 
-    private String uncalibrateFloatType( BigDecimal calValue ) {
+    private String uncalibrateFloatType( final BigDecimal calValue ) {
 
         switch ( rawTypeName_ ) {
 
@@ -1330,8 +1330,8 @@ public class XTCEItemValue {
 
     }
 
-    private String getUncalibratedFromRawString( String     encoding,
-                                                 BigInteger uncalValue ) {
+    private String getUncalibratedFromRawString( final String     encoding,
+                                                 final BigInteger uncalValue ) {
 
         // we need to accomodate the TerminationChar and the LeadingSize here
 
@@ -1353,13 +1353,13 @@ public class XTCEItemValue {
 
     }
 
-    private String uncalibrateStringType( String calValue ) {
+    private String uncalibrateStringType( final String calValue ) {
 
         return calValue;
 
     }
 
-    private String getCalibratedFromIntegerString( String calValue ) {
+    private String getCalibratedFromIntegerString( final String calValue ) {
 
         try {
             BigInteger retValue = new BigInteger( calValue );
@@ -1373,7 +1373,7 @@ public class XTCEItemValue {
 
     }
 
-    private String getCalibratedFromFloatString( String calValue ) {
+    private String getCalibratedFromFloatString( final String calValue ) {
 
         try {
             BigDecimal retValue = new BigDecimal( calValue );
@@ -1388,7 +1388,7 @@ public class XTCEItemValue {
 
     }
 
-    private String getCalibratedFromBooleanNumericString( String uncalValue ) {
+    private String getCalibratedFromBooleanNumericString( final String uncalValue ) {
 
         try {
 
@@ -1413,7 +1413,7 @@ public class XTCEItemValue {
 
     }
 
-    private String getCalibratedValueFromEnumeratedNumericString( String uncalValue ) {
+    private String getCalibratedValueFromEnumeratedNumericString( final String uncalValue ) {
 
         try {
 
@@ -1458,7 +1458,7 @@ public class XTCEItemValue {
      *
      */
 
-    private String applyCalibrator( String uncalValue ) {
+    private String applyCalibrator( final String uncalValue ) {
 
         CalibratorType calNode = defCal_;
         if ( calNode == null ) {
@@ -1509,8 +1509,8 @@ public class XTCEItemValue {
      *
      */
 
-    private double applyPolynomial( double                    xValue,
-                                    List<PolynomialType.Term> terms ) {
+    private double applyPolynomial( final double                    xValue,
+                                    final List<PolynomialType.Term> terms ) {
 
         double yValue = 0.0;
         for ( PolynomialType.Term term : terms ) {
@@ -1554,10 +1554,10 @@ public class XTCEItemValue {
      *
      */
 
-    private double applySpline( double                xValue,
-                                BigInteger            order,
-                                boolean               extrapolate,
-                                List<SplinePointType> points ) {
+    private double applySpline( final double                xValue,
+                                final BigInteger            order,
+                                final boolean               extrapolate,
+                                final List<SplinePointType> points ) {
 
         // TODO: Support quadratics because I did it on the other side
 
@@ -1601,7 +1601,7 @@ public class XTCEItemValue {
         return xValue;
     }
 
-    private BigInteger encodeUtfString( BigInteger retValue ) {
+    private BigInteger encodeUtfString( final BigInteger retValue ) {
 
         long bitLength = retValue.toByteArray().length * 8;
         if ( bitLength > rawSizeInBits_ ) {
@@ -1618,8 +1618,7 @@ public class XTCEItemValue {
             return retValue;
         }
         while ( bitLength < rawSizeInBits_ ) {
-            retValue = retValue.shiftLeft( 8 );
-            bitLength = retValue.toByteArray().length * 8;
+            bitLength = retValue.shiftLeft( 8 ).toByteArray().length * 8;
             //retValue = retValue.add(  ); for termination char
         }
         return retValue;
@@ -1661,8 +1660,7 @@ public class XTCEItemValue {
 
         if ( rawValue.compareTo( BigInteger.ZERO ) < 0 ) {
             if ( rawTypeName_ == RawType.signMagnitude ) {
-                rawValue = rawValue.negate();
-                rawValue = rawValue.setBit( rawSizeInBits_ - 1 );
+                rawValue = rawValue.negate().setBit( rawSizeInBits_ - 1 );
             } else if ( rawTypeName_ == RawType.onesComplement ) {
                 rawValue = rawValue.subtract( BigInteger.ONE );
             }
@@ -1691,7 +1689,7 @@ public class XTCEItemValue {
      *
      */
 
-    private void setValidRangeAttributes( XTCETypedObject item ) {
+    private void setValidRangeAttributes( final XTCETypedObject item ) {
 
         NameDescriptionType typeObj = item.getTypeReference();
 
@@ -1704,7 +1702,7 @@ public class XTCEItemValue {
 
     }
 
-    private BitSet makeBitSetFromBigInteger( BigInteger rawValue ) {
+    private BitSet makeBitSetFromBigInteger( final BigInteger rawValue ) {
 
         BitSet rawBits = new BitSet( rawSizeInBits_ );
 
@@ -1740,7 +1738,7 @@ public class XTCEItemValue {
      *
      */
 
-    public String bitSetToHex( BitSet bits ) {
+    public final String bitSetToHex( final BitSet bits ) {
 
         int bitCount = rawSizeInBits_;
         if ( ( rawSizeInBits_ % 8 ) != 0 ) {
@@ -1775,7 +1773,7 @@ public class XTCEItemValue {
      *
      */
 
-    public BigInteger bitSetToNumber( BitSet bits ) {
+    public final BigInteger bitSetToNumber( final BitSet bits ) {
 
         int bitCount = rawSizeInBits_;
         if ( ( rawSizeInBits_ % 8 ) != 0 ) {
@@ -1819,7 +1817,7 @@ public class XTCEItemValue {
      *
      */
 
-    public String bitSetToBinary( BitSet bits ) {
+    public final String bitSetToBinary( final BitSet bits ) {
 
         StringBuilder sb = new StringBuilder();
 
@@ -1848,7 +1846,7 @@ public class XTCEItemValue {
      *
      */
 
-    public BigInteger integerStringToBigInteger( String rawValue ) {
+    public BigInteger integerStringToBigInteger( final String rawValue ) {
 
         BigInteger rawInteger = BigInteger.ZERO;
         String     reasValue  = rawValue;
@@ -1872,7 +1870,7 @@ public class XTCEItemValue {
 
     }
 
-    private BigDecimal floatEncodingUncalibrate( BigDecimal calValue ) {
+    private BigDecimal floatEncodingUncalibrate( final BigDecimal calValue ) {
 
         if ( defCal_ == null ) {
             return calValue;
@@ -2049,7 +2047,7 @@ public class XTCEItemValue {
 
     }
 
-    private BigDecimal floatEncodingUncalibrate( BigInteger calValue ) {
+    private BigDecimal floatEncodingUncalibrate( final BigInteger calValue ) {
 
         if ( defCal_ == null ) {
             return new BigDecimal( calValue );
@@ -2059,7 +2057,7 @@ public class XTCEItemValue {
 
     }
 
-    private BigInteger integerEncodingUncalibrate( BigDecimal calValue ) {
+    private BigInteger integerEncodingUncalibrate( final BigDecimal calValue ) {
 
         if ( defCal_ == null ) {
             long value = Math.round( calValue.doubleValue() );
@@ -2236,7 +2234,7 @@ public class XTCEItemValue {
 
     }
 
-    private BigInteger integerEncodingUncalibrate( BigInteger calValue ) {
+    private BigInteger integerEncodingUncalibrate( final BigInteger calValue ) {
 
         if ( defCal_ == null ) {
             return calValue;
@@ -2255,7 +2253,7 @@ public class XTCEItemValue {
      *
      */
 
-    private void setEnumerationList( XTCETypedObject item ) {
+    private void setEnumerationList( final XTCETypedObject item ) {
         enums_ = item.getEnumerations();
     }
 
@@ -2266,7 +2264,7 @@ public class XTCEItemValue {
      *
      */
 
-    private void setDefaultCalibrator( XTCETypedObject item ) {
+    private void setDefaultCalibrator( final XTCETypedObject item ) {
         defCal_ = item.getDefaultCalibrator();
     }
 
@@ -2286,7 +2284,7 @@ public class XTCEItemValue {
      *
      */
 
-    public boolean isIntegerRawValueReasonable( BigInteger rawValue ) {
+    public boolean isIntegerRawValueReasonable( final BigInteger rawValue ) {
 
         // first find the general size applicable to the bit length
         boolean minInclusive = true;
@@ -2404,7 +2402,7 @@ public class XTCEItemValue {
      *
      */
 
-    public boolean isFloatRawValueReasonable( double rawValue ) {
+    public boolean isFloatRawValueReasonable( final double rawValue ) {
 
         // first find the general size applicable to the bit length
         boolean minInclusive = true;
@@ -2567,7 +2565,7 @@ public class XTCEItemValue {
 
     }
 
-    private void warn( String warning ) {
+    private void warn( final String warning ) {
 
         if ( warnings_ == null ) {
             warnings_ = new ArrayList<>();

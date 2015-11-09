@@ -193,7 +193,7 @@ abstract class XTCEContainerContentModelBase {
             throw new XTCEDatabaseException(
                 XTCEFunctions.getText( "error_encdec_noraw_nosizeinbits" ) + // NOI18N
                 " " + // NOI18N
-                currentEntry.itemName +
+                currentEntry.getName() +
                 " (" + // NOI18N
                 XTCEFunctions.getText( "general_numberexception" ) + // NOI18N
                 " )" ); // NOI18N
@@ -213,7 +213,7 @@ abstract class XTCEContainerContentModelBase {
                 throw new XTCEDatabaseException(
                     XTCEFunctions.getText( "error_encdec_binarytoosmall" ) + // NOI18N
                     " '" + // NOI18N
-                    currentEntry.itemName +
+                    currentEntry.getName() +
                     "' (" + // NOI18N
                     XTCEFunctions.getText( "error_encdec_binarysize" ) + // NOI18N
                     " " + // NOI18N
@@ -233,7 +233,7 @@ abstract class XTCEContainerContentModelBase {
                 throw new XTCEDatabaseException(
                     XTCEFunctions.getText( "error_encdec_binarytoosmall" ) + // NOI18N
                     " '" + // NOI18N
-                    currentEntry.itemName +
+                    currentEntry.getName() +
                     "' (" + // NOI18N
                     XTCEFunctions.getText( "error_encdec_binarysize" ) + // NOI18N
                     " " + // NOI18N
@@ -257,7 +257,7 @@ abstract class XTCEContainerContentModelBase {
             throw new XTCEDatabaseException(
                 XTCEFunctions.getText( "error_encdec_nostartbit" ) + // NOI18N
                 " " + // NOI18N
-                currentEntry.itemName );
+                currentEntry.getName() );
         }
 
         //int bitCount = bitLength;
@@ -368,7 +368,7 @@ abstract class XTCEContainerContentModelBase {
             warnings_.add( "'DimensionList/Dimension' " + // NOI18N
                            XTCEFunctions.getText( "xml_element_not_yet_supported" ) + // NOI18N
                            " " + // NOI18N
-                           contentEntry.itemName );
+                           contentEntry.getName() );
             return 1;
         }
 
@@ -419,7 +419,7 @@ abstract class XTCEContainerContentModelBase {
                 warnings_.add( "'DimensionList/Size/DynamicValue' " + // NOI18N
                                XTCEFunctions.getText( "xml_element_error_evaluation" ) + // NOI18N
                                " " + // NOI18N
-                               contentEntry.itemName +
+                               contentEntry.getName() +
                                " " + // NOI18N
                                XTCEFunctions.getText( "general_because" ) + // NOI18N
                                " " + // NOI18N
@@ -432,7 +432,7 @@ abstract class XTCEContainerContentModelBase {
             warnings_.add( "'DimensionList/Size/DiscreteLookupList' " + // NOI18N
                            XTCEFunctions.getText( "xml_element_not_yet_supported" ) + // NOI18N
                            " " + // NOI18N
-                           contentEntry.itemName );
+                           contentEntry.getName() );
 
         }
 
@@ -496,7 +496,7 @@ abstract class XTCEContainerContentModelBase {
                 warnings_.add( "'RepeatEntry/DynamicEntry' " + // NOI18N
                                XTCEFunctions.getText( "xml_element_error_evaluation" ) + // NOI18N
                                " " + // NOI18N
-                               contentEntry.itemName +
+                               contentEntry.getName() +
                                " " + // NOI18N
                                XTCEFunctions.getText( "general_because" ) + // NOI18N
                                " " + // NOI18N
@@ -509,7 +509,7 @@ abstract class XTCEContainerContentModelBase {
             warnings_.add( "'RepeatEntry/DiscreteLookupList' " + // NOI18N
                            XTCEFunctions.getText( "xml_element_not_yet_supported" ) + // NOI18N
                            " " + // NOI18N
-                           contentEntry.itemName );
+                           contentEntry.getName() );
 
         }
 
@@ -765,7 +765,7 @@ abstract class XTCEContainerContentModelBase {
     }
 
     protected void evaluateIncludeConditions( XTCEContainerContentEntry content ) {
-        content.isCurrentlyApplied = isEntryConditionSatisfied( content );
+        content.setCurrentlyInUse( isEntryConditionSatisfied( content ) );
     }
 
     protected XTCEParameter findParameter( String          parameterRef,
@@ -1019,12 +1019,12 @@ abstract class XTCEContainerContentModelBase {
                 warnings_.add( "'LocationInContainerInBits/DynamicValue' " + // NOI18N
                                XTCEFunctions.getText( "xml_element_not_yet_supported" ) + // NOI18N
                                " " + // NOI18N
-                               contentEntry.itemName );
+                               contentEntry.getName() );
             } else if ( pRefEntry.getLocationInContainerInBits().getDiscreteLookupList() != null ) {
                 warnings_.add( "'LocationInContainerInBits/DiscreteLookupList' " + // NOI18N
                                XTCEFunctions.getText( "xml_element_not_yet_supported" ) + // NOI18N
                                " " + // NOI18N
-                               contentEntry.itemName );
+                               contentEntry.getName() );
             }
         }
 
@@ -1058,7 +1058,7 @@ abstract class XTCEContainerContentModelBase {
             warnings_.add( "'LocationInContainerInBits/@nextEntry' " + // NOI18N
                            XTCEFunctions.getText( "xml_element_not_yet_supported" ) + // NOI18N
                            " " + // NOI18N
-                           contentEntry.itemName );
+                           contentEntry.getName() );
         }
 
     }
@@ -1135,7 +1135,7 @@ abstract class XTCEContainerContentModelBase {
                     if ( usageMap.containsKey( bit ) == true ) {
                         warnings_.add( XTCEFunctions.getText( "warning_encdec_containeritem" ) + // NOI18N
                                        " " + // NOI18N
-                                       entry.itemName +
+                                       entry.getName() +
                                        " " + // NOI18N
                                        XTCEFunctions.getText( "warning_encdec_overlapsitem" ) + // NOI18N
                                        " " + // NOI18N
@@ -1145,7 +1145,7 @@ abstract class XTCEContainerContentModelBase {
                                        " " + // NOI18N
                                        bit.toString() );
                     } else {
-                        usageMap.put( bit, entry.itemName );
+                        usageMap.put( bit, entry.getName() );
                     }
                 }
             }

@@ -58,7 +58,10 @@ public class XTCEParameter extends XTCETypedObject {
      *
      */
 
-    XTCEParameter( String name, String path, Parameter pRef, NameDescriptionType ptRef ) {
+    XTCEParameter( final String              name,
+                   final String              path,
+                   final Parameter           pRef,
+                   final NameDescriptionType ptRef ) {
 
         super( name,
                path,
@@ -87,7 +90,10 @@ public class XTCEParameter extends XTCETypedObject {
      *
      */
 
-    XTCEParameter( String name, String path, Member pRef, NameDescriptionType ptRef ) {
+    XTCEParameter( final String              name,
+                   final String              path,
+                   final Member              pRef,
+                   final NameDescriptionType ptRef ) {
 
         super( name, path, null, null, ptRef );
 

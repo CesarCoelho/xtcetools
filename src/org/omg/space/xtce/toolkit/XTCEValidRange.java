@@ -39,7 +39,7 @@ public class XTCEValidRange {
      *
      */
 
-    XTCEValidRange( NameDescriptionType item ) {
+    XTCEValidRange( final NameDescriptionType item ) {
         setValidRangeAttributes( item );
     }
 
@@ -154,12 +154,12 @@ public class XTCEValidRange {
      *
      */
 
-    private void setValidRange( String  lowValidValue,
-                                String  highValidValue,
-                                boolean lowValidValueInclusive,
-                                boolean highValidValueInclusive,
-                                boolean lowAppliesToCalibrated,
-                                boolean highAppliesToCalibrated ) {
+    private void setValidRange( final String  lowValidValue,
+                                final String  highValidValue,
+                                final boolean lowValidValueInclusive,
+                                final boolean highValidValueInclusive,
+                                final boolean lowAppliesToCalibrated,
+                                final boolean highAppliesToCalibrated ) {
 
         lowValidValue_           = lowValidValue;
         highValidValue_          = highValidValue;
@@ -180,7 +180,7 @@ public class XTCEValidRange {
      *
      */
 
-    private void setValidRangeAttributes( NameDescriptionType typeObj ) {
+    private void setValidRangeAttributes( final NameDescriptionType typeObj ) {
 
         if ( typeObj instanceof IntegerDataType ) {
             IntegerDataType.ValidRange rangeElement = ((IntegerDataType)typeObj).getValidRange();
@@ -211,7 +211,7 @@ public class XTCEValidRange {
      *
      */
 
-    private void setFloatValidRange( FloatDataType.ValidRange rangeElement ) {
+    private void setFloatValidRange( final FloatDataType.ValidRange rangeElement ) {
 
         // first evaluate the minimum value, if it exists, and determine if
         // it is inclusive or exclusive.  We leave it an empty string if it is
