@@ -1601,7 +1601,7 @@ public class XTCEItemValue {
         return xValue;
     }
 
-    private BigInteger encodeUtfString( final BigInteger retValue ) {
+    private BigInteger encodeUtfString( BigInteger retValue ) {
 
         long bitLength = retValue.toByteArray().length * 8;
         if ( bitLength > rawSizeInBits_ ) {
@@ -1618,7 +1618,8 @@ public class XTCEItemValue {
             return retValue;
         }
         while ( bitLength < rawSizeInBits_ ) {
-            bitLength = retValue.shiftLeft( 8 ).toByteArray().length * 8;
+            retValue  = retValue.shiftLeft( 8 );
+            bitLength = retValue.toByteArray().length * 8;
             //retValue = retValue.add(  ); for termination char
         }
         return retValue;
