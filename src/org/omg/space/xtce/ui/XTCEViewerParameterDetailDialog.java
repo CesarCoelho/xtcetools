@@ -461,6 +461,16 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
         valueText = new javax.swing.JTextField();
         descriptionTextScrollPane = new javax.swing.JScrollPane();
         descriptionText = new javax.swing.JTextArea();
+        enumerationTablePopupMenu = new javax.swing.JPopupMenu();
+        copyEnumerationCellMenuItem = new javax.swing.JMenuItem();
+        copyEnumerationColumnMenuItem = new javax.swing.JMenuItem();
+        copyEnumerationRowMenuItem = new javax.swing.JMenuItem();
+        copyEnumerationTableMenuItem = new javax.swing.JMenuItem();
+        splineCalibratorTablePopupMenu = new javax.swing.JPopupMenu();
+        copySplineCellMenuItem = new javax.swing.JMenuItem();
+        copySplineColumnMenuItem = new javax.swing.JMenuItem();
+        copySplineRowMenuItem = new javax.swing.JMenuItem();
+        copySplineTableMenuItem = new javax.swing.JMenuItem();
         editButtonsPanel = new javax.swing.JPanel();
         editButton = new javax.swing.JButton();
         dismissButton = new javax.swing.JButton();
@@ -507,7 +517,7 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
         jLabel19 = new javax.swing.JLabel();
         rightPanel = new javax.swing.JPanel();
         extraDetailsTabbedPane = new javax.swing.JTabbedPane();
-        engineeringConversionTab = new javax.swing.JPanel();
+        enumerationConversionTab = new javax.swing.JPanel();
         enumerationPanel = new javax.swing.JPanel();
         enumerationLabel = new javax.swing.JLabel();
         enumerationScrollPane = new javax.swing.JScrollPane();
@@ -617,8 +627,72 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
                 .addContainerGap())
         );
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/omg/space/xtce/toolkit/MessagesBundle"); // NOI18N
+        copyEnumerationCellMenuItem.setText(bundle.getString("general_copy_cell")); // NOI18N
+        copyEnumerationCellMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                copyEnumerationCellMenuItemActionPerformed(evt);
+            }
+        });
+        enumerationTablePopupMenu.add(copyEnumerationCellMenuItem);
+
+        copyEnumerationColumnMenuItem.setText(bundle.getString("general_copy_column")); // NOI18N
+        copyEnumerationColumnMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                copyEnumerationColumnMenuItemActionPerformed(evt);
+            }
+        });
+        enumerationTablePopupMenu.add(copyEnumerationColumnMenuItem);
+
+        copyEnumerationRowMenuItem.setText(bundle.getString("general_copy_row")); // NOI18N
+        copyEnumerationRowMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                copyEnumerationRowMenuItemActionPerformed(evt);
+            }
+        });
+        enumerationTablePopupMenu.add(copyEnumerationRowMenuItem);
+
+        copyEnumerationTableMenuItem.setText(bundle.getString("general_copy_table")); // NOI18N
+        copyEnumerationTableMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                copyEnumerationTableMenuItemActionPerformed(evt);
+            }
+        });
+        enumerationTablePopupMenu.add(copyEnumerationTableMenuItem);
+
+        copySplineCellMenuItem.setText(bundle.getString("general_copy_cell")); // NOI18N
+        copySplineCellMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                copySplineCellMenuItemActionPerformed(evt);
+            }
+        });
+        splineCalibratorTablePopupMenu.add(copySplineCellMenuItem);
+
+        copySplineColumnMenuItem.setText(bundle.getString("general_copy_column")); // NOI18N
+        copySplineColumnMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                copySplineColumnMenuItemActionPerformed(evt);
+            }
+        });
+        splineCalibratorTablePopupMenu.add(copySplineColumnMenuItem);
+
+        copySplineRowMenuItem.setText(bundle.getString("general_copy_row")); // NOI18N
+        copySplineRowMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                copySplineRowMenuItemActionPerformed(evt);
+            }
+        });
+        splineCalibratorTablePopupMenu.add(copySplineRowMenuItem);
+
+        copySplineTableMenuItem.setText(bundle.getString("general_copy_table")); // NOI18N
+        copySplineTableMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                copySplineTableMenuItemActionPerformed(evt);
+            }
+        });
+        splineCalibratorTablePopupMenu.add(copySplineTableMenuItem);
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(bundle.getString("dialog_paramdetail_title")); // NOI18N
 
         editButton.setText(bundle.getString("general_edit")); // NOI18N
@@ -903,6 +977,11 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
                 return canEdit [columnIndex];
             }
         });
+        enumerationTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                enumerationTableMousePressed(evt);
+            }
+        });
         enumerationScrollPane.setViewportView(enumerationTable);
         if (enumerationTable.getColumnModel().getColumnCount() > 0) {
             enumerationTable.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("dialog_paramdetail_enumslabel")); // NOI18N
@@ -980,24 +1059,24 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
                 .addContainerGap())
         );
 
-        javax.swing.GroupLayout engineeringConversionTabLayout = new javax.swing.GroupLayout(engineeringConversionTab);
-        engineeringConversionTab.setLayout(engineeringConversionTabLayout);
-        engineeringConversionTabLayout.setHorizontalGroup(
-            engineeringConversionTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(engineeringConversionTabLayout.createSequentialGroup()
+        javax.swing.GroupLayout enumerationConversionTabLayout = new javax.swing.GroupLayout(enumerationConversionTab);
+        enumerationConversionTab.setLayout(enumerationConversionTabLayout);
+        enumerationConversionTabLayout.setHorizontalGroup(
+            enumerationConversionTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(enumerationConversionTabLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(enumerationPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
-        engineeringConversionTabLayout.setVerticalGroup(
-            engineeringConversionTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(engineeringConversionTabLayout.createSequentialGroup()
+        enumerationConversionTabLayout.setVerticalGroup(
+            enumerationConversionTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(enumerationConversionTabLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(enumerationPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
-        extraDetailsTabbedPane.addTab(bundle.getString("dialog_paramdetail_tabenums"), engineeringConversionTab); // NOI18N
+        extraDetailsTabbedPane.addTab(bundle.getString("dialog_paramdetail_tabenums"), enumerationConversionTab); // NOI18N
 
         polynomialCalibratorsLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         polynomialCalibratorsLabel.setText(bundle.getString("dialog_paramdetail_polycal")); // NOI18N
@@ -1184,6 +1263,11 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
+            }
+        });
+        splineTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                splineTableMousePressed(evt);
             }
         });
         splineTableScrollPane.setViewportView(splineTable);
@@ -1609,6 +1693,54 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
 
     }//GEN-LAST:event_removeSplinePointButtonActionPerformed
 
+    private void enumerationTableMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_enumerationTableMousePressed
+
+        XTCEViewerFunctions.showRightClickTableMenu( evt,
+                                                     enumerationTable,
+                                                     enumerationTablePopupMenu );
+
+    }//GEN-LAST:event_enumerationTableMousePressed
+
+    private void splineTableMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_splineTableMousePressed
+
+        XTCEViewerFunctions.showRightClickTableMenu( evt,
+                                                     splineTable,
+                                                     splineCalibratorTablePopupMenu );
+
+    }//GEN-LAST:event_splineTableMousePressed
+
+    private void copyEnumerationCellMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_copyEnumerationCellMenuItemActionPerformed
+        XTCEViewerFunctions.copyCell( enumerationTable );
+    }//GEN-LAST:event_copyEnumerationCellMenuItemActionPerformed
+
+    private void copyEnumerationColumnMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_copyEnumerationColumnMenuItemActionPerformed
+        XTCEViewerFunctions.copyColumn( enumerationTable );
+    }//GEN-LAST:event_copyEnumerationColumnMenuItemActionPerformed
+
+    private void copyEnumerationRowMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_copyEnumerationRowMenuItemActionPerformed
+        XTCEViewerFunctions.copyRow( enumerationTable );
+    }//GEN-LAST:event_copyEnumerationRowMenuItemActionPerformed
+
+    private void copyEnumerationTableMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_copyEnumerationTableMenuItemActionPerformed
+        XTCEViewerFunctions.copyTable( enumerationTable );
+    }//GEN-LAST:event_copyEnumerationTableMenuItemActionPerformed
+
+    private void copySplineCellMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_copySplineCellMenuItemActionPerformed
+        XTCEViewerFunctions.copyCell( splineTable );
+    }//GEN-LAST:event_copySplineCellMenuItemActionPerformed
+
+    private void copySplineColumnMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_copySplineColumnMenuItemActionPerformed
+        XTCEViewerFunctions.copyColumn( splineTable );
+    }//GEN-LAST:event_copySplineColumnMenuItemActionPerformed
+
+    private void copySplineRowMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_copySplineRowMenuItemActionPerformed
+        XTCEViewerFunctions.copyRow( splineTable );
+    }//GEN-LAST:event_copySplineRowMenuItemActionPerformed
+
+    private void copySplineTableMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_copySplineTableMenuItemActionPerformed
+        XTCEViewerFunctions.copyTable( splineTable );
+    }//GEN-LAST:event_copySplineTableMenuItemActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1687,6 +1819,14 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
     private javax.swing.JTextField coefficient6Text;
     private javax.swing.JLabel coefficient7Label;
     private javax.swing.JTextField coefficient7Text;
+    private javax.swing.JMenuItem copyEnumerationCellMenuItem;
+    private javax.swing.JMenuItem copyEnumerationColumnMenuItem;
+    private javax.swing.JMenuItem copyEnumerationRowMenuItem;
+    private javax.swing.JMenuItem copyEnumerationTableMenuItem;
+    private javax.swing.JMenuItem copySplineCellMenuItem;
+    private javax.swing.JMenuItem copySplineColumnMenuItem;
+    private javax.swing.JMenuItem copySplineRowMenuItem;
+    private javax.swing.JMenuItem copySplineTableMenuItem;
     private javax.swing.JTextField defaultValueTextField;
     private javax.swing.JLabel descriptionLabel;
     private javax.swing.JTextArea descriptionText;
@@ -1698,16 +1838,17 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
     private javax.swing.JButton editSplinePointButton;
     private javax.swing.JLabel encodingInformationLabel;
     private javax.swing.JComboBox encodingTypeComboField;
-    private javax.swing.JPanel engineeringConversionTab;
     private javax.swing.JComboBox engineeringTypeComboField;
     private javax.swing.JLabel enumLabelLabel;
     private javax.swing.JLabel enumMaxValueLabel;
     private javax.swing.JLabel enumValueLabel;
+    private javax.swing.JPanel enumerationConversionTab;
     private javax.swing.JPanel enumerationEditorPanel;
     private javax.swing.JLabel enumerationLabel;
     private javax.swing.JPanel enumerationPanel;
     private javax.swing.JScrollPane enumerationScrollPane;
     private javax.swing.JTable enumerationTable;
+    private javax.swing.JPopupMenu enumerationTablePopupMenu;
     private javax.swing.JTabbedPane extraDetailsTabbedPane;
     private javax.swing.JCheckBox hexCheckbox;
     private javax.swing.JLabel jLabel1;
@@ -1753,6 +1894,7 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
     private javax.swing.JLabel shortDescriptionLabel;
     private javax.swing.JComboBox sourceComboField;
     private javax.swing.JLabel sourceLabel;
+    private javax.swing.JPopupMenu splineCalibratorTablePopupMenu;
     private javax.swing.JPanel splineCalibratorsPanel;
     private javax.swing.JPanel splineCalibratorsTab;
     private javax.swing.JTabbedPane splineCalibratorsTabbedPane;
