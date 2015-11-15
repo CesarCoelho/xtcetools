@@ -114,6 +114,7 @@ public class XTCEViewer extends javax.swing.JFrame {
         showParameterUsageMenuItem = new javax.swing.JMenuItem();
         showEncodeDecodeDialogMenuItem = new javax.swing.JMenuItem();
         copyParameterCellMenuItem = new javax.swing.JMenuItem();
+        copyParameterColumnMenuItem = new javax.swing.JMenuItem();
         copyParameterRowMenuItem = new javax.swing.JMenuItem();
         copyParameterTableMenuItem = new javax.swing.JMenuItem();
         containerTreePopupMenu = new javax.swing.JPopupMenu();
@@ -125,6 +126,7 @@ public class XTCEViewer extends javax.swing.JFrame {
         setConditionTrueMenuItem = new javax.swing.JMenuItem();
         setRepeatCounterMenuItem = new javax.swing.JMenuItem();
         copyContainerCellMenuItem = new javax.swing.JMenuItem();
+        copyContainerColumnMenuItem = new javax.swing.JMenuItem();
         copyContainerRowMenuItem = new javax.swing.JMenuItem();
         copyContainerTableMenuItem = new javax.swing.JMenuItem();
         containerDrawingPopupMenu = new javax.swing.JPopupMenu();
@@ -344,6 +346,14 @@ public class XTCEViewer extends javax.swing.JFrame {
         });
         parameterDetailPopupMenu.add(copyParameterCellMenuItem);
 
+        copyParameterColumnMenuItem.setText(bundle.getString("general_copy_column")); // NOI18N
+        copyParameterColumnMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                copyParameterColumnMenuItemActionPerformed(evt);
+            }
+        });
+        parameterDetailPopupMenu.add(copyParameterColumnMenuItem);
+
         copyParameterRowMenuItem.setText(bundle.getString("general_copy_row")); // NOI18N
         copyParameterRowMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -416,6 +426,14 @@ public class XTCEViewer extends javax.swing.JFrame {
             }
         });
         containerTablePopupMenu.add(copyContainerCellMenuItem);
+
+        copyContainerColumnMenuItem.setText(bundle.getString("general_copy_column")); // NOI18N
+        copyContainerColumnMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                copyContainerColumnMenuItemActionPerformed(evt);
+            }
+        });
+        containerTablePopupMenu.add(copyContainerColumnMenuItem);
 
         copyContainerRowMenuItem.setText(bundle.getString("general_copy_row")); // NOI18N
         copyContainerRowMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -3519,6 +3537,28 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     }//GEN-LAST:event_decodeContainerDrawingMenuItemActionPerformed
 
+    private void copyParameterColumnMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_copyParameterColumnMenuItemActionPerformed
+
+        if ( xtceDatabaseFile == null ) return;
+
+        int idx = mainWindowPrimaryWorkspace.getSelectedIndex();
+
+        if ( idx == 1 ) {
+            XTCEViewerFunctions.copyColumn( tmParametersTable );
+        } else if ( idx == 2 ) {
+            XTCEViewerFunctions.copyColumn( tcParametersTable );
+        }
+
+    }//GEN-LAST:event_copyParameterColumnMenuItemActionPerformed
+
+    private void copyContainerColumnMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_copyContainerColumnMenuItemActionPerformed
+
+        if ( xtceDatabaseFile == null ) return;
+
+        XTCEViewerFunctions.copyColumn( tmContainerTable );
+
+    }//GEN-LAST:event_copyContainerColumnMenuItemActionPerformed
+
     public void goToParameter( String  parameterName,
                                String  spaceSystemName,
                                boolean isTelemetryParameter ) {
@@ -4870,9 +4910,11 @@ public class XTCEViewer extends javax.swing.JFrame {
     private javax.swing.JPopupMenu containerTreePopupMenu;
     private javax.swing.JTextField containersTotal;
     private javax.swing.JMenuItem copyContainerCellMenuItem;
+    private javax.swing.JMenuItem copyContainerColumnMenuItem;
     private javax.swing.JMenuItem copyContainerRowMenuItem;
     private javax.swing.JMenuItem copyContainerTableMenuItem;
     private javax.swing.JMenuItem copyParameterCellMenuItem;
+    private javax.swing.JMenuItem copyParameterColumnMenuItem;
     private javax.swing.JMenuItem copyParameterRowMenuItem;
     private javax.swing.JMenuItem copyParameterTableMenuItem;
     private javax.swing.JPanel databaseMetricsPanel;

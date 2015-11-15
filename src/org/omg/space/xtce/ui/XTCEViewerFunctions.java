@@ -162,6 +162,44 @@ public class XTCEViewerFunctions {
 
     }
 
+    /** Helper function to implement copying contents of a table column to the
+     * System Clipboard for pasting in other applications.
+     *
+     * @param table JTable object to query for the column contents and copy
+     *
+     */
+
+    public static void copyColumn( JTable table ) {
+
+        int column   = table.getSelectedColumn();
+        int rowCount = table.getRowCount();
+
+        if ( column == -1 ) {
+            return;
+        }
+
+        StringBuilder sb = new StringBuilder();
+
+        for ( int rrr = 0; rrr < rowCount; ++rrr ) {
+            sb.append( '"' );
+            if ( table.getValueAt( rrr, column ) instanceof Boolean ) {
+                if ( (Boolean)table.getValueAt( rrr, column ) == true ) {
+                    sb.append( "true" );
+                } else {
+                    sb.append( "false" );
+                }
+            } else {
+                sb.append( (String)table.getValueAt( rrr, column ) );
+            }
+            sb.append( '"' );
+            sb.append( System.getProperty( "line.separator" ) ); // NOI18N
+        }
+
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clipboard.setContents( new StringSelection( sb.toString() ), null );
+
+    }
+
     /** Helper function to implement copying contents of a table to the
      * System Clipboard for pasting in other applications.
      *

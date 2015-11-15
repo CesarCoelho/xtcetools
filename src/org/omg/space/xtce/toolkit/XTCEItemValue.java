@@ -1850,11 +1850,10 @@ public class XTCEItemValue {
     public BigInteger integerStringToBigInteger( final String rawValue ) {
 
         BigInteger rawInteger = BigInteger.ZERO;
-        String     reasValue  = rawValue;
 
         try {
 
-            reasValue = rawValue.toLowerCase();
+            String reasValue = rawValue.toLowerCase();
             if ( reasValue.startsWith( "0x" ) == true ) {
                 rawInteger =
                     new BigInteger( reasValue.replaceFirst( "0x", "" ), 16 );
