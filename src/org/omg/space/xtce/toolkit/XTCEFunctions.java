@@ -281,6 +281,9 @@ public class XTCEFunctions {
 
         String candidate = fullPath.toString();
 
+        // this takes half the time called in this function, there should be
+        // a better way to avoid this
+
         return candidate.replaceAll( "/+", "/" ); // NOI18N
 
     }
@@ -490,7 +493,7 @@ public class XTCEFunctions {
         // handle the part up to the first *
         for ( int iii = 0; iii < glob.length(); ++iii ) {
             if ( ( glob.charAt( iii ) != '?' ) && // NOI18N
-                 ( ! glob.substring( iii, iii + 1 ).equalsIgnoreCase(text.substring( iii, iii + 1 ) ) ) ) {
+                 ( ! glob.substring( iii, iii + 1 ).equals(text.substring( iii, iii + 1 ) ) ) ) {
                 return false;
             }
         }
