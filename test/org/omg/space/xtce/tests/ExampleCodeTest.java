@@ -122,12 +122,12 @@ public class ExampleCodeTest {
         BufferedReader buf =
             new BufferedReader( new InputStreamReader( procHandle.getInputStream() ) );
 
-        int procResult = procHandle.waitFor();
-
         String line;
         while ( ( line = buf.readLine() ) != null ) {
             System.out.println( line );
         }
+
+        int procResult = procHandle.waitFor();
 
         Assert.assertTrue( "Process should return 0 but value is " +
                            Integer.toString( procResult ),
