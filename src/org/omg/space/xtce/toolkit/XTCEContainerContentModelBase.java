@@ -1124,31 +1124,46 @@ abstract class XTCEContainerContentModelBase {
 
     protected void checkForOverlaps() {
 
+        final String separator =
+            System.getProperty( "line.separator" ); // NOI18N
+
+        StringBuilder sb = new StringBuilder();
+
         HashMap<Long, String> usageMap = new HashMap<>();
+
         for ( XTCEContainerContentEntry entry : contentList_ ) {
+
             if ( ( entry.getStartBit().isEmpty()      == false ) &&
                  ( entry.getRawSizeInBits().isEmpty() == false ) ) {
+
                 long startBit   = Long.parseLong( entry.getStartBit() );
                 long sizeInBits = Long.parseLong( entry.getRawSizeInBits() );
+
                 for ( long iii = startBit; iii < ( startBit + sizeInBits ); ++iii ) {
-                    Long bit = iii;
-                    if ( usageMap.containsKey( bit ) == true ) {
-                        warnings_.add( XTCEFunctions.getText( "warning_encdec_containeritem" ) + // NOI18N
-                                       " " + // NOI18N
-                                       entry.getName() +
-                                       " " + // NOI18N
-                                       XTCEFunctions.getText( "warning_encdec_overlapsitem" ) + // NOI18N
-                                       " " + // NOI18N
-                                       usageMap.get( bit ) +
-                                       " " + // NOI18N
-                                       XTCEFunctions.getText( "warning_encdec_atbitpos" ) + // NOI18N
-                                       " " + // NOI18N
-                                       bit.toString() );
+                    if ( usageMap.containsKey( iii ) == true ) {
+                        sb.append( XTCEFunctions.getText( "warning_encdec_containeritem" ) ); // NOI18N
+                        sb.append( " " ); // NOI18N
+                        sb.append( entry.getName() ); // NOI18N
+                        sb.append( " " ); // NOI18N
+                        sb.append( XTCEFunctions.getText( "warning_encdec_overlapsitem" ) ); // NOI18N
+                        sb.append( " " ); // NOI18N
+                        sb.append( usageMap.get( iii ) ); // NOI18N
+                        sb.append( " " ); // NOI18N
+                        sb.append( XTCEFunctions.getText( "warning_encdec_atbitpos" ) ); // NOI18N
+                        sb.append( " " ); // NOI18N
+                        sb.append( Long.toString( iii ) ); // NOI18N
+                        sb.append( separator ); // NOI18N
                     } else {
-                        usageMap.put( bit, entry.getName() );
+                        usageMap.put( iii, entry.getName() );
                     }
                 }
+
             }
+
+        }
+
+        if ( sb.length() > 0 ) {
+            warnings_.add( sb.deleteCharAt( sb.length() - 1 ).toString() );
         }
 
     }
