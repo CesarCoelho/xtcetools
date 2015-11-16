@@ -41,8 +41,8 @@
                       <Group type="103" groupAlignment="1" attributes="0">
                           <Component id="parameterTypeLabel" alignment="0" max="32767" attributes="0"/>
                           <Component id="parameterLabel" alignment="0" max="32767" attributes="0"/>
-                          <Component id="jScrollPane2" alignment="0" max="32767" attributes="0"/>
-                          <Component id="jScrollPane1" max="32767" attributes="0"/>
+                          <Component id="parameterDefinitionScrollPane" alignment="0" max="32767" attributes="0"/>
+                          <Component id="parameterTypeScrollPane" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -56,11 +56,11 @@
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Component id="parameterTypeLabel" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Component id="jScrollPane1" pref="131" max="32767" attributes="0"/>
+              <Component id="parameterTypeScrollPane" pref="131" max="32767" attributes="0"/>
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Component id="parameterLabel" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Component id="jScrollPane2" pref="132" max="32767" attributes="0"/>
+              <Component id="parameterDefinitionScrollPane" min="-2" pref="132" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="buttonPanel" min="-2" max="-2" attributes="0"/>
           </Group>
@@ -74,11 +74,14 @@
         <Property name="text" type="java.lang.String" value="Parameter Type Definition"/>
       </Properties>
     </Component>
-    <Container class="javax.swing.JScrollPane" name="jScrollPane1">
+    <Container class="javax.swing.JScrollPane" name="parameterTypeScrollPane">
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
       <SubComponents>
         <Component class="javax.swing.JTextArea" name="parameterTypeDefinitionText">
+          <Properties>
+            <Property name="rows" type="int" value="10"/>
+          </Properties>
         </Component>
       </SubComponents>
     </Container>
@@ -88,11 +91,14 @@
         <Property name="text" type="java.lang.String" value="Parameter Definition"/>
       </Properties>
     </Component>
-    <Container class="javax.swing.JScrollPane" name="jScrollPane2">
+    <Container class="javax.swing.JScrollPane" name="parameterDefinitionScrollPane">
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
       <SubComponents>
         <Component class="javax.swing.JTextArea" name="parameterDefinitionText">
+          <Properties>
+            <Property name="rows" type="int" value="3"/>
+          </Properties>
         </Component>
       </SubComponents>
     </Container>
@@ -137,7 +143,6 @@
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
               <ResourceString bundle="org/omg/space/xtce/toolkit/MessagesBundle.properties" key="general_accept_text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
             </Property>
-            <Property name="label" type="java.lang.String" value="Accept"/>
             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[100, 25]"/>
             </Property>
@@ -157,7 +162,6 @@
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
               <ResourceString bundle="org/omg/space/xtce/toolkit/MessagesBundle.properties" key="general_dismiss_text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
             </Property>
-            <Property name="label" type="java.lang.String" value="Dismiss"/>
             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[100, 25]"/>
             </Property>

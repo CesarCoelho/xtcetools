@@ -481,9 +481,9 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
         sourceLabel = new javax.swing.JLabel();
         systemNameLabel = new javax.swing.JLabel();
         nameTextField = new javax.swing.JTextField();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        aliasScrollPane = new javax.swing.JScrollPane();
         aliasTextField = new javax.swing.JTextArea();
-        jScrollPane2 = new javax.swing.JScrollPane();
+        unitsScrollPane = new javax.swing.JScrollPane();
         unitsTextField = new javax.swing.JTextArea();
         sourceComboField = new javax.swing.JComboBox();
         readOnlyCheckboxField = new javax.swing.JCheckBox();
@@ -492,16 +492,19 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
         shortDescriptionLabel = new javax.swing.JLabel();
         shortDescriptionField = new javax.swing.JTextField();
         longDescriptionLabel = new javax.swing.JLabel();
-        jScrollPane3 = new javax.swing.JScrollPane();
+        leftScrollPane = new javax.swing.JScrollPane();
         longDescriptionField = new javax.swing.JTextArea();
         systemNameTextField = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
+        engineeringTypeLabel = new javax.swing.JLabel();
+        encodingTypeLabel = new javax.swing.JLabel();
+        encodingSizeLabel = new javax.swing.JLabel();
+        typeNameLabel = new javax.swing.JLabel();
+        bitOrderLabel = new javax.swing.JLabel();
+        changeThresholdLabel = new javax.swing.JLabel();
+        defaultValueLabel = new javax.swing.JLabel();
+        lowRangeLabel = new javax.swing.JLabel();
+        highRangeLabel = new javax.swing.JLabel();
+        rangeScopeLabel = new javax.swing.JLabel();
         engineeringTypeComboField = new javax.swing.JComboBox();
         encodingTypeComboField = new javax.swing.JComboBox();
         rawSizeTextField = new javax.swing.JTextField();
@@ -512,9 +515,6 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
         rangeLowTextField = new javax.swing.JTextField();
         rangeHighTextField = new javax.swing.JTextField();
         rangeAppliesToComboBox = new javax.swing.JComboBox();
-        jLabel17 = new javax.swing.JLabel();
-        jLabel18 = new javax.swing.JLabel();
-        jLabel19 = new javax.swing.JLabel();
         rightPanel = new javax.swing.JPanel();
         extraDetailsTabbedPane = new javax.swing.JTabbedPane();
         enumerationConversionTab = new javax.swing.JPanel();
@@ -746,17 +746,17 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
 
         systemNameLabel.setText(bundle.getString("dialog_paramdetail_subsys")); // NOI18N
 
-        jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        aliasScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
         aliasTextField.setColumns(20);
         aliasTextField.setRows(5);
-        jScrollPane1.setViewportView(aliasTextField);
+        aliasScrollPane.setViewportView(aliasTextField);
 
-        jScrollPane2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        unitsScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
         unitsTextField.setColumns(20);
         unitsTextField.setRows(5);
-        jScrollPane2.setViewportView(unitsTextField);
+        unitsScrollPane.setViewportView(unitsTextField);
 
         sourceComboField.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "telemetered", "derived", "local", "constant" }));
         sourceComboField.setMinimumSize(new java.awt.Dimension(150, 27));
@@ -784,21 +784,27 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
         longDescriptionField.setLineWrap(true);
         longDescriptionField.setRows(5);
         longDescriptionField.setWrapStyleWord(true);
-        jScrollPane3.setViewportView(longDescriptionField);
+        leftScrollPane.setViewportView(longDescriptionField);
 
-        jLabel1.setText(bundle.getString("dialog_paramdetail_etype")); // NOI18N
+        engineeringTypeLabel.setText(bundle.getString("dialog_paramdetail_etype")); // NOI18N
 
-        jLabel2.setText(bundle.getString("dialog_paramdetail_rtype")); // NOI18N
+        encodingTypeLabel.setText(bundle.getString("dialog_paramdetail_rtype")); // NOI18N
 
-        jLabel3.setText(bundle.getString("dialog_paramdetail_rsize")); // NOI18N
+        encodingSizeLabel.setText(bundle.getString("dialog_paramdetail_rsize")); // NOI18N
 
-        jLabel4.setText(bundle.getString("dialog_paramdetail_ptypename")); // NOI18N
+        typeNameLabel.setText(bundle.getString("dialog_paramdetail_ptypename")); // NOI18N
 
-        jLabel5.setText(bundle.getString("dialog_paramdetail_bitorder")); // NOI18N
+        bitOrderLabel.setText(bundle.getString("dialog_paramdetail_bitorder")); // NOI18N
 
-        jLabel6.setText(bundle.getString("dialog_paramdetail_cthreshold")); // NOI18N
+        changeThresholdLabel.setText(bundle.getString("dialog_paramdetail_cthreshold")); // NOI18N
 
-        jLabel7.setText(bundle.getString("dialog_paramdetail_ivalue")); // NOI18N
+        defaultValueLabel.setText(bundle.getString("dialog_paramdetail_ivalue")); // NOI18N
+
+        lowRangeLabel.setText(bundle.getString("dialog_paramdetail_rangelow")); // NOI18N
+
+        highRangeLabel.setText(bundle.getString("dialog_paramdetail_rangehigh")); // NOI18N
+
+        rangeScopeLabel.setText(bundle.getString("dialog_paramdetail_rangescope")); // NOI18N
 
         engineeringTypeComboField.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "ENUMERATED", "SIGNED", "UNSIGNED", "FLOAT32", "FLOAT64", "FLOAT128", "STRUCTURE", "BINARY", "BOOLEAN", "STRING", "TIME", "DURATION", "ARRAY" }));
 
@@ -807,12 +813,6 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
         bitOrderComboField.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "mostSignificantBitFirst", "leastSignificantBitFirst", "" }));
 
         rangeAppliesToComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Uncalibrated", "Calibrated", "" }));
-
-        jLabel17.setText(bundle.getString("dialog_paramdetail_rangelow")); // NOI18N
-
-        jLabel18.setText(bundle.getString("dialog_paramdetail_rangehigh")); // NOI18N
-
-        jLabel19.setText(bundle.getString("dialog_paramdetail_rangescope")); // NOI18N
 
         javax.swing.GroupLayout leftPanelLayout = new javax.swing.GroupLayout(leftPanel);
         leftPanel.setLayout(leftPanelLayout);
@@ -826,7 +826,7 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
                     .addComponent(encodingInformationLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(shortDescriptionField)
                     .addComponent(longDescriptionLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(leftScrollPane, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(leftPanelLayout.createSequentialGroup()
                         .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(aliasLabel)
@@ -842,20 +842,20 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
                                 .addComponent(readOnlyCheckboxField))
                             .addComponent(systemNameTextField)
                             .addComponent(nameTextField)
-                            .addComponent(jScrollPane2)
-                            .addComponent(jScrollPane1)))
+                            .addComponent(unitsScrollPane)
+                            .addComponent(aliasScrollPane)))
                     .addGroup(leftPanelLayout.createSequentialGroup()
                         .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel6)
-                            .addComponent(jLabel7)
-                            .addComponent(jLabel17)
-                            .addComponent(jLabel18)
-                            .addComponent(jLabel19))
+                            .addComponent(engineeringTypeLabel)
+                            .addComponent(encodingTypeLabel)
+                            .addComponent(encodingSizeLabel)
+                            .addComponent(typeNameLabel)
+                            .addComponent(bitOrderLabel)
+                            .addComponent(changeThresholdLabel)
+                            .addComponent(defaultValueLabel)
+                            .addComponent(lowRangeLabel)
+                            .addComponent(highRangeLabel)
+                            .addComponent(rangeScopeLabel))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(engineeringTypeComboField, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -880,11 +880,11 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
                     .addComponent(nameLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(aliasScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(aliasLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(unitsScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(unitsLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -903,49 +903,49 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(longDescriptionLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(leftScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(encodingInformationLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
+                    .addComponent(engineeringTypeLabel)
                     .addComponent(engineeringTypeComboField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
+                    .addComponent(encodingTypeLabel)
                     .addComponent(encodingTypeComboField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
+                    .addComponent(encodingSizeLabel)
                     .addComponent(rawSizeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
+                    .addComponent(typeNameLabel)
                     .addComponent(xtceTypeNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
+                    .addComponent(bitOrderLabel)
                     .addComponent(bitOrderComboField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
+                    .addComponent(changeThresholdLabel)
                     .addComponent(changeThresholdTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
+                    .addComponent(defaultValueLabel)
                     .addComponent(defaultValueTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(rangeLowTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel17))
+                    .addComponent(lowRangeLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(rangeHighTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel18))
+                    .addComponent(highRangeLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(rangeAppliesToComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel19))
+                    .addComponent(rangeScopeLabel))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -1796,12 +1796,15 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
     private javax.swing.JButton addSplinePointButton;
     private javax.swing.JPanel alarmDefinitionsTab;
     private javax.swing.JLabel aliasLabel;
+    private javax.swing.JScrollPane aliasScrollPane;
     private javax.swing.JTextArea aliasTextField;
     private javax.swing.JLabel ancillaryDataLabel;
     private javax.swing.JPanel ancillaryDataPanel;
     private javax.swing.JScrollPane ancillaryDataScrollPane;
     private javax.swing.JPanel ancillaryDataTab;
     private javax.swing.JComboBox bitOrderComboField;
+    private javax.swing.JLabel bitOrderLabel;
+    private javax.swing.JLabel changeThresholdLabel;
     private javax.swing.JTextField changeThresholdTextField;
     private javax.swing.JLabel coefficient0Label;
     private javax.swing.JTextField coefficient0Text;
@@ -1827,6 +1830,7 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
     private javax.swing.JMenuItem copySplineColumnMenuItem;
     private javax.swing.JMenuItem copySplineRowMenuItem;
     private javax.swing.JMenuItem copySplineTableMenuItem;
+    private javax.swing.JLabel defaultValueLabel;
     private javax.swing.JTextField defaultValueTextField;
     private javax.swing.JLabel descriptionLabel;
     private javax.swing.JTextArea descriptionText;
@@ -1837,8 +1841,11 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
     private javax.swing.JButton editEnumerationButton;
     private javax.swing.JButton editSplinePointButton;
     private javax.swing.JLabel encodingInformationLabel;
+    private javax.swing.JLabel encodingSizeLabel;
     private javax.swing.JComboBox encodingTypeComboField;
+    private javax.swing.JLabel encodingTypeLabel;
     private javax.swing.JComboBox engineeringTypeComboField;
+    private javax.swing.JLabel engineeringTypeLabel;
     private javax.swing.JLabel enumLabelLabel;
     private javax.swing.JLabel enumMaxValueLabel;
     private javax.swing.JLabel enumValueLabel;
@@ -1851,24 +1858,14 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
     private javax.swing.JPopupMenu enumerationTablePopupMenu;
     private javax.swing.JTabbedPane extraDetailsTabbedPane;
     private javax.swing.JCheckBox hexCheckbox;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel17;
-    private javax.swing.JLabel jLabel18;
-    private javax.swing.JLabel jLabel19;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JLabel highRangeLabel;
     private javax.swing.JTextField labelText;
     private javax.swing.JPanel latexDrawingPanel;
     private javax.swing.JPanel leftPanel;
+    private javax.swing.JScrollPane leftScrollPane;
     private javax.swing.JTextArea longDescriptionField;
     private javax.swing.JLabel longDescriptionLabel;
+    private javax.swing.JLabel lowRangeLabel;
     private javax.swing.JTextField maxValueText;
     private javax.swing.JLabel nameLabel;
     private javax.swing.JTextField nameTextField;
@@ -1885,6 +1882,7 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
     private javax.swing.JTextField rangeHighTextField;
     private javax.swing.JCheckBox rangeLowInclusiveCheckbox;
     private javax.swing.JTextField rangeLowTextField;
+    private javax.swing.JLabel rangeScopeLabel;
     private javax.swing.JTextField rawSizeTextField;
     private javax.swing.JCheckBox readOnlyCheckboxField;
     private javax.swing.JButton removeEnumerationButton;
@@ -1903,8 +1901,10 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
     private javax.swing.JScrollPane splineTableScrollPane;
     private javax.swing.JLabel systemNameLabel;
     private javax.swing.JTextField systemNameTextField;
+    private javax.swing.JLabel typeNameLabel;
     private javax.swing.JLabel typeReferenceNameLabel;
     private javax.swing.JLabel unitsLabel;
+    private javax.swing.JScrollPane unitsScrollPane;
     private javax.swing.JTextArea unitsTextField;
     private javax.swing.JTextField valueText;
     private javax.swing.JTextField xtceTypeNameTextField;

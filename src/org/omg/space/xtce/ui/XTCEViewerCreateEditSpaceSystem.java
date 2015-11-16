@@ -143,29 +143,30 @@ public class XTCEViewerCreateEditSpaceSystem extends javax.swing.JDialog {
         validationStatusText = new javax.swing.JComboBox();
         createButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        longDescriptionScrollPane = new javax.swing.JScrollPane();
         longDescriptionText = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Create/Edit Space System");
 
-        spaceSystemNameLabel.setText("Space System Name");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/omg/space/xtce/toolkit/MessagesBundle"); // NOI18N
+        spaceSystemNameLabel.setText(bundle.getString("ss_name_text")); // NOI18N
 
-        shortDescriptionLabel.setText("Short Description");
+        shortDescriptionLabel.setText(bundle.getString("tab_ssdetail_shortdesc_text")); // NOI18N
 
-        operationalStatusLabel.setText("Operational Status");
+        operationalStatusLabel.setText(bundle.getString("tab_ssdetail_opstatus_text")); // NOI18N
 
-        versionLabel.setText("Version");
+        versionLabel.setText(bundle.getString("tab_ssdetail_version_text")); // NOI18N
 
-        dateLabel.setText("Date");
+        dateLabel.setText(bundle.getString("tab_ssdetail_date_text")); // NOI18N
 
-        classificationLabel.setText("Classification");
+        classificationLabel.setText(bundle.getString("tab_ssdetail_classification_text")); // NOI18N
 
-        classificationInstructionsLabel.setText("Classification Instructions");
+        classificationInstructionsLabel.setText(bundle.getString("tab_ssdetail_classinstruction_text")); // NOI18N
 
-        validationStatusLabel.setText("Validation Status");
+        validationStatusLabel.setText(bundle.getString("tab_ssdetail_validationstatus_text")); // NOI18N
 
-        longDescriptionLabel.setText("Long Description");
+        longDescriptionLabel.setText(bundle.getString("tab_ssdetail_longdesc_text")); // NOI18N
 
         spaceSystemNameText.setText("MySpaceSystem");
 
@@ -175,20 +176,20 @@ public class XTCEViewerCreateEditSpaceSystem extends javax.swing.JDialog {
 
         classificationText.setText("NotClassified");
 
-        createButton.setText("Accept");
-        createButton.setMaximumSize(new java.awt.Dimension(75, 25));
-        createButton.setMinimumSize(new java.awt.Dimension(75, 25));
-        createButton.setPreferredSize(new java.awt.Dimension(75, 25));
+        createButton.setText(bundle.getString("general_accept_text")); // NOI18N
+        createButton.setMaximumSize(new java.awt.Dimension(80, 25));
+        createButton.setMinimumSize(new java.awt.Dimension(80, 25));
+        createButton.setPreferredSize(new java.awt.Dimension(80, 25));
         createButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 createButtonActionPerformed(evt);
             }
         });
 
-        cancelButton.setLabel("Cancel");
-        cancelButton.setMaximumSize(new java.awt.Dimension(75, 25));
-        cancelButton.setMinimumSize(new java.awt.Dimension(75, 25));
-        cancelButton.setPreferredSize(new java.awt.Dimension(75, 25));
+        cancelButton.setText(bundle.getString("general_dismiss_text")); // NOI18N
+        cancelButton.setMaximumSize(new java.awt.Dimension(80, 25));
+        cancelButton.setMinimumSize(new java.awt.Dimension(80, 25));
+        cancelButton.setPreferredSize(new java.awt.Dimension(80, 25));
         cancelButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cancelButtonActionPerformed(evt);
@@ -197,7 +198,7 @@ public class XTCEViewerCreateEditSpaceSystem extends javax.swing.JDialog {
 
         longDescriptionText.setColumns(20);
         longDescriptionText.setRows(5);
-        jScrollPane1.setViewportView(longDescriptionText);
+        longDescriptionScrollPane.setViewportView(longDescriptionText);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -220,7 +221,7 @@ public class XTCEViewerCreateEditSpaceSystem extends javax.swing.JDialog {
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(17, 17, 17)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(spaceSystemNameText, javax.swing.GroupLayout.DEFAULT_SIZE, 241, Short.MAX_VALUE)
+                                    .addComponent(spaceSystemNameText)
                                     .addComponent(shortDescriptionText)
                                     .addComponent(operationalStatusText)
                                     .addComponent(versionText)
@@ -231,7 +232,7 @@ public class XTCEViewerCreateEditSpaceSystem extends javax.swing.JDialog {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(classificationInstructionsText)
                                     .addComponent(validationStatusText, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jScrollPane1)))))
+                                    .addComponent(longDescriptionScrollPane)))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(createButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -281,7 +282,7 @@ public class XTCEViewerCreateEditSpaceSystem extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(longDescriptionLabel)
-                    .addComponent(jScrollPane1))
+                    .addComponent(longDescriptionScrollPane))
                 .addGap(17, 17, 17)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(createButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -355,8 +356,8 @@ public class XTCEViewerCreateEditSpaceSystem extends javax.swing.JDialog {
     private javax.swing.JButton createButton;
     private javax.swing.JLabel dateLabel;
     private javax.swing.JTextField dateText;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel longDescriptionLabel;
+    private javax.swing.JScrollPane longDescriptionScrollPane;
     private javax.swing.JTextArea longDescriptionText;
     private javax.swing.JLabel operationalStatusLabel;
     private javax.swing.JTextField operationalStatusText;

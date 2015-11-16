@@ -21,6 +21,7 @@ import java.awt.Frame;
 import org.omg.space.xtce.toolkit.XTCEDatabaseException;
 import org.omg.space.xtce.toolkit.XTCEParameter;
 import java.awt.event.WindowEvent;
+import org.omg.space.xtce.toolkit.XTCEFunctions;
 
 /** Dialog window to display the raw XML contents of a Parameter, where
  * both the type element and the Parameter element are shown for the user.
@@ -51,12 +52,16 @@ public class XTCEViewerParameterXmlDialog extends javax.swing.JDialog {
 
         super(parent, modal);
         initComponents();
+
         if ( parameter == null ) {
             return;
         }
+
         parameterDefinitionText.setText( parameter.toXml() );
         parameterTypeDefinitionText.setText( parameter.typeToXml() );
-        setTitle( "Parameter XML: " + parameter.getName() );
+        setTitle( XTCEFunctions.getText( "dialog_parameter_xml_title" ) + // NOI18N
+                  ": " + // NOI18N
+                  parameter.getName() );
         pack();
         setLocationRelativeTo( parent );
 
@@ -72,10 +77,10 @@ public class XTCEViewerParameterXmlDialog extends javax.swing.JDialog {
     private void initComponents() {
 
         parameterTypeLabel = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        parameterTypeScrollPane = new javax.swing.JScrollPane();
         parameterTypeDefinitionText = new javax.swing.JTextArea();
         parameterLabel = new javax.swing.JLabel();
-        jScrollPane2 = new javax.swing.JScrollPane();
+        parameterDefinitionScrollPane = new javax.swing.JScrollPane();
         parameterDefinitionText = new javax.swing.JTextArea();
         buttonPanel = new javax.swing.JPanel();
         acceptButton = new javax.swing.JButton();
@@ -90,19 +95,20 @@ public class XTCEViewerParameterXmlDialog extends javax.swing.JDialog {
         parameterTypeLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         parameterTypeLabel.setText("Parameter Type Definition");
 
-        jScrollPane1.setViewportView(parameterTypeDefinitionText);
+        parameterTypeDefinitionText.setRows(10);
+        parameterTypeScrollPane.setViewportView(parameterTypeDefinitionText);
 
         parameterLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         parameterLabel.setText("Parameter Definition");
 
-        jScrollPane2.setViewportView(parameterDefinitionText);
+        parameterDefinitionText.setRows(3);
+        parameterDefinitionScrollPane.setViewportView(parameterDefinitionText);
 
         buttonPanel.setMaximumSize(new java.awt.Dimension(32767, 47));
         buttonPanel.setMinimumSize(new java.awt.Dimension(0, 47));
 
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/omg/space/xtce/toolkit/MessagesBundle"); // NOI18N
         acceptButton.setText(bundle.getString("general_accept_text")); // NOI18N
-        acceptButton.setLabel("Accept");
         acceptButton.setMaximumSize(new java.awt.Dimension(100, 25));
         acceptButton.setMinimumSize(new java.awt.Dimension(100, 25));
         acceptButton.setPreferredSize(new java.awt.Dimension(100, 25));
@@ -113,7 +119,6 @@ public class XTCEViewerParameterXmlDialog extends javax.swing.JDialog {
         });
 
         dismissButton.setText(bundle.getString("general_dismiss_text")); // NOI18N
-        dismissButton.setLabel("Dismiss");
         dismissButton.setMaximumSize(new java.awt.Dimension(100, 25));
         dismissButton.setMinimumSize(new java.awt.Dimension(100, 25));
         dismissButton.setPreferredSize(new java.awt.Dimension(100, 25));
@@ -156,8 +161,8 @@ public class XTCEViewerParameterXmlDialog extends javax.swing.JDialog {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(parameterTypeLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(parameterLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1))
+                            .addComponent(parameterDefinitionScrollPane, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(parameterTypeScrollPane))
                         .addContainerGap())))
         );
         layout.setVerticalGroup(
@@ -166,11 +171,11 @@ public class XTCEViewerParameterXmlDialog extends javax.swing.JDialog {
                 .addContainerGap()
                 .addComponent(parameterTypeLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
+                .addComponent(parameterTypeScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(parameterLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
+                .addComponent(parameterDefinitionScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(buttonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -192,11 +197,11 @@ public class XTCEViewerParameterXmlDialog extends javax.swing.JDialog {
     private javax.swing.JButton acceptButton;
     private javax.swing.JPanel buttonPanel;
     private javax.swing.JButton dismissButton;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane parameterDefinitionScrollPane;
     private javax.swing.JTextArea parameterDefinitionText;
     private javax.swing.JLabel parameterLabel;
     private javax.swing.JTextArea parameterTypeDefinitionText;
     private javax.swing.JLabel parameterTypeLabel;
+    private javax.swing.JScrollPane parameterTypeScrollPane;
     // End of variables declaration//GEN-END:variables
 }
