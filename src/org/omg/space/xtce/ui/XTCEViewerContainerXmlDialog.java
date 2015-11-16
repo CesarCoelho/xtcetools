@@ -51,7 +51,8 @@ public class XTCEViewerContainerXmlDialog extends javax.swing.JDialog {
 
     XTCEViewerContainerXmlDialog( Frame           parent,
                                   boolean         modal,
-                                  XTCETMContainer container ) throws XTCEDatabaseException {
+                                  XTCETMContainer container )
+        throws XTCEDatabaseException {
 
         super( parent, modal );
         initComponents();
@@ -61,10 +62,12 @@ public class XTCEViewerContainerXmlDialog extends javax.swing.JDialog {
         }
 
         containerDefinitionText.setText( container.toXml() );
-        containerLabel.setText( XTCEFunctions.getText( "dialog_xmlsingle_container" ) );
+        containerLabel.setText(
+            XTCEFunctions.getText( "dialog_xmlsingle_container" ) ); // NOI18N
         setTitle( XTCEFunctions.getText( "dialog_container_xml_title" ) + // NOI18N
                   ": " + // NOI18N
                   container.getName() );
+
         pack();
         setLocationRelativeTo( parent );
 
@@ -85,15 +88,20 @@ public class XTCEViewerContainerXmlDialog extends javax.swing.JDialog {
 
     XTCEViewerContainerXmlDialog( Frame           parent,
                                   boolean         modal,
-                                  XTCETMStream    stream ) throws XTCEDatabaseException {
+                                  XTCETMStream    stream )
+        throws XTCEDatabaseException {
 
         super( parent, modal );
         initComponents();
+
         if ( stream == null ) {
             return;
         }
+
         containerDefinitionText.setText( stream.toXml() );
-        containerLabel.setText( XTCEFunctions.getText( "dialog_xmlsingle_stream" ) );
+        containerLabel.setText(
+            XTCEFunctions.getText( "dialog_xmlsingle_stream" ) ); // NOI18N
+
         pack();
         setLocationRelativeTo( parent );
 
@@ -205,7 +213,6 @@ public class XTCEViewerContainerXmlDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_dismissButtonActionPerformed
 
     private void acceptButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_acceptButtonActionPerformed
-        // TODO : Do something useful here
         this.dispatchEvent( new WindowEvent(this, WindowEvent.WINDOW_CLOSING) );
     }//GEN-LAST:event_acceptButtonActionPerformed
 
@@ -217,4 +224,5 @@ public class XTCEViewerContainerXmlDialog extends javax.swing.JDialog {
     private javax.swing.JButton dismissButton;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
+
 }

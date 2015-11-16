@@ -48,7 +48,8 @@ public class XTCEViewerParameterXmlDialog extends javax.swing.JDialog {
 
     XTCEViewerParameterXmlDialog( Frame         parent,
                                   boolean       modal,
-                                  XTCEParameter parameter ) throws XTCEDatabaseException {
+                                  XTCEParameter parameter )
+        throws XTCEDatabaseException {
 
         super(parent, modal);
         initComponents();
@@ -59,9 +60,11 @@ public class XTCEViewerParameterXmlDialog extends javax.swing.JDialog {
 
         parameterDefinitionText.setText( parameter.toXml() );
         parameterTypeDefinitionText.setText( parameter.typeToXml() );
-        setTitle( XTCEFunctions.getText( "dialog_parameter_xml_title" ) + // NOI18N
-                  ": " + // NOI18N
-                  parameter.getName() );
+        setTitle( XTCEFunctions.getText(
+            "dialog_parameter_xml_title" ) + // NOI18N
+            ": " + // NOI18N
+            parameter.getName() );
+
         pack();
         setLocationRelativeTo( parent );
 
@@ -188,7 +191,6 @@ public class XTCEViewerParameterXmlDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_dismissButtonActionPerformed
 
     private void acceptButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_acceptButtonActionPerformed
-        // TODO : Do something useful here
         this.dispatchEvent( new WindowEvent(this, WindowEvent.WINDOW_CLOSING) );
     }//GEN-LAST:event_acceptButtonActionPerformed
 
@@ -204,4 +206,5 @@ public class XTCEViewerParameterXmlDialog extends javax.swing.JDialog {
     private javax.swing.JLabel parameterTypeLabel;
     private javax.swing.JScrollPane parameterTypeScrollPane;
     // End of variables declaration//GEN-END:variables
+
 }
