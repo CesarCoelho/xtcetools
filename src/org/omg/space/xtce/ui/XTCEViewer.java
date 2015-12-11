@@ -1747,6 +1747,8 @@ public class XTCEViewer extends javax.swing.JFrame {
                       chs.isXIncludeSelected(),
                       chs.isValidateSelected(),
                       chs.isReadOnlySelected() );
+            prefs.updateRecentFilesList( mainWindowOpenRecentMenu,
+                                         chs.getSelectedFile() );
         }
 
     }//GEN-LAST:event_mainWindowOpenFileMenuItemActionPerformed
@@ -4481,8 +4483,6 @@ public class XTCEViewer extends javax.swing.JFrame {
 
             buildSpaceSystemTrees();
 
-            prefs.updateRecentFilesList( mainWindowOpenRecentMenu, dbFile );
-
             if ( dbFile.getParent() != null ) {
                 prefs.setCurrentWorkingDirectory( dbFile.getParent() );
             }
@@ -4578,8 +4578,6 @@ public class XTCEViewer extends javax.swing.JFrame {
             }
 
             buildSpaceSystemTrees();
-
-            //prefs.updateRecentFilesList( mainWindowOpenRecentMenu, dbFile );
 
             //if ( dbFile.getParent() != null ) {
             //    prefs.setCurrentWorkingDirectory( dbFile.getParent() );
@@ -4831,48 +4829,52 @@ public class XTCEViewer extends javax.swing.JFrame {
 
                 XTCEViewer app = new XTCEViewer();
 
-                if ( args.length > 0 ) {
-                    File argFile = new File( args[0] );
-                    if ( argFile.isFile() && argFile.canRead() ) {
-                        boolean useXInclude    = true;
-                        boolean validateOnLoad = false;
-                        boolean readOnly       = true;
-                        for ( int iii = 1; iii < args.length; ++iii ) {
-                            if ( args[iii].equals( "--no-xinclude" ) == true ) {
-                                useXInclude = false;
-                            } else if ( args[iii].equals( "--xinclude" ) == true ) {
-                                useXInclude = true;
-                            } else if ( args[iii].equals( "--no-validate" ) == true ) {
-                                validateOnLoad = false;
-                            } else if ( args[iii].equals( "--validate" ) == true ) {
-                                validateOnLoad = true;
-                            } else if ( args[iii].equals( "--writable" ) == true ) {
-                                readOnly = false;
-                            } else if ( args[iii].equals( "--readonly" ) == true ) {
-                                readOnly = true;
-                            } else if ( args[iii].startsWith( "--timehandlers=" ) == true ) {
-                                applyTimeHandlers( args[iii] );
-                            } else {
-                                System.err.println(
-                                    XTCEFunctions.getText( "general_unrecognizedarg" ) +
-                                    ": " + args[iii] );
-                                usage();
-                                System.exit( -1 );
-                            }
-                        }
-                        app.openFile( argFile,
-                                      useXInclude,
-                                      validateOnLoad,
-                                      readOnly);
-                    } else if ( args[0].startsWith( "--timehandlers=" ) == true ) {
-                        applyTimeHandlers( args[0] );
+                String  fileToOpen     = null;
+                boolean useXInclude    = true;
+                boolean validateOnLoad = false;
+                boolean readOnly       = true;
+
+                for ( int iii = 0; iii < args.length; ++iii ) {
+                    if ( args[iii].equals( "--no-xinclude" ) == true ) {
+                        useXInclude = false;
+                    } else if ( args[iii].equals( "--xinclude" ) == true ) {
+                        useXInclude = true;
+                    } else if ( args[iii].equals( "--no-validate" ) == true ) {
+                        validateOnLoad = false;
+                    } else if ( args[iii].equals( "--validate" ) == true ) {
+                        validateOnLoad = true;
+                    } else if ( args[iii].equals( "--writable" ) == true ) {
+                        readOnly = false;
+                    } else if ( args[iii].equals( "--readonly" ) == true ) {
+                        readOnly = true;
+                    } else if ( args[iii].startsWith( "--timehandlers=" ) == true ) {
+                        applyTimeHandlers( args[iii] );
+                    } else if ( args[iii].startsWith( "--file=" ) == true ) {
+                        fileToOpen = args[iii].substring( 7 );
                     } else {
                         System.err.println(
-                            XTCEFunctions.getText( "file_chooser_noload_text" ) +
-                            " " + args[0] );
+                            XTCEFunctions.getText( "general_unrecognizedarg" ) +
+                            ": " + args[iii] );
                         usage();
                         System.exit( -1 );
                     }
+
+                    if ( fileToOpen != null ) {
+                        File argFile = new File( fileToOpen );
+                        if ( argFile.isFile() && argFile.canRead() ) {
+                            app.openFile( argFile,
+                                          useXInclude,
+                                          validateOnLoad,
+                                          readOnly );
+                        } else {
+                            System.err.println(
+                            XTCEFunctions.getText( "file_chooser_noload_text" ) +
+                            " " + args[0] );
+                            usage();
+                            System.exit( -1 );
+                        }
+                    }
+
                 }
 
                 app.setLocationByPlatform( true );

@@ -318,9 +318,12 @@ abstract class XTCEContainerContentModelBase {
             // TODO Make this so constant parameters will evaluate even if they are
             // not on the table.
 
-            for ( final XTCEContainerEntryValue listEntry : contentValues_ ) {
-                if ( listEntry.isCompatibleWith( condition ) == true ) {
-                    ++satisfied;
+            for ( int iii = contentValues_.size() - 1; iii >= 0; --iii ) {
+                if ( condition.getItemFullPath().equals( contentValues_.get( iii ).getItemFullPath() ) == true ) {
+                    if ( contentValues_.get( iii ).isCompatibleWith( condition ) == true ) {
+                        ++satisfied;
+                    }
+                    break;
                 }
             }
 
