@@ -249,6 +249,22 @@ public class XTCEContainerEntryValue {
 
     }
 
+    /** Retrieve the Raw value of the entry, regardless of how it was assigned.
+     *
+     * @return String containing the raw value in hexadecimal form.
+     *
+     */
+
+    public final String getRawValueHex() {
+
+        if ( itemValueObj_ == null ) {
+            itemValueObj_ = new XTCEItemValue( item_ );
+        }
+
+        return itemValueObj_.bitSetToHex( getRawValue() );
+
+    }
+
     /** Compatibility Operator
      *
      * This method compares this entry value with another entry value to see if
