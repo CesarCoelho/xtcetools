@@ -250,6 +250,8 @@ public class XTCEViewerContainerDrawing extends JPanel {
 
     private void createDrawing( Graphics ggg ) {
 
+        int maxEntriesInUse = 256;
+
         // momentarily restore the default sizes so that the drawing functions
         // can grow them as needed, otherwise the sizes will leak larger and
         // larger.
@@ -258,12 +260,20 @@ public class XTCEViewerContainerDrawing extends JPanel {
 
         // short circuit crazy large drawings that are unreadable anyway
 
-        if ( contentModel_.getContentList().size() > 256 ) {
+        long drawingEntryCount = 0;
+
+        for ( XTCEContainerContentEntry entry : contentModel_.getContentList() ) {
+            if ( entry.isCurrentlyInUse() == true ) {
+                drawingEntryCount++;
+            }
+        }
+
+        if ( drawingEntryCount > maxEntriesInUse ) {
             totalSizeX_ = 250;
             totalSizeY_ = 100;
             ggg.drawString( XTCEFunctions.getText( "warning_drawing_too_wide" ) + // NOI18N
                             " " + // NOI18N
-                            Integer.toString( 256 ),
+                            Integer.toString( maxEntriesInUse ),
                             25,
                             25 );
             return;
