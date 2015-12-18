@@ -166,7 +166,13 @@ public class XTCESchemaErrorHandler implements ErrorHandler,
                 if ( event.getMessage().contains( skipMsg_ ) == true ) {
                     return true;
                 }
-                msg = warningMsg_ + event.getMessage();
+                msg = warningMsg_ +
+                    "( line " + // NOI18N
+                    Integer.toString( event.getLocator().getLineNumber() ) +
+                    " column " + // NOI18N
+                    Integer.toString( event.getLocator().getColumnNumber() ) +
+                    " ) " + // NOI18N
+                    event.getMessage();
                 if ( messages.contains( msg ) == false ) {
                     messages.add( msg );
                     ++warnings;
@@ -174,7 +180,13 @@ public class XTCESchemaErrorHandler implements ErrorHandler,
                 break;
 
             case ValidationEvent.ERROR:
-                msg = errorMsg_ + event.getMessage();
+                msg = errorMsg_ +
+                    "( line " + // NOI18N
+                    Integer.toString( event.getLocator().getLineNumber() ) +
+                    " column " + // NOI18N
+                    Integer.toString( event.getLocator().getColumnNumber() ) +
+                    " ) " + // NOI18N
+                    event.getMessage();
                 if ( messages.contains( msg ) == false ) {
                     messages.add( msg );
                     ++errors;
@@ -182,7 +194,13 @@ public class XTCESchemaErrorHandler implements ErrorHandler,
                 break;
 
             case ValidationEvent.FATAL_ERROR:
-                msg = fatalMsg_ + event.getMessage();
+                msg = fatalMsg_ +
+                    "( line " + // NOI18N
+                    Integer.toString( event.getLocator().getLineNumber() ) +
+                    " column " + // NOI18N
+                    Integer.toString( event.getLocator().getColumnNumber() ) +
+                    " ) " + // NOI18N
+                    event.getMessage();
                 if ( messages.contains( msg ) == false ) {
                     messages.add( msg );
                     ++errors;
