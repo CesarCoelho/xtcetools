@@ -138,7 +138,7 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
         contentValues_.clear();
         warnings_.clear();
 
-        long startTime = System.currentTimeMillis();
+        //long startTime = System.currentTimeMillis();
 
         RunningStartBit totalSize = new RunningStartBit();
 
@@ -148,7 +148,7 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
 
         checkForOverlaps();
 
-        long estimatedTime = System.currentTimeMillis() - startTime;
+        //long estimatedTime = System.currentTimeMillis() - startTime;
 
         //System.out.println( "Processed Container in approximately " +
         //    Long.toString( estimatedTime / 1000 ) + " seconds" );
@@ -262,7 +262,11 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
 
         }
 
-        //System.out.println( "Applying Current Container " + currentContainer.getName() + " with starting bit position " + Long.toString( containerStartBit ) );
+        //System.out.println( "Applying Current Container " +
+        //                    currentContainer.getName() +
+        //                    " with starting bit position " +
+        //                    Long.toString( containerStartBit ) );
+
         applyCurrentContainer( currentContainer,
                                currentStartBit,
                                containerStartBit,
