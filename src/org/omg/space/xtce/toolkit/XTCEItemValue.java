@@ -118,6 +118,25 @@ public class XTCEItemValue {
 
     }
 
+    /** Constructor
+     *
+     * @param item XTCETypedObject containing the Parameter or Argument
+     * that is being encoded/decoded.
+     *
+     * @param calibrator CalibratorType containing the contextually accurate
+     * calibrator for this item value evaluation.
+     *
+     */
+
+    public XTCEItemValue( final XTCETypedObject item,
+                          final CalibratorType  calibrator ) {
+
+        this( item );
+
+        defCal_ = calibrator;
+
+    }
+
     /** Retrieves the item name of the Parameter or Argument that is the basis
      * for this item value encode()/decode() object.
      *

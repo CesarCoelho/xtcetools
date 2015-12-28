@@ -24,7 +24,9 @@ import java.util.HashMap;
 import java.util.List;
 import org.omg.space.xtce.database.ArrayParameterRefEntryType;
 import org.omg.space.xtce.database.ArrayParameterRefEntryType.DimensionList;
+import org.omg.space.xtce.database.CalibratorType;
 import org.omg.space.xtce.database.ComparisonType;
+import org.omg.space.xtce.database.ContextCalibratorType;
 import org.omg.space.xtce.database.IntegerValueType;
 import org.omg.space.xtce.database.MatchCriteriaType;
 import org.omg.space.xtce.database.RepeatType;
@@ -881,12 +883,22 @@ abstract class XTCEContainerContentModelBase {
 
             BitSet rawValue = extractRawValue( entry );
 
+            CalibratorType calibrator = getMatchingCalibrator( entry );
+
             // what to do in the case of an existing set value?
 
             if ( entry.getEntryType() == FieldType.PARAMETER ) {
-                XTCEContainerEntryValue valueObj =
-                    new XTCEContainerEntryValue( entry.getParameter(),
-                                                 rawValue );
+                XTCEContainerEntryValue valueObj;
+                if ( calibrator == null ) {
+                    valueObj =
+                        new XTCEContainerEntryValue( entry.getParameter(),
+                                                     rawValue );
+                } else {
+                    valueObj =
+                        new XTCEContainerEntryValue( entry.getParameter(),
+                                                     rawValue,
+                                                     calibrator );
+                }
                 if ( entry.getValue() != null ) {
                     if ( entry.getValue().isCompatibleWith( valueObj ) == false ) {
                         warnings_.add( entry.getName() +
@@ -908,6 +920,7 @@ abstract class XTCEContainerContentModelBase {
                 entry.setValue( valueObj );
                 contentValues_.add( valueObj );
             } else if ( entry.getEntryType() == FieldType.ARGUMENT ) {
+                // TODO set the calibrator here if there is a matching context
                 XTCEContainerEntryValue valueObj =
                     new XTCEContainerEntryValue( entry.getArgument(),
                                                  rawValue );
@@ -1168,6 +1181,118 @@ abstract class XTCEContainerContentModelBase {
         if ( sb.length() > 0 ) {
             warnings_.add( sb.deleteCharAt( sb.length() - 1 ).toString() );
         }
+
+    }
+
+    /** Method to resolve the matching context for a series of context
+     * calibrators and return the appropriate match, or the default if there is
+     * no match.
+     *
+     * @return CalibratorType containing the calibrator to use or a null
+     * pointer if there is no calibrator.
+     *
+     */
+
+    private CalibratorType getMatchingCalibrator( XTCEContainerContentEntry entry )
+        throws XTCEDatabaseException {
+
+        // first check that this is a parameter
+
+        if ( entry.getEntryType() != FieldType.PARAMETER ) {
+            return null;
+        }
+
+        // get the typed object
+
+        XTCETypedObject parameter = entry.getParameter();
+
+        // next check to see if we have any values to compare to, otherwise
+        // this can only be the default calibrator
+
+        if ( contentValues_.isEmpty() == true ) {
+            return parameter.getDefaultCalibrator();
+        }
+
+        List<ContextCalibratorType> contextCalibrators =
+            parameter.getContextCalibrators();
+
+        // if there are no context calibrators, then the default or null must
+        // be the case
+
+        if ( contextCalibrators == null ) {
+            return parameter.getDefaultCalibrator();
+        }
+
+        // check each context calibrator for matching context and return the
+        // first one that matches
+
+        for ( ContextCalibratorType pair : contextCalibrators ) {
+
+            MatchCriteriaType criteria = pair.getContextMatch();
+
+            // retrieve the comparisons
+
+            List<ComparisonType> compares = new ArrayList<>();
+            if ( criteria.getComparison() != null ) {
+                compares.add( criteria.getComparison() );
+            } else if ( criteria.getComparisonList() != null ) {
+                compares.addAll( criteria.getComparisonList()
+                                         .getComparison() );
+            }
+
+            // loop through the various comparisons
+
+            int matches = 0;
+
+            for ( ComparisonType compare : compares ) {
+
+                XTCETypedObject compareParameter;
+
+                // TODO: Telecommand container support will be needed here
+
+                if ( entry.getTelemetryContainer() != null ) {
+                    compareParameter = findParameter( compare.getParameterRef(),
+                                                      entry.getTelemetryContainer() );
+                } else if ( entry.getHoldingContainer() != null ) {
+                    compareParameter = findParameter( compare.getParameterRef(),
+                                                      entry.getHoldingContainer() );
+                } else {
+                    throw new XTCEDatabaseException(
+                        XTCEFunctions.getText( "error_encdec_entrynotsupported" ) ); // NOI18N
+                }
+
+                XTCEContainerEntryValue compareValue =
+                    new XTCEContainerEntryValue( compareParameter,
+                                                 compare.getValue(),
+                                                 compare.getComparisonOperator(),
+                                                 ( compare.isUseCalibratedValue() ? "Calibrated" : "Uncalibrated" ) ); // NOI18N
+
+                // read backwards through the content values so that we act on
+                // the most recent potential matching parameter report
+
+                for ( int iii = contentValues_.size() - 1; iii >= 0; --iii ) {
+                    if ( contentValues_.get( iii ).getItemFullPath().equals( compareParameter.getFullPath() ) == true ) {
+                        if ( contentValues_.get( iii ).isCompatibleWith( compareValue ) == true ) {
+                            ++matches;
+                        }
+                        break;
+                    }
+                }
+
+            }
+
+            // return the context calibrator if it matches the data in the
+            // container
+
+            if ( matches == compares.size() ) {
+                return pair.getCalibrator();
+            }
+
+        }
+
+        // this will be null if there is no default calibrator
+
+        return parameter.getDefaultCalibrator();
 
     }
 

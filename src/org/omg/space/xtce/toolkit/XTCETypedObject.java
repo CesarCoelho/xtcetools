@@ -30,12 +30,15 @@ import org.omg.space.xtce.database.BaseTimeDataType;
 import org.omg.space.xtce.database.BinaryDataType;
 import org.omg.space.xtce.database.BooleanDataType;
 import org.omg.space.xtce.database.CalibratorType;
+import org.omg.space.xtce.database.ComparisonType;
+import org.omg.space.xtce.database.ContextCalibratorType;
 import org.omg.space.xtce.database.DescriptionType.AncillaryDataSet;
 import org.omg.space.xtce.database.DescriptionType.AncillaryDataSet.AncillaryData;
 import org.omg.space.xtce.database.EnumeratedDataType;
 import org.omg.space.xtce.database.FloatDataType;
 import org.omg.space.xtce.database.IntegerDataType;
 import org.omg.space.xtce.database.IntegerValueType;
+import org.omg.space.xtce.database.MatchCriteriaType;
 import org.omg.space.xtce.database.NameDescriptionType;
 import org.omg.space.xtce.database.RelativeTimeDataType;
 import org.omg.space.xtce.database.StringDataEncodingType;
@@ -959,11 +962,12 @@ public abstract class XTCETypedObject extends XTCENamedObject {
 
     }
 
-    /** Retrieves the CalibratorType from the JAXB generated classes that is
-     * attached to this type, or null if this type has no Calibrators.
+    /** Retrieves the default CalibratorType from the JAXB generated classes
+     * that is attached to this type, or null if this type has no default
+     * Calibrator.
      *
-     * @return CalibratorType containing the Default and Context Calibrator
-     * elements for this type, or a null pointer if there aren't any.
+     * @return CalibratorType containing the Default Calibrator element for
+     * this type, or a null pointer if there is not a default calibrator.
      *
      */
 
@@ -1003,6 +1007,99 @@ public abstract class XTCETypedObject extends XTCENamedObject {
 
         return null;
 
+    }
+
+    /** Method to determine if this typed object has a default calibrator.
+     *
+     * @return boolean true if a default calibrator exists or false if not.
+     *
+     */
+
+    public final boolean hasDefaultCalibrator() {
+        return ( getDefaultCalibrator() != null );
+    }
+
+    /** Retrieves the List of ContextCalibratorType elements from the JAXB
+     * generated classes that is attached to this type.
+     *
+     * @return List of ContextCalibratorType elements for this type, or a null
+     * pointer if there aren't any context calibrators.
+     *
+     */
+
+    public final List<ContextCalibratorType> getContextCalibrators() {
+
+        if ( typeObj_ == null ) {
+            return null;
+        }
+
+        if ( isBaseDataType() == true ) {
+
+            BaseDataType pTypeRef = (BaseDataType)typeObj_;
+
+            if ( pTypeRef != null ) {
+                if ( pTypeRef.getIntegerDataEncoding() != null ) {
+                    try {
+                       return pTypeRef.getIntegerDataEncoding()
+                                      .getContextCalibratorList()
+                                      .getContextCalibrator();
+                    } catch ( NullPointerException ex ) {
+                        // do nothing
+                    }
+                } else if ( pTypeRef.getFloatDataEncoding() != null ) {
+                    try {
+                        return pTypeRef.getFloatDataEncoding()
+                                       .getContextCalibratorList()
+                                       .getContextCalibrator();
+                    } catch ( NullPointerException ex ) {
+                        // do nothing
+                    }
+                }
+            }
+
+        } else if ( isBaseTimeDataType() == true ) {
+
+            BaseTimeDataType pTypeRef = (BaseTimeDataType)typeObj_;
+
+            if ( pTypeRef != null ) {
+                if ( pTypeRef.getEncoding() != null ) {
+                    if ( pTypeRef.getEncoding().getIntegerDataEncoding() != null ) {
+                        try {
+                            return pTypeRef.getEncoding()
+                                           .getIntegerDataEncoding()
+                                           .getContextCalibratorList()
+                                           .getContextCalibrator();
+                        } catch ( NullPointerException ex ) {
+                            // do nothing
+                        }
+                    } else if ( pTypeRef.getEncoding().getFloatDataEncoding() != null ) {
+                        try {
+                            return pTypeRef.getEncoding()
+                                           .getFloatDataEncoding()
+                                           .getContextCalibratorList()
+                                           .getContextCalibrator();
+                        } catch ( NullPointerException ex ) {
+                            // do nothing
+                        }
+                    }
+                }
+            }
+
+        }
+
+        return null;
+
+    }
+
+    /** Method to determine if this typed object has a list of context
+     * calibrators.
+     *
+     * @return boolean true if a list exists or false if not.
+     *
+     */
+
+    public final boolean hasContextCalibrators() {
+        return ( getContextCalibrators() != null );
     }
 
     /** Retrieve an XML string that represents this typed object's "type"

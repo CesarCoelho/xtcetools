@@ -803,6 +803,115 @@ public class ContainerDecodingTest {
 
     }
 
+    @Test
+    public void processContainerWithContextCalibrators() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        String containerName = "/BogusSAT/SC001/BusElectronics/SensorHistoryBuffer";
+
+        String binFilename =
+            "src/org/omg/space/xtce/database/Container-SensorHistoryBuffer.bin";
+
+        try {
+
+            XTCETMContainer container = db_.getContainer( containerName );
+
+            XTCEContainerContentModel model =
+                db_.processContainer( container,
+                                      readBytesFromFile( binFilename ) );
+
+            long sizeInBytes = model.getTotalSize();
+
+            Assert.assertTrue( "Container size of " + containerName + " is " +
+                Long.toString( sizeInBytes ) + " but should be 448 bits",
+                sizeInBytes == 448 );
+
+            List<XTCEContainerContentEntry> entries = model.getContentList();
+
+            for ( String warning : model.getWarnings() ) {
+                System.out.println( "Container Model Warning: " + warning );
+            }
+
+            long items = 0;
+
+            for ( XTCEContainerContentEntry entry : entries ) {
+
+                if ( entry.getName().equals( "SensorTime" ) ) {
+                    ++items;
+                    // no check, we aren't testing time right now
+
+                } else if ( items == 1 && entry.getName().equals( "SunSensorMode" ) ) {
+                    ++items;
+                    checkEntry( entry, "8", "64", "==HIGH{cal}", "OFF", "", "" );
+                } else if ( items == 2 && entry.getName().equals( "EarthSensorMode" ) ) {
+                    ++items;
+                    checkEntry( entry, "8", "72", "==HIGH{cal}", "OFF", "", "" );
+                } else if ( items == 3 && entry.getName().equals( "SunSensorLevel" ) ) {
+                    ++items;
+                    checkEntry( entry, "16", "80", "==45.0{cal}", "", "", "" );
+                } else if ( items == 4 && entry.getName().equals( "EarthSensorLevel" ) ) {
+                    ++items;
+                    checkEntry( entry, "16", "96", "==10.0{cal}", "", "", "" );
+
+                } else if ( items == 6 && entry.getName().equals( "SunSensorMode" ) ) {
+                    ++items;
+                    checkEntry( entry, "8", "176", "==LOW{cal}", "OFF", "", "" );
+                } else if ( items == 7 && entry.getName().equals( "EarthSensorMode" ) ) {
+                    ++items;
+                    checkEntry( entry, "8", "184", "==LOW{cal}", "OFF", "", "" );
+                } else if ( items == 8 && entry.getName().equals( "SunSensorLevel" ) ) {
+                    ++items;
+                    checkEntry( entry, "16", "192", "==15.0{cal}", "", "", "" );
+                } else if ( items == 9 && entry.getName().equals( "EarthSensorLevel" ) ) {
+                    ++items;
+                    checkEntry( entry, "16", "208", "==7.5{cal}", "", "", "" );
+
+                } else if ( items == 11 && entry.getName().equals( "SunSensorMode" ) ) {
+                    ++items;
+                    checkEntry( entry, "8", "288", "==OFF{cal}", "OFF", "", "" );
+                } else if ( items == 12 && entry.getName().equals( "EarthSensorMode" ) ) {
+                    ++items;
+                    checkEntry( entry, "8", "296", "==OFF{cal}", "OFF", "", "" );
+                } else if ( items == 13 && entry.getName().equals( "SunSensorLevel" ) ) {
+                    ++items;
+                    checkEntry( entry, "16", "304", "==5.0{cal}", "", "", "" );
+                } else if ( items == 14 && entry.getName().equals( "EarthSensorLevel" ) ) {
+                    ++items;
+                    checkEntry( entry, "16", "320", "==10.0{cal}", "", "", "" );
+
+                } else if ( items == 16 && entry.getName().equals( "SunSensorMode" ) ) {
+                    ++items;
+                    checkEntry( entry, "8", "400", "==HIGH{cal}", "OFF", "", "" );
+                } else if ( items == 17 && entry.getName().equals( "EarthSensorMode" ) ) {
+                    ++items;
+                    checkEntry( entry, "8", "408", "==HIGH{cal}", "OFF", "", "" );
+                } else if ( items == 18 && entry.getName().equals( "SunSensorLevel" ) ) {
+                    ++items;
+                    checkEntry( entry, "16", "416", "==0.0{cal}", "", "", "" );
+                } else if ( items == 19 && entry.getName().equals( "EarthSensorLevel" ) ) {
+                    ++items;
+                    checkEntry( entry, "16", "432", "==10.0{cal}", "", "", "" );
+                }
+
+            }
+
+            Assert.assertTrue( "Container parameter count of " + containerName + " is " +
+                Long.toString( items ) + " but should be 20 items",
+                items == 20 );
+
+            assertOnWarnings( model );
+
+        } catch ( Exception ex ) {
+            //ex.printStackTrace();
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+    }
+
     private void checkEntry( XTCEContainerContentEntry entry,
                              String                    sizeInBits,
                              String                    startBit,

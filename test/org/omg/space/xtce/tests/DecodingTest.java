@@ -29,8 +29,11 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Ignore;
+import org.omg.space.xtce.database.ContextCalibratorType;
+import org.omg.space.xtce.database.MatchCriteriaType;
 import org.omg.space.xtce.toolkit.XTCEDatabase;
 import org.omg.space.xtce.toolkit.XTCEDatabaseException;
+import org.omg.space.xtce.toolkit.XTCEFunctions;
 import org.omg.space.xtce.toolkit.XTCEItemValue;
 import org.omg.space.xtce.toolkit.XTCEParameter;
 
@@ -911,6 +914,418 @@ public class DecodingTest {
 
     }
 
+    @Test
+    public void testFloatParameterTypesDefaultWithPolynomialContextCalibrator() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        long errors = 0;
+
+        try {
+
+            System.out.println( "Testing EU Float Default with Polynomial Context Calibrator" );
+
+            getParameterItemValueObj( "/BogusSAT/SC001/BusElectronics",
+                                      "SunSensorLevel" );
+
+            errors += checkPass( "-10.0",
+                                 "0x0000" );
+
+            errors += checkPass( "-5.0",
+                                 1 );
+
+            errors += checkPass( "0.0",
+                                 "0x0002" );
+
+            errors += checkPass( "5.0",
+                                 "0x0003" );
+
+            System.out.println( "" );
+
+        } catch ( Throwable ex ) {
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+        if ( errors != 0 ) {
+            Assert.fail( "Not all checks passed" );
+        }
+
+    }
+
+    @Test
+    public void testFloatParameterTypesDefaultWithSplineContextCalibrator() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        long errors = 0;
+
+        try {
+
+            System.out.println( "Testing EU Float Default with Spline Context Calibrator" );
+
+            getParameterItemValueObj( "/BogusSAT/SC001/BusElectronics",
+                                      "EarthSensorLevel" );
+
+            //errors += check( "0",
+            //                 "Spline Calibrator for Spline_Demo does not bound calibrated value 0 and extrapolate is false" );
+
+            //errors += check( 0.0,
+            //                 "Spline Calibrator for Spline_Demo does not bound calibrated value 0.0 and extrapolate is false" );
+
+            //errors += check( (float)0.0,
+            //                 "Spline Calibrator for Spline_Demo does not bound calibrated value 0.0 and extrapolate is false" );
+
+            errors += checkPass( "0.0",
+                                 "0x0000000000000000" );
+
+            //errors += check( "-2",
+            //                 "Spline Calibrator for Spline_Demo does not bound calibrated value -2 and extrapolate is false" );
+
+            errors += checkPass( "5.0",
+                                 10 );
+
+            errors += checkPass( "10.0",
+                                 "0x0000000000000014" );
+
+            //errors += checkFail( "50",
+            //                     "Spline Calibrator for EarthSensorLevel does not bound calibrated value -4.0 and extrapolate is false" );
+
+            //errors += check( 5.0,
+            //                 "Spline Calibrator for Spline_Demo does not bound calibrated value 5.0 and extrapolate is false" );
+
+            System.out.println( "" );
+
+        } catch ( Throwable ex ) {
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+        if ( errors != 0 ) {
+            Assert.fail( "Not all checks passed" );
+        }
+
+    }
+
+    @Test
+    public void testFloatParameterTypesWithPolynomialContextCalibratorFalseMatch() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        long errors = 0;
+
+        try {
+
+            System.out.println( "Testing EU Float with Polynomial Context Calibrator False Match" );
+
+            getParameterItemValueObj( "/BogusSAT/SC001/BusElectronics",
+                                      "SunSensorLevel",
+                                      "/BogusSAT/SC001/BusElectronics",
+                                      "SunSensorMode",
+                                      "OFF" );
+
+            errors += checkPass( "-10.0",
+                                 "0x0000" );
+
+            errors += checkPass( "-5.0",
+                                 1 );
+
+            errors += checkPass( "0.0",
+                                 "0x0002" );
+
+            errors += checkPass( "5.0",
+                                 "0x0003" );
+
+            System.out.println( "" );
+
+        } catch ( Throwable ex ) {
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+        if ( errors != 0 ) {
+            Assert.fail( "Not all checks passed" );
+        }
+
+    }
+
+    @Test
+    public void testFloatParameterTypesWithPolynomialContextCalibratorTrueMatch1() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        long errors = 0;
+
+        try {
+
+            System.out.println( "Testing EU Float with Polynomial Context Calibrator True Match = LOW" );
+
+            getParameterItemValueObj( "/BogusSAT/SC001/BusElectronics",
+                                      "SunSensorLevel",
+                                      "/BogusSAT/SC001/BusElectronics",
+                                      "SunSensorMode",
+                                      "LOW" );
+
+            errors += checkPass( "0.0",
+                                 "0x0000" );
+
+            errors += checkPass( "5.0",
+                                 1 );
+
+            errors += checkPass( "10.0",
+                                 "0x0002" );
+
+            errors += checkPass( "15.0",
+                                 "0x0003" );
+
+            System.out.println( "" );
+
+        } catch ( Throwable ex ) {
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+        if ( errors != 0 ) {
+            Assert.fail( "Not all checks passed" );
+        }
+
+    }
+
+    @Test
+    public void testFloatParameterTypesWithPolynomialContextCalibratorTrueMatch2() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        long errors = 0;
+
+        try {
+
+            System.out.println( "Testing EU Float with Polynomial Context Calibrator True Match = HIGH" );
+
+            getParameterItemValueObj( "/BogusSAT/SC001/BusElectronics",
+                                      "SunSensorLevel",
+                                      "/BogusSAT/SC001/BusElectronics",
+                                      "SunSensorMode",
+                                      "HIGH" );
+
+            errors += checkPass( "0.0",
+                                 "0x0000" );
+
+            errors += checkPass( "15.0",
+                                 1 );
+
+            errors += checkPass( "30.0",
+                                 "0x0002" );
+
+            errors += checkPass( "45.0",
+                                 "0x0003" );
+
+            System.out.println( "" );
+
+        } catch ( Throwable ex ) {
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+        if ( errors != 0 ) {
+            Assert.fail( "Not all checks passed" );
+        }
+
+    }
+
+    @Test
+    public void testFloatParameterTypesWithSplineContextCalibratorFalseMatch() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        long errors = 0;
+
+        try {
+
+            System.out.println( "Testing EU Float with Spline Context Calibrator False Match" );
+
+            getParameterItemValueObj( "/BogusSAT/SC001/BusElectronics",
+                                      "EarthSensorLevel",
+                                      "/BogusSAT/SC001/BusElectronics",
+                                      "EarthSensorMode",
+                                      "OFF" );
+
+            //errors += check( "0",
+            //                 "Spline Calibrator for Spline_Demo does not bound calibrated value 0 and extrapolate is false" );
+
+            //errors += check( 0.0,
+            //                 "Spline Calibrator for Spline_Demo does not bound calibrated value 0.0 and extrapolate is false" );
+
+            //errors += check( (float)0.0,
+            //                 "Spline Calibrator for Spline_Demo does not bound calibrated value 0.0 and extrapolate is false" );
+
+            errors += checkPass( "0.0",
+                                 "0x0000000000000000" );
+
+            //errors += check( "-2",
+            //                 "Spline Calibrator for Spline_Demo does not bound calibrated value -2 and extrapolate is false" );
+
+            errors += checkPass( "5.0",
+                                 10 );
+
+            errors += checkPass( "10.0",
+                                 "0x0000000000000014" );
+
+            //errors += checkFail( "50",
+            //                     "Spline Calibrator for EarthSensorLevel does not bound calibrated value -4.0 and extrapolate is false" );
+
+            //errors += check( 5.0,
+            //                 "Spline Calibrator for Spline_Demo does not bound calibrated value 5.0 and extrapolate is false" );
+
+            System.out.println( "" );
+
+        } catch ( Throwable ex ) {
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+        if ( errors != 0 ) {
+            Assert.fail( "Not all checks passed" );
+        }
+
+    }
+
+    @Test
+    public void testFloatParameterTypesWithSplineContextCalibratorTrueMatch1() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        long errors = 0;
+
+        try {
+
+            System.out.println( "Testing EU Float with Spline Context Calibrator True Match = LOW" );
+
+            getParameterItemValueObj( "/BogusSAT/SC001/BusElectronics",
+                                      "EarthSensorLevel",
+                                      "/BogusSAT/SC001/BusElectronics",
+                                      "EarthSensorMode",
+                                      "LOW" );
+
+            //errors += check( "0",
+            //                 "Spline Calibrator for Spline_Demo does not bound calibrated value 0 and extrapolate is false" );
+
+            //errors += check( 0.0,
+            //                 "Spline Calibrator for Spline_Demo does not bound calibrated value 0.0 and extrapolate is false" );
+
+            //errors += check( (float)0.0,
+            //                 "Spline Calibrator for Spline_Demo does not bound calibrated value 0.0 and extrapolate is false" );
+
+            errors += checkPass( "5.0",
+                                 "0x0000000000000000" );
+
+            //errors += check( "-2",
+            //                 "Spline Calibrator for Spline_Demo does not bound calibrated value -2 and extrapolate is false" );
+
+            errors += checkPass( "7.5", // testing order=1
+                                 5 );
+
+            errors += checkPass( "10.0",
+                                 10 );
+
+            errors += checkPass( "15.0",
+                                 "0x0000000000000014" );
+
+            //errors += checkFail( "50",
+            //                     "Spline Calibrator for EarthSensorLevel does not bound calibrated value -4.0 and extrapolate is false" );
+
+            //errors += check( 5.0,
+            //                 "Spline Calibrator for Spline_Demo does not bound calibrated value 5.0 and extrapolate is false" );
+
+            System.out.println( "" );
+
+        } catch ( Throwable ex ) {
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+        if ( errors != 0 ) {
+            Assert.fail( "Not all checks passed" );
+        }
+
+    }
+
+    @Test
+    public void testFloatParameterTypesWithSplineContextCalibratorTrueMatch2() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        long errors = 0;
+
+        try {
+
+            System.out.println( "Testing EU Float with Spline Context Calibrator True Match = HIGH" );
+
+            getParameterItemValueObj( "/BogusSAT/SC001/BusElectronics",
+                                      "EarthSensorLevel",
+                                      "/BogusSAT/SC001/BusElectronics",
+                                      "EarthSensorMode",
+                                      "HIGH" );
+
+            //errors += check( "0",
+            //                 "Spline Calibrator for Spline_Demo does not bound calibrated value 0 and extrapolate is false" );
+
+            //errors += check( 0.0,
+            //                 "Spline Calibrator for Spline_Demo does not bound calibrated value 0.0 and extrapolate is false" );
+
+            //errors += check( (float)0.0,
+            //                 "Spline Calibrator for Spline_Demo does not bound calibrated value 0.0 and extrapolate is false" );
+
+            errors += checkPass( "10.0",
+                                 "0x0000000000000000" );
+
+            //errors += check( "-2",
+            //                 "Spline Calibrator for Spline_Demo does not bound calibrated value -2 and extrapolate is false" );
+
+            errors += checkPass( "10.0", // testing order=0
+                                 5 );
+
+            errors += checkPass( "15.0",
+                                 10 );
+
+            errors += checkPass( "20.0",
+                                 "0x0000000000000014" );
+
+            //errors += checkFail( "50",
+            //                     "Spline Calibrator for EarthSensorLevel does not bound calibrated value -4.0 and extrapolate is false" );
+
+            //errors += check( 5.0,
+            //                 "Spline Calibrator for Spline_Demo does not bound calibrated value 5.0 and extrapolate is false" );
+
+            System.out.println( "" );
+
+        } catch ( Throwable ex ) {
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+        if ( errors != 0 ) {
+            Assert.fail( "Not all checks passed" );
+        }
+
+    }
+
     private long checkFail( BitSet bits, long raw, String warning ) {
 
         String result = vvv_.decode( bits );
@@ -1095,12 +1510,79 @@ public class DecodingTest {
 
     }
 
-    private void getParameterItemValueObj( String path, String name )
+    private void getParameterItemValueObj( String path,
+                                           String name )
         throws XTCEDatabaseException {
 
         ppp_ = db_.getSpaceSystem( path ).getTelemetryParameter( name );
 
         vvv_ = new XTCEItemValue( ppp_ );
+        if ( vvv_.isValid() == false ) {
+            throw new XTCEDatabaseException( "Parameter " +
+                                             ppp_.getName() +
+                                             " missing encoding information" );
+        }
+
+    }
+
+    private void getParameterItemValueObj( String path,
+                                           String name,
+                                           String pathContextMatcher,
+                                           String nameContextMatcher,
+                                           String calValueMatch )
+        throws XTCEDatabaseException {
+
+        // this should NOT serve as an example of how to do this because it is
+        // not general, rather it is crafted for these test cases and nothing
+        // more.
+
+        ppp_ = db_.getSpaceSystem( path )
+                  .getTelemetryParameter( name );
+
+        XTCEParameter contextMatcher =
+            db_.getSpaceSystem( pathContextMatcher )
+               .getTelemetryParameter( nameContextMatcher );
+
+        List<ContextCalibratorType> calibrators = ppp_.getContextCalibrators();
+
+        if ( calibrators == null ) {
+            throw new XTCEDatabaseException( "Parameter " +
+                                             ppp_.getName() +
+                                             " missing context calibrators" );
+        }
+
+        // this only supports single match cases, not the list of comparisons
+
+        vvv_ = null;
+
+        for ( ContextCalibratorType calibrator : calibrators ) {
+
+            MatchCriteriaType matcher = calibrator.getContextMatch();
+            String parameterRef = matcher.getComparison().getParameterRef();
+            String matchParameterAbsPath = XTCEFunctions.resolvePathReference( path, parameterRef );
+            String matchParameterPath = XTCEFunctions.getPathNameFromReferenceString( matchParameterAbsPath );
+            String matchParameterName = XTCEFunctions.getNameFromPathReferenceString( matchParameterAbsPath );
+
+            XTCEParameter matchParameter =
+                db_.getSpaceSystem( matchParameterPath )
+                   .getTelemetryParameter( matchParameterName );
+
+            if ( matchParameter.equals( contextMatcher ) == true ) {
+                String calValue = matcher.getComparison().getValue();
+                if ( calValue.equals( calValueMatch ) == true ) {
+                    vvv_ = new XTCEItemValue( ppp_, calibrator.getCalibrator() );
+                    break;
+                }
+            }
+
+        }
+
+        // no context match uses the default calibrator
+
+        if ( vvv_ == null ) {
+            vvv_ = new XTCEItemValue( ppp_, ppp_.getDefaultCalibrator() );
+        }
+
         if ( vvv_.isValid() == false ) {
             throw new XTCEDatabaseException( "Parameter " +
                                              ppp_.getName() +

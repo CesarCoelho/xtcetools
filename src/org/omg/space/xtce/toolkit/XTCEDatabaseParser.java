@@ -25,6 +25,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import javax.xml.XMLConstants;
 import javax.xml.bind.Binder;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
@@ -40,6 +41,8 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
 import org.omg.space.xtce.database.SpaceSystemType;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -178,7 +181,8 @@ public abstract class XTCEDatabaseParser {
             spf.setValidating( true );
             
             SAXParser parser = spf.newSAXParser();
-            parser.setProperty( sunSchema_, xsdUrl_ );
+            parser.setProperty( sunSchema_,
+                                XMLConstants.W3C_XML_SCHEMA_NS_URI );
 
             XMLReader reader = parser.getXMLReader();
             reader.setErrorHandler( handler );
@@ -479,28 +483,42 @@ public abstract class XTCEDatabaseParser {
 
         try {
 
+            SchemaFactory factory =
+                SchemaFactory.newInstance( XMLConstants.W3C_XML_SCHEMA_NS_URI );
+            Schema schema = factory.newSchema();
+
             Unmarshaller     um  = jaxbContext_.createUnmarshaller();
             SAXParserFactory spf = SAXParserFactory.newInstance();
 
+            //System.out.println( "Got here 1" );
             spf.setXIncludeAware( applyXIncludes );
 	    spf.setNamespaceAware( true );
-            spf.setValidating( validateOnLoad );
+            if ( validateOnLoad == true ) {
+                spf.setSchema( schema );
+            }
 
+            //System.out.println( "Got here 2" );
             SAXParser parser = spf.newSAXParser();
-            parser.setProperty( sunSchema_, xsdUrl_ );
+            //parser.setProperty( sunSchema_,
+            //                    XMLConstants.W3C_XML_SCHEMA_NS_URI );
 
+            //System.out.println( "Got here 3" );
             XMLReader reader = parser.getXMLReader();
             reader.setErrorHandler( handler );
             um.setEventHandler( handler );
 
+            //System.out.println( "Got here 4" );
             SAXSource source =
                 new SAXSource( reader, new InputSource( dbStream ) );
 
+            //System.out.println( "Got here 5" );
             jaxbElementRoot_ = (JAXBElement)um.unmarshal( source );
 
+            //System.out.println( "Got here 6" );
             errorCount_ = handler.getErrorCount();
             warnings_   = handler.getMessages();
-            
+
+            //System.out.println( "Got here 7" );
             Object candidate = jaxbElementRoot_.getValue();
 
             if ( candidate.getClass().equals( SpaceSystemType.class ) == false ) {
@@ -509,6 +527,7 @@ public abstract class XTCEDatabaseParser {
                 throw new XTCEDatabaseException( exceptionMessage );
             }
 
+            //System.out.println( "Got here 8" );
             domLoaded_       = false;
             domDocumentRoot_ = null;
             domBinder_       = null;
@@ -516,8 +535,10 @@ public abstract class XTCEDatabaseParser {
             return (SpaceSystemType)candidate;
 
         } catch ( UnmarshalException ex ) {
+            //System.out.println( "Got here 9" );
             throw new XTCEDatabaseException( handler.getMessages() );
         } catch ( NumberFormatException ex ) {
+            //System.out.println( "Got here 10" );
             String msg = XTCEFunctions.getText( "general_error" ) + // NOI18N
                          ": " + // NOI18N
                          XTCEFunctions.getText( "general_numberexception" ) + // NOI18N
@@ -528,8 +549,10 @@ public abstract class XTCEDatabaseParser {
             msgs.add( msg );
             throw new XTCEDatabaseException( msgs );
         } catch ( Exception ex ) {
+            //System.out.println( "Got here 11" );
             throw new XTCEDatabaseException( ex ); 
         } finally {
+            //System.out.println( "Got here 12" );
             System.setProperty( "user.dir", currentDir ); // NOI18N
         }
 
@@ -586,7 +609,8 @@ public abstract class XTCEDatabaseParser {
             dbf.setValidating( validateOnLoad );
 
             if ( validateOnLoad == true ) {
-                dbf.setAttribute( sunSchema_, xsdUrl_ );
+                dbf.setAttribute( sunSchema_,
+                                  XMLConstants.W3C_XML_SCHEMA_NS_URI );
             }
 
             DocumentBuilder db = dbf.newDocumentBuilder();
@@ -662,9 +686,7 @@ public abstract class XTCEDatabaseParser {
                          new StreamResult( dbFile ) );
 
         } catch ( Exception ex ) {
-            
             throw new XTCEDatabaseException( ex );
-            
         }
         
     }
@@ -703,8 +725,5 @@ public abstract class XTCEDatabaseParser {
 
     private static final String sunSchema_ =
         "http://java.sun.com/xml/jaxp/properties/schemaLanguage"; // NOI18N
-
-    private static final String xsdUrl_ =
-        "http://www.w3.org/2001/XMLSchema"; // NOI18N
 
 }

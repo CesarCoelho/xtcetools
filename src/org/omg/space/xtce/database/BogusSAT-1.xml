@@ -27,6 +27,14 @@ limitations under the License.
 	</xtce:Header>
 	<xtce:TelemetryMetaData>
 		<xtce:ParameterTypeSet>
+			<xtce:AbsoluteTimeParameterType name="POSIXTimeType" shortDescription="POSIX UNIX Time 'timeval' which is 2 unsigned 32 bit integers">
+				<xtce:Encoding>
+					<xtce:IntegerDataEncoding sizeInBits="64"/>
+				</xtce:Encoding>
+				<xtce:ReferenceTime>
+					<xtce:Epoch>1970-01-01</xtce:Epoch>
+				</xtce:ReferenceTime>
+			</xtce:AbsoluteTimeParameterType>
 			<xtce:EnumeratedParameterType name="TM_CHECKSUMType" initialValue="NotUsed">
 				<xtce:UnitSet/>
 				<xtce:EnumerationList>
@@ -360,6 +368,92 @@ limitations under the License.
 						<xtce:UnitSet/>
 						<xtce:IntegerDataEncoding bitOrder="mostSignificantBitFirst" encoding="unsigned" sizeInBits="8" changeThreshold="1"/>
 					</xtce:BooleanParameterType>
+                                        <xtce:FloatParameterType sizeInBits="64" name="SunSensorPolyCalType">
+                                            <xtce:UnitSet>
+                                                <xtce:Unit>cd/m^2</xtce:Unit>
+                                            </xtce:UnitSet>
+                                            <xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement">
+                                		<xtce:DefaultCalibrator>
+                                        		<xtce:PolynomialCalibrator>
+                                                            <xtce:Term exponent="0" coefficient="-10.0"/>
+                                                            <xtce:Term exponent="1" coefficient="5.0"/>
+                                                        </xtce:PolynomialCalibrator>
+                                                </xtce:DefaultCalibrator>
+                                                <xtce:ContextCalibratorList>
+                                                    <xtce:ContextCalibrator>
+                                                        <xtce:ContextMatch>
+                                                            <xtce:Comparison value="LOW" parameterRef="/BogusSAT/SC001/BusElectronics/SunSensorMode"/>
+                                                        </xtce:ContextMatch>
+                                                        <xtce:Calibrator>
+                                                            <xtce:PolynomialCalibrator>
+                                                                <xtce:Term exponent="0" coefficient="0.0"/>
+                                                                <xtce:Term exponent="1" coefficient="5.0"/>
+                                                            </xtce:PolynomialCalibrator>
+                                                        </xtce:Calibrator>
+                                                    </xtce:ContextCalibrator>
+                                                    <xtce:ContextCalibrator>
+                                                        <xtce:ContextMatch>
+                                                            <xtce:Comparison value="HIGH" parameterRef="SunSensorMode"/>
+                                                        </xtce:ContextMatch>
+                                                        <xtce:Calibrator>
+                                                            <xtce:PolynomialCalibrator>
+                                                                <xtce:Term exponent="0" coefficient="0.0"/>
+                                                                <xtce:Term exponent="1" coefficient="15.0"/>
+                                                            </xtce:PolynomialCalibrator>
+                                                        </xtce:Calibrator>
+                                                    </xtce:ContextCalibrator>
+                                                </xtce:ContextCalibratorList>
+                                            </xtce:IntegerDataEncoding>
+                                        </xtce:FloatParameterType>
+                                        <xtce:FloatParameterType sizeInBits="64" name="EarthSensorSplineCalType">
+                                            <xtce:UnitSet>
+                                                <xtce:Unit>cd/m^2</xtce:Unit>
+                                            </xtce:UnitSet>
+                                            <xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement">
+                                		<xtce:DefaultCalibrator>
+                                        		<xtce:SplineCalibrator order="1">
+                                                            <xtce:SplinePoint raw="0" calibrated="0.0"/>
+                                                            <xtce:SplinePoint raw="10" calibrated="5.0"/>
+                                                            <xtce:SplinePoint raw="20" calibrated="10.0"/>
+                                                        </xtce:SplineCalibrator>
+                                                </xtce:DefaultCalibrator>
+                                                <xtce:ContextCalibratorList>
+                                                    <xtce:ContextCalibrator>
+                                                        <xtce:ContextMatch>
+                                                            <xtce:Comparison value="LOW" parameterRef="EarthSensorMode"/>
+                                                        </xtce:ContextMatch>
+                                                        <xtce:Calibrator>
+                                                            <xtce:SplineCalibrator order="1">
+                                                                <xtce:SplinePoint raw="0" calibrated="5.0"/>
+                                                                <xtce:SplinePoint raw="10" calibrated="10.0"/>
+                                                                <xtce:SplinePoint raw="20" calibrated="15.0"/>
+                                                            </xtce:SplineCalibrator>
+                                                        </xtce:Calibrator>
+                                                    </xtce:ContextCalibrator>
+                                                    <xtce:ContextCalibrator>
+                                                        <xtce:ContextMatch>
+                                                            <xtce:Comparison value="HIGH" parameterRef="/BogusSAT/SC001/BusElectronics/EarthSensorMode"/>
+                                                        </xtce:ContextMatch>
+                                                        <xtce:Calibrator>
+                                                            <xtce:SplineCalibrator order="0">
+                                                                <xtce:SplinePoint raw="0" calibrated="10.0"/>
+                                                                <xtce:SplinePoint raw="10" calibrated="15.0"/>
+                                                                <xtce:SplinePoint raw="20" calibrated="20.0"/>
+                                                            </xtce:SplineCalibrator>
+                                                        </xtce:Calibrator>
+                                                    </xtce:ContextCalibrator>
+                                                </xtce:ContextCalibratorList>
+                                            </xtce:IntegerDataEncoding>
+                                        </xtce:FloatParameterType>
+                                	<xtce:EnumeratedParameterType name="SunSensorModeType" initialValue="OFF">
+                                		<xtce:UnitSet/>
+                                                <xtce:IntegerDataEncoding sizeInBits="8" encoding="unsigned"/>
+                                        	<xtce:EnumerationList>
+                                                    <xtce:Enumeration label="OFF" value="0"/>
+                                                    <xtce:Enumeration label="LOW" value="1"/>
+                                                    <xtce:Enumeration label="HIGH" value="2"/>
+                                                </xtce:EnumerationList>
+                                        </xtce:EnumeratedParameterType>
 				</xtce:ParameterTypeSet>
 				<xtce:ParameterSet>
 					<xtce:Parameter name="Battery_Charge_Mode" parameterTypeRef="Battery_Charge_Mode_Type">
@@ -453,7 +547,44 @@ limitations under the License.
 							</xtce:PhysicalAddressSet>
 						</xtce:ParameterProperties>
 					</xtce:Parameter>
+                                        <xtce:Parameter name="SensorTime" parameterTypeRef="/BogusSAT/POSIXTimeType" shortDescription="Measurement time of the sensor data">
+                                            <xtce:ParameterProperties dataSource="telemetered" readOnly="true"/>
+                                        </xtce:Parameter>
+                                        <xtce:Parameter name="SunSensorMode" parameterTypeRef="SunSensorModeType" shortDescription="Operational mode of the sun sensor">
+                                            <xtce:ParameterProperties dataSource="telemetered" readOnly="true"/>
+                                        </xtce:Parameter>
+                                        <xtce:Parameter name="EarthSensorMode" parameterTypeRef="SunSensorModeType" shortDescription="Operational mode of the earth sensor">
+                                            <xtce:ParameterProperties dataSource="telemetered" readOnly="true"/>
+                                        </xtce:Parameter>
+                                        <xtce:Parameter name="SunSensorLevel" parameterTypeRef="SunSensorPolyCalType" shortDescription="Illumination level measurement of the sun sensor">
+                                            <xtce:ParameterProperties dataSource="telemetered" readOnly="true"/>
+                                        </xtce:Parameter>
+                                        <xtce:Parameter name="EarthSensorLevel" parameterTypeRef="EarthSensorSplineCalType" shortDescription="Illumination level of the earth sensor">
+                                            <xtce:ParameterProperties dataSource="telemetered" readOnly="true"/>
+                                        </xtce:Parameter>
 				</xtce:ParameterSet>
+                                <xtce:ContainerSet>
+                                    <xtce:SequenceContainer name="SensorHistoryRecord">
+                                        <xtce:EntryList>
+                                            <xtce:ParameterRefEntry parameterRef="SensorTime"/>
+                                            <xtce:ParameterRefEntry parameterRef="SunSensorMode"/>
+                                            <xtce:ParameterRefEntry parameterRef="EarthSensorMode"/>
+                                            <xtce:ParameterRefEntry parameterRef="SunSensorLevel"/>
+                                            <xtce:ParameterRefEntry parameterRef="EarthSensorLevel"/>
+                                        </xtce:EntryList>
+                                    </xtce:SequenceContainer>
+                                    <xtce:SequenceContainer name="SensorHistoryBuffer">
+                                        <xtce:EntryList>
+                                            <xtce:ContainerRefEntry containerRef="SensorHistoryRecord">
+                                                <xtce:RepeatEntry>
+                                                    <xtce:Count>
+                                                        <xtce:FixedValue>4</xtce:FixedValue>
+                                                    </xtce:Count>
+                                                </xtce:RepeatEntry>
+                                            </xtce:ContainerRefEntry>
+                                        </xtce:EntryList>
+                                    </xtce:SequenceContainer>
+                                </xtce:ContainerSet>
 				<xtce:AlgorithmSet>
 					<xtce:MathAlgorithm name="ComputeBatterySOC" shortDescription="Compute the battery state of charge">
 						<xtce:MathOperation outputParameterRef="Battery_State_Of_Charge">

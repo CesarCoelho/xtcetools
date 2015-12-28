@@ -20,6 +20,7 @@ package org.omg.space.xtce.toolkit;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
+import org.omg.space.xtce.database.CalibratorType;
 
 /** This class represents the value of an entry in the container model when
  * processing a specific Container in the XTCE data model.
@@ -98,6 +99,37 @@ public class XTCEContainerEntryValue {
         item_                     = item;
         name_                     = item.getFullPath();
         itemValueObj_             = new XTCEItemValue( item );
+        rawValue_                 = rawValue;
+        value_                    = itemValueObj_.decode( rawValue );
+        operator_                 = "=="; // NOI18N
+        form_                     = "Calibrated"; // NOI18N
+        toStringWithoutParameter_ = operator_ + value_ + "{cal}"; // NOI18N
+
+    }
+
+    /** Constructor
+     *
+     * This constructs an instance of the class to represent a binary decoded
+     * value from a binary stream BitSet, which is always a raw value.
+     *
+     * @param item XTCETypedObject representing the parameter or argument in
+     * the XTCE document.
+     *
+     * @param rawValue BitSet containing the raw encoded bits for this item.
+     *
+     * @param calibrator CalibratorType element from the JAXB generated classes
+     * that is applicable for the value decom for this item based on where it
+     * is in the container.
+     *
+     */
+
+    public XTCEContainerEntryValue( final XTCETypedObject item,
+                                    final BitSet          rawValue,
+                                    final CalibratorType  calibrator ) {
+
+        item_                     = item;
+        name_                     = item.getFullPath();
+        itemValueObj_             = new XTCEItemValue( item, calibrator );
         rawValue_                 = rawValue;
         value_                    = itemValueObj_.decode( rawValue );
         operator_                 = "=="; // NOI18N

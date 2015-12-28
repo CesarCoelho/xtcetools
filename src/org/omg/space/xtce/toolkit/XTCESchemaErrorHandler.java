@@ -166,13 +166,7 @@ public class XTCESchemaErrorHandler implements ErrorHandler,
                 if ( event.getMessage().contains( skipMsg_ ) == true ) {
                     return true;
                 }
-                msg = warningMsg_ +
-                    "( line " + // NOI18N
-                    Integer.toString( event.getLocator().getLineNumber() ) +
-                    " column " + // NOI18N
-                    Integer.toString( event.getLocator().getColumnNumber() ) +
-                    " ) " + // NOI18N
-                    event.getMessage();
+                msg = warningMsg_ + getEventMessage( event );
                 if ( messages.contains( msg ) == false ) {
                     messages.add( msg );
                     ++warnings;
@@ -180,13 +174,7 @@ public class XTCESchemaErrorHandler implements ErrorHandler,
                 break;
 
             case ValidationEvent.ERROR:
-                msg = errorMsg_ +
-                    "( line " + // NOI18N
-                    Integer.toString( event.getLocator().getLineNumber() ) +
-                    " column " + // NOI18N
-                    Integer.toString( event.getLocator().getColumnNumber() ) +
-                    " ) " + // NOI18N
-                    event.getMessage();
+                msg = errorMsg_ + getEventMessage( event );
                 if ( messages.contains( msg ) == false ) {
                     messages.add( msg );
                     ++errors;
@@ -194,13 +182,7 @@ public class XTCESchemaErrorHandler implements ErrorHandler,
                 break;
 
             case ValidationEvent.FATAL_ERROR:
-                msg = fatalMsg_ +
-                    "( line " + // NOI18N
-                    Integer.toString( event.getLocator().getLineNumber() ) +
-                    " column " + // NOI18N
-                    Integer.toString( event.getLocator().getColumnNumber() ) +
-                    " ) " + // NOI18N
-                    event.getMessage();
+                msg = fatalMsg_ + getEventMessage( event );
                 if ( messages.contains( msg ) == false ) {
                     messages.add( msg );
                     ++errors;
@@ -244,6 +226,39 @@ public class XTCESchemaErrorHandler implements ErrorHandler,
 
     public long getErrorCount() {
         return errors;
+    }
+
+    /** Method to process the incoming ValidationEvent message, taking into
+     * consideration that the line and column numbers may throw.
+     *
+     * @param ValidationEvent event containing the event sent by the parser.
+     *
+     * @return String containing the message.
+     *
+     */
+
+    private String getEventMessage( ValidationEvent event ) {
+
+        StringBuilder retMsg = new StringBuilder();
+
+        try {
+
+            int linenum = event.getLocator().getLineNumber();
+            int column  = event.getLocator().getColumnNumber();
+            retMsg.append( "( line " ); // NOI18N
+            retMsg.append( Integer.toString( linenum ) );
+            retMsg.append( " column " ); // NOI18N
+            retMsg.append( Integer.toString( column ) );
+            retMsg.append( " ) " ); // NOI18N
+
+        } catch ( Throwable ex ) {
+            // do nothing
+        }
+
+        retMsg.append( event.getMessage() );
+
+        return retMsg.toString();
+
     }
 
     /// Count of the number of errors

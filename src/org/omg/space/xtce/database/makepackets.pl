@@ -27,6 +27,28 @@ print FILE1 pack( "C", 0x02 ); # Default_CPU_Start_Mode = SAFEHOLD (2)
 
 close( FILE1 );
 
+open( FILE9, ">Container-SensorHistoryBuffer.bin" );
+binmode( FILE9 );
+
+print FILE9 pack( "N2", 0x3c31abf5, 0x00000000 ); # SensorTime
+print FILE9 pack( "C2", 0x02, 0x02 ); # SunSensorMode = HIGH and EarthSensorMode = HIGH
+print FILE9 pack( "n", 0x0003 ); # SunSensorLevel = 45.0
+print FILE9 pack( "n", 0x0005 ); # EarthSensorLevel = 10.0
+print FILE9 pack( "N2", 0x3c310a10, 0x00000000 ); # SensorTime
+print FILE9 pack( "C2", 0x01, 0x01 ); # SunSensorMode = LOW and EarthSensorMode = LOW
+print FILE9 pack( "n", 0x0003 ); # SunSensorLevel = 15.0
+print FILE9 pack( "n", 0x0005 ); # EarthSensorLevel = 7.5
+print FILE9 pack( "N2", 0x3c310d94, 0x00000000 ); # SensorTime
+print FILE9 pack( "C2", 0x00, 0x00 ); # SunSensorMode = OFF and EarthSensorMode = OFF
+print FILE9 pack( "n", 0x0003 ); # SunSensorLevel = 5.0
+print FILE9 pack( "n", 0x0014 ); # EarthSensorLevel = 10.0
+print FILE9 pack( "N2", 0x3c311118, 0x00000000 ); # SensorTime = 2002-01-01 01:30:00.000
+print FILE9 pack( "C2", 0x02, 0x02 ); # SunSensorMode = HIGH and EarthSensorMode = HIGH
+print FILE9 pack( "n", 0x0000 ); # SunSensorLevel = 0.0
+print FILE9 pack( "n", 0x0000 ); # EarthSensorLevel = 10.0
+
+close( FILE9 );
+
 open( FILE2, ">Container-CCSDS_SpacePacket1.bin" );
 binmode( FILE2 );
 
