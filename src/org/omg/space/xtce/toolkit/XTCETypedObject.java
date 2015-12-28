@@ -30,7 +30,6 @@ import org.omg.space.xtce.database.BaseTimeDataType;
 import org.omg.space.xtce.database.BinaryDataType;
 import org.omg.space.xtce.database.BooleanDataType;
 import org.omg.space.xtce.database.CalibratorType;
-import org.omg.space.xtce.database.ComparisonType;
 import org.omg.space.xtce.database.ContextCalibratorType;
 import org.omg.space.xtce.database.DescriptionType.AncillaryDataSet;
 import org.omg.space.xtce.database.DescriptionType.AncillaryDataSet.AncillaryData;
@@ -38,7 +37,6 @@ import org.omg.space.xtce.database.EnumeratedDataType;
 import org.omg.space.xtce.database.FloatDataType;
 import org.omg.space.xtce.database.IntegerDataType;
 import org.omg.space.xtce.database.IntegerValueType;
-import org.omg.space.xtce.database.MatchCriteriaType;
 import org.omg.space.xtce.database.NameDescriptionType;
 import org.omg.space.xtce.database.RelativeTimeDataType;
 import org.omg.space.xtce.database.StringDataEncodingType;
@@ -46,7 +44,7 @@ import org.omg.space.xtce.database.StringDataType;
 import org.omg.space.xtce.database.UnitType;
 import org.omg.space.xtce.database.ValueEnumerationType;
 
-/** The XTCETypesObject class extends the basic XTCENamedObject class to serve
+/** The XTCETypedObject class extends the basic XTCENamedObject class to serve
  * by capturing the named objects that have specific type element associated
  * with them, such as Parameter, Arguments, and Members.
  *
