@@ -4736,32 +4736,38 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     private static void usage() {
 
-        // TODO: Translate this
-
         StringBuilder msg = new StringBuilder();
 
-        msg.append( "No arguments launches the user interface normally." );
-        msg.append( System.getProperty( "line.separator" ) );
-        msg.append( "Options relevant to loading a file on startup:" );
-        msg.append( System.getProperty( "line.separator" ) );
-        msg.append( "   --file=NAME (loads an XTCE file on startup)" );
-        msg.append( System.getProperty( "line.separator" ) );
-        msg.append( "   --xinclude (apply XIncludes - default)" );
-        msg.append( System.getProperty( "line.separator" ) );
-        msg.append( "   --no-xinclude (do not apply XIncludes)" );
-        msg.append( System.getProperty( "line.separator" ) );
-        msg.append( "   --validate (do XSD validation on load)" );
-        msg.append( System.getProperty( "line.separator" ) );
-        msg.append( "   --no-validate (no XSD validation on load - default)" );
-        msg.append( System.getProperty( "line.separator" ) );
-        msg.append( "   --readonly (load the file read only - default)" );
-        msg.append( System.getProperty( "line.separator" ) );
-        msg.append( "   --writable (load the file for writing/saving)" );
-        msg.append( System.getProperty( "line.separator" ) );
-        msg.append( "To load custom time handler classes/shared libs:" );
-        msg.append( System.getProperty( "line.separator" ) );
-        msg.append( "   --timehandlers=CLASS[:solib][,CLASS[:solib],...]" );
-        msg.append( System.getProperty( "line.separator" ) );
+        msg.append( XTCEFunctions.getText( "usage01" ) ); // NOI18N
+        msg.append( System.getProperty( "line.separator" ) ); // NOI18N
+        msg.append( XTCEFunctions.getText( "usage02" ) ); // NOI18N
+        msg.append( System.getProperty( "line.separator" ) ); // NOI18N
+        msg.append( "   --file=NAME " ); // NOI18N
+        msg.append( XTCEFunctions.getText( "usage03" ) ); // NOI18N
+        msg.append( System.getProperty( "line.separator" ) ); // NOI18N
+        msg.append( "   --xinclude " ); // NOI18N
+        msg.append( XTCEFunctions.getText( "usage04" ) ); // NOI18N
+        msg.append( System.getProperty( "line.separator" ) ); // NOI18N
+        msg.append( "   --no-xinclude " ); // NOI18N
+        msg.append( XTCEFunctions.getText( "usage05" ) ); // NOI18N
+        msg.append( System.getProperty( "line.separator" ) ); // NOI18N
+        msg.append( "   --validate " ); // NOI18N
+        msg.append( XTCEFunctions.getText( "usage06" ) ); // NOI18N
+        msg.append( System.getProperty( "line.separator" ) ); // NOI18N
+        msg.append( "   --no-validate " ); // NOI18N
+        msg.append( XTCEFunctions.getText( "usage07" ) ); // NOI18N
+        msg.append( System.getProperty( "line.separator" ) ); // NOI18N
+        msg.append( "   --readonly " ); // NOI18N
+        msg.append( XTCEFunctions.getText( "usage08" ) ); // NOI18N
+        msg.append( System.getProperty( "line.separator" ) ); // NOI18N
+        msg.append( "   --writable " ); // NOI18N
+        msg.append( XTCEFunctions.getText( "usage09" ) ); // NOI18N
+        msg.append( System.getProperty( "line.separator" ) ); // NOI18N
+        msg.append( XTCEFunctions.getText( "usage10" ) ); // NOI18N
+        msg.append( System.getProperty( "line.separator" ) ); // NOI18N
+        msg.append( "   --timehandlers=CLASS[:solib][,CLASS[:solib],...]" ); // NOI18N
+        msg.append( System.getProperty( "line.separator" ) ); // NOI18N
+
         System.err.println( msg );
 
     }
