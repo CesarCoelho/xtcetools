@@ -4746,15 +4746,15 @@ public class XTCEViewer extends javax.swing.JFrame {
         msg.append( System.getProperty( "line.separator" ) );
         msg.append( "   --file=NAME (loads an XTCE file on startup)" );
         msg.append( System.getProperty( "line.separator" ) );
-        msg.append( "   --xinclude (apply XIncludes)" );
+        msg.append( "   --xinclude (apply XIncludes - default)" );
         msg.append( System.getProperty( "line.separator" ) );
         msg.append( "   --no-xinclude (do not apply XIncludes)" );
         msg.append( System.getProperty( "line.separator" ) );
         msg.append( "   --validate (do XSD validation on load)" );
         msg.append( System.getProperty( "line.separator" ) );
-        msg.append( "   --no-validate (do not do XSD validation on load)" );
+        msg.append( "   --no-validate (no XSD validation on load - default)" );
         msg.append( System.getProperty( "line.separator" ) );
-        msg.append( "   --readonly (load the file read only)" );
+        msg.append( "   --readonly (load the file read only - default)" );
         msg.append( System.getProperty( "line.separator" ) );
         msg.append( "   --writable (load the file for writing/saving)" );
         msg.append( System.getProperty( "line.separator" ) );
