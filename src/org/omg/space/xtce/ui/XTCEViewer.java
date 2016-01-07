@@ -4455,7 +4455,7 @@ public class XTCEViewer extends javax.swing.JFrame {
 
             logMsg( XTCEFunctions.getMemoryUsageStatistics() );
 
-            long    startTime      = System.currentTimeMillis();
+            long startTime = System.currentTimeMillis();
 
             xtceDatabaseFile = new XTCEDatabase( dbFile,
                                                  validateOnLoad,
@@ -4551,7 +4551,7 @@ public class XTCEViewer extends javax.swing.JFrame {
 
             logMsg( XTCEFunctions.getMemoryUsageStatistics() );
 
-            long    startTime      = System.currentTimeMillis();
+            long startTime = System.currentTimeMillis();
 
             xtceDatabaseFile = new XTCEDatabase( dbUrl,
                                                  validateOnLoad,
