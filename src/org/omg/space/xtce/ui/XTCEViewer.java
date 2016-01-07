@@ -4864,7 +4864,7 @@ public class XTCEViewer extends javax.swing.JFrame {
                         } else {
                             System.err.println(
                             XTCEFunctions.getText( "file_chooser_noload_text" ) +
-                            " " + args[0] );
+                            " " + fileToOpen );
                             usage();
                             System.exit( -1 );
                         }
