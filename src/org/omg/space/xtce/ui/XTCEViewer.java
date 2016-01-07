@@ -4742,17 +4742,9 @@ public class XTCEViewer extends javax.swing.JFrame {
 
         msg.append( "No arguments launches the user interface normally." );
         msg.append( System.getProperty( "line.separator" ) );
-        msg.append( "First optional argument is a filename to load on start" );
+        msg.append( "Options relevant to loading a file on startup:" );
         msg.append( System.getProperty( "line.separator" ) );
-        msg.append( "By default, a file is loaded with options:" );
-        msg.append( System.getProperty( "line.separator" ) );
-        msg.append( "   --xinclude (apply XIncludes)" );
-        msg.append( System.getProperty( "line.separator" ) );
-        msg.append( "   --readonly (open read only)" );
-        msg.append( System.getProperty( "line.separator" ) );
-        msg.append( "   --no-validate (do not do XSD validation on load)" );
-        msg.append( System.getProperty( "line.separator" ) );
-        msg.append( "The following options are recognized after a filename:" );
+        msg.append( "   --file=NAME (loads an XTCE file on startup)" );
         msg.append( System.getProperty( "line.separator" ) );
         msg.append( "   --xinclude (apply XIncludes)" );
         msg.append( System.getProperty( "line.separator" ) );
@@ -4766,7 +4758,10 @@ public class XTCEViewer extends javax.swing.JFrame {
         msg.append( System.getProperty( "line.separator" ) );
         msg.append( "   --writable (load the file for writing/saving)" );
         msg.append( System.getProperty( "line.separator" ) );
-
+        msg.append( "To load custom time handler classes/shared libs:" );
+        msg.append( System.getProperty( "line.separator" ) );
+        msg.append( "   --timehandlers=CLASS[:solib][,CLASS[:solib],...]" );
+        msg.append( System.getProperty( "line.separator" ) );
         System.err.println( msg );
 
     }
