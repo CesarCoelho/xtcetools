@@ -600,7 +600,7 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
                         arrayContent.setStartBit( currentStartBit.get() );
                         currentStartBit.add( Long.parseLong( arrayContent.getRawSizeInBits() ) );
                     }
-                    //applyBinaryValue( arrayContent ); // NOT YET FOR ARRAY CONTENTS
+                    applyBinaryValue( arrayContent );
                 }
 
                 if ( arrayParameterObject.getTypeReference().getClass() == AggregateDataType.class ) {
