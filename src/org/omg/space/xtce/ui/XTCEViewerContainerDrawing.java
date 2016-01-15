@@ -250,7 +250,7 @@ public class XTCEViewerContainerDrawing extends JPanel {
 
     private void createDrawing( Graphics ggg ) {
 
-        int maxEntriesInUse = 256;
+        final int maxEntriesInUse = 256;
 
         // momentarily restore the default sizes so that the drawing functions
         // can grow them as needed, otherwise the sizes will leak larger and
@@ -279,23 +279,39 @@ public class XTCEViewerContainerDrawing extends JPanel {
             return;
         }
 
-        // make the drawing
+        try {
 
-        if ( orientDrawingAs_ == Orientation.LEFT_TO_RIGHT ) {
-            drawParameterNames( ggg );
-            drawParameters( ggg );
-            drawByteLineLeftToRight( ggg );
-        } else if ( orientDrawingAs_ == Orientation.TOP_TO_BOTTOM ) {
-            drawTopToBottomRectangles( ggg );
-            drawByteLineTopToBottom( ggg );
+            // make the drawing
+
+            if ( orientDrawingAs_ == Orientation.LEFT_TO_RIGHT ) {
+                drawParameterNames( ggg );
+                drawParameters( ggg );
+                drawByteLineLeftToRight( ggg );
+            } else if ( orientDrawingAs_ == Orientation.TOP_TO_BOTTOM ) {
+                drawTopToBottomRectangles( ggg );
+                drawByteLineTopToBottom( ggg );
+            }
+
+        } catch ( Exception ex ) {
+
+            super.paintComponent( ggg );
+            ggg.drawString( XTCEFunctions.getText( "warning_drawing_too_wide" ) + // NOI18N
+                            " " + // NOI18N
+                            ex.getLocalizedMessage() +
+                            " bits",
+                            25,
+                            25 );
+
         }
 
     }
 
     private void drawParameterNames( Graphics ggg ) {
 
-        int numberOfItems = entriesInUse_.size();
-        int upOffsetEach  = scale( 3 );
+        final int maxSizeInBits = 32768 * 8;
+        final int numberOfItems = entriesInUse_.size();
+        final int upOffsetEach  = scale( 3 );
+
         int currentOffset = upOffsetEach * numberOfItems;
 
         totalSizeY_ = originY_ + currentOffset + scale( 40 );
@@ -315,6 +331,10 @@ public class XTCEViewerContainerDrawing extends JPanel {
             String itemStartBit    = entry.itemEntryObj.getStartBit();
             int    itemSizeInt     = Integer.parseInt( itemSize );
             int    itemStartBitInt = Integer.parseInt( itemStartBit );
+
+            if ( itemSizeInt + itemStartBitInt > maxSizeInBits ) {
+                throw new RuntimeException( Integer.toString( maxSizeInBits ) );
+            }
 
             int lineBottomX = rectBaseX_ + scale( itemStartBitInt ) + ( scale( itemSizeInt ) / 2 );
             int lineBottomY = rectBaseY_;
