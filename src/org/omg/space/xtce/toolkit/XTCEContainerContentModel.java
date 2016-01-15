@@ -146,7 +146,7 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
 
         reorderItemsByStartBit();
 
-        checkForOverlaps();
+        checkForOverlaps( totalSize.get() );
 
         //long estimatedTime = System.currentTimeMillis() - startTime;
 

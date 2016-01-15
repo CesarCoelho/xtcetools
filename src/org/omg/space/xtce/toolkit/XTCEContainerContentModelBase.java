@@ -783,6 +783,10 @@ abstract class XTCEContainerContentModelBase {
         String parameterName = XTCEFunctions.getNameFromPathReferenceString( parameterPath );
         String spaceSystemPath = XTCEFunctions.getPathNameFromReferenceString( parameterPath );
 
+        // TODO Problems with Aggregate inside Array Parameters not found!
+        //parameterPath = parameterPath.replaceAll( "\\[[0-9]+\\]", "" );
+        //System.out.println( "Looking for " + parameterPath );
+
         int idx = 1;
 
         do {
@@ -1138,44 +1142,50 @@ abstract class XTCEContainerContentModelBase {
 
     }
 
-    protected void checkForOverlaps() {
+    protected void checkForOverlaps( long totalSizeInBits ) {
 
         final String separator =
             System.getProperty( "line.separator" ); // NOI18N
 
         StringBuilder sb = new StringBuilder();
 
-        HashMap<Long, String> usageMap = new HashMap<>();
+        String[] usageMap = new String[ (int)totalSizeInBits ];
 
-        for ( XTCEContainerContentEntry entry : contentList_ ) {
+        try {
 
-            if ( ( entry.getStartBit().isEmpty()      == false ) &&
-                 ( entry.getRawSizeInBits().isEmpty() == false ) ) {
+            for ( XTCEContainerContentEntry entry : contentList_ ) {
 
-                long startBit   = Long.parseLong( entry.getStartBit() );
-                long sizeInBits = Long.parseLong( entry.getRawSizeInBits() );
+                if ( ( entry.getStartBit().isEmpty()      == false ) &&
+                     ( entry.getRawSizeInBits().isEmpty() == false ) ) {
 
-                for ( long iii = startBit; iii < ( startBit + sizeInBits ); ++iii ) {
-                    if ( usageMap.containsKey( iii ) == true ) {
-                        sb.append( XTCEFunctions.getText( "warning_encdec_containeritem" ) ); // NOI18N
-                        sb.append( " " ); // NOI18N
-                        sb.append( entry.getName() ); // NOI18N
-                        sb.append( " " ); // NOI18N
-                        sb.append( XTCEFunctions.getText( "warning_encdec_overlapsitem" ) ); // NOI18N
-                        sb.append( " " ); // NOI18N
-                        sb.append( usageMap.get( iii ) ); // NOI18N
-                        sb.append( " " ); // NOI18N
-                        sb.append( XTCEFunctions.getText( "warning_encdec_atbitpos" ) ); // NOI18N
-                        sb.append( " " ); // NOI18N
-                        sb.append( Long.toString( iii ) ); // NOI18N
-                        sb.append( separator ); // NOI18N
-                    } else {
-                        usageMap.put( iii, entry.getName() );
+                    int startBit   = Integer.parseInt( entry.getStartBit() );
+                    int sizeInBits = Integer.parseInt( entry.getRawSizeInBits() );
+
+                    for ( int iii = startBit; iii < ( startBit + sizeInBits ); ++iii ) {
+                        if ( usageMap[iii] != null ) {
+                            sb.append( XTCEFunctions.getText( "warning_encdec_containeritem" ) ); // NOI18N
+                            sb.append( " " ); // NOI18N
+                            sb.append( entry.getName() ); // NOI18N
+                            sb.append( " " ); // NOI18N
+                            sb.append( XTCEFunctions.getText( "warning_encdec_overlapsitem" ) ); // NOI18N
+                            sb.append( " " ); // NOI18N
+                            sb.append( usageMap[iii] ); // NOI18N
+                            sb.append( " " ); // NOI18N
+                            sb.append( XTCEFunctions.getText( "warning_encdec_atbitpos" ) ); // NOI18N
+                            sb.append( " " ); // NOI18N
+                            sb.append( Integer.toString( iii ) ); // NOI18N
+                            sb.append( separator ); // NOI18N
+                        } else {
+                            usageMap[iii] = entry.getName();
+                        }
                     }
+
                 }
 
             }
 
+        } catch ( ArrayIndexOutOfBoundsException ex ) {
+            // ignore it for now
         }
 
         if ( sb.length() > 0 ) {
