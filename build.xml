@@ -71,9 +71,31 @@
 
     -->
     <target name="-pre-compile-test" depends="jar" description="make sure the JAR is built for the tests because of example code checks"/>
+
     <target name="-pre-jar" depends="javadoc" description="add javadoc to distribution for help viewer in gui"/>
+
     <target name="-post-jar" description="put the shell scripts into the delivery">
         <copy file="xtceview.sh" todir="${dist.dir}"/>
         <copy file="xtceview.bat" todir="${dist.dir}"/>
     </target>
+
+    <target name="test-report">
+        <property name="genReportDir" location="${basedir}/unitTestReports"/>
+        <delete dir="${genReportDir}"/>
+        <mkdir dir="${genReportDir}"/>
+        <junitreport todir="${basedir}/unitTestReports">
+            <fileset dir="${basedir}">
+                <include name="**/TEST-*.xml"/>
+            </fileset>
+            <report format="noframes" todir="${genReportDir}/html"/>
+        </junitreport>
+    </target>
+
+    <target name="-post-clean">
+        <property name="genReportDir" location="${basedir}/unitTestReports"/>
+        <property name="jacoDir" location="${basedir}/.jacocoverage"/>
+        <delete dir="${genReportDir}"/>
+        <delete dir="${jacoDir}"/>
+    </target>
+
 </project>
