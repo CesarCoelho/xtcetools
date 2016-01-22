@@ -212,6 +212,7 @@ abstract class XTCEContainerContentModelBase {
 
             int startBit = Integer.parseInt( currentEntry.getStartBit() );
             if ( startBit > availBitsLastIndex ) {
+                exhaustedBinaryBitSupply_ = true;
                 throw new XTCEDatabaseException(
                     XTCEFunctions.getText( "error_encdec_binarytoosmall" ) + // NOI18N
                     " '" + // NOI18N
@@ -232,6 +233,7 @@ abstract class XTCEContainerContentModelBase {
             }
 
             if ( ( startBit + bitLength ) > availBits ) {
+                exhaustedBinaryBitSupply_ = true;
                 throw new XTCEDatabaseException(
                     XTCEFunctions.getText( "error_encdec_binarytoosmall" ) + // NOI18N
                     " '" + // NOI18N
@@ -875,11 +877,9 @@ abstract class XTCEContainerContentModelBase {
 
     protected void applyBinaryValue( XTCEContainerContentEntry entry ) {
 
-        if ( binaryValues_ == null ) {
-            return;
-        }
-
-        if ( entry.getStartBit().isEmpty() == true ) {
+        if ( ( binaryValues_                 == null ) ||
+             ( exhaustedBinaryBitSupply_     == true ) ||
+             ( entry.getStartBit().isEmpty() == true ) ) {
             return;
         }
 
@@ -1305,6 +1305,10 @@ abstract class XTCEContainerContentModelBase {
         return parameter.getDefaultCalibrator();
 
     }
+
+    /// Flag to indicate that processing has run out of available bits
+
+    protected boolean exhaustedBinaryBitSupply_ = false;
 
     /// Validity flag for container processing attempts
 

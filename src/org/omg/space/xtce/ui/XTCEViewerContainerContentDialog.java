@@ -293,8 +293,8 @@ public class XTCEViewerContainerContentDialog extends javax.swing.JDialog {
 
         for ( XTCEContainerContentEntry entry : entries ) {
 
-            if ( ( entry.isCurrentlyInUse() == false               ) ||
-                 ( entry.getEntryType()     == FieldType.CONTAINER ) ) {
+            if ( ( entry.isCurrentlyInUse() == false ) ||
+                 ( entry.getValue()         == null  ) ) {
                 continue;
             }
 
@@ -322,9 +322,9 @@ public class XTCEViewerContainerContentDialog extends javax.swing.JDialog {
 
                 case CONSTANT:
                     entryPanel.add( new XTCEViewerContainerContentRow( entry,
-                                                                           showAllNamespaces,
-                                                                           showNamespaces,
-                                                                           preferredNamespace ) );
+                                                                       showAllNamespaces,
+                                                                       showNamespaces,
+                                                                       preferredNamespace ) );
                     break;
 
             }
