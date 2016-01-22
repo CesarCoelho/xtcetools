@@ -321,15 +321,15 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
                      ( includedContainer.getConditionList().isEmpty() == false ) ) {
                     addContainer( (ContainerRefEntryType)entry,
                                   currentStartBit,
-                                  //currentStartBit.get(),
-                                  containerStartBit,
+                                  currentStartBit.get(),
+                                  //containerStartBit,
                                   container,
                                   includedContainer.getConditionList() );
                 } else {
                     addContainer( (ContainerRefEntryType)entry,
                                   currentStartBit,
-                                  //currentStartBit.get(),
-                                  containerStartBit,
+                                  currentStartBit.get(),
+                                  //containerStartBit,
                                   container,
                                   null );
                 }
