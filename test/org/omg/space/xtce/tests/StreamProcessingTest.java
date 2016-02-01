@@ -87,7 +87,7 @@ public class StreamProcessingTest {
 
             List<XTCETMStream> streams = db_.getStreams();
 
-            long expected = 2;
+            long expected = 6;
 
             Assert.assertTrue( "Should have found " +
                 Long.toString( expected ) + " streams, but found instead " +
@@ -100,6 +100,14 @@ public class StreamProcessingTest {
                 "/BogusSAT/SC001/Onboard_Tables/Calibration_Offsets";
             String root2 =
                 "/BogusSAT/CCSDSTelemetryPacket";
+            String root3 =
+                "/BogusSAT/LOG_MSGS/LOG_DATA";
+            String root4 =
+                "/BogusSAT/LOG_MSGS/LOG_FOOTER";
+            String root5 =
+                "/BogusSAT/LOG_MSGS/LOG_DYNAMIC_MEMORY";
+            String root6 =
+                "/BogusSAT/LOG_MSGS/LOG_ALL";
 
             for ( XTCETMStream stream : streams ) {
                 if ( stream.getName().equals( "CALTABLE" ) == true ) {
@@ -109,6 +117,22 @@ public class StreamProcessingTest {
                 } else if ( stream.getName().equals( "CCSDS-TM" ) == true ) {
                     Assert.assertTrue( "Stream CCSDS-TM should have root " + root2,
                                        stream.getStreamRootContainer().getFullPath().equals( root2 ) );
+                    ++found;
+                } else if ( stream.getName().equals( "LOG_DATA" ) == true ) {
+                    Assert.assertTrue( "Stream LOG_DATA should have root " + root3,
+                                       stream.getStreamRootContainer().getFullPath().equals( root3 ) );
+                    ++found;
+                } else if ( stream.getName().equals( "LOG_FOOTER" ) == true ) {
+                    Assert.assertTrue( "Stream LOG_FOOTER should have root " + root4,
+                                       stream.getStreamRootContainer().getFullPath().equals( root4 ) );
+                    ++found;
+                } else if ( stream.getName().equals( "LOG_DYNAMIC_MEMORY" ) == true ) {
+                    Assert.assertTrue( "Stream LOG_DYNAMIC_MEMORY should have root " + root5,
+                                       stream.getStreamRootContainer().getFullPath().equals( root5 ) );
+                    ++found;
+                } else if ( stream.getName().equals( "LOG_ALL" ) == true ) {
+                    Assert.assertTrue( "Stream LOG_ALL should have root " + root6,
+                                       stream.getStreamRootContainer().getFullPath().equals( root6 ) );
                     ++found;
                 }
             }

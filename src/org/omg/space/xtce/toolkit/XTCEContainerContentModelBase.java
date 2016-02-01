@@ -89,7 +89,7 @@ abstract class XTCEContainerContentModelBase {
         }
 
         // create a fast lookup table for Space System paths
-        for ( XTCESpaceSystem spaceSystem : spaceSystems_ ) {
+        for ( XTCESpaceSystem spaceSystem : spaceSystems ) {
             spaceSystemsHashTable_.put( spaceSystem.getFullPath(),
                                         spaceSystem );
         }
@@ -117,7 +117,7 @@ abstract class XTCEContainerContentModelBase {
      *
      */
 
-    public boolean isValid() {
+    public final boolean isValid() {
         return valid_;
     }
 
@@ -147,7 +147,7 @@ abstract class XTCEContainerContentModelBase {
      *
      */
 
-    public long getTotalSize() {
+    public final long getTotalSize() {
         return totalContainerSize_;
     }
 
@@ -183,14 +183,10 @@ abstract class XTCEContainerContentModelBase {
     public BitSet extractRawValue( XTCEContainerContentEntry currentEntry )
         throws XTCEDatabaseException {
 
-        BitSet result;
-        int    bitLength;
+        int bitLength;
 
         try {
-
             bitLength = Integer.parseInt( currentEntry.getRawSizeInBits() );
-            result    = new BitSet( bitLength );
-
         } catch ( NumberFormatException ex ) {
             throw new XTCEDatabaseException(
                 XTCEFunctions.getText( "error_encdec_noraw_nosizeinbits" ) + // NOI18N
@@ -202,7 +198,7 @@ abstract class XTCEContainerContentModelBase {
         }
 
         if ( binaryValues_ == null ) {
-            return result;
+            return new BitSet( bitLength );
         }
 
         int availBits          = binaryValues_.size();
@@ -212,7 +208,11 @@ abstract class XTCEContainerContentModelBase {
 
             int startBit = Integer.parseInt( currentEntry.getStartBit() );
             if ( startBit > availBitsLastIndex ) {
-                exhaustedBinaryBitSupply_ = true;
+                if ( exhaustedBinaryBitSupply_ == false ) {
+                    exhaustedBinaryBitSupply_ = true;
+                } else {
+                    return new BitSet( bitLength );
+                }
                 throw new XTCEDatabaseException(
                     XTCEFunctions.getText( "error_encdec_binarytoosmall" ) + // NOI18N
                     " '" + // NOI18N
@@ -233,7 +233,11 @@ abstract class XTCEContainerContentModelBase {
             }
 
             if ( ( startBit + bitLength ) > availBits ) {
-                exhaustedBinaryBitSupply_ = true;
+                if ( exhaustedBinaryBitSupply_ == false ) {
+                    exhaustedBinaryBitSupply_ = true;
+                } else {
+                    return new BitSet( bitLength );
+                }
                 throw new XTCEDatabaseException(
                     XTCEFunctions.getText( "error_encdec_binarytoosmall" ) + // NOI18N
                     " '" + // NOI18N
@@ -253,9 +257,15 @@ abstract class XTCEContainerContentModelBase {
                     ")" ); // NOI18N
             }
 
+            exhaustedBinaryBitSupply_ = false;
+
+            BitSet result = new BitSet( bitLength );
+
             for ( int iii = 0; iii < bitLength; ++iii ) {
                 result.set( iii, binaryValues_.get( startBit + bitLength - 1 - iii ) );
             }
+
+            return result;
 
         } catch ( NumberFormatException ex ) {
             throw new XTCEDatabaseException(
@@ -263,16 +273,6 @@ abstract class XTCEContainerContentModelBase {
                 " " + // NOI18N
                 currentEntry.getName() );
         }
-
-        //int bitCount = bitLength;
-        //if ( ( bitLength % 8 ) != 0 ) {
-        //    bitCount += 8 - ( bitLength % 8 );
-        //}
-
-        //System.out.println( "Extracted " + currentEntry.getName() + " " +
-        //    XTCEFunctions.bitSetToHex( result, ( bitCount / 8 ) ) );
-
-        return result;
 
     }
 
@@ -878,7 +878,6 @@ abstract class XTCEContainerContentModelBase {
     protected void applyBinaryValue( XTCEContainerContentEntry entry ) {
 
         if ( ( binaryValues_                 == null ) ||
-             ( exhaustedBinaryBitSupply_     == true ) ||
              ( entry.getStartBit().isEmpty() == true ) ) {
             return;
         }
@@ -886,6 +885,10 @@ abstract class XTCEContainerContentModelBase {
         try {
 
             BitSet rawValue = extractRawValue( entry );
+
+            if ( exhaustedBinaryBitSupply_ == true ) {
+                return;
+            }
 
             CalibratorType calibrator = getMatchingCalibrator( entry );
 
@@ -1028,41 +1031,28 @@ abstract class XTCEContainerContentModelBase {
                                 long                      containerStartBit ) {
 
         // not present means 0 from previous entry
-        String refLocation = "previousEntry"; // NOI18N
-        String offsetInBits = "0"; // NOI18N
+        String refLocation  = "previousEntry"; // NOI18N
+        long   offsetInBits = getReferenceLocationOffset( pRefEntry, contentEntry );
 
         if ( pRefEntry.getLocationInContainerInBits() != null ) {
             refLocation = pRefEntry.getLocationInContainerInBits().getReferenceLocation();
-            if ( pRefEntry.getLocationInContainerInBits().getFixedValue() != null ) {
-                offsetInBits = pRefEntry.getLocationInContainerInBits().getFixedValue();
-            } else if ( pRefEntry.getLocationInContainerInBits().getDynamicValue() != null ) {
-                warnings_.add( "'LocationInContainerInBits/DynamicValue' " + // NOI18N
-                               XTCEFunctions.getText( "xml_element_not_yet_supported" ) + // NOI18N
-                               " " + // NOI18N
-                               contentEntry.getName() );
-            } else if ( pRefEntry.getLocationInContainerInBits().getDiscreteLookupList() != null ) {
-                warnings_.add( "'LocationInContainerInBits/DiscreteLookupList' " + // NOI18N
-                               XTCEFunctions.getText( "xml_element_not_yet_supported" ) + // NOI18N
-                               " " + // NOI18N
-                               contentEntry.getName() );
-            }
         }
 
-        long offsetInBitsLong  = Long.parseLong( offsetInBits );
         long rawSizeInBitsLong = 0;
+
         if ( contentEntry.getRawSizeInBits().isEmpty() == false ) {
             rawSizeInBitsLong = Long.parseLong( contentEntry.getRawSizeInBits() );
         }
 
         if ( refLocation.equals( "previousEntry" ) == true ) { // NOI18N
-            long start = currentStartBit.get() + offsetInBitsLong;
+            long start = currentStartBit.get() + offsetInBits;
             //System.out.println( "previousEntry offset resolved to " + Long.toString( start ) );
             if ( isEntryNeedingStartBit( contentEntry ) == true ) {
                 contentEntry.setStartBit( start );
             }
             currentStartBit.set( start + rawSizeInBitsLong );
         } else if ( refLocation.equals( "containerStart" ) == true ) { // NOI18N
-            long start = containerStartBit + offsetInBitsLong;
+            long start = containerStartBit + offsetInBits;
             //System.out.println( "containerStart offset resolved to " + Long.toString( start ) );
             if ( isEntryNeedingStartBit( contentEntry ) == true ) {
                 contentEntry.setStartBit( start );
@@ -1070,7 +1060,7 @@ abstract class XTCEContainerContentModelBase {
             currentStartBit.set( start + rawSizeInBitsLong );
         } else if ( refLocation.equals( "containerEnd") == true ) { // NOI18N
             if ( isEntryNeedingStartBit( contentEntry ) == true ) {
-                contentEntry.setStartBit( "E" + Long.toString( offsetInBitsLong ) ); // NOI18N
+                contentEntry.setStartBit( "E" + Long.toString( offsetInBits ) ); // NOI18N
             }
             // do not set the entry to follow here???
             // could be a problem if someone does previousEntry...
@@ -1080,6 +1070,39 @@ abstract class XTCEContainerContentModelBase {
                            " " + // NOI18N
                            contentEntry.getName() );
         }
+
+    }
+
+    protected long evaluateContainerReferenceLocation( SequenceEntryType         cRefEntry,
+                                                       XTCEContainerContentEntry contentEntry,
+                                                       RunningStartBit           currentStartBit,
+                                                       long                      containerStartBit ) {
+
+        // not present means 0 from previous entry
+        String refLocation  = "previousEntry"; // NOI18N
+        long   offsetInBits = getReferenceLocationOffset( cRefEntry, contentEntry );
+
+        if ( cRefEntry.getLocationInContainerInBits() != null ) {
+            refLocation = cRefEntry.getLocationInContainerInBits().getReferenceLocation();
+        }
+
+        if ( refLocation.equals( "previousEntry" ) == true ) { // NOI18N
+            currentStartBit.add( offsetInBits );
+        } else if ( refLocation.equals( "containerStart" ) == true ) { // NOI18N
+            currentStartBit.set( containerStartBit + offsetInBits );
+        } else if ( refLocation.equals( "containerEnd") == true ) { // NOI18N
+            warnings_.add( "'LocationInContainerInBits/@containerEnd' " + // NOI18N
+                           XTCEFunctions.getText( "xml_element_not_yet_supported" ) + // NOI18N
+                           " " + // NOI18N
+                           contentEntry.getName() );
+        } else if ( refLocation.equals( "nextEntry" ) == true ) { // NOI18N
+            warnings_.add( "'LocationInContainerInBits/@nextEntry' " + // NOI18N
+                           XTCEFunctions.getText( "xml_element_not_yet_supported" ) + // NOI18N
+                           " " + // NOI18N
+                           contentEntry.getName() );
+        }
+
+        return currentStartBit.get();
 
     }
 
@@ -1191,6 +1214,29 @@ abstract class XTCEContainerContentModelBase {
         if ( sb.length() > 0 ) {
             warnings_.add( sb.deleteCharAt( sb.length() - 1 ).toString() );
         }
+
+    }
+
+    private long getReferenceLocationOffset( SequenceEntryType         refEntry,
+                                             XTCEContainerContentEntry entry ) {
+
+        if ( refEntry.getLocationInContainerInBits() != null ) {
+            if ( refEntry.getLocationInContainerInBits().getFixedValue() != null ) {
+                return Long.parseLong( refEntry.getLocationInContainerInBits().getFixedValue() );
+            } else if ( refEntry.getLocationInContainerInBits().getDynamicValue() != null ) {
+                warnings_.add( "'LocationInContainerInBits/DynamicValue' " + // NOI18N
+                               XTCEFunctions.getText( "xml_element_not_yet_supported" ) + // NOI18N
+                               " " + // NOI18N
+                               entry.getName() );
+            } else if ( refEntry.getLocationInContainerInBits().getDiscreteLookupList() != null ) {
+                warnings_.add( "'LocationInContainerInBits/DiscreteLookupList' " + // NOI18N
+                               XTCEFunctions.getText( "xml_element_not_yet_supported" ) + // NOI18N
+                               " " + // NOI18N
+                               entry.getName() );
+            }
+        }
+
+        return 0;
 
     }
 
@@ -1312,7 +1358,7 @@ abstract class XTCEContainerContentModelBase {
 
     /// Validity flag for container processing attempts
 
-    protected boolean valid_ = true;
+    private boolean valid_ = true;
 
     /// List of warning messages collected when processing this container.
 
@@ -1345,7 +1391,7 @@ abstract class XTCEContainerContentModelBase {
     /// A hashed version of the Space System list to speed up searching for
     /// Parameter Members at depth.
 
-    protected HashMap<String, XTCESpaceSystem> spaceSystemsHashTable_ =
+    private HashMap<String, XTCESpaceSystem> spaceSystemsHashTable_ =
         new HashMap<>();
 
     /// Total Size of this container in bits

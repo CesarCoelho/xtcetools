@@ -74,8 +74,10 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
         throws XTCEDatabaseException {
 
         super( spaceSystems, userValues, null, showAllConditions );
-        container_          = container;
-        totalContainerSize_ = processContainer();
+
+        container_ = container;
+
+        processContainer();
 
     }
 
@@ -106,8 +108,10 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
         throws XTCEDatabaseException {
 
         super( spaceSystems, null, binaryData, false );
-        container_          = container;
-        totalContainerSize_ = processContainer();
+
+        container_ = container;
+
+        processContainer();
 
     }
 
@@ -153,7 +157,9 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
         //System.out.println( "Processed Container in approximately " +
         //    Long.toString( estimatedTime / 1000 ) + " seconds" );
 
-        return totalSize.get();
+        totalContainerSize_ = totalSize.get();
+
+        return getTotalSize();
 
     }
 
@@ -284,10 +290,6 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
                                         XTCEContainerContentEntry includedContainer )
         throws XTCEDatabaseException {
 
-        //System.out.println( "Processing " + container.getInheritancePath() );
-
-        // do not make a second row for the included container
-        //if ( ( includedContainer != null ) && ( includedContainer.getContainer().getFullPath().equals( container.getFullPath() ) == false ) ) {
         if ( includedContainer == null ) {
             contentList_.add( new XTCEContainerContentEntry( container, null ) );
         } else if ( includedContainer.getTelemetryContainer().getFullPath().equals( container.getFullPath() ) == false ) {
@@ -321,15 +323,15 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
                      ( includedContainer.getConditionList().isEmpty() == false ) ) {
                     addContainer( (ContainerRefEntryType)entry,
                                   currentStartBit,
-                                  currentStartBit.get(),
-                                  //containerStartBit,
+                                  //currentStartBit.get(),
+                                  containerStartBit,
                                   container,
                                   includedContainer.getConditionList() );
                 } else {
                     addContainer( (ContainerRefEntryType)entry,
                                   currentStartBit,
-                                  currentStartBit.get(),
-                                  //containerStartBit,
+                                  //currentStartBit.get(),
+                                  containerStartBit,
                                   container,
                                   null );
                 }
@@ -401,12 +403,14 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
         throws XTCEDatabaseException {
 
         String nameRef = entry.getContainerRef();
+
         //System.out.println( "Identified Container " +
         //                    nameRef +
         //                    " cur start bit " +
         //                    Long.toString( currentStartBit.get() ) +
         //                    " cont start bit " +
         //                    Long.toString( containerStartBit ) );
+
         XTCETMContainer nextIncludedContainer =
             findContainer( nameRef, holdingContainer );
 
@@ -424,6 +428,13 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
 
         evaluateIncludeConditions( nextIncludedContent );
 
+        if ( nextIncludedContent.isCurrentlyInUse() == true ) {
+            containerStartBit = evaluateContainerReferenceLocation( entry,
+                                                                    nextIncludedContent,
+                                                                    currentStartBit,
+                                                                    containerStartBit );
+        }
+
         long repeatCount =
             addRepeatEntryDescription( entry, nextIncludedContent );
 
@@ -434,7 +445,7 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
                     XTCEFunctions.makeRepeatString( iii + 1, repeatCount ) );
             }
 
-            //System.out.println( "Identified Container " +
+            //System.out.println( "Adding Identified Container " +
             //                    nameRef +
             //                    " cur start bit " +
             //                    Long.toString( currentStartBit.get() ) +
@@ -461,7 +472,7 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
 
             // need a deep copy of the content if this is NOT the last
             if ( iii < ( repeatCount - 1 ) ) {
-                containerStartBit   = currentStartBit.get();
+                containerStartBit = currentStartBit.get();
                 try {
                     nextIncludedContent = (XTCEContainerContentEntry)nextIncludedContent.clone();
                 } catch ( CloneNotSupportedException ex ) {
@@ -481,6 +492,7 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
         throws XTCEDatabaseException {
 
         String nameRef = pRefEntry.getParameterRef();
+
         //System.out.println( "Identified Parameter " +
         //                    nameRef +
         //                    " cur start bit " +
@@ -653,6 +665,7 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
         throws XTCEDatabaseException {
 
         String nameRef = pRefEntry.getParameterRef();
+
         //System.out.println( "Identified Parameter " +
         //                    nameRef +
         //                    " cur start bit " +

@@ -171,7 +171,7 @@ public class ContainerProcessingTest {
 
             List<XTCETMContainer> containers = db_.getContainers();
 
-            long expected = 20;
+            long expected = 24;
 
             Assert.assertTrue( "Should have found " +
                 Long.toString( expected ) + " containers, but found instead " +
@@ -1871,6 +1871,91 @@ public class ContainerProcessingTest {
                 items == 19 );
 
             assertOnWarnings( model );
+
+        } catch ( Exception ex ) {
+            //ex.printStackTrace();
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+    }
+
+    @Test
+    public void processContainerWithContainerRefAndReferenceLocation() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        String containerName = "/BogusSAT/LOG_MSGS/LOG_ALL";
+
+        try {
+
+            XTCETMContainer container = db_.getContainer( containerName );
+
+            XTCEContainerContentModel model =
+                db_.processContainer( container, null, false );
+
+            long sizeInBytes = model.getTotalSize();
+
+            Assert.assertTrue( "Container size of " + containerName + " is " +
+                Long.toString( sizeInBytes ) + " but should be 2496 bits",
+                sizeInBytes == 2496 );
+
+            List<XTCEContainerContentEntry> entries = model.getContentList();
+
+            long items = 0;
+
+            for ( XTCEContainerContentEntry entry : entries ) {
+
+                if ( entry.getName().equals( "DYNAMIC_REGION_1" ) ) {
+                    ++items;
+                    checkEntry( entry, "128", "0", "", "", "", "" );
+                } else if ( entry.getName().equals( "DYNAMIC_REGION_2" ) ) {
+                    ++items;
+                    checkEntry( entry, "256", "128", "", "", "", "" );
+                } else if ( items == 6 && entry.getName().equals( "RECORDFLAG" ) ) {
+                    ++items;
+                    checkEntry( entry, "32", "384", "", "3735928559", "", "" );
+                } else if ( items == 7 && entry.getName().equals( "LOGLEVEL" ) ) {
+                    ++items;
+                    checkEntry( entry, "4", "416", "", "", "", "" );
+                } else if ( items == 8 && entry.getName().equals( "FACILITY" ) ) {
+                    ++items;
+                    checkEntry( entry, "4", "420", "", "", "", "" );
+                } else if ( items == 9 && entry.getName().equals( "ERRORCODE" ) ) {
+                    ++items;
+                    checkEntry( entry, "16", "424", "", "", "", "" );
+                } else if ( items == 10 && entry.getName().equals( "DATAWORDS" ) ) {
+                    ++items;
+                    checkEntry( entry, "8", "440", "", "", "", "" );
+                } else if ( items == 11 && entry.getName().equals( "LOGTIME" ) ) {
+                    ++items;
+                    checkEntry( entry, "64", "448", "", "", "", "" );
+                // skipping the repeats because they are tested elsewhere
+                } else if ( entry.getName().equals( "WRAP_FLAG" ) ) {
+                    ++items;
+                    checkEntry( entry, "16", "2432", "", "", "", "" );
+                } else if ( entry.getName().equals( "START_POINTER" ) ) {
+                    ++items;
+                    checkEntry( entry, "16", "2448", "", "", "", "" );
+                } else if ( entry.getName().equals( "END_POINTER" ) ) {
+                    ++items;
+                    checkEntry( entry, "16", "2464", "", "", "", "" );
+                } else if ( entry.getName().equals( "SIZE_USED" ) ) {
+                    ++items;
+                    checkEntry( entry, "16", "2480", "", "", "", "" );
+                } else {
+                    ++items;
+                }
+
+            }
+
+            Assert.assertTrue( "Container parameter count of " + containerName + " is " +
+                Long.toString( items ) + " but should be 139 items",
+                items == 139 );
+
+            //assertOnWarnings( model ); // Warning Expected Now
 
         } catch ( Exception ex ) {
             //ex.printStackTrace();

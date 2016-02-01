@@ -3900,6 +3900,9 @@ public class XTCEViewer extends javax.swing.JFrame {
          
                 tmContainerDrawingScrollPane.setViewportView( drawing );
 
+                // TODO: it would be nice here to set the vertical scrollbar to
+                // the bottom of the drawing that is presented
+
                 logMsg( XTCEFunctions.getText( "ss_cont_processed" ) + // NOI18N
                         " '" + // NOI18N
                         containerModel.getContainerReference().getName() +
@@ -4685,6 +4688,11 @@ public class XTCEViewer extends javax.swing.JFrame {
             messagesText.setText( "" ); // NOI18N
         }
 
+        // since this is a text widget, we don't do the line separator because
+        // this is internal to Java.  If there is later a copy/paste issue with
+        // Windoze, then this is likely what would need to be adjusted for that
+        // platform.
+
         messagesText.append( msg + "\n" ); // NOI18N
 
         messagesText.setCaretPosition( messagesText.getText().length() );
@@ -4855,7 +4863,8 @@ public class XTCEViewer extends javax.swing.JFrame {
                     } else {
                         System.err.println(
                             XTCEFunctions.getText( "general_unrecognizedarg" ) +
-                            ": " + args[iii] );
+                            ": " +
+                            args[iii] );
                         usage();
                         System.exit( -1 );
                     }
@@ -4869,8 +4878,9 @@ public class XTCEViewer extends javax.swing.JFrame {
                                           readOnly );
                         } else {
                             System.err.println(
-                            XTCEFunctions.getText( "file_chooser_noload_text" ) +
-                            " " + fileToOpen );
+                                XTCEFunctions.getText( "file_chooser_noload_text" ) +
+                                " " +
+                                fileToOpen );
                             usage();
                             System.exit( -1 );
                         }
