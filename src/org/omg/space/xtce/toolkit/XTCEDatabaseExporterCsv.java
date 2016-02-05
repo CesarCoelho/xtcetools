@@ -108,7 +108,8 @@ public class XTCEDatabaseExporterCsv extends XTCEDatabaseExporter {
                     String lowIncFlag  = ""; // NOI18N
                     String highIncFlag = ""; // NOI18N
                     if ( rangeObj.isValidRangeApplied() == true ) {
-                        if ( rangeObj.getLowValue().isEmpty() == false ) {
+                        if ( ( rangeObj.getLowValue()           != null  ) &&
+                             ( rangeObj.getLowValue().isEmpty() == false ) ) {
                             lowValue   = rangeObj.getLowValue();
                             lowIncFlag = ( rangeObj.isLowValueInclusive() == true ? "inc" : "exc" ); // NOI18N
                             if ( rangeObj.isLowValueCalibrated() == false ) {
@@ -118,7 +119,8 @@ public class XTCEDatabaseExporterCsv extends XTCEDatabaseExporter {
                                     valueObj.getCalibratedFromUncalibrated( lowValue );
                             }
                         }
-                        if ( rangeObj.getHighValue().isEmpty() == false ) {
+                        if ( ( rangeObj.getHighValue()           != null ) &&
+                             ( rangeObj.getHighValue().isEmpty() == false ) ) {
                             highValue   = rangeObj.getHighValue();
                             highIncFlag = ( rangeObj.isHighValueInclusive() == true ? "inc" : "exc" ); // NOI18N
                             if ( rangeObj.isHighValueCalibrated() == false ) {
