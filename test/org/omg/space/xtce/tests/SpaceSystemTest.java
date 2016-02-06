@@ -169,6 +169,17 @@ public class SpaceSystemTest {
     }
 
     @Test
+    public void checkInvalidSpaceSystem() {
+
+        XTCESpaceSystem ss = db_.getSpaceSystem( "/BogusSAT/SC001/PayloadX" );
+
+        if ( ss != null ) {
+            Assert.fail( "Should have gotten a null for SpaceSystem /BogusSAT/SC001/PayloadX" );
+        }
+
+    }
+
+    @Test
     public void checkEmptySpaceSystemForParameterChecks() {
 
         XTCESpaceSystem ss = db_.getSpaceSystem( "/BogusSAT/SC001/Payload2" );
@@ -309,6 +320,49 @@ public class SpaceSystemTest {
 
         if ( parameters.size() != expected ) {
             Assert.fail( "Expected " + Long.toString( expected ) + " parameters" );
+        }
+
+    }
+
+    @Test
+    public void checkGetTypeReferences() {
+
+        XTCESpaceSystem ss = db_.getSpaceSystem( "/BogusSAT/SC001/BusElectronics" );
+
+        NameDescriptionType typeRef;
+
+        typeRef = ss.getTMParameterTypeReference( "Battery_Current_Type" );
+        if ( typeRef == null ) {
+            Assert.fail( "Should have found type named 'Battery_Current_Type'" );
+        }
+
+        typeRef = ss.getTMParameterTypeReference( "FOOBAR_Type" );
+        if ( typeRef != null ) {
+            Assert.fail( "Should not have found type named 'FOOBAR_Type'" );
+        }
+
+        ss = db_.getSpaceSystem( "/BogusSAT" );
+
+        typeRef = ss.getTCParameterTypeReference( "TC_CHECKSUMType" );
+        if ( typeRef == null ) {
+            Assert.fail( "Should have found type named 'TC_CHECKSUMType'" );
+        }
+
+        typeRef = ss.getTCParameterTypeReference( "FOOBAR_Type" );
+        if ( typeRef != null ) {
+            Assert.fail( "Should not have found type named 'FOOBAR_Type'" );
+        }
+
+        ss = db_.getSpaceSystem( "/BogusSAT/SC001" );
+
+        typeRef = ss.getTMParameterTypeReference( "FOOBAR_Type" );
+        if ( typeRef != null ) {
+            Assert.fail( "Should not have found type named 'FOOBAR_Type' in SpaceSystem with no types" );
+        }
+
+        typeRef = ss.getTCParameterTypeReference( "FOOBAR_Type" );
+        if ( typeRef != null ) {
+            Assert.fail( "Should not have found type named 'FOOBAR_Type' in SpaceSystem with no types" );
         }
 
     }

@@ -66,7 +66,7 @@ public class XTCETMContainer extends XTCENamedObject {
      *
      */
 
-    public SequenceContainerType getSequenceContainerReference() {
+    public final SequenceContainerType getSequenceContainerReference() {
         return container_;
     }
 
@@ -77,7 +77,7 @@ public class XTCETMContainer extends XTCENamedObject {
      *
      */
 
-    public boolean isAbstract() {
+    public final boolean isAbstract() {
         return container_.isAbstract();
     }
 
@@ -91,7 +91,7 @@ public class XTCETMContainer extends XTCENamedObject {
      *
      */
 
-    public String getInheritancePath() {
+    public final String getInheritancePath() {
         return iPath_;
     }
 
@@ -102,7 +102,7 @@ public class XTCETMContainer extends XTCENamedObject {
      *
      */
 
-    public String getShortDescription() {
+    public final String getShortDescription() {
         return getPrimaryShortDescription( container_ );
     }
 
@@ -116,7 +116,7 @@ public class XTCETMContainer extends XTCENamedObject {
      *
      */
 
-    public void setShortDescription( String description ) {
+    public final void setShortDescription( String description ) {
         setPrimaryShortDescription( container_, description );
     }
 
@@ -127,7 +127,7 @@ public class XTCETMContainer extends XTCENamedObject {
      *
      */
 
-    public String getLongDescription() {
+    public final String getLongDescription() {
         return getPrimaryLongDescription( container_ );
     }
 
@@ -141,7 +141,7 @@ public class XTCETMContainer extends XTCENamedObject {
      *
      */
 
-    public void setLongDescription( String description ) {
+    public final void setLongDescription( String description ) {
         setPrimaryLongDescription( container_, description );
     }
 
@@ -157,7 +157,7 @@ public class XTCETMContainer extends XTCENamedObject {
      *
      */
 
-    public String getDescription() {
+    public final String getDescription() {
 
         String parameterDescription = getShortDescription();
         if ( parameterDescription.isEmpty() == true ) {
@@ -177,7 +177,7 @@ public class XTCETMContainer extends XTCENamedObject {
      *
      */
 
-    public boolean contains( XTCEParameter parameter ) {
+    public final boolean contains( XTCEParameter parameter ) {
 
         try {
 
@@ -249,7 +249,7 @@ public class XTCETMContainer extends XTCENamedObject {
      *
      */
 
-    public String toXml() throws XTCEDatabaseException {
+    public final String toXml() throws XTCEDatabaseException {
 
         try {
 

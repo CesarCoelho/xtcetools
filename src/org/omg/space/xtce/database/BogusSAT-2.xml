@@ -144,7 +144,11 @@ limitations under the License.
                     <xtce:Member name="Spare1" typeRef="PUSspare1Type"/>
                     <xtce:Member name="Version" typeRef="PUSVersionType"/>
                     <xtce:Member name="Spare4" typeRef="PUSspare4Type"/>
-                    <xtce:Member name="Service" typeRef="PUSServiceType"/>
+                    <xtce:Member name="Service" typeRef="PUSServiceType">
+                        <xtce:ParameterProperties dataSource="telemetered" readOnly="true">
+                            <xtce:SystemName>PUS</xtce:SystemName>
+                        </xtce:ParameterProperties>
+                    </xtce:Member>
                     <xtce:Member name="Subservice" typeRef="PUSSubServiceType"/>
                     <xtce:Member name="SeqCount" typeRef="PUSSeqCountType"/>
                     <xtce:Member name="Destination" typeRef="PUSDestinationType"/>
@@ -317,33 +321,49 @@ limitations under the License.
             </xtce:Parameter>
         </xtce:ParameterSet>
         <xtce:MetaCommandSet>
-            <xtce:MetaCommand abstract="true" name="CCSDSCommand">
-                <xtce:LongDescription>Super-Command for all CCSDS commands.</xtce:LongDescription>
-                <xtce:CommandContainer name="CCSDSCommandPacket">
-                    <xtce:LongDescription>Super-container for all CCSDS command packets.</xtce:LongDescription>
+            <xtce:MetaCommand abstract="true" name="CCSDSTelecommand">
+                <xtce:LongDescription>Base telecommand structure for all CCSDS telecommands.</xtce:LongDescription>
+                <xtce:CommandContainer name="CCSDSTelecommandPacket">
+                    <xtce:LongDescription>Super-container for all CCSDS telecommand packets.</xtce:LongDescription>
                     <xtce:EntryList/>
-                    <xtce:BaseContainer containerRef="CCSDSPacket">
-                        <xtce:RestrictionCriteria>
-                            <xtce:ComparisonList>
-                                <xtce:Comparison value="0" parameterRef="CCSDSVersion"/>
-                                <xtce:Comparison value="1" parameterRef="CCSDSType"/>
-                            </xtce:ComparisonList>
-                        </xtce:RestrictionCriteria>
-                    </xtce:BaseContainer>
+                    <xtce:BaseContainer containerRef="CCSDSPacket"/>
                 </xtce:CommandContainer>
             </xtce:MetaCommand>
-            <xtce:MetaCommand abstract="true" name="CCSDSPUSCommandPacket">
-                <xtce:LongDescription>Super-Command for all CCSDS/ECSS PUS command packets.</xtce:LongDescription>
-                <xtce:CommandContainer name="CCSDSPUSCommandPacket">
+            <xtce:MetaCommand abstract="true" name="CCSDSPUSTelecommand">
+                <xtce:LongDescription>Base telecommand structure for all CCSDS/ECSS PUS telecommand packets.</xtce:LongDescription>
+                <!-- xtce:BaseMetaCommand metaCommandRef="CCSDSTelecommand"/ -->
+                <xtce:CommandContainer name="CCSDSPUSTelecommand">
                     <xtce:EntryList/>
-                    <xtce:BaseContainer containerRef="CCSDSCommandPacket">
+                    <xtce:BaseContainer containerRef="CCSDSTelecommandPacket">
                         <xtce:RestrictionCriteria>
-                            <xtce:Comparison parameterRef="CCSDSSecH" value="Present"/>
+                            <xtce:Comparison parameterRef="CCSDS_Packet_ID/SecHdrFlag" value="Present"/>
                         </xtce:RestrictionCriteria>
                     </xtce:BaseContainer>
                 </xtce:CommandContainer>
             </xtce:MetaCommand>
         </xtce:MetaCommandSet>
+        <xtce:CommandContainerSet>
+            <xtce:CommandContainer abstract="true" name="CCSDSPacket" shortDescription="Super-container for all CCSDS telecommand packets">
+                <xtce:LongDescription>Structure of this container is standardized.  This representation was borrowed for the ECSS PUS Document E-70-41A, which restates the general CCSDS standard for the CCSDS header.</xtce:LongDescription>
+                <xtce:EntryList>
+                    <xtce:ParameterRefEntry parameterRef="CCSDS_Packet_ID"/>
+                    <xtce:ParameterRefEntry parameterRef="CCSDS_Packet_Sequence"/>
+                    <xtce:ParameterRefEntry parameterRef="CCSDS_Packet_Length"/>
+                </xtce:EntryList>
+            </xtce:CommandContainer>
+            <xtce:CommandContainer abstract="true" name="CCSDSTelecommandPacket" shortDescription="Super-container for all CCSDS telecommand packets">
+                <xtce:LongDescription>Restricted based on the two identifying values in the standard that are a general requirement for a telemetry packet.</xtce:LongDescription>
+                <xtce:EntryList/>
+                <xtce:BaseContainer containerRef="CCSDSPacket">
+                    <xtce:RestrictionCriteria>
+                        <xtce:ComparisonList>
+                            <xtce:Comparison value="0" parameterRef="CCSDS_Packet_ID/Version"/>
+                            <xtce:Comparison value="TC" parameterRef="CCSDS_Packet_ID/Type"/>
+                        </xtce:ComparisonList>
+                    </xtce:RestrictionCriteria>
+                </xtce:BaseContainer>
+            </xtce:CommandContainer>
+        </xtce:CommandContainerSet>
     </xtce:CommandMetaData>
     <xtce:SpaceSystem name="SC001" shortDescription="This is the first spacecraft in the BogusSAT system">
         <xtce:LongDescription>This space system contains the telemetry packets that comprise TM parameters from the various subsystems on the satellite.</xtce:LongDescription>
@@ -547,6 +567,7 @@ limitations under the License.
                     </xtce:BaseContainer>
                 </xtce:SequenceContainer>
                 <xtce:SequenceContainer name="ECSS_Service_3_Subservice_25" abstract="true" shortDescription="Housekeeping Parameter Report (3,25)">
+                    <xtce:LongDescription>The service 3,25 packet of the ECSS PUS contains the housekeeping telemetry subpackets, switched with the PUS_Structure_ID parameter</xtce:LongDescription>
                     <xtce:EntryList>
                         <xtce:ParameterRefEntry parameterRef="../PUS_Structure_ID"/>
                     </xtce:EntryList>
@@ -648,6 +669,7 @@ limitations under the License.
             <xtce:TelemetryMetaData>
                 <xtce:ParameterTypeSet>
                     <xtce:FloatParameterType name="Float32_Offset">
+                        <xtce:LongDescription>A long description for this type</xtce:LongDescription>
                         <xtce:UnitSet/>
                         <xtce:FloatDataEncoding encoding="IEEE754_1985" sizeInBits="32"/>
                         <xtce:ValidRange minInclusive="-100.0" maxInclusive="100.0"/>
@@ -674,6 +696,7 @@ limitations under the License.
                 </xtce:ParameterTypeSet>
                 <xtce:ParameterSet>
                     <xtce:Parameter name="Battery_Voltage_Offset" initialValue="2.5" parameterTypeRef="Float32_Offset" shortDescription="Correction for battery voltage measurements">
+                        <xtce:LongDescription>Extended discussion about the nature of the battery voltage offset</xtce:LongDescription>
                         <xtce:ParameterProperties dataSource="telemetered" readOnly="false">
                             <xtce:PhysicalAddressSet>
                                 <xtce:PhysicalAddress sourceName="CPU1" sourceAddress="0000f010"/>

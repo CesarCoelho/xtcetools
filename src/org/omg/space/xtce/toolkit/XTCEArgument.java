@@ -116,7 +116,7 @@ public class XTCEArgument extends XTCETypedObject {
      *
      */
 
-    public String getTypeReferenceFullPath() {
+    public final String getTypeReferenceFullPath() {
 
         if ( isValid() == false ) {
             return ""; // NOI18N
@@ -149,7 +149,7 @@ public class XTCEArgument extends XTCETypedObject {
      *
      */
 
-    public String getShortDescription() {
+    public final String getShortDescription() {
 
         String parameterDescription = ""; // NOI18N
 
@@ -187,7 +187,7 @@ public class XTCEArgument extends XTCETypedObject {
      *
      */
 
-    public String getLongDescription() {
+    public final String getLongDescription() {
 
         String parameterDescription = ""; // NOI18N
 
@@ -226,7 +226,7 @@ public class XTCEArgument extends XTCETypedObject {
      *
      */
 
-    public String getDescription() {
+    public final String getDescription() {
 
         String parameterDescription = ""; // NOI18N
 
@@ -290,7 +290,7 @@ public class XTCEArgument extends XTCETypedObject {
      *
      */
 
-    public boolean isMember() {
+    public final boolean isMember() {
         return ( memberReference_ != null );
     }
 
@@ -302,7 +302,7 @@ public class XTCEArgument extends XTCETypedObject {
      *
      */
 
-    public boolean isArgument() {
+    public final boolean isArgument() {
         return ( reference_ != null );
     }
 

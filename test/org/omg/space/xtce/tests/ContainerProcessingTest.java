@@ -1964,6 +1964,188 @@ public class ContainerProcessingTest {
 
     }
 
+    @Test
+    public void testContainmentCheck() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        String containerName = "/BogusSAT/CCSDSPacket";
+
+        try {
+
+            XTCESpaceSystem ss = db_.getSpaceSystem( "/BogusSAT" );
+
+            XTCEParameter ppp_not_in  = ss.getTelemetryParameter( "PUS_Time" );
+            XTCEParameter ppp_is_in_1 = ss.getTelemetryParameter( "CCSDS_Packet_Length" );
+            XTCEParameter ppp_is_in_2 = ss.getTelemetryParameter( "CCSDS_Packet_ID.APID" );
+
+            XTCETMContainer container = db_.getContainer( containerName );
+
+            if ( container.contains( ppp_not_in ) == true ) {
+                Assert.fail( "Parameter " + ppp_not_in.getName() + " should not be in " + containerName );
+            }
+
+            if ( container.contains( ppp_is_in_1 ) == false ) {
+                Assert.fail( "Parameter " + ppp_is_in_1.getName() + " should be in " + containerName );
+            }
+
+            if ( container.contains( ppp_is_in_2 ) == false ) {
+                Assert.fail( "Parameter " + ppp_is_in_2.getName() + " should be in " + containerName );
+            }
+
+        } catch ( Exception ex ) {
+            //ex.printStackTrace();
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+    }
+
+    @Test
+    public void testDescriptions() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        try {
+
+            XTCESpaceSystem ss = db_.getSpaceSystem( "/BogusSAT/SC001" );
+
+            XTCETMContainer container1 = ss.getContainer( "ECSS_Service_1_Subservice_1" );
+            XTCETMContainer container2 = ss.getContainer( "ECSS_Service_3_Subservice_25" );
+            XTCETMContainer container3 = ss.getContainer( "CCSDS_SpacePacket1" );
+
+            if ( container3.getShortDescription().isEmpty() == false ) {
+                Assert.fail( "Should not have shortDescription on 'CCSDS_SpacePacket1'" );
+            }
+            if ( container3.getLongDescription().isEmpty() == false ) {
+                Assert.fail( "Should not have LongDescription on 'CCSDS_SpacePacket1'" );
+            }
+            if ( container3.getDescription().isEmpty() == false ) {
+                Assert.fail( "Should not have Combined Description on 'CCSDS_SpacePacket1'" );
+            }
+
+            if ( container1.getShortDescription().equals( "Telecommand Acceptance Report - Success (1,1)" ) == false ) {
+                Assert.fail( "Should have shortDescription on 'ECSS_Service_1_Subservice_1'" );
+            }
+            if ( container1.getLongDescription().isEmpty() == false ) {
+                Assert.fail( "Should not have LongDescription on 'ECSS_Service_1_Subservice_1'" );
+            }
+            if ( container1.getDescription().equals( "Telecommand Acceptance Report - Success (1,1)" ) == false ) {
+                Assert.fail( "Should have Combined Description on 'ECSS_Service_1_Subservice_1'" );
+            }
+
+            if ( container2.getShortDescription().equals( "Housekeeping Parameter Report (3,25)" ) == false ) {
+                Assert.fail( "Should have shortDescription on 'ECSS_Service_3_Subservice_25'" );
+            }
+            if ( container2.getLongDescription().startsWith( "The service 3,25 packet of the ECSS PUS" ) == false ) {
+                Assert.fail( "Should have LongDescription on 'ECSS_Service_3_Subservice_25'" );
+            }
+            if ( container2.getDescription().equals( "Housekeeping Parameter Report (3,25)" ) == false ) {
+                Assert.fail( "Should have Combined Description on 'ECSS_Service_3_Subservice_25'" );
+            }
+
+            // check the missed branch for the compareTo method
+
+            if ( container1.compareTo( "/CCSDSPacket/CCSDSTelemetryPacket/CCSDSPUSTelemetryPacket/ECSS_Service_1_Subservice_1" ) != 0 ) {
+                Assert.fail( "Check comparison of container to '/CCSDSPacket/CCSDSTelemetryPacket/CCSDSPUSTelemetryPacket/ECSS_Service_1_Subservice_1' in compareTo" );
+            }
+
+        } catch ( Exception ex ) {
+            //ex.printStackTrace();
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+    }
+
+    @Test
+    public void checkInvalidContainerPathName() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        try {
+
+            XTCETMContainer container =
+                db_.getContainer( "/FOOBAR/ECSS_Service_1_Subservice_1" );
+
+            Assert.fail( "Should have gotten an exception on container lookup for /FOOBAR/ECSS_Service_1_Subservice_1" );
+
+        } catch ( Exception ex ) {
+            // do nothing, expect an exception
+        }
+
+    }
+
+    @Test
+    public void checkFindingContainersWithParameter() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        List<XTCETMContainer> result;
+
+        List<XTCEParameter> parameter1list =
+            db_.getTelemetryParameters( "Solar_Array_Voltage_*_Offset" );
+
+        if ( parameter1list.size() != 2 ) {
+            Assert.fail( "Should have found 2 for 'Solar_Array_Voltage_*_Offset'" );
+        }
+
+        result = db_.findContainers( parameter1list.get( 0 ) );
+
+        if ( result.size() != 1 || result.get( 0 ).getName().equals( "Calibration_Offsets" ) == false ) {
+            Assert.fail( "Did not locate Calibration_Offsets for Solar Array Voltage Parameter" );
+        }
+
+        List<XTCEParameter> parameter2list =
+            db_.getTelecommandParameters( "*CHECK*" );
+
+        if ( parameter2list.size() != 1 ) {
+            Assert.fail( "Should have found 1 for '*CHECK*'" );
+        }
+
+        result = db_.findContainers( parameter2list.get( 0 ) );
+
+        if ( result.isEmpty() == false ) {
+            Assert.fail( "Should have found no containers for *CHECK* parameters" );
+        }
+
+    }
+
+    @Test
+    public void testXmlOutput() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        String containerName = "/BogusSAT/LOG_MSGS/LOG_ALL";
+
+        try {
+            XTCETMContainer container = db_.getContainer( containerName );
+            String containerXml = container.toXml();
+            System.out.println( containerXml );
+        } catch ( XTCEDatabaseException ex ) {
+            Assert.fail( "Got exception for TM container XML generation on " +
+                         "'" +
+                         containerName +
+                         "' with '" +
+                         ex.getLocalizedMessage() +
+                         "'" );
+        }
+
+    }
+
     private void checkEntry( XTCEContainerContentEntry entry,
                              String                    sizeInBits,
                              String                    startBit,

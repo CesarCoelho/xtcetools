@@ -30,6 +30,7 @@ import static org.junit.Assert.*;
 import org.omg.space.xtce.toolkit.XTCEConstants;
 import org.omg.space.xtce.toolkit.XTCEDatabase;
 import org.omg.space.xtce.toolkit.XTCEDatabaseException;
+import org.omg.space.xtce.toolkit.XTCEFunctions;
 import org.omg.space.xtce.toolkit.XTCENamespaceContext;
 import org.w3c.dom.NodeList;
 
@@ -179,6 +180,29 @@ public class XPathTest {
                                results.getLength() == 1 );
         } catch ( Exception ex ) {
             Assert.fail( "Query for " + query + " should not have thrown: " +
+                         ex.getLocalizedMessage() );
+        }
+
+    }
+
+    @Test
+    public void verifyXPathOnElementWithSpecificAttributeAndPrettyPrint() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        String query = "//xtce:Parameter[@name = 'Payload_1_State']";
+
+        try {
+            loadDocument( false );
+            NodeList results = db_.evaluateXPathQuery( query );
+            Assert.assertTrue( query + " should have 1 result",
+                               results.getLength() == 1 );
+            System.out.println( XTCEFunctions.xmlPrettyPrint( results ) );
+        } catch ( Exception ex ) {
+            Assert.fail( "Query/PrettyPrint for " + query + " should not have thrown: " +
                          ex.getLocalizedMessage() );
         }
 

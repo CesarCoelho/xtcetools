@@ -91,7 +91,9 @@ public class XTCETelecommand extends XTCENamedObject {
                getAncillaryDataFromProperElement( metaCommandObj) );
 
         iPath_ = iPath;
+
         if ( metaCommandObj.getClass() == MetaCommandType.class ) {
+
             metaCommand_ = (MetaCommandType)metaCommandObj;
             populateArguments( dbReference );
             if ( metaCommand_.getCommandContainer() != null ) {
@@ -99,14 +101,17 @@ public class XTCETelecommand extends XTCENamedObject {
                                                   makeContainerInheritanceString( metaCommand_.getCommandContainer(), dbReference ),
                                                   metaCommand_.getCommandContainer() );
             }
-            //System.out.println( "Made MetaCommand: " + getName() + " IPath: " + iPath_ + " Path: " + getSpaceSystemPath() );
+            System.out.println( "Made MetaCommand: " + getName() + " IPath: " + iPath_ + " Path: " + getSpaceSystemPath() );
             for ( XTCEArgument arg : argumentList_ ) {
-                //System.out.println( "Argument " + arg.getName() + " type " + arg.getTypeReferenceFullPath() );
+                System.out.println( "Argument " + arg.getName() + " type " + arg.getTypeReferenceFullPath() );
             }
+
         } else if ( metaCommandObj.getClass() == BlockMetaCommand.class ) {
+
             blockMetaCommand_ = (BlockMetaCommand)metaCommandObj;
-            argumentList_ = new ArrayList<XTCEArgument>();
-            //System.out.println( "Made MetaCommand: " + getName() + " IPath: " + iPath_ + " Path: " + getSpaceSystemPath() );
+            argumentList_     = new ArrayList<XTCEArgument>();
+            System.out.println( "Made MetaCommand: " + getName() + " IPath: " + iPath_ + " Path: " + getSpaceSystemPath() );
+
         }
 
     }
@@ -125,7 +130,7 @@ public class XTCETelecommand extends XTCENamedObject {
      *
      */
 
-    public String getInheritancePath() {
+    public final String getInheritancePath() {
         return iPath_;
     }
 
@@ -137,7 +142,7 @@ public class XTCETelecommand extends XTCENamedObject {
      *
      */
 
-    public boolean isMetaCommand() {
+    public final boolean isMetaCommand() {
         return ( metaCommand_ != null );
     }
 
@@ -149,7 +154,7 @@ public class XTCETelecommand extends XTCENamedObject {
      *
      */
 
-    public boolean isBlockMetaCommand() {
+    public final boolean isBlockMetaCommand() {
         return ( metaCommand_ == null );
     }
 
@@ -165,7 +170,7 @@ public class XTCETelecommand extends XTCENamedObject {
      *
      */
 
-    public MetaCommandType getMetaCommandReference() {
+    public final MetaCommandType getMetaCommandReference() {
         return metaCommand_;
     }
 
@@ -181,7 +186,7 @@ public class XTCETelecommand extends XTCENamedObject {
      *
      */
 
-    public BlockMetaCommand getBlockMetaCommandReference() {
+    public final BlockMetaCommand getBlockMetaCommandReference() {
         return blockMetaCommand_;
     }
 
@@ -197,7 +202,7 @@ public class XTCETelecommand extends XTCENamedObject {
      *
      */
 
-    public XTCETCContainer getCommandContainer() {
+    public final XTCETCContainer getCommandContainer() {
         return container_;
     }
 
@@ -210,7 +215,7 @@ public class XTCETelecommand extends XTCENamedObject {
      *
      */
 
-    public List<XTCEArgument> getArguments() {
+    public final List<XTCEArgument> getArguments() {
         return argumentList_;
     }
 
@@ -226,7 +231,7 @@ public class XTCETelecommand extends XTCENamedObject {
      *
      */
 
-    public boolean isAbstract() {
+    public final boolean isAbstract() {
         return ( metaCommand_ == null ? false : metaCommand_.isAbstract() );
     }
 
@@ -237,7 +242,7 @@ public class XTCETelecommand extends XTCENamedObject {
      *
      */
 
-    public String getShortDescription() {
+    public final String getShortDescription() {
         if ( isMetaCommand() == true ) {
             return getPrimaryShortDescription( metaCommand_ );
         } else {
@@ -253,7 +258,7 @@ public class XTCETelecommand extends XTCENamedObject {
      *
      */
 
-    public void setShortDescription( String description ) {
+    public final void setShortDescription( String description ) {
         if ( isMetaCommand() == true ) {
             setPrimaryShortDescription( metaCommand_, description );
         } else {
@@ -268,7 +273,7 @@ public class XTCETelecommand extends XTCENamedObject {
      *
      */
 
-    public String getLongDescription() {
+    public final String getLongDescription() {
         if ( isMetaCommand() == true ) {
             return getPrimaryLongDescription( metaCommand_ );
         } else {
@@ -284,7 +289,7 @@ public class XTCETelecommand extends XTCENamedObject {
      *
      */
 
-    public void setLongDescription( String description ) {
+    public final void setLongDescription( String description ) {
         if ( isMetaCommand() == true ) {
             setPrimaryLongDescription( metaCommand_, description );
         } else {
@@ -304,7 +309,7 @@ public class XTCETelecommand extends XTCENamedObject {
      *
      */
 
-    public String getDescription() {
+    public final String getDescription() {
 
         String parameterDescription = getShortDescription();
         if ( parameterDescription.isEmpty() == true ) {
@@ -325,7 +330,7 @@ public class XTCETelecommand extends XTCENamedObject {
      *
      */
 
-    public String toXml() throws XTCEDatabaseException {
+    public final String toXml() throws XTCEDatabaseException {
 
         try {
 
@@ -376,7 +381,9 @@ public class XTCETelecommand extends XTCENamedObject {
      *
      */
 
-    private static String getNameFromProperElement( Object element ) throws XTCEDatabaseException {
+    private static String getNameFromProperElement( Object element )
+        throws XTCEDatabaseException {
+
         if ( element.getClass() == MetaCommandType.class ) {
             return ((NameDescriptionType)element).getName();
         } else if ( element.getClass() == BlockMetaCommand.class ) {
@@ -384,6 +391,7 @@ public class XTCETelecommand extends XTCENamedObject {
         } else {
             throw new XTCEDatabaseException( "Unknown telecommand object type" );
         }
+
     }
 
     /** Private method to extract the AliasSetType element from the XTCE data
@@ -397,12 +405,15 @@ public class XTCETelecommand extends XTCENamedObject {
      */
 
     private static AliasSetType getAliasSetFromProperElement( Object element ) {
+
         if ( element.getClass() == MetaCommandType.class ) {
             return ((MetaCommandType)element).getAliasSet();
         } else if ( element.getClass() == BlockMetaCommand.class ) {
             return ((BlockMetaCommand)element).getAliasSet();
         }
+
         return null;
+
     }
 
     /** Private method to extract the AncillaryDataSet element from the XTCE
@@ -416,12 +427,15 @@ public class XTCETelecommand extends XTCENamedObject {
      */
 
     private static AncillaryDataSet getAncillaryDataFromProperElement( Object element ) {
+
         if ( element.getClass() == MetaCommandType.class ) {
             return ((MetaCommandType)element).getAncillaryDataSet();
         } else if ( element.getClass() == BlockMetaCommand.class ) {
             return ((BlockMetaCommand)element).getAncillaryDataSet();
         }
+
         return null;
+
     }
 
     /** Private method to populate the List of XTCEArguments that are
@@ -490,7 +504,7 @@ public class XTCETelecommand extends XTCENamedObject {
             NameDescriptionType argType =
                 dbReference.getArgumentTypeReference( path );
 
-            argumentList_.add( new XTCEArgument( metaCommand_.getName(),
+            argumentList_.add( new XTCEArgument( arg.getName(),
                                                  getSpaceSystemPath(),
                                                  arg,
                                                  argType ) );
@@ -572,10 +586,10 @@ public class XTCETelecommand extends XTCENamedObject {
     private String makeContainerInheritanceString( CommandContainerType container,
                                                    XTCEDatabase         dbReference ) throws XTCEDatabaseException {
 
-        LinkedList<String> cpathList = new LinkedList<String>();
+        LinkedList<String> cpathList = new LinkedList<>();
         CommandContainerType currentContainer = container;
         cpathList.addFirst( container.getName() );
-        String currentSpaceSystemPath = getFullPath();
+        String currentSpaceSystemPath = getSpaceSystemPath();
 
         while ( currentContainer.getBaseContainer() != null ) {
             String path = XTCEFunctions.resolvePathReference( currentSpaceSystemPath,
@@ -647,7 +661,7 @@ public class XTCETelecommand extends XTCENamedObject {
             }
         }
 
-        throw new XTCEDatabaseException( "Container named " + name + " not found in Space System " + path );
+        throw new XTCEDatabaseException( "Telecommand Container named " + name + " not found in Space System " + path );
 
     }
 

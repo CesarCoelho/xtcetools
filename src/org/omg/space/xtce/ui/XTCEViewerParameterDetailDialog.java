@@ -86,7 +86,7 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
             readOnlyCheckboxField.setSelected( true );
             readOnlyCheckboxField.setEnabled( false );
         } else {
-            readOnlyCheckboxField.setSelected( parameter.isSettable() );
+            readOnlyCheckboxField.setSelected( parameter.isReadOnly() );
         }
         shortDescriptionField.setText( parameter.getShortDescription() );
         shortDescriptionField.setCaretPosition( 0 );

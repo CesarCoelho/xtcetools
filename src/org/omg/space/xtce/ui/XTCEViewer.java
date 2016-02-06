@@ -4107,7 +4107,7 @@ public class XTCEViewer extends javax.swing.JFrame {
                                  parameter.getRawSizeInBits(),
                                  parameter.getRawTypeString(),
                                  parameter.getDataSource(),
-                                 parameter.isSettable(),
+                                 parameter.isReadOnly(),
                                  parameter.getInitialValue(),
                                  parameter.getDescription() };
 

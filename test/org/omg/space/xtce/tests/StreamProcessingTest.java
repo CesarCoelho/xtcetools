@@ -207,6 +207,26 @@ public class StreamProcessingTest {
     }
 
     @Test
+    public void checkInvalidStreamName() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        try {
+
+            XTCETMStream stream = db_.getStream( "FOOBAR" );
+
+            Assert.fail( "Should have gotten an exception on stream lookup for FOOBAR" );
+
+        } catch ( Exception ex ) {
+            // do nothing, expect an exception
+        }
+
+    }
+
+    @Test
     public void checkSimpleInheritancePath() {
 
         final String methodName =
@@ -282,6 +302,14 @@ public class StreamProcessingTest {
         try {
 
             XTCETMStream stream = db_.getStream( "CCSDS-TM" );
+
+            if ( stream.getReference() == null ) {
+                Assert.fail( "Stream 'CCSDS-TM' should have a PCMStreamType internally" );
+            }
+
+            if ( stream.getStreamRootContainerPath().equals( "/BogusSAT/CCSDSTelemetryPacket" ) == false ) {
+                Assert.fail( "Expected root path of '/BogusSAT/CCSDSTelemetryPacket' for 'CCSDS-TM' but got " + stream.getStreamRootContainerPath() );
+            }
 
             long expected = 13;
             long found    = 0;
@@ -1605,6 +1633,27 @@ public class StreamProcessingTest {
         } catch ( Exception ex ) {
             //ex.printStackTrace();
             Assert.fail( ex.getLocalizedMessage() );
+        }
+
+    }
+
+    @Test
+    public void testXmlOutput() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        try {
+            XTCETMStream stream = db_.getStream( "CCSDS-TM" );
+            String streamXml = stream.toXml();
+            System.out.println( streamXml );
+        } catch ( XTCEDatabaseException ex ) {
+            Assert.fail( "Got exception for TM stream XML generation on " +
+                         "'CCSDS-TM' with '" +
+                         ex.getLocalizedMessage() +
+                         "'" );
         }
 
     }

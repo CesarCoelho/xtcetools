@@ -359,11 +359,8 @@ public class XTCEParameter extends XTCETypedObject {
     }
 
     /** Accessor to determine if this Parameter or Member represented by this
-     * object is "settable", or in a "Read Only" state, as defined by the
-     * readOnly attribute of the ParameterProperties element.
-     *
-     * Settable is defined as the ParameterProperties readOnly attribute being
-     * set to false.
+     * object is in a "Read Only" state, as defined by the readOnly attribute
+     * of the ParameterProperties element.
      *
      * There is a special case in the XTCE schema of this toolkit.  The
      * ParameterProperties element is allowed to also appear on the Member
@@ -371,11 +368,11 @@ public class XTCEParameter extends XTCETypedObject {
      * As a result, it is possible for there to be a ParameterProperties
      * element in this toolkit for Member elements.
      *
-     * @return boolean indicating if this Parameter or Member is settable.
+     * @return boolean indicating if this Parameter or Member is "read only".
      *
      */
 
-    public final boolean isSettable() {
+    public final boolean isReadOnly() {
 
         try {
 
@@ -391,6 +388,26 @@ public class XTCEParameter extends XTCETypedObject {
 
         return false;
 
+    }
+
+    /** Accessor to determine if this Parameter or Member represented by this
+     * object is in a "settable" state, as defined by the readOnly attribute
+     * of the ParameterProperties element.
+     *
+     * This method is the inverse of the isReadOnly() method.
+     *
+     * There is a special case in the XTCE schema of this toolkit.  The
+     * ParameterProperties element is allowed to also appear on the Member
+     * elements, although that is non-standard until perhaps XTCE version 1.2.
+     * As a result, it is possible for there to be a ParameterProperties
+     * element in this toolkit for Member elements.
+     *
+     * @return boolean indicating if this Parameter or Member is settable.
+     *
+     */
+
+    public final boolean isSettable() {
+        return ( isReadOnly() == false );
     }
 
     /** Accessor to determine if this XTCEParameter object represents a
@@ -415,7 +432,7 @@ public class XTCEParameter extends XTCETypedObject {
      *
      */
 
-    final Member getMemberReference() {
+    public final Member getMemberReference() {
         return memberReference_;
     }
 
@@ -441,7 +458,7 @@ public class XTCEParameter extends XTCETypedObject {
      *
      */
 
-    final Parameter getParameterReference() {
+    public final Parameter getParameterReference() {
         return reference_;
     }
 

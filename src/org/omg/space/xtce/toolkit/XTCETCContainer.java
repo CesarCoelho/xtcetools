@@ -17,6 +17,8 @@
 
 package org.omg.space.xtce.toolkit;
 
+import javax.xml.bind.JAXBElement;
+import javax.xml.namespace.QName;
 import org.omg.space.xtce.database.CommandContainerType;
 
 /** The XTCETCContainer class models the XTCE CommandContainer element by
@@ -60,7 +62,7 @@ public class XTCETCContainer extends XTCENamedObject {
      *
      */
 
-    public CommandContainerType getCommandContainerReference() {
+    public final CommandContainerType getCommandContainerReference() {
         return container_;
     }
 
@@ -70,7 +72,7 @@ public class XTCETCContainer extends XTCENamedObject {
      *
      */
 
-    public String getInheritancePath() {
+    public final String getInheritancePath() {
         return iPath_;
     }
 
@@ -81,7 +83,7 @@ public class XTCETCContainer extends XTCENamedObject {
      *
      */
 
-    public String getShortDescription() {
+    public final String getShortDescription() {
         return getPrimaryShortDescription( container_ );
     }
 
@@ -95,7 +97,7 @@ public class XTCETCContainer extends XTCENamedObject {
      *
      */
 
-    public void setShortDescription( String description ) {
+    public final void setShortDescription( String description ) {
         setPrimaryShortDescription( container_, description );
     }
 
@@ -106,7 +108,7 @@ public class XTCETCContainer extends XTCENamedObject {
      *
      */
 
-    public String getLongDescription() {
+    public final String getLongDescription() {
         return getPrimaryLongDescription( container_ );
     }
 
@@ -120,7 +122,7 @@ public class XTCETCContainer extends XTCENamedObject {
      *
      */
 
-    public void setLongDescription( String description ) {
+    public final void setLongDescription( String description ) {
         setPrimaryLongDescription( container_, description );
     }
 
@@ -136,7 +138,7 @@ public class XTCETCContainer extends XTCENamedObject {
      *
      */
 
-    public String getDescription() {
+    public final String getDescription() {
 
         String parameterDescription = getShortDescription();
         if ( parameterDescription.isEmpty() == true ) {
@@ -144,6 +146,41 @@ public class XTCETCContainer extends XTCENamedObject {
         }
 
         return parameterDescription;
+
+    }
+
+    /** Retrieve an XML string that represents this Container element.
+     *
+     * @return String containing the XML fragment.
+     *
+     * @throws XTCEDatabaseException in the event that the elements being
+     * marshaled from the JAXB internal classes cannot make a valid document.
+     * Check the exception message for causality information.
+     *
+     */
+
+    public final String toXml() throws XTCEDatabaseException {
+
+        try {
+
+            JAXBElement xmlElement = new JAXBElement( new QName(CommandContainerType.class.getSimpleName()),
+                                                          CommandContainerType.class,
+                                                          container_ );
+
+            XTCEDocumentMarshaller mmm =
+                new XTCEDocumentMarshaller( CommandContainerType.class, true );
+
+            return XTCEFunctions.xmlPrettyPrint( mmm.marshalToXml( xmlElement ) );
+
+        } catch ( Exception ex ) {
+            throw new XTCEDatabaseException(
+                getName() +
+                ": " + // NOI18N
+                XTCEFunctions.getText( "xml_marshal_error_container" ) + // NOI18N
+                " '" + // NOI18N
+                ex.getCause() +
+                "'" ); // NOI18N
+        }
 
     }
 
@@ -161,8 +198,14 @@ public class XTCETCContainer extends XTCENamedObject {
 
     @Override
     public int compareTo( Object that ) {
-        return this.getInheritancePath()
-                   .compareTo(((XTCETCContainer)that).getInheritancePath() );
+
+        if ( that instanceof String ) {
+            return this.iPath_.compareTo( (String)that );
+        }
+
+        return this.iPath_
+                   .compareTo( ( (XTCETCContainer)that ).iPath_ );
+
     }
 
     private final String               iPath_;
