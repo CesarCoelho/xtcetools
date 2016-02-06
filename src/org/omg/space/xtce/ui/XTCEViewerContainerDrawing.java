@@ -373,7 +373,7 @@ public class XTCEViewerContainerDrawing extends JPanel {
     private void drawByteLineLeftToRight( Graphics ggg ) {
 
         int linex1 = rectBaseX_;
-        int liney1 = rectBaseY_ + scale( 20 );
+        int liney1 = rectBaseY_ + scale( 13 );
         int linex2 = rectBaseX_ + scale( (int)contentModel_.getTotalSize() );
         int liney2 = liney1;
         ggg.drawLine( linex1, liney1, linex2, liney2 );
@@ -389,17 +389,16 @@ public class XTCEViewerContainerDrawing extends JPanel {
 
         for ( int iii = 0; iii <= bitCountInBytes; iii += 8 ) {
             int x1 = rectBaseX_ + scale( iii );
-            int y1 = rectBaseY_ + scale( 19 );
+            int y1 = rectBaseY_ + scale( 12 );
             int x2 = x1;
-            int y2 = rectBaseY_ + scale( 21 );
+            int y2 = rectBaseY_ + scale( 14 );
             ggg.drawLine( x1, y1, x2, y2 );
             int posx1 = x1;
-            int posy1 = rectBaseY_ + scale( 22 );
+            int posy1 = rectBaseY_ + scale( 15 );
             drawCenteredString( ggg, Integer.toString( iii / 8 ), posx1, posy1 );
         }
 
-        int xpostotal = rectBaseX_ - 75;
-        int ypostotal = rectBaseY_ + scale( 35 );
+        int ypostotal = rectBaseY_ + scale( 25 );
         String totalsMessage = XTCEFunctions.getText( "general_totalbytes" ) + // NOI18N
             ": " + // NOI18N
             Integer.toString( bitCountInBytes / 8 ) +
@@ -407,10 +406,17 @@ public class XTCEViewerContainerDrawing extends JPanel {
             XTCEFunctions.getText( "general_bits_cap" ) + // NOI18N
             ": " + // NOI18N
             Long.toString( contentModel_.getTotalSize() );
-        ggg.drawString( totalsMessage, xpostotal, ypostotal);
+        ggg.drawString( totalsMessage, textxpos, ypostotal);
         ggg.drawString( XTCEFunctions.getText( "general_bits_cap" ), // NOI18N
-                        xpostotal,
+                        textxpos,
                         rectBaseY_ + ( scale( 15 ) / 2 ) );
+
+        int yposdesc = rectBaseY_ + scale( 28 );
+        String descMessage =
+            contentModel_.getContainerReference().getName() +
+            ": " + //NOI18N
+            contentModel_.getContainerReference().getDescription();
+        ggg.drawString( descMessage, textxpos, yposdesc );
 
         totalSizeX_ = rectBaseX_ + linex2 + 25;
 
@@ -425,7 +431,7 @@ public class XTCEViewerContainerDrawing extends JPanel {
         ggg.drawLine( linex1, liney1, linex2, liney2 );
 
         int textxpos = linex2;
-        int textypos = liney2 + 25;
+        int textypos = liney2 + scale( 2 );
         drawCenteredString( ggg,
                             XTCEFunctions.getText( "general_bytes" ), // NOI18N
                             textxpos,
@@ -445,16 +451,25 @@ public class XTCEViewerContainerDrawing extends JPanel {
             drawCenteredString( ggg, Integer.toString( iii / 8 ), posx1, posy1 );
         }
 
-        //int xpostotal = rectBaseX_ - 75;
-        //int ypostotal = rectBaseY_ + scale( 35 );
-        //String totalsMessage = "Total Bytes: " +
-        //    Integer.toString( bitCountInBytes / 8 ) + " Bits: " +
-        //    Long.toString( contentModel_.getTotalSize() );
-        //ggg.drawString( totalsMessage, xpostotal, ypostotal);
-        //ggg.drawString( "Bits", xpostotal, rectBaseY_ + ( scale( 15 ) / 2 ) );
+        int ypostotal = textypos + scale( 3 );
+        String totalsMessage = "Total Bytes: " +
+            Integer.toString( bitCountInBytes / 8 ) + " Bits: " +
+            Long.toString( contentModel_.getTotalSize() );
+        ggg.drawString( totalsMessage, rectBaseX_, ypostotal );
+
+        int yposdesc = textypos + scale( 6 );
+        String descMessage =
+            contentModel_.getContainerReference().getName() +
+            ": " + //NOI18N
+            contentModel_.getContainerReference().getDescription();
+        ggg.drawString( descMessage, rectBaseX_, yposdesc );
 
         if ( totalSizeX_ < ( rectBaseX_ + linex2 + 25 ) ) {
             totalSizeX_ = rectBaseX_ + linex2 + 25;
+        }
+
+        if ( totalSizeY_ < ( yposdesc + 25 ) ) {
+            totalSizeY_ = yposdesc + 25;
         }
 
     }
@@ -493,14 +508,14 @@ public class XTCEViewerContainerDrawing extends JPanel {
 
                 if ( previousContainerName.equals( containerName ) == false ) {
                     int x1 = rectBaseX_ + scale( itemStartBitInt );
-                    int y1 = rectBaseY_ + scale( 28 );
+                    int y1 = rectBaseY_ + scale( 19 );
                     int x2 = x1;
-                    int y2 = rectBaseY_ + scale( 30 );
+                    int y2 = rectBaseY_ + scale( 21 );
                     ggg.drawLine( x1, y1, x2, y2 );
                     int containerLength = itemStartBitInt - previousContainerEnd;
                     if ( ( firstEntry != entry ) && ( containerLength != 0 ) ) {
                         int xpos1 = rectBaseX_ + scale( previousContainerEnd ) + ( scale( containerLength ) / 2 );
-                        int ypos1 = rectBaseY_ + scale( 28 ) - 2;
+                        int ypos1 = rectBaseY_ + scale( 21 ) - 2;
                         drawCenteredString( ggg, Integer.toString( containerLength ), xpos1, ypos1 );
                     }
                     previousContainerName = containerName;
@@ -510,12 +525,12 @@ public class XTCEViewerContainerDrawing extends JPanel {
                 if ( lastEntry == entry ) {
                     int containerLength = itemStartBitInt - previousContainerEnd + itemSizeInt;
                     int x1 = rectBaseX_ + scale( itemStartBitInt ) + scale( itemSizeInt );
-                    int y1 = rectBaseY_ + scale( 28 );
+                    int y1 = rectBaseY_ + scale( 19 );
                     int x2 = x1;
-                    int y2 = rectBaseY_ + scale( 30 );
+                    int y2 = rectBaseY_ + scale( 21 );
                     ggg.drawLine( x1, y1, x2, y2 );
                     int xpos1 = rectBaseX_ + scale( previousContainerEnd ) + ( scale( containerLength ) / 2 );
-                    int ypos1 = rectBaseY_ + scale( 28 ) - 2;
+                    int ypos1 = rectBaseY_ + scale( 21 ) - 2;
                     drawCenteredString( ggg, Integer.toString( containerLength ), xpos1, ypos1 );
                 }
 
@@ -530,7 +545,7 @@ public class XTCEViewerContainerDrawing extends JPanel {
     private void drawContainersLine( Graphics ggg ) {
 
         int clinex1 = rectBaseX_;
-        int cliney1 = rectBaseY_ + scale( 29 );
+        int cliney1 = rectBaseY_ + scale( 20 );
         int clinex2 = clinex1 + scale( (int)contentModel_.getTotalSize() );
         int cliney2 = cliney1;
         ggg.drawLine( clinex1, cliney1, clinex2, cliney2 );
@@ -550,7 +565,7 @@ public class XTCEViewerContainerDrawing extends JPanel {
         int leftTopX = rectBaseX_ + scale( itemStartBit );
         int leftTopY = rectBaseY_;
         int width  = scale( itemSize );
-        int height = scale( 15 );
+        int height = scale( 10 );
         ggg.drawRect( leftTopX, leftTopY, width, height );
         int posX = rectBaseX_ + scale( itemStartBit ) + ( scale( itemSize ) / 2 );
         int posY = rectBaseY_ + ( height / 2 );
