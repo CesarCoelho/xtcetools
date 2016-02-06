@@ -452,8 +452,12 @@ public class XTCEViewerContainerDrawing extends JPanel {
         }
 
         int ypostotal = textypos + scale( 3 );
-        String totalsMessage = "Total Bytes: " +
-            Integer.toString( bitCountInBytes / 8 ) + " Bits: " +
+        String totalsMessage = XTCEFunctions.getText( "general_totalbytes" ) + // NOI18N
+            ": " + // NOI18N
+            Integer.toString( bitCountInBytes / 8 ) +
+            " " + // NOI18N
+            XTCEFunctions.getText( "general_bits_cap" ) + // NOI18N
+            ": " + // NOI18N
             Long.toString( contentModel_.getTotalSize() );
         ggg.drawString( totalsMessage, rectBaseX_, ypostotal );
 
