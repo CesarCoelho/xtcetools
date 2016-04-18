@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
-    <system systemId="file:/C:/Documents%20and%20Settings/Melanie%20Laub/Desktop/david/JavaApplication1/src/org/omg/xtce/SpaceSystemV1.2-27Feb2014-mods.xsd" uri="xml-resources/jaxb/XTCE/SpaceSystemV1.2-27Feb2014-mods.xsd"/>
-    <system systemId="file:/C:/Documents%20and%20Settings/Melanie%20Laub/Desktop/david/JavaApplication1/src/org/omg/xtce/xml.xsd" uri="xml-resources/jaxb/XTCE/xml.xsd"/>
-    <system systemId="file:/C:/Documents%20and%20Settings/Melanie%20Laub/Desktop/david/JavaApplication1/src/org/omg/space/xtce/database/SpaceSystemV1.2-27Feb2014-mods.xsd" uri="xml-resources/jaxb/XTCE/SpaceSystemV1.2-27Feb2014-mods.xsd"/>
-    <system systemId="file:/C:/Documents%20and%20Settings/Melanie%20Laub/Desktop/david/JavaApplication1/src/org/omg/space/xtce/database/xml.xsd" uri="xml-resources/jaxb/XTCE/xml.xsd"/>
-</catalog>

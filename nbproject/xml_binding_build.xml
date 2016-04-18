@@ -11,8 +11,8 @@
     <target name="jaxb-code-generation" depends="xjc-typedef-target,-do-init,-init-macrodef-javac">
         <mkdir dir="${build.generated.sources.dir}/jaxb" xmlns:s="http://xml.netbeans.org/schema/JAXBWizConfig"/>
         <mkdir dir="build/generated/jaxbCache" xmlns:s="http://xml.netbeans.org/schema/JAXBWizConfig"/>
-        <mkdir dir="build/generated/jaxbCache/XTCE"/>
-        <xjc package="org.omg.space.xtce.database" destdir="build/generated/jaxbCache/XTCE" catalog="catalog.xml">
+        <mkdir dir="build/generated/jaxbCache/XTCE12"/>
+        <xjc package="org.omg.space.xtce" destdir="build/generated/jaxbCache/XTCE12" catalog="catalog.xml">
             <classpath>
                 <pathelement location="${src.dir}"/>
                 <pathelement path="${jaxbwiz.xjcrun.classpath}"/>
@@ -20,12 +20,12 @@
             <arg value="-xmlschema"/>
             <arg value="-npa"/>
             <arg value="-verbose"/>
-            <schema file="xml-resources/jaxb/XTCE/SpaceSystemV1.2-27Feb2014-mods.xsd"/>
-            <depends file="xml-resources/jaxb/XTCE/SpaceSystemV1.2-27Feb2014-mods.xsd"/>
-            <produces dir="build/generated/jaxbCache/XTCE"/>
+            <schema file="xml-resources/jaxb/XTCE12/SpaceSystemV1.2-27Feb2014-mods.xsd"/>
+            <depends file="xml-resources/jaxb/XTCE12/SpaceSystemV1.2-27Feb2014-mods.xsd"/>
+            <produces dir="build/generated/jaxbCache/XTCE12"/>
         </xjc>
         <copy todir="${build.generated.sources.dir}/jaxb">
-            <fileset dir="build/generated/jaxbCache/XTCE"/>
+            <fileset dir="build/generated/jaxbCache/XTCE12"/>
         </copy>
     </target>
 </project>
