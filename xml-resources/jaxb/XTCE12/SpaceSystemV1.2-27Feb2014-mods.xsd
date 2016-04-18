@@ -789,7 +789,7 @@ Style Notes, used throughout the schema:
 	</complexType>
 	<complexType name="ParameterRefType">
 		<annotation>
-			<documentation xml:lang="en">A reference to a Parameter. Uses Unix ‘like’ naming across the SpaceSystem Tree (e.g., SimpleSat/Bus/EPDS/BatteryOne/Voltage).  To reference an individual member of an array use the zero based bracket notation commonly used in languages like C, C++, and Java.</documentation>
+			<documentation xml:lang="en">A reference to a Parameter. Uses Unix-like naming across the SpaceSystem Tree (e.g., SimpleSat/Bus/EPDS/BatteryOne/Voltage).  To reference an individual member of an array use the zero based bracket notation commonly used in languages like C, C++, and Java.</documentation>
 		</annotation>
 		<attribute name="parameterRef" type="xtce:NameReferenceType" use="required"/>
 	</complexType>
@@ -2964,7 +2964,7 @@ Style Notes, used throughout the schema:
 	</complexType>
 	<simpleType name="NameReferenceType">
 		<annotation>
-			<documentation xml:lang="en">Used when referencing a directory style "NameType".   All characters are legal.  All name references use a Unix ‘like’ name referencing mechanism across the SpaceSystem Tree (e.g., SimpleSat/Bus/EPDS/BatteryOne/Voltage) where the '/', ‘..’ and ‘.’ are used to navigate through the hierarchy.  The use of an unqualified name will search for an item in the current SpaceSystem first, then if none is found, in progressively higher SpaceSystems.  A SpaceSystem is a name space (i.e., a named type declared in MetaCommandData is also declared in TelemetryMetaData - and vice versa).</documentation>
+			<documentation xml:lang="en">Used when referencing a directory style "NameType".   All characters are legal.  All name references use a Unix-like name referencing mechanism across the SpaceSystem Tree (e.g., SimpleSat/Bus/EPDS/BatteryOne/Voltage) where the '/', '..' and '.' are used to navigate through the hierarchy.  The use of an unqualified name will search for an item in the current SpaceSystem first, then if none is found, in progressively higher SpaceSystems.  A SpaceSystem is a name space (i.e., a named type declared in MetaCommandData is also declared in TelemetryMetaData - and vice versa).</documentation>
 		</annotation>
 		<restriction base="string"/>
 	</simpleType>
