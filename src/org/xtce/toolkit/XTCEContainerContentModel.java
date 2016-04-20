@@ -48,6 +48,11 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
      * This constructor creates the container content model object with some
      * optional user values provided in a list.
      *
+     * Major problems processing the container will result in an exception,
+     * but many problems encountered do not inhibit continuation.  These can be
+     * inspected by calling getWarnings() after this method to retrieve any
+     * non-blocking issue descriptions.
+     *
      * @param container XTCETMContainer from the database object that contains
      * all the needed entry list items.
      *
@@ -85,6 +90,11 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
      *
      * This constructor creates the container content model object with TM
      * parameter values evaluated from the binary provided in a BitSet.
+     *
+     * Major problems processing the container will result in an exception,
+     * but many problems encountered do not inhibit continuation.  These can be
+     * inspected by calling getWarnings() after this method to retrieve any
+     * non-blocking issue descriptions.
      *
      * @param container XTCETMContainer from the database object that contains
      * all the needed entry list items.
@@ -129,10 +139,16 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
     /** This method processes the contents of the entire container into
      * an ArrayList of XTCEContainerContentEntry objects.
      *
+     * Major problems processing the container will result in an exception,
+     * but many problems encountered do not inhibit continuation.  These can be
+     * inspected by calling getWarnings() after this method to retrieve any
+     * non-blocking issue descriptions.
+     *
      * @return long containing the total length of this content/container
      * entry.
      *
-     * @throws XTCEDatabaseException 
+     * @throws XTCEDatabaseException thrown in the event that this container
+     * cannot be processed.
      *
      */
 
@@ -173,7 +189,9 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
      * based on the inheritance model restrictions.
      *
      * @throws XTCEDatabaseException thrown in the event that the container
-     * contents cannot be processed.
+     * contents cannot be processed.  In the event that the container has
+     * already been processed, which is usually the case, then this method
+     * cannot throw.
      *
      */
 
@@ -208,6 +226,67 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
         }
 
         return true;
+
+    }
+
+    /** Encode a raw binary BitSet from the processed container content model
+     * for potential file or wire transmission.
+     *
+     * The binary will be encoded first from the values processed with a
+     * binary or user value set input provided when processing this container
+     * or the default/initial values in the database for parameters that do not
+     * have an assigned value during container processing.
+     *
+     * @return BitSet containing the raw bits representing this container and
+     * the values of the parameters.
+     *
+     * @throws XTCEDatabaseException thrown in the event that the container
+     * contents cannot be processed.  In the event that the container has
+     * already been processed, which is usually the case, then this method
+     * cannot throw.
+     *
+     */
+
+    public final BitSet encodeContainer( ) throws XTCEDatabaseException {
+
+        if ( contentList_.isEmpty() == true ) {
+            processContainer();
+        }
+
+        BitSet rawBits = new BitSet( (int)getTotalSize() );
+
+        List<XTCEContainerContentEntry> entries = getContentList();
+
+        for ( XTCEContainerContentEntry entry : entries ) {
+
+            XTCEContainerEntryValue valueObj = entry.getValue();
+
+            if ( valueObj == null ) {
+                String defaultValue = entry.getInitialValue();
+                if ( defaultValue.isEmpty() == false ) {
+                    valueObj = new XTCEContainerEntryValue( entry.getParameter(),
+                                                            defaultValue,
+                                                            "==",
+                                                            "Calibrated" );
+                } else {
+                    continue;
+                }
+            }
+
+            BitSet rawValue = valueObj.getRawValue();
+            int    startBit = Integer.parseInt( entry.getStartBit() );
+            int    numBits  = Integer.parseInt( entry.getRawSizeInBits() );
+
+            for ( int iii = 0; iii < numBits; ++iii ) {
+
+                rawBits.set( startBit + numBits - 1 - iii,
+                             rawValue.get( iii ) );
+
+            }
+
+        }
+
+        return rawBits;
 
     }
 
