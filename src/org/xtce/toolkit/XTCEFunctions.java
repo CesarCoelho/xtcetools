@@ -146,6 +146,46 @@ public class XTCEFunctions {
 
     }
 
+    /** This function converts a BitSet from the encode functions to a byte
+     * array in the order it would exist on the wire in that the zeroth index
+     * is the first byte read/written.
+     *
+     * @param rawBits BitSet containing the raw binary data.
+     *
+     * @param minBytes int containing the number of bytes expected.  Sometimes
+     * the BitSet can be short or long due to allocations.
+     *
+     * @return byte[] containing the data for streaming or printing.
+     *
+     */
+
+    public static byte[] getStreamByteArrayFromBitSet( final BitSet rawBits,
+                                                       final int    minBytes ) {
+
+        byte[] bytes = new byte[minBytes];
+
+        int byteCounter = -1;
+        int bitSize     = rawBits.length();
+        int remainder;
+
+        for ( int iii = 0; iii < ( minBytes * 8 ); ++iii ) {
+
+            remainder = iii % 8;
+
+            if ( remainder == 0 ) {
+                ++byteCounter;
+            }
+
+            if ( ( iii < bitSize ) && ( rawBits.get( iii ) == true ) ) {
+                bytes[byteCounter] += 1 << ( 7 - remainder );
+            }
+            
+        }
+
+        return bytes;
+
+    }
+
     /** This function converts a byte array to a BitSet suitable for use in the
      * container content processing when applying a binary data set.
      *

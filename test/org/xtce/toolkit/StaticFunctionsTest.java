@@ -18,6 +18,7 @@
 package org.xtce.toolkit;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.BitSet;
 import java.util.List;
 import java.util.Locale;
@@ -160,6 +161,32 @@ public class StaticFunctionsTest {
             }
         }
         
+    }
+
+    @Test
+    public void testGetStreamByteArrayFromBitSet() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        byte[] bytes = { (byte)0x40, (byte)0x20, (byte)0x00, (byte)0x00, // 2.5
+                         (byte)0x00, (byte)0x00,                         // 2 byte gap
+                         (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x02, // 2
+                         (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x01, // 1
+                         (byte)0xbf, (byte)0xf8, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, // -1.5
+                         (byte)0x01 }; // 1=NORMAL
+
+        int minBytes = bytes.length;
+
+        BitSet bits = XTCEFunctions.getBitSetFromStreamByteArray( bytes );
+        byte[] bytesOutput = XTCEFunctions.getStreamByteArrayFromBitSet( bits, minBytes );
+
+        if ( Arrays.equals( bytes, bytesOutput ) == false ) {
+            Assert.fail( "Could not recover bytes" );
+        }
+
     }
 
     @Test
