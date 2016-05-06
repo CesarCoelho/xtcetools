@@ -1,4 +1,8 @@
 #!/bin/sh
+#
+# Example launch script for UNIX style environments.  Java 7 recommended for
+# this example.  For cases where Java 8 is desired, remove the jfxrt.jar file
+# because it is part of the default classpath.
 
 cd `dirname $0`
 
@@ -11,5 +15,5 @@ XTCETOOLS_JAR=XTCETools.jar
 ${JAVA_HOME}/bin/java -Xms4G \
                       -Dfile.encoding=UTF-8 \
                       -cp ${COTS_JARS}:${XTCETOOLS_JAR} \
-                      org.omg.space.xtce.ui.XTCEViewer
+                      org.xtce.apps.editor.ui.XTCEViewer
 

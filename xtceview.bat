@@ -7,4 +7,4 @@ SET JAVA_LIBS=%JAVA_HOME%\jre\lib
 
 @ECHO ON
 
-"%JAVA_HOME%\bin\java.exe" -Xms4G -Dfile.encoding=UTF-8 -cp "%JAVA_LIBS%\jfxrt.jar";"%JAVA_LIBS%\javaws.jar";"%JAVA_LIBS%deploy.jar";"%JAVA_LIBS%\plugin.jar";dist\XTCETools.jar;XTCETools.jar org.omg.space.xtce.ui.XTCEViewer
+"%JAVA_HOME%\bin\java.exe" -Xms4G -Dfile.encoding=UTF-8 -cp "%JAVA_LIBS%\jfxrt.jar";"%JAVA_LIBS%\javaws.jar";"%JAVA_LIBS%deploy.jar";"%JAVA_LIBS%\plugin.jar";dist\XTCETools.jar;XTCETools.jar org.xtce.apps.editor.ui.XTCEViewer
