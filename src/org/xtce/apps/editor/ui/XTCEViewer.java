@@ -3637,9 +3637,13 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     }
 
+    @SuppressWarnings("unchecked")
     private void buildContainerTree() {
 
         DefaultTreeModel tmodel = (DefaultTreeModel)tmContainerTree.getModel();
+
+        // sort function below results in an unchecked warning on type
+        // XTCETMContainer from List<T>, not sure how to check it yet...
 
         List<XTCETMContainer> containers = xtceDatabaseFile.getContainers();
         Collections.sort( containers );
@@ -4219,6 +4223,7 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     }
 
+    @SuppressWarnings("unchecked")
     private void updateTelecommandTree( List<XTCETelecommand> telecommands, XTCESpaceSystem spaceSystem ) {
 
         if ( telecommands == null ) {
@@ -4226,6 +4231,9 @@ public class XTCEViewer extends javax.swing.JFrame {
         }
 
         DefaultTreeModel tmodel = (DefaultTreeModel)tcTree.getModel();
+
+        // sort function results in an unchecked warnings at XTCETelecommand in
+        // List<T>, not sure how to check it yet...
 
         Collections.sort( telecommands );
 

@@ -163,9 +163,10 @@ public class XTCETCContainer extends XTCENamedObject {
 
         try {
 
-            JAXBElement xmlElement = new JAXBElement( new QName(CommandContainerType.class.getSimpleName()),
-                                                          CommandContainerType.class,
-                                                          container_ );
+            JAXBElement<CommandContainerType> xmlElement = new JAXBElement<>
+                ( new QName( "CommandContainer" ), // NOI18N
+                  CommandContainerType.class,
+                  container_ );
 
             XTCEDocumentMarshaller mmm =
                 new XTCEDocumentMarshaller( CommandContainerType.class, true );

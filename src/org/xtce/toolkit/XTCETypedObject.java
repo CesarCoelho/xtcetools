@@ -1154,6 +1154,7 @@ public abstract class XTCETypedObject extends XTCENamedObject {
      *
      */
 
+    @SuppressWarnings("unchecked")
     public String typeToXml() throws XTCEDatabaseException {
 
         if ( getTypeReference() == null ) {
@@ -1165,7 +1166,10 @@ public abstract class XTCETypedObject extends XTCENamedObject {
 
         try {
 
-            JAXBElement xmlElement =
+            // this constructor warns unchecked on the typeObj_.getClass() and
+            // I am not sure how to fix that right now.
+
+            JAXBElement<?> xmlElement =
                 new JAXBElement( new QName(typeObj_.getClass().getSimpleName()),
                                  typeObj_.getClass(),
                                  typeObj_ );

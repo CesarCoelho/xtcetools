@@ -263,9 +263,10 @@ public class XTCETMContainer extends XTCENamedObject {
 
         try {
 
-            JAXBElement xmlElement = new JAXBElement( new QName(SequenceContainerType.class.getSimpleName()),
-                                                          SequenceContainerType.class,
-                                                          container_ );
+            JAXBElement<SequenceContainerType> xmlElement = new JAXBElement<>
+                ( new QName( "SequenceContainer" ), // NOI18N
+                  SequenceContainerType.class,
+                  container_ );
 
             XTCEDocumentMarshaller mmm =
                 new XTCEDocumentMarshaller( SequenceContainerType.class, true );

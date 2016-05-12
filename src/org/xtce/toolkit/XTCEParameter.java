@@ -478,17 +478,29 @@ public class XTCEParameter extends XTCETypedObject {
         try {
 
             if ( isMember() == true ) {
-                JAXBElement xmlElement = new JAXBElement( new QName(Member.class.getSimpleName()),
-                                                          Member.class,
-                                                          memberReference_ );
-                XTCEDocumentMarshaller mmm = new XTCEDocumentMarshaller( Member.class, true );
+
+                JAXBElement<Member> xmlElement = new JAXBElement<>
+                    ( new QName( Member.class.getSimpleName() ),
+                      Member.class,
+                      memberReference_ );
+
+                XTCEDocumentMarshaller mmm =
+                    new XTCEDocumentMarshaller( Member.class, true );
+
                 return XTCEFunctions.xmlPrettyPrint( mmm.marshalToXml( xmlElement ) );
+
             } else {
-                JAXBElement xmlElement = new JAXBElement( new QName(Parameter.class.getSimpleName()),
-                                                          Parameter.class,
-                                                          reference_ );
-                XTCEDocumentMarshaller mmm = new XTCEDocumentMarshaller( Parameter.class, true );
+
+                JAXBElement<Parameter> xmlElement = new JAXBElement<>
+                    ( new QName( Parameter.class.getSimpleName() ),
+                      Parameter.class,
+                      reference_ );
+
+                XTCEDocumentMarshaller mmm =
+                    new XTCEDocumentMarshaller( Parameter.class, true );
+
                 return XTCEFunctions.xmlPrettyPrint( mmm.marshalToXml( xmlElement ) );
+
             }
 
         } catch ( Exception ex ) {

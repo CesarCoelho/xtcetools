@@ -334,24 +334,31 @@ public class XTCETelecommand extends XTCENamedObject {
 
         try {
 
-            JAXBElement            xmlElement = null;
-            XTCEDocumentMarshaller mmm        = null;
+            JAXBElement            xmlElement;
+            XTCEDocumentMarshaller mmm;
 
             if ( isMetaCommand() == true ) {
 
-                xmlElement = new JAXBElement( new QName(MetaCommandType.class.getSimpleName()),
-                                                        MetaCommandType.class,
-                                                        metaCommand_ );
+                xmlElement = new JAXBElement<MetaCommandType>
+                    ( new QName( "MetaCommand" ), // NOI18N
+                      MetaCommandType.class,
+                      metaCommand_ );
 
                 mmm = new XTCEDocumentMarshaller( MetaCommandType.class, true );
 
             } else if ( isBlockMetaCommand() == true ) {
 
-                xmlElement = new JAXBElement( new QName(BlockMetaCommand.class.getSimpleName()),
-                                                        BlockMetaCommand.class,
-                                                        blockMetaCommand_ );
+                xmlElement = new JAXBElement<BlockMetaCommand>
+                    ( new QName( "BlockMetaCommand" ),
+                      BlockMetaCommand.class,
+                      blockMetaCommand_ );
 
                 mmm = new XTCEDocumentMarshaller( BlockMetaCommand.class, true );
+
+            } else {
+
+                // this will not happen in XTCE 1.2
+                return "";
 
             }
 

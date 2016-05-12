@@ -815,6 +815,9 @@ public class XTCEViewerPreferences {
         ByteArrayInputStream bais = new ByteArrayInputStream( raw );
         ObjectInputStream    ois  = new ObjectInputStream( bais );
 
+        // this readObject method gives me an unchecked warning on the use of
+        // the return type.  I should be safer here.
+
         return (List<String>)ois.readObject();
 
     }

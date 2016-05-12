@@ -29,6 +29,7 @@ import java.util.Set;
 import javax.xml.bind.JAXBElement;
 import javax.xml.namespace.QName;
 import org.omg.space.xtce.AliasSetType;
+import org.omg.space.xtce.CustomStreamType;
 import org.omg.space.xtce.DescriptionType.AncillaryDataSet;
 import org.omg.space.xtce.FixedFrameStreamType;
 import org.omg.space.xtce.PCMStreamType;
@@ -153,12 +154,17 @@ public class XTCETMStream extends XTCENamedObject {
      *
      */
 
+    @SuppressWarnings("unchecked")
     public List<XTCETMContainer> getContainers() {
 
         Set<XTCETMContainer>  containers = streamContainers_.keySet();
         List<XTCETMContainer> sorted     = new ArrayList<>();
 
         //System.out.println( "Count: " + Long.toString( containers.size() ) );
+
+        // sort function results in an unchecked warnings at XTCETMContainer in
+        // List<T>, not sure how to check it yet...
+
         sorted.addAll( containers );
         Collections.sort( sorted );
 
@@ -627,20 +633,38 @@ public class XTCETMStream extends XTCENamedObject {
 
             if ( stream_ instanceof VariableFrameStreamType ) {
 
-                xmlElement = new JAXBElement( new QName(VariableFrameStreamType.class.getSimpleName()),
-                                              VariableFrameStreamType.class,
-                                              stream_ );
+                xmlElement = new JAXBElement<VariableFrameStreamType>
+                    ( new QName( "VariableFrameStream" ), // NOI18N
+                      VariableFrameStreamType.class,
+                      (VariableFrameStreamType)stream_ );
 
                 mmm = new XTCEDocumentMarshaller( VariableFrameStreamType.class,
                                                   true );
 
+            } else if ( stream_ instanceof FixedFrameStreamType ) {
+
+                xmlElement = new JAXBElement<FixedFrameStreamType>
+                    ( new QName( "FixedFrameStream" ), // NOI18N
+                      FixedFrameStreamType.class,
+                      (FixedFrameStreamType)stream_ );
+
+                mmm = new XTCEDocumentMarshaller( FixedFrameStreamType.class,
+                                                  true );
+
+            } else if ( stream_ instanceof CustomStreamType ) {
+
+                xmlElement = new JAXBElement<CustomStreamType>
+                    ( new QName( "CustomStream" ), // NOI18N
+                      CustomStreamType.class,
+                      (CustomStreamType)stream_ );
+
+                mmm = new XTCEDocumentMarshaller( CustomStreamType.class,
+                                                  true );
+
             } else {
 
-                xmlElement = new JAXBElement( new QName(PCMStreamType.class.getSimpleName()),
-                                              PCMStreamType.class,
-                                              stream_ );
-
-                mmm = new XTCEDocumentMarshaller( PCMStreamType.class, true );
+                // this cannot happen in XTCE 1.2
+                return "";
 
             }
 

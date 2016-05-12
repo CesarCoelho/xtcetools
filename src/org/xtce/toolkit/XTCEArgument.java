@@ -321,17 +321,29 @@ public class XTCEArgument extends XTCETypedObject {
         try {
 
             if ( isMember() == true ) {
-                JAXBElement xmlElement = new JAXBElement( new QName(Member.class.getSimpleName()),
-                                                          Member.class,
-                                                          memberReference_ );
-                XTCEDocumentMarshaller mmm = new XTCEDocumentMarshaller( Member.class, true );
+
+                JAXBElement<Member> xmlElement = new JAXBElement<>
+                    ( new QName( Member.class.getSimpleName() ),
+                      Member.class,
+                      memberReference_ );
+
+                XTCEDocumentMarshaller mmm =
+                    new XTCEDocumentMarshaller( Member.class, true );
+
                 return XTCEFunctions.xmlPrettyPrint( mmm.marshalToXml( xmlElement ) );
+
             } else {
-                JAXBElement xmlElement = new JAXBElement( new QName(Argument.class.getSimpleName()),
-                                                          Argument.class,
-                                                          reference_ );
-                XTCEDocumentMarshaller mmm = new XTCEDocumentMarshaller( Argument.class, true );
+
+                JAXBElement<Argument> xmlElement = new JAXBElement<>
+                    ( new QName( Argument.class.getSimpleName() ),
+                      Argument.class,
+                      reference_ );
+
+                XTCEDocumentMarshaller mmm =
+                    new XTCEDocumentMarshaller( Argument.class, true );
+
                 return XTCEFunctions.xmlPrettyPrint( mmm.marshalToXml( xmlElement ) );
+
             }
 
         } catch ( Exception ex ) {

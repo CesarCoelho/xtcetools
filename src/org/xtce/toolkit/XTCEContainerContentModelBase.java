@@ -341,6 +341,7 @@ abstract class XTCEContainerContentModelBase {
 
     }
 
+    @SuppressWarnings("unchecked")
     protected void reorderItemsByStartBit() {
 
         ArrayList<XTCEContainerContentEntry> tempList = new ArrayList<>();
@@ -357,6 +358,10 @@ abstract class XTCEContainerContentModelBase {
                 sbText = item.getStartBit();
             }
         }
+
+        // sort function makes an unchecked warning on the
+        // XTCEContainerContentEntry of List<T>.  Not sure how to check this
+        // yet.
 
         Collections.sort( contentList_ );
 

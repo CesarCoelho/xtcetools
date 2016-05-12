@@ -28,6 +28,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import org.xtce.toolkit.XTCEContainerContentEntry;
@@ -879,6 +880,7 @@ public class XTCEViewerContainerDrawing extends JPanel {
      *
      */
 
+    @SuppressWarnings("unchecked")
     private void initializeDrawingEntryList() {
 
         for ( XTCEContainerContentEntry entry : contentModel_.getContentList() ) {
@@ -923,6 +925,9 @@ public class XTCEViewerContainerDrawing extends JPanel {
 
         }
 
+        // this results in an unchecked warning for the concrete type
+        // DrawingEntry in the List<T>.  Not sure HOW to check it yet...
+
         Collections.sort( entriesInUse_ );
 
     }
@@ -932,7 +937,7 @@ public class XTCEViewerContainerDrawing extends JPanel {
     private boolean                   drawingDone_     = false;
     private XTCEContainerContentModel contentModel_    = null;
     private Orientation               orientDrawingAs_ = null;
-    private ArrayList<DrawingEntry>   entriesInUse_    = null;
+    private List<DrawingEntry>        entriesInUse_    = null;
     private final int                 originX_         = 100;
     private final int                 originY_         = 20;
     private int                       rectBaseX_;
