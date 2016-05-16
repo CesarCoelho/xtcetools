@@ -15,7 +15,7 @@
  * 
  */
 
-package org.xtce.apps.editor.ui;
+package org.xtce.apps.editor.dialogs;
 
 import java.awt.event.WindowEvent;
 import java.io.IOException;
@@ -26,7 +26,8 @@ import javax.swing.event.HyperlinkListener;
 import javax.swing.text.Document;
 import org.xtce.toolkit.XTCEFunctions;
 
-/**
+/** This is a basic text dialog for the help menu, although it is not used at
+ * the present time, in favor of XTCEViewerHelpBrowserDialog instead.
  *
  * @author David Overeem
  *
@@ -34,12 +35,21 @@ import org.xtce.toolkit.XTCEFunctions;
 
 public class XTCEViewerHelpDialog extends javax.swing.JDialog {
 
-    /**
-     * Creates new form XTCEViewerHelpDialog
+    /** Creates new form XTCEViewerHelpDialog
+     *
+     * @param parent Java Frame of the parent window
+     *
+     * @param modal boolean indicating if this dialog should have modal
+     * behavior
+     *
+     * @param pageUrl URL containing the help HTML page to load, which for the
+     * purpose of this application is generally within the JAR file.
+     *
      */
-    public XTCEViewerHelpDialog(java.awt.Frame parent,
-                                boolean        modal,
-                                URL            pageUrl ) {
+
+    public XTCEViewerHelpDialog( java.awt.Frame parent,
+                                 boolean        modal,
+                                 URL            pageUrl ) {
 
         super(parent, modal);
         initComponents();

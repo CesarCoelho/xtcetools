@@ -130,7 +130,7 @@ public class FileTest {
             ClassLoader.getSystemResource( "junit/runner/Version.class" );
 
         String absPath = fileUrl.getPath();
-        int    idx     = absPath.lastIndexOf( "!" );
+        int    idx     = absPath.lastIndexOf( '!' );
         if ( idx != -1 ) {
             absPath = absPath.substring( idx + 1 );
         }
@@ -165,7 +165,7 @@ public class FileTest {
 
             URL    fileUrl = fileUrls.nextElement();
             String absPath = fileUrl.getPath();
-            int    idx     = absPath.lastIndexOf( "!" );
+            int    idx     = absPath.lastIndexOf( '!' );
             if ( idx != -1 ) {
                 absPath = absPath.substring( idx + 1 );
             }

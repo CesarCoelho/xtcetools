@@ -15,12 +15,14 @@
  * 
  */
 
-package org.xtce.apps.editor.ui;
+package org.xtce.apps.editor.dialogs;
 
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
+import org.xtce.apps.editor.ui.XTCEViewer;
+import org.xtce.apps.editor.ui.XTCEViewerPreferences;
 import org.xtce.toolkit.XTCEAlias;
 import org.xtce.toolkit.XTCEDatabase;
 import org.xtce.toolkit.XTCEFunctions;
@@ -35,9 +37,19 @@ import org.xtce.toolkit.XTCETMContainer;
 
 public class XTCEViewerContainerFindDialog extends javax.swing.JFrame {
 
-    /**
-     * Creates new form XTCEViewerContainerFindDialog
+    /** This dialog presents the user with an opportunity to interactively
+     * query the XML document Containers.
+     *
+     * @param parent XTCEViewer application for setting the initial location
+     * of the dialog box.
+     *
+     * @param prefs XTCEViewerPreferences object used for saving queries that
+     * the user might like to repeat.
+     *
+     * @param dbFile XTCEDatabase object to perform the queries against.
+     *
      */
+
     public XTCEViewerContainerFindDialog( XTCEViewer            parent,
                                           XTCEViewerPreferences prefs,
                                           XTCEDatabase          dbFile ) {
@@ -384,9 +396,14 @@ public class XTCEViewerContainerFindDialog extends javax.swing.JFrame {
         tableModel.setRowCount( 0 );
 
         if ( results.size() > 0 ) {
-            resultsText.setText( "Found " + Long.toString( results.size() ) + " Container(s)" );
+            resultsText.setText( Long.toString( results.size() ) +
+                                 " " +
+                                 XTCEFunctions.getText( "dialog_findcontainer_found" ) ); // NOI18N
         } else {
-            resultsText.setText( "No Results For Search '" + searchText + "'" );
+            resultsText.setText( XTCEFunctions.getText( "dialog_findparameter_none" ) + // NOI18N
+                                 " '" + // NOI18N
+                                 searchText +
+                                 "'" ); // NOI18N
             return;
         }
 

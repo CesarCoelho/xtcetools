@@ -15,7 +15,7 @@
  * 
  */
 
-package org.xtce.apps.editor.ui;
+package org.xtce.apps.editor.dialogs;
 
 import org.xtce.toolkit.XTCESpaceSystem;
 import java.awt.event.WindowEvent;
@@ -25,21 +25,32 @@ import java.util.Date;
 import javax.swing.DefaultComboBoxModel;
 import org.omg.space.xtce.HeaderType;
 
-/**
+/** Dialog form for creating/editing Space Systems in the XTCE data model.
  *
  * @author David Overeem
  *
  */
 
-public class XTCEViewerCreateEditSpaceSystem extends javax.swing.JDialog {
+public class XTCEViewerCreateEditSpaceSystemDialog extends javax.swing.JDialog {
 
-    /**
-     * Creates new form XTCEViewerCreateDatabase
+    /** Creates new form XTCEViewerCreateEditSpaceSystemDialog
+     *
+     * @param parent Java Frame of the parent window
+     *
+     * @param modal boolean indicating if this dialog should have modal
+     * behavior
+     *
+     * @param spaceSystem XTCESpaceSystem object to create or edit
+     *
      */
-    public XTCEViewerCreateEditSpaceSystem( java.awt.Frame parent, boolean modal, XTCESpaceSystem spaceSystem ) {
+
+    public XTCEViewerCreateEditSpaceSystemDialog( java.awt.Frame  parent,
+                                                  boolean         modal,
+                                                  XTCESpaceSystem spaceSystem ) {
 
         super(parent, modal);
         initComponents();
+
         validationStatusText.setModel( new DefaultComboBoxModel(
             new String[] { "Unknown",
                            "Working",
@@ -53,6 +64,7 @@ public class XTCEViewerCreateEditSpaceSystem extends javax.swing.JDialog {
         dateText.setText( dateFormat.format( new Date() ) );
         pack();
         setLocationRelativeTo( parent );
+
         if ( spaceSystem != null ) {
             this.setTitle( "Edit SpaceSystem " + spaceSystem.getReference().getName() );
             spaceSystemNameText.setText( spaceSystem.getReference().getName() );
@@ -302,50 +314,6 @@ public class XTCEViewerCreateEditSpaceSystem extends javax.swing.JDialog {
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         this.dispatchEvent( new WindowEvent(this, WindowEvent.WINDOW_CLOSING) );
     }//GEN-LAST:event_cancelButtonActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(XTCEViewerCreateEditSpaceSystem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(XTCEViewerCreateEditSpaceSystem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(XTCEViewerCreateEditSpaceSystem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(XTCEViewerCreateEditSpaceSystem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                XTCEViewerCreateEditSpaceSystem dialog = new XTCEViewerCreateEditSpaceSystem(new javax.swing.JFrame(), true, null);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelButton;

@@ -15,11 +15,12 @@
  * 
  */
 
-package org.xtce.apps.editor.ui;
+package org.xtce.apps.editor.dialogs;
 
 import java.awt.event.WindowEvent;
 import java.util.List;
 import javax.swing.DefaultListModel;
+import org.xtce.apps.editor.ui.XTCEViewer;
 import org.xtce.toolkit.XTCEDatabase;
 import org.xtce.toolkit.XTCEFunctions;
 import org.xtce.toolkit.XTCEParameter;

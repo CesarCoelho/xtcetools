@@ -15,7 +15,7 @@
  * 
  */
 
-package org.xtce.apps.editor.ui;
+package org.xtce.apps.editor.dialogs;
 
 import java.awt.event.WindowEvent;
 

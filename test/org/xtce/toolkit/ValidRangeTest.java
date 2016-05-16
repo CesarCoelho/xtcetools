@@ -18,7 +18,6 @@
 package org.xtce.toolkit;
 
 import java.io.File;
-import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.BitSet;
 import java.util.List;
@@ -28,7 +27,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *

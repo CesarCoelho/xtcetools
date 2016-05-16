@@ -15,12 +15,14 @@
  * 
  */
 
-package org.xtce.apps.editor.ui;
+package org.xtce.apps.editor.dialogs;
 
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
+import org.xtce.apps.editor.ui.XTCEViewer;
+import org.xtce.apps.editor.ui.XTCEViewerPreferences;
 import org.xtce.toolkit.XTCEAlias;
 import org.xtce.toolkit.XTCEDatabase;
 import org.xtce.toolkit.XTCEFunctions;
@@ -35,9 +37,19 @@ import org.xtce.toolkit.XTCETelecommand;
 
 public class XTCEViewerTelecommandFindDialog extends javax.swing.JFrame {
 
-    /**
-     * Creates new form XTCEViewerContainerFindDialog
+    /** This dialog presents the user with an opportunity to interactively
+     * query the XML document Telecommands (MetaCommand/BlockMetaCommand).
+     *
+     * @param parent XTCEViewer application for setting the initial location
+     * of the dialog box.
+     *
+     * @param prefs XTCEViewerPreferences object used for saving queries that
+     * the user might like to repeat.
+     *
+     * @param dbFile XTCEDatabase object to perform the queries against.
+     *
      */
+
     public XTCEViewerTelecommandFindDialog( XTCEViewer            parent,
                                             XTCEViewerPreferences prefs,
                                             XTCEDatabase          dbFile ) {
@@ -214,6 +226,7 @@ public class XTCEViewerTelecommandFindDialog extends javax.swing.JFrame {
             }
         });
 
+        resultsText.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         resultsText.setText(bundle.getString("dialog_findparameter_initialresults_text")); // NOI18N
 
         javax.swing.GroupLayout buttonPanelLayout = new javax.swing.GroupLayout(buttonPanel);
@@ -221,14 +234,12 @@ public class XTCEViewerTelecommandFindDialog extends javax.swing.JFrame {
         buttonPanelLayout.setHorizontalGroup(
             buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(buttonPanelLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(buttonPanelLayout.createSequentialGroup()
-                        .addComponent(goToContainerButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(dismissButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(resultsText))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(156, Short.MAX_VALUE)
+                .addComponent(goToContainerButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(dismissButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(156, 156, 156))
+            .addComponent(resultsText, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         buttonPanelLayout.setVerticalGroup(
             buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -384,9 +395,14 @@ public class XTCEViewerTelecommandFindDialog extends javax.swing.JFrame {
         tableModel.setRowCount( 0 );
 
         if ( results.size() > 0 ) {
-            resultsText.setText( "Found " + Long.toString( results.size() ) + " Container(s)" );
+            resultsText.setText( Long.toString( results.size() ) +
+                                 " " +
+                                 XTCEFunctions.getText( "dialog_findtelecommand_found" ) ); // NOI18N
         } else {
-            resultsText.setText( "No Results For Search '" + searchText + "'" );
+            resultsText.setText( XTCEFunctions.getText( "dialog_findparameter_none" ) + // NOI18N
+                                 " '" + // NOI18N
+                                 searchText +
+                                 "'" ); // NOI18N
             return;
         }
 

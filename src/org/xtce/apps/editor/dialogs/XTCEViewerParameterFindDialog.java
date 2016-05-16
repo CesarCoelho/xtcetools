@@ -15,13 +15,15 @@
  * 
  */
 
-package org.xtce.apps.editor.ui;
+package org.xtce.apps.editor.dialogs;
 
 import java.awt.event.ItemEvent;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
+import org.xtce.apps.editor.ui.XTCEViewer;
+import org.xtce.apps.editor.ui.XTCEViewerPreferences;
 import org.xtce.toolkit.XTCEAlias;
 import org.xtce.toolkit.XTCEDatabase;
 import org.xtce.toolkit.XTCEFunctions;
@@ -502,12 +504,12 @@ public class XTCEViewerParameterFindDialog extends javax.swing.JFrame {
         if ( results.size() > 0 ) {
             resultsText.setText( Long.toString( results.size() ) +
                                  " " +
-                                 XTCEFunctions.getText( "dialog_findparameter_found" ) );
+                                 XTCEFunctions.getText( "dialog_findparameter_found" ) ); // NOI18N
         } else {
-            resultsText.setText( XTCEFunctions.getText( "dialog_findparameter_none" ) +
-                                 " '" +
+            resultsText.setText( XTCEFunctions.getText( "dialog_findparameter_none" ) + // NOI18N
+                                 " '" + // NOI18N
                                  searchText +
-                                 "'" );
+                                 "'" ); // NOI18N
             return;
         }
 

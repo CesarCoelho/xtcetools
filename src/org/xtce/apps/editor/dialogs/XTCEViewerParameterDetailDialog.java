@@ -15,7 +15,7 @@
  * 
  */
 
-package org.xtce.apps.editor.ui;
+package org.xtce.apps.editor.dialogs;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -42,6 +42,8 @@ import org.omg.space.xtce.ParameterTypeSetType.BooleanParameterType;
 import org.omg.space.xtce.PolynomialType;
 import org.omg.space.xtce.SplinePointType;
 import org.omg.space.xtce.ValueEnumerationType;
+import org.xtce.apps.editor.ui.XTCEViewerAncillaryDataRow;
+import org.xtce.apps.editor.ui.XTCEViewerFunctions;
 import org.xtce.toolkit.XTCEFunctions;
 import org.xtce.toolkit.XTCETypedObject;
 import org.xtce.toolkit.XTCETypedObject.EngineeringType;

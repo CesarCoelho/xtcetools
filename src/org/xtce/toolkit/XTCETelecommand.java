@@ -96,21 +96,38 @@ public class XTCETelecommand extends XTCENamedObject {
 
             metaCommand_ = (MetaCommandType)metaCommandObj;
             populateArguments( dbReference );
+
             if ( metaCommand_.getCommandContainer() != null ) {
                 container_ = new XTCETCContainer( path,
                                                   makeContainerInheritanceString( metaCommand_.getCommandContainer(), dbReference ),
                                                   metaCommand_.getCommandContainer() );
             }
-            System.out.println( "Made MetaCommand: " + getName() + " IPath: " + iPath_ + " Path: " + getSpaceSystemPath() );
-            for ( XTCEArgument arg : argumentList_ ) {
-                System.out.println( "Argument " + arg.getName() + " type " + arg.getTypeReferenceFullPath() );
-            }
+
+            //System.out.println( "Made MetaCommand: " +
+            //                    getName() +
+            //                    " IPath: " +
+            //                    iPath_ +
+            //                    " Path: " +
+            //                    getSpaceSystemPath() );
+
+            //for ( XTCEArgument arg : argumentList_ ) {
+            //    System.out.println( "Argument " +
+            //                        arg.getName() +
+            //                        " type " +
+            //                        arg.getTypeReferenceFullPath() );
+            //}
 
         } else if ( metaCommandObj.getClass() == BlockMetaCommand.class ) {
 
             blockMetaCommand_ = (BlockMetaCommand)metaCommandObj;
-            argumentList_     = new ArrayList<XTCEArgument>();
-            System.out.println( "Made MetaCommand: " + getName() + " IPath: " + iPath_ + " Path: " + getSpaceSystemPath() );
+            argumentList_     = new ArrayList<>();
+
+            //System.out.println( "Made MetaCommand: " +
+            //                    getName() +
+            //                    " IPath: " +
+            //                    iPath_ +
+            //                    " Path: " +
+            //                    getSpaceSystemPath() );
 
         }
 
@@ -675,11 +692,10 @@ public class XTCETelecommand extends XTCENamedObject {
 
     // Private Data Members
 
-    private String                  iPath_            = null;
-    private MetaCommandType         metaCommand_      = null;
-    private BlockMetaCommand        blockMetaCommand_ = null;
-    private ArrayList<XTCEAlias>    aliasList_        = null;
-    private ArrayList<XTCEArgument> argumentList_     = null;
-    private XTCETCContainer         container_        = null;
+    private String             iPath_            = null;
+    private MetaCommandType    metaCommand_      = null;
+    private BlockMetaCommand   blockMetaCommand_ = null;
+    private List<XTCEArgument> argumentList_     = null;
+    private XTCETCContainer    container_        = null;
 
 }

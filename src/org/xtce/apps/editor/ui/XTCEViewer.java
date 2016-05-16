@@ -17,6 +17,21 @@
 
 package org.xtce.apps.editor.ui;
 
+import org.xtce.apps.editor.dialogs.XTCEViewerCreateEditSpaceSystemDialog;
+import org.xtce.apps.editor.dialogs.XTCEViewerXpathQueryDialog;
+import org.xtce.apps.editor.dialogs.XTCEViewerTelecommandFindDialog;
+import org.xtce.apps.editor.dialogs.XTCEViewerParameterXmlDialog;
+import org.xtce.apps.editor.dialogs.XTCEViewerParameterUsageDialog;
+import org.xtce.apps.editor.dialogs.XTCEViewerParameterFindDialog;
+import org.xtce.apps.editor.dialogs.XTCEViewerParameterDetailDialog;
+import org.xtce.apps.editor.dialogs.XTCEViewerHelpMenuAboutDialog;
+import org.xtce.apps.editor.dialogs.XTCEViewerHelpBrowserDialog;
+import org.xtce.apps.editor.dialogs.XTCEViewerEncodeDecodeItemDialog;
+import org.xtce.apps.editor.dialogs.XTCEViewerContainerXmlDialog;
+import org.xtce.apps.editor.dialogs.XTCEViewerContainerFindDialog;
+import org.xtce.apps.editor.dialogs.XTCEViewerContainerContentDialog;
+import org.xtce.apps.editor.dialogs.XTCEViewerAliasNamespaceDialog;
+import org.xtce.apps.editor.dialogs.XTCEViewerDatabaseMetricsDialog;
 import java.awt.BorderLayout;
 import java.awt.Rectangle;
 import java.awt.Window;
@@ -62,7 +77,6 @@ import org.xtce.toolkit.XTCEContainerContentEntry.FieldType;
 import org.xtce.toolkit.XTCEContainerEntryValue;
 import org.xtce.toolkit.XTCEFunctions;
 import org.xtce.toolkit.XTCENamedObject;
-import org.xtce.toolkit.XTCESpaceSystemMetrics;
 import org.xtce.toolkit.XTCETMStream;
 import org.xtce.toolkit.XTCETelecommand;
 import org.xtce.toolkit.XTCETelecommandContentModel;
@@ -154,34 +168,6 @@ public class XTCEViewer extends javax.swing.JFrame {
         exportContainersCometRadioButton = new javax.swing.JRadioButton();
         exportContainersIncludeHeaderRowCheckbox = new javax.swing.JCheckBox();
         exportContainersUseNamespacesCheckbox = new javax.swing.JCheckBox();
-        databaseMetricsPanel = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
-        jLabel14 = new javax.swing.JLabel();
-        spaceSystemsTotal = new javax.swing.JTextField();
-        tmParametersTotal = new javax.swing.JTextField();
-        tcParametersTotal = new javax.swing.JTextField();
-        parametersTotal = new javax.swing.JTextField();
-        tmParameterTypesTotal = new javax.swing.JTextField();
-        tcParameterTypesTotal = new javax.swing.JTextField();
-        parameterTypesTotal = new javax.swing.JTextField();
-        argumentsTotal = new javax.swing.JTextField();
-        argumentTypesTotal = new javax.swing.JTextField();
-        telecommandsTotal = new javax.swing.JTextField();
-        tmContainersTotal = new javax.swing.JTextField();
-        tcContainersTotal = new javax.swing.JTextField();
-        containersTotal = new javax.swing.JTextField();
         messagesDialogPanel = new javax.swing.JScrollPane();
         messagesDialogText = new javax.swing.JTextArea();
         streamTreePopupMenu = new javax.swing.JPopupMenu();
@@ -606,167 +592,6 @@ public class XTCEViewer extends javax.swing.JFrame {
                 .addComponent(exportContainersIncludeHeaderRowCheckbox)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(exportContainersUseNamespacesCheckbox)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        jLabel1.setText(bundle.getString("dialog_metrics_databasetotals_label")); // NOI18N
-
-        jLabel2.setText(bundle.getString("dialog_metrics_spacesystemcount_text")); // NOI18N
-
-        jLabel3.setText(bundle.getString("dialog_metrics_tmparameters_text")); // NOI18N
-
-        jLabel4.setText(bundle.getString("dialog_metrics_tcparameters_text")); // NOI18N
-
-        jLabel5.setText(bundle.getString("dialog_metrics_totalparameters_text")); // NOI18N
-
-        jLabel6.setText(bundle.getString("dialog_metrics_tmparametertypes_text")); // NOI18N
-
-        jLabel7.setText(bundle.getString("dialog_metrics_tcparametertypes_text")); // NOI18N
-
-        jLabel8.setText(bundle.getString("dialog_metrics_totalparametertypes_text")); // NOI18N
-
-        jLabel9.setText(bundle.getString("dialog_metrics_tcarguments_text")); // NOI18N
-
-        jLabel10.setText(bundle.getString("dialog_metrics_tcargumenttypes_text")); // NOI18N
-
-        jLabel11.setText(bundle.getString("dialog_metrics_telecommands_text")); // NOI18N
-
-        jLabel12.setText(bundle.getString("dialog_metrics_tmcontainers_text")); // NOI18N
-
-        jLabel13.setText(bundle.getString("dialog_metrics_tccontainers_text")); // NOI18N
-
-        jLabel14.setText(bundle.getString("dialog_metrics_totalcontainers_text")); // NOI18N
-
-        spaceSystemsTotal.setEditable(false);
-
-        tmParametersTotal.setEditable(false);
-
-        tcParametersTotal.setEditable(false);
-
-        parametersTotal.setEditable(false);
-
-        tmParameterTypesTotal.setEditable(false);
-
-        tcParameterTypesTotal.setEditable(false);
-
-        parameterTypesTotal.setEditable(false);
-
-        argumentsTotal.setEditable(false);
-
-        argumentTypesTotal.setEditable(false);
-
-        telecommandsTotal.setEditable(false);
-
-        tmContainersTotal.setEditable(false);
-
-        tcContainersTotal.setEditable(false);
-
-        containersTotal.setEditable(false);
-
-        javax.swing.GroupLayout databaseMetricsPanelLayout = new javax.swing.GroupLayout(databaseMetricsPanel);
-        databaseMetricsPanel.setLayout(databaseMetricsPanelLayout);
-        databaseMetricsPanelLayout.setHorizontalGroup(
-            databaseMetricsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(databaseMetricsPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(databaseMetricsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, databaseMetricsPanelLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jLabel1)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, databaseMetricsPanelLayout.createSequentialGroup()
-                        .addGroup(databaseMetricsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel2))
-                        .addGap(59, 59, 59)
-                        .addGroup(databaseMetricsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(tmParametersTotal, javax.swing.GroupLayout.DEFAULT_SIZE, 65, Short.MAX_VALUE)
-                            .addComponent(spaceSystemsTotal)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, databaseMetricsPanelLayout.createSequentialGroup()
-                        .addGroup(databaseMetricsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel14)
-                            .addComponent(jLabel13)
-                            .addComponent(jLabel12)
-                            .addComponent(jLabel11)
-                            .addComponent(jLabel10)
-                            .addComponent(jLabel9)
-                            .addComponent(jLabel8)
-                            .addComponent(jLabel7)
-                            .addComponent(jLabel6)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel4))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(databaseMetricsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(tcParametersTotal, javax.swing.GroupLayout.DEFAULT_SIZE, 65, Short.MAX_VALUE)
-                            .addComponent(parametersTotal)
-                            .addComponent(tmParameterTypesTotal)
-                            .addComponent(tcParameterTypesTotal)
-                            .addComponent(parameterTypesTotal)
-                            .addComponent(argumentsTotal)
-                            .addComponent(argumentTypesTotal)
-                            .addComponent(telecommandsTotal)
-                            .addComponent(tmContainersTotal)
-                            .addComponent(tcContainersTotal)
-                            .addComponent(containersTotal))))
-                .addContainerGap())
-        );
-        databaseMetricsPanelLayout.setVerticalGroup(
-            databaseMetricsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(databaseMetricsPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(databaseMetricsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(spaceSystemsTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(databaseMetricsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tmParametersTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(databaseMetricsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tcParametersTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(databaseMetricsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(parametersTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(databaseMetricsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tmParameterTypesTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(databaseMetricsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tcParameterTypesTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(databaseMetricsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(parameterTypesTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel8))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(databaseMetricsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(argumentsTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel9))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(databaseMetricsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(argumentTypesTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel10))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(databaseMetricsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(telecommandsTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel11))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(databaseMetricsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tmContainersTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel12))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(databaseMetricsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tcContainersTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel13))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(databaseMetricsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(containersTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel14))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -2007,8 +1832,8 @@ public class XTCEViewer extends javax.swing.JFrame {
         // just cancel, and in that case is it "not accepted", so we just
         // return and do nothing.
 
-        XTCEViewerCreateEditSpaceSystem dialog =
-            new XTCEViewerCreateEditSpaceSystem( this, true, null );
+        XTCEViewerCreateEditSpaceSystemDialog dialog =
+            new XTCEViewerCreateEditSpaceSystemDialog( this, true, null );
         dialog.setVisible( true );
         if ( dialog.isAccepted() == false ) {
             return;
@@ -2050,8 +1875,8 @@ public class XTCEViewer extends javax.swing.JFrame {
             return;
         }
 
-        XTCEViewerCreateEditSpaceSystem dialog =
-            new XTCEViewerCreateEditSpaceSystem( this, true, null );
+        XTCEViewerCreateEditSpaceSystemDialog dialog =
+            new XTCEViewerCreateEditSpaceSystemDialog( this, true, null );
         dialog.setVisible( true );
 
         if ( dialog.isAccepted() == true ) {
@@ -2580,26 +2405,7 @@ public class XTCEViewer extends javax.swing.JFrame {
 
         if ( fileOpenWarning() == true ) return;
 
-        XTCESpaceSystemMetrics metrics = xtceDatabaseFile.getMetrics();
-
-        spaceSystemsTotal.setText( Long.toString( metrics.getNumberOfChildSpaceSystems() ) );
-        tmParametersTotal.setText( Long.toString( metrics.getNumberOfTelemetryParameters() ) );
-        tcParametersTotal.setText( Long.toString( metrics.getNumberOfTelecommandParameters() ) );
-        parametersTotal.setText( Long.toString( metrics.getNumberOfParameters() ) );
-        tmParameterTypesTotal.setText( Long.toString( metrics.getNumberOfTelemetryParameterTypes() ) );
-        tcParameterTypesTotal.setText( Long.toString( metrics.getNumberOfTelecommandParameterTypes() ) );
-        parameterTypesTotal.setText( Long.toString( metrics.getNumberOfParameterTypes() ) );
-        argumentsTotal.setText( Long.toString( metrics.getNumberOfTelecommandArguments() ) );
-        argumentTypesTotal.setText( Long.toString( metrics.getNumberOfTelecommandArgumentTypes() ) );
-        telecommandsTotal.setText( Long.toString( metrics.getNumberOfTelecommands() ) );
-        tmContainersTotal.setText( Long.toString( metrics.getNumberOfTelemetryContainers() ) );
-        tcContainersTotal.setText( Long.toString( metrics.getNumberOfTelecommandContainers() ) );
-        containersTotal.setText( Long.toString( metrics.getNumberOfContainers() ) );
-
-        JOptionPane.showMessageDialog( this,
-                                       databaseMetricsPanel,
-                                       XTCEFunctions.getText( "dialog_totals_text" ), // NOI18N
-                                       JOptionPane.PLAIN_MESSAGE);
+        new XTCEViewerDatabaseMetricsDialog( this, false, xtceDatabaseFile );
 
     }//GEN-LAST:event_mainWindowShowMetricsMenuItemActionPerformed
 
@@ -4016,14 +3822,15 @@ public class XTCEViewer extends javax.swing.JFrame {
 
         if ( ( node != null ) && ( node.getTelecommandReference() != null ) ) {
 
-            //System.out.println( "Selected TC " + node.getTelecommandPath() );
+            System.out.println( "Selected TC " + node.getTelecommandPath() );
+
             XTCETelecommand tcObject  = node.getTelecommandReference();
 
             boolean showAllConditionals =
                 prefs.getShowAllContainerConditionalsOption();
 
             try {
-                // @todo this might be eligible to short circuit
+                // TODO this might be eligible to short circuit
                 XTCETelecommandContentModel containerModel =
                     xtceDatabaseFile.processTelecommand( tcObject,
                                                          values,
@@ -4919,8 +4726,6 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem addSpaceSystemMenuItem;
-    private javax.swing.JTextField argumentTypesTotal;
-    private javax.swing.JTextField argumentsTotal;
     private javax.swing.JMenuItem cloneContainerDrawingMenuItem;
     private javax.swing.JRadioButtonMenuItem containerDrawingLeftToRight;
     private javax.swing.JMenu containerDrawingOrientationMenu;
@@ -4929,7 +4734,6 @@ public class XTCEViewer extends javax.swing.JFrame {
     private javax.swing.JPanel containerExportPanel;
     private javax.swing.JPopupMenu containerTablePopupMenu;
     private javax.swing.JPopupMenu containerTreePopupMenu;
-    private javax.swing.JTextField containersTotal;
     private javax.swing.JMenuItem copyContainerCellMenuItem;
     private javax.swing.JMenuItem copyContainerColumnMenuItem;
     private javax.swing.JMenuItem copyContainerRowMenuItem;
@@ -4938,7 +4742,6 @@ public class XTCEViewer extends javax.swing.JFrame {
     private javax.swing.JMenuItem copyParameterColumnMenuItem;
     private javax.swing.JMenuItem copyParameterRowMenuItem;
     private javax.swing.JMenuItem copyParameterTableMenuItem;
-    private javax.swing.JPanel databaseMetricsPanel;
     private javax.swing.JMenuItem decodeContainerDrawingMenuItem;
     private javax.swing.JMenuItem decodeContainerMenuItem;
     private javax.swing.JMenuItem decodeStreamMenuItem;
@@ -4963,20 +4766,6 @@ public class XTCEViewer extends javax.swing.JFrame {
     private javax.swing.JLabel exportParametersLabel;
     private javax.swing.JCheckBox exportParametersUseNamespacesCheckbox;
     private javax.swing.JMenuItem goToEntryMenuItem;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSplitPane jSplitPane1;
@@ -5038,8 +4827,6 @@ public class XTCEViewer extends javax.swing.JFrame {
     private javax.swing.JPanel parameterExportPanel;
     private javax.swing.ButtonGroup parameterFieldExclusion;
     private javax.swing.ButtonGroup parameterLocationExclusion;
-    private javax.swing.JTextField parameterTypesTotal;
-    private javax.swing.JTextField parametersTotal;
     private javax.swing.JMenuItem saveContainerDrawingMenuItem;
     private javax.swing.JMenuItem setConditionTrueMenuItem;
     private javax.swing.JMenuItem setRepeatCounterMenuItem;
@@ -5054,9 +4841,7 @@ public class XTCEViewer extends javax.swing.JFrame {
     private javax.swing.JPopupMenu spaceSystemDetailPopupMenu;
     private javax.swing.JLabel spaceSystemOverviewLabel;
     private javax.swing.JPanel spaceSystemOverviewPanel;
-    private javax.swing.JTextField spaceSystemsTotal;
     private javax.swing.JPopupMenu streamTreePopupMenu;
-    private javax.swing.JTextField tcContainersTotal;
     private javax.swing.JScrollPane tcContentDrawingScrollPane;
     private javax.swing.JScrollPane tcContentScrollPane;
     private javax.swing.JSplitPane tcContentSplitPane;
@@ -5067,17 +4852,14 @@ public class XTCEViewer extends javax.swing.JFrame {
     private javax.swing.JTree tcDefinitionsSpaceSystemTree;
     private javax.swing.JTree tcParameterSpaceSystemTree;
     private javax.swing.JScrollPane tcParameterSpaceSystemTreeScrollPane;
-    private javax.swing.JTextField tcParameterTypesTotal;
     private javax.swing.JLabel tcParametersOverviewLabel;
     private javax.swing.JPanel tcParametersPanel;
     private javax.swing.JTable tcParametersTable;
     private javax.swing.JScrollPane tcParametersTableScrollPane;
-    private javax.swing.JTextField tcParametersTotal;
     private javax.swing.JSplitPane tcSpaceSystemSplitPane;
     private javax.swing.JTree tcTree;
     private javax.swing.JScrollPane tcTreeScrollPane;
     private javax.swing.JPanel tcTypesPanel;
-    private javax.swing.JTextField telecommandsTotal;
     private javax.swing.JSplitPane tmContainerContentSplitPane;
     private javax.swing.JLabel tmContainerDetailsLabel;
     private javax.swing.JScrollPane tmContainerDrawingScrollPane;
@@ -5086,15 +4868,12 @@ public class XTCEViewer extends javax.swing.JFrame {
     private javax.swing.JTree tmContainerTree;
     private javax.swing.JScrollPane tmContainerTreeScrollPane;
     private javax.swing.JPanel tmContainersPanel;
-    private javax.swing.JTextField tmContainersTotal;
     private javax.swing.JTree tmParameterSpaceSystemTree;
     private javax.swing.JScrollPane tmParameterSpaceSystemTreeScrollPane;
-    private javax.swing.JTextField tmParameterTypesTotal;
     private javax.swing.JLabel tmParametersOverviewLabel;
     private javax.swing.JPanel tmParametersPanel;
     private javax.swing.JTable tmParametersTable;
     private javax.swing.JScrollPane tmParametersTableScrollPane;
-    private javax.swing.JTextField tmParametersTotal;
     private javax.swing.JTree tmStreamContentTree;
     private javax.swing.JLabel tmStreamDetailsLabel;
     private javax.swing.JTree tmStreamTree;

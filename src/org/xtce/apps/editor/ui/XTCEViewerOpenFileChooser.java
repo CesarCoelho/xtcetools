@@ -26,9 +26,11 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.xtce.toolkit.XTCEFunctions;
 
-/**
+/** This dialog creates the File Chooser for XTCE documents to support the
+ * XTCEViewer application.
  *
  * @author dovereem
+ *
  */
 
 public class XTCEViewerOpenFileChooser extends JFileChooser {

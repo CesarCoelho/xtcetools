@@ -15,7 +15,7 @@
  * 
  */
 
-package org.xtce.apps.editor.ui;
+package org.xtce.apps.editor.dialogs;
 
 import java.awt.Frame;
 import org.xtce.toolkit.XTCEDatabaseException;
@@ -49,9 +49,9 @@ public class XTCEViewerContainerXmlDialog extends javax.swing.JDialog {
      *
      */
 
-    XTCEViewerContainerXmlDialog( Frame           parent,
-                                  boolean         modal,
-                                  XTCETMContainer container )
+    public XTCEViewerContainerXmlDialog( Frame           parent,
+                                         boolean         modal,
+                                         XTCETMContainer container )
         throws XTCEDatabaseException {
 
         super( parent, modal );
@@ -86,9 +86,9 @@ public class XTCEViewerContainerXmlDialog extends javax.swing.JDialog {
      *
      */
 
-    XTCEViewerContainerXmlDialog( Frame           parent,
-                                  boolean         modal,
-                                  XTCETMStream    stream )
+    public XTCEViewerContainerXmlDialog( Frame           parent,
+                                         boolean         modal,
+                                         XTCETMStream    stream )
         throws XTCEDatabaseException {
 
         super( parent, modal );
@@ -101,6 +101,9 @@ public class XTCEViewerContainerXmlDialog extends javax.swing.JDialog {
         containerDefinitionText.setText( stream.toXml() );
         containerLabel.setText(
             XTCEFunctions.getText( "dialog_xmlsingle_stream" ) ); // NOI18N
+        setTitle( XTCEFunctions.getText( "dialog_stream_xml_title" ) + // NOI18N
+                  ": " + // NOI18N
+                  stream.getName() );
 
         pack();
         setLocationRelativeTo( parent );

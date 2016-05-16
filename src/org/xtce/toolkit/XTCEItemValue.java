@@ -1675,19 +1675,26 @@ public class XTCEItemValue {
 
         // TODO: Support quadratics because I did it on the other side
 
-        if ( order.intValue() > 1 ) {
+        if ( ( order.intValue() > 1 ) || ( order.intValue() < 0 ) ) {
             warn( itemName_ + " Unsupported Spline " +
                   "order of approximation " + order.toString() +
-                  ", only flat, linear, and quadratic (0, 1, 2) are " +
-                  "supported." );
-            return 0.0;
+                  ", only flat and linear (0, 1) are supported." );
+            return xValue;
+        }
+
+        if ( points.size() < 2 ) {
+            warn( itemName_ + " Needs at least 2 spline points to calibrate" );
+            return xValue;
         }
 
         double rawLow  = points.get( 0 ).getRaw();
         double calLow  = points.get( 0 ).getCalibrated();
+        double rawHigh = rawLow;
+        double calHigh = calLow;
+
         for ( int iii = 1; iii < points.size(); ++iii ) {
-            double rawHigh = points.get( iii ).getRaw();
-            double calHigh = points.get( iii ).getCalibrated();
+            rawHigh = points.get( iii ).getRaw();
+            calHigh = points.get( iii ).getCalibrated();
             if ( ( xValue >= rawLow ) && ( xValue <= rawHigh ) ) {
                 if ( order.intValue() == 0 ) {
                     // if it equals rawHigh, then take the next one as there is
@@ -1696,6 +1703,15 @@ public class XTCEItemValue {
                         return calLow;
                     }
                 } else if ( order.intValue() == 1 ) {
+                    if ( rawHigh - rawLow == 0.0 ) {
+                        warn( "Spline Calibrator for " +
+                              itemName_ +
+                              " has infinite slope between cal values " +
+                              Double.toString( calLow ) +
+                              " and " +
+                              Double.toString( calHigh ) );
+                        return calLow;
+                    }
                     double slope = ( calHigh - calLow ) / ( rawHigh - rawLow );
                     double intercept = calLow - ( slope * rawLow );
                     //double slope = ( rawHigh - rawLow ) / ( calHigh - calLow );
@@ -1710,9 +1726,14 @@ public class XTCEItemValue {
             calLow = calHigh;
         }
 
-        // out of bounds case
+        if ( extrapolate == true ) {
+            warn( itemName_ + " Extrapolation is not yet supported" );
+        }
 
-        return xValue;
+        // TODO out of bounds case, add extrapolate support
+
+        return calHigh;
+
     }
 
     private BigInteger encodeUtfString( BigInteger retValue ) {
@@ -2134,8 +2155,21 @@ public class XTCEItemValue {
             if ( interpolateOrder == 0 ) {
                 return new BigDecimal( ( x1 + x2 ) / 2.0 );
             } else if ( interpolateOrder == 1 ) {
+                if ( x2 - x1 == 0.0 ) {
+                    warn( "Spline Calibrator for " +
+                          itemName_ +
+                          " has infinite slope between cal values " +
+                          Double.toString( y1 ) +
+                          " and " +
+                          Double.toString( y2 ) );
+                    return new BigDecimal( x1 );
+                }
                 double slope = ( y2 - y1 ) / ( x2 - x1 );
                 //System.out.println( "Slope = " + Double.toString( slope ) );
+                if ( slope == 0.0 ) {
+                    // does not matter which since slope is 0
+                    return new BigDecimal( x1 );
+                }
                 double rawValue = ( calValue.doubleValue() - y1 ) / slope + x1;
                 //System.out.println( "Raw = " + Double.toString( rawValue ) );
                 return new BigDecimal( rawValue );
@@ -2174,8 +2208,7 @@ public class XTCEItemValue {
     private BigInteger integerEncodingUncalibrate( final BigDecimal calValue ) {
 
         if ( defCal_ == null ) {
-            long value = Math.round( calValue.doubleValue() );
-            return new BigInteger( Long.toString( value ) );
+            return BigInteger.valueOf( Math.round( calValue.doubleValue() ) );
         }
 
         PolynomialType polyCal = defCal_.getPolynomialCalibrator();
@@ -2320,8 +2353,21 @@ public class XTCEItemValue {
             if ( interpolateOrder == 0 ) {
                 return new BigDecimal( ( x1 + x2 ) / 2.0 ).toBigInteger();
             } else if ( interpolateOrder == 1 ) {
+                if ( x2 - x1 == 0.0 ) {
+                    warn( "Spline Calibrator for " +
+                          itemName_ +
+                          " has infinite slope between cal values " +
+                          Double.toString( y1 ) +
+                          " and " +
+                          Double.toString( y2 ) );
+                    return new BigDecimal( x1 ).toBigInteger();
+                }
                 double slope = ( y2 - y1 ) / ( x2 - x1 );
                 //System.out.println( "Slope = " + Double.toString( slope ) );
+                if ( slope == 0.0 ) {
+                    // does not matter which since slope is 0
+                    return new BigDecimal( x1 ).toBigInteger();
+                }
                 double rawValue = ( calValue.doubleValue() - y1 ) / slope + x1;
                 //System.out.println( "Raw = " + Double.toString( rawValue ) );
                 return new BigDecimal( rawValue ).toBigInteger();
@@ -2343,8 +2389,7 @@ public class XTCEItemValue {
             return BigInteger.ZERO;
         }
 
-        long value = calValue.longValue();
-        return new BigInteger( Long.toString( value ) );
+        return BigInteger.valueOf( calValue.longValue() );
 
     }
 

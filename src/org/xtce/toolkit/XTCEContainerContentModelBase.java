@@ -164,6 +164,118 @@ abstract class XTCEContainerContentModelBase {
         showAllConditions_ = flag;
     }
 
+    /** Retrieve the compatibility of this container with the raw bits provided
+     * by the caller to determine if this is the right model object to match
+     * the binary.
+     *
+     * @param rawBits BitSet containing the raw binary bits of a container.
+     *
+     * @return boolean indicating if this container matches the supplied binary
+     * based on the inheritance model restrictions.
+     *
+     * @throws XTCEDatabaseException thrown in the event that the container
+     * contents cannot be processed.  In the event that the container has
+     * already been processed, which is usually the case, then this method
+     * cannot throw.
+     *
+     */
+
+    public final boolean isProcessingCompatible( BitSet rawBits )
+        throws XTCEDatabaseException {
+
+        // TODO: This method does not yet differentiate between Parameter and
+        // Argument.
+
+        List<XTCEContainerContentEntry> entries = getContentList();
+
+        for ( XTCEContainerContentEntry entry : entries ) {
+
+            XTCEContainerEntryValue valueObj = entry.getValue();
+
+            if ( ( valueObj                                      != null  ) &&
+                 ( valueObj.toStringWithoutParameter().isEmpty() == false ) ) {
+
+                BitSet raw = valueObj.getRawValue();
+                int    sb  = Integer.parseInt( entry.getStartBit() );
+                int    nb  = Integer.parseInt( entry.getRawSizeInBits() );
+
+                for ( int iii = 0; iii < nb; ++iii ) {
+                    if ( rawBits.get( sb + nb - 1 - iii ) != raw.get( iii ) ) {
+                        return false;
+                    }
+                }
+
+            }
+
+        }
+
+        return true;
+
+    }
+
+    /** Encode a raw binary BitSet from the processed container content model
+     * for potential file or wire transmission.
+     *
+     * The binary will be encoded first from the values processed with a
+     * binary or user value set input provided when processing this container
+     * or the default/initial values in the database for parameters that do not
+     * have an assigned value during container processing.
+     *
+     * @return BitSet containing the raw bits representing this container and
+     * the values of the parameters.
+     *
+     * @throws XTCEDatabaseException thrown in the event that the container
+     * contents cannot be processed.  In the event that the container has
+     * already been processed, which is usually the case, then this method
+     * cannot throw.
+     *
+     */
+
+    public final BitSet encodeContainer( ) throws XTCEDatabaseException {
+
+        BitSet rawBits = new BitSet( (int)getTotalSize() );
+
+        List<XTCEContainerContentEntry> entries = getContentList();
+
+        for ( XTCEContainerContentEntry entry : entries ) {
+
+            XTCEContainerEntryValue valueObj = entry.getValue();
+
+            if ( valueObj == null ) {
+                String defaultValue = entry.getInitialValue();
+                if ( defaultValue.isEmpty() == false ) {
+                    if ( entry.getEntryType() == FieldType.PARAMETER ) {
+                        valueObj = new XTCEContainerEntryValue( entry.getParameter(),
+                                                                defaultValue,
+                                                                "==",
+                                                                "Calibrated" );
+                    } else if ( entry.getEntryType() == FieldType.ARGUMENT ) {
+                        valueObj = new XTCEContainerEntryValue( entry.getArgument(),
+                                                                defaultValue,
+                                                                "==",
+                                                                "Calibrated" );
+                    } else {
+                        continue;
+                    }
+                } else {
+                    continue;
+                }
+            }
+
+            BitSet raw = valueObj.getRawValue();
+            int    sb  = Integer.parseInt( entry.getStartBit() );
+            int    nb  = Integer.parseInt( entry.getRawSizeInBits() );
+
+            for ( int iii = 0; iii < nb; ++iii ) {
+                rawBits.set( sb + nb - 1 - iii, raw.get( iii ) );
+            }
+
+        }
+
+        return rawBits;
+
+    }
+
     /** Extracts the raw binary value from a container where the binary of the
      * container has been provided to this object.
      *

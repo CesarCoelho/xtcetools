@@ -15,7 +15,7 @@
  * 
  */
 
-package org.xtce.apps.editor.ui;
+package org.xtce.apps.editor.dialogs;
 
 import java.awt.Frame;
 import org.xtce.toolkit.XTCEDatabaseException;
@@ -46,9 +46,9 @@ public class XTCEViewerParameterXmlDialog extends javax.swing.JDialog {
      *
      */
 
-    XTCEViewerParameterXmlDialog( Frame         parent,
-                                  boolean       modal,
-                                  XTCEParameter parameter )
+    public XTCEViewerParameterXmlDialog( Frame         parent,
+                                         boolean       modal,
+                                         XTCEParameter parameter )
         throws XTCEDatabaseException {
 
         super(parent, modal);
@@ -96,13 +96,14 @@ public class XTCEViewerParameterXmlDialog extends javax.swing.JDialog {
         setName("XML Elements"); // NOI18N
 
         parameterTypeLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        parameterTypeLabel.setText("Parameter Type Definition");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/xtce/toolkit/MessagesBundle"); // NOI18N
+        parameterTypeLabel.setText(bundle.getString("dialog_paramtype_xml_def")); // NOI18N
 
         parameterTypeDefinitionText.setRows(10);
         parameterTypeScrollPane.setViewportView(parameterTypeDefinitionText);
 
         parameterLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        parameterLabel.setText("Parameter Definition");
+        parameterLabel.setText(bundle.getString("dialog_param_xml_def")); // NOI18N
 
         parameterDefinitionText.setRows(3);
         parameterDefinitionScrollPane.setViewportView(parameterDefinitionText);
@@ -110,7 +111,6 @@ public class XTCEViewerParameterXmlDialog extends javax.swing.JDialog {
         buttonPanel.setMaximumSize(new java.awt.Dimension(32767, 47));
         buttonPanel.setMinimumSize(new java.awt.Dimension(0, 47));
 
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/xtce/toolkit/MessagesBundle"); // NOI18N
         acceptButton.setText(bundle.getString("general_accept_text")); // NOI18N
         acceptButton.setMaximumSize(new java.awt.Dimension(100, 25));
         acceptButton.setMinimumSize(new java.awt.Dimension(100, 25));

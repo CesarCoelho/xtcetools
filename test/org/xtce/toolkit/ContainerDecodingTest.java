@@ -99,21 +99,27 @@ public class ContainerDecodingTest {
 
             for ( XTCEContainerContentEntry entry : entries ) {
 
-                if ( entry.getName().equals( "Battery_Voltage_Offset" ) ) {
-                    ++items;
-                    checkEntry( entry, "32", "0", "==3.5{cal}", "2.5", "", "" );
-                } else if ( entry.getName().equals( "Solar_Array_Voltage_1_Offset" ) ) {
-                    ++items;
-                    checkEntry( entry, "32", "48", "==9{cal}", "2", "", "" );
-                } else if ( entry.getName().equals( "Solar_Array_Voltage_2_Offset" ) ) {
-                    ++items;
-                    checkEntry( entry, "32", "80", "==-5{cal}", "1", "", "" );
-                } else if ( entry.getName().equals( "Battery_Current_Offset" ) ) {
-                    ++items;
-                    checkEntry( entry, "64", "112", "==14.25{cal}", "-1.5", "", "" );
-                } else if ( entry.getName().equals( "Default_CPU_Start_Mode" ) ) {
-                    ++items;
-                    checkEntry( entry, "8", "176", "==SAFEHOLD{cal}", "NORMAL", "", "" );
+                switch (entry.getName()) {
+                    case "Battery_Voltage_Offset":
+                        ++items;
+                        checkEntry( entry, "32", "0", "==3.5{cal}", "2.5", "", "" );
+                        break;
+                    case "Solar_Array_Voltage_1_Offset":
+                        ++items;
+                        checkEntry( entry, "32", "48", "==9{cal}", "2", "", "" );
+                        break;
+                    case "Solar_Array_Voltage_2_Offset":
+                        ++items;
+                        checkEntry( entry, "32", "80", "==-5{cal}", "1", "", "" );
+                        break;
+                    case "Battery_Current_Offset":
+                        ++items;
+                        checkEntry( entry, "64", "112", "==14.25{cal}", "-1.5", "", "" );
+                        break;
+                    case "Default_CPU_Start_Mode":
+                        ++items;
+                        checkEntry( entry, "8", "176", "==SAFEHOLD{cal}", "NORMAL", "", "" );
+                        break;
                 }
 
             }
@@ -164,45 +170,59 @@ public class ContainerDecodingTest {
 
             for ( XTCEContainerContentEntry entry : entries ) {
 
-                if ( entry.getName().equals( "CCSDS_Packet_ID.Version" ) ) {
-                    ++items;
-                    checkEntry( entry, "3", "0", "==0{cal}", "0", "", "" );
-                } else if ( entry.getName().equals( "CCSDS_Packet_ID.Type" ) ) {
-                    ++items;
-                    checkEntry( entry, "1", "3", "==TM{cal}", "", "", "" );
-                } else if ( entry.getName().equals( "CCSDS_Packet_ID.SecHdrFlag" ) ) {
-                    ++items;
-                    checkEntry( entry, "1", "4", "==NotPresent{cal}", "", "", "" );
-                } else if ( entry.getName().equals( "CCSDS_Packet_ID.APID" ) ) {
-                    ++items;
-                    checkEntry( entry, "11", "5", "==1{cal}", "2047", "", "" );
-                } else if ( entry.getName().equals( "CCSDS_Packet_Sequence.GroupFlags" ) ) {
-                    ++items;
-                    checkEntry( entry, "2", "16", "==3{cal}", "3", "", "" );
-                } else if ( entry.getName().equals( "CCSDS_Packet_Sequence.Count" ) ) {
-                    ++items;
-                    checkEntry( entry, "14", "18", "==3783{cal}", "", "", "" );
-                } else if ( entry.getName().equals( "CCSDS_Packet_Length" ) ) {
-                    ++items;
-                    checkEntry( entry, "16", "32", "==11{cal}", "", "", "" );
-                } else if ( entry.getName().equals( "Battery_Voltage" ) ) {
-                    ++items;
-                    checkEntry( entry, "32", "48", "==12.3{cal}", "", "", "" );
-                } else if ( entry.getName().equals( "Battery_Current" ) ) {
-                    ++items;
-                    checkEntry( entry, "32", "80", "==0.5{cal}", "", "", "" );
-                } else if ( entry.getName().equals( "Battery_Charge_Mode" ) ) {
-                    ++items;
-                    checkEntry( entry, "1", "112", "==CHARGE{cal}", "", "", "" );
-                } else if ( entry.getName().equals( "SomeParameter" ) ) {
-                    ++items;
-                    checkEntry( entry, "7", "113", "==5{cal}", "", "", "" );
-                } else if ( entry.getName().equals( "Solar_Array_Voltage_1" ) ) {
-                    ++items;
-                    checkEntry( entry, "12", "120", "==23.0{cal}", "", "", "" );
-                } else if ( entry.getName().equals( "Solar_Array_Voltage_2" ) ) {
-                    ++items;
-                    checkEntry( entry, "12", "132", "==23.0{cal}", "", "", "" );
+                switch (entry.getName()) {
+                    case "CCSDS_Packet_ID.Version":
+                        ++items;
+                        checkEntry( entry, "3", "0", "==0{cal}", "0", "", "" );
+                        break;
+                    case "CCSDS_Packet_ID.Type":
+                        ++items;
+                        checkEntry( entry, "1", "3", "==TM{cal}", "", "", "" );
+                        break;
+                    case "CCSDS_Packet_ID.SecHdrFlag":
+                        ++items;
+                        checkEntry( entry, "1", "4", "==NotPresent{cal}", "", "", "" );
+                        break;
+                    case "CCSDS_Packet_ID.APID":
+                        ++items;
+                        checkEntry( entry, "11", "5", "==1{cal}", "2047", "", "" );
+                        break;
+                    case "CCSDS_Packet_Sequence.GroupFlags":
+                        ++items;
+                        checkEntry( entry, "2", "16", "==3{cal}", "3", "", "" );
+                        break;
+                    case "CCSDS_Packet_Sequence.Count":
+                        ++items;
+                        checkEntry( entry, "14", "18", "==3783{cal}", "", "", "" );
+                        break;
+                    case "CCSDS_Packet_Length":
+                        ++items;
+                        checkEntry( entry, "16", "32", "==11{cal}", "", "", "" );
+                        break;
+                    case "Battery_Voltage":
+                        ++items;
+                        checkEntry( entry, "32", "48", "==12.3{cal}", "", "", "" );
+                        break;
+                    case "Battery_Current":
+                        ++items;
+                        checkEntry( entry, "32", "80", "==0.5{cal}", "", "", "" );
+                        break;
+                    case "Battery_Charge_Mode":
+                        ++items;
+                        checkEntry( entry, "1", "112", "==CHARGE{cal}", "", "", "" );
+                        break;
+                    case "SomeParameter":
+                        ++items;
+                        checkEntry( entry, "7", "113", "==5{cal}", "", "", "" );
+                        break;
+                    case "Solar_Array_Voltage_1":
+                        ++items;
+                        checkEntry( entry, "12", "120", "==23.0{cal}", "", "", "" );
+                        break;
+                    case "Solar_Array_Voltage_2":
+                        ++items;
+                        checkEntry( entry, "12", "132", "==23.0{cal}", "", "", "" );
+                        break;
                 }
 
             }
@@ -253,40 +273,48 @@ public class ContainerDecodingTest {
 
             for ( XTCEContainerContentEntry entry : entries ) {
 
-                if ( entry.getName().equals( "CCSDS_Packet_ID.Version" ) ) {
-                    ++items;
-                    checkEntry( entry, "3", "0", "==0{cal}", "0", "", "" );
-                } else if ( entry.getName().equals( "CCSDS_Packet_ID.Type" ) ) {
-                    ++items;
-                    checkEntry( entry, "1", "3", "==TM{cal}", "", "", "" );
-                } else if ( entry.getName().equals( "CCSDS_Packet_ID.SecHdrFlag" ) ) {
-                    ++items;
-                    checkEntry( entry, "1", "4", "==NotPresent{cal}", "", "", "" );
-                } else if ( entry.getName().equals( "CCSDS_Packet_ID.APID" ) ) {
-                    ++items;
-                    checkEntry( entry, "11", "5", "==3{cal}", "2047", "", "" );
-                } else if ( entry.getName().equals( "CCSDS_Packet_Sequence.GroupFlags" ) ) {
-                    ++items;
-                    checkEntry( entry, "2", "16", "==3{cal}", "3", "", "" );
-                } else if ( entry.getName().equals( "CCSDS_Packet_Sequence.Count" ) ) {
-                    ++items;
-                    checkEntry( entry, "14", "18", "==3786{cal}", "", "", "" );
-                } else if ( entry.getName().equals( "CCSDS_Packet_Length" ) ) {
-                    ++items;
-                    checkEntry( entry, "16", "32", "==19{cal}", "", "", "" );
-                } else if ( entry.getName().equals( "Basic_string_uint32" ) ) {
-                    ++items;
-                    if ( items == 8 ) {
-                        checkEntry( entry, "32", "48", "==1{cal}", "", "", XTCEFunctions.makeRepeatString( 1, 5 ) );
-                    } else if ( items == 9 ) {
-                        checkEntry( entry, "32", "80", "==0{cal}", "", "", XTCEFunctions.makeRepeatString( 2, 5 ) );
-                    } else if ( items == 10 ) {
-                        checkEntry( entry, "32", "112", "==65535{cal}", "", "", XTCEFunctions.makeRepeatString( 3, 5 ) );
-                    } else if ( items == 11 ) {
-                        checkEntry( entry, "32", "144", "==21845{cal}", "", "", XTCEFunctions.makeRepeatString( 4, 5 ) );
-                    } else if ( items == 12 ) {
-                        checkEntry( entry, "32", "176", "==4096{cal}", "", "", XTCEFunctions.makeRepeatString( 5, 5 ) );
-                    }
+                switch (entry.getName()) {
+                    case "CCSDS_Packet_ID.Version":
+                        ++items;
+                        checkEntry( entry, "3", "0", "==0{cal}", "0", "", "" );
+                        break;
+                    case "CCSDS_Packet_ID.Type":
+                        ++items;
+                        checkEntry( entry, "1", "3", "==TM{cal}", "", "", "" );
+                        break;
+                    case "CCSDS_Packet_ID.SecHdrFlag":
+                        ++items;
+                        checkEntry( entry, "1", "4", "==NotPresent{cal}", "", "", "" );
+                        break;
+                    case "CCSDS_Packet_ID.APID":
+                        ++items;
+                        checkEntry( entry, "11", "5", "==3{cal}", "2047", "", "" );
+                        break;
+                    case "CCSDS_Packet_Sequence.GroupFlags":
+                        ++items;
+                        checkEntry( entry, "2", "16", "==3{cal}", "3", "", "" );
+                        break;
+                    case "CCSDS_Packet_Sequence.Count":
+                        ++items;
+                        checkEntry( entry, "14", "18", "==3786{cal}", "", "", "" );
+                        break;
+                    case "CCSDS_Packet_Length":
+                        ++items;
+                        checkEntry( entry, "16", "32", "==19{cal}", "", "", "" );
+                        break;
+                    case "Basic_string_uint32":
+                        ++items;
+                        if ( items == 8 ) {
+                            checkEntry( entry, "32", "48", "==1{cal}", "", "", XTCEFunctions.makeRepeatString( 1, 5 ) );
+                        } else if ( items == 9 ) {
+                            checkEntry( entry, "32", "80", "==0{cal}", "", "", XTCEFunctions.makeRepeatString( 2, 5 ) );
+                        } else if ( items == 10 ) {
+                            checkEntry( entry, "32", "112", "==65535{cal}", "", "", XTCEFunctions.makeRepeatString( 3, 5 ) );
+                        } else if ( items == 11 ) {
+                            checkEntry( entry, "32", "144", "==21845{cal}", "", "", XTCEFunctions.makeRepeatString( 4, 5 ) );
+                        } else if ( items == 12 ) {
+                            checkEntry( entry, "32", "176", "==4096{cal}", "", "", XTCEFunctions.makeRepeatString( 5, 5 ) );
+                        }   break;
                 }
 
             }
@@ -343,101 +371,122 @@ public class ContainerDecodingTest {
 
             for ( XTCEContainerContentEntry entry : entries ) {
 
-                if ( entry.getName().equals( "CCSDS_Packet_ID.Version" ) ) {
-                    ++items;
-                    checkEntry( entry, "3", "0", "==0{cal}", "0", "", "" );
-                } else if ( entry.getName().equals( "CCSDS_Packet_ID.Type" ) ) {
-                    ++items;
-                    checkEntry( entry, "1", "3", "==TM{cal}", "", "", "" );
-                } else if ( entry.getName().equals( "CCSDS_Packet_ID.SecHdrFlag" ) ) {
-                    ++items;
-                    checkEntry( entry, "1", "4", "==Present{cal}", "", "", "" );
-                } else if ( entry.getName().equals( "CCSDS_Packet_ID.APID" ) ) {
-                    ++items;
-                    checkEntry( entry, "11", "5", "==100{cal}", "2047", "", "" );
-                } else if ( entry.getName().equals( "CCSDS_Packet_Sequence.GroupFlags" ) ) {
-                    ++items;
-                    checkEntry( entry, "2", "16", "==3{cal}", "3", "", "" );
-                } else if ( entry.getName().equals( "CCSDS_Packet_Sequence.Count" ) ) {
-                    ++items;
-                    checkEntry( entry, "14", "18", "==3785{cal}", "", "", "" );
-                } else if ( entry.getName().equals( "CCSDS_Packet_Length" ) ) {
-                    ++items;
-                    checkEntry( entry, "16", "32", "==27{cal}", "", "", "" );
-                } else if ( entry.getName().equals( "PUS_Data_Field_Header.Spare1" ) ) {
-                    ++items;
-                    checkEntry( entry, "1", "48", "==0{cal}", "0", "", "" );
-                } else if ( entry.getName().equals( "PUS_Data_Field_Header.Version" ) ) {
-                    ++items;
-                    checkEntry( entry, "3", "49", "==1{cal}", "1", "", "" );
-                } else if ( entry.getName().equals( "PUS_Data_Field_Header.Spare4" ) ) {
-                    ++items;
-                    checkEntry( entry, "4", "52", "==0{cal}", "0", "", "" );
-                } else if ( entry.getName().equals( "PUS_Data_Field_Header.Service" ) ) {
-                    ++items;
-                    checkEntry( entry, "8", "56", "==1{cal}", "", "", "" );
-                } else if ( entry.getName().equals( "PUS_Data_Field_Header.Subservice" ) ) {
-                    ++items;
-                    checkEntry( entry, "8", "64", "==2{cal}", "", "", "" );
-                } else if ( entry.getName().equals( "PUS_Data_Field_Header.SeqCount" ) ) {
-                    ++items;
-                    checkEntry( entry, "8", "72", "==254{cal}", "", "", "" );
-                } else if ( entry.getName().equals( "PUS_Data_Field_Header.Destination" ) ) {
-                    ++items;
-                    checkEntry( entry, "8", "80", "==2{cal}", "", "", "" );
-                } else if ( entry.getName().equals( "PUS_Time" ) ) {
-                    ++items;
-                    checkEntry( entry, "64", "", "", "", "APPL_TIME_CODE!=NotUsed{cal}", "" );
-                } else if ( entry.getName().equals( "PUS_Error_Control_Field" ) ) {
-                    ++items;
-                    checkEntry( entry, "16", "", "", "", "TM_CHECKSUM_TYPE!=NotUsed{cal}", "" );
-                } else if ( entry.getName().equals( "TC_Packet_ID" ) ) {
-                    ++items;
-                    checkEntry( entry, "16", "88", "==170{cal}", "", "", "" );
-                } else if ( entry.getName().equals( "TC_Packet_Sequence_Control" ) ) {
-                    ++items;
-                    checkEntry( entry, "16", "104", "==257{cal}", "", "", "" );
-                } else if ( entry.getName().equals( "TC_Accept_Failure_Code" ) ) {
-                    ++items;
-                    checkEntry( entry, "16", "120", "==INCONSISTENT_APPL_DATA{cal}", "", "", "" );
-                } else if ( entry.getName().equals( "TC_Parameter_Count" ) ) {
-                    ++items;
-                    checkEntry( entry, "8", "136", "==16{cal}", "", "", "" );
-                } else if ( entry.getName().equals( "TC_Parameter_Data" ) ) {
-                    ++items;
-                    if ( items == 21 ) {
-                        checkEntry( entry, "8", "144", "==0{cal}", "", "", XTCEFunctions.makeRepeatString( 1, 16 ) );
-                    } else if ( items == 22 ) {
-                        checkEntry( entry, "8", "152", "==1{cal}", "", "", XTCEFunctions.makeRepeatString( 2, 16 ) );
-                    } else if ( items == 23 ) {
-                        checkEntry( entry, "8", "160", "==2{cal}", "", "", XTCEFunctions.makeRepeatString( 3, 16 ) );
-                    } else if ( items == 24 ) {
-                        checkEntry( entry, "8", "168", "==3{cal}", "", "", XTCEFunctions.makeRepeatString( 4, 16 ) );
-                    } else if ( items == 25 ) {
-                        checkEntry( entry, "8", "176", "==4{cal}", "", "", XTCEFunctions.makeRepeatString( 5, 16 ) );
-                    } else if ( items == 26 ) {
-                        checkEntry( entry, "8", "184", "==5{cal}", "", "", XTCEFunctions.makeRepeatString( 6, 16 ) );
-                    } else if ( items == 27 ) {
-                        checkEntry( entry, "8", "192", "==6{cal}", "", "", XTCEFunctions.makeRepeatString( 7, 16 ) );
-                    } else if ( items == 28 ) {
-                        checkEntry( entry, "8", "200", "==7{cal}", "", "", XTCEFunctions.makeRepeatString( 8, 16 ) );
-                    } else if ( items == 29 ) {
-                        checkEntry( entry, "8", "208", "==8{cal}", "", "", XTCEFunctions.makeRepeatString( 9, 16 ) );
-                    } else if ( items == 30 ) {
-                        checkEntry( entry, "8", "216", "==9{cal}", "", "", XTCEFunctions.makeRepeatString( 10, 16 ) );
-                    } else if ( items == 31 ) {
-                        checkEntry( entry, "8", "224", "==10{cal}", "", "", XTCEFunctions.makeRepeatString( 11, 16 ) );
-                    } else if ( items == 32 ) {
-                        checkEntry( entry, "8", "232", "==11{cal}", "", "", XTCEFunctions.makeRepeatString( 12, 16 ));
-                    } else if ( items == 33 ) {
-                        checkEntry( entry, "8", "240", "==12{cal}", "", "", XTCEFunctions.makeRepeatString( 13, 16 ) );
-                    } else if ( items == 34 ) {
-                        checkEntry( entry, "8", "248", "==13{cal}", "", "", XTCEFunctions.makeRepeatString( 14, 16 ) );
-                    } else if ( items == 35 ) {
-                        checkEntry( entry, "8", "256", "==14{cal}", "", "", XTCEFunctions.makeRepeatString( 15, 16 ) );
-                    } else if ( items == 36 ) {
-                        checkEntry( entry, "8", "264", "==15{cal}", "", "", XTCEFunctions.makeRepeatString( 16, 16 ) );
-                    }
+                switch (entry.getName()) {
+                    case "CCSDS_Packet_ID.Version":
+                        ++items;
+                        checkEntry( entry, "3", "0", "==0{cal}", "0", "", "" );
+                        break;
+                    case "CCSDS_Packet_ID.Type":
+                        ++items;
+                        checkEntry( entry, "1", "3", "==TM{cal}", "", "", "" );
+                        break;
+                    case "CCSDS_Packet_ID.SecHdrFlag":
+                        ++items;
+                        checkEntry( entry, "1", "4", "==Present{cal}", "", "", "" );
+                        break;
+                    case "CCSDS_Packet_ID.APID":
+                        ++items;
+                        checkEntry( entry, "11", "5", "==100{cal}", "2047", "", "" );
+                        break;
+                    case "CCSDS_Packet_Sequence.GroupFlags":
+                        ++items;
+                        checkEntry( entry, "2", "16", "==3{cal}", "3", "", "" );
+                        break;
+                    case "CCSDS_Packet_Sequence.Count":
+                        ++items;
+                        checkEntry( entry, "14", "18", "==3785{cal}", "", "", "" );
+                        break;
+                    case "CCSDS_Packet_Length":
+                        ++items;
+                        checkEntry( entry, "16", "32", "==27{cal}", "", "", "" );
+                        break;
+                    case "PUS_Data_Field_Header.Spare1":
+                        ++items;
+                        checkEntry( entry, "1", "48", "==0{cal}", "0", "", "" );
+                        break;
+                    case "PUS_Data_Field_Header.Version":
+                        ++items;
+                        checkEntry( entry, "3", "49", "==1{cal}", "1", "", "" );
+                        break;
+                    case "PUS_Data_Field_Header.Spare4":
+                        ++items;
+                        checkEntry( entry, "4", "52", "==0{cal}", "0", "", "" );
+                        break;
+                    case "PUS_Data_Field_Header.Service":
+                        ++items;
+                        checkEntry( entry, "8", "56", "==1{cal}", "", "", "" );
+                        break;
+                    case "PUS_Data_Field_Header.Subservice":
+                        ++items;
+                        checkEntry( entry, "8", "64", "==2{cal}", "", "", "" );
+                        break;
+                    case "PUS_Data_Field_Header.SeqCount":
+                        ++items;
+                        checkEntry( entry, "8", "72", "==254{cal}", "", "", "" );
+                        break;
+                    case "PUS_Data_Field_Header.Destination":
+                        ++items;
+                        checkEntry( entry, "8", "80", "==2{cal}", "", "", "" );
+                        break;
+                    case "PUS_Time":
+                        ++items;
+                        checkEntry( entry, "64", "", "", "", "APPL_TIME_CODE!=NotUsed{cal}", "" );
+                        break;
+                    case "PUS_Error_Control_Field":
+                        ++items;
+                        checkEntry( entry, "16", "", "", "", "TM_CHECKSUM_TYPE!=NotUsed{cal}", "" );
+                        break;
+                    case "TC_Packet_ID":
+                        ++items;
+                        checkEntry( entry, "16", "88", "==170{cal}", "", "", "" );
+                        break;
+                    case "TC_Packet_Sequence_Control":
+                        ++items;
+                        checkEntry( entry, "16", "104", "==257{cal}", "", "", "" );
+                        break;
+                    case "TC_Accept_Failure_Code":
+                        ++items;
+                        checkEntry( entry, "16", "120", "==INCONSISTENT_APPL_DATA{cal}", "", "", "" );
+                        break;
+                    case "TC_Parameter_Count":
+                        ++items;
+                        checkEntry( entry, "8", "136", "==16{cal}", "", "", "" );
+                        break;
+                    case "TC_Parameter_Data":
+                        ++items;
+                        if ( items == 21 ) {
+                            checkEntry( entry, "8", "144", "==0{cal}", "", "", XTCEFunctions.makeRepeatString( 1, 16 ) );
+                        } else if ( items == 22 ) {
+                            checkEntry( entry, "8", "152", "==1{cal}", "", "", XTCEFunctions.makeRepeatString( 2, 16 ) );
+                        } else if ( items == 23 ) {
+                            checkEntry( entry, "8", "160", "==2{cal}", "", "", XTCEFunctions.makeRepeatString( 3, 16 ) );
+                        } else if ( items == 24 ) {
+                            checkEntry( entry, "8", "168", "==3{cal}", "", "", XTCEFunctions.makeRepeatString( 4, 16 ) );
+                        } else if ( items == 25 ) {
+                            checkEntry( entry, "8", "176", "==4{cal}", "", "", XTCEFunctions.makeRepeatString( 5, 16 ) );
+                        } else if ( items == 26 ) {
+                            checkEntry( entry, "8", "184", "==5{cal}", "", "", XTCEFunctions.makeRepeatString( 6, 16 ) );
+                        } else if ( items == 27 ) {
+                            checkEntry( entry, "8", "192", "==6{cal}", "", "", XTCEFunctions.makeRepeatString( 7, 16 ) );
+                        } else if ( items == 28 ) {
+                            checkEntry( entry, "8", "200", "==7{cal}", "", "", XTCEFunctions.makeRepeatString( 8, 16 ) );
+                        } else if ( items == 29 ) {
+                            checkEntry( entry, "8", "208", "==8{cal}", "", "", XTCEFunctions.makeRepeatString( 9, 16 ) );
+                        } else if ( items == 30 ) {
+                            checkEntry( entry, "8", "216", "==9{cal}", "", "", XTCEFunctions.makeRepeatString( 10, 16 ) );
+                        } else if ( items == 31 ) {
+                            checkEntry( entry, "8", "224", "==10{cal}", "", "", XTCEFunctions.makeRepeatString( 11, 16 ) );
+                        } else if ( items == 32 ) {
+                            checkEntry( entry, "8", "232", "==11{cal}", "", "", XTCEFunctions.makeRepeatString( 12, 16 ));
+                        } else if ( items == 33 ) {
+                            checkEntry( entry, "8", "240", "==12{cal}", "", "", XTCEFunctions.makeRepeatString( 13, 16 ) );
+                        } else if ( items == 34 ) {
+                            checkEntry( entry, "8", "248", "==13{cal}", "", "", XTCEFunctions.makeRepeatString( 14, 16 ) );
+                        } else if ( items == 35 ) {
+                            checkEntry( entry, "8", "256", "==14{cal}", "", "", XTCEFunctions.makeRepeatString( 15, 16 ) );
+                        } else if ( items == 36 ) {
+                            checkEntry( entry, "8", "264", "==15{cal}", "", "", XTCEFunctions.makeRepeatString( 16, 16 ) );
+                        }   break;
                 }
 
             }
@@ -488,45 +537,59 @@ public class ContainerDecodingTest {
 
             for ( XTCEContainerContentEntry entry : entries ) {
 
-                if ( entry.getName().equals( "CCSDS_Packet_ID.Version" ) ) {
-                    ++items;
-                    checkEntry( entry, "3", "0", "==0{cal}", "0", "", "" );
-                } else if ( entry.getName().equals( "CCSDS_Packet_ID.Type" ) ) {
-                    ++items;
-                    checkEntry( entry, "1", "3", "==TM{cal}", "", "", "" );
-                } else if ( entry.getName().equals( "CCSDS_Packet_ID.SecHdrFlag" ) ) {
-                    ++items;
-                    checkEntry( entry, "1", "4", "==Present{cal}", "", "", "" );
-                } else if ( entry.getName().equals( "CCSDS_Packet_ID.APID" ) ) {
-                    ++items;
-                    checkEntry( entry, "11", "5", "==1{cal}", "2047", "", "" );
-                } else if ( entry.getName().equals( "CCSDS_Packet_Sequence.GroupFlags" ) ) {
-                    ++items;
-                    checkEntry( entry, "2", "16", "==3{cal}", "3", "", "" );
-                } else if ( entry.getName().equals( "CCSDS_Packet_Sequence.Count" ) ) {
-                    ++items;
-                    checkEntry( entry, "14", "18", "==3783{cal}", "", "", "" );
-                } else if ( entry.getName().equals( "CCSDS_Packet_Length" ) ) {
-                    ++items;
-                    checkEntry( entry, "16", "32", "==11{cal}", "", "", "" );
-                } else if ( entry.getName().equals( "Battery_Voltage" ) ) {
-                    ++items;
-                    checkEntry( entry, "32", "48", "==12.3{cal}", "", "", "" );
-                } else if ( entry.getName().equals( "Battery_Current" ) ) {
-                    ++items;
-                    checkEntry( entry, "32", "80", "==0.5{cal}", "", "", "" );
-                } else if ( entry.getName().equals( "Battery_Charge_Mode" ) ) {
-                    ++items;
-                    checkEntry( entry, "1", "112", "==CHARGE{cal}", "", "", "" );
-                } else if ( entry.getName().equals( "SomeParameter" ) ) {
-                    ++items;
-                    checkEntry( entry, "7", "113", "==5{cal}", "", "", "" );
-                } else if ( entry.getName().equals( "Solar_Array_Voltage_1" ) ) {
-                    ++items;
-                    checkEntry( entry, "12", "120", "==23.0{cal}", "", "", "" );
-                } else if ( entry.getName().equals( "Solar_Array_Voltage_2" ) ) {
-                    ++items;
-                    checkEntry( entry, "12", "132", "==23.0{cal}", "", "", "" );
+                switch (entry.getName()) {
+                    case "CCSDS_Packet_ID.Version":
+                        ++items;
+                        checkEntry( entry, "3", "0", "==0{cal}", "0", "", "" );
+                        break;
+                    case "CCSDS_Packet_ID.Type":
+                        ++items;
+                        checkEntry( entry, "1", "3", "==TM{cal}", "", "", "" );
+                        break;
+                    case "CCSDS_Packet_ID.SecHdrFlag":
+                        ++items;
+                        checkEntry( entry, "1", "4", "==Present{cal}", "", "", "" );
+                        break;
+                    case "CCSDS_Packet_ID.APID":
+                        ++items;
+                        checkEntry( entry, "11", "5", "==1{cal}", "2047", "", "" );
+                        break;
+                    case "CCSDS_Packet_Sequence.GroupFlags":
+                        ++items;
+                        checkEntry( entry, "2", "16", "==3{cal}", "3", "", "" );
+                        break;
+                    case "CCSDS_Packet_Sequence.Count":
+                        ++items;
+                        checkEntry( entry, "14", "18", "==3783{cal}", "", "", "" );
+                        break;
+                    case "CCSDS_Packet_Length":
+                        ++items;
+                        checkEntry( entry, "16", "32", "==11{cal}", "", "", "" );
+                        break;
+                    case "Battery_Voltage":
+                        ++items;
+                        checkEntry( entry, "32", "48", "==12.3{cal}", "", "", "" );
+                        break;
+                    case "Battery_Current":
+                        ++items;
+                        checkEntry( entry, "32", "80", "==0.5{cal}", "", "", "" );
+                        break;
+                    case "Battery_Charge_Mode":
+                        ++items;
+                        checkEntry( entry, "1", "112", "==CHARGE{cal}", "", "", "" );
+                        break;
+                    case "SomeParameter":
+                        ++items;
+                        checkEntry( entry, "7", "113", "==5{cal}", "", "", "" );
+                        break;
+                    case "Solar_Array_Voltage_1":
+                        ++items;
+                        checkEntry( entry, "12", "120", "==23.0{cal}", "", "", "" );
+                        break;
+                    case "Solar_Array_Voltage_2":
+                        ++items;
+                        checkEntry( entry, "12", "132", "==23.0{cal}", "", "", "" );
+                        break;
                 }
 
             }
@@ -587,75 +650,99 @@ public class ContainerDecodingTest {
 
             for ( XTCEContainerContentEntry entry : entries ) {
 
-                if ( entry.getName().equals( "CCSDS_Packet_ID.Version" ) ) {
-                    ++items;
-                    checkEntry( entry, "3", "0", "==0{cal}", "0", "", "" );
-                } else if ( entry.getName().equals( "CCSDS_Packet_ID.Type" ) ) {
-                    ++items;
-                    checkEntry( entry, "1", "3", "==TM{cal}", "", "", "" );
-                } else if ( entry.getName().equals( "CCSDS_Packet_ID.SecHdrFlag" ) ) {
-                    ++items;
-                    checkEntry( entry, "1", "4", "==Present{cal}", "", "", "" );
-                } else if ( entry.getName().equals( "CCSDS_Packet_ID.APID" ) ) {
-                    ++items;
-                    checkEntry( entry, "11", "5", "==100{cal}", "2047", "", "" );
-                } else if ( entry.getName().equals( "CCSDS_Packet_Sequence.GroupFlags" ) ) {
-                    ++items;
-                    checkEntry( entry, "2", "16", "==3{cal}", "3", "", "" );
-                } else if ( entry.getName().equals( "CCSDS_Packet_Sequence.Count" ) ) {
-                    ++items;
-                    checkEntry( entry, "14", "18", "==3784{cal}", "", "", "" );
-                } else if ( entry.getName().equals( "CCSDS_Packet_Length" ) ) {
-                    ++items;
-                    checkEntry( entry, "16", "32", "==17{cal}", "", "", "" );
-                } else if ( entry.getName().equals( "PUS_Data_Field_Header.Spare1" ) ) {
-                    ++items;
-                    checkEntry( entry, "1", "48", "==0{cal}", "0", "", "" );
-                } else if ( entry.getName().equals( "PUS_Data_Field_Header.Version" ) ) {
-                    ++items;
-                    checkEntry( entry, "3", "49", "==1{cal}", "1", "", "" );
-                } else if ( entry.getName().equals( "PUS_Data_Field_Header.Spare4" ) ) {
-                    ++items;
-                    checkEntry( entry, "4", "52", "==0{cal}", "0", "", "" );
-                } else if ( entry.getName().equals( "PUS_Data_Field_Header.Service" ) ) {
-                    ++items;
-                    checkEntry( entry, "8", "56", "==3{cal}", "", "", "" );
-                } else if ( entry.getName().equals( "PUS_Data_Field_Header.Subservice" ) ) {
-                    ++items;
-                    checkEntry( entry, "8", "64", "==25{cal}", "", "", "" );
-                } else if ( entry.getName().equals( "PUS_Data_Field_Header.SeqCount" ) ) {
-                    ++items;
-                    checkEntry( entry, "8", "72", "==241{cal}", "", "", "" );
-                } else if ( entry.getName().equals( "PUS_Data_Field_Header.Destination" ) ) {
-                    ++items;
-                    checkEntry( entry, "8", "80", "==3{cal}", "", "", "" );
-                } else if ( entry.getName().equals( "PUS_Time" ) ) {
-                    ++items;
-                    checkEntry( entry, "64", "", "", "", "APPL_TIME_CODE!=NotUsed{cal}", "" );
-                } else if ( entry.getName().equals( "PUS_Error_Control_Field" ) ) {
-                    ++items;
-                    checkEntry( entry, "16", "", "", "", "TM_CHECKSUM_TYPE!=NotUsed{cal}", "" );
-                } else if ( entry.getName().equals( "PUS_Structure_ID" ) ) {
-                    ++items;
-                    checkEntry( entry, "8", "88", "==ECSS_SpacePacket2{cal}", "", "", "" );
-                } else if ( entry.getName().equals( "Battery_Voltage" ) ) {
-                    ++items;
-                    checkEntry( entry, "32", "96", "==12.3{cal}", "", "", "" );
-                } else if ( entry.getName().equals( "Battery_Current" ) ) {
-                    ++items;
-                    checkEntry( entry, "32", "128", "==0.5{cal}", "", "", "" );
-                } else if ( entry.getName().equals( "Flag_Parameter" ) ) {
-                    ++items;
-                    checkEntry( entry, "8", "160", "==5{cal}", "", "", "" );
-                } else if ( entry.getName().equals( "Optional_Parameter" ) ) {
-                    ++items;
-                    checkEntry( entry, "16", "", "", "", "Flag_Parameter==1{cal}", "" );
-                } else if ( entry.getName().equals( "Solar_Array_Voltage_1" ) ) {
-                    ++items;
-                    checkEntry( entry, "12", "168", "==5.0{cal}", "", "", "" );
-                } else if ( entry.getName().equals( "Solar_Array_Voltage_2" ) ) {
-                    ++items;
-                    checkEntry( entry, "12", "180", "==23.0{cal}", "", "", "" );
+                switch (entry.getName()) {
+                    case "CCSDS_Packet_ID.Version":
+                        ++items;
+                        checkEntry( entry, "3", "0", "==0{cal}", "0", "", "" );
+                        break;
+                    case "CCSDS_Packet_ID.Type":
+                        ++items;
+                        checkEntry( entry, "1", "3", "==TM{cal}", "", "", "" );
+                        break;
+                    case "CCSDS_Packet_ID.SecHdrFlag":
+                        ++items;
+                        checkEntry( entry, "1", "4", "==Present{cal}", "", "", "" );
+                        break;
+                    case "CCSDS_Packet_ID.APID":
+                        ++items;
+                        checkEntry( entry, "11", "5", "==100{cal}", "2047", "", "" );
+                        break;
+                    case "CCSDS_Packet_Sequence.GroupFlags":
+                        ++items;
+                        checkEntry( entry, "2", "16", "==3{cal}", "3", "", "" );
+                        break;
+                    case "CCSDS_Packet_Sequence.Count":
+                        ++items;
+                        checkEntry( entry, "14", "18", "==3784{cal}", "", "", "" );
+                        break;
+                    case "CCSDS_Packet_Length":
+                        ++items;
+                        checkEntry( entry, "16", "32", "==17{cal}", "", "", "" );
+                        break;
+                    case "PUS_Data_Field_Header.Spare1":
+                        ++items;
+                        checkEntry( entry, "1", "48", "==0{cal}", "0", "", "" );
+                        break;
+                    case "PUS_Data_Field_Header.Version":
+                        ++items;
+                        checkEntry( entry, "3", "49", "==1{cal}", "1", "", "" );
+                        break;
+                    case "PUS_Data_Field_Header.Spare4":
+                        ++items;
+                        checkEntry( entry, "4", "52", "==0{cal}", "0", "", "" );
+                        break;
+                    case "PUS_Data_Field_Header.Service":
+                        ++items;
+                        checkEntry( entry, "8", "56", "==3{cal}", "", "", "" );
+                        break;
+                    case "PUS_Data_Field_Header.Subservice":
+                        ++items;
+                        checkEntry( entry, "8", "64", "==25{cal}", "", "", "" );
+                        break;
+                    case "PUS_Data_Field_Header.SeqCount":
+                        ++items;
+                        checkEntry( entry, "8", "72", "==241{cal}", "", "", "" );
+                        break;
+                    case "PUS_Data_Field_Header.Destination":
+                        ++items;
+                        checkEntry( entry, "8", "80", "==3{cal}", "", "", "" );
+                        break;
+                    case "PUS_Time":
+                        ++items;
+                        checkEntry( entry, "64", "", "", "", "APPL_TIME_CODE!=NotUsed{cal}", "" );
+                        break;
+                    case "PUS_Error_Control_Field":
+                        ++items;
+                        checkEntry( entry, "16", "", "", "", "TM_CHECKSUM_TYPE!=NotUsed{cal}", "" );
+                        break;
+                    case "PUS_Structure_ID":
+                        ++items;
+                        checkEntry( entry, "8", "88", "==ECSS_SpacePacket2{cal}", "", "", "" );
+                        break;
+                    case "Battery_Voltage":
+                        ++items;
+                        checkEntry( entry, "32", "96", "==12.3{cal}", "", "", "" );
+                        break;
+                    case "Battery_Current":
+                        ++items;
+                        checkEntry( entry, "32", "128", "==0.5{cal}", "", "", "" );
+                        break;
+                    case "Flag_Parameter":
+                        ++items;
+                        checkEntry( entry, "8", "160", "==5{cal}", "", "", "" );
+                        break;
+                    case "Optional_Parameter":
+                        ++items;
+                        checkEntry( entry, "16", "", "", "", "Flag_Parameter==1{cal}", "" );
+                        break;
+                    case "Solar_Array_Voltage_1":
+                        ++items;
+                        checkEntry( entry, "12", "168", "==5.0{cal}", "", "", "" );
+                        break;
+                    case "Solar_Array_Voltage_2":
+                        ++items;
+                        checkEntry( entry, "12", "180", "==23.0{cal}", "", "", "" );
+                        break;
                 }
 
             }
@@ -710,75 +797,99 @@ public class ContainerDecodingTest {
 
             for ( XTCEContainerContentEntry entry : entries ) {
 
-                if ( entry.getName().equals( "CCSDS_Packet_ID.Version" ) ) {
-                    ++items;
-                    checkEntry( entry, "3", "0", "==0{cal}", "0", "", "" );
-                } else if ( entry.getName().equals( "CCSDS_Packet_ID.Type" ) ) {
-                    ++items;
-                    checkEntry( entry, "1", "3", "==TM{cal}", "", "", "" );
-                } else if ( entry.getName().equals( "CCSDS_Packet_ID.SecHdrFlag" ) ) {
-                    ++items;
-                    checkEntry( entry, "1", "4", "==Present{cal}", "", "", "" );
-                } else if ( entry.getName().equals( "CCSDS_Packet_ID.APID" ) ) {
-                    ++items;
-                    checkEntry( entry, "11", "5", "==100{cal}", "2047", "", "" );
-                } else if ( entry.getName().equals( "CCSDS_Packet_Sequence.GroupFlags" ) ) {
-                    ++items;
-                    checkEntry( entry, "2", "16", "==3{cal}", "3", "", "" );
-                } else if ( entry.getName().equals( "CCSDS_Packet_Sequence.Count" ) ) {
-                    ++items;
-                    checkEntry( entry, "14", "18", "==3784{cal}", "", "", "" );
-                } else if ( entry.getName().equals( "CCSDS_Packet_Length" ) ) {
-                    ++items;
-                    checkEntry( entry, "16", "32", "==19{cal}", "", "", "" );
-                } else if ( entry.getName().equals( "PUS_Data_Field_Header.Spare1" ) ) {
-                    ++items;
-                    checkEntry( entry, "1", "48", "==0{cal}", "0", "", "" );
-                } else if ( entry.getName().equals( "PUS_Data_Field_Header.Version" ) ) {
-                    ++items;
-                    checkEntry( entry, "3", "49", "==1{cal}", "1", "", "" );
-                } else if ( entry.getName().equals( "PUS_Data_Field_Header.Spare4" ) ) {
-                    ++items;
-                    checkEntry( entry, "4", "52", "==0{cal}", "0", "", "" );
-                } else if ( entry.getName().equals( "PUS_Data_Field_Header.Service" ) ) {
-                    ++items;
-                    checkEntry( entry, "8", "56", "==3{cal}", "", "", "" );
-                } else if ( entry.getName().equals( "PUS_Data_Field_Header.Subservice" ) ) {
-                    ++items;
-                    checkEntry( entry, "8", "64", "==25{cal}", "", "", "" );
-                } else if ( entry.getName().equals( "PUS_Data_Field_Header.SeqCount" ) ) {
-                    ++items;
-                    checkEntry( entry, "8", "72", "==241{cal}", "", "", "" );
-                } else if ( entry.getName().equals( "PUS_Data_Field_Header.Destination" ) ) {
-                    ++items;
-                    checkEntry( entry, "8", "80", "==3{cal}", "", "", "" );
-                } else if ( entry.getName().equals( "PUS_Time" ) ) {
-                    ++items;
-                    checkEntry( entry, "64", "", "", "", "APPL_TIME_CODE!=NotUsed{cal}", "" );
-                } else if ( entry.getName().equals( "PUS_Error_Control_Field" ) ) {
-                    ++items;
-                    checkEntry( entry, "16", "", "", "", "TM_CHECKSUM_TYPE!=NotUsed{cal}", "" );
-                } else if ( entry.getName().equals( "PUS_Structure_ID" ) ) {
-                    ++items;
-                    checkEntry( entry, "8", "88", "==ECSS_SpacePacket2{cal}", "", "", "" );
-                } else if ( entry.getName().equals( "Battery_Voltage" ) ) {
-                    ++items;
-                    checkEntry( entry, "32", "96", "==12.3{cal}", "", "", "" );
-                } else if ( entry.getName().equals( "Battery_Current" ) ) {
-                    ++items;
-                    checkEntry( entry, "32", "128", "==0.5{cal}", "", "", "" );
-                } else if ( entry.getName().equals( "Flag_Parameter" ) ) {
-                    ++items;
-                    checkEntry( entry, "8", "160", "==1{cal}", "", "", "" );
-                } else if ( entry.getName().equals( "Optional_Parameter" ) ) {
-                    ++items;
-                    checkEntry( entry, "16", "168", "==61455{cal}", "", "Flag_Parameter==1{cal}", "" );
-                } else if ( entry.getName().equals( "Solar_Array_Voltage_1" ) ) {
-                    ++items;
-                    checkEntry( entry, "12", "184", "==5.0{cal}", "", "", "" );
-                } else if ( entry.getName().equals( "Solar_Array_Voltage_2" ) ) {
-                    ++items;
-                    checkEntry( entry, "12", "196", "==23.0{cal}", "", "", "" );
+                switch (entry.getName()) {
+                    case "CCSDS_Packet_ID.Version":
+                        ++items;
+                        checkEntry( entry, "3", "0", "==0{cal}", "0", "", "" );
+                        break;
+                    case "CCSDS_Packet_ID.Type":
+                        ++items;
+                        checkEntry( entry, "1", "3", "==TM{cal}", "", "", "" );
+                        break;
+                    case "CCSDS_Packet_ID.SecHdrFlag":
+                        ++items;
+                        checkEntry( entry, "1", "4", "==Present{cal}", "", "", "" );
+                        break;
+                    case "CCSDS_Packet_ID.APID":
+                        ++items;
+                        checkEntry( entry, "11", "5", "==100{cal}", "2047", "", "" );
+                        break;
+                    case "CCSDS_Packet_Sequence.GroupFlags":
+                        ++items;
+                        checkEntry( entry, "2", "16", "==3{cal}", "3", "", "" );
+                        break;
+                    case "CCSDS_Packet_Sequence.Count":
+                        ++items;
+                        checkEntry( entry, "14", "18", "==3784{cal}", "", "", "" );
+                        break;
+                    case "CCSDS_Packet_Length":
+                        ++items;
+                        checkEntry( entry, "16", "32", "==19{cal}", "", "", "" );
+                        break;
+                    case "PUS_Data_Field_Header.Spare1":
+                        ++items;
+                        checkEntry( entry, "1", "48", "==0{cal}", "0", "", "" );
+                        break;
+                    case "PUS_Data_Field_Header.Version":
+                        ++items;
+                        checkEntry( entry, "3", "49", "==1{cal}", "1", "", "" );
+                        break;
+                    case "PUS_Data_Field_Header.Spare4":
+                        ++items;
+                        checkEntry( entry, "4", "52", "==0{cal}", "0", "", "" );
+                        break;
+                    case "PUS_Data_Field_Header.Service":
+                        ++items;
+                        checkEntry( entry, "8", "56", "==3{cal}", "", "", "" );
+                        break;
+                    case "PUS_Data_Field_Header.Subservice":
+                        ++items;
+                        checkEntry( entry, "8", "64", "==25{cal}", "", "", "" );
+                        break;
+                    case "PUS_Data_Field_Header.SeqCount":
+                        ++items;
+                        checkEntry( entry, "8", "72", "==241{cal}", "", "", "" );
+                        break;
+                    case "PUS_Data_Field_Header.Destination":
+                        ++items;
+                        checkEntry( entry, "8", "80", "==3{cal}", "", "", "" );
+                        break;
+                    case "PUS_Time":
+                        ++items;
+                        checkEntry( entry, "64", "", "", "", "APPL_TIME_CODE!=NotUsed{cal}", "" );
+                        break;
+                    case "PUS_Error_Control_Field":
+                        ++items;
+                        checkEntry( entry, "16", "", "", "", "TM_CHECKSUM_TYPE!=NotUsed{cal}", "" );
+                        break;
+                    case "PUS_Structure_ID":
+                        ++items;
+                        checkEntry( entry, "8", "88", "==ECSS_SpacePacket2{cal}", "", "", "" );
+                        break;
+                    case "Battery_Voltage":
+                        ++items;
+                        checkEntry( entry, "32", "96", "==12.3{cal}", "", "", "" );
+                        break;
+                    case "Battery_Current":
+                        ++items;
+                        checkEntry( entry, "32", "128", "==0.5{cal}", "", "", "" );
+                        break;
+                    case "Flag_Parameter":
+                        ++items;
+                        checkEntry( entry, "8", "160", "==1{cal}", "", "", "" );
+                        break;
+                    case "Optional_Parameter":
+                        ++items;
+                        checkEntry( entry, "16", "168", "==61455{cal}", "", "Flag_Parameter==1{cal}", "" );
+                        break;
+                    case "Solar_Array_Voltage_1":
+                        ++items;
+                        checkEntry( entry, "12", "184", "==5.0{cal}", "", "", "" );
+                        break;
+                    case "Solar_Array_Voltage_2":
+                        ++items;
+                        checkEntry( entry, "12", "196", "==23.0{cal}", "", "", "" );
+                        break;
                 }
 
             }

@@ -17,7 +17,6 @@
 
 package org.xtce.toolkit;
 
-import java.util.ArrayList;
 import java.util.List;
 import org.omg.space.xtce.ArrayParameterRefEntryType;
 import org.omg.space.xtce.CommandContainerType.BaseContainer;
@@ -44,14 +43,46 @@ import org.xtce.toolkit.XTCEContainerContentEntry.FieldType;
 
 public class XTCETelecommandContentModel extends XTCEContainerContentModelBase {
 
-    XTCETelecommandContentModel( XTCETelecommand               tcObject,
-                                 List<XTCESpaceSystem>         spaceSystems,
-                                 List<XTCEContainerEntryValue> userValues,
-                                 boolean                       showAllConditions ) throws XTCEDatabaseException {
+    /** Constructor
+     *
+     * This constructor creates the container content model object with some
+     * optional user values provided in a list.
+     *
+     * Major problems processing the container will result in an exception,
+     * but many problems encountered do not inhibit continuation.  These can be
+     * inspected by calling getWarnings() after this method to retrieve any
+     * non-blocking issue descriptions.
+     *
+     * @param tcObject XTCETelecommand from the database object that contains
+     * all the needed entry list items.
+     *
+     * @param spaceSystems List of XTCESpaceSystem objects to search for
+     * entries on the entry list.
+     *
+     * @param userValues List of XTCEContainerEntryValue objects for TC
+     * Parameters and/or Arguments that are within the container.  This can be
+     * null if no values are needed to be passed into conditional processing.
+     *
+     * @param showAllConditions boolean indicating if unsatisfied conditional
+     * includes should be pursued at depth.  This can be a performance hit if
+     * there are a large number of conditionals nested.
+     *
+     * @throws XTCEDatabaseException in the event that the container cannot
+     * be completely processed.
+     *
+     */
+
+    public XTCETelecommandContentModel( XTCETelecommand               tcObject,
+                                        List<XTCESpaceSystem>         spaceSystems,
+                                        List<XTCEContainerEntryValue> userValues,
+                                        boolean                       showAllConditions )
+        throws XTCEDatabaseException {
 
         super( spaceSystems, userValues, null, showAllConditions );
-        telecommand_        = tcObject;
-        totalContainerSize_ = processTelecommand();
+
+        telecommand_ = tcObject;
+
+        processTelecommand();
 
     }
 
@@ -83,15 +114,18 @@ public class XTCETelecommandContentModel extends XTCEContainerContentModelBase {
      * @return long containing the total length of this content/container
      * entry.
      *
-     * @throws XTCEDatabaseException 
+     * @throws XTCEDatabaseException thrown in the event that this container
+     * cannot be processed.
      *
      */
 
     public final long processTelecommand() throws XTCEDatabaseException {
 
-        long startTime = System.currentTimeMillis();
+        contentList_.clear();
+        contentValues_.clear();
+        warnings_.clear();
 
-        warnings_ = new ArrayList<>();
+        //long startTime = System.currentTimeMillis();
 
         RunningStartBit totalSize = new RunningStartBit();
 
@@ -106,12 +140,14 @@ public class XTCETelecommandContentModel extends XTCEContainerContentModelBase {
 
         checkForOverlaps( totalSize.get() );
 
-        long estimatedTime = System.currentTimeMillis() - startTime;
+        //long estimatedTime = System.currentTimeMillis() - startTime;
 
         //System.out.println( "Processed Telecommand in approximately " +
         //    Long.toString( estimatedTime / 1000 ) + " seconds" );
 
-        return totalSize.get();
+        totalContainerSize_ = totalSize.get();
+
+        return getTotalSize();
 
     }
 
@@ -120,7 +156,8 @@ public class XTCETelecommandContentModel extends XTCEContainerContentModelBase {
                                           long                      containerStartBit,
                                           MatchCriteriaType         parentRestrictions,
                                           String                    parentSpaceSystem,
-                                          XTCEContainerContentEntry includedContainer ) throws XTCEDatabaseException {
+                                          XTCEContainerContentEntry includedContainer )
+        throws XTCEDatabaseException {
 
         long containerStartIndex = contentList_.size() - 1;
 

@@ -15,7 +15,7 @@
  * 
  */
 
-package org.xtce.apps.editor.ui;
+package org.xtce.apps.editor.dialogs;
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -61,9 +61,9 @@ public class XTCEViewerHelpBrowserDialog extends JDialog {
      *
      */
 
-    XTCEViewerHelpBrowserDialog( java.awt.Frame parent,
-                                 final boolean  modal,
-                                 final URL      pageUrl ) {
+    public XTCEViewerHelpBrowserDialog( java.awt.Frame parent,
+                                        final boolean  modal,
+                                        final URL      pageUrl ) {
 
         super(parent, modal);
 

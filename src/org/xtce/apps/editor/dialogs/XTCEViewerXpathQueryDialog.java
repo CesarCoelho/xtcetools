@@ -15,7 +15,7 @@
  * 
  */
 
-package org.xtce.apps.editor.ui;
+package org.xtce.apps.editor.dialogs;
 
 import java.awt.event.WindowEvent;
 import java.util.List;
@@ -23,6 +23,8 @@ import org.xtce.toolkit.XTCEDatabase;
 import org.xtce.toolkit.XTCEDatabaseException;
 import org.xtce.toolkit.XTCEFunctions;
 import org.w3c.dom.NodeList;
+import org.xtce.apps.editor.ui.XTCEViewer;
+import org.xtce.apps.editor.ui.XTCEViewerPreferences;
 
 /** The XPath Query Dialog provides an interactive screen for the user to be
  * able to execute and view XML string results based on an arbitrary XPath
@@ -51,9 +53,9 @@ public class XTCEViewerXpathQueryDialog extends javax.swing.JFrame {
      *
      */
 
-    XTCEViewerXpathQueryDialog( XTCEViewer            parent,
-                                XTCEViewerPreferences prefs,
-                                XTCEDatabase          dbFile ) {
+    public XTCEViewerXpathQueryDialog( XTCEViewer            parent,
+                                       XTCEViewerPreferences prefs,
+                                       XTCEDatabase          dbFile ) {
 
         prefs_  = prefs;
         xtcedb_ = dbFile;
@@ -197,6 +199,7 @@ public class XTCEViewerXpathQueryDialog extends javax.swing.JFrame {
         resultsText.setRows(5);
         resultsScrollPane.setViewportView(resultsText);
 
+        dismissButton.setText(bundle.getString("general_dismiss_text")); // NOI18N
         dismissButton.setLabel(bundle.getString("general_dismiss_text")); // NOI18N
         dismissButton.setMaximumSize(new java.awt.Dimension(150, 25));
         dismissButton.setMinimumSize(new java.awt.Dimension(150, 25));
