@@ -117,7 +117,7 @@ place to start.
 The following image is a snapshot of the main user interface screen showing a
 possible example representation of a CCSDS TM (Telemetry) Space Packet header.
 
-<img src="src/ui_main_screen.tiff" alt="Main Window Example Screen"/>
+<img src="src/ui_main_screen.png" alt="Main Window Example Screen"/>
 
 ### About The Author ###
 
