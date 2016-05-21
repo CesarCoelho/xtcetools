@@ -34,6 +34,11 @@ Buffer data, when represented in the XTCE data model.
 
 * Supported by the author and tested regularly on Linux, Solaris, Mac OS/X,
 and Windows platforms.
+* Static Analysis by Coverity Scan for Open Source &nbsp;&nbsp;
+  <a href="https://scan.coverity.com/projects/xtcetools">
+      <img alt="Coverity Scan Build Status"
+           src="https://scan.coverity.com/projects/8933/badge.svg"/>
+  </a>
 * Telemetry Parameter access without needing to understand the XTCE data model,
 relationships, references, or other complexities.
 * Similar Telecommand and Argument access without needing to understand the
@@ -98,5 +103,5 @@ place to start.
 The following image is a snapshot of the main user interface screen showing a
 possible example representation of a CCSDS TM (Telemetry) Space Packet header.
 
-![Main Window Example Screen](https://gitlab.com/dovereem/xtcetools/tree/master/src/ui_main_screen.tiff "Main Window Example Screen")
+<img src="src/ui_main_screen.tiff" alt="Main Window Example Screen"/>
 
