@@ -2,16 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/Users/dovereem/NetBeansProjects/xtce/src/org/omg/space/xtce/toolkit/MessagesBundle_en_US.properties</file>
-            <file>file:/Users/dovereem/NetBeansProjects/xtce/src/org/omg/space/xtce/toolkit/MessagesBundle.properties</file>
-            <file>file:/Users/dovereem/NetBeansProjects/xtce/src/org/omg/space/xtce/ui/XTCEViewerXpathQueryDialog.java</file>
-            <file>file:/Users/dovereem/NetBeansProjects/xtce/src/org/omg/space/xtce/toolkit/XTCEDatabaseExporterCsv.java</file>
-            <file>file:/Users/dovereem/NetBeansProjects/xtce/src/org/omg/space/xtce/ui/XTCEViewer.java</file>
-            <file>file:/Users/dovereem/NetBeansProjects/xtce/src/org/omg/space/xtce/toolkit/MessagesBundle_fr_FR.properties</file>
-            <file>file:/Users/dovereem/NetBeansProjects/xtce/src/org/omg/space/xtce/ui/XTCEViewerFunctions.java</file>
-            <file>file:/Users/dovereem/NetBeansProjects/xtce/src/org/omg/space/xtce/ui/XTCEViewerPreferences.java</file>
-            <file>file:/Users/dovereem/NetBeansProjects/xtce/src/org/omg/space/xtce/ui/XTCEViewerParameterFindDialog.java</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

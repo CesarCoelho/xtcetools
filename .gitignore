@@ -1,3 +1,4 @@
 /build/
 /dist/
 /.jacocoverage/
+/nbproject/private/private.xml

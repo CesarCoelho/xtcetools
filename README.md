@@ -98,4 +98,5 @@ place to start.
 The following image is a snapshot of the main user interface screen showing a
 possible example representation of a CCSDS TM (Telemetry) Space Packet header.
 
-![Main Window Example Screen](https://bitbucket.org/dovereem/xtce-toolkit/src/d332202203a6c88f48a72cfbd30dfe65d5dd50f5/ui_main_screen.tiff?at=master "Main Window Example Screen")
+![Main Window Example Screen](https://gitlab.com/dovereem/xtcetools/tree/master/src/ui_main_screen.tiff "Main Window Example Screen")
+
