@@ -30,6 +30,20 @@ and tools by providing an internal encoder/decoder to enable round trip
 conversion of Telemetry, Telecommand, Table, and various forms of Log or
 Buffer data, when represented in the XTCE data model.
 
+### Note On The Specification ###
+
+This project is primarily aimed at supporting the XTCE 1.2 specification that
+has yet to be released by the <a href="http://space.omg.org/index.htm">
+Object Management Group Space Domain Task Force</a>.  XTCE XML documents that
+are compliant with the existing 1.1 specification will work with this library
+in many cases, although some intervention may be required on elements which are
+known to have spelling errors.  Enabling validation on the XML will report the
+issues, should any exist during document loading.
+
+The longer term strategy planned at present is to have this library/ui toolkit
+automatically migrate XTCE 1.1 documents to XTCE 1.2 documents during the
+loading process when the XTCE 1.2 specification is finalized.
+
 ### Key Features ###
 
 * Supported by the author and tested regularly on Linux, Solaris, Mac OS/X,
@@ -104,4 +118,9 @@ The following image is a snapshot of the main user interface screen showing a
 possible example representation of a CCSDS TM (Telemetry) Space Packet header.
 
 <img src="src/ui_main_screen.tiff" alt="Main Window Example Screen"/>
+
+### About The Author ###
+
+The initial author of this software is an active member of the Task Force that
+maintains the XTCE specification.
 

@@ -2,3 +2,4 @@
 /dist/
 /.jacocoverage/
 /nbproject/private/private.xml
+/cov-int
