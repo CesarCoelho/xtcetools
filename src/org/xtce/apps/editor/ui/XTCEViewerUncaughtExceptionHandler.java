@@ -17,9 +17,9 @@
 
 package org.xtce.apps.editor.ui;
 
-import java.io.Writer;
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import javax.swing.JOptionPane;
 import javax.swing.JFrame;
 import org.xtce.toolkit.XTCEFunctions;
@@ -33,7 +33,7 @@ import org.xtce.toolkit.XTCEFunctions;
  */
 
 public final class XTCEViewerUncaughtExceptionHandler
-       implements  Thread.UncaughtExceptionHandler {
+    implements Thread.UncaughtExceptionHandler {
 
     /** Constructor
      *
@@ -45,9 +45,7 @@ public final class XTCEViewerUncaughtExceptionHandler
      */
 
     XTCEViewerUncaughtExceptionHandler( JFrame parent ) {
-
         frame = parent;
-
     }
 
     /** Method that is called by Java when no exception handler is defined.
@@ -67,18 +65,19 @@ public final class XTCEViewerUncaughtExceptionHandler
     @Override
     public void uncaughtException( Thread id, Throwable ex ) {
 
-        final Writer result = new StringWriter();
-        final PrintWriter writer = new PrintWriter( result );
-        ex.printStackTrace( writer );
+        final OutputStream ostream = new ByteArrayOutputStream();
+        final PrintStream  pstream = new PrintStream( ostream );
 
-        String st = new String();
-        writer.write( st );
+        ex.printStackTrace( pstream );
 
-        // TODO remove this stack trace someday
-        ex.printStackTrace();
+        //System.out.println( ex.toString() + "\n\n" + ostream.toString() );
 
         JOptionPane.showMessageDialog( frame,
-                                       XTCEFunctions.generalErrorPrefix() + ex.toString() + "\n\n" + st,
+                                       XTCEFunctions.generalErrorPrefix() +
+                                            ex.toString() +
+                                            System.lineSeparator() +
+                                            System.lineSeparator() +
+                                            ostream.toString(),
                                        XTCEFunctions.getText( "uncaught_exception_error_title" ),
                                        JOptionPane.ERROR_MESSAGE );
 
