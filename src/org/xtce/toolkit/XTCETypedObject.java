@@ -117,14 +117,19 @@ public abstract class XTCETypedObject extends XTCENamedObject {
         // from the named object with additions from the typed object.
 
         if ( typeObj_ != null ) {
+
             populateAliasListFromReference( typeObj_.getAliasSet() );
-        }
 
-        // if the AncillaryDataSet is not null, then XTCE requires there to be
-        // content from getAncillaryData(), so no second null check needed.
+            // if the AncillaryDataSet is not null, then XTCE requires
+            // content from getAncillaryData(), so no second null check needed.
 
-        if ( typeObj.getAncillaryDataSet() != null ) {
-            typeAncDataList_ = typeObj.getAncillaryDataSet().getAncillaryData();
+            if ( typeObj_.getAncillaryDataSet() != null ) {
+                typeAncDataList_ =
+                    typeObj_.getAncillaryDataSet().getAncillaryData();
+            } else {
+                typeAncDataList_ = null;
+            }
+
         } else {
             typeAncDataList_ = null;
         }
@@ -299,6 +304,10 @@ public abstract class XTCETypedObject extends XTCENamedObject {
      */
 
     protected String getInitialValue() {
+
+        if ( typeObj_ == null || dataType_ == null ) {
+            return ""; // NOI18N
+        }
 
         switch ( dataType_ ) {
 
@@ -572,6 +581,10 @@ public abstract class XTCETypedObject extends XTCENamedObject {
 
     public final String getEngineeringTypeString() {
 
+        if ( typeObj_ == null || dataType_ == null ) {
+            return ""; // NOI18N
+        }
+
         switch ( dataType_ ) {
 
             case IntegerDataType: {
@@ -608,9 +621,9 @@ public abstract class XTCETypedObject extends XTCENamedObject {
             case ArrayDataTypeType:
                 return "ARRAY"; // NOI18N
 
-            default:
-                return ""; // NOI18N
         }
+
+        return ""; // NOI18N
 
     }
 

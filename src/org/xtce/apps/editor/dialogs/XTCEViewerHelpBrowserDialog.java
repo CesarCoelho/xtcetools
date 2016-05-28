@@ -22,7 +22,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
 import java.net.URL;
 import javafx.application.Platform;
-import javafx.collections.ObservableList;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
 import javafx.scene.web.WebView;
@@ -180,8 +179,7 @@ public class XTCEViewerHelpBrowserDialog extends JDialog {
     private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {                                           
 
         final WebHistory history = webEngine_.getHistory();
-        ObservableList<WebHistory.Entry> entryList = history.getEntries();
-        int currentIndex = history.getCurrentIndex();
+
         Platform.runLater( new Runnable() {
             @Override
             public void run() {
@@ -205,8 +203,7 @@ public class XTCEViewerHelpBrowserDialog extends JDialog {
     private void forwardButtonActionPerformed(java.awt.event.ActionEvent evt) {                                              
 
         final WebHistory history = webEngine_.getHistory();
-        ObservableList<WebHistory.Entry> entryList = history.getEntries();
-        int currentIndex = history.getCurrentIndex();
+
         Platform.runLater( new Runnable() {
             @Override
             public void run() {

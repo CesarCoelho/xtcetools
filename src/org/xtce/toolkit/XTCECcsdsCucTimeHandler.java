@@ -152,7 +152,7 @@ public class XTCECcsdsCucTimeHandler implements XTCEAbsoluteTimeType {
 
         try {
 
-            long bits = ( numSecBytes_ + numFracBytes_ ) * 8;
+            long bits = ( numSecBytes_ + numFracBytes_ ) * 8L;
 
             IntegerDataEncodingType enc =
                 instance.getEncoding().getIntegerDataEncoding();
@@ -222,7 +222,6 @@ public class XTCECcsdsCucTimeHandler implements XTCEAbsoluteTimeType {
             hex = hex.substring( 1 );
         }
 
-        //System.out.println( "Temp: " + hex );
         int sPos = numSecBytes_  * 8 / 4;
         int fPos = numFracBytes_ * 8 / 4;
         int tPos = sPos + fPos;
@@ -278,7 +277,7 @@ public class XTCECcsdsCucTimeHandler implements XTCEAbsoluteTimeType {
     @Override
     public String getCalibratedFromUncalibrated( String uncalValue ) {
 
-        BigInteger usecs = null;
+        BigInteger usecs;
         if ( uncalValue.startsWith( "0x" ) == true ) { // NOI18N
             usecs = new BigInteger( uncalValue.replaceFirst( "0x", "" ), 16 ); // NOI18N
         } else {
@@ -314,7 +313,7 @@ public class XTCECcsdsCucTimeHandler implements XTCEAbsoluteTimeType {
     @Override
     public BitSet getRawFromUncalibrated( String uncalValue ) {
 
-        BigInteger usecs = null;
+        BigInteger usecs;
         if ( uncalValue.startsWith( "0x" ) == true ) { // NOI18N
             usecs = new BigInteger( uncalValue.replaceFirst( "0x", "" ), 16 ); // NOI18N
         } else {
@@ -323,7 +322,8 @@ public class XTCECcsdsCucTimeHandler implements XTCEAbsoluteTimeType {
 
         BigInteger secs = usecs.divide( oneThousand_ ).divide( oneThousand_ );
 
-        usecs = usecs.subtract( secs.multiply( oneThousand_ ).multiply( oneThousand_ ) );
+        usecs = usecs.subtract( secs.multiply( oneThousand_ )
+                                    .multiply( oneThousand_ ) );
 
         DateFormat format = new SimpleDateFormat( "yyyy-MM-dd" ); // NOI18N
         format.setTimeZone( TimeZone.getTimeZone( timeZone_ ) );

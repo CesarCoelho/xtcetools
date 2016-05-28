@@ -257,7 +257,6 @@ public class XTCEValidRange {
 
     // Private Data Members
 
-    private NameDescriptionType typeObj_;
     private boolean             rangeApplied_            = false;
     private String              lowValidValue_           = ""; // NOI18N
     private String              highValidValue_          = ""; // NOI18N

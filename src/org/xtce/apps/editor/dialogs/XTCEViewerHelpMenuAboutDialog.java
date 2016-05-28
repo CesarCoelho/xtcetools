@@ -75,6 +75,12 @@ public class XTCEViewerHelpMenuAboutDialog extends javax.swing.JDialog {
                                file );
         }
 
+        try {
+            stream.close();
+        } catch ( Exception ex ) {
+            // not much that can be done here
+        }
+
         textField.setCaretPosition( 0 );
         textField.setEditable( false );
 
@@ -218,6 +224,7 @@ public class XTCEViewerHelpMenuAboutDialog extends javax.swing.JDialog {
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 XTCEViewerHelpMenuAboutDialog dialog = new XTCEViewerHelpMenuAboutDialog(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {

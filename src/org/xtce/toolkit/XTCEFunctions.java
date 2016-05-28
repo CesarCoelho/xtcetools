@@ -219,25 +219,6 @@ public class XTCEFunctions {
 
     }
 
-/*
-        BitSet bits = new BitSet( bytes.length * 8 );
-
-        for ( int iii = 0; iii < bytes.length; ++iii ) {
-        //for ( int iii = bytes.length - 1; iii >= 0; --iii ) {
-            System.out.println( "Byte: 0x" + String.format( "%02x", bytes[iii] ) );
-            for ( int jjj = 0; jjj < 8; ++jjj ) {
-                if ( ( bytes[iii] & ( 1 << ( 7 - jjj ) ) ) != 0 ) {
-                    bits.set( ( ( bytes.length - 1 - iii ) * 8 ) + ( 7 - jjj ) );
-                    System.out.println( "Setting bit " + Integer.toString( ( ( bytes.length - 1 - iii ) * 8 ) + ( 7 - jjj ) ) + " 1" );
-                } else {
-                    System.out.println( "Setting bit " + Integer.toString( ( ( bytes.length - 1 - iii ) * 8 ) + ( 7 - jjj ) ) + " 0" );
-                }
-            }
-        }
-
-        return bits;
-*/
-
     /** Convert a BitSet object to a hex byte string, ordered from the most
      * significant byte to the least significant byte.
      *
@@ -719,8 +700,6 @@ public class XTCEFunctions {
             "org/xtce/toolkit/prettyprint.xsl" ); // NOI18N
 
         try {
-
-            StringBuilder resultsText = new StringBuilder();
 
             Transformer transformer =
                 TransformerFactory.newInstance()

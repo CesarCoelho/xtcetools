@@ -86,15 +86,20 @@ public class XTCEAlias {
 
     @Override
     public boolean equals( Object rhs ) {
-        if ( this == rhs ) {
+
+        if ( rhs == null ) {
+            return false;
+        } else if ( this == rhs ) {
             return true;
-        }
-        if ( rhs.getClass() != XTCEAlias.class ) {
+        } else if ( rhs instanceof XTCEAlias == false ) {
             return false;
         }
+
         XTCEAlias that = (XTCEAlias)rhs;
+
         return ( ( this.getAliasName().equals( that.getAliasName() ) == true ) &&
                  ( this.getNameSpace().equals( that.getNameSpace() ) == true ) );
+
     }
 
     /** Hash Code Operator
