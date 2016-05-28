@@ -306,10 +306,14 @@ public class SpaceSystemTest {
 
         List<XTCEParameter> parameters = ss.getParameters();
 
-        long expected = 27;
+        long expected = 29;
 
         if ( parameters.size() != expected ) {
-            Assert.fail( "Expected " + Long.toString( expected ) + " parameters" );
+            Assert.fail( "Expected " +
+                         Long.toString( expected ) +
+                         " parameters but got " +
+                         Long.toString( parameters.size() ) +
+                         " instead" );
         }
 
     }

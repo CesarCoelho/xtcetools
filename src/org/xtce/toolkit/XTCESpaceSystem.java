@@ -23,7 +23,6 @@ import java.util.LinkedList;
 import java.util.List;
 import org.omg.space.xtce.AggregateDataType;
 import org.omg.space.xtce.AggregateDataType.MemberList.Member;
-import org.omg.space.xtce.CommandMetaDataType.MetaCommandSet.BlockMetaCommand;
 import org.omg.space.xtce.HeaderType;
 import org.omg.space.xtce.MetaCommandType;
 import org.omg.space.xtce.NameDescriptionType;
@@ -616,7 +615,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
     public List<XTCEParameter> getParameters() {
 
-        ArrayList<XTCEParameter> list = new ArrayList<>();
+        List<XTCEParameter> list = new ArrayList<>();
         list.addAll( getTelemetryParameters() );
         list.addAll( getTelecommandParameters() );
         return list;
@@ -896,33 +895,44 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
         String name = XTCEFunctions.getNameFromPathReferenceString( nameOrPath );
 
-        List<Object> metacommands =
-            getReference().
-            getCommandMetaData().
-            getMetaCommandSet().
-            getMetaCommandOrMetaCommandRefOrBlockMetaCommand();
+        try {
 
-        for ( Object metacommand : metacommands ) {
-            String foundName;
-            if ( metacommand.getClass() == MetaCommandType.class ) {
-                foundName = ((NameDescriptionType)metacommand).getName();
-            } else if ( metacommand.getClass() == BlockMetaCommand.class ) {
-                foundName = ((NameDescriptionType)metacommand).getName();
-            } else {
-                continue;
+            List<Object> metacommands =
+                getReference().
+                getCommandMetaData().
+                getMetaCommandSet().
+                getMetaCommandOrMetaCommandRefOrBlockMetaCommand();
+
+            for ( Object metacommand : metacommands ) {
+
+                String foundName;
+                if ( metacommand instanceof NameDescriptionType ) {
+                    foundName = ((NameDescriptionType)metacommand).getName();
+                } else {
+                    continue;
+                }
+
+                if ( foundName.equals( name ) == true ) {
+                    try {
+                        return new XTCETelecommand( getFullPath(),
+                                                    makeTelecommandInheritanceString( metacommand ),
+                                                    (NameDescriptionType)metacommand,
+                                                    databaseReference_ );
+                    } catch ( Exception ex ) {
+                        throw new XTCEDatabaseException( XTCEFunctions.getText( "general_telecommand" ) + // NOI18N
+                                                         " '" + // NOI18N
+                                                         name +
+                                                         "' " + // NOI18N
+                                                         XTCEFunctions.getText( "error_tc_form_in_ss" ) + // NOI18N
+                                                         " '" + // NOI18N
+                                                         getFullPath() +
+                                                         "'" ); // NOI18N
+                    }
+                }
             }
-            //System.out.println( "Search Space System " +
-            //                    getFullPath() +
-            //                    " for " +
-            //                    nameOrPath +
-            //                    " with " +
-            //                    name );
-            if ( foundName.equals( name ) == true ) {
-                return new XTCETelecommand( getFullPath(),
-                                            makeTelecommandInheritanceString( metacommand ),
-                                            metacommand,
-                                            databaseReference_ );
-            }
+
+        } catch ( NullPointerException ex ) {
+            // throw statement after this captures the missing TC
         }
 
         throw new XTCEDatabaseException( XTCEFunctions.getText( "general_telecommand" ) + // NOI18N
@@ -951,7 +961,9 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
     public List<XTCETelecommand> getTelecommands() {
 
-        ArrayList<XTCETelecommand> list = new ArrayList<>();
+        warnings_.clear();
+
+        List<XTCETelecommand> list = new ArrayList<>();
 
         try {
 
@@ -963,17 +975,21 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
             for ( Object metacommand : metacommands ) {
                 try {
-                    if ( ( metacommand.getClass() == MetaCommandType.class  ) ||
-                         ( metacommand.getClass() == BlockMetaCommand.class ) ) {
-                        //System.out.println( "Loading " + ((NameDescriptionType)metacommand).getName() );
+                    if ( metacommand instanceof NameDescriptionType  ) {
                         list.add( new XTCETelecommand( getFullPath(),
                                                        makeTelecommandInheritanceString( metacommand ),
-                                                       metacommand,
+                                                       (NameDescriptionType)metacommand,
                                                        databaseReference_ ) );
                     }
-                } catch ( XTCEDatabaseException ex ) {
-                    System.out.println( ex.getLocalizedMessage() );
-                    // need to make an error message
+                } catch ( Exception ex ) {
+                    warnings_.add( XTCEFunctions.getText( "general_telecommand" ) + // NOI18N
+                                   " '" + // NOI18N
+                                   ((NameDescriptionType)metacommand).getName() +
+                                   "' " +
+                                   XTCEFunctions.getText( "error_tc_form_in_ss" ) + // NOI18N
+                                   " '" + // NOI18N
+                                   getFullPath() +
+                                   "'" ); // NOI18N
                 }
             }
 
@@ -1216,26 +1232,31 @@ public class XTCESpaceSystem extends XTCENamedObject {
         String path = XTCEFunctions.getPathNameFromReferenceString( ssPath );
         List<XTCESpaceSystem> spaceSystems =
             databaseReference_.getSpaceSystemTree();
-        //System.out.println( "Searching for MetaCommand " + name + " at " + path );
+
         for ( XTCESpaceSystem spaceSystem : spaceSystems ) {
-            //System.out.println( "Checking in Space System " + spaceSystem.getFullPath() );
+
             if ( spaceSystem.getFullPath().equals( path ) == true ) {
-                List<Object> metacommands =
-                    spaceSystem.getReference()
-                               .getCommandMetaData()
-                               .getMetaCommandSet()
-                               .getMetaCommandOrMetaCommandRefOrBlockMetaCommand();
-                //System.out.println( "Found " + Integer.toString( metacommands.size() ) + " MetaCommands" );
-                for ( Object metacommand : metacommands ) {
-                    if ( metacommand.getClass() == MetaCommandType.class ) {
-                        MetaCommandType found = (MetaCommandType)metacommand;
-                        //System.out.println( "Found MetaCommand " + found.getName() );
-                        if ( found.getName().equals( name ) == true ) {
-                            return found;
+
+                try {
+                    List<Object> metacommands =
+                        spaceSystem.getReference()
+                                   .getCommandMetaData()
+                                   .getMetaCommandSet()
+                                   .getMetaCommandOrMetaCommandRefOrBlockMetaCommand();
+                    for ( Object metacommand : metacommands ) {
+                        if ( metacommand.getClass() == MetaCommandType.class ) {
+                            MetaCommandType found = (MetaCommandType)metacommand;
+                            if ( found.getName().equals( name ) == true ) {
+                                return found;
+                            }
                         }
                     }
+                } catch ( Exception ex ) {
+                    break;
                 }
+
             }
+
         }
 
         throw new XTCEDatabaseException( XTCEFunctions.getText( "general_telecommand" ) + // NOI18N
@@ -1288,6 +1309,10 @@ public class XTCESpaceSystem extends XTCENamedObject {
                 } catch ( NullPointerException ex ) {
                     warnings_.add( parameter.getName() + " " +  // NOI18N
                         XTCEFunctions.getText( "error_param_invalid_type" ) ); // NOI18N
+                    list.add( new XTCEParameter( parameter.getName(),
+                                                 getFullPath(),
+                                                 parameter,
+                                                 null ) );
                 }
 
             }
@@ -1307,6 +1332,8 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
         List<Member> members = type.getMemberList().getMember();
 
+        String newbasename = "";
+
         for ( Member member : members ) {
 
             try {
@@ -1315,7 +1342,8 @@ public class XTCESpaceSystem extends XTCENamedObject {
                     XTCEFunctions.resolvePathReference( getFullPath(),
                                                         member.getTypeRef() );
 
-                String newbasename = basename + "." + member.getName(); // NOI18N
+                newbasename = basename + "." + member.getName(); // NOI18N
+
                 NameDescriptionType mtype =
                     databaseReference_.getParameterTypeReference( mpath );
             
@@ -1334,6 +1362,12 @@ public class XTCESpaceSystem extends XTCENamedObject {
             } catch ( NullPointerException ex ) {
                 warnings_.add( member.getName() + " " +  // NOI18N
                     XTCEFunctions.getText( "error_parammember_invalid_type" ) ); // NOI18N
+                if ( newbasename.isEmpty() == false ) {
+                    list.add( new XTCEParameter( newbasename,
+                                                 getFullPath(),
+                                                 member,
+                                                 null ) );
+                }
             }
 
         }
