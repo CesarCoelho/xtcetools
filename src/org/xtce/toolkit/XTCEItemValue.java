@@ -1127,30 +1127,6 @@ public class XTCEItemValue {
     /** Function to resolve a numeric uncalibrated value to a Calibrated EU
      * Boolean string value.
      *
-     * @param uncalValue double containing the raw value, which will result in
-     * a warning if the value is not integral.
-     *
-     * @return String containing the Boolean EU type text.
-     *
-     */
-
-    private String booleanTypeFromUncalibrated( final double uncalValue ) {
-
-        if ( ( uncalValue % 1 ) != 0 ) {
-            warn( itemName_ +
-                  " Invalid raw value of '" +
-                  Double.toString( uncalValue ) +
-                  "' for Boolean EU type" );
-            return booleanZeroString_;
-        }
-
-        return booleanTypeFromUncalibrated( Double.valueOf( uncalValue ).longValue() );
-
-    }
-
-    /** Function to resolve a numeric uncalibrated value to a Calibrated EU
-     * Boolean string value.
-     *
      * @param uncalValue long containing the raw value, which will result in
      * a warning if the value is not either 0 or 1.
      *
@@ -2192,16 +2168,6 @@ public class XTCEItemValue {
         }
 
         return calValue;
-
-    }
-
-    private BigDecimal floatEncodingUncalibrate( final BigInteger calValue ) {
-
-        if ( defCal_ == null ) {
-            return new BigDecimal( calValue );
-        }
-
-        return floatEncodingUncalibrate( new BigDecimal( calValue ) );
 
     }
 

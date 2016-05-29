@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -78,18 +79,12 @@ public class XTCEDatabaseExporterCsv extends XTCEDatabaseExporter {
 
         try {
 
-            FileOutputStream stream = new FileOutputStream( outFile );
+            OutputStream stream = new FileOutputStream( outFile );
             List<XTCESpaceSystem> spaceSystems = db_.getSpaceSystemTree();
 
             if ( properties_.getProperty( "use_header_row" ).equals( "true" ) == true ) { // NOI18N
                 List<String> headerFields = getParametersHeaderFields();
-                for ( int iii = 0; iii < headerFields.size(); ++iii ) {
-                    stream.write( headerFields.get( iii ).getBytes() );
-                    if ( iii != ( headerFields.size() - 1) ) {
-                        stream.write( ',' ); // NOI18N
-                    }
-                }
-                stream.write( System.getProperty( "line.separator" ).getBytes() ); // NOI18N
+                writeHeaderFields( headerFields, stream );
             }
 
             for ( XTCESpaceSystem spaceSystem : spaceSystems ) {
@@ -107,6 +102,7 @@ public class XTCEDatabaseExporterCsv extends XTCEDatabaseExporter {
                     String highValue   = ""; // NOI18N
                     String lowIncFlag  = ""; // NOI18N
                     String highIncFlag = ""; // NOI18N
+
                     if ( rangeObj.isValidRangeApplied() == true ) {
                         if ( ( rangeObj.getLowValue()           != null  ) &&
                              ( rangeObj.getLowValue().isEmpty() == false ) ) {
@@ -211,21 +207,15 @@ public class XTCEDatabaseExporterCsv extends XTCEDatabaseExporter {
     public List<String> exportContainers( File outFile )
         throws XTCEDatabaseException {
 
-        ArrayList<String> warnings = new ArrayList<>();
+        List<String> warnings = new ArrayList<>();
 
         try {
 
-            FileOutputStream stream = new FileOutputStream( outFile );
+            OutputStream stream = new FileOutputStream( outFile );
 
             if ( properties_.getProperty( "use_header_row" ).equals( "true" ) == true ) { // NOI18N
                 List<String> headerFields = getContainersHeaderFields();
-                for ( int iii = 0; iii < headerFields.size(); ++iii ) {
-                    stream.write( headerFields.get( iii ).getBytes() );
-                    if ( iii != ( headerFields.size() - 1) ) {
-                        stream.write( ',' ); // NOI18N
-                    }
-                }
-                stream.write( System.getProperty( "line.separator" ).getBytes() ); // NOI18N
+                writeHeaderFields( headerFields, stream );
             }
 
             List<XTCETMContainer> containers = db_.getContainers();
@@ -255,17 +245,15 @@ public class XTCEDatabaseExporterCsv extends XTCEDatabaseExporter {
                         name = entry.getParameter().getName();
                     }
 
-                    String containerName = null;
-                    String description   = null;
+                    String containerName = "UNDEFINED"; // NOI18N
+                    String description   = ""; // NOI18N
+
                     if ( entry.getEntryType() == FieldType.PARAMETER ) {
                         containerName = entry.getHoldingContainer().getName();
                         description   = entry.getParameter().getDescription();
                     } else if ( entry.getEntryType() == FieldType.CONTAINER ) {
                         containerName = entry.getTelemetryContainer().getName();
                         description   = entry.getTelemetryContainer().getDescription();
-                    } else {
-                        containerName = "UNDEFINED"; // NOI18N
-                        description   = ""; // NOI18N
                     }
 
                     String rValue = ""; // NOI18N
@@ -318,6 +306,149 @@ public class XTCEDatabaseExporterCsv extends XTCEDatabaseExporter {
 
     }
 
+    /** Export the telecommands in the XTCE file represented by an XTCEDatabase
+     * object.
+     * 
+     * The XTCEDatabase object is provided to the constructor of this class,
+     * along with a Properties object that contains modifier information.
+     *
+     * @param outFile File object to export to the data to.
+     *
+     * @return List containing 0 or more error/warning messages.
+     * For this CSV implementation, no messages are produced.  In the event
+     * that there are filesystem errors, those will be thrown by exception.
+     *
+     * @throws XTCEDatabaseException thrown in the event that the file cannot
+     * be opened/written/etc.
+     *
+     */
+
+    @Override
+    public List<String> exportTelecommands( File outFile )
+        throws XTCEDatabaseException {
+
+        List<String> warnings = new ArrayList<>();
+
+        try {
+
+            OutputStream stream = new FileOutputStream( outFile );
+
+            if ( properties_.getProperty( "use_header_row" ).equals( "true" ) == true ) { // NOI18N
+                List<String> headerFields = getTelecommandsHeaderFields();
+                writeHeaderFields( headerFields, stream );
+            }
+
+            List<XTCETelecommand> telecommands = db_.getTelecommands();
+
+            for ( XTCETelecommand tc : telecommands ) {
+
+                XTCETelecommandContentModel model =
+                    db_.processTelecommand( tc,
+                                            null,
+                                            properties_.getProperty( "show_all_conditions" ).equals( "true" ) ); // NOI18N
+
+                warnings.addAll( model.getWarnings() );
+
+                List<XTCEContainerContentEntry> entries =
+                    model.getContentList();
+
+                for ( XTCEContainerContentEntry entry : entries ) {
+
+                    String aliasString = ""; // NOI18N
+                    String name        = ""; // NOI18N
+                    if ( entry.getEntryType() == FieldType.PARAMETER ) {
+                        aliasString =
+                            XTCEFunctions.makeAliasDisplayString( entry.getParameter(),
+                                                                  properties_.getProperty( "show_all_alias_namespaces" ).equals( "true" ), // NOI18N
+                                                                  properties_.getProperty( "show_alias_namespaces" ).equals( "true" ), // NOI18N
+                                                                  properties_.getProperty( "preferred_alias_namespace" ) ); // NOI18N
+                        name = entry.getParameter().getName();
+                    }
+
+                    String containerName = "UNDEFINED"; // NOI18N
+                    String description   = ""; // NOI18N
+                    String engType       = ""; // NOI18N
+                    String units         = ""; // NOI18N
+                    String encoding      = ""; // NOI18N
+                    String bitOrder      = ""; // NOI18N
+
+                    if ( entry.getEntryType() == FieldType.PARAMETER ) {
+                        containerName = entry.getTelecommand().getName();
+                        description   = entry.getParameter().getDescription();
+                        engType       = entry.getParameter().getEngineeringType().toString();
+                        units         = entry.getParameter().getUnits();
+                        encoding      = entry.getParameter().getRawTypeString();
+                        bitOrder      = entry.getParameter().getRawBitOrder();
+                    } else if ( entry.getEntryType() == FieldType.CONTAINER ) {
+                        containerName = entry.getTelecommandContainer().getName();
+                        description   = entry.getTelecommandContainer().getDescription();
+                    } else if ( entry.getEntryType() == FieldType.ARGUMENT ) {
+                        containerName = entry.getTelecommand().getName();
+                        description   = entry.getArgument().getDescription();
+                        engType       = entry.getArgument().getEngineeringType().toString();
+                        units         = entry.getArgument().getUnits();
+                        encoding      = entry.getArgument().getRawTypeString();
+                        bitOrder      = entry.getArgument().getRawBitOrder();
+                    }
+
+                    String rValue = ""; // NOI18N
+                    if ( entry.getValue() != null ) {
+                        rValue = entry.getValue().toStringWithoutParameter();
+                    }
+
+                    stream.write( containerName.getBytes() );
+                    stream.write( ',' ); // NOI18N
+                    stream.write( entry.getEntryTypeString().getBytes() );
+                    stream.write( ',' ); // NOI18N
+                    stream.write( name.getBytes() );
+                    stream.write( ',' ); // NOI18N
+                    stream.write( aliasString.getBytes() );
+                    stream.write( ',' ); // NOI18N
+                    stream.write( engType.getBytes() );
+                    stream.write( ',' ); // NOI18N
+                    stream.write( units.getBytes() ); // NOI18N
+                    stream.write( ',' ); // NOI18N
+                    stream.write( encoding.getBytes() ); // NOI18N
+                    stream.write( ',' ); // NOI18N
+                    stream.write( bitOrder.getBytes() ); // NOI18N
+                    stream.write( ',' ); // NOI18N
+                    stream.write( entry.getRawSizeInBits().getBytes() );
+                    stream.write( ',' ); // NOI18N
+                    stream.write( entry.getStartBit().getBytes() );
+                    stream.write( ',' ); // NOI18N
+                    stream.write( rValue.getBytes() );
+                    stream.write( ',' ); // NOI18N
+                    stream.write( entry.getInitialValue().getBytes() );
+                    stream.write( ',' ); // NOI18N
+                    stream.write( entry.getConditions().getBytes() );
+                    stream.write( ',' ); // NOI18N
+                    stream.write( entry.getRepeatParameterInfo().getBytes() );
+                    stream.write( ',' ); // NOI18N
+                    stream.write( '"' ); // NOI18N
+                    stream.write( description.getBytes() );
+                    stream.write( '"' ); // NOI18N
+                    stream.write( System.getProperty( "line.separator" ).getBytes() ); // NOI18N
+
+                }
+
+            }
+
+            stream.close();
+
+        } catch ( FileNotFoundException ex ) {
+            throw new XTCEDatabaseException( XTCEFunctions.getText( "dialog_export_error_writing" ) + // NOI18N
+                                             " (" + outFile.getAbsolutePath() + // NOI18N
+                                             "): " + ex.getLocalizedMessage() ); // NOI18N
+        } catch ( IOException ex ) {
+            throw new XTCEDatabaseException( XTCEFunctions.getText( "dialog_export_error_writing" ) + // NOI18N
+                                             " (" + outFile.getAbsolutePath() + // NOI18N
+                                             "): " + ex.getLocalizedMessage() ); // NOI18N
+        }
+
+        return warnings;
+
+    }
+
     /** Private method to assemble the list of header fields for the parameter
      * export output.
      *
@@ -327,7 +458,8 @@ public class XTCEDatabaseExporterCsv extends XTCEDatabaseExporter {
 
     private List<String> getParametersHeaderFields() {
 
-        ArrayList<String> headerFields = new ArrayList<>();
+        List<String> headerFields = new ArrayList<>();
+
         headerFields.add( XTCEFunctions.getText( "ss_name_text" ) ); // NOI18N
         headerFields.add( XTCEFunctions.getText( "table_parameters_name_col_label" ) ); // NOI18N
         headerFields.add( XTCEFunctions.getText( "table_parameters_aliases_col_label" ) ); // NOI18N
@@ -346,6 +478,7 @@ public class XTCEDatabaseExporterCsv extends XTCEDatabaseExporter {
         headerFields.add( XTCEFunctions.getText( "table_parameters_highval_label" ) ); // NOI18N
         headerFields.add( XTCEFunctions.getText( "table_parameters_highinc_label" ) ); // NOI18N
         headerFields.add( XTCEFunctions.getText( "table_parameters_desc_col_label" ) ); // NOI18N
+
         return headerFields;
 
     }
@@ -359,7 +492,8 @@ public class XTCEDatabaseExporterCsv extends XTCEDatabaseExporter {
 
     private List<String> getContainersHeaderFields() {
 
-        ArrayList<String> headerFields = new ArrayList<>();
+        List<String> headerFields = new ArrayList<>();
+
         headerFields.add( XTCEFunctions.getText( "table_containers_contname_label" ) ); // NOI18N
         headerFields.add( XTCEFunctions.getText( "table_containers_contname_label" ) ); // NOI18N
         headerFields.add( XTCEFunctions.getText( "table_containers_paramname_label" ) ); // NOI18N
@@ -371,7 +505,57 @@ public class XTCEDatabaseExporterCsv extends XTCEDatabaseExporter {
         headerFields.add( XTCEFunctions.getText( "table_containers_condition_label" ) ); // NOI18N
         headerFields.add( XTCEFunctions.getText( "table_containers_repeat_label" ) ); // NOI18N
         headerFields.add( XTCEFunctions.getText( "table_parameters_desc_col_label" ) ); // NOI18N
+
         return headerFields;
+
+    }
+
+    /** Private method to assemble the list of header fields for the
+     * telecommand export output.
+     *
+     * @return List of String objects containing the names of the columns.
+     *
+     */
+
+    private List<String> getTelecommandsHeaderFields() {
+
+        List<String> headerFields = new ArrayList<>();
+
+        headerFields.add( XTCEFunctions.getText( "table_telecommands_contname_label" ) ); // NOI18N
+        headerFields.add( XTCEFunctions.getText( "table_telecommands_fieldtype_label" ) ); // NOI18N
+        headerFields.add( XTCEFunctions.getText( "table_telecommands_itemname_label" ) ); // NOI18N
+        headerFields.add( XTCEFunctions.getText( "table_containers_paramaliases_label" ) ); // NOI18N
+        headerFields.add( XTCEFunctions.getText( "table_parameters_type_col_label" ) ); // NOI18N
+        headerFields.add( XTCEFunctions.getText( "table_parameters_unit_col_label" ) ); // NOI18N
+        headerFields.add( XTCEFunctions.getText( "table_parameters_encoding_col_label" ) ); // NOI18N
+        headerFields.add( XTCEFunctions.getText( "table_parameters_bitorder_label" ) ); // NOI18N
+        headerFields.add( XTCEFunctions.getText( "table_telecommands_size_label" ) ); // NOI18N
+        headerFields.add( XTCEFunctions.getText( "table_telecommands_startbit_label" ) ); // NOI18N
+        headerFields.add( XTCEFunctions.getText( "table_telecommands_value_label" ) ); // NOI18N
+        headerFields.add( XTCEFunctions.getText( "table_telecommands_defaultvalue_label" ) ); // NOI18N
+        headerFields.add( XTCEFunctions.getText( "table_telecommands_condition_label" ) ); // NOI18N
+        headerFields.add( XTCEFunctions.getText( "table_telecommands_repeat_label" ) ); // NOI18N
+        headerFields.add( XTCEFunctions.getText( "table_telecommands_desc_label" ) ); // NOI18N
+
+        return headerFields;
+
+    }
+
+    private void writeHeaderFields( final List<String> headerFields,
+                                    final OutputStream stream )
+        throws IOException {
+
+        for ( int iii = 0; iii < headerFields.size(); ++iii ) {
+
+            stream.write( headerFields.get( iii ).getBytes() );
+
+            if ( iii != ( headerFields.size() - 1) ) {
+                stream.write( ',' ); // NOI18N
+            }
+
+        }
+
+        stream.write( System.getProperty( "line.separator" ).getBytes() ); // NOI18N
 
     }
 

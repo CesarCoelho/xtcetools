@@ -58,8 +58,12 @@ public class XTCEViewerContainerTableCellRenderer extends DefaultTableCellRender
                     ccc.setForeground( Color.RED );
                     return ccc;
                 }
-            }
-            if ( entries_.get( row ).isCurrentlyInUse() == false ) {
+            } else if ( entries_.get( row ).getEntryType() == FieldType.ARGUMENT ) {
+                if ( entries_.get( row ).getArgument().isValid() == false ) {
+                    ccc.setForeground( Color.RED );
+                    return ccc;
+                }
+            } else if ( entries_.get( row ).isCurrentlyInUse() == false ) {
                 ccc.setForeground( Color.ORANGE );
                 return ccc;
             }

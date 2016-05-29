@@ -56,7 +56,7 @@ and Windows platforms.
 * Telemetry Parameter access without needing to understand the XTCE data model,
 relationships, references, or other complexities.
 * Similar Telecommand and Argument access without needing to understand the
-XTCE data model. __Still In Work__
+XTCE data model.
 * Telemetry and Telecommand Container/Packet processing supporting most of the
 XTCE schema complexity, reducing the output access to simple flattened
 accessors such that the user need not understand or be aware of the
@@ -117,10 +117,33 @@ place to start.
 The following image is a snapshot of the main user interface screen showing a
 possible example representation of a CCSDS TM (Telemetry) Space Packet header.
 
+<br/>
 <img src="src/ui_main_screen.png" alt="Main Window Example Screen"/>
+<br/>
 
 ### About The Author ###
 
 The initial author of this software is an active member of the Task Force that
 maintains the XTCE specification.
+
+If this project interests you, perhaps these other projects that interest the
+author would also be of interest to you.
+
+* Comprehensive Open-architecture Solution for Mission Operations Systems
+  * <a href="http://www.cosmos-project.org/">Hawaii Space Flight Laboratory</a>
+  * <a href="http://cosmosrb.com/">Ball Aerospace</a>
+* <a href="http://www.hbird.de/">Hummingbird</a>
+
+The author is aware of XTCE implementations provided by commercial spacecraft
+command and control vendors.  This list will be updated as the author is made
+aware of any additional implementations that are tested and deployed to the
+marketplace.  For each of these two products, the author has significant
+experience integrating and using the offerings.  Using this open source XTCE
+toolkit and these products can assure a rapid integration of a spacecraft TT&C
+database.
+
+* <a href="http://itservices.harris.com/oscomet.aspx">
+  Harris Corporation OS/COMET Product</a>
+* <a href="http://www2.l-3com.com/trf/incontrol/">
+  L-3 Communications InControl Product</a>
 

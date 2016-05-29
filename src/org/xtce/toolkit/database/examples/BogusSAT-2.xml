@@ -15,7 +15,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<xtce:SpaceSystem name="BogusSAT" xmlns:xtce="http://www.omg.org/space/xtce" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.omg.org/space/xtce SpaceSystemV1.2-27Feb2014-mods.xsd" shortDescription="This is a bogus satellite telemetry and telecommand database." operationalStatus="unittest">
+<xtce:SpaceSystem name="BogusSAT" xmlns:xtce="http://www.omg.org/space/xtce" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.omg.org/space/xtce ../../../../omg/space/xtce/schema/SpaceSystemV1.2-27Feb2014-mods.xsd" shortDescription="This is a bogus satellite telemetry and telecommand database." operationalStatus="unittest">
     <xtce:LongDescription>This is a bogus satellite telemetry and telecommand database.  The purpose of BogusSAT is to exercise the capabilities of XTCE and the XTCE View tool.</xtce:LongDescription>
     <xtce:Header validationStatus="Working" classification="NotClassified" version="1.0" date="27-10-2012">
         <xtce:AuthorSet>
@@ -236,6 +236,7 @@ limitations under the License.
             </xtce:Parameter>
             <xtce:Parameter name="SomeParameter" parameterTypeRef="SomeParameter_Type"/>
             <xtce:Parameter name="BrokenParameter1" parameterTypeRef="Type_Does_Not_Exist"/>
+            <!-- The following element is a deliberate error for testing -->
             <xtce:Parameter name="BrokenParameter2" parameterRef="Schema_Attribute_Name_Error"/>
             <xtce:Parameter name="CCSDS_Packet_ID" parameterTypeRef="CCSDS_Packet_ID_Type"/>
             <xtce:Parameter name="CCSDS_Packet_Sequence" parameterTypeRef="CCSDS_Packet_Sequence_Type"/>
@@ -322,18 +323,21 @@ limitations under the License.
         </xtce:ParameterSet>
         <xtce:MetaCommandSet>
             <xtce:MetaCommand abstract="true" name="CCSDSTelecommand">
-                <xtce:LongDescription>Base telecommand structure for all CCSDS telecommands.</xtce:LongDescription>
+                <xtce:LongDescription>Base telecommand structure for all CCSDS based telecommands.</xtce:LongDescription>
                 <xtce:CommandContainer name="CCSDSTelecommandPacket">
                     <xtce:LongDescription>Super-container for all CCSDS telecommand packets.</xtce:LongDescription>
-                    <xtce:EntryList/>
-                    <xtce:BaseContainer containerRef="CCSDSPacket"/>
+                    <xtce:EntryList>
+                        <xtce:ParameterRefEntry parameterRef="CCSDS_Packet_ID"/>
+                        <xtce:ParameterRefEntry parameterRef="CCSDS_Packet_Sequence"/>
+                        <xtce:ParameterRefEntry parameterRef="CCSDS_Packet_Length"/>
+                    </xtce:EntryList>
                 </xtce:CommandContainer>
             </xtce:MetaCommand>
             <xtce:MetaCommand abstract="true" name="CCSDSPUSTelecommand">
-                <xtce:LongDescription>Base telecommand structure for all CCSDS/ECSS PUS telecommand packets.</xtce:LongDescription>
-                <!-- xtce:BaseMetaCommand metaCommandRef="CCSDSTelecommand"/ -->
+                <xtce:LongDescription>Base telecommand structure for all CCSDS/ECSS PUS based telecommand packets.</xtce:LongDescription>
+                <xtce:BaseMetaCommand metaCommandRef="CCSDSTelecommand"/>
                 <xtce:CommandContainer name="CCSDSPUSTelecommand">
-                    <xtce:EntryList/>
+                    <xtce:EntryList/><!-- need to fill these in -->
                     <xtce:BaseContainer containerRef="CCSDSTelecommandPacket">
                         <xtce:RestrictionCriteria>
                             <xtce:Comparison parameterRef="CCSDS_Packet_ID/SecHdrFlag" value="Present"/>
@@ -341,17 +345,21 @@ limitations under the License.
                     </xtce:BaseContainer>
                 </xtce:CommandContainer>
             </xtce:MetaCommand>
+            <xtce:MetaCommand abstract="true" name="CCSDSDirectTelecommand">
+                <xtce:LongDescription>Base telecommand structure for all CCSDS based hardware direct telecommand packets.</xtce:LongDescription>
+                <xtce:BaseMetaCommand metaCommandRef="CCSDSTelecommand"/>
+                <xtce:CommandContainer name="CCSDSDirectTelecommand">
+                    <xtce:EntryList/>
+                    <xtce:BaseContainer containerRef="CCSDSTelecommandPacket">
+                        <xtce:RestrictionCriteria>
+                            <xtce:Comparison parameterRef="CCSDS_Packet_ID/SecHdrFlag" value="NotPresent"/>
+                        </xtce:RestrictionCriteria>
+                    </xtce:BaseContainer>
+                </xtce:CommandContainer>
+            </xtce:MetaCommand>
         </xtce:MetaCommandSet>
         <xtce:CommandContainerSet>
-            <xtce:CommandContainer abstract="true" name="CCSDSPacket" shortDescription="Super-container for all CCSDS telecommand packets">
-                <xtce:LongDescription>Structure of this container is standardized.  This representation was borrowed for the ECSS PUS Document E-70-41A, which restates the general CCSDS standard for the CCSDS header.</xtce:LongDescription>
-                <xtce:EntryList>
-                    <xtce:ParameterRefEntry parameterRef="CCSDS_Packet_ID"/>
-                    <xtce:ParameterRefEntry parameterRef="CCSDS_Packet_Sequence"/>
-                    <xtce:ParameterRefEntry parameterRef="CCSDS_Packet_Length"/>
-                </xtce:EntryList>
-            </xtce:CommandContainer>
-            <xtce:CommandContainer abstract="true" name="CCSDSTelecommandPacket" shortDescription="Super-container for all CCSDS telecommand packets">
+            <xtce:CommandContainer name="CCSDSTelecommandPacket" shortDescription="Super-container for all CCSDS telecommand packets">
                 <xtce:LongDescription>Restricted based on the two identifying values in the standard that are a general requirement for a telemetry packet.</xtce:LongDescription>
                 <xtce:EntryList/>
                 <xtce:BaseContainer containerRef="CCSDSPacket">
@@ -1199,6 +1207,131 @@ limitations under the License.
                     </xtce:MathAlgorithm>
                 </xtce:AlgorithmSet>
             </xtce:TelemetryMetaData>
+            <xtce:CommandMetaData>
+                <xtce:ArgumentTypeSet>
+                    <xtce:IntegerArgumentType name="RW_UNIT_ID_Type" shortDescription="ID number of the reaction wheel">
+                        <xtce:UnitSet/>
+                        <xtce:IntegerDataEncoding sizeInBits="8" encoding="unsigned"/>
+                        <xtce:ValidRange minInclusive="1" maxInclusive="2"/>
+                    </xtce:IntegerArgumentType>
+                    <xtce:EnumeratedArgumentType name="RW_PWR_STATE_Type" shortDescription="Flag to indicate if power should be turned on or off">
+                        <xtce:UnitSet/>
+                        <xtce:IntegerDataEncoding sizeInBits="8" encoding="unsigned"/>
+                        <xtce:EnumerationList>
+                            <xtce:Enumeration value="0" label="OFF"/>
+                            <xtce:Enumeration value="1" label="ON"/>
+                        </xtce:EnumerationList>
+                    </xtce:EnumeratedArgumentType>
+                    <xtce:EnumeratedArgumentType name="PHASE_Type">
+                        <xtce:UnitSet/>
+                        <xtce:IntegerDataEncoding sizeInBits="8" encoding="unsigned"/>
+                        <xtce:EnumerationList>
+                            <xtce:Enumeration value="0" label="SAFE"/>
+                            <xtce:Enumeration value="1" label="LEOP"/>
+                            <xtce:Enumeration value="2" label="ASCENT"/>
+                            <xtce:Enumeration value="3" label="MISSION"/>
+                            <xtce:Enumeration value="4" label="STORAGE"/>
+                            <xtce:Enumeration value="5" label="DEBORBIT"/>
+                        </xtce:EnumerationList>
+                    </xtce:EnumeratedArgumentType>
+                </xtce:ArgumentTypeSet>
+                <xtce:MetaCommandSet>
+                    <xtce:MetaCommand name="Reaction_Wheel_Control" shortDescription="Power on/off reaction wheel">
+                        <xtce:LongDescription>This hardware telecommand directs the hardware to power on or off either of the 2 reaction wheels</xtce:LongDescription>
+                        <xtce:AliasSet>
+                            <xtce:Alias nameSpace="OPS" alias="RW_PWR"/>
+                        </xtce:AliasSet>
+                        <xtce:BaseMetaCommand metaCommandRef="../../CCSDSDirectTelecommand"/>
+                        <xtce:ArgumentList>
+                            <xtce:Argument name="RW_UNIT_ID" argumentTypeRef="RW_UNIT_ID_Type"/>
+                            <xtce:Argument name="RW_PWR_STATE" argumentTypeRef="RW_PWR_STATE_Type"/>
+                        </xtce:ArgumentList>
+                        <xtce:CommandContainer name="Reaction_Wheel_Control_Container">
+                            <xtce:EntryList>
+                                <xtce:ArgumentRefEntry argumentRef="RW_UNIT_ID"/>
+                                <xtce:ArgumentRefEntry argumentRef="RW_PWR_STATE"/>
+                            </xtce:EntryList>
+                            <xtce:BaseContainer containerRef="../../CCSDSDirectTelecommand"/>
+                        </xtce:CommandContainer>
+                    </xtce:MetaCommand>
+                    <xtce:MetaCommand name="Reaction_Wheel_1_On" shortDescription="Turn power on for reaction wheel 1">
+                        <xtce:LongDescription>This hardware telecommand is a derived form of 'Reaction_Wheel_Control' that turns ON reaction wheel 1</xtce:LongDescription>
+                        <xtce:AliasSet>
+                            <xtce:Alias nameSpace="OPS" alias="RW_1_ON"/>
+                        </xtce:AliasSet>
+                        <xtce:BaseMetaCommand metaCommandRef="Reaction_Wheel_Control">
+                            <xtce:ArgumentAssignmentList>
+                                <xtce:ArgumentAssignment argumentName="RW_UNIT_ID" argumentValue="1"/>
+                                <xtce:ArgumentAssignment argumentName="RW_PWR_STATE" argumentValue="ON"/>
+                            </xtce:ArgumentAssignmentList>
+                        </xtce:BaseMetaCommand>
+                        <xtce:CommandContainer name="Reaction_Wheel_1_On_Container">
+                            <xtce:EntryList/>
+                            <xtce:BaseContainer containerRef="Reaction_Wheel_Control_Container"/>
+                        </xtce:CommandContainer>
+                    </xtce:MetaCommand>
+                    <xtce:MetaCommand name="Reaction_Wheel_1_Off" shortDescription="Turn power off for reaction wheel 1">
+                        <xtce:LongDescription>This hardware telecommand is a derived form of 'Reaction_Wheel_Control' that turns OFF reaction wheel 1</xtce:LongDescription>
+                        <xtce:AliasSet>
+                            <xtce:Alias nameSpace="OPS" alias="RW_1_OFF"/>
+                        </xtce:AliasSet>
+                        <xtce:BaseMetaCommand metaCommandRef="Reaction_Wheel_Control">
+                            <xtce:ArgumentAssignmentList>
+                                <xtce:ArgumentAssignment argumentName="RW_UNIT_ID" argumentValue="1"/>
+                                <xtce:ArgumentAssignment argumentName="RW_PWR_STATE" argumentValue="OFF"/>
+                            </xtce:ArgumentAssignmentList>
+                        </xtce:BaseMetaCommand>
+                        <xtce:CommandContainer name="Reaction_Wheel_1_Off_Container">
+                            <xtce:EntryList/>
+                            <xtce:BaseContainer containerRef="Reaction_Wheel_Control_Container"/>
+                        </xtce:CommandContainer>
+                    </xtce:MetaCommand>
+                    <xtce:MetaCommand name="Reaction_Wheel_2_On" shortDescription="Turn power on for reaction wheel 2">
+                        <xtce:LongDescription>This hardware telecommand is a derived form of 'Reaction_Wheel_Control' that turns ON reaction wheel 2</xtce:LongDescription>
+                        <xtce:AliasSet>
+                            <xtce:Alias nameSpace="OPS" alias="RW_2_ON"/>
+                        </xtce:AliasSet>
+                        <xtce:BaseMetaCommand metaCommandRef="Reaction_Wheel_Control">
+                            <xtce:ArgumentAssignmentList>
+                                <xtce:ArgumentAssignment argumentName="RW_UNIT_ID" argumentValue="2"/>
+                                <xtce:ArgumentAssignment argumentName="RW_PWR_STATE" argumentValue="ON"/>
+                            </xtce:ArgumentAssignmentList>
+                        </xtce:BaseMetaCommand>
+                        <xtce:CommandContainer name="Reaction_Wheel_2_On_Container">
+                            <xtce:EntryList/>
+                            <xtce:BaseContainer containerRef="Reaction_Wheel_Control_Container"/>
+                        </xtce:CommandContainer>
+                    </xtce:MetaCommand>
+                    <xtce:MetaCommand name="Reaction_Wheel_2_Off" shortDescription="Turn power off for reaction wheel 2">
+                        <xtce:LongDescription>This hardware telecommand is a derived form of 'Reaction_Wheel_Control' that turns OFF reaction wheel 2</xtce:LongDescription>
+                        <xtce:AliasSet>
+                            <xtce:Alias nameSpace="OPS" alias="RW_2_OFF"/>
+                        </xtce:AliasSet>
+                        <xtce:BaseMetaCommand metaCommandRef="Reaction_Wheel_Control">
+                            <xtce:ArgumentAssignmentList>
+                                <xtce:ArgumentAssignment argumentName="RW_UNIT_ID" argumentValue="2"/>
+                                <xtce:ArgumentAssignment argumentName="RW_PWR_STATE" argumentValue="OFF"/>
+                            </xtce:ArgumentAssignmentList>
+                        </xtce:BaseMetaCommand>
+                        <xtce:CommandContainer name="Reaction_Wheel_2_Off_Container">
+                            <xtce:EntryList/>
+                            <xtce:BaseContainer containerRef="Reaction_Wheel_Control_Container"/>
+                        </xtce:CommandContainer>
+                    </xtce:MetaCommand>
+                    <xtce:MetaCommand name="Set_Mission_Phase" shortDescription="Set the bus electronics mission phase">
+                        <xtce:BaseMetaCommand metaCommandRef="/BogusSAT/CCSDSPUSTelecommand"/>
+                        <xtce:ArgumentList>
+                            <xtce:Argument name="PHASE" argumentTypeRef="PHASE_Type" shortDescription="Mission Operational Mode"/>
+                        </xtce:ArgumentList>
+                        <xtce:CommandContainer name="Set_Mission_Phase_Container">
+                            <xtce:BaseContainer containerRef="/BogusSAT/CCSDSPUSTelecommand"/>
+                            <xtce:EntryList>
+                                <xtce:ArgumentRefEntry argumentRef="PHASE"/>
+                            </xtce:EntryList>
+                        </xtce:CommandContainer>
+                    </xtce:MetaCommand>
+                </xtce:MetaCommandSet>
+            </xtce:CommandMetaData>
         </xtce:SpaceSystem>
         <xtce:SpaceSystem name="Payload1">
             <xtce:LongDescription>This is the primary revenue generating payload software monitor and control data.</xtce:LongDescription>
@@ -1625,6 +1758,71 @@ limitations under the License.
                     </xtce:SequenceContainer>
                 </xtce:ContainerSet>
             </xtce:TelemetryMetaData>
+            <xtce:CommandMetaData>
+                <xtce:ArgumentTypeSet>
+                    <xtce:EnumeratedArgumentType name="Payload_State_Type">
+                        <xtce:UnitSet/>
+                        <xtce:IntegerDataEncoding encoding="signMagnitude" sizeInBits="8"/>
+                        <xtce:EnumerationList>
+                            <xtce:Enumeration value="-1" label="OFF"/>
+                            <xtce:Enumeration value="1" label="ON"/>
+                            <xtce:Enumeration value="0" label="STANDBY"/>
+                        </xtce:EnumerationList>
+                    </xtce:EnumeratedArgumentType>
+                    <xtce:FloatArgumentType name="Output_Power_Type" shortDescription="Payload output power">
+                        <xtce:UnitSet>
+                            <xtce:Unit description="current">Amperes</xtce:Unit>
+                        </xtce:UnitSet>
+                        <xtce:FloatDataEncoding sizeInBits="32" encoding="IEEE754_1985"/>
+                    </xtce:FloatArgumentType>
+                    <xtce:AggregateArgumentType name="Config_Item_Type">
+                        <xtce:MemberList>
+                            <xtce:Member name="ADDRESS" typeRef="Address_Type"/>
+                            <xtce:Member name="VALUE32" typeRef="Value32_Type"/>
+                        </xtce:MemberList>
+                    </xtce:AggregateArgumentType>
+                    <xtce:IntegerArgumentType name="Address_Type" signed="false" shortDescription="Address of configurable">
+                        <xtce:UnitSet/>
+                        <xtce:IntegerDataEncoding sizeInBits="32" encoding="unsigned"/>
+                    </xtce:IntegerArgumentType>
+                    <xtce:IntegerArgumentType name="Value32_Type" shortDescription="New value to set to 32 bit integer item">
+                        <xtce:UnitSet/>
+                        <xtce:IntegerDataEncoding sizeInBits="32" encoding="unsigned"/>
+                    </xtce:IntegerArgumentType>
+                </xtce:ArgumentTypeSet>
+                <xtce:MetaCommandSet>
+                    <xtce:MetaCommand name="Payload_1_Control" shortDescription="Controls the state of payload operation">
+                        <xtce:BaseMetaCommand metaCommandRef="/BogusSAT/CCSDSPUSTelecommand"/>
+                        <xtce:ArgumentList>
+                            <xtce:Argument name="STATE" argumentTypeRef="Payload_State_Type"/>
+                            <xtce:Argument name="OUTPUT_POWER" argumentTypeRef="Output_Power_Type">
+                                <xtce:LongDescription>Long Description of the output power argument</xtce:LongDescription>
+                            </xtce:Argument>
+                        </xtce:ArgumentList>
+                        <xtce:CommandContainer name="Payload_1_Control_Container">
+                            <xtce:BaseContainer containerRef="/BogusSAT/CCSDSPUSTelecommand"/>
+                            <xtce:EntryList>
+                                <xtce:ArgumentRefEntry argumentRef="STATE"/>
+                                <xtce:FixedValueEntry binaryValue="f0" sizeInBits="8"/>
+                                <xtce:ArgumentRefEntry argumentRef="OUTPUT_POWER"/>
+                            </xtce:EntryList>
+                        </xtce:CommandContainer>
+                    </xtce:MetaCommand>
+                    <xtce:MetaCommand name="Adjust_Payload_1_Config" shortDescription="Modify payload configuration">
+                        <xtce:LongDescription>Modifies an internal configurable item at a provided address for the payload processor</xtce:LongDescription>
+                        <xtce:BaseMetaCommand metaCommandRef="/BogusSAT/CCSDSPUSTelecommand"/>
+                        <xtce:ArgumentList>
+                            <xtce:Argument name="CFGITEM" argumentTypeRef="Config_Item_Type"/>
+                        </xtce:ArgumentList>
+                        <xtce:CommandContainer name="Payload_1_Control_Container">
+                            <xtce:BaseContainer containerRef="/BogusSAT/CCSDSPUSTelecommand"/>
+                            <xtce:EntryList>
+                                <xtce:ArgumentRefEntry argumentRef="CFGITEM"/>
+                            </xtce:EntryList>
+                        </xtce:CommandContainer>
+                    </xtce:MetaCommand>
+                </xtce:MetaCommandSet>
+            </xtce:CommandMetaData>
         </xtce:SpaceSystem>
         <xtce:SpaceSystem name="Payload2"/>
     </xtce:SpaceSystem>

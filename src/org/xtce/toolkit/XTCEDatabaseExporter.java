@@ -124,7 +124,7 @@ public abstract class XTCEDatabaseExporter {
     public List<String> exportParameters( File outFile )
         throws XTCEDatabaseException {
 
-        ArrayList<String> msg = new ArrayList<>();
+        List<String> msg = new ArrayList<>();
         msg.add( XTCEFunctions.getText( "dialog_export_notyetimplemented_text" ) ); // NOI18N
         return msg;
 
@@ -153,7 +153,7 @@ public abstract class XTCEDatabaseExporter {
     public List<String> exportContainers( File outFile )
         throws XTCEDatabaseException {
 
-        ArrayList<String> msg = new ArrayList<>();
+        List<String> msg = new ArrayList<>();
         msg.add( XTCEFunctions.getText( "dialog_export_notyetimplemented_text" ) ); // NOI18N
         return msg;
 
@@ -182,7 +182,7 @@ public abstract class XTCEDatabaseExporter {
     public List<String> exportTelecommands( File outFile )
         throws XTCEDatabaseException {
 
-        ArrayList<String> msg = new ArrayList<>();
+        List<String> msg = new ArrayList<>();
         msg.add( XTCEFunctions.getText( "dialog_export_notyetimplemented_text" ) ); // NOI18N
         return msg;
 

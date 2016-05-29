@@ -234,6 +234,9 @@ public class XTCEContainerEntryValue {
             return value_;
         } else {
             if ( itemValueObj_ == null ) {
+                if ( ( value_ != null ) && ( item_ == null ) ) {
+                    return value_;
+                }
                 itemValueObj_ = new XTCEItemValue( item_ );
             }
             return itemValueObj_.getCalibratedFromUncalibrated( value_ );
@@ -254,6 +257,9 @@ public class XTCEContainerEntryValue {
             return value_;
         } else {
             if ( itemValueObj_ == null ) {
+                if ( ( value_ != null ) && ( item_ == null ) ) {
+                    return value_;
+                }
                 itemValueObj_ = new XTCEItemValue( item_ );
             }
             return itemValueObj_.getUncalibratedFromCalibrated( value_ );
@@ -267,6 +273,9 @@ public class XTCEContainerEntryValue {
      */
 
     public final BitSet getRawValue() {
+
+        // TODO this function is vulnerable in the FixedValueEntry case because
+        // the size is not known and there is not item_
 
         if ( rawValue_ != null ) {
             return rawValue_;
@@ -288,6 +297,9 @@ public class XTCEContainerEntryValue {
      */
 
     public final String getRawValueHex() {
+
+        // TODO this function is vulnerable in the FixedValueEntry case because
+        // the size is not known and there is not item_
 
         if ( itemValueObj_ == null ) {
             itemValueObj_ = new XTCEItemValue( item_ );
@@ -385,9 +397,11 @@ public class XTCEContainerEntryValue {
     @Override
     public boolean equals( Object rhs ) {
 
-        if ( this == rhs ) {
+        if ( rhs == null ) {
+            return false;
+        } else if ( this == rhs ) {
             return true;
-        } else if ( rhs.getClass() != XTCEContainerEntryValue.class ) {
+        } else if ( rhs instanceof XTCEContainerEntryValue == false ) {
             return false;
         }
 

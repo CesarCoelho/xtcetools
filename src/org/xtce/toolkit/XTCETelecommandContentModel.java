@@ -17,8 +17,13 @@
 
 package org.xtce.toolkit;
 
+import java.math.BigInteger;
 import java.util.List;
+import org.omg.space.xtce.AggregateDataType;
 import org.omg.space.xtce.ArrayParameterRefEntryType;
+import org.omg.space.xtce.CmdContArrayArgumentRefEntryType;
+import org.omg.space.xtce.CommandContainerEntryListType.ArgumentRefEntry;
+import org.omg.space.xtce.CommandContainerEntryListType.FixedValueEntry;
 import org.omg.space.xtce.CommandContainerType.BaseContainer;
 import org.omg.space.xtce.ContainerRefEntryType;
 import org.omg.space.xtce.ContainerSegmentRefEntryType;
@@ -78,7 +83,12 @@ public class XTCETelecommandContentModel extends XTCEContainerContentModelBase {
                                         boolean                       showAllConditions )
         throws XTCEDatabaseException {
 
-        super( spaceSystems, userValues, null, showAllConditions );
+        super( spaceSystems,
+               userValues,
+               null,
+               tcObject.getName(),
+               tcObject.getDescription(),
+               showAllConditions );
 
         telecommand_ = tcObject;
 
@@ -169,7 +179,9 @@ public class XTCETelecommandContentModel extends XTCEContainerContentModelBase {
                               null,
                               includedContainer );
 
-        processEndOfContainer( currentStartBit, containerStartBit, containerStartIndex );
+        processEndOfContainer( currentStartBit,
+                               containerStartBit,
+                               containerStartIndex );
 
     }
 
@@ -194,14 +206,17 @@ public class XTCETelecommandContentModel extends XTCEContainerContentModelBase {
                 getBaseTelecommand( currentTelecommand );
 
             BaseContainer baseContainerRef =
-                currentTelecommand.getCommandContainer().getCommandContainerReference().getBaseContainer();
+                currentTelecommand.getCommandContainer()
+                                  .getCommandContainerReference()
+                                  .getBaseContainer();
 
             MatchCriteriaType restrictions = null;
             if ( baseContainerRef != null ) {
                 restrictions = baseContainerRef.getRestrictionCriteria();
             }
 
-            ArgumentAssignmentList assignments = baseTelecommandRef.getArgumentAssignmentList();
+            ArgumentAssignmentList assignments =
+                baseTelecommandRef.getArgumentAssignmentList();
 
             applyBaseTelecommand( baseTelecommand,
                                   currentStartBit,
@@ -241,34 +256,40 @@ public class XTCETelecommandContentModel extends XTCEContainerContentModelBase {
             contentList_.add( new XTCEContainerContentEntry( telecommand.getCommandContainer(), null ) );
         }
 
-        List<SequenceEntryType> entryList = telecommand.getCommandContainer().getCommandContainerReference().getEntryList().getParameterRefEntryOrParameterSegmentRefEntryOrContainerRefEntry();
+        List<SequenceEntryType> entryList =
+            telecommand.getCommandContainer()
+                       .getCommandContainerReference()
+                       .getEntryList()
+                       .getParameterRefEntryOrParameterSegmentRefEntryOrContainerRefEntry();
+
         for ( SequenceEntryType entry : entryList ) {
 
             if ( entry.getClass() == ParameterRefEntryType.class ) {
-                //// pass the include condition?
-                //if ( includedContainer != null ) {
-                //    if ( includedContainer.getConditionList().size() > 0 ) {
-                //        addParameter( (ParameterRefEntryType)entry,
-                //                      currentStartBit,
-                //                      containerStartBit,
-                //                      container,
-                //                      includedContainer.getConditionList() );
-                //    } else {
-                //        addParameter( (ParameterRefEntryType)entry,
-                //                      currentStartBit,
-                //                      containerStartBit,
-                //                      container,
-                //                      null );
-                //    }
-                //} else {
-                //    addParameter( (ParameterRefEntryType)entry,
-                //                  currentStartBit,
-                //                  containerStartBit,
-                //                  container,
-                //                  null );
-                //}
+
+                if ( ( includedContainer                              != null  ) && 
+                     ( includedContainer.getConditionList().isEmpty() == false ) ) {
+                    addParameter( (ParameterRefEntryType)entry,
+                                  currentStartBit,
+                                  containerStartBit,
+                                  telecommand,
+                                  includedContainer.getConditionList() );
+                } else {
+                    addParameter( (ParameterRefEntryType)entry,
+                                  currentStartBit,
+                                  containerStartBit,
+                                  telecommand,
+                                  null );
+                }
+
             } else if ( entry.getClass() == ContainerRefEntryType.class ) {
-                System.out.println( "ContainerRefEntryType not yet implemented" );
+
+                String nameRef =
+                    ((ContainerRefEntryType)entry).getContainerRef();
+                warnings_.add( "'ContainerRefEntry' " + // NOI18N
+                               XTCEFunctions.getText( "xml_element_not_yet_supported" ) + // NOI18N
+                               " " + // NOI18N
+                               nameRef );
+
                 //String nameRef = ((ContainerRefEntryType)entry).getContainerRef();
                 //XTCETCContainer nextIncludedContainer = findContainer( nameRef, telecommand );
                 //XTCEContainerContentEntry nextIncludedContent =
@@ -300,20 +321,94 @@ public class XTCETelecommandContentModel extends XTCEContainerContentModelBase {
                 //        // to eventually consider repeat offset
                 //    }
                 //}
+            } else if ( entry.getClass() == ArgumentRefEntry.class ) {
+
+                if ( ( includedContainer                              != null  ) && 
+                     ( includedContainer.getConditionList().isEmpty() == false ) ) {
+                    addArgument( (ArgumentRefEntry)entry,
+                                 currentStartBit,
+                                 containerStartBit,
+                                 telecommand,
+                                 includedContainer.getConditionList() );
+                } else {
+                    addArgument( (ArgumentRefEntry)entry,
+                                 currentStartBit,
+                                 containerStartBit,
+                                 telecommand,
+                                 null );
+                }
+
+            } else if ( entry.getClass() == FixedValueEntry.class ) {
+
+                if ( ( includedContainer                              != null  ) && 
+                     ( includedContainer.getConditionList().isEmpty() == false ) ) {
+                    addFixedValue( (FixedValueEntry)entry,
+                                   currentStartBit,
+                                   containerStartBit,
+                                   telecommand,
+                                   includedContainer.getConditionList() );
+                } else {
+                    addFixedValue( (FixedValueEntry)entry,
+                                   currentStartBit,
+                                   containerStartBit,
+                                   telecommand,
+                                   null );
+                }
+
             } else if ( entry.getClass() == ArrayParameterRefEntryType.class ) {
-                String nameRef = ((ArrayParameterRefEntryType)entry).getParameterRef();
-                warnings_.add( "Element ArrayParameterRefEntryType not yet supported for: " + nameRef );
+
+                String nameRef =
+                    ((ArrayParameterRefEntryType)entry).getParameterRef();
+                warnings_.add( "'ArrayParameterRefEntry' " + // NOI18N
+                               XTCEFunctions.getText( "xml_element_not_yet_supported" ) + // NOI18N
+                               " " + // NOI18N
+                               nameRef );
+
+            } else if ( entry.getClass() == CmdContArrayArgumentRefEntryType.class ) {
+
+                String nameRef =
+                    ((CmdContArrayArgumentRefEntryType)entry).getArgumentRef();
+                warnings_.add( "'ArrayArgumentRefEntry' " + // NOI18N
+                               XTCEFunctions.getText( "xml_element_not_yet_supported" ) + // NOI18N
+                               " " + // NOI18N
+                               nameRef );
+
             } else if ( entry.getClass() == ParameterSegmentRefEntryType.class ) {
-                String nameRef = ((ParameterSegmentRefEntryType)entry).getParameterRef();
-                warnings_.add( "Element ParameterSegmentRefEntryType not yet supported for: " + nameRef );
+
+                String nameRef =
+                    ((ParameterSegmentRefEntryType)entry).getParameterRef();
+                warnings_.add( "'ParameterSegmentRefEntry' " + // NOI18N
+                               XTCEFunctions.getText( "xml_element_not_yet_supported" ) + // NOI18N
+                               " " + // NOI18N
+                               nameRef );
+
             } else if ( entry.getClass() == ContainerSegmentRefEntryType.class ) {
-                String nameRef = ((ContainerSegmentRefEntryType)entry).getContainerRef();
-                warnings_.add( "Element ContainerSegmentRefEntryType not yet supported for: " + nameRef );
+
+                String nameRef =
+                    ((ContainerSegmentRefEntryType)entry).getContainerRef();
+                warnings_.add( "'ContainerSegmentRefEntry' " + // NOI18N
+                               XTCEFunctions.getText( "xml_element_not_yet_supported" ) + // NOI18N
+                               " " + // NOI18N
+                               nameRef );
+
             } else if ( entry.getClass() == StreamSegmentEntryType.class ) {
-                String nameRef = ((StreamSegmentEntryType)entry).getStreamRef();
-                warnings_.add( "Element StreamSegmentEntryType not yet supported for: " + nameRef );
+
+                String nameRef =
+                    ((StreamSegmentEntryType)entry).getStreamRef();
+                warnings_.add( "'StreamSegmentEntry' " + // NOI18N
+                               XTCEFunctions.getText( "xml_element_not_yet_supported" ) + // NOI18N
+                               " " + // NOI18N
+                               nameRef );
+
             } else if ( entry.getClass() == IndirectParameterRefEntryType.class ) {
-                warnings_.add( "Element IndirectParameterRefEntryType not yet supported" );
+
+                String nameRef =
+                    ((IndirectParameterRefEntryType)entry).getParameterInstance().getParameterRef();
+                warnings_.add( "'IndirectParameterRefEntry' " + // NOI18N
+                               XTCEFunctions.getText( "xml_element_not_yet_supported" ) + // NOI18N
+                               " " + // NOI18N
+                               nameRef );
+
             }
 
         }
@@ -341,10 +436,14 @@ public class XTCETelecommandContentModel extends XTCEContainerContentModelBase {
             }
         }
 
-        throw new XTCEDatabaseException( "Unable to locate BaseMetaCommand Reference " +
+        throw new XTCEDatabaseException( XTCEFunctions.getText( "error_no_base_tc" ) +
+                                         " '" +
                                          metaCommandRef +
-                                         " in MetaCommand " +
-                                         currentTelecommand.getName() );
+                                         "' " +
+                                         XTCEFunctions.getText( "error_from_tc" ) +
+                                         " '" +
+                                         currentTelecommand.getName() +
+                                         "'" );
 
     }
 
@@ -365,6 +464,323 @@ public class XTCETelecommandContentModel extends XTCEContainerContentModelBase {
                     }
                 }
             }
+        }
+
+    }
+
+    private void addFixedValue( FixedValueEntry               fixedEntry,
+                                RunningStartBit               currentStartBit,
+                                long                          containerStartBit,
+                                XTCETelecommand               telecommand,
+                                List<XTCEContainerEntryValue> includedConditionsList )
+        throws XTCEDatabaseException {
+
+        BigInteger value = new BigInteger( fixedEntry.getBinaryValue() );
+
+        if ( value.compareTo( BigInteger.ZERO ) == -1 ) {
+            value = value.negate();
+        }
+
+        XTCEContainerContentEntry content =
+            new XTCEContainerContentEntry( fixedEntry.getSizeInBits().toString(),
+                                           value.toString(),
+                                           telecommand );
+
+        if ( includedConditionsList != null ) {
+            content.setConditionList( includedConditionsList, false );
+        }
+        addIncludeConditions( fixedEntry, telecommand, content );
+        evaluateIncludeConditions( content );
+        if ( content.isCurrentlyInUse() == true ) {
+            addStartBit( fixedEntry, content, currentStartBit, containerStartBit );
+        }
+
+        long repeatCount = addRepeatEntryDescription( fixedEntry, content );
+
+        for ( int iii = 0; iii < repeatCount; ++iii ) {
+
+            if ( repeatCount != 1 ) {
+                content.setRepeatparameterInfo(
+                    XTCEFunctions.makeRepeatString( iii + 1, repeatCount ) );
+            }
+
+            contentList_.add( content );
+
+            // short circuit the depth into members when the parameter is not
+            // currently applied
+
+            if ( ( showAllConditions_         == false ) &&
+                 ( content.isCurrentlyInUse() == false ) ) {
+                return;
+            }
+
+            // need a deep copy of the content if this is NOT the last
+            if ( iii < ( repeatCount - 1 ) ) {
+                try {
+                    content = (XTCEContainerContentEntry)content.clone();
+                } catch ( CloneNotSupportedException ex ) {
+                    // do nothing, it will not happen
+                }
+                // deep copy include is previousEntry 0 right now, but we need
+                // to eventually consider repeat offset
+                if ( isEntryNeedingStartBit( content ) == true ) {
+                    // to support RepeatEntry/Offset, add function here
+                    content.setStartBit( currentStartBit.get() );
+                    currentStartBit.add( Long.parseLong( content.getRawSizeInBits() ) );
+                }
+            }
+
+        }
+
+    }
+
+    private void addArgument( ArgumentRefEntry              aRefEntry,
+                              RunningStartBit               currentStartBit,
+                              long                          containerStartBit,
+                              XTCETelecommand               telecommand,
+                              List<XTCEContainerEntryValue> includedConditionsList )
+        throws XTCEDatabaseException {
+
+        String nameRef = aRefEntry.getArgumentRef();
+
+        //System.out.println( "Identified Argument " +
+        //                    nameRef +
+        //                    " cur start bit " +
+        //                    Long.toString( currentStartBit.get() ) +
+        //                    " cont start bit " +
+        //                    Long.toString( containerStartBit ) );
+
+        XTCEArgument aObj = telecommand.getArgument( nameRef );
+
+        XTCEContainerContentEntry content =
+            new XTCEContainerContentEntry( aObj, telecommand );
+
+        if ( includedConditionsList != null ) {
+            content.setConditionList( includedConditionsList, false );
+        }
+        addIncludeConditions( aRefEntry, telecommand, content );
+        applyUserValue( content );
+        evaluateIncludeConditions( content );
+        if ( content.isCurrentlyInUse() == true ) {
+            addStartBit( aRefEntry, content, currentStartBit, containerStartBit );
+            applyBinaryValue( content );
+        }
+
+        long repeatCount = addRepeatEntryDescription( aRefEntry, content );
+
+        for ( int iii = 0; iii < repeatCount; ++iii ) {
+
+            if ( repeatCount != 1 ) {
+                content.setRepeatparameterInfo(
+                    XTCEFunctions.makeRepeatString( iii + 1, repeatCount ) );
+            }
+
+            contentList_.add( content );
+
+            // short circuit the depth into members when the parameter is not
+            // currently applied
+
+            if ( ( showAllConditions_         == false ) &&
+                 ( content.isCurrentlyInUse() == false ) ) {
+                return;
+            }
+
+            if ( aObj.getTypeReference().getClass() == AggregateDataType.class ) {
+                // doesnt need container start bit because they are always previousEntry & 0
+                addMembers( aObj, currentStartBit, telecommand, content );
+            }
+
+            // need a deep copy of the content if this is NOT the last
+            if ( iii < ( repeatCount - 1 ) ) {
+                try {
+                    content = (XTCEContainerContentEntry)content.clone();
+                } catch ( CloneNotSupportedException ex ) {
+                    // do nothing, it will not happen
+                }
+                // deep copy include is previousEntry 0 right now, but we need
+                // to eventually consider repeat offset
+                if ( isEntryNeedingStartBit( content ) == true ) {
+                    // to support RepeatEntry/Offset, add function here
+                    content.setStartBit( currentStartBit.get() );
+                    currentStartBit.add( Long.parseLong( content.getRawSizeInBits() ) );
+                    content.setValue( (XTCEContainerEntryValue)null );
+                    applyBinaryValue( content );
+                }
+            }
+
+        }
+
+    }
+
+    private void addParameter( ParameterRefEntryType         pRefEntry,
+                               RunningStartBit               currentStartBit,
+                               long                          containerStartBit,
+                               XTCETelecommand               telecommand,
+                               List<XTCEContainerEntryValue> includedConditionsList )
+        throws XTCEDatabaseException {
+
+        String nameRef = pRefEntry.getParameterRef();
+
+        //System.out.println( "Identified Parameter " +
+        //                    nameRef +
+        //                    " cur start bit " +
+        //                    Long.toString( currentStartBit.get() ) +
+        //                    " cont start bit " +
+        //                    Long.toString( containerStartBit ) );
+
+        XTCEParameter pObj = findParameter( nameRef, telecommand );
+        XTCEContainerContentEntry content =
+            new XTCEContainerContentEntry( pObj, telecommand );
+
+        if ( includedConditionsList != null ) {
+            content.setConditionList( includedConditionsList, false );
+        }
+        addIncludeConditions( pRefEntry, telecommand, content );
+        applyUserValue( content );
+        evaluateIncludeConditions( content );
+        if ( content.isCurrentlyInUse() == true ) {
+            addStartBit( pRefEntry, content, currentStartBit, containerStartBit );
+            applyBinaryValue( content );
+        }
+
+        long repeatCount = addRepeatEntryDescription( pRefEntry, content );
+
+        for ( int iii = 0; iii < repeatCount; ++iii ) {
+
+            if ( repeatCount != 1 ) {
+                content.setRepeatparameterInfo(
+                    XTCEFunctions.makeRepeatString( iii + 1, repeatCount ) );
+            }
+
+            contentList_.add( content );
+
+            // short circuit the depth into members when the parameter is not
+            // currently applied
+
+            if ( ( showAllConditions_         == false ) &&
+                 ( content.isCurrentlyInUse() == false ) ) {
+                return;
+            }
+
+            if ( pObj.getTypeReference().getClass() == AggregateDataType.class ) {
+                // doesnt need container start bit because they are always previousEntry & 0
+                addMembers( pObj, currentStartBit, telecommand, content );
+            }
+
+            // need a deep copy of the content if this is NOT the last
+            if ( iii < ( repeatCount - 1 ) ) {
+                try {
+                    content = (XTCEContainerContentEntry)content.clone();
+                } catch ( CloneNotSupportedException ex ) {
+                    // do nothing, it will not happen
+                }
+                // deep copy include is previousEntry 0 right now, but we need
+                // to eventually consider repeat offset
+                if ( isEntryNeedingStartBit( content ) == true ) {
+                    // to support RepeatEntry/Offset, add function here
+                    content.setStartBit( currentStartBit.get() );
+                    currentStartBit.add( Long.parseLong( content.getRawSizeInBits() ) );
+                    content.setValue( (XTCEContainerEntryValue)null );
+                    applyBinaryValue( content );
+                }
+            }
+
+        }
+
+    }
+
+    private void addMembers( XTCEParameter             parameter,
+                             RunningStartBit           currentStartBit,
+                             XTCETelecommand           telecommand,
+                             XTCEContainerContentEntry parentContentEntry )
+        throws XTCEDatabaseException {
+
+        List<AggregateDataType.MemberList.Member> members =
+            ((AggregateDataType)parameter.getTypeReference()).getMemberList()
+                                                             .getMember();
+
+        for ( AggregateDataType.MemberList.Member member : members ) {
+
+            String newPath = parameter.getFullPath() + "." + member.getName(); // NOI18N
+            //System.out.println( "Identified Parameter Member " + newPath );
+
+            XTCEParameter mObj = findParameter( newPath, telecommand );
+
+            XTCEContainerContentEntry mcontent =
+                new XTCEContainerContentEntry( mObj, telecommand );
+
+            mcontent.setConditionList( parentContentEntry.getConditionList(),
+                                       parentContentEntry.isCurrentlyInUse() );
+
+            applyUserValue( mcontent );
+
+            if ( parentContentEntry.getRepeatParameterInfo().isEmpty() == false ) {
+                mcontent.setRepeatparameterInfo( parentContentEntry.getRepeatParameterInfo() );
+            }
+
+            // compute start bit for Members is easy because they are always
+            // previousEntry and 0.
+
+            if ( isEntryNeedingStartBit( mcontent ) == true ) {
+                mcontent.setStartBit( currentStartBit.get() );
+                currentStartBit.add( Long.parseLong( mcontent.getRawSizeInBits() ) );
+                applyBinaryValue( mcontent );
+            }
+
+            contentList_.add( mcontent );
+
+            if ( mObj.getTypeReference().getClass() == AggregateDataType.class ) {
+                addMembers( mObj, currentStartBit, telecommand, mcontent );
+            }
+
+        }
+
+    }
+
+    private void addMembers( XTCEArgument              argument,
+                             RunningStartBit           currentStartBit,
+                             XTCETelecommand           telecommand,
+                             XTCEContainerContentEntry parentContentEntry )
+        throws XTCEDatabaseException {
+
+        List<AggregateDataType.MemberList.Member> members =
+            ((AggregateDataType)argument.getTypeReference()).getMemberList()
+                                                            .getMember();
+
+        for ( AggregateDataType.MemberList.Member member : members ) {
+
+            String newPath = argument.getName() + "." + member.getName(); // NOI18N
+            //System.out.println( "Identified Argument Member " + newPath );
+
+            XTCEArgument aObj = telecommand.getArgument( newPath );
+
+            XTCEContainerContentEntry mcontent =
+                new XTCEContainerContentEntry( aObj, telecommand );
+
+            mcontent.setConditionList( parentContentEntry.getConditionList(),
+                                       parentContentEntry.isCurrentlyInUse() );
+
+            applyUserValue( mcontent );
+
+            if ( parentContentEntry.getRepeatParameterInfo().isEmpty() == false ) {
+                mcontent.setRepeatparameterInfo( parentContentEntry.getRepeatParameterInfo() );
+            }
+
+            // compute start bit for Members is easy because they are always
+            // previousEntry and 0.
+
+            if ( isEntryNeedingStartBit( mcontent ) == true ) {
+                mcontent.setStartBit( currentStartBit.get() );
+                currentStartBit.add( Long.parseLong( mcontent.getRawSizeInBits() ) );
+                applyBinaryValue( mcontent );
+            }
+
+            contentList_.add( mcontent );
+
+            if ( aObj.getTypeReference() instanceof AggregateDataType ) {
+                addMembers( aObj, currentStartBit, telecommand, mcontent );
+            }
+
         }
 
     }

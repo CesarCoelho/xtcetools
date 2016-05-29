@@ -285,6 +285,9 @@ public class AliasLogicTest {
             Assert.assertFalse( "Alias object equals another object is false",
                                 aliases1.get( 1 ).equals( myNumber ) );
 
+            Assert.assertFalse( "Alias object equals null is false",
+                                aliases1.get( 1 ).equals( null ) );
+
         } catch ( Throwable ex ) {
             Assert.fail( ex.getLocalizedMessage() );
         }

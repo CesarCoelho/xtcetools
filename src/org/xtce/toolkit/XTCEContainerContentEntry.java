@@ -93,21 +93,21 @@ public class XTCEContainerContentEntry implements Comparable, Cloneable {
      *
      * @param parameter XTCEParameter object containing the parameter info.
      *
-     * @param tcContainer XTCETelecommand object that holds this container
+     * @param tc XTCETelecommand object that holds this container
      * within the container being processed.
      *
      */
 
     XTCEContainerContentEntry( final XTCEParameter   parameter,
-                               final XTCETelecommand tcContainer ) {
+                               final XTCETelecommand tc ) {
 
         fieldType       = FieldType.PARAMETER;
         pReference      = parameter;
-        hContainer      = null;
+        hContainer      = null;  // should I be doing this?
         tmContReference = null;
-        tcContReference = null;
+        tcContReference = tc.getCommandContainer();
         aReference      = null;
-        telecommand     = tcContainer;
+        telecommand     = tc;
         fixedSize       = "";
 
     }
@@ -120,21 +120,21 @@ public class XTCEContainerContentEntry implements Comparable, Cloneable {
      *
      * @param argument XTCEArgument object containing the argument info.
      *
-     * @param tcContainer XTCETelecommand object that holds this container
+     * @param tc XTCETelecommand object that holds this container
      * within the container being processed.
      *
      */
 
     XTCEContainerContentEntry( final XTCEArgument    argument,
-                               final XTCETelecommand tcContainer ) {
+                               final XTCETelecommand tc ) {
 
         fieldType       = FieldType.ARGUMENT;
         pReference      = null;
-        hContainer      = null;
+        hContainer      = null;  // should I be doing this?
         tmContReference = null;
-        tcContReference = null;
+        tcContReference = tc.getCommandContainer();
         aReference      = argument;
-        telecommand     = tcContainer;
+        telecommand     = tc;
         fixedSize       = "";
 
     }
@@ -147,21 +147,21 @@ public class XTCEContainerContentEntry implements Comparable, Cloneable {
      *
      * @param container XTCETCContainer object containing the container info.
      *
-     * @param tcContainer XTCETelecommand object that holds this container
+     * @param tc XTCETelecommand object that holds this container
      * within the container being processed.
      *
      */
 
     XTCEContainerContentEntry( final XTCETCContainer container,
-                               final XTCETelecommand tcContainer ) {
+                               final XTCETelecommand tc ) {
 
         fieldType        = FieldType.CONTAINER;
         pReference       = null;
-        hContainer       = null;
+        hContainer       = null;  // should I be doing this?
         tmContReference  = null;
         aReference       = null;
         tcContReference  = container;
-        telecommand      = tcContainer;
+        telecommand      = tc;
         fixedSize        = "";
 
     }
@@ -177,27 +177,24 @@ public class XTCEContainerContentEntry implements Comparable, Cloneable {
      * @param value String containing the value of this fixed entry field,
      * which is assumed to be in xs:hexBinary format.
      *
-     * @param tcContainer XTCETelecommand object that holds this container
+     * @param tc XTCETelecommand object that holds this container
      * within the container being processed.
      *
      */
 
     XTCEContainerContentEntry( final String          size,
                                final String          value,
-                               final XTCETelecommand tcContainer ) {
+                               final XTCETelecommand tc ) {
 
         fieldType       = FieldType.CONSTANT;
         pReference      = null;
-        hContainer      = null;
+        hContainer      = null;  // should I be doing this?
         tmContReference = null;
-        tcContReference = null;
+        tcContReference = tc.getCommandContainer();
         aReference      = null;
-        telecommand     = tcContainer;
+        telecommand     = tc;
         fixedSize       = size;
-
-        long tempValueLong = Long.parseLong( value, 16 );
-        entryValue =
-            new XTCEContainerEntryValue( Long.toString( tempValueLong ) );
+        entryValue      = new XTCEContainerEntryValue( value );
 
     }
 

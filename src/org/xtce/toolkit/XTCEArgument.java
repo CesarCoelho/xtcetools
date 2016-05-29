@@ -19,9 +19,19 @@ package org.xtce.toolkit;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.namespace.QName;
+import org.omg.space.xtce.AbsoluteTimeDataType;
+import org.omg.space.xtce.AggregateDataType;
 import org.omg.space.xtce.AggregateDataType.MemberList.Member;
+import org.omg.space.xtce.ArgumentTypeSetType.FloatArgumentType;
+import org.omg.space.xtce.ArgumentTypeSetType.IntegerArgumentType;
+import org.omg.space.xtce.ArrayDataTypeType;
+import org.omg.space.xtce.BinaryDataType;
+import org.omg.space.xtce.BooleanDataType;
+import org.omg.space.xtce.EnumeratedDataType;
 import org.omg.space.xtce.MetaCommandType.ArgumentList.Argument;
 import org.omg.space.xtce.NameDescriptionType;
+import org.omg.space.xtce.RelativeTimeDataType;
+import org.omg.space.xtce.StringDataType;
 
 /** This class serves as a convenient container for representing Telecommand
  * Arguments in the XTCE data model by abstracting the mechanics of assembling
@@ -351,6 +361,99 @@ public class XTCEArgument extends XTCETypedObject {
                 getName() +
                 ": " + // NOI18N
                 XTCEFunctions.getText( "xml_marshal_error_argument" ) + // NOI18N
+                " '" + // NOI18N
+                ex.getCause() +
+                "'" ); // NOI18N
+        }
+
+    }
+
+    /** Retrieve an XML string that represents this argument object's "type"
+     * element.
+     *
+     * This method overrides the one provided in XTCETypedObject because the
+     * element name and class name for Argument Types do not align in XTCE 1.2.
+     *
+     * From ArgumentTypeSetType:
+     *
+     * (name = "StringArgumentType", type = StringDataType.class),
+     * (name = "EnumeratedArgumentType", type = EnumeratedDataType.class),
+     * (name = "IntegerArgumentType", type = ArgumentTypeSetType.IntegerArgumentType.class),
+     * (name = "BinaryArgumentType", type = BinaryDataType.class),
+     * (name = "FloatArgumentType", type = ArgumentTypeSetType.FloatArgumentType.class),
+     * (name = "BooleanArgumentType", type = BooleanDataType.class),
+     * (name = "RelativeTimeAgumentType", type = RelativeTimeDataType.class),
+     * (name = "AbsoluteTimeArgumentType", type = AbsoluteTimeDataType.class),
+     * (name = "ArrayArgumentType", type = ArrayDataTypeType.class),
+     * (name = "AggregateArgumentType", type = AggregateDataType.class)
+     *
+     * @return String containing the XML fragment.
+     *
+     * @throws XTCEDatabaseException in the event that the XML could not be
+     * marshaled to the string.
+     *
+     */
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public String typeToXml() throws XTCEDatabaseException {
+
+        NameDescriptionType type = getTypeReference();
+
+        if ( type == null ) {
+            throw new XTCEDatabaseException(
+                getName() +
+                ": " + // NOI18N
+                XTCEFunctions.getText( "xml_marshal_notype" ) ); // NOI18N
+        }
+
+        QName elementName;
+
+        if ( type instanceof StringDataType ) {
+            elementName = new QName( "StringArgumentType" );
+        } else if ( type instanceof EnumeratedDataType ) {
+            elementName = new QName( "EnumeratedArgumentType" );
+        } else if ( type instanceof IntegerArgumentType ) {
+            elementName = new QName( "IntegerArgumentType" );
+        } else if ( type instanceof BinaryDataType ) {
+            elementName = new QName( "BinaryArgumentType" );
+        } else if ( type instanceof FloatArgumentType ) {
+            elementName = new QName( "FloatArgumentType" );
+        } else if ( type instanceof BooleanDataType ) {
+            elementName = new QName( "BooleanArgumentType" );
+        } else if ( type instanceof RelativeTimeDataType ) {
+            elementName = new QName( "RelativeTimeAgumentType" );
+        } else if ( type instanceof AbsoluteTimeDataType ) {
+            elementName = new QName( "AbsoluteTimeArgumentType" );
+        } else if ( type instanceof ArrayDataTypeType ) {
+            elementName = new QName( "ArrayArgumentType" );
+        } else if ( type instanceof AggregateDataType ) {
+            elementName = new QName( "AggregateArgumentType" );
+        } else {
+            elementName = new QName( "UNDEFINED" );
+        }
+
+        try {
+
+            // this constructor warns unchecked on the typeObj_.getClass() and
+            // I am not sure how to fix that right now.
+
+            JAXBElement<?> xmlElement =
+                new JAXBElement( elementName,
+                                 type.getClass(),
+                                 type );
+
+            XTCEDocumentMarshaller mmm =
+                new XTCEDocumentMarshaller( type.getClass(), true );
+
+            return
+                XTCEFunctions.xmlPrettyPrint( mmm.marshalToXml( xmlElement ) );
+
+        } catch ( Exception ex ) {
+            throw new XTCEDatabaseException(
+                getName() +
+                ": " + // NOI18N
+                XTCEFunctions.getText( "xml_marshal_error_type" ) + // NOI18N
                 " '" + // NOI18N
                 ex.getCause() +
                 "'" ); // NOI18N

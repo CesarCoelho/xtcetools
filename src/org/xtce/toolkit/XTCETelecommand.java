@@ -24,14 +24,14 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.namespace.QName;
 import org.omg.space.xtce.AggregateDataType;
 import org.omg.space.xtce.AggregateDataType.MemberList.Member;
-import org.omg.space.xtce.AliasSetType;
 import org.omg.space.xtce.CommandContainerType;
 import org.omg.space.xtce.CommandMetaDataType.MetaCommandSet.BlockMetaCommand;
-import org.omg.space.xtce.DescriptionType.AncillaryDataSet;
+import org.omg.space.xtce.ContainerType;
 import org.omg.space.xtce.MetaCommandType;
 import org.omg.space.xtce.MetaCommandType.ArgumentList.Argument;
 import org.omg.space.xtce.MetaCommandType.BaseMetaCommand;
 import org.omg.space.xtce.NameDescriptionType;
+import org.omg.space.xtce.SequenceContainerType;
 
 /** This class serves as a convenient container for representing Telecommands
  * from the XTCE data model by abstracting the mechanics of assembling the
@@ -80,15 +80,16 @@ public class XTCETelecommand extends XTCENamedObject {
      *
      */
 
-    XTCETelecommand( String       path,
-                     String       iPath,
-                     Object       metaCommandObj,
-                     XTCEDatabase dbReference ) throws XTCEDatabaseException {
+    XTCETelecommand( String              path,
+                     String              iPath,
+                     NameDescriptionType metaCommandObj,
+                     XTCEDatabase        dbReference )
+        throws XTCEDatabaseException {
 
-        super( getNameFromProperElement( metaCommandObj ),
+        super( metaCommandObj.getName(),
                path,
-               getAliasSetFromProperElement( metaCommandObj ),
-               getAncillaryDataFromProperElement( metaCommandObj) );
+               metaCommandObj.getAliasSet(),
+               metaCommandObj.getAncillaryDataSet() );
 
         iPath_ = iPath;
 
@@ -223,6 +224,40 @@ public class XTCETelecommand extends XTCENamedObject {
         return container_;
     }
 
+    /** Retrieve a named Argument object from this Telecommand object.
+     *
+     * @param name String containing the name of the Argument to retrieve.
+     *
+     * @return XTCEArgument object that represents the named requested
+     * argument that is a part of this Telecommand object.
+     *
+     * @throws XTCEDatabaseException in the event that the argument does not
+     * exist in the scope of this telecommand.
+     *
+     */
+
+    public final XTCEArgument getArgument( final String name )
+        throws XTCEDatabaseException {
+
+        List<XTCEArgument> arguments = getArguments();
+
+        for( XTCEArgument argument : arguments ) {
+            if ( argument.getName().equals( name ) == true ) {
+                return argument;
+            }
+        }
+
+        throw new XTCEDatabaseException( XTCEFunctions.getText( "general_argument" ) + // NOI18N
+                                         " '" + // NOI18N
+                                         name +
+                                         "' " + // NOI18N
+                                         XTCEFunctions.getText( "error_arg_not_in_tc" ) + // NOI18N
+                                         " '" + // NOI18N
+                                         getName() +
+                                         "'" ); // NOI18N
+
+    }
+
     /** Retrieve the list of XTCEArgument objects that were constructed for
      * this XTCETelecommand, which includes all inherited Argument elements,
      * in addition to those defined with this XTCETelecommand.
@@ -260,11 +295,13 @@ public class XTCETelecommand extends XTCENamedObject {
      */
 
     public final String getShortDescription() {
+
         if ( isMetaCommand() == true ) {
             return getPrimaryShortDescription( metaCommand_ );
         } else {
             return getPrimaryShortDescription( blockMetaCommand_ );
         }
+
     }
 
     /** Set the short description attribute.
@@ -276,11 +313,13 @@ public class XTCETelecommand extends XTCENamedObject {
      */
 
     public final void setShortDescription( String description ) {
+
         if ( isMetaCommand() == true ) {
             setPrimaryShortDescription( metaCommand_, description );
         } else {
             setPrimaryShortDescription( blockMetaCommand_, description );
         }
+
     }
 
     /** Retrieve the Long Description element text content.
@@ -291,11 +330,13 @@ public class XTCETelecommand extends XTCENamedObject {
      */
 
     public final String getLongDescription() {
+
         if ( isMetaCommand() == true ) {
             return getPrimaryLongDescription( metaCommand_ );
         } else {
             return getPrimaryLongDescription( blockMetaCommand_ );
         }
+
     }
 
     /** Set the long description element text content.
@@ -307,11 +348,13 @@ public class XTCETelecommand extends XTCENamedObject {
      */
 
     public final void setLongDescription( String description ) {
+
         if ( isMetaCommand() == true ) {
             setPrimaryLongDescription( metaCommand_, description );
         } else {
             setPrimaryLongDescription( blockMetaCommand_, description );
         }
+
     }
 
     /** Retrieves the preferred effective description of this Telecommand in
@@ -379,7 +422,8 @@ public class XTCETelecommand extends XTCENamedObject {
 
             }
 
-            return XTCEFunctions.xmlPrettyPrint( mmm.marshalToXml( xmlElement ) );
+            return
+                XTCEFunctions.xmlPrettyPrint( mmm.marshalToXml( xmlElement ) );
 
         } catch ( Exception ex ) {
             throw new XTCEDatabaseException(
@@ -390,75 +434,6 @@ public class XTCETelecommand extends XTCENamedObject {
                 ex.getCause() +
                 "'" ); // NOI18N
         }
-
-    }
-
-    /** Private method to extract the name attribute based on whether this is
-     * a MetaCommand or a BlockMetaCommand.
-     *
-     * @param element Object containing the XTCE data model element.
-     *
-     * @return String containing the name attribute.
-     *
-     * @throws XTCEDatabaseException thrown in the event that the Object passed
-     * is neither of the expected objects, which is unlikely to ever occur.
-     *
-     */
-
-    private static String getNameFromProperElement( Object element )
-        throws XTCEDatabaseException {
-
-        if ( element.getClass() == MetaCommandType.class ) {
-            return ((NameDescriptionType)element).getName();
-        } else if ( element.getClass() == BlockMetaCommand.class ) {
-            return ((NameDescriptionType)element).getName();
-        } else {
-            throw new XTCEDatabaseException( "Unknown telecommand object type" );
-        }
-
-    }
-
-    /** Private method to extract the AliasSetType element from the XTCE data
-     * model for the Object that this XTCETelecommand represents.
-     *
-     * @param element Object containing the XTCE data model element.
-     *
-     * @return AliasSetType from the appropriate MetaCommand or
-     * BlockMetaCommand, which can be null.
-     *
-     */
-
-    private static AliasSetType getAliasSetFromProperElement( Object element ) {
-
-        if ( element.getClass() == MetaCommandType.class ) {
-            return ((MetaCommandType)element).getAliasSet();
-        } else if ( element.getClass() == BlockMetaCommand.class ) {
-            return ((BlockMetaCommand)element).getAliasSet();
-        }
-
-        return null;
-
-    }
-
-    /** Private method to extract the AncillaryDataSet element from the XTCE
-     * data model for the Object that this XTCETelecommand represents.
-     *
-     * @param element Object containing the XTCE data model element.
-     *
-     * @return AncillaryDataSet from the appropriate MetaCommand or
-     * BlockMetaCommand, which can be null.
-     *
-     */
-
-    private static AncillaryDataSet getAncillaryDataFromProperElement( Object element ) {
-
-        if ( element.getClass() == MetaCommandType.class ) {
-            return ((MetaCommandType)element).getAncillaryDataSet();
-        } else if ( element.getClass() == BlockMetaCommand.class ) {
-            return ((BlockMetaCommand)element).getAncillaryDataSet();
-        }
-
-        return null;
 
     }
 
@@ -480,14 +455,15 @@ public class XTCETelecommand extends XTCENamedObject {
 
     private void populateArguments( XTCEDatabase dbReference ) throws XTCEDatabaseException {
 
-        argumentList_ = new ArrayList<XTCEArgument>();
+        argumentList_ = new ArrayList<>();
 
         BaseMetaCommand baseTelecommandElement =
             getMetaCommandReference().getBaseMetaCommand();
 
         if ( baseTelecommandElement != null ) {
+
             String bmcRefPath = baseTelecommandElement.getMetaCommandRef();
-            String bmcPath = XTCEFunctions.resolvePathReference( getFullPath(),
+            String bmcPath = XTCEFunctions.resolvePathReference( getSpaceSystemPath(),
                                                                  bmcRefPath );
             String bmcName =
                 XTCEFunctions.getNameFromPathReferenceString( bmcPath );
@@ -523,8 +499,10 @@ public class XTCETelecommand extends XTCENamedObject {
 
         for ( Argument arg : argList ) {
 
-            String path = XTCEFunctions.resolvePathReference( getFullPath(),
-                                                              arg.getArgumentTypeRef() );
+            String path =
+                XTCEFunctions.resolvePathReference( getSpaceSystemPath(),
+                                                    arg.getArgumentTypeRef() );
+
             NameDescriptionType argType =
                 dbReference.getArgumentTypeReference( path );
 
@@ -533,8 +511,14 @@ public class XTCETelecommand extends XTCENamedObject {
                                                  arg,
                                                  argType ) );
 
-            if ( ( argType != null ) && ( argType.getClass() == AggregateDataType.class ) ) {
-                addArgumentMembers( metaCommand_.getName(), (AggregateDataType)argType, argumentList_, dbReference );
+            if ( ( argType !=         null              ) &&
+                 ( argType instanceof AggregateDataType ) ) {
+
+                addArgumentMembers( arg.getName(),
+                                    (AggregateDataType)argType,
+                                    argumentList_,
+                                    dbReference );
+
             }
 
         }
@@ -572,17 +556,28 @@ public class XTCETelecommand extends XTCENamedObject {
 
         for ( Member member : members ) {
 
-            String mpath              = XTCEFunctions.resolvePathReference( getFullPath(), member.getTypeRef() );
-            String newbasename        = basename + "." + member.getName();
-            NameDescriptionType mtype = dbReference.getParameterTypeReference( mpath );
-            
+            String mpath =
+                XTCEFunctions.resolvePathReference( getSpaceSystemPath(),
+                                                    member.getTypeRef() );
+
+            String newbasename = basename + "." + member.getName();
+
+            NameDescriptionType mtype =
+                dbReference.getArgumentTypeReference( mpath );
+
             list.add( new XTCEArgument( newbasename,
                                         getSpaceSystemPath(),
                                         member,
                                         mtype ) );
 
-            if ( ( mtype != null ) && ( mtype.getClass() == AggregateDataType.class ) ) {
-                addArgumentMembers( newbasename, (AggregateDataType)mtype, list, dbReference );
+            if ( ( mtype !=         null              ) &&
+                 ( mtype instanceof AggregateDataType ) ) {
+
+                addArgumentMembers( newbasename,
+                                    (AggregateDataType)mtype,
+                                    list,
+                                    dbReference );
+
             }
 
         }
@@ -593,8 +588,9 @@ public class XTCETelecommand extends XTCENamedObject {
      * path for the XTCETCContainer that is constructed to represent the
      * CommandContainer element for this XTCETelecommand.
      *
-     * @param container The XTCE CommandContainerType element from the JAXB
-     * generated classes.
+     * @param container The XTCE ContainerType element from the JAXB
+     * generated classes, which can be a CommandContainerType or a telemetry
+     * SequenceContainerType.
      *
      * @param dbReference The XTCEDatabase object used to resolve the path
      * references to the concrete containers.
@@ -607,27 +603,61 @@ public class XTCETelecommand extends XTCENamedObject {
      *
      */
 
-    private String makeContainerInheritanceString( CommandContainerType container,
-                                                   XTCEDatabase         dbReference ) throws XTCEDatabaseException {
+    private String makeContainerInheritanceString( ContainerType container,
+                                                   XTCEDatabase  dbReference )
+        throws XTCEDatabaseException {
 
         LinkedList<String> cpathList = new LinkedList<>();
-        CommandContainerType currentContainer = container;
         cpathList.addFirst( container.getName() );
         String currentSpaceSystemPath = getSpaceSystemPath();
 
-        while ( currentContainer.getBaseContainer() != null ) {
-            String path = XTCEFunctions.resolvePathReference( currentSpaceSystemPath,
-                                                              currentContainer.getBaseContainer().getContainerRef() );
-            currentContainer = getCommandContainerElement( path, dbReference );
-            currentSpaceSystemPath = XTCEFunctions.getPathNameFromReferenceString( path );
-            cpathList.addFirst( currentContainer.getName() );
+        boolean done = false;
+
+        ContainerType currentContainer = container;
+
+        // this is horribly annoying
+
+        while ( ! done ) {
+
+            String path;
+
+            if ( currentContainer instanceof CommandContainerType ) {
+                done = ( ((CommandContainerType)currentContainer).getBaseContainer() == null );
+                if ( done == true ) {
+                    continue;
+                }
+                path = XTCEFunctions.resolvePathReference( currentSpaceSystemPath,
+                                                           ((CommandContainerType)currentContainer).getBaseContainer().getContainerRef() );
+            } else if ( currentContainer instanceof SequenceContainerType ) {
+                done = ( ((SequenceContainerType)currentContainer).getBaseContainer() == null );
+                if ( done == true ) {
+                    continue;
+                }
+                path = XTCEFunctions.resolvePathReference( currentSpaceSystemPath,
+                                                           ((SequenceContainerType)currentContainer).getBaseContainer().getContainerRef() );
+            } else {
+                continue;
+            }
+
+            if ( done == false ) {
+                currentContainer = getCommandContainerElement( path, dbReference );
+                currentSpaceSystemPath = XTCEFunctions.getPathNameFromReferenceString( path );
+                cpathList.addFirst( currentContainer.getName() );
+            }
+
         }
 
+        // assemble the inheritance string
+
         StringBuilder inheritancePathBuilder = new StringBuilder();
+
         for ( String containerName : cpathList ) {
-            inheritancePathBuilder.append( "/" );
+            inheritancePathBuilder.append( "/" ); // NOI18N
             inheritancePathBuilder.append( containerName );
         }
+
+        //System.out.println( "TC Container Inheritance String: " +
+        //                    inheritancePathBuilder.toString() );
 
         return inheritancePathBuilder.toString();
 
@@ -636,6 +666,11 @@ public class XTCETelecommand extends XTCENamedObject {
     /** Private method to retrieve the CommandContainer element for this
      * telecommand object represented.
      *
+     * This method searches for container matches for telecommands using the
+     * sequence of first looking at the containers within telecommands, then
+     * the CommandContainerSet element and lastly in the SequenceContainer
+     * elements.
+     *
      * @param ssPath String containing the SpaceSystem path to this
      * telecommand object, which is used to anchor the CommandContainer to the
      * hierarchy of the XTCE document.
@@ -643,8 +678,9 @@ public class XTCETelecommand extends XTCENamedObject {
      * @param dbReference The XTCEDatabase object used to resolve the path
      * references to the concrete containers.
      *
-     * @return CommandContainerType object from the JAXB generated classed of
-     * the XTCE data model.
+     * @return ContainerType object from the JAXB generated classed of
+     * the XTCE data model.  This is a base class and may be either a
+     * CommandContainerType or a SequenceContainerType.
      *
      * @throws XTCEDatabaseException thrown in the event that the element for
      * the CommandContainer cannot be located, which would make this object of
@@ -652,40 +688,82 @@ public class XTCETelecommand extends XTCENamedObject {
      *
      */
 
-    private CommandContainerType getCommandContainerElement( String       ssPath,
-                                                             XTCEDatabase dbReference ) throws XTCEDatabaseException {
+    private ContainerType getCommandContainerElement( String       ssPath,
+                                                      XTCEDatabase dbReference )
+        throws XTCEDatabaseException {
 
         String name = XTCEFunctions.getNameFromPathReferenceString( ssPath );
         String path = XTCEFunctions.getPathNameFromReferenceString( ssPath );
+
         List<XTCESpaceSystem> spaceSystems = dbReference.getSpaceSystemTree();
+
         for ( XTCESpaceSystem spaceSystem : spaceSystems ) {
-            if ( spaceSystem.getFullPath().equals( path ) == true ) {
-                try {
-                    List<Object> metacommands = spaceSystem.getReference().getCommandMetaData().getMetaCommandSet().getMetaCommandOrMetaCommandRefOrBlockMetaCommand();
-                    for ( Object metacommand : metacommands ) {
-                        if ( metacommand.getClass() == MetaCommandType.class ) {
-                            if ( ((MetaCommandType)metacommand).getCommandContainer().getName().equals( name ) == true ) {
-                                return (((MetaCommandType)metacommand).getCommandContainer());
-                            }
-                        }
-                    }
-                } catch ( NullPointerException ex ) {
-                    // maybe this space system has no commanding
-                }
-                try {
-                    List<CommandContainerType> containers = spaceSystem.getReference().getCommandMetaData().getCommandContainerSet().getCommandContainer();
-                    for ( CommandContainerType container : containers ) {
-                        if ( container.getName().equals( name ) == true ) {
-                            return container;
-                        }
-                    }
-                } catch ( NullPointerException ex ) {
-                    // maybe this space system has no command container set
-                }
+
+            if ( spaceSystem.getFullPath().equals( path ) == false ) {
+                continue;
             }
+
+            try {
+                List<Object> metacommands =
+                    spaceSystem.getReference()
+                               .getCommandMetaData()
+                               .getMetaCommandSet()
+                               .getMetaCommandOrMetaCommandRefOrBlockMetaCommand();
+                for ( Object metacommand : metacommands ) {
+                    if ( metacommand.getClass() == MetaCommandType.class ) {
+                        if ( ((MetaCommandType)metacommand).getCommandContainer().getName().equals( name ) == true ) {
+                            return (((MetaCommandType)metacommand).getCommandContainer());
+                        }
+                    }
+                }
+            } catch ( NullPointerException ex ) {
+                // maybe this space system has no commanding
+            }
+
+            try {
+                List<CommandContainerType> containers =
+                    spaceSystem.getReference()
+                               .getCommandMetaData()
+                               .getCommandContainerSet()
+                               .getCommandContainer();
+                for ( CommandContainerType container : containers ) {
+                    if ( container.getName().equals( name ) == true ) {
+                        return container;
+                    }
+                }
+            } catch ( NullPointerException ex ) {
+                // maybe this space system has no command container set
+            }
+
+            try {
+                List<SequenceContainerType> containers =
+                    spaceSystem.getReference()
+                               .getTelemetryMetaData()
+                               .getContainerSet()
+                               .getSequenceContainer();
+                for ( SequenceContainerType container : containers ) {
+                    if ( container.getName().equals( name ) == true ) {
+                        return container;
+                    }
+                }
+            } catch ( NullPointerException ex ) {
+                // maybe this space system has no command container set
+            }
+
         }
 
-        throw new XTCEDatabaseException( "Telecommand Container named " + name + " not found in Space System " + path );
+        throw new XTCEDatabaseException( XTCEFunctions.getText( "error_cont_not_found" ) + // NOI18N
+                                         " '" + // NOI18N
+                                         name +
+                                         "' " + // NOI18N
+                                         XTCEFunctions.getText( "error_from_tc" ) + // NOI18N
+                                         " '" + // NOI18N
+                                         getName() +
+                                         "' " + // NOI18N
+                                         XTCEFunctions.getText( "ss_name_text" ) + // NOI18N
+                                         " '" + // NOI18N
+                                         path +
+                                         "'" ); // NOI18N
 
     }
 

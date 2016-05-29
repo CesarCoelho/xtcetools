@@ -1183,7 +1183,7 @@ public abstract class XTCETypedObject extends XTCENamedObject {
             // I am not sure how to fix that right now.
 
             JAXBElement<?> xmlElement =
-                new JAXBElement( new QName(typeObj_.getClass().getSimpleName()),
+                new JAXBElement( new QName(typeObj_.getClass().getSimpleName() ),
                                  typeObj_.getClass(),
                                  typeObj_ );
 

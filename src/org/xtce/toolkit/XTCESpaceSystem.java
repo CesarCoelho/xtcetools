@@ -891,7 +891,8 @@ public class XTCESpaceSystem extends XTCENamedObject {
      *
      */
 
-    public XTCETelecommand getTelecommand( final String nameOrPath ) throws XTCEDatabaseException {
+    public XTCETelecommand getTelecommand( final String nameOrPath )
+        throws XTCEDatabaseException {
 
         String name = XTCEFunctions.getNameFromPathReferenceString( nameOrPath );
 
@@ -982,6 +983,61 @@ public class XTCESpaceSystem extends XTCENamedObject {
                                                        databaseReference_ ) );
                     }
                 } catch ( Exception ex ) {
+                    warnings_.add( XTCEFunctions.getText( "general_telecommand" ) + // NOI18N
+                                   " '" + // NOI18N
+                                   ((NameDescriptionType)metacommand).getName() +
+                                   "' " +
+                                   XTCEFunctions.getText( "error_tc_form_in_ss" ) + // NOI18N
+                                   " '" + // NOI18N
+                                   getFullPath() +
+                                   "'" ); // NOI18N
+                }
+            }
+
+        } catch ( NullPointerException ex ) {
+            // this is okay, the SpaceSystem may not have any Telecommands
+        }
+
+        return list;
+
+    }
+
+    /** Retrieve a List of Telecommands that match a user provided string
+     * glob, modeled as XTCETelecommand objects.
+     *
+     * @param nameGlob String containing a glob style matching pattern to match
+     * against the container names.
+     *
+     * @return List of XTCETelecommand objects representing the telecommands
+     * that match the provided glob or an empty list if there are no matches.
+     *
+     */
+
+    public List<XTCETelecommand> getTelecommands( final String nameGlob ) {
+
+        warnings_.clear();
+
+        List<XTCETelecommand> list = new ArrayList<>();
+
+        try {
+
+            List<Object> metacommands =
+                getReference().
+                getCommandMetaData().
+                getMetaCommandSet().
+                getMetaCommandOrMetaCommandRefOrBlockMetaCommand();
+
+            for ( Object metacommand : metacommands ) {
+                try {
+                    if ( metacommand instanceof NameDescriptionType  ) {
+                        if ( XTCEFunctions.matchesUsingGlob( ((NameDescriptionType)metacommand).getName(), nameGlob ) == true ) {
+                            list.add( new XTCETelecommand( getFullPath(),
+                                                           makeTelecommandInheritanceString( metacommand ),
+                                                           (NameDescriptionType)metacommand,
+                                                           databaseReference_ ) );
+                        }
+                    }
+                } catch ( XTCEDatabaseException ex ) {
                     warnings_.add( XTCEFunctions.getText( "general_telecommand" ) + // NOI18N
                                    " '" + // NOI18N
                                    ((NameDescriptionType)metacommand).getName() +

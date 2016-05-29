@@ -61,7 +61,6 @@ public class XTCEViewerDatabaseMetricsDialog extends javax.swing.JDialog {
         containersTotal.setText( Long.toString( metrics.getNumberOfContainers() ) );
 
         setLocationRelativeTo( parent );
-        setVisible( true );
 
     }
 

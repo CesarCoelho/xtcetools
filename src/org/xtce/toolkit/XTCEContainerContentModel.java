@@ -78,7 +78,12 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
                                       boolean                       showAllConditions )
         throws XTCEDatabaseException {
 
-        super( spaceSystems, userValues, null, showAllConditions );
+        super( spaceSystems,
+               userValues,
+               null,
+               container.getName(),
+               container.getDescription(),
+               showAllConditions );
 
         container_ = container;
 
@@ -117,7 +122,12 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
                                       BitSet                binaryData )
         throws XTCEDatabaseException {
 
-        super( spaceSystems, null, binaryData, false );
+        super( spaceSystems,
+               null,
+               binaryData,
+               container.getName(),
+               container.getDescription(),
+               false );
 
         container_ = container;
 
@@ -196,7 +206,9 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
                             null,
                             includedContainer );
 
-        processEndOfContainer( currentStartBit, containerStartBit, containerStartIndex );
+        processEndOfContainer( currentStartBit,
+                               containerStartBit,
+                               containerStartIndex );
 
     }
 
@@ -210,17 +222,20 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
 
         BaseContainer baseContainerRef =
             currentContainer.getSequenceContainerReference().getBaseContainer();
+
         String currentSpaceSystemPath = currentContainer.getSpaceSystemPath();
 
         // first crawl back to the deepest base container before proceeding
 
         if ( baseContainerRef != null ) {
+
             String containerPath = XTCEFunctions.resolvePathReference( currentSpaceSystemPath,
                                                                        baseContainerRef.getContainerRef() );
             MatchCriteriaType restrictions =
                 baseContainerRef.getRestrictionCriteria();
             String spaceSystemPath =
                 XTCEFunctions.getPathNameFromReferenceString( containerPath );
+
             for ( XTCESpaceSystem spaceSystem : spaceSystems_ ) {
                 if ( spaceSystemPath.equals( spaceSystem.getFullPath() ) == true ) {
                     XTCETMContainer baseContainer = spaceSystem.getContainer( containerPath );
@@ -264,7 +279,10 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
             contentList_.add( new XTCEContainerContentEntry( container, null ) );
         }
 
-        List<SequenceEntryType> entryList = container.getSequenceContainerReference().getEntryList().getParameterRefEntryOrParameterSegmentRefEntryOrContainerRefEntry();
+        List<SequenceEntryType> entryList =
+            container.getSequenceContainerReference()
+                     .getEntryList()
+                     .getParameterRefEntryOrParameterSegmentRefEntryOrContainerRefEntry();
 
         for ( SequenceEntryType entry : entryList ) {
 
@@ -291,14 +309,12 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
                      ( includedContainer.getConditionList().isEmpty() == false ) ) {
                     addContainer( (ContainerRefEntryType)entry,
                                   currentStartBit,
-                                  //currentStartBit.get(),
                                   containerStartBit,
                                   container,
                                   includedContainer.getConditionList() );
                 } else {
                     addContainer( (ContainerRefEntryType)entry,
                                   currentStartBit,
-                                  //currentStartBit.get(),
                                   containerStartBit,
                                   container,
                                   null );

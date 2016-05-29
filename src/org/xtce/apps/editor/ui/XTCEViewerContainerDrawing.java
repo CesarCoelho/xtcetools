@@ -33,7 +33,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import org.xtce.toolkit.XTCEContainerContentEntry;
 import org.xtce.toolkit.XTCEContainerContentEntry.FieldType;
-import org.xtce.toolkit.XTCEContainerContentModel;
+import org.xtce.toolkit.XTCEContainerContentModelBase;
 import org.xtce.toolkit.XTCEDatabaseException;
 import org.xtce.toolkit.XTCEFunctions;
 
@@ -90,11 +90,11 @@ public class XTCEViewerContainerDrawing extends JPanel {
      *
      */
 
-    XTCEViewerContainerDrawing( XTCEContainerContentModel contentModel,
-                                Orientation               orientDrawingAs,
-                                boolean                   showAllNamespaces,
-                                boolean                   showAliasNamespaces,
-                                String                    preferredNamespace ) {
+    XTCEViewerContainerDrawing( XTCEContainerContentModelBase contentModel,
+                                Orientation                   orientDrawingAs,
+                                boolean                       showAllNamespaces,
+                                boolean                       showAliasNamespaces,
+                                String                        preferredNamespace ) {
 
         contentModel_        = contentModel;
         orientDrawingAs_     = orientDrawingAs;
@@ -414,9 +414,9 @@ public class XTCEViewerContainerDrawing extends JPanel {
 
         int yposdesc = rectBaseY_ + scale( 28 );
         String descMessage =
-            contentModel_.getContainerReference().getName() +
+            contentModel_.getName() +
             ": " + //NOI18N
-            contentModel_.getContainerReference().getDescription();
+            contentModel_.getDescription();
         ggg.drawString( descMessage, textxpos, yposdesc );
 
         totalSizeX_ = rectBaseX_ + linex2 + 25;
@@ -464,9 +464,9 @@ public class XTCEViewerContainerDrawing extends JPanel {
 
         int yposdesc = textypos + scale( 6 );
         String descMessage =
-            contentModel_.getContainerReference().getName() +
+            contentModel_.getName() +
             ": " + //NOI18N
-            contentModel_.getContainerReference().getDescription();
+            contentModel_.getDescription();
         ggg.drawString( descMessage, rectBaseX_, yposdesc );
 
         if ( totalSizeX_ < ( rectBaseX_ + linex2 + 25 ) ) {
@@ -824,10 +824,12 @@ public class XTCEViewerContainerDrawing extends JPanel {
      */
 
     private void setDefaultSizing() {
+
         rectBaseX_  = originX_;
         rectBaseY_  = originY_;
         totalSizeX_ = 800;
         totalSizeY_ = 600;
+
     }
 
     /** Function to copy this XTCEViewerContainerDrawing to another one so that
@@ -885,12 +887,19 @@ public class XTCEViewerContainerDrawing extends JPanel {
 
         for ( XTCEContainerContentEntry entry : contentModel_.getContentList() ) {
 
+            //System.out.println( "Processing Drawing of " + entry.getName() );
+
             String containerName = ""; // NOI18N
             String itemName      = ""; // NOI18N
             String itemAliases   = ""; // NOI18N
+
             if ( entry.getEntryType() == FieldType.PARAMETER ) {
                 itemName      = entry.getParameter().getName();
-                containerName = entry.getHoldingContainer().getName();
+                if ( entry.getHoldingContainer() != null ) {
+                    containerName = entry.getHoldingContainer().getName();
+                } else if ( entry.getTelecommand() != null ) {
+                    containerName = entry.getTelecommand().getName();
+                }
                 itemAliases   =
                     XTCEFunctions.makeAliasDisplayString( entry.getParameter(),
                                                           showAllNamespaces_,
@@ -904,6 +913,9 @@ public class XTCEViewerContainerDrawing extends JPanel {
                                                           showAllNamespaces_,
                                                           showAliasNamespaces_,
                                                           preferredNamespace_ );
+            } else if ( entry.getEntryType() == FieldType.CONSTANT ) {
+                itemName      = "FixedValue";
+                containerName = entry.getTelecommand().getName();
             }
 
             if ( ( itemName.isEmpty()                 == true ) ||
@@ -934,20 +946,20 @@ public class XTCEViewerContainerDrawing extends JPanel {
 
     // Private Data Members
 
-    private boolean                   drawingDone_     = false;
-    private XTCEContainerContentModel contentModel_    = null;
-    private Orientation               orientDrawingAs_ = null;
-    private List<DrawingEntry>        entriesInUse_    = null;
-    private final int                 originX_         = 100;
-    private final int                 originY_         = 20;
-    private int                       rectBaseX_;
-    private int                       rectBaseY_;
-    private final int                 scaleFactor_     = 8;
-    private int                       totalSizeX_;
-    private int                       totalSizeY_;
-    private boolean                   showAllNamespaces_;
-    private boolean                   showAliasNamespaces_;
-    private String                    preferredNamespace_;
+    private boolean                       drawingDone_     = false;
+    private XTCEContainerContentModelBase contentModel_    = null;
+    private Orientation                   orientDrawingAs_ = null;
+    private List<DrawingEntry>            entriesInUse_    = null;
+    private final int                     originX_         = 100;
+    private final int                     originY_         = 20;
+    private int                           rectBaseX_;
+    private int                           rectBaseY_;
+    private final int                     scaleFactor_     = 8;
+    private int                           totalSizeX_;
+    private int                           totalSizeY_;
+    private boolean                       showAllNamespaces_;
+    private boolean                       showAliasNamespaces_;
+    private String                        preferredNamespace_;
 
     /** Enumeration to describe the orientation of the container/telecommand
      * drawing.

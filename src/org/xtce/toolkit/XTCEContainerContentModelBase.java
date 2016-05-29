@@ -40,7 +40,7 @@ import org.xtce.toolkit.XTCEContainerContentEntry.FieldType;
  *
  */
 
-abstract class XTCEContainerContentModelBase {
+public abstract class XTCEContainerContentModelBase {
 
     /** Constructor
      *
@@ -61,6 +61,12 @@ abstract class XTCEContainerContentModelBase {
      * be the zeroth bit of the container binary (start bit 0) and may be short
      * in the event that there are trailing zeros.
      *
+     * @param name String containing the name of the container that the model
+     * represents.
+     *
+     * @param desc String containing a description of the container that the
+     * model represents.
+     *
      * @param showAllConditions boolean indicating if unsatisfied conditional
      * includes should be pursued at depth.  This can be a performance hit if
      * there are a large number of conditionals nested.
@@ -73,10 +79,14 @@ abstract class XTCEContainerContentModelBase {
     XTCEContainerContentModelBase( List<XTCESpaceSystem>         spaceSystems,
                                    List<XTCEContainerEntryValue> userValues,
                                    BitSet                        binaryValues,
+                                   String                        name,
+                                   String                        desc,
                                    boolean                       showAllConditions ) {
 
-        spaceSystems_      = spaceSystems;
-        showAllConditions_ = showAllConditions;
+        spaceSystems_         = spaceSystems;
+        showAllConditions_    = showAllConditions;
+        containerName_        = name;
+        containerDescription_ = desc;
 
         // the user values arraylist is never null in this object
         if ( userValues != null ) {
@@ -94,6 +104,28 @@ abstract class XTCEContainerContentModelBase {
                                         spaceSystem );
         }
 
+    }
+
+    /** Accessor to retrieve the name of the container that this model
+     * represents.
+     *
+     * @return String containing a name or an empty string if no name is used.
+     *
+     */
+
+    public String getName() {
+        return containerName_;
+    }
+
+    /** Accessor to retrieve a description of the container that this model
+     * represents.
+     *
+     * @return String containing a description or an empty string if none used.
+     *
+     */
+
+    public String getDescription() {
+        return containerDescription_;
     }
 
     /** Accessor to retrieve the list of warnings when processing this
@@ -710,7 +742,9 @@ abstract class XTCEContainerContentModelBase {
 
         if ( restrictions.getComparisonList() != null ) {
 
-            List<ComparisonType> list = restrictions.getComparisonList().getComparison();
+            List<ComparisonType> list =
+                restrictions.getComparisonList().getComparison();
+
             for ( ComparisonType compare : list ) {
                 applyRestriction( compare,
                                   container );
@@ -751,8 +785,8 @@ abstract class XTCEContainerContentModelBase {
 
         try {
 
-            XTCEParameter compareParameter = findParameter( compare.getParameterRef(),
-                                                            container );
+            XTCEParameter compareParameter =
+                findParameter( compare.getParameterRef(), container );
 
             boolean found = false;
 
@@ -906,7 +940,7 @@ abstract class XTCEContainerContentModelBase {
         //parameterPath = parameterPath.replaceAll( "\\[[0-9]+\\]", "" );
         //System.out.println( "Looking for " + parameterPath );
 
-        int idx = 1;
+        int idx;
 
         do {
 
@@ -1519,6 +1553,9 @@ abstract class XTCEContainerContentModelBase {
     /// when processing, saves a lot of time if not done for certain packets.
 
     protected boolean showAllConditions_ = false;
+
+    protected String containerName_ = "";
+    protected String containerDescription_ = "";
 
     /** This class is a holder for the running start bit so that it can be
      * updated in a reference that is passed down several functions deep.

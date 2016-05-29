@@ -630,7 +630,7 @@ public final class XTCEDatabase extends XTCEDatabaseParser {
     }
 
     /** Function to retrieve all of the Telemetry Containers that are defined
-     * in the XTCEdocument.
+     * in the XTCE document.
      *
      * Similar functions exist on the XTCESpaceSystem objects.  This one is
      * intended to return the entire contents of the XTCE database file.
@@ -644,8 +644,8 @@ public final class XTCEDatabase extends XTCEDatabaseParser {
 
     public List<XTCETMContainer> getContainers( ) {
 
-       List<XTCESpaceSystem>      spaceSystems = getSpaceSystemTree();
-       ArrayList<XTCETMContainer> containers   = new ArrayList<>();
+       List<XTCESpaceSystem> spaceSystems = getSpaceSystemTree();
+       List<XTCETMContainer> containers   = new ArrayList<>();
 
        for ( XTCESpaceSystem spaceSystem : spaceSystems ) {
            containers.addAll( spaceSystem.getContainers() );
@@ -669,7 +669,8 @@ public final class XTCEDatabase extends XTCEDatabaseParser {
      *
      */
 
-    public XTCETMContainer getContainer( String contFullPath ) throws XTCEDatabaseException {
+    public XTCETMContainer getContainer( String contFullPath )
+        throws XTCEDatabaseException {
 
         String contPath =
             XTCEFunctions.getPathNameFromReferenceString( contFullPath );
@@ -703,14 +704,100 @@ public final class XTCEDatabase extends XTCEDatabaseParser {
 
     public List<XTCETMContainer> getContainers( String nameGlob ) {
 
-        List<XTCESpaceSystem>      spaceSystems = getSpaceSystemTree();
-        ArrayList<XTCETMContainer> list         = new ArrayList<>();
+        List<XTCESpaceSystem> spaceSystems = getSpaceSystemTree();
+        List<XTCETMContainer> list         = new ArrayList<>();
 
         for ( XTCESpaceSystem spaceSystem : spaceSystems ) {
             list.addAll( spaceSystem.getContainers( nameGlob ) );
         }
 
         return list;
+
+    }
+
+    /** Function to retrieve all of the Telecommands that are defined
+     * in the XTCE document.
+     *
+     * Similar functions exist on the XTCESpaceSystem objects.  This one is
+     * intended to return the entire contents of the XTCE database file.
+     *
+     * @return List of XTCETelecommand objects that exist in the entirety
+     * of the file.  The list can possibly be empty if there are no
+     * containers, which is likely only to happen on a newly created database
+     * file.
+     *
+     */
+
+    public List<XTCETelecommand> getTelecommands( ) {
+
+       List<XTCESpaceSystem> spaceSystems = getSpaceSystemTree();
+       List<XTCETelecommand> containers   = new ArrayList<>();
+
+       for ( XTCESpaceSystem spaceSystem : spaceSystems ) {
+           containers.addAll( spaceSystem.getTelecommands() );
+       }
+
+       return containers;
+
+    }
+
+    /** Retrieve a List of Telecommands that match a user provided string
+     * glob, modeled as XTCETelecommand objects.
+     *
+     * @param nameGlob String containing a glob style matching pattern to match
+     * against the telecommand names.
+     *
+     * @return List of XTCETelecommand objects representing the telecommands
+     * that match the provided glob or an empty list if there are no matches.
+     *
+     */
+
+    public List<XTCETelecommand> getTelecommands( String nameGlob ) {
+
+        List<XTCESpaceSystem> spaceSystems = getSpaceSystemTree();
+        List<XTCETelecommand> list         = new ArrayList<>();
+
+        for ( XTCESpaceSystem spaceSystem : spaceSystems ) {
+            list.addAll( spaceSystem.getTelecommands( nameGlob ) );
+        }
+
+        return list;
+
+    }
+
+    /** Retrieve a specific telecommand in the XTCE database by the fully
+     * qualified path name to the telecommand, using XTCE document path rules.
+     *
+     * @param contFullPath String containing the fully qualified path to the
+     * telecommand desired.
+     *
+     * @return XTCETelecommand representing the MetaCommand element in
+     * the XTCE data model.
+     *
+     * @throws XTCEDatabaseException thrown in the event that the telecommand
+     * cannot be located using the provided path.
+     *
+     */
+
+    public XTCETelecommand getTelecommand( String contFullPath )
+        throws XTCEDatabaseException {
+
+        String contPath =
+            XTCEFunctions.getPathNameFromReferenceString( contFullPath );
+        String contName =
+            XTCEFunctions.getNameFromPathReferenceString( contFullPath );
+
+        try {
+
+            XTCESpaceSystem spaceSystem = getSpaceSystem( contPath );
+
+            return spaceSystem.getTelecommand( contName );
+
+        } catch ( NullPointerException ex ) {
+            throw new XTCEDatabaseException(
+                XTCEFunctions.getText( "dialog_nolocatespacesystem_text" ) + // NOI18N
+                " '" + contPath + "'" ); // NOI18N
+        }
 
     }
 

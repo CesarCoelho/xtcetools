@@ -21,8 +21,10 @@ import java.awt.Frame;
 import org.xtce.toolkit.XTCEDatabaseException;
 import java.awt.event.WindowEvent;
 import org.xtce.toolkit.XTCEFunctions;
+import org.xtce.toolkit.XTCETCContainer;
 import org.xtce.toolkit.XTCETMContainer;
 import org.xtce.toolkit.XTCETMStream;
+import org.xtce.toolkit.XTCETelecommand;
 
 /** This class creates a dialog box to view the XML contents of a container
  * or a stream.
@@ -47,6 +49,9 @@ public class XTCEViewerContainerXmlDialog extends javax.swing.JDialog {
      * @param container XTCETMContainer object that will be used to extract the
      * raw XML ASCII for display to the user in the dialog.
      *
+     * @throws XTCEDatabaseException in the event that the XML cannot be
+     * marshaled from the JAXB internal model.
+     *
      */
 
     public XTCEViewerContainerXmlDialog( Frame           parent,
@@ -64,6 +69,47 @@ public class XTCEViewerContainerXmlDialog extends javax.swing.JDialog {
         containerDefinitionText.setText( container.toXml() );
         containerLabel.setText(
             XTCEFunctions.getText( "dialog_xmlsingle_container" ) ); // NOI18N
+
+        setTitle( XTCEFunctions.getText( "dialog_container_xml_title" ) + // NOI18N
+                  ": " + // NOI18N
+                  container.getName() );
+
+        pack();
+        setLocationRelativeTo( parent );
+
+    }
+    /** Creates new dialog window for showing the XTCE SequenceContainer
+     * element XML contents.
+     *
+     * @param parent Frame containing the parent window.
+     *
+     * @param modal Boolean indicating if this dialog should block the parent
+     * window interactions until dismissed.
+     *
+     * @param container XTCETMContainer object that will be used to extract the
+     * raw XML ASCII for display to the user in the dialog.
+     *
+     * @throws XTCEDatabaseException in the event that the XML cannot be
+     * marshaled from the JAXB internal model.
+     *
+     */
+
+    public XTCEViewerContainerXmlDialog( Frame           parent,
+                                         boolean         modal,
+                                         XTCETCContainer container )
+        throws XTCEDatabaseException {
+
+        super( parent, modal );
+        initComponents();
+
+        if ( container == null ) {
+            return;
+        }
+
+        containerDefinitionText.setText( container.toXml() );
+        containerLabel.setText(
+            XTCEFunctions.getText( "dialog_xmlsingle_container" ) ); // NOI18N
+
         setTitle( XTCEFunctions.getText( "dialog_container_xml_title" ) + // NOI18N
                   ": " + // NOI18N
                   container.getName() );
@@ -84,6 +130,9 @@ public class XTCEViewerContainerXmlDialog extends javax.swing.JDialog {
      * @param stream XTCETMStream object that will be used to extract the
      * raw XML ASCII for display to the user in the dialog.
      *
+     * @throws XTCEDatabaseException in the event that the XML cannot be
+     * marshaled from the JAXB internal model.
+     *
      */
 
     public XTCEViewerContainerXmlDialog( Frame           parent,
@@ -101,9 +150,51 @@ public class XTCEViewerContainerXmlDialog extends javax.swing.JDialog {
         containerDefinitionText.setText( stream.toXml() );
         containerLabel.setText(
             XTCEFunctions.getText( "dialog_xmlsingle_stream" ) ); // NOI18N
+
         setTitle( XTCEFunctions.getText( "dialog_stream_xml_title" ) + // NOI18N
                   ": " + // NOI18N
                   stream.getName() );
+
+        pack();
+        setLocationRelativeTo( parent );
+
+    }
+
+    /** Creates new dialog window for showing the XTCE PCMStreamType element
+     * XML contents.
+     *
+     * @param parent Frame containing the parent window.
+     *
+     * @param modal Boolean indicating if this dialog should block the parent
+     * window interactions until dismissed.
+     *
+     * @param tc XTCETelecommand object that will be used to extract the
+     * raw XML ASCII for display to the user in the dialog.
+     *
+     * @throws XTCEDatabaseException in the event that the XML cannot be
+     * marshaled from the JAXB internal model.
+     *
+     */
+
+    public XTCEViewerContainerXmlDialog( Frame           parent,
+                                         boolean         modal,
+                                         XTCETelecommand tc )
+        throws XTCEDatabaseException {
+
+        super( parent, modal );
+        initComponents();
+
+        if ( tc == null ) {
+            return;
+        }
+
+        containerDefinitionText.setText( tc.toXml() );
+        containerLabel.setText(
+            XTCEFunctions.getText( "dialog_xmlsingle_telecommand" ) ); // NOI18N
+
+        setTitle( XTCEFunctions.getText( "dialog_telecommand_xml_title" ) + // NOI18N
+                  ": " + // NOI18N
+                  tc.getName() );
 
         pack();
         setLocationRelativeTo( parent );
