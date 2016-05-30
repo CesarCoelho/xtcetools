@@ -848,11 +848,6 @@ public class XTCEViewer extends javax.swing.JFrame {
         tmParameterSpaceSystemTree.setMaximumSize(new java.awt.Dimension(32767, 32767));
         tmParameterSpaceSystemTree.setMinimumSize(new java.awt.Dimension(100, 0));
         tmParameterSpaceSystemTree.setPreferredSize(new java.awt.Dimension(100, 0));
-        tmParameterSpaceSystemTree.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                tmParameterSpaceSystemTreeMousePressed(evt);
-            }
-        });
         tmParameterSpaceSystemTree.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
             public void valueChanged(javax.swing.event.TreeSelectionEvent evt) {
                 tmParameterSpaceSystemTreeValueChanged(evt);
@@ -956,11 +951,6 @@ public class XTCEViewer extends javax.swing.JFrame {
         tcParameterSpaceSystemTree.setMaximumSize(new java.awt.Dimension(32767, 32767));
         tcParameterSpaceSystemTree.setMinimumSize(new java.awt.Dimension(100, 0));
         tcParameterSpaceSystemTree.setPreferredSize(new java.awt.Dimension(100, 0));
-        tcParameterSpaceSystemTree.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                tcParameterSpaceSystemTreeMousePressed(evt);
-            }
-        });
         tcParameterSpaceSystemTree.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
             public void valueChanged(javax.swing.event.TreeSelectionEvent evt) {
                 tcParameterSpaceSystemTreeValueChanged(evt);
@@ -1171,11 +1161,6 @@ public class XTCEViewer extends javax.swing.JFrame {
         tcDefinitionsSpaceSystemTree.setMaximumSize(new java.awt.Dimension(32767, 32767));
         tcDefinitionsSpaceSystemTree.setMinimumSize(new java.awt.Dimension(100, 0));
         tcDefinitionsSpaceSystemTree.setPreferredSize(new java.awt.Dimension(100, 0));
-        tcDefinitionsSpaceSystemTree.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                tcDefinitionsSpaceSystemTreeMousePressed(evt);
-            }
-        });
         tcDefinitionsSpaceSystemTree.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
             public void valueChanged(javax.swing.event.TreeSelectionEvent evt) {
                 tcDefinitionsSpaceSystemTreeValueChanged(evt);
@@ -1212,14 +1197,14 @@ public class XTCEViewer extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Container Name", "Field Type", "Field Name", "Size", "Start Bit", "Value", "Default Value", "Condition", "Repeat", "Description"
+                "Container Name", "Field Type", "Field Name", "Unit(s)", "Type", "Encoding", "Size", "Start Bit", "Value", "Default Value", "Condition", "Repeat", "Description"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -1238,23 +1223,33 @@ public class XTCEViewer extends javax.swing.JFrame {
         tcContentScrollPane.setViewportView(tcContentTable);
         if (tcContentTable.getColumnModel().getColumnCount() > 0) {
             tcContentTable.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("table_telecommands_contname_label")); // NOI18N
+            tcContentTable.getColumnModel().getColumn(1).setMinWidth(75);
+            tcContentTable.getColumnModel().getColumn(1).setPreferredWidth(75);
+            tcContentTable.getColumnModel().getColumn(1).setMaxWidth(75);
             tcContentTable.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("table_telecommands_fieldtype_label")); // NOI18N
             tcContentTable.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("table_telecommands_itemname_label")); // NOI18N
-            tcContentTable.getColumnModel().getColumn(3).setMinWidth(65);
-            tcContentTable.getColumnModel().getColumn(3).setPreferredWidth(65);
-            tcContentTable.getColumnModel().getColumn(3).setMaxWidth(65);
-            tcContentTable.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("table_telecommands_size_label")); // NOI18N
-            tcContentTable.getColumnModel().getColumn(4).setMinWidth(65);
-            tcContentTable.getColumnModel().getColumn(4).setPreferredWidth(65);
-            tcContentTable.getColumnModel().getColumn(4).setMaxWidth(65);
-            tcContentTable.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("table_telecommands_startbit_label")); // NOI18N
-            tcContentTable.getColumnModel().getColumn(5).setPreferredWidth(75);
-            tcContentTable.getColumnModel().getColumn(5).setHeaderValue(bundle.getString("table_telecommands_value_label")); // NOI18N
-            tcContentTable.getColumnModel().getColumn(6).setPreferredWidth(75);
-            tcContentTable.getColumnModel().getColumn(6).setHeaderValue(bundle.getString("table_telecommands_defaultvalue_label")); // NOI18N
-            tcContentTable.getColumnModel().getColumn(7).setHeaderValue(bundle.getString("table_telecommands_condition_label")); // NOI18N
-            tcContentTable.getColumnModel().getColumn(8).setHeaderValue(bundle.getString("table_telecommands_repeat_label")); // NOI18N
-            tcContentTable.getColumnModel().getColumn(9).setHeaderValue(bundle.getString("table_telecommands_desc_label")); // NOI18N
+            tcContentTable.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("table_parameters_unit_col_label")); // NOI18N
+            tcContentTable.getColumnModel().getColumn(4).setPreferredWidth(100);
+            tcContentTable.getColumnModel().getColumn(4).setMaxWidth(100);
+            tcContentTable.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("table_parameters_type_col_label")); // NOI18N
+            tcContentTable.getColumnModel().getColumn(5).setPreferredWidth(120);
+            tcContentTable.getColumnModel().getColumn(5).setMaxWidth(120);
+            tcContentTable.getColumnModel().getColumn(5).setHeaderValue(bundle.getString("table_parameters_encoding_col_label")); // NOI18N
+            tcContentTable.getColumnModel().getColumn(6).setMinWidth(65);
+            tcContentTable.getColumnModel().getColumn(6).setPreferredWidth(65);
+            tcContentTable.getColumnModel().getColumn(6).setMaxWidth(65);
+            tcContentTable.getColumnModel().getColumn(6).setHeaderValue(bundle.getString("table_telecommands_size_label")); // NOI18N
+            tcContentTable.getColumnModel().getColumn(7).setMinWidth(65);
+            tcContentTable.getColumnModel().getColumn(7).setPreferredWidth(65);
+            tcContentTable.getColumnModel().getColumn(7).setMaxWidth(65);
+            tcContentTable.getColumnModel().getColumn(7).setHeaderValue(bundle.getString("table_telecommands_startbit_label")); // NOI18N
+            tcContentTable.getColumnModel().getColumn(8).setPreferredWidth(75);
+            tcContentTable.getColumnModel().getColumn(8).setHeaderValue(bundle.getString("table_telecommands_value_label")); // NOI18N
+            tcContentTable.getColumnModel().getColumn(9).setPreferredWidth(75);
+            tcContentTable.getColumnModel().getColumn(9).setHeaderValue(bundle.getString("table_telecommands_defaultvalue_label")); // NOI18N
+            tcContentTable.getColumnModel().getColumn(10).setHeaderValue(bundle.getString("table_telecommands_condition_label")); // NOI18N
+            tcContentTable.getColumnModel().getColumn(11).setHeaderValue(bundle.getString("table_telecommands_repeat_label")); // NOI18N
+            tcContentTable.getColumnModel().getColumn(12).setHeaderValue(bundle.getString("table_telecommands_desc_label")); // NOI18N
         }
 
         tcContentSplitPane.setTopComponent(tcContentScrollPane);
@@ -1764,7 +1759,7 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     private void mainWindowExitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mainWindowExitMenuItemActionPerformed
 
-        dispatchEvent( new WindowEvent(this, WindowEvent.WINDOW_CLOSING) );
+        dispatchEvent( new WindowEvent( this, WindowEvent.WINDOW_CLOSING ) );
 
     }//GEN-LAST:event_mainWindowExitMenuItemActionPerformed
 
@@ -1858,22 +1853,6 @@ public class XTCEViewer extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_detailSpaceSystemTreeMousePressed
-
-    private void tmParameterSpaceSystemTreeMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tmParameterSpaceSystemTreeMousePressed
-
-        if ( SwingUtilities.isLeftMouseButton( evt ) == true ) {
-           //drawTelemetryParameterTable();
-        }
-
-    }//GEN-LAST:event_tmParameterSpaceSystemTreeMousePressed
-
-    private void tcParameterSpaceSystemTreeMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tcParameterSpaceSystemTreeMousePressed
-
-        if ( SwingUtilities.isLeftMouseButton( evt ) == true ) {
-           //drawTelecommandParameterTable();
-        }
-
-    }//GEN-LAST:event_tcParameterSpaceSystemTreeMousePressed
 
     private void tmContainerTreeMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tmContainerTreeMousePressed
 
@@ -2523,14 +2502,6 @@ public class XTCEViewer extends javax.swing.JFrame {
         drawTelecommandTree();
 
     }//GEN-LAST:event_tcDefinitionsSpaceSystemTreeValueChanged
-
-    private void tcDefinitionsSpaceSystemTreeMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tcDefinitionsSpaceSystemTreeMousePressed
-
-        if ( SwingUtilities.isLeftMouseButton( evt ) == true ) {
-           //drawTelecommandTree();
-        }
-
-    }//GEN-LAST:event_tcDefinitionsSpaceSystemTreeMousePressed
 
     private void tmContainerTableMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tmContainerTableMousePressed
 
@@ -4344,44 +4315,38 @@ public class XTCEViewer extends javax.swing.JFrame {
         //    " root path " +
         //    node.getStreamReference().getStreamContainerPath() );
 
-        //try {
+        List<XTCETMContainer> containers =
+            node.getStreamReference().getContainers();
 
-            List<XTCETMContainer> containers =
-                node.getStreamReference().getContainers();
+        XTCEViewerContainerTreeNode rootObj =
+            new XTCEViewerContainerTreeNode( XTCEFunctions.getText( "general_containers" ), // NOI18N
+                                             null );
 
-            XTCEViewerContainerTreeNode rootObj =
-                new XTCEViewerContainerTreeNode( XTCEFunctions.getText( "general_containers" ), // NOI18N
-                                                 null );
+        tmodel.setRoot( rootObj );
 
-            tmodel.setRoot( rootObj );
+        tmStreamContentTree.setCellRenderer( new XTCEViewerContainerTreeCellRenderer() );
 
-            tmStreamContentTree.setCellRenderer( new XTCEViewerContainerTreeCellRenderer() );
-
-            for ( XTCETMContainer container : containers ) {
-                //System.out.println( "Container " +
-                //                    container.getName() +
-                //                    " IPath " +
-                //                    container.getInheritancePath() +
-                //                    " CPath " +
-                //                    container.getFullPath() );
-                String[] fields =
-                    container.getInheritancePath().split( "/" ); // NOI18N
-                XTCEViewerContainerTreeNode obj = rootObj;
-                for ( int jjj = 1; jjj < fields.length; ++jjj ) {
-                    obj = setContainerTreeNode( obj, container, true );
-                }
+        for ( XTCETMContainer container : containers ) {
+            //System.out.println( "Container " +
+            //                    container.getName() +
+            //                    " IPath " +
+            //                    container.getInheritancePath() +
+            //                    " CPath " +
+            //                    container.getFullPath() );
+            String[] fields =
+                container.getInheritancePath().split( "/" ); // NOI18N
+            XTCEViewerContainerTreeNode obj = rootObj;
+            for ( int jjj = 1; jjj < fields.length; ++jjj ) {
+                obj = setContainerTreeNode( obj, container, true );
             }
+        }
 
-            logMsg( XTCEFunctions.getText( "ss_processed_stream" ) + // NOI18N
-                " '" + node.getStreamReference().getName() +
-                "' " + XTCEFunctions.getText( "ss_stream_containing" ) +
-                " " + Long.toString( containers.size() ) +
-                " " +
-                XTCEFunctions.getText( "general_containers" ) );
-
-        //} catch ( XTCEDatabaseException ex ) {
-        //    logMsg( XTCEFunctions.generalErrorPrefix() + ex.getLocalizedMessage() );
-        //}
+        logMsg( XTCEFunctions.getText( "ss_processed_stream" ) + // NOI18N
+            " '" + node.getStreamReference().getName() + // NOI18N
+            "' " + XTCEFunctions.getText( "ss_stream_containing" ) + // NOI18N
+            " " + Long.toString( containers.size() ) + // NOI18N
+            " " + // NOI18N
+            XTCEFunctions.getText( "general_containers" ) ); // NOI18N
 
         tmStreamContentTree.setRootVisible( false );
 
@@ -4636,6 +4601,9 @@ public class XTCEViewer extends javax.swing.JFrame {
             String fieldType     = ""; // NOI18N
             String defaultValue  = ""; // NOI18N
             String description   = ""; // NOI18N
+            String units         = ""; // NOI18N
+            String typeName      = ""; // NOI18N
+            String encodingName  = ""; // NOI18N
 
             // re-evaluate which container names should be used here
 
@@ -4653,6 +4621,9 @@ public class XTCEViewer extends javax.swing.JFrame {
                 }
                 fieldType = "Parameter";
                 description = entry.getParameter().getDescription();
+                units = entry.getParameter().getUnits();
+                typeName = entry.getParameter().getEngineeringType().toString();
+                encodingName = entry.getParameter().getRawTypeString();
             } else if ( entry.getEntryType() == FieldType.ARGUMENT ) {
                 aliasString =
                     XTCEFunctions.makeAliasDisplayString( entry.getArgument(),
@@ -4663,6 +4634,9 @@ public class XTCEViewer extends javax.swing.JFrame {
                 containerName = entry.getTelecommand().getName();
                 fieldType = "Argument";
                 description = entry.getArgument().getDescription();
+                units = entry.getArgument().getUnits();
+                typeName = entry.getArgument().getEngineeringType().toString();
+                encodingName = entry.getArgument().getRawTypeString();
             } else if ( entry.getEntryType() == FieldType.CONTAINER ) {
                 if ( entry.getTelecommand() != null ) {
                     containerName = entry.getTelecommand().getName();
@@ -4685,6 +4659,9 @@ public class XTCEViewer extends javax.swing.JFrame {
             Object rowData[] = { containerName,
                                  fieldType,
                                  name,
+                                 units,
+                                 typeName,
+                                 encodingName,
                                  //aliasString,
                                  entry.getRawSizeInBits(),
                                  entry.getStartBit(),

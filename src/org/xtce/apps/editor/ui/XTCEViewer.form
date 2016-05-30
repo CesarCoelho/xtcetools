@@ -1537,7 +1537,6 @@
                         </Property>
                       </Properties>
                       <Events>
-                        <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tmParameterSpaceSystemTreeMousePressed"/>
                         <EventHandler event="valueChanged" listener="javax.swing.event.TreeSelectionListener" parameters="javax.swing.event.TreeSelectionEvent" handler="tmParameterSpaceSystemTreeValueChanged"/>
                       </Events>
                     </Component>
@@ -1735,7 +1734,6 @@
                         </Property>
                       </Properties>
                       <Events>
-                        <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tcParameterSpaceSystemTreeMousePressed"/>
                         <EventHandler event="valueChanged" listener="javax.swing.event.TreeSelectionListener" parameters="javax.swing.event.TreeSelectionEvent" handler="tcParameterSpaceSystemTreeValueChanged"/>
                       </Events>
                     </Component>
@@ -2160,7 +2158,6 @@
                         </Property>
                       </Properties>
                       <Events>
-                        <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tcDefinitionsSpaceSystemTreeMousePressed"/>
                         <EventHandler event="valueChanged" listener="javax.swing.event.TreeSelectionListener" parameters="javax.swing.event.TreeSelectionEvent" handler="tcDefinitionsSpaceSystemTreeValueChanged"/>
                       </Events>
                     </Component>
@@ -2241,10 +2238,13 @@
                             <Component class="javax.swing.JTable" name="tcContentTable">
                               <Properties>
                                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                                  <Table columnCount="10" rowCount="0">
+                                  <Table columnCount="13" rowCount="0">
                                     <Column editable="false" title="Container Name" type="java.lang.String"/>
                                     <Column editable="false" title="Field Type" type="java.lang.String"/>
                                     <Column editable="false" title="Field Name" type="java.lang.String"/>
+                                    <Column editable="false" title="Unit(s)" type="java.lang.String"/>
+                                    <Column editable="false" title="Type" type="java.lang.String"/>
+                                    <Column editable="false" title="Encoding" type="java.lang.String"/>
                                     <Column editable="false" title="Size" type="java.lang.String"/>
                                     <Column editable="false" title="Start Bit" type="java.lang.String"/>
                                     <Column editable="false" title="Value" type="java.lang.String"/>
@@ -2263,7 +2263,7 @@
                                       <Editor/>
                                       <Renderer/>
                                     </Column>
-                                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                                    <Column maxWidth="75" minWidth="75" prefWidth="75" resizable="true">
                                       <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                                         <ResourceString bundle="org/xtce/toolkit/MessagesBundle.properties" key="table_telecommands_fieldtype_label" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                                       </Title>
@@ -2273,6 +2273,27 @@
                                     <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                                       <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                                         <ResourceString bundle="org/xtce/toolkit/MessagesBundle.properties" key="table_telecommands_itemname_label" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                                      </Title>
+                                      <Editor/>
+                                      <Renderer/>
+                                    </Column>
+                                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                                      <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                                        <ResourceString bundle="org/xtce/toolkit/MessagesBundle.properties" key="table_parameters_unit_col_label" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                                      </Title>
+                                      <Editor/>
+                                      <Renderer/>
+                                    </Column>
+                                    <Column maxWidth="100" minWidth="-1" prefWidth="100" resizable="true">
+                                      <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                                        <ResourceString bundle="org/xtce/toolkit/MessagesBundle.properties" key="table_parameters_type_col_label" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                                      </Title>
+                                      <Editor/>
+                                      <Renderer/>
+                                    </Column>
+                                    <Column maxWidth="120" minWidth="-1" prefWidth="120" resizable="true">
+                                      <Title editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                                        <ResourceString bundle="org/xtce/toolkit/MessagesBundle.properties" key="table_parameters_encoding_col_label" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                                       </Title>
                                       <Editor/>
                                       <Renderer/>
