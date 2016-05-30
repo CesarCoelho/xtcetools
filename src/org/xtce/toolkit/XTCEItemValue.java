@@ -2600,12 +2600,12 @@ public class XTCEItemValue {
 
         // function is never called if BOTH are invalid since we checked the
         // discriminant earlier.
-        if ( ( root1 == Double.NaN               ) ||
+        if ( ( true  == Double.isNaN( root1 )    ) ||
              ( root1 == Double.POSITIVE_INFINITY ) ||
              ( root1 == Double.NEGATIVE_INFINITY ) ) {
             root1 = root2;
         }
-        if ( ( root2 == Double.NaN               ) ||
+        if ( ( true  == Double.isNaN( root2 )    ) ||
              ( root2 == Double.POSITIVE_INFINITY ) ||
              ( root2 == Double.NEGATIVE_INFINITY ) ) {
             root2 = root1;

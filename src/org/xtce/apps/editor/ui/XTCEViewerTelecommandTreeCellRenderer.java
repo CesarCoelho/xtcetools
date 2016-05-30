@@ -56,7 +56,9 @@ public class XTCEViewerTelecommandTreeCellRenderer extends DefaultTreeCellRender
             // fall down to the default
         } else {
             if ( node.getTelecommandReference().isAbstract() == true ) {
-                ccc.setFont( getFont().deriveFont( Font.ITALIC ) );
+                if ( getFont() != null ) {
+                    ccc.setFont( getFont().deriveFont( Font.ITALIC ) );
+                }
                 return this;
             }
         }

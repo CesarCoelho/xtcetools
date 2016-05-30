@@ -56,7 +56,9 @@ public class XTCEViewerContainerTreeCellRenderer extends DefaultTreeCellRenderer
             // fall down to the default
         } else {
             if ( node.getContainerReference().isAbstract() == true ) {
-                ccc.setFont( getFont().deriveFont( Font.ITALIC ) );
+                if ( getFont() != null ) {
+                    ccc.setFont( getFont().deriveFont( Font.ITALIC ) );
+                }
                 return this;
             }
         }

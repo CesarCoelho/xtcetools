@@ -140,7 +140,10 @@ public class XTCEViewerHelpBrowserDialog extends JDialog {
                     .addComponent(forwardButton_, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
-        setLocationRelativeTo( parent );
+        // removed because Coverity says that this uses a null graphicsConfig
+        // dereference, but I don't understand that yet
+
+        //setLocationRelativeTo( parent );
 
         Platform.runLater( new Runnable() {
             @Override

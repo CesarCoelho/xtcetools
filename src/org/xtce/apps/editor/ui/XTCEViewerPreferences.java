@@ -405,10 +405,11 @@ public class XTCEViewerPreferences {
 
     public void updateExampleFilesList( JMenu exampleItemsMenu ) {
 
-        ArrayList<File> files = new ArrayList<>();
+        List<File> files = new ArrayList<>();
 
         URL dbFilesDirectoryUrl =
             ClassLoader.getSystemResource( "org/xtce/toolkit/database/examples" ); // NOI18N
+
         if ( dbFilesDirectoryUrl != null ) {
             try {
                 File dir = new File( dbFilesDirectoryUrl.toURI() );
@@ -418,10 +419,10 @@ public class XTCEViewerPreferences {
                         files.add( nextFile );
                     }
                 }
-            } catch ( URISyntaxException ex ) {
-                // skip it, do nothing for now
-            } catch ( IllegalArgumentException ex ) {
-                // skip it, do nothing for now
+            } catch ( Exception ex ) {
+                // skip it, do nothing for now - "examples" could be file
+                exampleItemsMenu.removeAll();
+                return;
             }
         }
 
@@ -432,28 +433,32 @@ public class XTCEViewerPreferences {
                 "org/xtce/toolkit/database/examples/BogusSAT-2.xml" ); // NOI18N
             final URL example2 = ClassLoader.getSystemResource(
                 "org/xtce/toolkit/database/examples/GovSat_2_0_1.xml" ); // NOI18N
-            JMenuItem item1 = new JMenuItem( example1.getFile() );
-            item1.addActionListener( new ActionListener() {
-                @Override
-                public void actionPerformed( ActionEvent evt ) {
-                    viewer.openFile( example1,
-                                     true,
-                                     false,
-                                     false );
-                }
-            });
-            JMenuItem item2 = new JMenuItem( example2.getFile() );
-            item2.addActionListener( new ActionListener() {
-                @Override
-                public void actionPerformed( ActionEvent evt ) {
-                    viewer.openFile( example2,
-                                     true,
-                                     true,
-                                     false );
-                }
-            });
-            exampleItemsMenu.add( item1 );
-            exampleItemsMenu.add( item2 );
+            if ( example1 != null ) {
+                JMenuItem item1 = new JMenuItem( example1.getFile() );
+                item1.addActionListener( new ActionListener() {
+                    @Override
+                    public void actionPerformed( ActionEvent evt ) {
+                        viewer.openFile( example1,
+                                         true,
+                                         false,
+                                         false );
+                    }
+                });
+                exampleItemsMenu.add( item1 );
+            }
+            if ( example2 != null ) {
+                JMenuItem item2 = new JMenuItem( example2.getFile() );
+                item2.addActionListener( new ActionListener() {
+                    @Override
+                    public void actionPerformed( ActionEvent evt ) {
+                        viewer.openFile( example2,
+                                         true,
+                                         true,
+                                         false );
+                    }
+                });
+                exampleItemsMenu.add( item2 );
+            }
         } else {
             for ( int iii = ( files.size() - 1 ); iii >= 0; --iii ) {
                 JMenuItem item = new JMenuItem( files.get( iii ).getName() );

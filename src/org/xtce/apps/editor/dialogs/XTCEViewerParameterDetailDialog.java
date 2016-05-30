@@ -1561,7 +1561,7 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
 
     private void editEnumerationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editEnumerationButtonActionPerformed
 
-        DefaultTableModel tableModel = (DefaultTableModel)enumerationTable.getModel();
+        //DefaultTableModel tableModel = (DefaultTableModel)enumerationTable.getModel();
         int row = enumerationTable.getSelectedRow();
         if ( row == -1 ) {
             JOptionPane.showMessageDialog( this,
@@ -1628,7 +1628,7 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
 
     private void removeEnumerationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeEnumerationButtonActionPerformed
 
-        DefaultTableModel tableModel = (DefaultTableModel)enumerationTable.getModel();
+        //DefaultTableModel tableModel = (DefaultTableModel)enumerationTable.getModel();
         int row = enumerationTable.getSelectedRow();
         if ( row == -1 ) {
             JOptionPane.showMessageDialog( this,

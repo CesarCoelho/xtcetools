@@ -2855,7 +2855,8 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     private void saveContainerDrawingMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveContainerDrawingMenuItemActionPerformed
 
-        if ( tmContainerDrawingScrollPane.getViewport().getView() == null ) {
+        if ( ( tmContainerDrawingScrollPane.getViewport().getView() == null ) ||
+             ( tmContainerTree.getLastSelectedPathComponent()       == null ) ) {
             JOptionPane.showMessageDialog( this,
                                            XTCEFunctions.getText( "rightclick_container_noselection_message" ), // NOI18N
                                            XTCEFunctions.getText( "general_error" ), // NOI18N
@@ -2900,7 +2901,8 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     private void cloneContainerDrawingMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cloneContainerDrawingMenuItemActionPerformed
 
-        if ( tmContainerDrawingScrollPane.getViewport().getView() == null ) {
+        if ( ( tmContainerDrawingScrollPane.getViewport().getView() == null ) ||
+             ( tmContainerTree.getLastSelectedPathComponent()       == null ) ) {
             JOptionPane.showMessageDialog( this,
                                            XTCEFunctions.getText( "rightclick_container_noselection_message" ), // NOI18N
                                            XTCEFunctions.getText( "general_error" ), // NOI18N
@@ -3637,7 +3639,8 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     private void saveTelecommandDrawingMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveTelecommandDrawingMenuItemActionPerformed
 
-        if ( tcContentDrawingScrollPane.getViewport().getView() == null ) {
+        if ( ( tcContentDrawingScrollPane.getViewport().getView() == null ) ||
+             ( tcTree.getLastSelectedPathComponent()              == null ) ) {
             JOptionPane.showMessageDialog( this,
                                            XTCEFunctions.getText( "rightclick_telecommand_noselection_message" ), // NOI18N
                                            XTCEFunctions.getText( "general_error" ), // NOI18N
@@ -3682,7 +3685,8 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     private void cloneTelecommandDrawingMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cloneTelecommandDrawingMenuItemActionPerformed
 
-        if ( tcContentDrawingScrollPane.getViewport().getView() == null ) {
+        if ( ( tcContentDrawingScrollPane.getViewport().getView() == null ) ||
+             ( tcTree.getLastSelectedPathComponent()              == null ) ) {
             JOptionPane.showMessageDialog( this,
                                            XTCEFunctions.getText( "rightclick_telecommand_noselection_message" ), // NOI18N
                                            XTCEFunctions.getText( "general_error" ), // NOI18N
@@ -4641,13 +4645,13 @@ public class XTCEViewer extends javax.swing.JFrame {
                 if ( entry.getTelecommand() != null ) {
                     containerName = entry.getTelecommand().getName();
                 } else if ( entry.getTelecommandContainer() != null ) {
-                    entry.getTelecommandContainer().getName();
+                    containerName = entry.getTelecommandContainer().getName();
                 }
             } else if ( entry.getEntryType() == FieldType.CONSTANT ) {
                 if ( entry.getTelecommand() != null ) {
                     containerName = entry.getTelecommand().getName();
                 } else if ( entry.getTelecommandContainer() != null ) {
-                    entry.getTelecommandContainer().getName();
+                    containerName = entry.getTelecommandContainer().getName();
                 }
                 fieldType = "Constant";
             }
