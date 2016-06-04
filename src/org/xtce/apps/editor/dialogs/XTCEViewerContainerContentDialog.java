@@ -268,7 +268,7 @@ public class XTCEViewerContainerContentDialog extends javax.swing.JDialog {
 
             for ( String warning : model.getWarnings() ) {
                 warnings.append( warning );
-                warnings.append( System.getProperty( "line.separator" ) );
+                warnings.append( System.getProperty( "line.separator" ) ); // NOI18N
             }
 
         } catch ( Exception ex ) {

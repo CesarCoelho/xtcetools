@@ -378,7 +378,7 @@ public class XTCEViewerParameterFindDialog extends javax.swing.JFrame {
     private void parameterFindByNameRadioButtonItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_parameterFindByNameRadioButtonItemStateChanged
 
         if ( evt.getStateChange() == ItemEvent.SELECTED ) {
-            semaphore_ = "";
+            semaphore_ = ""; // NOI18N
             executeButtonActionPerformed( null );
         }
 
@@ -387,7 +387,7 @@ public class XTCEViewerParameterFindDialog extends javax.swing.JFrame {
     private void parameterFindByAliasRadioButtonItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_parameterFindByAliasRadioButtonItemStateChanged
 
         if ( evt.getStateChange() == ItemEvent.SELECTED ) {
-            semaphore_ = "";
+            semaphore_ = ""; // NOI18N
             executeButtonActionPerformed( null );
         }
 
@@ -396,7 +396,7 @@ public class XTCEViewerParameterFindDialog extends javax.swing.JFrame {
     private void telemetryParameterRadioButtonItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_telemetryParameterRadioButtonItemStateChanged
 
         if ( evt.getStateChange() == ItemEvent.SELECTED ) {
-            semaphore_ = "";
+            semaphore_ = ""; // NOI18N
             executeButtonActionPerformed( null );
         }
 
@@ -405,7 +405,7 @@ public class XTCEViewerParameterFindDialog extends javax.swing.JFrame {
     private void telecommandParameterRadioButtonItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_telecommandParameterRadioButtonItemStateChanged
 
         if ( evt.getStateChange() == ItemEvent.SELECTED ) {
-            semaphore_ = "";
+            semaphore_ = ""; // NOI18N
             executeButtonActionPerformed( null );
         }
 
@@ -416,7 +416,7 @@ public class XTCEViewerParameterFindDialog extends javax.swing.JFrame {
         searchTextComboBox.removeAllItems();
         List<String> itemList = prefs_.getRecentFindParameterSearches();
         if ( setEmptyRow == true ) {
-            searchTextComboBox.addItem( "" );
+            searchTextComboBox.addItem( "" ); // NOI18N
         }
         for ( String searchItem : itemList ) {
             if ( setEmptyRow == false ) {
@@ -503,7 +503,7 @@ public class XTCEViewerParameterFindDialog extends javax.swing.JFrame {
 
         if ( results.size() > 0 ) {
             resultsText.setText( Long.toString( results.size() ) +
-                                 " " +
+                                 " " + // NOI18N
                                  XTCEFunctions.getText( "dialog_findparameter_found" ) ); // NOI18N
         } else {
             resultsText.setText( XTCEFunctions.getText( "dialog_findparameter_none" ) + // NOI18N
@@ -537,7 +537,7 @@ public class XTCEViewerParameterFindDialog extends javax.swing.JFrame {
     private XTCEViewer            xtceViewer_ = null;
     private XTCEViewerPreferences prefs_      = null;
     private XTCEDatabase          dbFile_     = null;
-    private String                semaphore_  = "";
+    private String                semaphore_  = ""; // NOI18N
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel buttonPanel;

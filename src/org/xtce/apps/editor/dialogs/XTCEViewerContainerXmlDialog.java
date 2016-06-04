@@ -224,14 +224,14 @@ public class XTCEViewerContainerXmlDialog extends javax.swing.JDialog {
         setName("XML Elements"); // NOI18N
 
         containerLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        containerLabel.setText("Container Definition");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/xtce/toolkit/MessagesBundle"); // NOI18N
+        containerLabel.setText(bundle.getString("dialog_xmlsingle_container")); // NOI18N
 
         jScrollPane1.setViewportView(containerDefinitionText);
 
         buttonPanel.setMaximumSize(new java.awt.Dimension(32767, 47));
         buttonPanel.setMinimumSize(new java.awt.Dimension(0, 47));
 
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/xtce/toolkit/MessagesBundle"); // NOI18N
         acceptButton.setText(bundle.getString("general_accept_text")); // NOI18N
         acceptButton.setMaximumSize(new java.awt.Dimension(100, 25));
         acceptButton.setMinimumSize(new java.awt.Dimension(100, 25));

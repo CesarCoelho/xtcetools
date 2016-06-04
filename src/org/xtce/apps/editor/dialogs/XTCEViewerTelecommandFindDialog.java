@@ -335,7 +335,7 @@ public class XTCEViewerTelecommandFindDialog extends javax.swing.JFrame {
     private String updatePreviousSearches() {
         String searchText = (String)searchTextComboBox.getSelectedItem();
         if ( searchText == null ) {
-            searchText = "";
+            searchText = ""; // NOI18N
         }
         prefs_.addFindTelecommandSearch( searchText );
         populatePreviousSearches( false );
@@ -396,7 +396,7 @@ public class XTCEViewerTelecommandFindDialog extends javax.swing.JFrame {
 
         if ( results.size() > 0 ) {
             resultsText.setText( Long.toString( results.size() ) +
-                                 " " +
+                                 " " + // NOI18N
                                  XTCEFunctions.getText( "dialog_findtelecommand_found" ) ); // NOI18N
         } else {
             resultsText.setText( XTCEFunctions.getText( "dialog_findparameter_none" ) + // NOI18N

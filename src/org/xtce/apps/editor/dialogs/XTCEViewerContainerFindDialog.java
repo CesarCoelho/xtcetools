@@ -320,7 +320,7 @@ public class XTCEViewerContainerFindDialog extends javax.swing.JFrame {
         searchTextComboBox.removeAllItems();
         List<String> itemList = prefs_.getRecentFindContainerSearches();
         if ( setEmptyRow == true ) {
-            searchTextComboBox.addItem( "" );
+            searchTextComboBox.addItem( "" ); // NOI18N
         }
         for ( String searchItem : itemList ) {
             if ( setEmptyRow == false ) {
@@ -397,7 +397,7 @@ public class XTCEViewerContainerFindDialog extends javax.swing.JFrame {
 
         if ( results.size() > 0 ) {
             resultsText.setText( Long.toString( results.size() ) +
-                                 " " +
+                                 " " + // NOI18N
                                  XTCEFunctions.getText( "dialog_findcontainer_found" ) ); // NOI18N
         } else {
             resultsText.setText( XTCEFunctions.getText( "dialog_findparameter_none" ) + // NOI18N

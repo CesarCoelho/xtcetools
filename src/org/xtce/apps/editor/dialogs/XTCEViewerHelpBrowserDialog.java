@@ -71,7 +71,7 @@ public class XTCEViewerHelpBrowserDialog extends JDialog {
         backButton_    = new JButton();
         forwardButton_ = new JButton();
 
-        setTitle( XTCEFunctions.getText( "help_menu_label" ) );
+        setTitle( XTCEFunctions.getText( "help_menu_label" ) ); // NOI18N
 
         // For using JavaFX Panel here, we need to HIDE_ON_CLOSE otherwise it
         // will call Platform.exit and the app will not be able to open another

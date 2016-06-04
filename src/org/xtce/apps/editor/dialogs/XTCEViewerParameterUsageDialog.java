@@ -64,13 +64,13 @@ public class XTCEViewerParameterUsageDialog extends javax.swing.JFrame {
 
         if ( containers_.size() > 0 ) {
             resultsText.setText( Long.toString( containers_.size() ) +
-                                 " " +
-                                 XTCEFunctions.getText( "dialog_findcontainersbyparameter_found" ) );
+                                 " " + // NOI18N
+                                 XTCEFunctions.getText( "dialog_findcontainersbyparameter_found" ) ); // NOI18N
         } else {
-            resultsText.setText( XTCEFunctions.getText( "dialog_findcontainersbyparameter_none" ) +
-                                 " '" +
+            resultsText.setText( XTCEFunctions.getText( "dialog_findcontainersbyparameter_none" ) + // NOI18N
+                                 " '" + // NOI18N
                                  parameter.getName() +
-                                 "'" );
+                                 "'" ); // NOI18N
         }
 
         setLocationRelativeTo( xtceViewer_ );

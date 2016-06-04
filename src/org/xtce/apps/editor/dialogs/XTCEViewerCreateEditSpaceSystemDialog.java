@@ -52,15 +52,15 @@ public class XTCEViewerCreateEditSpaceSystemDialog extends javax.swing.JDialog {
         initComponents();
 
         validationStatusText.setModel( new DefaultComboBoxModel(
-            new String[] { "Unknown",
-                           "Working",
-                           "Draft",
-                           "Test",
-                           "Validated",
-                           "Released",
-                           "Withdrawn" } ) );
+            new String[] { "Unknown", // NOI18N
+                           "Working", // NOI18N
+                           "Draft", // NOI18N
+                           "Test", // NOI18N
+                           "Validated", // NOI18N
+                           "Released", // NOI18N
+                           "Withdrawn" } ) ); // NOI18N
         validationStatusText.setSelectedIndex( 0 );
-        DateFormat dateFormat = new SimpleDateFormat( "yyyy-MM-dd" );
+        DateFormat dateFormat = new SimpleDateFormat( "yyyy-MM-dd" ); // NOI18N
         dateText.setText( dateFormat.format( new Date() ) );
         pack();
         setLocationRelativeTo( parent );

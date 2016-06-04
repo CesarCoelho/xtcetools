@@ -281,13 +281,13 @@ public class XTCEViewerXpathQueryDialog extends javax.swing.JFrame {
             long duration = System.currentTimeMillis() - startTime;
 
             resultsCountLabel.setText( Integer.toString( nodes.getLength() ) +
-                                       " " +
-                                       XTCEFunctions.getText( "dialog_xpathquery_results" ) +
-                                       " ( " +
+                                       " " + // NOI18N
+                                       XTCEFunctions.getText( "dialog_xpathquery_results" ) + // NOI18N
+                                       " ( " + // NOI18N
                                        Double.toString( duration / 1000.0 ) +
-                                       " " +
-                                       XTCEFunctions.getText( "file_chooser_load_time_unit_text" ) +
-                                       " )" );
+                                       " " + // NOI18N
+                                       XTCEFunctions.getText( "file_chooser_load_time_unit_text" ) + // NOI18N
+                                       " )" ); // NOI18N
 
             resultsText.setText( XTCEFunctions.xmlPrettyPrint( nodes ) );
             lastQueryString_ = queryTextField.getText();
@@ -296,7 +296,7 @@ public class XTCEViewerXpathQueryDialog extends javax.swing.JFrame {
         } catch ( XTCEDatabaseException ex ) {
 
             resultsText.setText( ex.getLocalizedMessage() );
-            lastQueryString_ = "";
+            lastQueryString_ = ""; // NOI18N
             saveButton.setEnabled( false );
 
         }
@@ -345,7 +345,7 @@ public class XTCEViewerXpathQueryDialog extends javax.swing.JFrame {
         queriesListBox.removeAllItems();
         List<String> itemList = prefs_.getSavedXPathQueries();
         if ( setEmptyRow == true ) {
-            queriesListBox.addItem( "" );
+            queriesListBox.addItem( "" ); // NOI18N
         }
         for ( String searchItem : itemList ) {
             queriesListBox.addItem( searchItem );
@@ -358,7 +358,7 @@ public class XTCEViewerXpathQueryDialog extends javax.swing.JFrame {
 
     private XTCEViewerPreferences prefs_           = null;
     private XTCEDatabase          xtcedb_          = null;
-    private String                lastQueryString_ = "";
+    private String                lastQueryString_ = ""; // NOI18N
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
