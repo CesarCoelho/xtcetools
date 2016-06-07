@@ -307,13 +307,14 @@
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Component id="exportParametersCppRadioButton" min="-2" max="-2" attributes="0"/>
                               <Component id="exportParametersCsvRadioButton" min="-2" max="-2" attributes="0"/>
                               <Component id="exportParametersInControlRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="exportParametersCometRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="exportParametersIncludeHeaderRowCheckbox" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="exportParametersUseNamespacesCheckbox" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="exportParametersUseNamespacesCheckbox" alignment="0" max="32767" attributes="0"/>
+                              <Component id="exportParametersCharSetComboBox" alignment="0" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace max="32767" attributes="0"/>
                       </Group>
@@ -338,6 +339,8 @@
                   <Component id="exportParametersIncludeHeaderRowCheckbox" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="exportParametersUseNamespacesCheckbox" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="exportParametersCharSetComboBox" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
@@ -413,6 +416,16 @@
             </Property>
           </Properties>
         </Component>
+        <Component class="javax.swing.JComboBox" name="exportParametersCharSetComboBox">
+          <Properties>
+            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="new DefaultComboBoxModel( Charset.availableCharsets().keySet().toArray() )" type="code"/>
+            </Property>
+            <Property name="selectedItem" type="java.lang.Object" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="Charset.defaultCharset().toString()" type="code"/>
+            </Property>
+          </Properties>
+        </Component>
       </SubComponents>
     </Container>
     <Container class="javax.swing.JPanel" name="containerExportPanel">
@@ -429,13 +442,14 @@
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Component id="exportContainersCppRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="exportContainersCsvRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="exportContainersInControlRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="exportContainersCometRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="exportContainersCometRadioButton" alignment="0" max="32767" attributes="0"/>
                               <Component id="exportContainersIncludeHeaderRowCheckbox" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="exportContainersUseNamespacesCheckbox" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="exportContainersCharSetComboBox" alignment="0" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace max="32767" attributes="0"/>
                       </Group>
@@ -460,6 +474,8 @@
                   <Component id="exportContainersIncludeHeaderRowCheckbox" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="exportContainersUseNamespacesCheckbox" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="exportContainersCharSetComboBox" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
@@ -535,6 +551,16 @@
             </Property>
           </Properties>
         </Component>
+        <Component class="javax.swing.JComboBox" name="exportContainersCharSetComboBox">
+          <Properties>
+            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="new DefaultComboBoxModel( Charset.availableCharsets().keySet().toArray() )" type="code"/>
+            </Property>
+            <Property name="selectedItem" type="java.lang.Object" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="Charset.defaultCharset().toString()" type="code"/>
+            </Property>
+          </Properties>
+        </Component>
       </SubComponents>
     </Container>
     <Container class="javax.swing.JPanel" name="telecommandExportPanel">
@@ -542,13 +568,9 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
+              <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="exportTelecommandsLabel" max="32767" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                      </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
@@ -560,6 +582,13 @@
                               <Component id="exportTelecommandsUseNamespacesCheckbox" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="32767" attributes="0"/>
+                      </Group>
+                      <Group type="102" attributes="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="exportTelecommandsLabel" alignment="0" max="32767" attributes="0"/>
+                              <Component id="exportTelecommandsCharSetComboBox" alignment="1" max="32767" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
@@ -582,6 +611,8 @@
                   <Component id="exportTelecommandsIncludeHeaderRowCheckbox" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="exportTelecommandsUseNamespacesCheckbox" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="exportTelecommandsCharSetComboBox" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
@@ -654,6 +685,16 @@
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
               <ResourceString bundle="org/xtce/toolkit/MessagesBundle.properties" key="dialog_export_parameters_options_ss_2_ns_text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+            </Property>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JComboBox" name="exportTelecommandsCharSetComboBox">
+          <Properties>
+            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="new DefaultComboBoxModel( Charset.availableCharsets().keySet().toArray() )" type="code"/>
+            </Property>
+            <Property name="selectedItem" type="java.lang.Object" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="Charset.defaultCharset().toString()&#xa;" type="code"/>
             </Property>
           </Properties>
         </Component>

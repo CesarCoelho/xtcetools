@@ -51,12 +51,15 @@ import javax.swing.JFileChooser;
 import java.awt.event.WindowEvent;
 import java.io.FileOutputStream;
 import java.net.URL;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
@@ -164,6 +167,7 @@ public class XTCEViewer extends javax.swing.JFrame {
         exportParametersCometRadioButton = new javax.swing.JRadioButton();
         exportParametersIncludeHeaderRowCheckbox = new javax.swing.JCheckBox();
         exportParametersUseNamespacesCheckbox = new javax.swing.JCheckBox();
+        exportParametersCharSetComboBox = new javax.swing.JComboBox();
         containerExportPanel = new javax.swing.JPanel();
         exportContainersLabel = new javax.swing.JLabel();
         exportContainersCsvRadioButton = new javax.swing.JRadioButton();
@@ -172,6 +176,7 @@ public class XTCEViewer extends javax.swing.JFrame {
         exportContainersCometRadioButton = new javax.swing.JRadioButton();
         exportContainersIncludeHeaderRowCheckbox = new javax.swing.JCheckBox();
         exportContainersUseNamespacesCheckbox = new javax.swing.JCheckBox();
+        exportContainersCharSetComboBox = new javax.swing.JComboBox();
         telecommandExportPanel = new javax.swing.JPanel();
         exportTelecommandsLabel = new javax.swing.JLabel();
         exportTelecommandsCsvRadioButton = new javax.swing.JRadioButton();
@@ -180,6 +185,7 @@ public class XTCEViewer extends javax.swing.JFrame {
         exportTelecommandsCometRadioButton = new javax.swing.JRadioButton();
         exportTelecommandsIncludeHeaderRowCheckbox = new javax.swing.JCheckBox();
         exportTelecommandsUseNamespacesCheckbox = new javax.swing.JCheckBox();
+        exportTelecommandsCharSetComboBox = new javax.swing.JComboBox();
         messagesDialogPanel = new javax.swing.JScrollPane();
         messagesDialogText = new javax.swing.JTextArea();
         streamTreePopupMenu = new javax.swing.JPopupMenu();
@@ -516,6 +522,9 @@ public class XTCEViewer extends javax.swing.JFrame {
 
         exportParametersUseNamespacesCheckbox.setText(bundle.getString("dialog_export_parameters_options_ss_2_ns_text")); // NOI18N
 
+        exportParametersCharSetComboBox.setModel(new DefaultComboBoxModel( Charset.availableCharsets().keySet().toArray() ));
+        exportParametersCharSetComboBox.setSelectedItem(Charset.defaultCharset().toString());
+
         javax.swing.GroupLayout parameterExportPanelLayout = new javax.swing.GroupLayout(parameterExportPanel);
         parameterExportPanel.setLayout(parameterExportPanelLayout);
         parameterExportPanelLayout.setHorizontalGroup(
@@ -528,13 +537,14 @@ public class XTCEViewer extends javax.swing.JFrame {
                         .addContainerGap())
                     .addGroup(parameterExportPanelLayout.createSequentialGroup()
                         .addGap(10, 10, 10)
-                        .addGroup(parameterExportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(parameterExportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(exportParametersCppRadioButton)
                             .addComponent(exportParametersCsvRadioButton)
                             .addComponent(exportParametersInControlRadioButton)
                             .addComponent(exportParametersCometRadioButton)
                             .addComponent(exportParametersIncludeHeaderRowCheckbox)
-                            .addComponent(exportParametersUseNamespacesCheckbox))
+                            .addComponent(exportParametersUseNamespacesCheckbox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(exportParametersCharSetComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         parameterExportPanelLayout.setVerticalGroup(
@@ -554,6 +564,8 @@ public class XTCEViewer extends javax.swing.JFrame {
                 .addComponent(exportParametersIncludeHeaderRowCheckbox)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(exportParametersUseNamespacesCheckbox)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(exportParametersCharSetComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -579,6 +591,9 @@ public class XTCEViewer extends javax.swing.JFrame {
 
         exportContainersUseNamespacesCheckbox.setText(bundle.getString("dialog_export_parameters_options_ss_2_ns_text")); // NOI18N
 
+        exportContainersCharSetComboBox.setModel(new DefaultComboBoxModel( Charset.availableCharsets().keySet().toArray() ));
+        exportContainersCharSetComboBox.setSelectedItem(Charset.defaultCharset().toString());
+
         javax.swing.GroupLayout containerExportPanelLayout = new javax.swing.GroupLayout(containerExportPanel);
         containerExportPanel.setLayout(containerExportPanelLayout);
         containerExportPanelLayout.setHorizontalGroup(
@@ -591,13 +606,14 @@ public class XTCEViewer extends javax.swing.JFrame {
                         .addContainerGap())
                     .addGroup(containerExportPanelLayout.createSequentialGroup()
                         .addGap(10, 10, 10)
-                        .addGroup(containerExportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(containerExportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(exportContainersCppRadioButton)
                             .addComponent(exportContainersCsvRadioButton)
                             .addComponent(exportContainersInControlRadioButton)
-                            .addComponent(exportContainersCometRadioButton)
+                            .addComponent(exportContainersCometRadioButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(exportContainersIncludeHeaderRowCheckbox)
-                            .addComponent(exportContainersUseNamespacesCheckbox))
+                            .addComponent(exportContainersUseNamespacesCheckbox)
+                            .addComponent(exportContainersCharSetComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         containerExportPanelLayout.setVerticalGroup(
@@ -617,6 +633,8 @@ public class XTCEViewer extends javax.swing.JFrame {
                 .addComponent(exportContainersIncludeHeaderRowCheckbox)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(exportContainersUseNamespacesCheckbox)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(exportContainersCharSetComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -642,6 +660,10 @@ public class XTCEViewer extends javax.swing.JFrame {
 
         exportTelecommandsUseNamespacesCheckbox.setText(bundle.getString("dialog_export_parameters_options_ss_2_ns_text")); // NOI18N
 
+        exportTelecommandsCharSetComboBox.setModel(new DefaultComboBoxModel( Charset.availableCharsets().keySet().toArray() ));
+        exportTelecommandsCharSetComboBox.setSelectedItem(Charset.defaultCharset().toString()
+        );
+
         javax.swing.GroupLayout telecommandExportPanelLayout = new javax.swing.GroupLayout(telecommandExportPanel);
         telecommandExportPanel.setLayout(telecommandExportPanelLayout);
         telecommandExportPanelLayout.setHorizontalGroup(
@@ -649,9 +671,6 @@ public class XTCEViewer extends javax.swing.JFrame {
             .addGroup(telecommandExportPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(telecommandExportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(telecommandExportPanelLayout.createSequentialGroup()
-                        .addComponent(exportTelecommandsLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())
                     .addGroup(telecommandExportPanelLayout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addGroup(telecommandExportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -661,7 +680,12 @@ public class XTCEViewer extends javax.swing.JFrame {
                             .addComponent(exportTelecommandsCometRadioButton)
                             .addComponent(exportTelecommandsIncludeHeaderRowCheckbox)
                             .addComponent(exportTelecommandsUseNamespacesCheckbox))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(telecommandExportPanelLayout.createSequentialGroup()
+                        .addGroup(telecommandExportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(exportTelecommandsLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(exportTelecommandsCharSetComboBox, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap())))
         );
         telecommandExportPanelLayout.setVerticalGroup(
             telecommandExportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -680,6 +704,8 @@ public class XTCEViewer extends javax.swing.JFrame {
                 .addComponent(exportTelecommandsIncludeHeaderRowCheckbox)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(exportTelecommandsUseNamespacesCheckbox)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(exportTelecommandsCharSetComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -2424,7 +2450,9 @@ public class XTCEViewer extends javax.swing.JFrame {
             try {
                 XTCEDatabaseExporter dbExport;
                 if ( exportParametersCsvRadioButton.isSelected() == true ) {
-                    dbExport = new XTCEDatabaseExporterCsv( xtceDatabaseFile, configProperties );
+                    dbExport = new XTCEDatabaseExporterCsv( xtceDatabaseFile,
+                                                            configProperties,
+                                                            Charset.forName( exportParametersCharSetComboBox.getSelectedItem().toString() ) );
                     dbExport.exportParameters( exportFile );
                 } else if ( exportParametersCppRadioButton.isSelected() == true ) {
                     logMsg( XTCEFunctions.getText( "general_warning" ) + // NOI18N
@@ -3366,7 +3394,8 @@ public class XTCEViewer extends javax.swing.JFrame {
                 if ( exportContainersCsvRadioButton.isSelected() == true ) {
                     XTCEDatabaseExporter dbExport =
                         new XTCEDatabaseExporterCsv( xtceDatabaseFile,
-                                                     configProperties );
+                                                     configProperties,
+                                                     Charset.forName( exportContainersCharSetComboBox.getSelectedItem().toString() ) );
                     List<String> msgs = dbExport.exportContainers( exportFile );
                     for ( String msg : msgs ) {
                         logMsg( XTCEFunctions.getText( "general_warning" ) + // NOI18N
@@ -3885,7 +3914,8 @@ public class XTCEViewer extends javax.swing.JFrame {
                 if ( exportTelecommandsCsvRadioButton.isSelected() == true ) {
                     XTCEDatabaseExporter dbExport =
                         new XTCEDatabaseExporterCsv( xtceDatabaseFile,
-                                                     configProperties );
+                                                     configProperties,
+                                                     Charset.forName( exportTelecommandsCharSetComboBox.getSelectedItem().toString() ) );
                     List<String> msgs = dbExport.exportTelecommands( exportFile );
                     for ( String msg : msgs ) {
                         logMsg( XTCEFunctions.getText( "general_warning" ) + // NOI18N
@@ -5407,6 +5437,7 @@ public class XTCEViewer extends javax.swing.JFrame {
     private javax.swing.JTree detailSpaceSystemTree;
     private javax.swing.JScrollPane detailSpaceSystemTreeScrollPane;
     private javax.swing.ButtonGroup exportContainersButtonGroup;
+    private javax.swing.JComboBox exportContainersCharSetComboBox;
     private javax.swing.JRadioButton exportContainersCometRadioButton;
     private javax.swing.JRadioButton exportContainersCppRadioButton;
     private javax.swing.JRadioButton exportContainersCsvRadioButton;
@@ -5415,6 +5446,7 @@ public class XTCEViewer extends javax.swing.JFrame {
     private javax.swing.JLabel exportContainersLabel;
     private javax.swing.JCheckBox exportContainersUseNamespacesCheckbox;
     private javax.swing.ButtonGroup exportParametersButtonGroup;
+    private javax.swing.JComboBox exportParametersCharSetComboBox;
     private javax.swing.JRadioButton exportParametersCometRadioButton;
     private javax.swing.JRadioButton exportParametersCppRadioButton;
     private javax.swing.JRadioButton exportParametersCsvRadioButton;
@@ -5423,6 +5455,7 @@ public class XTCEViewer extends javax.swing.JFrame {
     private javax.swing.JLabel exportParametersLabel;
     private javax.swing.JCheckBox exportParametersUseNamespacesCheckbox;
     private javax.swing.ButtonGroup exportTelecommandsButtonGroup;
+    private javax.swing.JComboBox exportTelecommandsCharSetComboBox;
     private javax.swing.JRadioButton exportTelecommandsCometRadioButton;
     private javax.swing.JRadioButton exportTelecommandsCppRadioButton;
     private javax.swing.JRadioButton exportTelecommandsCsvRadioButton;

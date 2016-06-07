@@ -18,6 +18,7 @@
 package org.xtce.toolkit;
 
 import java.io.File;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -57,13 +58,17 @@ public abstract class XTCEDatabaseExporter {
      * @param properties Properties object containing potential modifiers for
      * use by this exporter.  The object may be null, in which case all default
      * properties are used.
-     * 
+     *
+     * @param charEncoding Charset to encode the output text as.
+     *
      * @throws XTCEDatabaseException in the event that the database object is
      * null.
      *
      */
 
-    XTCEDatabaseExporter( XTCEDatabase db, Properties properties )
+    public XTCEDatabaseExporter( final XTCEDatabase db,
+                                 final Properties   properties,
+                                 final Charset      charEncoding )
         throws XTCEDatabaseException {
 
         if ( db == null ) {
@@ -71,7 +76,8 @@ public abstract class XTCEDatabaseExporter {
                 XTCEFunctions.getText( "dialog_export_nulldb_message" ) ); // NOI18N
         }
 
-        db_ = db;
+        db_           = db;
+        charEncoding_ = charEncoding;
 
         if ( properties == null ) {
             properties_ = new Properties();
@@ -196,5 +202,9 @@ public abstract class XTCEDatabaseExporter {
     /// A list of properties to affect the behavior of the export.
 
     protected final Properties properties_;
+
+    /// The character set selected for the export encoding
+
+    protected final Charset charEncoding_;
 
 }
