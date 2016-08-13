@@ -742,6 +742,143 @@ public class DecodingTest {
     }
 
     @Test
+    public void testFloatParameterTypesRawMilStd16() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        long errors = 0;
+
+        try {
+
+            System.out.println( "Testing EU Float Raw milstd16 no Calibrator" );
+
+            getParameterItemValueObj( "/BogusSAT/SC001/Payload1",
+                                      "Basic_MilFloat16" );
+
+            errors += checkPass( "0.0",
+                                 "0x0000" );
+
+            errors += checkPass( "0.5",
+                                 "0x4000" );
+
+            errors += checkPass( "1.0",
+                                 "0x4001" );
+
+            errors += checkPass( "0.25",
+                                 "0x403f" );
+
+            errors += checkPass( "12.40625", // -12.4
+                                 "0x6344" );
+
+            errors += checkPass( "12.40625", // -12.4
+                                 25412 );
+
+            errors += checkPass( "-12.125",
+                                 "0x9f04" );
+
+            System.out.println( "" );
+
+        } catch ( Throwable ex ) {
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+        if ( errors != 0 ) {
+            Assert.fail( "Not all checks passed" );
+        }
+
+    }
+
+    @Test
+    public void testFloatParameterTypesRawMilStd32() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        long errors = 0;
+
+        try {
+
+            System.out.println( "Testing EU Float Raw milstd32 no Calibrator" );
+
+            getParameterItemValueObj( "/BogusSAT/SC001/Payload1",
+                                      "Basic_MilFloat32" );
+
+            errors += checkPass( "0.0",
+                                 "0x00000000" );
+
+            errors += checkPass( "0.5",
+                                 "0x40000000" );
+
+            errors += checkPass( "1.0",
+                                 "0x40000001" );
+
+            errors += checkPass( "0.25",
+                                 "0x400000ff" );
+
+            errors += checkPass( "-25.630001068115234", // -25.63
+                                 "0x997ae105" );
+
+            System.out.println( "" );
+
+        } catch ( Throwable ex ) {
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+        if ( errors != 0 ) {
+            Assert.fail( "Not all checks passed" );
+        }
+
+    }
+
+    @Test
+    public void testFloatParameterTypesRawMilStd48() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        long errors = 0;
+
+        try {
+
+            System.out.println( "Testing EU Float Raw milstd48 no Calibrator" );
+
+            getParameterItemValueObj( "/BogusSAT/SC001/Payload1",
+                                      "Basic_MilFloat48" );
+
+            errors += checkPass( "0.0",
+                                 "0x000000000000" );
+
+            errors += checkPass( "0.5",
+                                 "0x400000000000" );
+
+            errors += checkPass( "1.0",
+                                 "0x400000010000" );
+
+            errors += checkPass( "105.63948563742451", // 105.639485637361
+                                 "0x69a3b50754ab" );
+
+            // need negative value
+
+            System.out.println( "" );
+
+        } catch ( Throwable ex ) {
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+        if ( errors != 0 ) {
+            Assert.fail( "Not all checks passed" );
+        }
+
+    }
+
+    @Test
     public void testFloatParameterTypesWithRawUnsignedLinearCalibrator() {
 
         final String methodName =

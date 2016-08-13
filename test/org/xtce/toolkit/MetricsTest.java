@@ -68,19 +68,19 @@ public class MetricsTest {
 
         XTCESpaceSystemMetrics metrics = db_.getMetrics();
 
-        if ( metrics.getNumberOfParameters() != 42 ) {
+        if ( metrics.getNumberOfParameters() != 45 ) {
             Assert.fail( "Should have found 42 total parameters" );
         }
-        if ( metrics.getNumberOfTelemetryParameters() != 41 ) {
+        if ( metrics.getNumberOfTelemetryParameters() != 44 ) {
             Assert.fail( "Should have found 41 total telemetry parameters" );
         }
         if ( metrics.getNumberOfTelecommandParameters() != 1 ) {
             Assert.fail( "Should have found 1 total telecommand parameters" );
         }
-        if ( metrics.getNumberOfParameterTypes() != 40 ) {
+        if ( metrics.getNumberOfParameterTypes() != 43 ) {
             Assert.fail( "Should have found 40 total parameter types" );
         }
-        if ( metrics.getNumberOfTelemetryParameterTypes() != 39 ) {
+        if ( metrics.getNumberOfTelemetryParameterTypes() != 42 ) {
             Assert.fail( "Should have found 39 total telemetry parameter types" );
         }
         if ( metrics.getNumberOfTelecommandParameterTypes() != 1 ) {

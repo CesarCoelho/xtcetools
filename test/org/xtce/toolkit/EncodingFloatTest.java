@@ -175,6 +175,318 @@ public class EncodingFloatTest {
     }
 
     @Test
+    public void testMilStdParameterTypesRaw16() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        long errors = 0;
+
+        try {
+
+            System.out.println( "Testing EU Float Raw milstd16 no Calibrator" );
+
+            getParameterItemValueObj( "/BogusSAT/SC001/Payload1",
+                                      "Basic_MilFloat16" );
+
+            errors += check( "0.0",
+                             "0x0000",
+                             "0000000000000000" );
+
+            errors += check( (float)0.0,
+                             "0x0000",
+                             "0000000000000000" );
+
+            errors += check( 0.0,
+                             "0x0000",
+                             "0000000000000000" );
+
+            errors += check( "0.5",
+                             "0x4000",
+                             "0100000000000000" );
+
+            errors += check( (float)0.5,
+                             "0x4000",
+                             "0100000000000000" );
+
+            errors += check( 0.5,
+                             "0x4000",
+                             "0100000000000000" );
+
+            errors += check( "1.0",
+                             "0x4001",
+                             "0100000000000001" );
+
+            errors += check( (float)1.0,
+                             "0x4001",
+                             "0100000000000001" );
+
+            errors += check( 1.0,
+                             "0x4001",
+                             "0100000000000001" );
+
+            errors += check( "-1.0",
+                             "0x8000",
+                             "1000000000000000" );
+
+            errors += check( (float)-1.0,
+                             "0x8000",
+                             "1000000000000000" );
+
+            errors += check( -1.0,
+                             "0x8000",
+                             "1000000000000000" );
+
+            errors += check( "-12.125",
+                             "0x9f04",
+                             "1001111100000100" );
+
+            errors += check( (float)-12.125,
+                             "0x9f04",
+                             "1001111100000100" );
+
+            errors += check( -12.125,
+                             "0x9f04",
+                             "1001111100000100" );
+
+            errors += check( "12.40625",
+                             "0x6344",
+                             "0110001101000100" );
+
+            errors += check( (float)12.40625,
+                             "0x6344",
+                             "0110001101000100" );
+
+            errors += check( 12.40625,
+                             "0x6344",
+                             "0110001101000100" );
+
+            errors += check( "FOOBAR",
+                             "Basic_MilFloat16 Invalid String value for uncalibrate MILSTD_1750A of 'FOOBAR'" );
+
+            System.out.println( "" );
+
+        } catch ( Throwable ex ) {
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+        if ( errors != 0 ) {
+            Assert.fail( "Not all checks passed" );
+        }
+
+    }
+
+    @Test
+    public void testMilStdParameterTypesRaw32() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        long errors = 0;
+
+        try {
+
+            System.out.println( "Testing EU Float Raw milstd32 no Calibrator" );
+
+            getParameterItemValueObj( "/BogusSAT/SC001/Payload1",
+                                      "Basic_MilFloat32" );
+
+            errors += check( "0.0",
+                             "0x00000000",
+                             "00000000000000000000000000000000" );
+
+            errors += check( (float)0.0,
+                             "0x00000000",
+                             "00000000000000000000000000000000" );
+
+            errors += check( 0.0,
+                             "0x00000000",
+                             "00000000000000000000000000000000" );
+
+            errors += check( "0.5",
+                             "0x40000000",
+                             "01000000000000000000000000000000" );
+
+            errors += check( (float)0.5,
+                             "0x40000000",
+                             "01000000000000000000000000000000" );
+
+            errors += check( 0.5,
+                             "0x40000000",
+                             "01000000000000000000000000000000" );
+
+            errors += check( "1.0",
+                             "0x40000001",
+                             "01000000000000000000000000000001" );
+
+            errors += check( (float)1.0,
+                             "0x40000001",
+                             "01000000000000000000000000000001" );
+
+            errors += check( 1.0,
+                             "0x40000001",
+                             "01000000000000000000000000000001" );
+
+            errors += check( "-1.0",
+                             "0x80000000",
+                             "10000000000000000000000000000000" );
+
+            errors += check( (float)-1.0,
+                             "0x80000000",
+                             "10000000000000000000000000000000" );
+
+            errors += check( -1.0,
+                             "0x80000000",
+                             "10000000000000000000000000000000" );
+
+            errors += check( "0.25",
+                             "0x400000ff",
+                             "01000000000000000000000011111111" );
+
+            errors += check( (float)0.25,
+                             "0x400000ff",
+                             "01000000000000000000000011111111" );
+
+            errors += check( 0.25,
+                             "0x400000ff",
+                             "01000000000000000000000011111111" );
+
+            errors += check( "-25.630001068115234",
+                             "0x997ae105",
+                             "10011001011110101110000100000101" );
+
+            //errors += check( (float)-25.630001068115234,
+            //                 "0x997ae105",
+            //                 "10011001011110101110000100000101" );
+
+            errors += check( -25.630001068115234,
+                             "0x997ae105",
+                             "10011001011110101110000100000101" );
+
+            errors += check( "FOOBAR",
+                             "Basic_MilFloat32 Invalid String value for uncalibrate MILSTD_1750A of 'FOOBAR'" );
+
+            System.out.println( "" );
+
+        } catch ( Throwable ex ) {
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+        if ( errors != 0 ) {
+            Assert.fail( "Not all checks passed" );
+        }
+
+    }
+
+    @Test
+    public void testMilStdParameterTypesRaw48() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        long errors = 0;
+
+        try {
+
+            System.out.println( "Testing EU Float Raw milstd48 no Calibrator" );
+
+            getParameterItemValueObj( "/BogusSAT/SC001/Payload1",
+                                      "Basic_MilFloat48" );
+
+            errors += check( "0.0",
+                             "0x000000000000",
+                             "000000000000000000000000000000000000000000000000" );
+
+            errors += check( (float)0.0,
+                             "0x000000000000",
+                             "000000000000000000000000000000000000000000000000" );
+
+            errors += check( 0.0,
+                             "0x000000000000",
+                             "000000000000000000000000000000000000000000000000" );
+
+            errors += check( "0.5",
+                             "0x400000000000",
+                             "010000000000000000000000000000000000000000000000" );
+
+            errors += check( (float)0.5,
+                             "0x400000000000",
+                             "010000000000000000000000000000000000000000000000" );
+
+            errors += check( 0.5,
+                             "0x400000000000",
+                             "010000000000000000000000000000000000000000000000" );
+
+            errors += check( "1.0",
+                             "0x400000010000",
+                             "010000000000000000000000000000010000000000000000" );
+
+            errors += check( (float)1.0,
+                             "0x400000010000",
+                             "010000000000000000000000000000010000000000000000" );
+
+            errors += check( 1.0,
+                             "0x400000010000",
+                             "010000000000000000000000000000010000000000000000" );
+
+            errors += check( "-1.0",
+                             "0x800000000000",
+                             "100000000000000000000000000000000000000000000000" );
+
+            errors += check( (float)-1.0,
+                             "0x800000000000",
+                             "100000000000000000000000000000000000000000000000" );
+
+            errors += check( -1.0,
+                             "0x800000000000",
+                             "100000000000000000000000000000000000000000000000" );
+
+            errors += check( "0.25",
+                             "0x400000ff0000",
+                             "010000000000000000000000111111110000000000000000" );
+
+            errors += check( (float)0.25,
+                             "0x400000ff0000",
+                             "010000000000000000000000111111110000000000000000" );
+
+            errors += check( 0.25,
+                             "0x400000ff0000",
+                             "010000000000000000000000111111110000000000000000" );
+
+            errors += check( "105.639485637361",
+                             "0x69a3b50754aa",
+                             "011010011010001110110101000001110101010010101010" );
+
+            //errors += check( (float)105.639485637361,
+            //                 "0x69a3b50754ab",
+            //                 "011010011010001110110101000001110101010010101011" );
+
+            errors += check( 105.639485637361,
+                             "0x69a3b50754aa",
+                             "011010011010001110110101000001110101010010101010" );
+
+            errors += check( "FOOBAR",
+                             "Basic_MilFloat48 Invalid String value for uncalibrate MILSTD_1750A of 'FOOBAR'" );
+
+            System.out.println( "" );
+
+        } catch ( Throwable ex ) {
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+        if ( errors != 0 ) {
+            Assert.fail( "Not all checks passed" );
+        }
+
+    }
+
+    @Test
     public void testFloatParameterTypesWithRawFloatQuadraticSingleRoot1Calibrator() {
 
         final String methodName =

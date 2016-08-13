@@ -17,6 +17,7 @@
 
 package org.xtce.toolkit;
 
+import org.xtce.math.MilStd1750A;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.charset.Charset;
@@ -325,6 +326,30 @@ public class XTCEItemValue {
                 break;
             }
 
+            case MILSTD_1750A: {
+                int sizeInBits = rawSizeInBits_;
+                if ( ( sizeInBits == 16 ) ||
+                     ( sizeInBits == 32 ) ||
+                     ( sizeInBits == 48 ) ) {
+                    MilStd1750A floatValue = new MilStd1750A( numericValue,
+                                                              sizeInBits );
+                    isFloatRawValueReasonable( floatValue.toIeeeDouble() );
+                    return floatValue.toString();
+                } else {
+                    warn( itemName_ +
+                          " " + // NOI18N
+                          XTCEFunctions.getText( "error_encdec_rawenctype" ) + // NOI18N
+                          ": " + // NOI18N
+                          rawTypeName_ +
+                          " (" + // NOI18N
+                          Integer.toString( rawSizeInBits_ ) +
+                          " " + // NOI18N
+                          XTCEFunctions.getText( "general_bits" ) + // NOI18N
+                          ")" ); // NOI18N
+                }
+                break;
+            }
+
             case binary:
                 return "0x" + numericValue.toString( 16 ); // NOI18N
 
@@ -335,7 +360,7 @@ public class XTCEItemValue {
                 return getUncalibratedFromRawString( "UTF-16", numericValue ); // NOI18N
 
             default:
-                // not supported MILSTD_1750A, BCD, packedBCD
+                // not supported BCD, packedBCD
                 warn( itemName_ +
                       " " + // NOI18N
                       XTCEFunctions.getText( "error_encdec_rawtypenotsupported" ) + // NOI18N
@@ -575,7 +600,8 @@ public class XTCEItemValue {
                     String lowerCalValue = uncalValue.toLowerCase();
                     intValue = integerStringToBigInteger( lowerCalValue );
                 }
-            } else if ( rawTypeName_ == RawType.IEEE754_1985 ) {
+            } else if ( ( rawTypeName_ == RawType.IEEE754_1985 ) ||
+                        ( rawTypeName_ == RawType.MILSTD_1750A ) ) {
                 String reasCalValue = uncalValue.toLowerCase();
                 if ( reasCalValue.startsWith( "0x" ) == true ) { // NOI18N
                     BigInteger temp = new BigInteger( reasCalValue.replaceFirst( "0x", "" ), 16 ); // NOI18N
@@ -583,9 +609,6 @@ public class XTCEItemValue {
                 } else {
                     return getRawFromUncalibrated( new BigDecimal( reasCalValue ) );
                 }
-            } else if ( rawTypeName_ == RawType.MILSTD_1750A ) {
-                warn( "Unsupported encoding type for " + itemName_ +
-                      " Encoding: " + rawTypeName_ );
             } else if ( rawTypeName_ == RawType.UTF8 ) {
                 BigInteger retValue = BigInteger.ZERO;
                 if ( uncalValue.isEmpty() == false ) {
@@ -728,11 +751,22 @@ public class XTCEItemValue {
                 }
             }
         } else if ( rawTypeName_ == RawType.MILSTD_1750A ) {
-            warn( "Unsupported encoding type for " +
-                  itemName_ +
-                  " Encoding: " +
-                  rawTypeName_ );
-            uncalValue = BigInteger.ZERO;
+            if ( isFloatRawValueReasonable( uncalValue.doubleValue() ) == false ) {
+                uncalValue = BigInteger.ZERO;
+            } else {
+                if ( ( rawSizeInBits_ == 16 ) ||
+                     ( rawSizeInBits_ == 32 ) ||
+                     ( rawSizeInBits_ == 48 ) ) {
+                    MilStd1750A milValue = new MilStd1750A( uncalValue.doubleValue(),
+                                                            rawSizeInBits_ );
+                    uncalValue = BigInteger.valueOf( milValue.toRawBits() );
+                } else {
+                    warn( "Unsupported encoding type for " +
+                          itemName_ +
+                          " Encoding: " +
+                          rawTypeName_ );
+                }
+            }
         } else if ( rawTypeName_ == RawType.UTF8 ) {
             String chars = uncalValue.toString();
             BigInteger retValue = new BigInteger( chars.getBytes( StandardCharsets.UTF_8 ) );
@@ -832,10 +866,22 @@ public class XTCEItemValue {
                 }
             }
         } else if ( rawTypeName_ == RawType.MILSTD_1750A ) {
-            warn( "Unsupported encoding type for " +
-                  itemName_ +
-                  " Encoding: " +
-                  rawTypeName_ );
+            if ( isFloatRawValueReasonable( uncalValue.doubleValue() ) == false ) {
+                intValue = BigInteger.ZERO;
+            } else {
+                if ( ( rawSizeInBits_ == 16 ) ||
+                     ( rawSizeInBits_ == 32 ) ||
+                     ( rawSizeInBits_ == 48 ) ) {
+                    MilStd1750A milValue = new MilStd1750A( uncalValue.doubleValue(),
+                                                            rawSizeInBits_ );
+                    intValue = BigInteger.valueOf( milValue.toRawBits() );
+                } else {
+                    warn( "Unsupported encoding type for " +
+                          itemName_ +
+                          " Encoding: " +
+                          rawTypeName_ );
+                }
+            }
         } else if ( rawTypeName_ == RawType.UTF8 ) {
             String chars = uncalValue.toString();
             BigInteger retValue = new BigInteger( chars.getBytes( StandardCharsets.UTF_8 ) );
@@ -951,7 +997,8 @@ public class XTCEItemValue {
                 } catch ( NumberFormatException ex ) {
                     warn( itemName_ +
                           " Invalid String value for uncalibrate " +
-                          "IEEE754_1985 of '" +
+                          rawTypeName_ +
+                          " of '" +
                           euValue +
                           "'" );
                 }
@@ -1252,7 +1299,8 @@ public class XTCEItemValue {
             case binary:
                 return calValue.toString();
 
-            case IEEE754_1985: {
+            case IEEE754_1985:
+            case MILSTD_1750A: {
                 BigDecimal uncalValue =
                     floatEncodingUncalibrate( new BigDecimal( calValue ) );
                 if ( isFloatRawValueReasonable( uncalValue.doubleValue() ) == false ) {
@@ -1260,13 +1308,6 @@ public class XTCEItemValue {
                 }
                 return Double.toString( uncalValue.doubleValue() );
             }
-
-            case MILSTD_1750A:
-                warn( "Unsupported encoding type for " +
-                      itemName_ +
-                      " Encoding: " +
-                      rawTypeName_ );
-                break;
 
             case UTF8:
             case UTF16:
@@ -1302,7 +1343,8 @@ public class XTCEItemValue {
             case binary:
                 return calValue.toString();
 
-            case IEEE754_1985: {
+            case IEEE754_1985:
+            case MILSTD_1750A: {
                 BigDecimal uncalValue =
                     floatEncodingUncalibrate( calValue );
                 if ( isFloatRawValueReasonable( uncalValue.doubleValue() ) == false ) {
@@ -1310,13 +1352,6 @@ public class XTCEItemValue {
                 }
                 return Double.toString( uncalValue.doubleValue() );
             }
-
-            case MILSTD_1750A:
-                warn( "Unsupported encoding type for " +
-                      itemName_ +
-                      " Encoding: " +
-                      rawTypeName_ );
-                break;
 
             case UTF8:
             case UTF16:
