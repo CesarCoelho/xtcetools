@@ -1170,11 +1170,39 @@ public abstract class XTCETypedObject extends XTCENamedObject {
     @SuppressWarnings("unchecked")
     public String typeToXml() throws XTCEDatabaseException {
 
-        if ( getTypeReference() == null ) {
+        NameDescriptionType type = getTypeReference();
+
+        if ( type == null ) {
             throw new XTCEDatabaseException(
                 getName() +
                 ": " + // NOI18N
                 XTCEFunctions.getText( "xml_marshal_notype" ) ); // NOI18N
+        }
+
+        QName elementName;
+
+        if ( type instanceof StringDataType ) {
+            elementName = new QName( "StringParameterType" );
+        } else if ( type instanceof EnumeratedDataType ) {
+            elementName = new QName( "EnumeratedParameterType" );
+        } else if ( type instanceof IntegerDataType ) {
+            elementName = new QName( "IntegerParameterType" );
+        } else if ( type instanceof BinaryDataType ) {
+            elementName = new QName( "BinaryParameterType" );
+        } else if ( type instanceof FloatDataType ) {
+            elementName = new QName( "FloatParameterType" );
+        } else if ( type instanceof BooleanDataType ) {
+            elementName = new QName( "BooleanParameterType" );
+        } else if ( type instanceof RelativeTimeDataType ) {
+            elementName = new QName( "RelativeTimeParameterType" );
+        } else if ( type instanceof AbsoluteTimeDataType ) {
+            elementName = new QName( "AbsoluteTimeParameterType" );
+        } else if ( type instanceof ArrayDataTypeType ) {
+            elementName = new QName( "ArrayParameterType" );
+        } else if ( type instanceof AggregateDataType ) {
+            elementName = new QName( "AggregateParameterType" );
+        } else {
+            elementName = new QName( "UNDEFINED" );
         }
 
         try {
@@ -1183,12 +1211,12 @@ public abstract class XTCETypedObject extends XTCENamedObject {
             // I am not sure how to fix that right now.
 
             JAXBElement<?> xmlElement =
-                new JAXBElement( new QName(typeObj_.getClass().getSimpleName() ),
-                                 typeObj_.getClass(),
-                                 typeObj_ );
+                new JAXBElement( elementName,
+                                 type.getClass(),
+                                 type );
 
             XTCEDocumentMarshaller mmm =
-                new XTCEDocumentMarshaller( typeObj_.getClass(), true );
+                new XTCEDocumentMarshaller( type.getClass(), true );
 
             return
                 XTCEFunctions.xmlPrettyPrint( mmm.marshalToXml( xmlElement ) );
