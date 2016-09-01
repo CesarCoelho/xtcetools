@@ -36,22 +36,25 @@ public abstract class XTCEDatabaseExporter {
      * These properties inform how the data is output.  The list of property
      * keys and their default values is:
      *
-     * @li use_header_row = "true".  This property indicates if the column
-     * headers should be included in the output.
+     * <ul>
+     * <li>use_header_row = "true".  This property indicates if the column
+     * headers should be included in the output.</li>
      *
-     * @li show_all_alias_namespaces = "true".  This property indicates if all
-     * of the Aliases in the AliasSet should be output (space delimited)
+     * <li>show_all_alias_namespaces = "true".  This property indicates if all
+     * of the Aliases in the AliasSet should be output (space delimited)</li>
      *
-     * @li show_alias_namespaces = "true".  This property indicates if the
-     * alias namespace should be shown in front of the alias, e.g NS::ALIAS.
+     * <li>show_alias_namespaces = "true".  This property indicates if the
+     * alias namespace should be shown in front of the alias,
+     * e.g NS::ALIAS.</li>
      *
-     * @li preferred_alias_namespace = "".  This property restricts the
+     * <li>preferred_alias_namespace = "".  This property restricts the
      * alias output to a specific namespace.  This is ignored if the property
-     * show_all_alias_namespaces is "true".
+     * show_all_alias_namespaces is "true".</li>
      *
-     * @li show_all_conditions = "false".  This property restricts the
+     * <li>show_all_conditions = "false".  This property restricts the
      * container conditional depth to stop at the first non-included container
-     * when a container is conditionally included in another container.
+     * when a container is conditionally included in another container.</li>
+     * </ul>
      *
      * @param db XTCEDatabase object to export from.
      * 
