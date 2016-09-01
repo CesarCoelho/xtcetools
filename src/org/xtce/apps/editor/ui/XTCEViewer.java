@@ -52,7 +52,6 @@ import java.awt.event.WindowEvent;
 import java.io.FileOutputStream;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -5341,6 +5340,7 @@ public class XTCEViewer extends javax.swing.JFrame {
                 boolean readOnly       = true;
 
                 for ( int iii = 0; iii < args.length; ++iii ) {
+
                     if ( args[iii].equals( "--no-xinclude" ) == true ) {
                         useXInclude = false;
                     } else if ( args[iii].equals( "--xinclude" ) == true ) {
@@ -5366,23 +5366,23 @@ public class XTCEViewer extends javax.swing.JFrame {
                         System.exit( -1 );
                     }
 
-                    if ( fileToOpen != null ) {
-                        File argFile = new File( fileToOpen );
-                        if ( argFile.isFile() && argFile.canRead() ) {
-                            app.openFile( argFile,
-                                          useXInclude,
-                                          validateOnLoad,
-                                          readOnly );
-                        } else {
-                            System.err.println(
-                                XTCEFunctions.getText( "file_chooser_noload_text" ) +
-                                " " +
-                                fileToOpen );
-                            usage();
-                            System.exit( -1 );
-                        }
-                    }
+                }
 
+                if ( fileToOpen != null ) {
+                    File argFile = new File( fileToOpen );
+                    if ( argFile.isFile() && argFile.canRead() ) {
+                        app.openFile( argFile,
+                                      useXInclude,
+                                      validateOnLoad,
+                                      readOnly );
+                    } else {
+                        System.err.println(
+                            XTCEFunctions.getText( "file_chooser_noload_text" ) +
+                            " " +
+                            fileToOpen );
+                        usage();
+                        System.exit( -1 );
+                    }
                 }
 
                 app.setLocationByPlatform( true );

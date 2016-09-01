@@ -15,7 +15,7 @@
  * 
  */
 
-package org.xtce.apps.editor.ui;
+package org.xtce.apps.editor.dialogs;
 
 import java.util.BitSet;
 import org.xtce.toolkit.XTCEContainerContentEntry;
