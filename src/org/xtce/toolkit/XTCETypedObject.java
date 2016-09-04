@@ -1124,19 +1124,15 @@ public abstract class XTCETypedObject extends XTCENamedObject {
             if ( pTypeRef != null ) {
                 if ( pTypeRef.getIntegerDataEncoding() != null ) {
                     if ( pTypeRef.getIntegerDataEncoding().getContextCalibratorList() != null ) {
-                        if ( pTypeRef.getIntegerDataEncoding().getContextCalibratorList().getContextCalibrator() != null ) {
-                            return pTypeRef.getIntegerDataEncoding()
-                                           .getContextCalibratorList()
-                                           .getContextCalibrator();
-                        }
+                        return pTypeRef.getIntegerDataEncoding()
+                                       .getContextCalibratorList()
+                                       .getContextCalibrator();
                     }
                 } else if ( pTypeRef.getFloatDataEncoding() != null ) {
                     if ( pTypeRef.getFloatDataEncoding().getContextCalibratorList() != null ) {
-                        if ( pTypeRef.getFloatDataEncoding().getContextCalibratorList().getContextCalibrator() != null ) {
-                            return pTypeRef.getFloatDataEncoding()
-                                           .getContextCalibratorList()
-                                           .getContextCalibrator();
-                        }
+                        return pTypeRef.getFloatDataEncoding()
+                                       .getContextCalibratorList()
+                                       .getContextCalibrator();
                     }
                 }
             }
@@ -1149,21 +1145,17 @@ public abstract class XTCETypedObject extends XTCENamedObject {
                 if ( pTypeRef.getEncoding() != null ) {
                     if ( pTypeRef.getEncoding().getIntegerDataEncoding() != null ) {
                         if ( pTypeRef.getEncoding().getIntegerDataEncoding().getContextCalibratorList() != null ) {
-                            if ( pTypeRef.getEncoding().getIntegerDataEncoding().getContextCalibratorList().getContextCalibrator() != null ) {
-                                return pTypeRef.getEncoding()
-                                               .getIntegerDataEncoding()
-                                               .getContextCalibratorList()
-                                               .getContextCalibrator();
-                            }
+                            return pTypeRef.getEncoding()
+                                           .getIntegerDataEncoding()
+                                           .getContextCalibratorList()
+                                           .getContextCalibrator();
                         }
                     } else if ( pTypeRef.getEncoding().getFloatDataEncoding() != null ) {
                         if ( pTypeRef.getEncoding().getFloatDataEncoding().getContextCalibratorList() != null ) {
-                            if ( pTypeRef.getEncoding().getFloatDataEncoding().getContextCalibratorList().getContextCalibrator() != null ) {
-                                return pTypeRef.getEncoding()
-                                               .getFloatDataEncoding()
-                                               .getContextCalibratorList()
-                                               .getContextCalibrator();
-                            }
+                            return pTypeRef.getEncoding()
+                                           .getFloatDataEncoding()
+                                           .getContextCalibratorList()
+                                           .getContextCalibrator();
                         }
                     }
                 }
