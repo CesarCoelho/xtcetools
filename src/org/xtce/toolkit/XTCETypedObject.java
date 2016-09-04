@@ -833,11 +833,15 @@ public abstract class XTCETypedObject extends XTCENamedObject {
     public final RawType getRawType() {
 
         String rType = getRawTypeString();
+
         if ( rType.isEmpty() == true ) {
             return RawType.UNKNOWN;
-        } else {
-            rType = rType.replaceAll( "-", "" ); // NOI18N
+        } else if ( rType.equals( "UTF-8" ) == true ) {
+            return RawType.UTF8;
+        } else if ( rType.equals( "UTF-16" ) == true ) {
+            return RawType.UTF16;
         }
+
         return RawType.valueOf( rType );
 
     }
@@ -918,11 +922,16 @@ public abstract class XTCETypedObject extends XTCENamedObject {
 
             if ( pTypeRef != null ) {
                 if ( pTypeRef.getIntegerDataEncoding() != null ) {
-                    return pTypeRef.getIntegerDataEncoding().getSizeInBits().toString();
+                    return pTypeRef.getIntegerDataEncoding()
+                                   .getSizeInBits()
+                                   .toString();
                 } else if ( pTypeRef.getFloatDataEncoding() != null ) {
-                    return pTypeRef.getFloatDataEncoding().getSizeInBits().toString();
+                    return pTypeRef.getFloatDataEncoding()
+                                   .getSizeInBits()
+                                   .toString();
                 } else if ( pTypeRef.getBinaryDataEncoding() != null ) {
-                    IntegerValueType sizeDetail = pTypeRef.getBinaryDataEncoding().getSizeInBits();
+                    IntegerValueType sizeDetail =
+                        pTypeRef.getBinaryDataEncoding().getSizeInBits();
                     if ( sizeDetail != null ) {
                         if ( sizeDetail.getFixedValue() != null ) {
                             return sizeDetail.getFixedValue();
@@ -931,7 +940,8 @@ public abstract class XTCETypedObject extends XTCENamedObject {
                         }
                     }
                 } else if ( pTypeRef.getStringDataEncoding() != null ) {
-                    StringDataEncodingType.SizeInBits sizeElement = pTypeRef.getStringDataEncoding().getSizeInBits();
+                    StringDataEncodingType.SizeInBits sizeElement =
+                        pTypeRef.getStringDataEncoding().getSizeInBits();
                     if ( sizeElement != null ) {
                         IntegerValueType sizeDetail = sizeElement.getFixed();
                         if ( sizeDetail != null ) {
@@ -954,11 +964,20 @@ public abstract class XTCETypedObject extends XTCENamedObject {
             if ( pTypeRef != null ) {
                 if ( pTypeRef.getEncoding() != null ) {
                     if ( pTypeRef.getEncoding().getIntegerDataEncoding() != null ) {
-                        return pTypeRef.getEncoding().getIntegerDataEncoding().getSizeInBits().toString();
+                        return pTypeRef.getEncoding()
+                                       .getIntegerDataEncoding()
+                                       .getSizeInBits()
+                                       .toString();
                     } else if ( pTypeRef.getEncoding().getFloatDataEncoding() != null ) {
-                        return pTypeRef.getEncoding().getFloatDataEncoding().getSizeInBits().toString();
+                        return pTypeRef.getEncoding()
+                                       .getFloatDataEncoding()
+                                       .getSizeInBits()
+                                       .toString();
                     } else if ( pTypeRef.getEncoding().getBinaryDataEncoding() != null ) {
-                        IntegerValueType sizeDetail = pTypeRef.getEncoding().getBinaryDataEncoding().getSizeInBits();
+                        IntegerValueType sizeDetail =
+                            pTypeRef.getEncoding()
+                                    .getBinaryDataEncoding()
+                                    .getSizeInBits();
                         if ( sizeDetail != null ) {
                             if ( sizeDetail.getFixedValue() != null ) {
                                 return sizeDetail.getFixedValue();
@@ -967,9 +986,13 @@ public abstract class XTCETypedObject extends XTCENamedObject {
                             }
                         }
                     } else if ( pTypeRef.getEncoding().getStringDataEncoding() != null ) {
-                        StringDataEncodingType.SizeInBits sizeElement = pTypeRef.getEncoding().getStringDataEncoding().getSizeInBits();
+                        StringDataEncodingType.SizeInBits sizeElement =
+                            pTypeRef.getEncoding()
+                                    .getStringDataEncoding()
+                                    .getSizeInBits();
                         if ( sizeElement != null ) {
-                            IntegerValueType sizeDetail = sizeElement.getFixed();
+                            IntegerValueType sizeDetail =
+                                sizeElement.getFixed();
                             if ( sizeDetail != null ) {
                                 if ( sizeDetail.getFixedValue() != null ) {
                                     return sizeDetail.getFixedValue();
@@ -1038,9 +1061,11 @@ public abstract class XTCETypedObject extends XTCENamedObject {
 
             if ( pTypeRef != null ) {
                 if ( pTypeRef.getIntegerDataEncoding() != null ) {
-                    return pTypeRef.getIntegerDataEncoding().getDefaultCalibrator();
+                    return pTypeRef.getIntegerDataEncoding()
+                                   .getDefaultCalibrator();
                 } else if ( pTypeRef.getFloatDataEncoding() != null ) {
-                    return pTypeRef.getFloatDataEncoding().getDefaultCalibrator();
+                    return pTypeRef.getFloatDataEncoding()
+                                   .getDefaultCalibrator();
                 }
             }
 
@@ -1051,9 +1076,13 @@ public abstract class XTCETypedObject extends XTCENamedObject {
             if ( pTypeRef != null ) {
                 if ( pTypeRef.getEncoding() != null ) {
                     if ( pTypeRef.getEncoding().getIntegerDataEncoding() != null ) {
-                        return pTypeRef.getEncoding().getIntegerDataEncoding().getDefaultCalibrator();
+                        return pTypeRef.getEncoding()
+                                       .getIntegerDataEncoding()
+                                       .getDefaultCalibrator();
                     } else if ( pTypeRef.getEncoding().getFloatDataEncoding() != null ) {
-                        return pTypeRef.getEncoding().getFloatDataEncoding().getDefaultCalibrator();
+                        return pTypeRef.getEncoding()
+                                       .getFloatDataEncoding()
+                                       .getDefaultCalibrator();
                     }
                 }
             }
@@ -1094,20 +1123,20 @@ public abstract class XTCETypedObject extends XTCENamedObject {
 
             if ( pTypeRef != null ) {
                 if ( pTypeRef.getIntegerDataEncoding() != null ) {
-                    try {
-                       return pTypeRef.getIntegerDataEncoding()
-                                      .getContextCalibratorList()
-                                      .getContextCalibrator();
-                    } catch ( NullPointerException ex ) {
-                        // do nothing
+                    if ( pTypeRef.getIntegerDataEncoding().getContextCalibratorList() != null ) {
+                        if ( pTypeRef.getIntegerDataEncoding().getContextCalibratorList().getContextCalibrator() != null ) {
+                            return pTypeRef.getIntegerDataEncoding()
+                                           .getContextCalibratorList()
+                                           .getContextCalibrator();
+                        }
                     }
                 } else if ( pTypeRef.getFloatDataEncoding() != null ) {
-                    try {
-                        return pTypeRef.getFloatDataEncoding()
-                                       .getContextCalibratorList()
-                                       .getContextCalibrator();
-                    } catch ( NullPointerException ex ) {
-                        // do nothing
+                    if ( pTypeRef.getFloatDataEncoding().getContextCalibratorList() != null ) {
+                        if ( pTypeRef.getFloatDataEncoding().getContextCalibratorList().getContextCalibrator() != null ) {
+                            return pTypeRef.getFloatDataEncoding()
+                                           .getContextCalibratorList()
+                                           .getContextCalibrator();
+                        }
                     }
                 }
             }
@@ -1119,22 +1148,22 @@ public abstract class XTCETypedObject extends XTCENamedObject {
             if ( pTypeRef != null ) {
                 if ( pTypeRef.getEncoding() != null ) {
                     if ( pTypeRef.getEncoding().getIntegerDataEncoding() != null ) {
-                        try {
-                            return pTypeRef.getEncoding()
-                                           .getIntegerDataEncoding()
-                                           .getContextCalibratorList()
-                                           .getContextCalibrator();
-                        } catch ( NullPointerException ex ) {
-                            // do nothing
+                        if ( pTypeRef.getEncoding().getIntegerDataEncoding().getContextCalibratorList() != null ) {
+                            if ( pTypeRef.getEncoding().getIntegerDataEncoding().getContextCalibratorList().getContextCalibrator() != null ) {
+                                return pTypeRef.getEncoding()
+                                               .getIntegerDataEncoding()
+                                               .getContextCalibratorList()
+                                               .getContextCalibrator();
+                            }
                         }
                     } else if ( pTypeRef.getEncoding().getFloatDataEncoding() != null ) {
-                        try {
-                            return pTypeRef.getEncoding()
-                                           .getFloatDataEncoding()
-                                           .getContextCalibratorList()
-                                           .getContextCalibrator();
-                        } catch ( NullPointerException ex ) {
-                            // do nothing
+                        if ( pTypeRef.getEncoding().getFloatDataEncoding().getContextCalibratorList() != null ) {
+                            if ( pTypeRef.getEncoding().getFloatDataEncoding().getContextCalibratorList().getContextCalibrator() != null ) {
+                                return pTypeRef.getEncoding()
+                                               .getFloatDataEncoding()
+                                               .getContextCalibratorList()
+                                               .getContextCalibrator();
+                            }
                         }
                     }
                 }
