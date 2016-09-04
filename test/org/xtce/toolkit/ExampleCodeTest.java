@@ -112,6 +112,37 @@ public class ExampleCodeTest {
 
     }
 
+    @Test
+    public void testDecodeContainerExample() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        String cwd = System.getProperty( "user.dir" );
+        System.out.println( "CWD: " + cwd );
+
+        try {
+
+            ProcessBuilder proc = new ProcessBuilder( 
+                "java",
+                "-classpath",
+                "dist/XTCETools.jar",
+                "org.xtce.toolkit.examples.DecodeContainerExample",
+                "src/org/xtce/toolkit/database/examples/BogusSAT-2.xml",
+                "/BogusSAT/SC001/ECSS_Service_1_Subservice_1",
+                "test/org/xtce/toolkit/test/Container-ECSS_Service_1_Subservice_1.bin" );
+
+            run( proc );
+
+        } catch ( Exception ex ) {
+            Assert.fail( "Should not have gotten an exception: " +
+                         ex.getLocalizedMessage() );
+        }
+
+    }
+
     private void run( ProcessBuilder proc ) throws IOException, InterruptedException {
 
         proc.redirectErrorStream( true );
