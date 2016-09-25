@@ -56,7 +56,7 @@ import org.xtce.toolkit.XTCETMContainer;
  *
  *     XTCETMContainer container = db.getContainer( "/MySAT/TM/Packet1" );
  *
- *     // Get a stream object for the provided bunary file contents.
+ *     // Get a stream object for the provided binary file contents.
  *
  *     InputStream fStream = new FileInputStream( args[2] );
  *
@@ -188,7 +188,7 @@ public class DecodeContainerExample {
 
             XTCETMContainer container = db.getContainer( args[1] );
 
-            // Get a stream object for the provided bunary file contents.
+            // Get a stream object for the provided binary file contents.
 
             InputStream fStream = new FileInputStream( args[2] );
 

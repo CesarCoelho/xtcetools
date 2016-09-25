@@ -89,18 +89,18 @@ public class ContainerEncodingTest {
             XTCEContainerContentModel model =
                 db_.processContainer( container, fileRawBits );
 
-            long sizeInBytes = model.getTotalSize();
+            long sizeInBits = model.getTotalSize();
 
             Assert.assertTrue( "Container size of " + containerName + " is " +
-                Long.toString( sizeInBytes ) + " but should be 184 bits",
-                sizeInBytes == 184 );
+                Long.toString( sizeInBits ) + " but should be 184 bits",
+                sizeInBits == 184 );
 
             BitSet rawBits = model.encodeContainer();
 
             StringBuilder fileBitString = new StringBuilder();
             StringBuilder procBitString = new StringBuilder();
 
-            for ( int iii = 0; iii < sizeInBytes; ++iii ) {
+            for ( int iii = 0; iii < sizeInBits; ++iii ) {
                 if ( fileRawBits.get( iii ) == true ) {
                     fileBitString.append( "1" );
                 } else {
@@ -150,7 +150,7 @@ public class ContainerEncodingTest {
             XTCEContainerContentModel model =
                 db_.processContainer( container, null, false );
 
-            long sizeInBytes = model.getTotalSize();
+            long sizeInBits = model.getTotalSize();
 
             byte[] bytes = { (byte)0x40, (byte)0x20, (byte)0x00, (byte)0x00, // 2.5
                              (byte)0x00, (byte)0x00,                         // 2 byte gap
@@ -162,15 +162,15 @@ public class ContainerEncodingTest {
             BitSet fileRawBits = XTCEFunctions.getBitSetFromStreamByteArray( bytes );
 
             Assert.assertTrue( "Container size of " + containerName + " is " +
-                Long.toString( sizeInBytes ) + " but should be 184 bits",
-                sizeInBytes == 184 );
+                Long.toString( sizeInBits ) + " but should be 184 bits",
+                sizeInBits == 184 );
 
             BitSet rawBits = model.encodeContainer();
 
             StringBuilder fileBitString = new StringBuilder();
             StringBuilder procBitString = new StringBuilder();
 
-            for ( int iii = 0; iii < sizeInBytes; ++iii ) {
+            for ( int iii = 0; iii < sizeInBits; ++iii ) {
                 if ( fileRawBits.get( iii ) == true ) {
                     fileBitString.append( "1" );
                 } else {
@@ -248,7 +248,7 @@ public class ContainerEncodingTest {
             XTCEContainerContentModel model =
                 db_.processContainer( container, values, false );
 
-            long sizeInBytes = model.getTotalSize();
+            long sizeInBits = model.getTotalSize();
 
             byte[] bytes = { (byte)0x42, (byte)0xb4, (byte)0x80, (byte)0x00, // 90.25 0x42B48000
                              (byte)0x00, (byte)0x00,                         // 2 byte gap
@@ -260,15 +260,15 @@ public class ContainerEncodingTest {
             BitSet fileRawBits = XTCEFunctions.getBitSetFromStreamByteArray( bytes );
 
             Assert.assertTrue( "Container size of " + containerName + " is " +
-                Long.toString( sizeInBytes ) + " but should be 184 bits",
-                sizeInBytes == 184 );
+                Long.toString( sizeInBits ) + " but should be 184 bits",
+                sizeInBits == 184 );
 
             BitSet rawBits = model.encodeContainer();
 
             StringBuilder fileBitString = new StringBuilder();
             StringBuilder procBitString = new StringBuilder();
 
-            for ( int iii = 0; iii < sizeInBytes; ++iii ) {
+            for ( int iii = 0; iii < sizeInBits; ++iii ) {
                 if ( fileRawBits.get( iii ) == true ) {
                     fileBitString.append( "1" );
                 } else {
@@ -322,18 +322,18 @@ public class ContainerEncodingTest {
             XTCEContainerContentModel model =
                 db_.processContainer( container, fileRawBits );
 
-            long sizeInBytes = model.getTotalSize();
+            long sizeInBits = model.getTotalSize();
 
             Assert.assertTrue( "Container size of " + containerName + " is " +
-                Long.toString( sizeInBytes ) + " but should be 144 bits",
-                sizeInBytes == 144 );
+                Long.toString( sizeInBits ) + " but should be 144 bits",
+                sizeInBits == 144 );
 
             BitSet rawBits = model.encodeContainer();
 
             StringBuilder fileBitString = new StringBuilder();
             StringBuilder procBitString = new StringBuilder();
 
-            for ( int iii = 0; iii < sizeInBytes; ++iii ) {
+            for ( int iii = 0; iii < sizeInBits; ++iii ) {
                 if ( fileRawBits.get( iii ) == true ) {
                     fileBitString.append( "1" );
                 } else {
@@ -387,18 +387,18 @@ public class ContainerEncodingTest {
             XTCEContainerContentModel model =
                 db_.processContainer( container, fileRawBits );
 
-            long sizeInBytes = model.getTotalSize();
+            long sizeInBits = model.getTotalSize();
 
             Assert.assertTrue( "Container size of " + containerName + " is " +
-                Long.toString( sizeInBytes ) + " but should be 208 bits",
-                sizeInBytes == 208 );
+                Long.toString( sizeInBits ) + " but should be 208 bits",
+                sizeInBits == 208 );
 
             BitSet rawBits = model.encodeContainer();
 
             StringBuilder fileBitString = new StringBuilder();
             StringBuilder procBitString = new StringBuilder();
 
-            for ( int iii = 0; iii < sizeInBytes; ++iii ) {
+            for ( int iii = 0; iii < sizeInBits; ++iii ) {
                 if ( fileRawBits.get( iii ) == true ) {
                     fileBitString.append( "1" );
                 } else {
@@ -454,18 +454,18 @@ public class ContainerEncodingTest {
 
             assertOnWarnings( model );
 
-            long sizeInBytes = model.getTotalSize();
+            long sizeInBits = model.getTotalSize();
 
             Assert.assertTrue( "Container size of " + containerName + " is " +
-                Long.toString( sizeInBytes ) + " but should be 272 bits",
-                sizeInBytes == 272 );
+                Long.toString( sizeInBits ) + " but should be 272 bits",
+                sizeInBits == 272 );
 
             BitSet rawBits = model.encodeContainer();
 
             StringBuilder fileBitString = new StringBuilder();
             StringBuilder procBitString = new StringBuilder();
 
-            for ( int iii = 0; iii < sizeInBytes; ++iii ) {
+            for ( int iii = 0; iii < sizeInBits; ++iii ) {
                 if ( fileRawBits.get( iii ) == true ) {
                     fileBitString.append( "1" );
                 } else {
@@ -519,18 +519,18 @@ public class ContainerEncodingTest {
             XTCEContainerContentModel model =
                 db_.processContainer( container, fileRawBits );
 
-            long sizeInBytes = model.getTotalSize();
+            long sizeInBits = model.getTotalSize();
 
             Assert.assertTrue( "Container size of " + containerName + " is " +
-                Long.toString( sizeInBytes ) + " but should be 144 bits",
-                sizeInBytes == 144 );
+                Long.toString( sizeInBits ) + " but should be 144 bits",
+                sizeInBits == 144 );
 
             BitSet rawBits = model.encodeContainer();
 
             StringBuilder fileBitString = new StringBuilder();
             StringBuilder procBitString = new StringBuilder();
 
-            for ( int iii = 0; iii < sizeInBytes; ++iii ) {
+            for ( int iii = 0; iii < sizeInBits; ++iii ) {
                 if ( fileRawBits.get( iii ) == true ) {
                     fileBitString.append( "1" );
                 } else {
@@ -590,18 +590,18 @@ public class ContainerEncodingTest {
             XTCEContainerContentModel model =
                 db_.processContainer( container, fileRawBits );
 
-            long sizeInBytes = model.getTotalSize();
+            long sizeInBits = model.getTotalSize();
 
             Assert.assertTrue( "Container size of " + containerName + " is " +
-                Long.toString( sizeInBytes ) + " but should be 192 bits",
-                sizeInBytes == 192 );
+                Long.toString( sizeInBits ) + " but should be 192 bits",
+                sizeInBits == 192 );
 
             BitSet rawBits = model.encodeContainer();
 
             StringBuilder fileBitString = new StringBuilder();
             StringBuilder procBitString = new StringBuilder();
 
-            for ( int iii = 0; iii < sizeInBytes; ++iii ) {
+            for ( int iii = 0; iii < sizeInBits; ++iii ) {
                 if ( fileRawBits.get( iii ) == true ) {
                     fileBitString.append( "1" );
                 } else {
@@ -655,18 +655,18 @@ public class ContainerEncodingTest {
             XTCEContainerContentModel model =
                 db_.processContainer( container, fileRawBits );
 
-            long sizeInBytes = model.getTotalSize();
+            long sizeInBits = model.getTotalSize();
 
             Assert.assertTrue( "Container size of " + containerName + " is " +
-                Long.toString( sizeInBytes ) + " but should be 208 bits",
-                sizeInBytes == 208 );
+                Long.toString( sizeInBits ) + " but should be 208 bits",
+                sizeInBits == 208 );
 
             BitSet rawBits = model.encodeContainer();
 
             StringBuilder fileBitString = new StringBuilder();
             StringBuilder procBitString = new StringBuilder();
 
-            for ( int iii = 0; iii < sizeInBytes; ++iii ) {
+            for ( int iii = 0; iii < sizeInBits; ++iii ) {
                 if ( fileRawBits.get( iii ) == true ) {
                     fileBitString.append( "1" );
                 } else {
@@ -720,18 +720,18 @@ public class ContainerEncodingTest {
             XTCEContainerContentModel model =
                 db_.processContainer( container, fileRawBits );
 
-            long sizeInBytes = model.getTotalSize();
+            long sizeInBits = model.getTotalSize();
 
             Assert.assertTrue( "Container size of " + containerName + " is " +
-                Long.toString( sizeInBytes ) + " but should be 448 bits",
-                sizeInBytes == 448 );
+                Long.toString( sizeInBits ) + " but should be 448 bits",
+                sizeInBits == 448 );
 
             BitSet rawBits = model.encodeContainer();
 
             StringBuilder fileBitString = new StringBuilder();
             StringBuilder procBitString = new StringBuilder();
 
-            for ( int iii = 0; iii < sizeInBytes; ++iii ) {
+            for ( int iii = 0; iii < sizeInBits; ++iii ) {
                 if ( fileRawBits.get( iii ) == true ) {
                     fileBitString.append( "1" );
                 } else {

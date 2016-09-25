@@ -143,6 +143,34 @@ public class ExampleCodeTest {
 
     }
 
+    @Test
+    public void testEncodeContainerExample() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        String cwd = System.getProperty( "user.dir" );
+        System.out.println( "CWD: " + cwd );
+
+        try {
+
+            ProcessBuilder proc = new ProcessBuilder( 
+                "java",
+                "-classpath",
+                "dist/XTCETools.jar",
+                "org.xtce.toolkit.examples.EncodeContainerExample" );
+
+            run( proc );
+
+        } catch ( Exception ex ) {
+            Assert.fail( "Should not have gotten an exception: " +
+                         ex.getLocalizedMessage() );
+        }
+
+    }
+    
     private void run( ProcessBuilder proc ) throws IOException, InterruptedException {
 
         proc.redirectErrorStream( true );
