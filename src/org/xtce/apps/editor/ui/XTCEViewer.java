@@ -75,6 +75,7 @@ import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 import org.xtce.apps.editor.dialogs.XTCEViewerArgumentXmlDialog;
+import org.xtce.apps.editor.dialogs.XTCEViewerContainerEncodingDialog;
 import org.xtce.toolkit.XTCEAbsoluteTimeType;
 import org.xtce.toolkit.XTCEContainerContentEntry.FieldType;
 import org.xtce.toolkit.XTCEContainerEntryValue;
@@ -139,6 +140,7 @@ public class XTCEViewer extends javax.swing.JFrame {
         containerTreePopupMenu = new javax.swing.JPopupMenu();
         showContainerXmlMenuItem = new javax.swing.JMenuItem();
         decodeContainerMenuItem = new javax.swing.JMenuItem();
+        encodeContainerMenuItem = new javax.swing.JMenuItem();
         containerTablePopupMenu = new javax.swing.JPopupMenu();
         showItemXmlElementsMenuItem = new javax.swing.JMenuItem();
         goToEntryMenuItem = new javax.swing.JMenuItem();
@@ -153,6 +155,7 @@ public class XTCEViewer extends javax.swing.JFrame {
         cloneContainerDrawingMenuItem = new javax.swing.JMenuItem();
         showContainerDrawingXmlMenuItem = new javax.swing.JMenuItem();
         decodeContainerDrawingMenuItem = new javax.swing.JMenuItem();
+        encodeContainerDrawingMenuItem = new javax.swing.JMenuItem();
         parameterFieldExclusion = new javax.swing.ButtonGroup();
         parameterLocationExclusion = new javax.swing.ButtonGroup();
         exportParametersButtonGroup = new javax.swing.ButtonGroup();
@@ -402,6 +405,14 @@ public class XTCEViewer extends javax.swing.JFrame {
         });
         containerTreePopupMenu.add(decodeContainerMenuItem);
 
+        encodeContainerMenuItem.setText(bundle.getString("options_popup_encodecontainer")); // NOI18N
+        encodeContainerMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                encodeContainerMenuItemActionPerformed(evt);
+            }
+        });
+        containerTreePopupMenu.add(encodeContainerMenuItem);
+
         showItemXmlElementsMenuItem.setText(bundle.getString("options_popup_showxmlelements")); // NOI18N
         showItemXmlElementsMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -498,6 +509,14 @@ public class XTCEViewer extends javax.swing.JFrame {
             }
         });
         containerDrawingPopupMenu.add(decodeContainerDrawingMenuItem);
+
+        encodeContainerDrawingMenuItem.setText(bundle.getString("options_popup_encodecontainer")); // NOI18N
+        encodeContainerDrawingMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                encodeContainerDrawingMenuItemActionPerformed(evt);
+            }
+        });
+        containerDrawingPopupMenu.add(encodeContainerDrawingMenuItem);
 
         exportParametersLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         exportParametersLabel.setText(bundle.getString("dialog_export_parameters_options_title")); // NOI18N
@@ -3949,6 +3968,43 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     }//GEN-LAST:event_mainWindowExportTelecommandsMenuItemActionPerformed
 
+    private void encodeContainerDrawingMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_encodeContainerDrawingMenuItemActionPerformed
+
+        encodeContainerMenuItemActionPerformed( evt );
+
+    }//GEN-LAST:event_encodeContainerDrawingMenuItemActionPerformed
+
+    private void encodeContainerMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_encodeContainerMenuItemActionPerformed
+
+        XTCEViewerContainerTreeNode node =
+           (XTCEViewerContainerTreeNode)tmContainerTree.getLastSelectedPathComponent();
+
+        if ( node == null ) {
+            JOptionPane.showMessageDialog( this,
+                                           XTCEFunctions.getText( "rightclick_container_noselection_message" ), // NOI18N
+                                           XTCEFunctions.getText( "general_error" ), // NOI18N
+                                           JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        try {
+            XTCETMContainer container = node.getContainerReference();
+            XTCEViewerContainerEncodingDialog dialog =
+                new XTCEViewerContainerEncodingDialog( this,
+                                                       false,
+                                                       container,
+                                                       xtceDatabaseFile,
+                                                       prefs );
+            dialog.setVisible( true );
+        } catch ( NullPointerException ex ) {
+            JOptionPane.showMessageDialog( this,
+                                           XTCEFunctions.getText( "dialog_selectedrownocontainer_text" ), // NOI18N
+                                           XTCEFunctions.getText( "general_error" ), // NOI18N
+                                           JOptionPane.ERROR_MESSAGE);
+        }
+
+    }//GEN-LAST:event_encodeContainerMenuItemActionPerformed
+
     public void goToParameter( String  parameterName,
                                String  spaceSystemName,
                                boolean isTelemetryParameter ) {
@@ -3990,7 +4046,7 @@ public class XTCEViewer extends javax.swing.JFrame {
     public void goToContainer( String  containerName,
                                String  spaceSystemName ) {
 
-        String containerFullPath = spaceSystemName + "/" + containerName;
+        String containerFullPath = spaceSystemName + "/" + containerName; // NOI18N
 
         if ( mainWindowPrimaryWorkspace.getSelectedIndex() != 3 ) {
             mainWindowPrimaryWorkspace.setSelectedIndex( 3 );
@@ -4135,7 +4191,7 @@ public class XTCEViewer extends javax.swing.JFrame {
                 //System.out.println( "matched " + spaceSystem.getFullPath() );
                 return child;
             } else {
-                existingPath += "/";
+                existingPath += "/"; // NOI18N
                 if ( container.getInheritancePath().startsWith( existingPath ) == true ) {
                     //System.out.println( "matched starts " + spaceSystem.getFullPath() );
                     return child;
@@ -4434,9 +4490,9 @@ public class XTCEViewer extends javax.swing.JFrame {
                     prefs.getContainerOrientationOption();
 
                 XTCEViewerContainerDrawing.Orientation orientDrawingFlag;
-                if ( orientationOption.equals( "LEFT_TO_RIGHT" ) == true ) {
+                if ( orientationOption.equals( "LEFT_TO_RIGHT" ) == true ) { // NOI18N
                     orientDrawingFlag = Orientation.LEFT_TO_RIGHT;
-                } else if ( orientationOption.equals( "TOP_TO_BOTTOM" ) == true ) {
+                } else if ( orientationOption.equals( "TOP_TO_BOTTOM" ) == true ) { // NOI18N
                     orientDrawingFlag = Orientation.TOP_TO_BOTTOM;
                 } else {
                     orientDrawingFlag = Orientation.LEFT_TO_RIGHT;
@@ -4614,7 +4670,7 @@ public class XTCEViewer extends javax.swing.JFrame {
 
         List<String> warnings = containerModel.getWarnings();
         for ( String warning : warnings ) {
-            logMsg( XTCEFunctions.getText( "general_warning" ) +  ": " + warning );
+            logMsg( XTCEFunctions.getText( "general_warning" ) +  ": " + warning ); // NOI18N
         }
 
         List<XTCEContainerContentEntry> entries = containerModel.getContentList();
@@ -4652,7 +4708,7 @@ public class XTCEViewer extends javax.swing.JFrame {
                 } else if ( entry.getTelecommand() != null ) {
                     containerName = entry.getTelecommand().getName();
                 }
-                fieldType = "Parameter";
+                fieldType = "Parameter"; // NOI18N
                 description = entry.getParameter().getDescription();
                 units = entry.getParameter().getUnits();
                 typeName = entry.getParameter().getEngineeringType().toString();
@@ -4665,7 +4721,7 @@ public class XTCEViewer extends javax.swing.JFrame {
                                                           preferredNamespace );
                 name = entry.getArgument().getName();
                 containerName = entry.getTelecommand().getName();
-                fieldType = "Argument";
+                fieldType = "Argument"; // NOI18N
                 description = entry.getArgument().getDescription();
                 units = entry.getArgument().getUnits();
                 typeName = entry.getArgument().getEngineeringType().toString();
@@ -4682,7 +4738,7 @@ public class XTCEViewer extends javax.swing.JFrame {
                 } else if ( entry.getTelecommandContainer() != null ) {
                     containerName = entry.getTelecommandContainer().getName();
                 }
-                fieldType = "Constant";
+                fieldType = "Constant"; // NOI18N
             }
 
             if ( entry.getValue() != null ) {
@@ -4746,7 +4802,7 @@ public class XTCEViewer extends javax.swing.JFrame {
 
             String telecommandLabel;
             if ( alias.isEmpty() == false ) {
-                telecommandLabel = telecommand.getName() + " (" + alias + ")";
+                telecommandLabel = telecommand.getName() + " (" + alias + ")"; // NOI18N
             } else {
                 telecommandLabel = telecommand.getName();
             }
@@ -4880,7 +4936,7 @@ public class XTCEViewer extends javax.swing.JFrame {
                         return true;
                     }
                 } else if ( ( preferredNamespace.isEmpty() == false ) && ( showAliasNamespaces == true ) ) {
-                    if ( ((String)tm.getValueAt( iii, 1 )).endsWith( "::" + searchString ) == true ) {
+                    if ( ((String)tm.getValueAt( iii, 1 )).endsWith( "::" + searchString ) == true ) { // NOI18N
                         int viewportRow = table.getRowSorter().convertRowIndexToView( iii );
                         table.setRowSelectionInterval( viewportRow, viewportRow );
                         table.scrollRectToVisible( new Rectangle( table.getCellRect( viewportRow, 0, true ) ) );
@@ -4888,10 +4944,10 @@ public class XTCEViewer extends javax.swing.JFrame {
                     }
                 } else {
                     String aliasField = (String)tm.getValueAt( iii, 1 );
-                    String fields[] = aliasField.split( " " );
+                    String fields[] = aliasField.split( " " ); // NOI18N
                     for ( String field : fields ) {
                         if ( showAliasNamespaces == true ) {
-                            if ( field.endsWith( "::" + searchString ) == true ) {
+                            if ( field.endsWith( "::" + searchString ) == true ) { // NOI18N
                                 int viewportRow = table.getRowSorter().convertRowIndexToView( iii );
                                 table.setRowSelectionInterval( viewportRow, viewportRow );
                                 table.scrollRectToVisible( new Rectangle( table.getCellRect( viewportRow, 0, true ) ) );
@@ -4969,8 +5025,8 @@ public class XTCEViewer extends javax.swing.JFrame {
             }
 
             if ( xtceDatabaseFile.getErrorCount() > 0 ) {
-                throw new XTCEDatabaseException( XTCEFunctions.getText( "dialog_unabletoload_text" ) +
-                                                 " " +
+                throw new XTCEDatabaseException( XTCEFunctions.getText( "dialog_unabletoload_text" ) + // NOI18N
+                                                 " " + // NOI18N
                                                  dbFile.getAbsolutePath() );
             }
 
@@ -5436,6 +5492,8 @@ public class XTCEViewer extends javax.swing.JFrame {
     private javax.swing.JScrollPane detailSpaceSystemPanelScrollPane;
     private javax.swing.JTree detailSpaceSystemTree;
     private javax.swing.JScrollPane detailSpaceSystemTreeScrollPane;
+    private javax.swing.JMenuItem encodeContainerDrawingMenuItem;
+    private javax.swing.JMenuItem encodeContainerMenuItem;
     private javax.swing.ButtonGroup exportContainersButtonGroup;
     private javax.swing.JComboBox exportContainersCharSetComboBox;
     private javax.swing.JRadioButton exportContainersCometRadioButton;

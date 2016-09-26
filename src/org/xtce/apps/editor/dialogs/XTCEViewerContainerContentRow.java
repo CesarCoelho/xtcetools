@@ -17,14 +17,22 @@
 
 package org.xtce.apps.editor.dialogs;
 
+import java.math.BigInteger;
 import java.util.BitSet;
+import java.util.List;
 import org.xtce.toolkit.XTCEContainerContentEntry;
 import org.xtce.toolkit.XTCEContainerContentEntry.FieldType;
 import org.xtce.toolkit.XTCEContainerEntryValue;
 import org.xtce.toolkit.XTCEFunctions;
+import org.xtce.toolkit.XTCEItemValue;
 
-/** This is the JPanel that is used inside the scrollable region in the
- * XTCEViewerContainerContentDialog class.
+/** This is the JPanel that is used inside the scroll region in the
+ * XTCEViewerContainerContentDialog class and also the variation class
+ * XTCEViewerContainerEncodingDialog.
+ *
+ * Two constructors are used with this.  The decode class uses this in a much
+ * simpler way and does not need the extra two arguments on the second larger
+ * constructor.
  *
  * @author dovereem
  *
@@ -59,6 +67,94 @@ public class XTCEViewerContainerContentRow extends javax.swing.JPanel {
 
         initComponents();
 
+        dialog_ = null;
+        entry_  = entry;
+        values_ = null;
+
+        drawRow( showAllNamespaces, showNamespaces, preferredNamespace );
+
+    }
+
+    /** Constructor to create a new JPanel to display information about a
+     * container content entry where the row is editable.
+     *
+     * @param entry XTCEContainerContentEntry from the processed container
+     * content list.
+     *
+     * @param showAllNamespaces boolean indicating if the user preference to
+     * show all alias namespace is set.  This is used for the first column that
+     * displays the name of the item.
+     *
+     * @param showNamespaces boolean indicating if namespace names should be
+     * shown per the user preference.  This is used for the first column that
+     * displays the name of the item.
+     *
+     * @param preferredNamespace String containing the user preferred namespace
+     * name, if there is one, based on the user preference.  This is used for
+     * the first column that displays the name of the item.
+     *
+     * @param dialog XTCEViewerContainerEncodingDialog parent used for callback
+     * on value change.
+     *
+     * @param values List of XTCEContainerEntryValue containing the values that
+     * are being updated for this container content.
+     *
+     */
+
+    public XTCEViewerContainerContentRow( XTCEContainerContentEntry         entry,
+                                          boolean                           showAllNamespaces,
+                                          boolean                           showNamespaces,
+                                          String                            preferredNamespace,
+                                          XTCEViewerContainerEncodingDialog dialog,
+                                          List<XTCEContainerEntryValue>     values ) {
+
+        initComponents();
+
+        dialog_ = dialog;
+        entry_  = entry;
+        values_ = values;
+
+        drawRow( showAllNamespaces, showNamespaces, preferredNamespace );
+
+    }
+
+    private void drawRow( boolean showAllNamespaces,
+                          boolean showNamespaces,
+                          String  preferredNamespace ) {
+
+        int byteSize = getSizeInBytes( entry_ );
+
+        XTCEContainerEntryValue valueObj = entry_.getValue();
+
+        if ( valueObj != null ) {
+            calValueField.setText( valueObj.getCalibratedValue() );
+            uncalValueField.setText( valueObj.getUncalibratedValue() );
+            if ( byteSize != 0 ) {
+                BitSet rawBits = valueObj.getRawValue();
+                rawValueField.setText(
+                    XTCEFunctions.bitSetToHex( rawBits, byteSize ) );
+            }
+        }
+
+        if ( dialog_ != null ) {
+            calValueField.setEditable( true );
+            uncalValueField.setEditable( true );
+            rawValueField.setEditable( true );
+        }
+
+        populateDisplayName( showAllNamespaces,
+                             showNamespaces,
+                             preferredNamespace );
+
+        itemNameField.setCaretPosition( 0 );
+        calValueField.setCaretPosition( 0 );
+        uncalValueField.setCaretPosition( 0 );
+        rawValueField.setCaretPosition( 0 );
+
+    }
+
+    private int getSizeInBytes( XTCEContainerContentEntry entry ) {
+
         String bitSize  = entry.getRawSizeInBits();
         int    byteSize = 0;
 
@@ -74,30 +170,26 @@ public class XTCEViewerContainerContentRow extends javax.swing.JPanel {
             }
         }
 
-        XTCEContainerEntryValue valueObj = entry.getValue();
+        return byteSize;
 
-        if ( valueObj != null ) {
-            calValueField.setText( valueObj.getCalibratedValue() );
-            uncalValueField.setText( valueObj.getUncalibratedValue() );
-            if ( byteSize != 0 ) {
-                BitSet rawBits = valueObj.getRawValue();
-                rawValueField.setText(
-                    XTCEFunctions.bitSetToHex( rawBits, byteSize ) );
-            }
-        }
+    }
 
-        String displayName = entry.getName();
+    private void populateDisplayName( boolean showAllNamespaces,
+                                      boolean showNamespaces,
+                                      String  preferredNamespace ) {
+
+        String displayName = entry_.getName();
         String aliasString = "";
 
-        if ( entry.getEntryType() == FieldType.PARAMETER ) {
+        if ( entry_.getEntryType() == FieldType.PARAMETER ) {
             aliasString =
-                XTCEFunctions.makeAliasDisplayString( entry.getParameter(),
+                XTCEFunctions.makeAliasDisplayString( entry_.getParameter(),
                                                       showAllNamespaces,
                                                       showNamespaces,
                                                       preferredNamespace );
-        } else if ( entry.getEntryType() == FieldType.ARGUMENT ) {
+        } else if ( entry_.getEntryType() == FieldType.ARGUMENT ) {
             aliasString =
-                XTCEFunctions.makeAliasDisplayString( entry.getArgument(),
+                XTCEFunctions.makeAliasDisplayString( entry_.getArgument(),
                                                       showAllNamespaces,
                                                       showNamespaces,
                                                       preferredNamespace );
@@ -106,13 +198,28 @@ public class XTCEViewerContainerContentRow extends javax.swing.JPanel {
         if ( aliasString.isEmpty() == true ) {
             itemNameField.setText( displayName );
         } else {
-            itemNameField.setText( displayName + " (" + aliasString + ")" );
+            itemNameField.setText( displayName + " (" + aliasString + ")" ); // NOI18N
         }
 
-        itemNameField.setCaretPosition( 0 );
-        calValueField.setCaretPosition( 0 );
-        uncalValueField.setCaretPosition( 0 );
-        rawValueField.setCaretPosition( 0 );
+    }
+
+    private void updateValueList( XTCEContainerEntryValue value ) {
+
+        boolean found = false;
+
+        for ( int iii = 0; iii < values_.size(); ++iii ) {
+            if ( values_.get( iii ).getItemFullPath().equals( entry_.getItemFullPath() ) == true ) {
+                values_.set( iii, value );
+                found = true;
+                break;
+            }
+        }
+
+        if ( found == false ) {
+            values_.add( value );
+        }
+
+        dialog_.repopulate();
 
     }
 
@@ -133,10 +240,40 @@ public class XTCEViewerContainerContentRow extends javax.swing.JPanel {
         itemNameField.setEditable(false);
 
         calValueField.setEditable(false);
+        calValueField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                calValueFieldActionPerformed(evt);
+            }
+        });
+        calValueField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                calValueFieldFocusLost(evt);
+            }
+        });
 
         uncalValueField.setEditable(false);
+        uncalValueField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                uncalValueFieldActionPerformed(evt);
+            }
+        });
+        uncalValueField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                uncalValueFieldFocusLost(evt);
+            }
+        });
 
         rawValueField.setEditable(false);
+        rawValueField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rawValueFieldActionPerformed(evt);
+            }
+        });
+        rawValueField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                rawValueFieldFocusLost(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -161,6 +298,120 @@ public class XTCEViewerContainerContentRow extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void calValueFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_calValueFieldFocusLost
+
+        calValueFieldActionPerformed( null );
+
+    }//GEN-LAST:event_calValueFieldFocusLost
+
+    private void uncalValueFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_uncalValueFieldFocusLost
+
+        uncalValueFieldActionPerformed( null );
+
+    }//GEN-LAST:event_uncalValueFieldFocusLost
+
+    private void rawValueFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_rawValueFieldFocusLost
+
+        rawValueFieldActionPerformed( null );
+
+    }//GEN-LAST:event_rawValueFieldFocusLost
+
+    private void calValueFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_calValueFieldActionPerformed
+
+        if ( dialog_ == null ) {
+            return;
+        }
+
+        XTCEContainerEntryValue value;
+
+        if ( entry_.getEntryType() == FieldType.PARAMETER ) {
+            value = new XTCEContainerEntryValue( entry_.getParameter(),
+                                                 calValueField.getText(),
+                                                 "==", // NOI18N
+                                                 "Calibrated" ); // NOI18N
+        } else if ( entry_.getEntryType() == FieldType.ARGUMENT ) {
+            value = new XTCEContainerEntryValue( entry_.getArgument(),
+                                                 calValueField.getText(),
+                                                 "==", // NOI18N
+                                                 "Calibrated" ); // NOI18N
+        } else {
+            return;
+        }
+
+        updateValueList( value );
+
+    }//GEN-LAST:event_calValueFieldActionPerformed
+
+    private void uncalValueFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_uncalValueFieldActionPerformed
+
+        if ( dialog_ == null ) {
+            return;
+        }
+
+        XTCEContainerEntryValue value;
+
+        if ( entry_.getEntryType() == FieldType.PARAMETER ) {
+            value = new XTCEContainerEntryValue( entry_.getParameter(),
+                                                 uncalValueField.getText(),
+                                                 "==", // NOI18N
+                                                 "Uncalibrated" ); // NOI18N
+        } else if ( entry_.getEntryType() == FieldType.ARGUMENT ) {
+            value = new XTCEContainerEntryValue( entry_.getArgument(),
+                                                 uncalValueField.getText(),
+                                                 "==", // NOI18N
+                                                 "Uncalibrated" ); // NOI18N
+        } else {
+            return;
+        }
+
+        updateValueList( value );
+
+    }//GEN-LAST:event_uncalValueFieldActionPerformed
+
+    private void rawValueFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rawValueFieldActionPerformed
+
+        if ( dialog_ == null ) {
+            return;
+        }
+
+        
+        String rawValue = rawValueField.getText();
+
+        XTCEContainerEntryValue value;
+
+        if ( entry_.getEntryType() == FieldType.PARAMETER ) {
+            XTCEItemValue valueObj = new XTCEItemValue( entry_.getParameter() );
+            BigInteger rawInteger = valueObj.integerStringToBigInteger( rawValue );
+            BitSet     bits       = valueObj.encodeRawBits( rawInteger );
+            String     binValue   = valueObj.bitSetToBinary( bits );
+            String     uncalValue = valueObj.getUncalibratedFromRaw( bits );
+            value = new XTCEContainerEntryValue( entry_.getParameter(),
+                                                 uncalValue,
+                                                 "==", // NOI18N
+                                                 "Uncalibrated" ); // NOI18N
+        } else if ( entry_.getEntryType() == FieldType.ARGUMENT ) {
+            XTCEItemValue valueObj = new XTCEItemValue( entry_.getArgument() );
+            BigInteger rawInteger = valueObj.integerStringToBigInteger( rawValue );
+            BitSet     bits       = valueObj.encodeRawBits( rawInteger );
+            String     binValue   = valueObj.bitSetToBinary( bits );
+            String     uncalValue = valueObj.getUncalibratedFromRaw( bits );
+            value = new XTCEContainerEntryValue( entry_.getArgument(),
+                                                 uncalValue,
+                                                 "==", // NOI18N
+                                                 "Uncalibrated" ); // NOI18N
+        } else {
+            return;
+        }
+
+        updateValueList( value );
+
+    }//GEN-LAST:event_rawValueFieldActionPerformed
+
+    // Private Data Members
+
+    private final XTCEViewerContainerEncodingDialog dialog_;
+    private final XTCEContainerContentEntry         entry_;
+    private final List<XTCEContainerEntryValue>     values_;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField calValueField;
