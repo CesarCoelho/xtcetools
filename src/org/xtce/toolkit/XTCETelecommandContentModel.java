@@ -436,14 +436,14 @@ public class XTCETelecommandContentModel extends XTCEContainerContentModelBase {
             }
         }
 
-        throw new XTCEDatabaseException( XTCEFunctions.getText( "error_no_base_tc" ) +
-                                         " '" +
+        throw new XTCEDatabaseException( XTCEFunctions.getText( "error_no_base_tc" ) + // NOI18N
+                                         " '" + // NOI18N
                                          metaCommandRef +
-                                         "' " +
-                                         XTCEFunctions.getText( "error_from_tc" ) +
-                                         " '" +
+                                         "' " + // NOI18N
+                                         XTCEFunctions.getText( "error_from_tc" ) + // NOI18N
+                                         " '" + // NOI18N
                                          currentTelecommand.getName() +
-                                         "'" );
+                                         "'" ); // NOI18N
 
     }
 
@@ -474,11 +474,11 @@ public class XTCETelecommandContentModel extends XTCEContainerContentModelBase {
                 warnings_.add( XTCEFunctions.getText( "xml_element_assignment_not_found1" ) + // NOI18N
                                " '" + // NOI18N
                                telecommand.getFullPath() +
-                               "' " +
+                               "' " + // NOI18N
                                XTCEFunctions.getText( "xml_element_assignment_not_found2" ) + // NOI18N
-                               " '" +
+                               " '" + // NOI18N
                                assign.getArgumentName() +
-                               "' " +
+                               "' " + // NOI18N
                                XTCEFunctions.getText( "xml_element_assignment_not_found3" ) ); // NOI18N
             }
 
