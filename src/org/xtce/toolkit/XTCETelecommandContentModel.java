@@ -457,13 +457,31 @@ public class XTCETelecommandContentModel extends XTCEContainerContentModelBase {
         List<ArgumentAssignment> assigns = argAssignments.getArgumentAssignment();
 
         for ( ArgumentAssignment assign : assigns ) {
+
+            boolean found = false;
+
             for ( XTCEContainerContentEntry entry : contentList_ ) {
                 if ( entry.getEntryType() == FieldType.ARGUMENT ) {
                     if ( entry.getArgument().getName().equals( assign.getArgumentName() ) == true ) {
                         entry.setValue( assign );
+                        found = true;
+                        break;
                     }
                 }
             }
+
+            if ( found == false ) {
+                warnings_.add( XTCEFunctions.getText( "xml_element_assignment_not_found1" ) + // NOI18N
+                               " '" + // NOI18N
+                               telecommand.getFullPath() +
+                               "' " +
+                               XTCEFunctions.getText( "xml_element_assignment_not_found2" ) + // NOI18N
+                               " '" +
+                               assign.getArgumentName() +
+                               "' " +
+                               XTCEFunctions.getText( "xml_element_assignment_not_found3" ) ); // NOI18N
+            }
+
         }
 
     }
