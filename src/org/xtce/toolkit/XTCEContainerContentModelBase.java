@@ -265,6 +265,8 @@ public abstract class XTCEContainerContentModelBase {
 
     public final BitSet encodeContainer( ) throws XTCEDatabaseException {
 
+        warnings_.clear();
+
         BitSet rawBits = new BitSet( (int)getTotalSize() );
 
         List<XTCEContainerContentEntry> entries = getContentList();
@@ -301,6 +303,8 @@ public abstract class XTCEContainerContentModelBase {
             for ( int iii = 0; iii < nb; ++iii ) {
                 rawBits.set( sb + nb - 1 - iii, raw.get( iii ) );
             }
+
+            warnings_.addAll( valueObj.getWarnings() );
 
         }
 

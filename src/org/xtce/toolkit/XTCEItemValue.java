@@ -106,7 +106,7 @@ public class XTCEItemValue {
                 timeHandler_ =
                     XTCEFunctions.getAbsoluteTimeHandler( timeXml );
             } catch ( XTCEDatabaseException ex ) {
-                warn( itemName_ + " " + ex.getLocalizedMessage() );
+                warn( itemName_ + " " + ex.getLocalizedMessage() ); // NOI18N
                 validObject_ = false;
                 return;
             }
@@ -428,7 +428,7 @@ public class XTCEItemValue {
                         return timeHandler_.getCalibratedFromUncalibrated( uncalValue );
                     }
                 } catch ( Exception ex ) {
-                    warn( itemName_ + ex.getLocalizedMessage() );
+                    warn( itemName_ + " " + ex.getLocalizedMessage() ); // NOI18N
                 }
                 break;
 
@@ -1035,7 +1035,7 @@ public class XTCEItemValue {
                         return timeHandler_.getUncalibratedFromCalibrated( euValue );
                     }
                 } catch ( Exception ex ) {
-                    warn( itemName_ + ex.getLocalizedMessage() );
+                    warn( itemName_ + " " + ex.getLocalizedMessage() ); // NOI18N
                 }
                 break;
 
