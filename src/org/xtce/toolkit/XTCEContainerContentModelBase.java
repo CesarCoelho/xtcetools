@@ -265,7 +265,7 @@ public abstract class XTCEContainerContentModelBase {
 
     public final BitSet encodeContainer( ) throws XTCEDatabaseException {
 
-        warnings_.clear();
+        //warnings_.clear();
 
         BitSet rawBits = new BitSet( (int)getTotalSize() );
 
