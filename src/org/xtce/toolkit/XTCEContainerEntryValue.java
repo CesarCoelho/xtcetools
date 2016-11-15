@@ -482,25 +482,25 @@ public class XTCEContainerEntryValue {
     /// The fully qualified name of the XTCE Parameter or Argument that should
     /// be assigned this value during processing of Containers.
 
-    private String name_ = null;
+    private final String name_;
 
     /// The value for this XTCE Parameter or Argument that should be assigned
     /// during processing of Containers.
 
-    private String value_ = null;
+    private final String value_;
 
     /// The operator for setting this value, which generally is just "==".
 
-    private String operator_ = null;
+    private final String operator_;
 
     /// Indicator for determining if this value for this Parameter or Argument
     /// is in Calibrated or Uncalibrated form.
 
-    private String form_ = null;
+    private final String form_;
 
     /// Prebuilt string for the toStringWithoutParameter method
 
-    private String toStringWithoutParameter_ = null;
+    private final String toStringWithoutParameter_;
 
     /// The typed object reference
 
