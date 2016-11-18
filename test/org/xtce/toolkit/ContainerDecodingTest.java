@@ -189,7 +189,7 @@ public class ContainerDecodingTest {
                         break;
                     case "CCSDS_Packet_Sequence.GroupFlags":
                         ++items;
-                        checkEntry( entry, "2", "16", "==3{cal}", "3", "", "" );
+                        checkEntry( entry, "2", "16", "==Standalone{cal}", "Standalone", "", "" );
                         break;
                     case "CCSDS_Packet_Sequence.Count":
                         ++items;
@@ -292,7 +292,7 @@ public class ContainerDecodingTest {
                         break;
                     case "CCSDS_Packet_Sequence.GroupFlags":
                         ++items;
-                        checkEntry( entry, "2", "16", "==3{cal}", "3", "", "" );
+                        checkEntry( entry, "2", "16", "==Standalone{cal}", "Standalone", "", "" );
                         break;
                     case "CCSDS_Packet_Sequence.Count":
                         ++items;
@@ -390,7 +390,7 @@ public class ContainerDecodingTest {
                         break;
                     case "CCSDS_Packet_Sequence.GroupFlags":
                         ++items;
-                        checkEntry( entry, "2", "16", "==3{cal}", "3", "", "" );
+                        checkEntry( entry, "2", "16", "==Standalone{cal}", "Standalone", "", "" );
                         break;
                     case "CCSDS_Packet_Sequence.Count":
                         ++items;
@@ -556,7 +556,7 @@ public class ContainerDecodingTest {
                         break;
                     case "CCSDS_Packet_Sequence.GroupFlags":
                         ++items;
-                        checkEntry( entry, "2", "16", "==3{cal}", "3", "", "" );
+                        checkEntry( entry, "2", "16", "==Standalone{cal}", "Standalone", "", "" );
                         break;
                     case "CCSDS_Packet_Sequence.Count":
                         ++items;
@@ -669,7 +669,7 @@ public class ContainerDecodingTest {
                         break;
                     case "CCSDS_Packet_Sequence.GroupFlags":
                         ++items;
-                        checkEntry( entry, "2", "16", "==3{cal}", "3", "", "" );
+                        checkEntry( entry, "2", "16", "==Standalone{cal}", "Standalone", "", "" );
                         break;
                     case "CCSDS_Packet_Sequence.Count":
                         ++items;
@@ -816,7 +816,7 @@ public class ContainerDecodingTest {
                         break;
                     case "CCSDS_Packet_Sequence.GroupFlags":
                         ++items;
-                        checkEntry( entry, "2", "16", "==3{cal}", "3", "", "" );
+                        checkEntry( entry, "2", "16", "==Standalone{cal}", "Standalone", "", "" );
                         break;
                     case "CCSDS_Packet_Sequence.Count":
                         ++items;

@@ -161,7 +161,7 @@ public class ContainerProcessingTest {
 
             List<XTCETMContainer> containers = db_.getContainers();
 
-            long expected = 24;
+            long expected = 25;
 
             Assert.assertTrue( "Should have found " +
                 Long.toString( expected ) + " containers, but found instead " +
@@ -189,7 +189,7 @@ public class ContainerProcessingTest {
 
             List<XTCETMContainer> containers = ss.getContainers();
 
-            long expected = 11;
+            long expected = 12;
 
             Assert.assertTrue( "Should have found " +
                 Long.toString( expected ) + " containers, but found instead " +
@@ -215,7 +215,7 @@ public class ContainerProcessingTest {
 
             List<XTCETMContainer> containers = db_.getContainers( "*ECSS*" );
 
-            long expected = 5;
+            long expected = 6;
 
             Assert.assertTrue( "'*ECSS*' Should have found " +
                 Long.toString( expected ) + " containers, but found instead " +
@@ -252,7 +252,7 @@ public class ContainerProcessingTest {
 
             List<XTCETMContainer> containers = ss.getContainers( "*Service*" );
 
-            long expected = 3;
+            long expected = 4;
 
             Assert.assertTrue( "'*Service*' Should have found " +
                 Long.toString( expected ) + " containers, but found instead " +
@@ -391,7 +391,7 @@ public class ContainerProcessingTest {
                         break;
                     case "CCSDS_Packet_Sequence.GroupFlags":
                         ++items;
-                        checkEntry( entry, "2", "16", "", "3", "", "" );
+                        checkEntry( entry, "2", "16", "", "Standalone", "", "" );
                         break;
                     case "CCSDS_Packet_Sequence.Count":
                         ++items;
@@ -490,7 +490,7 @@ public class ContainerProcessingTest {
                         break;
                     case "CCSDS_Packet_Sequence.GroupFlags":
                         ++items;
-                        checkEntry( entry, "2", "16", "", "3", "", "" );
+                        checkEntry( entry, "2", "16", "", "Standalone", "", "" );
                         break;
                     case "CCSDS_Packet_Sequence.Count":
                         ++items;
@@ -644,7 +644,7 @@ public class ContainerProcessingTest {
                         break;
                     case "CCSDS_Packet_Sequence.GroupFlags":
                         ++items;
-                        checkEntry( entry, "2", "16", "", "3", "", "" );
+                        checkEntry( entry, "2", "16", "", "Standalone", "", "" );
                         break;
                     case "CCSDS_Packet_Sequence.Count":
                         ++items;
@@ -783,7 +783,7 @@ public class ContainerProcessingTest {
                         break;
                     case "CCSDS_Packet_Sequence.GroupFlags":
                         ++items;
-                        checkEntry( entry, "2", "16", "", "3", "", "" );
+                        checkEntry( entry, "2", "16", "", "Standalone", "", "" );
                         break;
                     case "CCSDS_Packet_Sequence.Count":
                         ++items;
@@ -886,7 +886,7 @@ public class ContainerProcessingTest {
                         break;
                     case "CCSDS_Packet_Sequence.GroupFlags":
                         ++items;
-                        checkEntry( entry, "2", "16", "", "3", "", "" );
+                        checkEntry( entry, "2", "16", "", "Standalone", "", "" );
                         break;
                     case "CCSDS_Packet_Sequence.Count":
                         ++items;
@@ -1022,7 +1022,7 @@ public class ContainerProcessingTest {
                         break;
                     case "CCSDS_Packet_Sequence.GroupFlags":
                         ++items;
-                        checkEntry( entry, "2", "16", "", "3", "", "" );
+                        checkEntry( entry, "2", "16", "", "Standalone", "", "" );
                         break;
                     case "CCSDS_Packet_Sequence.Count":
                         ++items;
@@ -1153,7 +1153,7 @@ public class ContainerProcessingTest {
                         break;
                     case "CCSDS_Packet_Sequence.GroupFlags":
                         ++items;
-                        checkEntry( entry, "2", "16", "", "3", "", "" );
+                        checkEntry( entry, "2", "16", "", "Standalone", "", "" );
                         break;
                     case "CCSDS_Packet_Sequence.Count":
                         ++items;
@@ -1252,7 +1252,7 @@ public class ContainerProcessingTest {
                         break;
                     case "CCSDS_Packet_Sequence.GroupFlags":
                         ++items;
-                        checkEntry( entry, "2", "16", "", "3", "", "" );
+                        checkEntry( entry, "2", "16", "", "Standalone", "", "" );
                         break;
                     case "CCSDS_Packet_Sequence.Count":
                         ++items;
@@ -1382,7 +1382,7 @@ public class ContainerProcessingTest {
                         break;
                     case "CCSDS_Packet_Sequence.GroupFlags":
                         ++items;
-                        checkEntry( entry, "2", "16", "", "3", "", "" );
+                        checkEntry( entry, "2", "16", "", "Standalone", "", "" );
                         break;
                     case "CCSDS_Packet_Sequence.Count":
                         ++items;
@@ -1507,7 +1507,7 @@ public class ContainerProcessingTest {
                         break;
                     case "CCSDS_Packet_Sequence.GroupFlags":
                         ++items;
-                        checkEntry( entry, "2", "16", "", "3", "", "" );
+                        checkEntry( entry, "2", "16", "", "Standalone", "", "" );
                         break;
                     case "CCSDS_Packet_Sequence.Count":
                         ++items;
@@ -1611,7 +1611,7 @@ public class ContainerProcessingTest {
                         break;
                     case "CCSDS_Packet_Sequence.GroupFlags":
                         ++items;
-                        checkEntry( entry, "2", "16", "", "3", "", "" );
+                        checkEntry( entry, "2", "16", "", "Standalone", "", "" );
                         break;
                     case "CCSDS_Packet_Sequence.Count":
                         ++items;
@@ -1735,7 +1735,7 @@ public class ContainerProcessingTest {
                         break;
                     case "CCSDS_Packet_Sequence.GroupFlags":
                         ++items;
-                        checkEntry( entry, "2", "16", "", "3", "", "" );
+                        checkEntry( entry, "2", "16", "", "Standalone", "", "" );
                         break;
                     case "CCSDS_Packet_Sequence.Count":
                         ++items;
@@ -1896,7 +1896,7 @@ public class ContainerProcessingTest {
                         break;
                     case "CCSDS_Packet_Sequence.GroupFlags":
                         ++items;
-                        checkEntry( entry, "2", "16", "", "3", "", "" );
+                        checkEntry( entry, "2", "16", "", "Standalone", "", "" );
                         break;
                     case "CCSDS_Packet_Sequence.Count":
                         ++items;
@@ -2057,7 +2057,7 @@ public class ContainerProcessingTest {
                         break;
                     case "CCSDS_Packet_Sequence.GroupFlags":
                         ++items;
-                        checkEntry( entry, "2", "16", "", "3", "", "" );
+                        checkEntry( entry, "2", "16", "", "Standalone", "", "" );
                         break;
                     case "CCSDS_Packet_Sequence.Count":
                         ++items;

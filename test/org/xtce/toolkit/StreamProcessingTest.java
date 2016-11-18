@@ -294,6 +294,9 @@ public class StreamProcessingTest {
 
             XTCETMStream stream = db_.getStream( "CCSDS-TM" );
 
+            Assert.assertTrue( "Should have found CCSDS-TM stream",
+                               stream != null );
+
             if ( stream.getReference() == null ) {
                 Assert.fail( "Stream 'CCSDS-TM' should have a PCMStreamType internally" );
             }
@@ -302,11 +305,8 @@ public class StreamProcessingTest {
                 Assert.fail( "Expected root path of '/BogusSAT/CCSDSTelemetryPacket' for 'CCSDS-TM' but got " + stream.getStreamRootContainerPath() );
             }
 
-            long expected = 13;
+            long expected = 14;
             long found    = 0;
-
-            Assert.assertTrue( "Should have found CCSDS-TM stream",
-                               stream != null );
 
             List<XTCETMContainer> containers = stream.getContainers();
             for ( XTCETMContainer container : containers ) {
@@ -499,7 +499,7 @@ public class StreamProcessingTest {
                         break;
                     case "CCSDS_Packet_Sequence.GroupFlags":
                         ++items;
-                        checkEntry( entry, "2", "16", "==3{cal}", "3", "", "" );
+                        checkEntry( entry, "2", "16", "==Standalone{cal}", "Standalone", "", "" );
                         break;
                     case "CCSDS_Packet_Sequence.Count":
                         ++items;
@@ -720,7 +720,7 @@ public class StreamProcessingTest {
                         break;
                     case "CCSDS_Packet_Sequence.GroupFlags":
                         ++items;
-                        checkEntry( entry, "2", "16", "==3{cal}", "3", "", "" );
+                        checkEntry( entry, "2", "16", "==Standalone{cal}", "Standalone", "", "" );
                         break;
                     case "CCSDS_Packet_Sequence.Count":
                         ++items;
@@ -911,7 +911,7 @@ public class StreamProcessingTest {
                         break;
                     case "CCSDS_Packet_Sequence.GroupFlags":
                         ++items;
-                        checkEntry( entry, "2", "16", "==3{cal}", "3", "", "" );
+                        checkEntry( entry, "2", "16", "==Standalone{cal}", "Standalone", "", "" );
                         break;
                     case "CCSDS_Packet_Sequence.Count":
                         ++items;
@@ -1102,7 +1102,7 @@ public class StreamProcessingTest {
                         break;
                     case "CCSDS_Packet_Sequence.GroupFlags":
                         ++items;
-                        checkEntry( entry, "2", "16", "==3{cal}", "3", "", "" );
+                        checkEntry( entry, "2", "16", "==Standalone{cal}", "Standalone", "", "" );
                         break;
                     case "CCSDS_Packet_Sequence.Count":
                         ++items;
@@ -1201,7 +1201,7 @@ public class StreamProcessingTest {
                         break;
                     case "CCSDS_Packet_Sequence.GroupFlags":
                         ++items;
-                        checkEntry( entry, "2", "16", "==3{cal}", "3", "", "" );
+                        checkEntry( entry, "2", "16", "==Standalone{cal}", "Standalone", "", "" );
                         break;
                     case "CCSDS_Packet_Sequence.Count":
                         ++items;

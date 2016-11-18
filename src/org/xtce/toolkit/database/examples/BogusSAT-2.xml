@@ -122,11 +122,17 @@ limitations under the License.
                 <xtce:UnitSet/>
                 <xtce:IntegerDataEncoding sizeInBits="11"/>
             </xtce:IntegerParameterType>
-            <xtce:IntegerParameterType name="CCSDSGroupFlagsType" initialValue="3" signed="false" shortDescription="CCSDS Packet Grouping Flag">
+            <xtce:EnumeratedParameterType name="CCSDSGroupFlagsType" initialValue="Standalone" shortDescription="CCSDS Packet Grouping Flag">
                 <xtce:LongDescription>The grouping flags shall be used when a number of telemetry source packets originating from the same application process are sent in a group.  The interpretation of the grouping flags shall be 1=first packet of a group of packets, 0=continuation packet, 2=last packet of a group of packets, 3="stand-alone" packet.  If using ECSS PUS, All standard telemetry source packets defined are stand-alone packets.</xtce:LongDescription>
                 <xtce:UnitSet/>
                 <xtce:IntegerDataEncoding sizeInBits="2"/>
-            </xtce:IntegerParameterType>
+                <xtce:EnumerationList>
+                    <xtce:Enumeration value="0" label="Continuation"/>
+                    <xtce:Enumeration value="1" label="First"/>
+                    <xtce:Enumeration value="2" label="Last"/>
+                    <xtce:Enumeration value="3" label="Standalone"/>
+                </xtce:EnumerationList>
+            </xtce:EnumeratedParameterType>
             <xtce:IntegerParameterType name="CCSDSSourceSequenceCountType" signed="false" shortDescription="CCSDS Packet Sequence Counter">
                 <xtce:LongDescription>A separate source sequence count shall be maintained by each APID and shall be incremented by 1 whenever it releases a packet. If the application process can send distinct packets to distinct destinations using the optional Destination ID field shown below, then a separate source sequence count is maintained for each destination. Therefore the counter corresponds to the order of release of packets by the source and enables the destination (e.g. the ground system) to detect missing packets. This counter should never re-initialize; however, under no circumstances shall it “shortcycle” (i.e. have a discontinuity other than to a value zero). The counter wraps around from max value to zero.</xtce:LongDescription>
                 <xtce:UnitSet/>
@@ -195,7 +201,8 @@ limitations under the License.
                     <xtce:IntegerDataEncoding sizeInBits="64"/>
                 </xtce:Encoding>
                 <xtce:ReferenceTime>
-                    <xtce:Epoch>TAI</xtce:Epoch>
+                    <!--xtce:Epoch>TAI</xtce:Epoch-->
+                    <xtce:Epoch>1970-01-01</xtce:Epoch>
                 </xtce:ReferenceTime>
             </xtce:AbsoluteTimeParameterType>
             <xtce:BinaryParameterType name="PUSErrorControlFieldType" shortDescription="OPTIONAL PUS Error Control Field">
@@ -526,6 +533,7 @@ limitations under the License.
                     </xtce:BaseContainer>
                 </xtce:SequenceContainer>
                 <xtce:SequenceContainer name="ECSS_Service_1_Subservice_1" shortDescription="Telecommand Acceptance Report - Success (1,1)">
+                    <!--xtce:LongDescription>Report of acceptance of a telecommand packet.  This example is based on the design presented in document ECSS-E-70-41A (30 Jan 2003).</xtce:LongDescription-->
                     <xtce:EntryList>
                         <xtce:ParameterRefEntry parameterRef="Commanding/TC_Packet_ID"/>
                         <xtce:ParameterRefEntry parameterRef="Commanding/TC_Packet_Sequence_Control"/>
@@ -545,6 +553,7 @@ limitations under the License.
                     </xtce:BaseContainer>
                 </xtce:SequenceContainer>
                 <xtce:SequenceContainer name="ECSS_Service_1_Subservice_2" shortDescription="Telecommand Acceptance Report - Failure (1,2)">
+                    <xtce:LongDescription>Report of refused/failed acceptance of a telecommand packet.  This example is based on the design presented in document ECSS-E-70-41A (30 Jan 2003).</xtce:LongDescription>
                     <xtce:EntryList>
                         <xtce:ParameterRefEntry parameterRef="Commanding/TC_Packet_ID"/>
                         <xtce:ParameterRefEntry parameterRef="Commanding/TC_Packet_Sequence_Control"/>
@@ -575,7 +584,7 @@ limitations under the License.
                     </xtce:BaseContainer>
                 </xtce:SequenceContainer>
                 <xtce:SequenceContainer name="ECSS_Service_3_Subservice_25" abstract="true" shortDescription="Housekeeping Parameter Report (3,25)">
-                    <xtce:LongDescription>The service 3,25 packet of the ECSS PUS contains the housekeeping telemetry subpackets, switched with the PUS_Structure_ID parameter</xtce:LongDescription>
+                    <xtce:LongDescription>The service 3,25 packet of the ECSS PUS contains the housekeeping telemetry subpackets, switched with the PUS_Structure_ID parameter.  This example is based on the design presented in document ECSS-E-70-41A (30 Jan 2003).</xtce:LongDescription>
                     <xtce:EntryList>
                         <xtce:ParameterRefEntry parameterRef="../PUS_Structure_ID"/>
                     </xtce:EntryList>
@@ -589,6 +598,38 @@ limitations under the License.
                                 <xtce:Comparison value="0" parameterRef="PUS_Data_Field_Header/Spare4"/>
                                 <xtce:Comparison value="3" parameterRef="PUS_Data_Field_Header/Service"/>
                                 <xtce:Comparison value="25" parameterRef="PUS_Data_Field_Header/Subservice"/>
+                            </xtce:ComparisonList>
+                        </xtce:RestrictionCriteria>
+                    </xtce:BaseContainer>
+                </xtce:SequenceContainer>
+                <xtce:SequenceContainer name="ECSS_Service_6_Subservice_6" shortDescription="Memory Dump using Absolute Addresses Report (6,6)">
+                    <xtce:LongDescription>The packet defines the contents of a response to the telecommand "Dump Memory using Absolute Addresses (6,5)".  This assumes that only 1 address+data can be dumped at a time.  The length of the data is variable and the checksum for the data is used.  This example is based on the design presented in document ECSS-E-70-41A (30 Jan 2003).</xtce:LongDescription>
+                    <xtce:EntryList>
+                        <xtce:ParameterRefEntry parameterRef="Memory/Dump_Memory_ID"/>
+                        <!-- xtce:ParameterRefEntry parameterRef="Memory/Dump_Memory_Count_Areas"/ -->
+                        <xtce:ParameterRefEntry parameterRef="Memory/Dump_Memory_Address"/>
+                        <xtce:ParameterRefEntry parameterRef="Memory/Dump_Memory_Length"/>
+                        <xtce:ArrayParameterRefEntry parameterRef="Memory/Dump_Memory_Data">
+                            <xtce:DimensionList>
+                                <xtce:Size>
+                                    <xtce:DynamicValue>
+                                        <xtce:ParameterInstanceRef parameterRef="Memory/Dump_Memory_Length" useCalibratedValue="true"/>
+                                    </xtce:DynamicValue>
+                                </xtce:Size>
+                            </xtce:DimensionList>
+                        </xtce:ArrayParameterRefEntry>
+                        <xtce:ParameterRefEntry parameterRef="Memory/Dump_Memory_Chksum"/>
+                    </xtce:EntryList>
+                    <xtce:BaseContainer containerRef="/BogusSAT/CCSDSPUSTelemetryPacket">
+                        <xtce:RestrictionCriteria>
+                            <xtce:ComparisonList>
+                                <xtce:Comparison value="Present" parameterRef="CCSDS_Packet_ID/SecHdrFlag"/>
+                                <xtce:Comparison value="100" parameterRef="CCSDS_Packet_ID/APID"/>
+                                <xtce:Comparison value="0" parameterRef="PUS_Data_Field_Header/Spare1"/>
+                                <xtce:Comparison value="1" parameterRef="PUS_Data_Field_Header/Version"/>
+                                <xtce:Comparison value="0" parameterRef="PUS_Data_Field_Header/Spare4"/>
+                                <xtce:Comparison value="6" parameterRef="PUS_Data_Field_Header/Service"/>
+                                <xtce:Comparison value="6" parameterRef="PUS_Data_Field_Header/Subservice"/>
                             </xtce:ComparisonList>
                         </xtce:RestrictionCriteria>
                     </xtce:BaseContainer>
@@ -668,6 +709,46 @@ limitations under the License.
                         <xtce:ParameterProperties dataSource="telemetered" readOnly="true"/>
                     </xtce:Parameter>
                     <xtce:Parameter name="TC_Parameter_Data" parameterTypeRef="/BogusSAT/Generic_8bits_unsigned" shortDescription="Unrealistic repeating list of 32 bit parameter data">
+                        <xtce:ParameterProperties dataSource="telemetered" readOnly="true"/>
+                    </xtce:Parameter>
+                </xtce:ParameterSet>
+            </xtce:TelemetryMetaData>
+        </xtce:SpaceSystem>
+        <xtce:SpaceSystem name="Memory" shortDescription="Memory Management Subsystem Parameters">
+            <xtce:TelemetryMetaData>
+                <xtce:ParameterTypeSet>
+                    <xtce:EnumeratedParameterType name="Dump_Memory_ID_Type">
+                        <xtce:LongDescription>The names of the memory areas on the physical processor.</xtce:LongDescription>
+                        <xtce:UnitSet/>
+                        <xtce:IntegerDataEncoding encoding="unsigned" sizeInBits="8"/>
+                        <xtce:EnumerationList>
+                            <xtce:Enumeration value="0" label="RAM"/>
+                            <xtce:Enumeration value="1" label="PRI_EEPROM"/>
+                            <xtce:Enumeration value="2" label="RED_EEPROM"/>
+                        </xtce:EnumerationList>
+                    </xtce:EnumeratedParameterType>
+                    <xtce:IntegerParameterType name="Dump_Memory_Length_Type">
+                        <xtce:UnitSet>
+                            <xtce:Unit>bytes</xtce:Unit>
+                        </xtce:UnitSet>
+                        <xtce:IntegerDataEncoding encoding="unsigned" sizeInBits="16"/>
+                    </xtce:IntegerParameterType>
+                    <xtce:ArrayParameterType name="Dump_Memory_Data_Type" arrayTypeRef="/BogusSAT/Generic_8bits_unsigned" numberOfDimensions="1"/>
+                </xtce:ParameterTypeSet>
+                <xtce:ParameterSet>
+                    <xtce:Parameter name="Dump_Memory_ID" parameterTypeRef="Dump_Memory_ID_Type" shortDescription="Physical Memory Area Name">
+                        <xtce:ParameterProperties dataSource="telemetered" readOnly="true"/>
+                    </xtce:Parameter>
+                    <xtce:Parameter name="Dump_Memory_Address" parameterTypeRef="/BogusSAT/Generic_32bits_unsigned" shortDescription="Source address of the physical memory where the data block originates">
+                        <xtce:ParameterProperties dataSource="telemetered" readOnly="true"/>
+                    </xtce:Parameter>
+                    <xtce:Parameter name="Dump_Memory_Length" parameterTypeRef="Dump_Memory_Length_Type" shortDescription="Length of the data being dumped in the data field">
+                        <xtce:ParameterProperties dataSource="telemetered" readOnly="true"/>
+                    </xtce:Parameter>
+                    <xtce:Parameter name="Dump_Memory_Data" parameterTypeRef="Dump_Memory_Data_Type" shortDescription="The binary data being dumped from the source address">
+                        <xtce:ParameterProperties dataSource="telemetered" readOnly="true"/>
+                    </xtce:Parameter>
+                    <xtce:Parameter name="Dump_Memory_Chksum" parameterTypeRef="/BogusSAT/Generic_16bits_unsigned" shortDescription="ISO standard 16 bit checksum for the data block being dumped">
                         <xtce:ParameterProperties dataSource="telemetered" readOnly="true"/>
                     </xtce:Parameter>
                 </xtce:ParameterSet>
