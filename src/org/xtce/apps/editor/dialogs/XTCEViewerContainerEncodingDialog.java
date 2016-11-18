@@ -296,7 +296,8 @@ public class XTCEViewerContainerEncodingDialog extends javax.swing.JDialog {
 
                 case PARAMETER:
                     if ( ( entry.getParameter().getEngineeringType() != EngineeringType.STRUCTURE ) &&
-                         ( entry.getParameter().getEngineeringType() != EngineeringType.ARRAY     ) ) {
+                         ( entry.getParameter().getEngineeringType() != EngineeringType.ARRAY     ) &&
+                         ( entry.isCurrentlyInUse()                  == true                      ) ) {
                         entryPanel.add( new XTCEViewerContainerContentRow( entry,
                                                                            showAllNamespaces,
                                                                            showNamespaces,
@@ -308,7 +309,8 @@ public class XTCEViewerContainerEncodingDialog extends javax.swing.JDialog {
 
                 case ARGUMENT:
                     if ( ( entry.getParameter().getEngineeringType() != EngineeringType.STRUCTURE ) &&
-                         ( entry.getParameter().getEngineeringType() != EngineeringType.ARRAY     ) ) {
+                         ( entry.getParameter().getEngineeringType() != EngineeringType.ARRAY     ) &&
+                         ( entry.isCurrentlyInUse()                  == true                      ) ) {
                         entryPanel.add( new XTCEViewerContainerContentRow( entry,
                                                                            showAllNamespaces,
                                                                            showNamespaces,
