@@ -17,6 +17,7 @@
 
 package org.xtce.apps.editor.dialogs;
 
+import java.awt.Point;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.BitSet;
@@ -284,6 +285,8 @@ public class XTCEViewerContainerEncodingDialog extends javax.swing.JDialog {
         boolean showNamespaces     = prefs_.getShowAliasNamespacesOption();
         String  preferredNamespace = prefs_.getPreferredAliasNamespaceOption();
 
+        Point location = contentScrollPane.getViewport().getViewPosition();
+
         JPanel entryPanel = new JPanel();
         entryPanel.setLayout( new BoxLayout( entryPanel, BoxLayout.Y_AXIS ) );
 
@@ -327,6 +330,7 @@ public class XTCEViewerContainerEncodingDialog extends javax.swing.JDialog {
         }
 
         contentScrollPane.setViewportView( entryPanel );
+        contentScrollPane.getViewport().setViewPosition( location );
         contentScrollPane.revalidate();
         contentScrollPane.repaint();
 
