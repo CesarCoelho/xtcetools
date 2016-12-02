@@ -118,22 +118,42 @@ public class XTCEViewerContainerContentRow extends javax.swing.JPanel {
 
     }
 
-    private void drawRow( boolean showAllNamespaces,
-                          boolean showNamespaces,
-                          String  preferredNamespace ) {
-
-        int byteSize = getSizeInBytes( entry_ );
+    private void drawRow( final boolean showAllNamespaces,
+                          final boolean showNamespaces,
+                          final String  preferredNamespace ) {
 
         XTCEContainerEntryValue valueObj = entry_.getValue();
 
         if ( valueObj != null ) {
-            calValueField.setText( valueObj.getCalibratedValue() );
-            uncalValueField.setText( valueObj.getUncalibratedValue() );
-            if ( byteSize != 0 ) {
-                BitSet rawBits = valueObj.getRawValue();
-                rawValueField.setText(
-                    XTCEFunctions.bitSetToHex( rawBits, byteSize ) );
+
+            updateFromValueObj( valueObj );
+
+        } else if ( entry_.getEntryType() == FieldType.PARAMETER ) {
+
+            String initialValue = entry_.getParameter().getInitialValue();
+
+            if ( initialValue.isEmpty() == false ) {
+                XTCEContainerEntryValue value =
+                    new XTCEContainerEntryValue( entry_.getParameter(),
+                                                 initialValue,
+                                                 "==", // NOI18N
+                                                 "Calibrated" ); // NOI18N
+                updateFromValueObj( value );
             }
+
+        } else if ( entry_.getEntryType() == FieldType.ARGUMENT ) {
+
+            String initialValue = entry_.getArgument().getInitialValue();
+
+            if ( initialValue.isEmpty() == false ) {
+                XTCEContainerEntryValue value =
+                    new XTCEContainerEntryValue( entry_.getArgument(),
+                                                 initialValue,
+                                                 "==", // NOI18N
+                                                 "Calibrated" ); // NOI18N
+                updateFromValueObj( value );
+            }
+
         }
 
         if ( dialog_ != null ) {
@@ -174,9 +194,24 @@ public class XTCEViewerContainerContentRow extends javax.swing.JPanel {
 
     }
 
-    private void populateDisplayName( boolean showAllNamespaces,
-                                      boolean showNamespaces,
-                                      String  preferredNamespace ) {
+    private void updateFromValueObj( final XTCEContainerEntryValue valueObj ) {
+
+        int byteSize = getSizeInBytes( entry_ );
+
+        calValueField.setText( valueObj.getCalibratedValue() );
+        uncalValueField.setText( valueObj.getUncalibratedValue() );
+
+        if ( byteSize != 0 ) {
+            BitSet rawBits = valueObj.getRawValue();
+            rawValueField.setText(
+                XTCEFunctions.bitSetToHex( rawBits, byteSize ) );
+        }
+
+    }
+
+    private void populateDisplayName( final boolean showAllNamespaces,
+                                      final boolean showNamespaces,
+                                      final String  preferredNamespace ) {
 
         String displayName = entry_.getName();
         String aliasString = "";
@@ -203,7 +238,7 @@ public class XTCEViewerContainerContentRow extends javax.swing.JPanel {
 
     }
 
-    private void updateValueList( XTCEContainerEntryValue value ) {
+    private void updateValueList( final XTCEContainerEntryValue value ) {
 
         boolean found = false;
 
@@ -300,19 +335,25 @@ public class XTCEViewerContainerContentRow extends javax.swing.JPanel {
 
     private void calValueFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_calValueFieldFocusLost
 
-        calValueFieldActionPerformed( null );
+        if ( evt.isTemporary() == false ) {
+            calValueFieldActionPerformed( null );
+        }
 
     }//GEN-LAST:event_calValueFieldFocusLost
 
     private void uncalValueFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_uncalValueFieldFocusLost
 
-        uncalValueFieldActionPerformed( null );
+        if ( evt.isTemporary() == false ) {
+            uncalValueFieldActionPerformed( null );
+        }
 
     }//GEN-LAST:event_uncalValueFieldFocusLost
 
     private void rawValueFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_rawValueFieldFocusLost
 
-        rawValueFieldActionPerformed( null );
+        if ( evt.isTemporary() == false ) {
+            rawValueFieldActionPerformed( null );
+        }
 
     }//GEN-LAST:event_rawValueFieldFocusLost
 
