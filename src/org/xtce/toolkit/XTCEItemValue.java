@@ -1401,8 +1401,12 @@ public class XTCEItemValue {
     private String getCalibratedFromIntegerString( final String calValue ) {
 
         try {
-            BigInteger retValue = new BigInteger( calValue );
+
+            BigDecimal decimalValue = new BigDecimal( calValue );
+            BigInteger retValue     = decimalValue.toBigIntegerExact();
+
             if ( validRange_.isValidRangeApplied() == true ) {
+
                 try {
                     if ( validRange_.isHighValueCalibrated() == true ) {
                         BigInteger high = new BigInteger( validRange_.getHighValue() );
@@ -1444,11 +1448,16 @@ public class XTCEItemValue {
                     warn( itemName_ + " Valid Range contains value that " +
                           "is not representative of an integer" );
                 }
+
             }
+
             return retValue.toString();
-        } catch ( NumberFormatException ex ) {
+
+        } catch ( Exception ex ) {
+
             warn( itemName_ + " Calibrated value '" +
                   calValue + "' is not representative of an integer" );
+
         }
 
         return "";
