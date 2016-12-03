@@ -283,7 +283,12 @@ public class XTCEContainerEntryValue {
 
         String uncalValue = getUncalibratedValue();
         if ( itemValueObj_ == null ) {
-            itemValueObj_ = new XTCEItemValue( item_ );
+            if ( item_ == null ) {
+                // CONSTANT
+                return new BitSet(); // NEED TO WORK ON THIS, NO SIZE HERE
+            } else {
+                itemValueObj_ = new XTCEItemValue( item_ );
+            }
         }
 
         return itemValueObj_.getRawFromUncalibrated( uncalValue );

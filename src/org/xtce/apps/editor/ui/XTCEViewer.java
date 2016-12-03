@@ -1,4 +1,4 @@
-/* Copyright 2015 David Overeem (dovereem@cox.net)
+/* Copyright 2015-2016 David Overeem (dovereem@cox.net)
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -195,10 +195,14 @@ public class XTCEViewer extends javax.swing.JFrame {
         decodeStreamMenuItem = new javax.swing.JMenuItem();
         telecommandTreePopupMenu = new javax.swing.JPopupMenu();
         showTelecommandXmlMenuItem = new javax.swing.JMenuItem();
+        decodeTelecommandMenuItem = new javax.swing.JMenuItem();
+        encodeTelecommandMenuItem = new javax.swing.JMenuItem();
         telecommandDrawingPopupMenu = new javax.swing.JPopupMenu();
         saveTelecommandDrawingMenuItem = new javax.swing.JMenuItem();
         cloneTelecommandDrawingMenuItem = new javax.swing.JMenuItem();
         showTelecommandDrawingXmlMenuItem = new javax.swing.JMenuItem();
+        decodeTelecommandDrawingMenuItem = new javax.swing.JMenuItem();
+        encodeTelecommandDrawingMenuItem = new javax.swing.JMenuItem();
         telecommandTablePopupMenu = new javax.swing.JPopupMenu();
         showTcItemXmlElementsMenuItem = new javax.swing.JMenuItem();
         copyTcCellMenuItem = new javax.swing.JMenuItem();
@@ -760,6 +764,22 @@ public class XTCEViewer extends javax.swing.JFrame {
         });
         telecommandTreePopupMenu.add(showTelecommandXmlMenuItem);
 
+        decodeTelecommandMenuItem.setText(bundle.getString("options_popup_decodetelecommand")); // NOI18N
+        decodeTelecommandMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                decodeTelecommandMenuItemActionPerformed(evt);
+            }
+        });
+        telecommandTreePopupMenu.add(decodeTelecommandMenuItem);
+
+        encodeTelecommandMenuItem.setText(bundle.getString("options_popup_encodetelecommand")); // NOI18N
+        encodeTelecommandMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                encodeTelecommandMenuItemActionPerformed(evt);
+            }
+        });
+        telecommandTreePopupMenu.add(encodeTelecommandMenuItem);
+
         saveTelecommandDrawingMenuItem.setText(bundle.getString("options_popup_savedrawing")); // NOI18N
         saveTelecommandDrawingMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -783,6 +803,22 @@ public class XTCEViewer extends javax.swing.JFrame {
             }
         });
         telecommandDrawingPopupMenu.add(showTelecommandDrawingXmlMenuItem);
+
+        decodeTelecommandDrawingMenuItem.setText(bundle.getString("options_popup_decodetelecommand")); // NOI18N
+        decodeTelecommandDrawingMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                decodeTelecommandDrawingMenuItemActionPerformed(evt);
+            }
+        });
+        telecommandDrawingPopupMenu.add(decodeTelecommandDrawingMenuItem);
+
+        encodeTelecommandDrawingMenuItem.setText(bundle.getString("options_popup_encodetelecommand")); // NOI18N
+        encodeTelecommandDrawingMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                encodeTelecommandDrawingMenuItemActionPerformed(evt);
+            }
+        });
+        telecommandDrawingPopupMenu.add(encodeTelecommandDrawingMenuItem);
 
         showTcItemXmlElementsMenuItem.setText(bundle.getString("options_popup_showxmlelements")); // NOI18N
         showTcItemXmlElementsMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -843,6 +879,7 @@ public class XTCEViewer extends javax.swing.JFrame {
         detailSpaceSystemTreeScrollPane.setMinimumSize(new java.awt.Dimension(100, 0));
         detailSpaceSystemTreeScrollPane.setPreferredSize(new java.awt.Dimension(200, 0));
 
+        detailSpaceSystemTree.setToolTipText(bundle.getString("general_tree_tooltip")); // NOI18N
         detailSpaceSystemTree.setMaximumSize(new java.awt.Dimension(32767, 32767));
         detailSpaceSystemTree.setMinimumSize(new java.awt.Dimension(100, 0));
         detailSpaceSystemTree.setPreferredSize(new java.awt.Dimension(100, 0));
@@ -901,6 +938,8 @@ public class XTCEViewer extends javax.swing.JFrame {
 
         jSplitPane2.setLeftComponent(tmParameterSpaceSystemTreeScrollPane);
 
+        tmParametersTableScrollPane.setToolTipText(bundle.getString("general_tree_noselect_tooltip")); // NOI18N
+
         tmParametersTable.setAutoCreateRowSorter(true);
         tmParametersTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -925,6 +964,7 @@ public class XTCEViewer extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        tmParametersTable.setToolTipText(bundle.getString("general_drawing_tooltip")); // NOI18N
         tmParametersTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 tmParametersTableMousePressed(evt);
@@ -1004,6 +1044,8 @@ public class XTCEViewer extends javax.swing.JFrame {
 
         jSplitPane3.setLeftComponent(tcParameterSpaceSystemTreeScrollPane);
 
+        tcParametersTableScrollPane.setToolTipText(bundle.getString("general_tree_noselect_tooltip")); // NOI18N
+
         tcParametersTable.setAutoCreateRowSorter(true);
         tcParametersTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -1028,6 +1070,7 @@ public class XTCEViewer extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        tcParametersTable.setToolTipText(bundle.getString("general_drawing_tooltip")); // NOI18N
         tcParametersTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 tcParametersTableMousePressed(evt);
@@ -1095,6 +1138,7 @@ public class XTCEViewer extends javax.swing.JFrame {
         tmContainerTreeScrollPane.setMinimumSize(new java.awt.Dimension(100, 0));
         tmContainerTreeScrollPane.setPreferredSize(new java.awt.Dimension(200, 0));
 
+        tmContainerTree.setToolTipText(bundle.getString("general_tree_tooltip")); // NOI18N
         tmContainerTree.setMaximumSize(new java.awt.Dimension(32767, 32767));
         tmContainerTree.setMinimumSize(new java.awt.Dimension(100, 0));
         tmContainerTree.setPreferredSize(new java.awt.Dimension(100, 0));
@@ -1114,6 +1158,7 @@ public class XTCEViewer extends javax.swing.JFrame {
 
         tmContainerContentSplitPane.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
 
+        tmContainerTableScrollPane.setToolTipText(bundle.getString("general_tree_noselect_tooltip")); // NOI18N
         tmContainerTableScrollPane.setMinimumSize(new java.awt.Dimension(0, 100));
 
         tmContainerTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -1139,6 +1184,7 @@ public class XTCEViewer extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        tmContainerTable.setToolTipText(bundle.getString("general_drawing_tooltip")); // NOI18N
         tmContainerTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 tmContainerTableMousePressed(evt);
@@ -1167,6 +1213,7 @@ public class XTCEViewer extends javax.swing.JFrame {
 
         tmContainerContentSplitPane.setLeftComponent(tmContainerTableScrollPane);
 
+        tmContainerDrawingScrollPane.setToolTipText(bundle.getString("general_drawing_tooltip")); // NOI18N
         tmContainerDrawingScrollPane.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 tmContainerDrawingScrollPaneMousePressed(evt);
@@ -1217,6 +1264,7 @@ public class XTCEViewer extends javax.swing.JFrame {
         tcTreeScrollPane.setMinimumSize(new java.awt.Dimension(100, 0));
         tcTreeScrollPane.setPreferredSize(new java.awt.Dimension(200, 0));
 
+        tcTree.setToolTipText(bundle.getString("general_tree_tooltip")); // NOI18N
         tcTree.setMaximumSize(new java.awt.Dimension(32767, 32767));
         tcTree.setMinimumSize(new java.awt.Dimension(100, 0));
         tcTree.setPreferredSize(new java.awt.Dimension(100, 0));
@@ -1235,6 +1283,8 @@ public class XTCEViewer extends javax.swing.JFrame {
         tcSpaceSystemSplitPane.setLeftComponent(tcTreeScrollPane);
 
         tcContentSplitPane.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
+
+        tcContentScrollPane.setToolTipText(bundle.getString("general_tree_noselect_tooltip")); // NOI18N
 
         tcContentTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -1259,6 +1309,7 @@ public class XTCEViewer extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        tcContentTable.setToolTipText(bundle.getString("general_drawing_tooltip")); // NOI18N
         tcContentTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 tcContentTableMousePressed(evt);
@@ -1298,6 +1349,7 @@ public class XTCEViewer extends javax.swing.JFrame {
 
         tcContentSplitPane.setTopComponent(tcContentScrollPane);
 
+        tcContentDrawingScrollPane.setToolTipText(bundle.getString("general_drawing_tooltip")); // NOI18N
         tcContentDrawingScrollPane.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 tcContentDrawingScrollPaneMousePressed(evt);
@@ -1338,6 +1390,7 @@ public class XTCEViewer extends javax.swing.JFrame {
         tmStreamTreeScrollPane.setMinimumSize(new java.awt.Dimension(100, 0));
         tmStreamTreeScrollPane.setPreferredSize(new java.awt.Dimension(200, 0));
 
+        tmStreamTree.setToolTipText(bundle.getString("general_tree_tooltip")); // NOI18N
         tmStreamTree.setMaximumSize(new java.awt.Dimension(32767, 32767));
         tmStreamTree.setMinimumSize(new java.awt.Dimension(100, 0));
         tmStreamTree.setPreferredSize(new java.awt.Dimension(100, 0));
@@ -1358,6 +1411,7 @@ public class XTCEViewer extends javax.swing.JFrame {
         jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         jSplitPane5.setRightComponent(jScrollPane1);
 
+        tmStreamContentTree.setToolTipText(bundle.getString("general_tree_doubleclick_go")); // NOI18N
         tmStreamContentTree.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tmStreamContentTreeMouseClicked(evt);
@@ -2473,17 +2527,21 @@ public class XTCEViewer extends javax.swing.JFrame {
                                                             Charset.forName( exportParametersCharSetComboBox.getSelectedItem().toString() ) );
                     dbExport.exportParameters( exportFile );
                 } else if ( exportParametersCppRadioButton.isSelected() == true ) {
-                    logMsg( XTCEFunctions.getText( "general_warning" ) + // NOI18N
+                    logMsg( XTCEFunctions.generalWarningPrefix() +
                             XTCEFunctions.getText( "dialog_export_notyetimplemented_text" ) + // NOI18N
                             " " + // NOI18N
                             fileExtensionDescription );
                 } else if ( exportParametersCometRadioButton.isSelected() == true ) {
-                    logMsg( XTCEFunctions.getText( "general_warning" ) + // NOI18N
+                    //dbExport = new XTCEDatabaseExporterOSComet( xtceDatabaseFile,
+                    //                                            configProperties,
+                    //                                            Charset.forName( exportParametersCharSetComboBox.getSelectedItem().toString() ) );
+                    //dbExport.exportParameters( exportFile );
+                    logMsg( XTCEFunctions.generalWarningPrefix() +
                             XTCEFunctions.getText( "dialog_export_notyetimplemented_text" ) + // NOI18N
                             " " + // NOI18N
                             fileExtensionDescription );
                 } else if ( exportParametersInControlRadioButton.isSelected() == true ) {
-                    logMsg( XTCEFunctions.getText( "general_warning" ) + // NOI18N
+                    logMsg( XTCEFunctions.generalWarningPrefix() +
                             XTCEFunctions.getText( "dialog_export_notyetimplemented_text" ) + // NOI18N
                             " " + // NOI18N
                             fileExtensionDescription );
@@ -3416,22 +3474,20 @@ public class XTCEViewer extends javax.swing.JFrame {
                                                      Charset.forName( exportContainersCharSetComboBox.getSelectedItem().toString() ) );
                     List<String> msgs = dbExport.exportContainers( exportFile );
                     for ( String msg : msgs ) {
-                        logMsg( XTCEFunctions.getText( "general_warning" ) + // NOI18N
-                                " " + // NOI18N
-                                msg );
+                        logMsg( XTCEFunctions.generalWarningPrefix() + msg );
                     }
                 } else if ( exportContainersCppRadioButton.isSelected() == true ) {
-                    logMsg( XTCEFunctions.getText( "general_warning" ) + // NOI18N
+                    logMsg( XTCEFunctions.generalWarningPrefix() +
                             XTCEFunctions.getText( "dialog_export_notyetimplemented_text" ) + // NOI18N
                             " " + // NOI18N
                             fileExtensionDescription );
                 } else if ( exportContainersCometRadioButton.isSelected() == true ) {
-                    logMsg( XTCEFunctions.getText( "general_warning" ) + // NOI18N
+                    logMsg( XTCEFunctions.generalWarningPrefix() +
                             XTCEFunctions.getText( "dialog_export_notyetimplemented_text" ) + // NOI18N
                             " " + // NOI18N
                             fileExtensionDescription );
                 } else if ( exportContainersInControlRadioButton.isSelected() == true ) {
-                    logMsg( XTCEFunctions.getText( "general_warning" ) + // NOI18N
+                    logMsg( XTCEFunctions.generalWarningPrefix() +
                             XTCEFunctions.getText( "dialog_export_notyetimplemented_text" ) + // NOI18N
                             " " + // NOI18N
                             fileExtensionDescription );
@@ -3936,22 +3992,20 @@ public class XTCEViewer extends javax.swing.JFrame {
                                                      Charset.forName( exportTelecommandsCharSetComboBox.getSelectedItem().toString() ) );
                     List<String> msgs = dbExport.exportTelecommands( exportFile );
                     for ( String msg : msgs ) {
-                        logMsg( XTCEFunctions.getText( "general_warning" ) + // NOI18N
-                                " " + // NOI18N
-                                msg );
+                        logMsg( XTCEFunctions.generalWarningPrefix() + msg );
                     }
                 } else if ( exportTelecommandsCppRadioButton.isSelected() == true ) {
-                    logMsg( XTCEFunctions.getText( "general_warning" ) + // NOI18N
+                    logMsg( XTCEFunctions.generalWarningPrefix() +
                             XTCEFunctions.getText( "dialog_export_notyetimplemented_text" ) + // NOI18N
                             " " + // NOI18N
                             fileExtensionDescription );
                 } else if ( exportTelecommandsCometRadioButton.isSelected() == true ) {
-                    logMsg( XTCEFunctions.getText( "general_warning" ) + // NOI18N
+                    logMsg( XTCEFunctions.generalWarningPrefix() +
                             XTCEFunctions.getText( "dialog_export_notyetimplemented_text" ) + // NOI18N
                             " " + // NOI18N
                             fileExtensionDescription );
                 } else if ( exportTelecommandsInControlRadioButton.isSelected() == true ) {
-                    logMsg( XTCEFunctions.getText( "general_warning" ) + // NOI18N
+                    logMsg( XTCEFunctions.generalWarningPrefix() +
                             XTCEFunctions.getText( "dialog_export_notyetimplemented_text" ) + // NOI18N
                             " " + // NOI18N
                             fileExtensionDescription );
@@ -4004,6 +4058,80 @@ public class XTCEViewer extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_encodeContainerMenuItemActionPerformed
+
+    private void decodeTelecommandMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_decodeTelecommandMenuItemActionPerformed
+
+        XTCEViewerTelecommandTreeNode node =
+           (XTCEViewerTelecommandTreeNode)tcTree.getLastSelectedPathComponent();
+
+        if ( node == null ) {
+            JOptionPane.showMessageDialog( this,
+                                           XTCEFunctions.getText( "rightclick_telecommand_noselection_message" ), // NOI18N
+                                           XTCEFunctions.getText( "general_error" ), // NOI18N
+                                           JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        try {
+            XTCETelecommand container = node.getTelecommandReference();
+            XTCEViewerContainerContentDialog dialog =
+                new XTCEViewerContainerContentDialog( this,
+                                                      false,
+                                                      container,
+                                                      xtceDatabaseFile,
+                                                      prefs );
+            dialog.setVisible( true );
+        } catch ( NullPointerException ex ) {
+            JOptionPane.showMessageDialog( this,
+                                           XTCEFunctions.getText( "dialog_selectedrownotelecommand_text" ), // NOI18N
+                                           XTCEFunctions.getText( "general_error" ), // NOI18N
+                                           JOptionPane.ERROR_MESSAGE);
+        }
+
+    }//GEN-LAST:event_decodeTelecommandMenuItemActionPerformed
+
+    private void encodeTelecommandMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_encodeTelecommandMenuItemActionPerformed
+
+        XTCEViewerTelecommandTreeNode node =
+           (XTCEViewerTelecommandTreeNode)tcTree.getLastSelectedPathComponent();
+
+        if ( node == null ) {
+            JOptionPane.showMessageDialog( this,
+                                           XTCEFunctions.getText( "rightclick_telecommand_noselection_message" ), // NOI18N
+                                           XTCEFunctions.getText( "general_error" ), // NOI18N
+                                           JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        try {
+            XTCETelecommand container = node.getTelecommandReference();
+            XTCEViewerContainerEncodingDialog dialog =
+                new XTCEViewerContainerEncodingDialog( this,
+                                                       false,
+                                                       container,
+                                                       xtceDatabaseFile,
+                                                       prefs );
+            dialog.setVisible( true );
+        } catch ( NullPointerException ex ) {
+            JOptionPane.showMessageDialog( this,
+                                           XTCEFunctions.getText( "dialog_selectedrownotelecommand_text" ), // NOI18N
+                                           XTCEFunctions.getText( "general_error" ), // NOI18N
+                                           JOptionPane.ERROR_MESSAGE);
+        }
+
+    }//GEN-LAST:event_encodeTelecommandMenuItemActionPerformed
+
+    private void decodeTelecommandDrawingMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_decodeTelecommandDrawingMenuItemActionPerformed
+
+        decodeTelecommandMenuItemActionPerformed( evt );
+
+    }//GEN-LAST:event_decodeTelecommandDrawingMenuItemActionPerformed
+
+    private void encodeTelecommandDrawingMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_encodeTelecommandDrawingMenuItemActionPerformed
+
+        encodeTelecommandMenuItemActionPerformed( evt );
+
+    }//GEN-LAST:event_encodeTelecommandDrawingMenuItemActionPerformed
 
     public void goToParameter( String  parameterName,
                                String  spaceSystemName,
@@ -4155,22 +4283,20 @@ public class XTCEViewer extends javax.swing.JFrame {
         XTCEViewerFunctions.clearTree( tcTree );
         XTCEViewerFunctions.clearTree( tmStreamTree );
         XTCEViewerFunctions.clearTree( tmStreamContentTree );
-        
+
         if ( xtceDatabaseFile == null ) {
-            spaceSystems = null;
             return;
-        } else {
-            spaceSystems = xtceDatabaseFile.getSpaceSystemTree();
         }
-        
+
         XTCEViewerFunctions.buildSpaceSystemTree( detailSpaceSystemTree,
-                                                  spaceSystems );
+                                                  xtceDatabaseFile.getSpaceSystemTree() );
         XTCEViewerFunctions.buildSpaceSystemTree( tmParameterSpaceSystemTree,
-                                                  spaceSystems );
+                                                  xtceDatabaseFile.getSpaceSystemTree() );
         XTCEViewerFunctions.buildSpaceSystemTree( tcParameterSpaceSystemTree,
-                                                  spaceSystems );
+                                                  xtceDatabaseFile.getSpaceSystemTree() );
         XTCEViewerFunctions.buildSpaceSystemTree( tcDefinitionsSpaceSystemTree,
-                                                  spaceSystems );
+                                                  xtceDatabaseFile.getSpaceSystemTree() );
+
         buildContainerTree();
         buildStreamTree();
 
@@ -4247,7 +4373,7 @@ public class XTCEViewer extends javax.swing.JFrame {
                                                   showAllNamespaces,
                                                   showAliasNamespaces,
                                                   preferredNamespace );
-        String telecommandLabel = null;
+        String telecommandLabel;
         if ( aliasString.isEmpty() == false ) {
             telecommandLabel = telecommand.getName() + " (" + aliasString + ")"; // NOI18N
         } else {
@@ -4586,14 +4712,16 @@ public class XTCEViewer extends javax.swing.JFrame {
         }
 
         for ( String warning : spaceSystem.getWarningsFromLastOperation() ) {
-            logMsg( XTCEFunctions.getText( "general_warning" ) +  ": " + warning ); // NOI18N
+            logMsg( XTCEFunctions.generalWarningPrefix() + warning ); // NOI18N
         }
 
     }
 
     private void updateContainerTable( XTCEContainerContentModel containerModel ) {
 
-        DefaultTableModel tableModel = (DefaultTableModel)tmContainerTable.getModel();
+        DefaultTableModel tableModel =
+            (DefaultTableModel)tmContainerTable.getModel();
+
         tableModel.setRowCount( 0 );
 
         if ( containerModel == null ) {
@@ -4603,13 +4731,15 @@ public class XTCEViewer extends javax.swing.JFrame {
 
         List<String> warnings = containerModel.getWarnings();
         for ( String warning : warnings ) {
-            logMsg( XTCEFunctions.getText( "general_warning" ) +  ": " + warning ); // NOI18N
+            logMsg( XTCEFunctions.generalWarningPrefix() + warning );
         }
 
-        List<XTCEContainerContentEntry> entries = containerModel.getContentList();
+        List<XTCEContainerContentEntry> entries =
+            containerModel.getContentList();
 
-        tmContainerTable.setDefaultRenderer( String.class,
-                                             new XTCEViewerContainerTableCellRenderer( entries ) );
+        tmContainerTable.setDefaultRenderer(
+            String.class,
+            new XTCEViewerContainerTableCellRenderer( entries ) );
 
         boolean showAllNamespaces   = prefs.getShowAllAliasNamespacesOption();
         boolean showAliasNamespaces = prefs.getShowAliasNamespacesOption();
@@ -4617,19 +4747,17 @@ public class XTCEViewer extends javax.swing.JFrame {
 
         for ( XTCEContainerContentEntry entry : entries ) {
 
-            String aliasString = ""; // NOI18N
-            String name        = ""; // NOI18N
+            String aliasString   = ""; // NOI18N
+            String name          = ""; // NOI18N
+            String containerName;
+
             if ( entry.getEntryType() == FieldType.PARAMETER ) {
                 aliasString =
                     XTCEFunctions.makeAliasDisplayString( entry.getParameter(),
                                                           showAllNamespaces,
                                                           showAliasNamespaces,
                                                           preferredNamespace );
-                name = entry.getParameter().getName();
-            }
-
-            String containerName = null;
-            if ( entry.getEntryType() == FieldType.PARAMETER ) {
+                name          = entry.getParameter().getName();
                 containerName = entry.getHoldingContainer().getName();
             } else if ( entry.getEntryType() == FieldType.CONTAINER ) {
                 containerName = entry.getTelemetryContainer().getName();
@@ -4670,7 +4798,7 @@ public class XTCEViewer extends javax.swing.JFrame {
 
         List<String> warnings = containerModel.getWarnings();
         for ( String warning : warnings ) {
-            logMsg( XTCEFunctions.getText( "general_warning" ) +  ": " + warning ); // NOI18N
+            logMsg( XTCEFunctions.generalWarningPrefix() + warning );
         }
 
         List<XTCEContainerContentEntry> entries = containerModel.getContentList();
@@ -5454,7 +5582,6 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     private XTCEViewerPreferences           prefs                 = null;
     private XTCEDatabase                    xtceDatabaseFile      = null;
-    private List<XTCESpaceSystem>           spaceSystems          = null;
     private XTCEViewerXpathQueryDialog      xpathDialog           = null;
     private XTCEViewerParameterFindDialog   findParameterDialog   = null;
     private XTCEViewerParameterUsageDialog  parameterUsageDialog  = null;
@@ -5488,12 +5615,16 @@ public class XTCEViewer extends javax.swing.JFrame {
     private javax.swing.JMenuItem decodeContainerDrawingMenuItem;
     private javax.swing.JMenuItem decodeContainerMenuItem;
     private javax.swing.JMenuItem decodeStreamMenuItem;
+    private javax.swing.JMenuItem decodeTelecommandDrawingMenuItem;
+    private javax.swing.JMenuItem decodeTelecommandMenuItem;
     private javax.swing.JMenuItem deleteSpaceSystemMenuItem;
     private javax.swing.JScrollPane detailSpaceSystemPanelScrollPane;
     private javax.swing.JTree detailSpaceSystemTree;
     private javax.swing.JScrollPane detailSpaceSystemTreeScrollPane;
     private javax.swing.JMenuItem encodeContainerDrawingMenuItem;
     private javax.swing.JMenuItem encodeContainerMenuItem;
+    private javax.swing.JMenuItem encodeTelecommandDrawingMenuItem;
+    private javax.swing.JMenuItem encodeTelecommandMenuItem;
     private javax.swing.ButtonGroup exportContainersButtonGroup;
     private javax.swing.JComboBox exportContainersCharSetComboBox;
     private javax.swing.JRadioButton exportContainersCometRadioButton;

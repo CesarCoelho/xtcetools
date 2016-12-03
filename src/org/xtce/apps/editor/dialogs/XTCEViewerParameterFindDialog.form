@@ -235,6 +235,11 @@
       </SubComponents>
     </Container>
     <Container class="javax.swing.JScrollPane" name="resultsScrollPane">
+      <Properties>
+        <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+          <ResourceString bundle="org/xtce/toolkit/MessagesBundle.properties" key="general_tree_doubleclick_go" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+        </Property>
+      </Properties>
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
       <SubComponents>
@@ -248,6 +253,9 @@
                 <Column editable="false" title="Parameter Alias(s)" type="java.lang.String"/>
                 <Column editable="false" title="Description" type="java.lang.String"/>
               </Table>
+            </Property>
+            <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="org/xtce/toolkit/MessagesBundle.properties" key="general_tree_doubleclick_go" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
             </Property>
             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
               <TableColumnModel selectionModel="0">

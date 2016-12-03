@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathException;
@@ -1049,6 +1050,112 @@ public final class XTCEDatabase extends XTCEDatabaseParser {
 
     }
 
+    /** Function to decompose an XTCETelecommand object into a simple array of
+     * entries that an application can iterate over without the need to
+     * resolve XTCE data model references, included additional containers,
+     * base containers, and conditional processing.
+     *
+     * @param telecommand XTCETelecommand object containing the telecommand
+     * that the caller wishes to decompose.
+     *
+     * @param binaryData BitSet containing the telecommand binary encoded data
+     * so that the output object contains entries with actual values from a
+     * real binary image.
+     *
+     * @return XTCETelecommandContentModel representing this XTCETelecommand.
+     *
+     * @throws XTCEDatabaseException thrown in the event that it is not
+     * possible to decompose the telecommand completely due to bad references
+     * in the XTCE document.
+     *
+     */
+
+    public XTCETelecommandContentModel processTelecommand( XTCETelecommand telecommand,
+                                                           BitSet          binaryData )
+        throws XTCEDatabaseException {
+
+        return new XTCETelecommandContentModel( telecommand,
+                                                getSpaceSystemTree(),
+                                                binaryData );
+
+    }
+
+    /** Function to decompose an XTCETelecommand object into a simple array of
+     * entries that an application can iterate over without the need to
+     * resolve XTCE data model references, included additional containers,
+     * base containers, and conditional processing.
+     *
+     * This function is intended to accept the byte array that is read from
+     * a ByteArrayOutputStream.toByteArray() that is easily obtained when
+     * reading a binary file using a Java FileInputStream.
+     *
+     * @param telecommand XTCETelecommand object containing the telecommand
+     * that the caller wishes to decompose.
+     *
+     * @param bytes byte[] containing the container binary encoded data
+     * so that the output object contains entries with actual values from a
+     * real binary image.
+     *
+     * @return XTCETelecommandContentModel representing this XTCETelecommand.
+     *
+     * @throws XTCEDatabaseException thrown in the event that it is not
+     * possible to decompose the container completely due to bad references in
+     * the XTCE document.
+     *
+     */
+
+    public XTCETelecommandContentModel processTelecommand( XTCETelecommand telecommand,
+                                                           byte[]          bytes )
+        throws XTCEDatabaseException {
+
+        BitSet bits = XTCEFunctions.getBitSetFromStreamByteArray( bytes );
+
+        return processTelecommand( telecommand, bits );
+
+    }
+
+    /** Function to decompose an XTCETelecommand object into a simple array of
+     * entries that an application can iterate over without the need to
+     * resolve XTCE data model references, included additional containers,
+     * base containers, and conditional processing.
+     *
+     * This function is intended to accept a Java InputStream containing the
+     * bytes to use for the binary portion of the container.
+     *
+     * @param telecommand XTCETelecommand object containing the telecommand
+     * that the caller wishes to decompose.
+     *
+     * @param stream InputStream containing the container binary encoded data
+     * so that the output object contains entries with actual values from a
+     * real binary image.
+     *
+     * @return XTCETelecommandContentModel representing this XTCETelecommand.
+     *
+     * @throws XTCEDatabaseException thrown in the event that it is not
+     * possible to decompose the container completely due to bad references in
+     * the XTCE document, or if the stream throws an IOException.
+     *
+     */
+
+    public XTCETelecommandContentModel processTelecommand( XTCETelecommand telecommand,
+                                                           InputStream     stream )
+        throws XTCEDatabaseException {
+
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        int byteValue;
+
+        try {
+            while ( ( byteValue = stream.read() ) != -1 ) {
+                buffer.write( byteValue );
+            }
+        } catch ( Exception ex ) {
+            throw new XTCEDatabaseException( ex.getLocalizedMessage() );
+        }
+
+        return processTelecommand( telecommand, buffer.toByteArray() );
+
+    }
+
     /** Retrieve the containers in the XTCE document that directly reference
      * an entry in their manifest that includes the provided Parameter.
      *
@@ -1274,8 +1381,8 @@ public final class XTCEDatabase extends XTCEDatabaseParser {
     private SpaceSystemType topLevelSpaceSystem = null;
     private boolean         databaseChanged     = false;
 
-    private HashMap<String, NameDescriptionType> parameterTypes   = null;
-    private HashMap<String, NameDescriptionType> argumentTypes    = null;
-    private ArrayList<XTCESpaceSystem>           spaceSystemCache = null;
+    private Map<String, NameDescriptionType> parameterTypes   = null;
+    private Map<String, NameDescriptionType> argumentTypes    = null;
+    private List<XTCESpaceSystem>            spaceSystemCache = null;
 
 }

@@ -18,6 +18,7 @@
 package org.xtce.math;
 
 import java.math.BigInteger;
+import org.xtce.toolkit.XTCEFunctions;
 
 /** This class supports the MILSTD-1750A encoding and decoding by allowing for
  * conversion from 16, 32, and 48 bit floating point values, in MILSTD 1750A
@@ -86,11 +87,11 @@ public class MilStd1750A {
                     (double)mantissa * Math.pow( 2.0, ( exponent - 39.0 ) );
                 break;
 
-            default: {
-                String msg = "Invalid MILSTD-1750A encoding size of " +
-                    Integer.toString( encodingSize_ );
-                throw new IllegalArgumentException( msg );
-            }
+            default:
+                throw new IllegalArgumentException(
+                    XTCEFunctions.getText( "milstd_error_bitsize" ) + // NOI18N
+                                           " " + // NOI18N
+                                           Integer.toString( encodingSize_ ) );
 
         }
 
@@ -159,11 +160,11 @@ public class MilStd1750A {
                                ( mantissa & 0xffffL );
                 break;
 
-            default: {
-                String msg = "Invalid MILSTD-1750A encoding size of " +
-                    Integer.toString( encodingSize_ );
-                throw new IllegalArgumentException( msg );
-            }
+            default:
+                throw new IllegalArgumentException(
+                    XTCEFunctions.getText( "milstd_error_bitsize" ) + // NOI18N
+                                           " " + // NOI18N
+                                           Integer.toString( encodingSize_ ) );
 
         }
 

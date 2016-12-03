@@ -539,8 +539,7 @@ public abstract class XTCEDatabaseParser {
             throw new XTCEDatabaseException( handler.getMessages() );
         } catch ( NumberFormatException ex ) {
             //System.out.println( "Got here 10" );
-            String msg = XTCEFunctions.getText( "general_error" ) + // NOI18N
-                         ": " + // NOI18N
+            String msg = XTCEFunctions.generalErrorPrefix() +
                          XTCEFunctions.getText( "general_numberexception" ) + // NOI18N
                          " '" + // NOI18N
                          ex.getLocalizedMessage() +
@@ -639,8 +638,7 @@ public abstract class XTCEDatabaseParser {
         } catch ( UnmarshalException ex ) {
             throw new XTCEDatabaseException( handler.getMessages() );
         } catch ( NumberFormatException ex ) {
-            String msg = XTCEFunctions.getText( "general_error" ) + // NOI18N
-                         ": " + // NOI18N
+            String msg = XTCEFunctions.generalErrorPrefix() +
                          XTCEFunctions.getText( "general_numberexception" ) + // NOI18N
                          " '" + // NOI18N
                          ex.getLocalizedMessage() +

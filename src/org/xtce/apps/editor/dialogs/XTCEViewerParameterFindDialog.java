@@ -210,6 +210,8 @@ public class XTCEViewerParameterFindDialog extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        resultsScrollPane.setToolTipText(bundle.getString("general_tree_doubleclick_go")); // NOI18N
+
         resultsTable.setAutoCreateRowSorter(true);
         resultsTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -234,6 +236,7 @@ public class XTCEViewerParameterFindDialog extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        resultsTable.setToolTipText(bundle.getString("general_tree_doubleclick_go")); // NOI18N
         resultsTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 resultsTableMouseClicked(evt);

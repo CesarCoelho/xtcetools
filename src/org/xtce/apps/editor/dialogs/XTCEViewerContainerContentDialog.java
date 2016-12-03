@@ -21,6 +21,7 @@ import java.awt.event.WindowEvent;
 import java.util.List;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
+import org.xtce.apps.editor.ui.XTCEViewerFunctions;
 import org.xtce.apps.editor.ui.XTCEViewerPreferences;
 import org.xtce.toolkit.XTCEContainerContentEntry;
 import org.xtce.toolkit.XTCEContainerContentModel;
@@ -28,6 +29,8 @@ import org.xtce.toolkit.XTCEDatabase;
 import org.xtce.toolkit.XTCEFunctions;
 import org.xtce.toolkit.XTCETMContainer;
 import org.xtce.toolkit.XTCETMStream;
+import org.xtce.toolkit.XTCETelecommand;
+import org.xtce.toolkit.XTCETelecommandContentModel;
 import org.xtce.toolkit.XTCETypedObject.EngineeringType;
 
 /** XTCE Viewer/Browser dialog window for displaying processed content of a
@@ -77,6 +80,7 @@ public class XTCEViewerContainerContentDialog extends javax.swing.JDialog {
         prefs_       = prefs;
         tmContainer_ = container;
         tmStream_    = null;
+        tcObject_    = null;
 
         setLocationRelativeTo( parent );
 
@@ -119,6 +123,51 @@ public class XTCEViewerContainerContentDialog extends javax.swing.JDialog {
         prefs_       = prefs;
         tmContainer_ = null;
         tmStream_    = stream;
+        tcObject_    = null;
+
+        setLocationRelativeTo( parent );
+
+    }
+
+    /** Constructs a new dialog window for a selected database telecommand
+     * from the telecommand tree to permit the user to decode an arbitrary
+     * binary hex string.
+     *
+     * @param parent Frame object of the parent window, which is a part of the
+     * JDialog interface to permit control of the dialog from the parent.
+     *
+     * @param modal boolean indicating if this window should block interaction
+     * with the parent Frame.
+     *
+     * @param telecommand XTCETelecommand object selected from the viewer
+     * telecommand tree.
+     *
+     * @param db XTCEDatabase object used to perform the processing of the
+     * container object.
+     *
+     * @param prefs XTCEViewerPreferences object used for formatting the name
+     * of the container content item in the entry rows.
+     *
+     */
+
+    public XTCEViewerContainerContentDialog( java.awt.Frame        parent,
+                                             boolean               modal,
+                                             XTCETelecommand       telecommand,
+                                             XTCEDatabase          db,
+                                             XTCEViewerPreferences prefs ) {
+
+        super( parent, modal );
+        initComponents();
+
+        setTitle( XTCEFunctions.getText( "dialog_decodetelecommand_title1" ) + // NOI18N
+                  ": " + //NOI18N
+                  telecommand.getInheritancePath().replaceFirst( "/", "" ) ); // NOI18N
+
+        db_          = db;
+        prefs_       = prefs;
+        tmContainer_ = null;
+        tmStream_    = null;
+        tcObject_    = telecommand;
 
         setLocationRelativeTo( parent );
 
@@ -157,6 +206,11 @@ public class XTCEViewerContainerContentDialog extends javax.swing.JDialog {
 
         binaryTextField.setColumns(20);
         binaryTextField.setRows(8);
+        binaryTextField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                binaryTextFieldKeyTyped(evt);
+            }
+        });
         binaryTextFieldScrollPane.setViewportView(binaryTextField);
 
         decodeButton.setText(bundle.getString("dialog_decodecontainer_decodebutton")); // NOI18N
@@ -255,23 +309,44 @@ public class XTCEViewerContainerContentDialog extends javax.swing.JDialog {
 
         try {
 
-            XTCEContainerContentModel model;
-
             byte[] bytes = XTCEFunctions.getBytesFromHexString( hex );
 
-            if ( tmContainer_ != null ) {
-                model = db_.processContainer( tmContainer_, bytes );
+            if ( tcObject_ != null ) {
+
+                XTCETelecommandContentModel model =
+                    db_.processTelecommand( tcObject_, bytes );
+
+                addContainerEntries( model.getContentList() );
+
+                for ( String warning : model.getWarnings() ) {
+                    warnings.append( warning );
+                    warnings.append( System.getProperty( "line.separator" ) ); // NOI18N
+                }
+
             } else {
-                model = tmStream_.processStream( bytes );
+
+                XTCEContainerContentModel model;
+
+                if ( tmContainer_ != null ) {
+                    model = db_.processContainer( tmContainer_, bytes );
+                } else if ( tmStream_ != null ) {
+                    model = tmStream_.processStream( bytes );
+                } else {
+                    warnings.append( XTCEFunctions.getText( "dialog_decodecontainer_error_notype" ) ); // NOI18N
+                    return;
+                }
+
+                addContainerEntries( model.getContentList() );
+
+                for ( String warning : model.getWarnings() ) {
+                    warnings.append( warning );
+                    warnings.append( System.getProperty( "line.separator" ) ); // NOI18N
+                }
+
             }
 
-            addContainerEntries( model.getContentList() );
-
-            for ( String warning : model.getWarnings() ) {
-                warnings.append( warning );
-                warnings.append( System.getProperty( "line.separator" ) ); // NOI18N
-            }
-
+        } catch ( NumberFormatException ex ) {
+            warnings.append( XTCEFunctions.getText( "dialog_decodecontainer_error_hex" ) ); // NOI18N
         } catch ( Exception ex ) {
             warnings.append( ex.getLocalizedMessage() );
         }
@@ -286,7 +361,13 @@ public class XTCEViewerContainerContentDialog extends javax.swing.JDialog {
 
     }//GEN-LAST:event_dismissButtonActionPerformed
 
-    private void addContainerEntries( List<XTCEContainerContentEntry> entries ) {
+    private void binaryTextFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_binaryTextFieldKeyTyped
+
+        XTCEViewerFunctions.copyPasteTextArea( evt, binaryTextField );
+
+    }//GEN-LAST:event_binaryTextFieldKeyTyped
+
+    private void addContainerEntries( final List<XTCEContainerContentEntry> entries ) {
 
         boolean showAllNamespaces  = prefs_.getShowAllAliasNamespacesOption();
         boolean showNamespaces     = prefs_.getShowAliasNamespacesOption();
@@ -315,8 +396,8 @@ public class XTCEViewerContainerContentDialog extends javax.swing.JDialog {
                     break;
 
                 case ARGUMENT:
-                    if ( ( entry.getParameter().getEngineeringType() != EngineeringType.STRUCTURE ) &&
-                         ( entry.getParameter().getEngineeringType() != EngineeringType.ARRAY     ) ) {
+                    if ( ( entry.getArgument().getEngineeringType() != EngineeringType.STRUCTURE ) &&
+                         ( entry.getArgument().getEngineeringType() != EngineeringType.ARRAY     ) ) {
                         entryPanel.add( new XTCEViewerContainerContentRow( entry,
                                                                            showAllNamespaces,
                                                                            showNamespaces,
@@ -347,6 +428,7 @@ public class XTCEViewerContainerContentDialog extends javax.swing.JDialog {
     private final XTCEViewerPreferences prefs_;
     private final XTCETMContainer       tmContainer_;
     private final XTCETMStream          tmStream_;
+    private final XTCETelecommand       tcObject_;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel binaryLabel;

@@ -20,12 +20,15 @@ package org.xtce.apps.editor.ui;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.Enumeration;
 import java.util.List;
 import javax.swing.JPopupMenu;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.JTree;
 import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultTreeModel;
@@ -236,6 +239,48 @@ public class XTCEViewerFunctions {
 
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         clipboard.setContents( new StringSelection( sb.toString() ), null );
+
+    }
+
+    /** Helper function to implement copy and paste from JTextArea to the OS
+     * when it is not supported by default.
+     *
+     * @param evt KeyEvent object from the Swing callback.
+     *
+     * @param textArea JTextArea to copy or paste from.
+     *
+     */
+
+    public static void copyPasteTextArea( KeyEvent evt, JTextArea textArea ) {
+
+        if ( evt.isControlDown() == false ) {
+            return;
+        }
+
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+
+        if ( evt.getKeyChar() == 'c' ) {
+
+            if ( textArea.getSelectedText() == null ) {
+                return;
+            }
+
+            StringSelection selection =
+                new StringSelection( textArea.getSelectedText() );
+
+            clipboard.setContents( selection, selection );
+
+        } else if ( evt.getKeyChar() == 'v' ) {
+
+            try {
+                String text =
+                    (String)clipboard.getData( DataFlavor.stringFlavor );
+                textArea.setText( text );
+            } catch ( Exception ex ) {
+                // do nothing
+            }
+
+        }
 
     }
 

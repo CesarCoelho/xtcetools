@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import org.omg.space.xtce.AggregateDataType;
 import org.omg.space.xtce.AggregateDataType.MemberList.Member;
 import org.omg.space.xtce.HeaderType;
@@ -322,20 +323,17 @@ public class XTCESpaceSystem extends XTCENamedObject {
         }
 
         try {
+
             List<Object> xmlParameters = getReference().
                                          getTelemetryMetaData().
                                          getParameterSet().
                                          getParameterOrParameterRef();
-            //ArrayList<XTCEParameter> parameters =
-            //    addParameters( xmlParameters );
+
             tmParameterHashTable_ =
                 ensureHashTable( addParameters( xmlParameters ) );
+
             return isTelemetryParameter( name );
-            //for ( XTCEParameter parameter : parameters ) {
-            //    if ( parameter.getName().equals( name ) == true ) {
-            //        return true;
-            //    }
-            //}
+
         } catch ( NullPointerException ex ) {
             // this is okay, the SpaceSystem may not have any TM parameters
         }
@@ -369,20 +367,17 @@ public class XTCESpaceSystem extends XTCENamedObject {
         }
 
         try {
+
             List<Object> xmlParameters = getReference().
                                          getCommandMetaData().
                                          getParameterSet().
                                          getParameterOrParameterRef();
-            //ArrayList<XTCEParameter> parameters =
-            //    addParameters( xmlParameters );
+
             tcParameterHashTable_ =
                 ensureHashTable( addParameters( xmlParameters ) );
+
             return isTelecommandParameter( name );
-            //for ( XTCEParameter parameter : parameters ) {
-            //    if ( parameter.getName().equals( name ) == true ) {
-            //        return true;
-            //    }
-            //}
+
         } catch ( NullPointerException ex ) {
             // this is okay, the SpaceSystem may not have any TM parameters
         }
@@ -431,20 +426,17 @@ public class XTCESpaceSystem extends XTCENamedObject {
         }
 
         try {
+
             List<Object> xmlParameters = getReference().
                                          getTelemetryMetaData().
                                          getParameterSet().
                                          getParameterOrParameterRef();
-            //ArrayList<XTCEParameter> parameters =
-            //    addParameters( xmlParameters );
+
             tmParameterHashTable_ =
                 ensureHashTable( addParameters( xmlParameters ) );
+
             return getTelemetryParameter( name );
-            //for ( XTCEParameter parameter : parameters ) {
-            //    if ( parameter.getName().equals( name ) == true ) {
-            //        return parameter;
-            //    }
-            //}
+
         } catch ( NullPointerException ex ) {
             // this is okay, the SpaceSystem may not have any TM parameters
         }
@@ -501,20 +493,17 @@ public class XTCESpaceSystem extends XTCENamedObject {
         }
 
         try {
+
             List<Object> xmlParameters = getReference().
                                          getCommandMetaData().
                                          getParameterSet().
                                          getParameterOrParameterRef();
-            //ArrayList<XTCEParameter> parameters =
-            //    addParameters( xmlParameters );
+
             tcParameterHashTable_ =
                 ensureHashTable( addParameters( xmlParameters ) );
+
             return getTelecommandParameter( name );
-            //for ( XTCEParameter parameter : parameters ) {
-            //    if ( parameter.getName().equals( name ) == true ) {
-            //        return parameter;
-            //    }
-            //}
+
         } catch ( NullPointerException ex ) {
             // this is okay, the SpaceSystem may not have any TM parameters
         }
@@ -1180,18 +1169,38 @@ public class XTCESpaceSystem extends XTCENamedObject {
      *
      */
 
-    private HashMap<String, XTCEParameter> ensureHashTable( final List<XTCEParameter> list ) {
+    private Map<String, XTCEParameter> ensureHashTable( final List<XTCEParameter> list ) {
 
-        //System.out.println( "Creating Hash Table in " + getFullPath() );
-        HashMap<String, XTCEParameter> table = new HashMap<>( list.size() );
+        Map<String, XTCEParameter> table = new HashMap<>( list.size() );
+
         for ( XTCEParameter parameter : list ) {
             table.put( parameter.getName(), parameter );
         }
+
         return table;
 
     }
 
-    private String makeContainerInheritanceString( final SequenceContainerType container ) throws XTCEDatabaseException {
+    /** Private function to create the special case inheritance path string
+     * for containers.
+     *
+     * The inheritance path for containers used in the library is not the
+     * path through the SpaceSystem element hierarchy, rather it is the path
+     * of container inheritance.  In some cases, this is more intuitive for the
+     * user.
+     *
+     * @param container SequenceContainerType object from the XTCE data model.
+     *
+     * @return String describing the inheritance path to this container in
+     * UNIX style filesystem format.
+     *
+     * @throws XTCEDatabaseException in the event that the path cannot be
+     * resolved to valid containers.
+     *
+     */
+
+    private String makeContainerInheritanceString( final SequenceContainerType container )
+        throws XTCEDatabaseException {
 
         // optimization would be good to have here.
 
@@ -1218,7 +1227,26 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
     }
 
-    private String makeTelecommandInheritanceString( final Object metacommand ) throws XTCEDatabaseException {
+    /** Private function to create the special case inheritance path string
+     * for telecommands.
+     *
+     * The inheritance path for telecommands used in the library is not the
+     * path through the SpaceSystem element hierarchy, rather it is the path
+     * of telecommand inheritance.  In some cases, this is more intuitive for
+     * the user.
+     *
+     * @param metacommand Object object from the XTCE data model.
+     *
+     * @return String describing the inheritance path to this container in
+     * UNIX style filesystem format.
+     *
+     * @throws XTCEDatabaseException in the event that the path cannot be
+     * resolved to valid telecommands.
+     *
+     */
+
+    private String makeTelecommandInheritanceString( final Object metacommand )
+        throws XTCEDatabaseException {
 
         if ( metacommand.getClass() != MetaCommandType.class ) {
             /// @todo BlockMetaCommand
@@ -1249,7 +1277,27 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
     }
 
-    private SequenceContainerType getContainerElement( final String ssPath ) throws XTCEDatabaseException {
+    /** Private method to retrieve the XTCE data model SequenceContainerType
+     * object that represents a container location path string that is used by
+     * this library.
+     *
+     * This method depends on which SpaceSystem that this object represents
+     * because it can take into account relative path information in the
+     * desired container location inheritance string.
+     *
+     * @param ssPath String containing a container path, which can be local,
+     * absolute, or a relative location to the current Space System.
+     *
+     * @return SequenceContainerType XTCE data model object from JAXB that
+     * defines the desired container.
+     *
+     * @throws XTCEDatabaseException in the event that the container cannot
+     * be decisively located.
+     *
+     */
+
+    private SequenceContainerType getContainerElement( final String ssPath )
+        throws XTCEDatabaseException {
 
         String name = XTCEFunctions.getNameFromPathReferenceString( ssPath );
         String path = XTCEFunctions.getPathNameFromReferenceString( ssPath );
@@ -1282,7 +1330,27 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
     }
 
-    private MetaCommandType getMetaCommandElement( final String ssPath ) throws XTCEDatabaseException {
+    /** Private method to retrieve the XTCE data model MetaCommandType
+     * object that represents a MetaCommand location path string that is used
+     * by this library.
+     *
+     * This method depends on which SpaceSystem that this object represents
+     * because it can take into account relative path information in the
+     * desired MetaCommand location inheritance string.
+     *
+     * @param ssPath String containing a container path, which can be local,
+     * absolute, or a relative location to the current Space System.
+     *
+     * @return MetaCommandType XTCE data model object from JAXB that defines
+     * the desired MetaCommand.
+     *
+     * @throws XTCEDatabaseException in the event that the MetaCommand cannot
+     * be decisively located.
+     *
+     */
+
+    private MetaCommandType getMetaCommandElement( final String ssPath )
+        throws XTCEDatabaseException {
 
         String name = XTCEFunctions.getNameFromPathReferenceString( ssPath );
         String path = XTCEFunctions.getPathNameFromReferenceString( ssPath );
@@ -1326,11 +1394,26 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
     }
 
+    /** Private method to get all the Parameter(s) in this XTCE Space System
+     * and convert those to XTCEParameter objects, storing them in a list for
+     * future iteration.
+     *
+     * This abstraction is a key feature of the library processing of the
+     * XTCE document.  The returned list also contains the XTCE Member elements
+     * converted to XTCEParameter as well (see function below).
+     *
+     * @param parameters List<Object> of parameters from the JAXB generated
+     * XTCE data model.
+     *
+     * @return List of XTCEParameter objects for future use.
+     *
+     */
+
     private List<XTCEParameter> addParameters( final List<Object> parameters ) {
 
         warnings_.clear();
 
-        ArrayList<XTCEParameter> list = new ArrayList<>();
+        List<XTCEParameter> list = new ArrayList<>();
 
         for ( int iii = 0; iii < parameters.size(); ++iii ) {
 
@@ -1363,12 +1446,15 @@ public class XTCESpaceSystem extends XTCENamedObject {
 
 
                 } catch ( NullPointerException ex ) {
+
                     warnings_.add( parameter.getName() + " " +  // NOI18N
                         XTCEFunctions.getText( "error_param_invalid_type" ) ); // NOI18N
+
                     list.add( new XTCEParameter( parameter.getName(),
                                                  getFullPath(),
                                                  parameter,
                                                  null ) );
+
                 }
 
             }
@@ -1378,6 +1464,22 @@ public class XTCESpaceSystem extends XTCENamedObject {
         return list;
 
     }
+
+    /** Private method to support the addParameters method to handle the case
+     * where the parameters are actually members of an aggregate.
+     *
+     * This method recurses because once the processing is inside of 1
+     * aggregate type, then others can be embedded.
+     *
+     * @param basename String containing the Parameter name that starts the
+     * processing into an aggregate structure.
+     *
+     * @param type AggregateDataType object from the JAXB transformed XTCE
+     * data model that contains the Member elements.
+     *
+     * @param list List of XTCEParameter objects that should be added to.
+     *
+     */
 
     private void addMembers( final String              basename,
                              final AggregateDataType   type,
@@ -1416,14 +1518,17 @@ public class XTCESpaceSystem extends XTCENamedObject {
                 }
 
             } catch ( NullPointerException ex ) {
+
                 warnings_.add( member.getName() + " " +  // NOI18N
                     XTCEFunctions.getText( "error_parammember_invalid_type" ) ); // NOI18N
+
                 if ( newbasename.isEmpty() == false ) {
                     list.add( new XTCEParameter( newbasename,
                                                  getFullPath(),
                                                  member,
                                                  null ) );
                 }
+
             }
 
         }
@@ -1436,7 +1541,7 @@ public class XTCESpaceSystem extends XTCENamedObject {
     private final XTCEDatabase    databaseReference_;
     private final List<String>    warnings_;
 
-    private HashMap<String, XTCEParameter> tmParameterHashTable_ = null;
-    private HashMap<String, XTCEParameter> tcParameterHashTable_ = null;
+    private Map<String, XTCEParameter> tmParameterHashTable_ = null;
+    private Map<String, XTCEParameter> tcParameterHashTable_ = null;
 
 }

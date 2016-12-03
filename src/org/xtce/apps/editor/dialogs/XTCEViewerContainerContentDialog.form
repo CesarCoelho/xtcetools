@@ -115,6 +115,9 @@
             <Property name="columns" type="int" value="20"/>
             <Property name="rows" type="int" value="8"/>
           </Properties>
+          <Events>
+            <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="binaryTextFieldKeyTyped"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

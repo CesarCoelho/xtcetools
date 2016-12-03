@@ -18,6 +18,7 @@
 package org.xtce.toolkit;
 
 import java.math.BigInteger;
+import java.util.BitSet;
 import java.util.List;
 import org.omg.space.xtce.AggregateDataType;
 import org.omg.space.xtce.ArrayParameterRefEntryType;
@@ -50,7 +51,7 @@ public class XTCETelecommandContentModel extends XTCEContainerContentModelBase {
 
     /** Constructor
      *
-     * This constructor creates the container content model object with some
+     * This constructor creates the telecommand content model object with some
      * optional user values provided in a list.
      *
      * Major problems processing the container will result in an exception,
@@ -72,7 +73,7 @@ public class XTCETelecommandContentModel extends XTCEContainerContentModelBase {
      * includes should be pursued at depth.  This can be a performance hit if
      * there are a large number of conditionals nested.
      *
-     * @throws XTCEDatabaseException in the event that the container cannot
+     * @throws XTCEDatabaseException in the event that the telecommand cannot
      * be completely processed.
      *
      */
@@ -89,6 +90,50 @@ public class XTCETelecommandContentModel extends XTCEContainerContentModelBase {
                tcObject.getName(),
                tcObject.getDescription(),
                showAllConditions );
+
+        telecommand_ = tcObject;
+
+        processTelecommand();
+
+    }
+
+    /** Constructor
+     *
+     * This constructor creates the telecommand content model object with TC
+     * argument values evaluated from the binary provided in a BitSet.
+     *
+     * Major problems processing the container will result in an exception,
+     * but many problems encountered do not inhibit continuation.  These can be
+     * inspected by calling getWarnings() after this method to retrieve any
+     * non-blocking issue descriptions.
+     *
+     * @param tcObject XTCETelecommand from the database object that contains
+     * all the needed entry list items.
+     *
+     * @param spaceSystems List of XTCESpaceSystem objects to search for
+     * entries on the entry list.
+     *
+     * @param binaryData BitSet containing a map of the binary data that makes
+     * up a binary instance of the container.  The first bit in the set should
+     * be the zeroth bit of the telecommand binary (start bit 0) and may be
+     * short in the event that there are trailing zeros.
+     *
+     * @throws XTCEDatabaseException in the event that the telecommand cannot
+     * be completely processed.
+     *
+     */
+
+    public XTCETelecommandContentModel( XTCETelecommand       tcObject,
+                                        List<XTCESpaceSystem> spaceSystems,
+                                        BitSet                binaryData )
+        throws XTCEDatabaseException {
+
+        super( spaceSystems,
+               null,
+               binaryData,
+               tcObject.getName(),
+               tcObject.getDescription(),
+               false );
 
         telecommand_ = tcObject;
 

@@ -124,7 +124,11 @@ public class XTCEViewerContainerContentRow extends javax.swing.JPanel {
 
         XTCEContainerEntryValue valueObj = entry_.getValue();
 
-        if ( valueObj != null ) {
+        if ( entry_.getEntryType() == FieldType.CONSTANT ) {
+
+            calValueField.setText( valueObj.getCalibratedValue() );
+
+        } else if ( valueObj != null ) {
 
             updateFromValueObj( valueObj );
 
@@ -156,10 +160,22 @@ public class XTCEViewerContainerContentRow extends javax.swing.JPanel {
 
         }
 
-        if ( dialog_ != null ) {
-            calValueField.setEditable( true );
-            uncalValueField.setEditable( true );
-            rawValueField.setEditable( true );
+        if ( dialog_ == null ) {
+            calValueField.setEditable( false );
+            uncalValueField.setEditable( false );
+            rawValueField.setEditable( false );
+        } else {
+            if ( entry_.getEntryType() != FieldType.CONSTANT ) {
+                calValueField.setEditable( true );
+                uncalValueField.setEditable( true );
+                rawValueField.setEditable( true );
+            } else {
+                calValueField.setEditable( false );
+                uncalValueField.setEditable( false );
+                rawValueField.setEditable( false );
+                uncalValueField.setEnabled( false );
+                rawValueField.setEnabled( false );
+            }
         }
 
         populateDisplayName( showAllNamespaces,
@@ -228,6 +244,8 @@ public class XTCEViewerContainerContentRow extends javax.swing.JPanel {
                                                       showAllNamespaces,
                                                       showNamespaces,
                                                       preferredNamespace );
+        } else if ( entry_.getEntryType() == FieldType.CONSTANT ) {
+            displayName = "Fixed Value"; // NOI18N
         }
 
         if ( aliasString.isEmpty() == true ) {
@@ -235,6 +253,8 @@ public class XTCEViewerContainerContentRow extends javax.swing.JPanel {
         } else {
             itemNameField.setText( displayName + " (" + aliasString + ")" ); // NOI18N
         }
+
+        itemNameField.setEditable( false );
 
     }
 
@@ -415,7 +435,6 @@ public class XTCEViewerContainerContentRow extends javax.swing.JPanel {
             return;
         }
 
-        
         String rawValue = rawValueField.getText();
 
         XTCEContainerEntryValue value;
