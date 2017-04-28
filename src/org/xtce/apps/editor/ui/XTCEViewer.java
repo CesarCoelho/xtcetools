@@ -4586,6 +4586,13 @@ public class XTCEViewer extends javax.swing.JFrame {
 
             XTCEViewerFunctions.expandAllTreeNodes( tcTree );
 
+            List<String> warnings =
+                node.getSpaceSystemReference().getWarningsFromLastOperation();
+
+            for ( String warning : warnings ) {
+                logMsg( warning );
+            }
+
         }
 
     }
