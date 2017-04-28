@@ -916,7 +916,8 @@ public class XTCESpaceSystem extends XTCENamedObject {
                                                          XTCEFunctions.getText( "error_tc_form_in_ss" ) + // NOI18N
                                                          " '" + // NOI18N
                                                          getFullPath() +
-                                                         "'" ); // NOI18N
+                                                         "': " + // NOI18N
+                                                         ex.getLocalizedMessage() );
                     }
                 }
             }
@@ -979,7 +980,8 @@ public class XTCESpaceSystem extends XTCENamedObject {
                                    XTCEFunctions.getText( "error_tc_form_in_ss" ) + // NOI18N
                                    " '" + // NOI18N
                                    getFullPath() +
-                                   "'" ); // NOI18N
+                                   "': " + // NOI18N
+                                   ex.getLocalizedMessage() );
                 }
             }
 
@@ -1034,7 +1036,8 @@ public class XTCESpaceSystem extends XTCENamedObject {
                                    XTCEFunctions.getText( "error_tc_form_in_ss" ) + // NOI18N
                                    " '" + // NOI18N
                                    getFullPath() +
-                                   "'" ); // NOI18N
+                                   "': " + // NOI18N
+                                   ex.getLocalizedMessage() );
                 }
             }
 
