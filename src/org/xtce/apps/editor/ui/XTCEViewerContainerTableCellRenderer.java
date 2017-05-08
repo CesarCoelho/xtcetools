@@ -53,6 +53,7 @@ public class XTCEViewerContainerTableCellRenderer extends DefaultTableCellRender
                                                              column );
 
         if ( ( entries_ != null ) && ( entries_.size() > row ) ) {
+
             if ( entries_.get( row ).getEntryType() == FieldType.PARAMETER ) {
                 if ( entries_.get( row ).getParameter().isValid() == false ) {
                     ccc.setForeground( Color.RED );
@@ -63,10 +64,15 @@ public class XTCEViewerContainerTableCellRenderer extends DefaultTableCellRender
                     ccc.setForeground( Color.RED );
                     return ccc;
                 }
-            } else if ( entries_.get( row ).isCurrentlyInUse() == false ) {
-                ccc.setForeground( Color.ORANGE );
-                return ccc;
             }
+
+            if ( ccc.getForeground() != Color.RED ) {
+                if ( entries_.get( row ).isCurrentlyInUse() == false ) {
+                    ccc.setForeground( Color.ORANGE );
+                    return ccc;
+                }
+            }
+
         }
 
         return defaultRenderer.getTableCellRendererComponent( table,
