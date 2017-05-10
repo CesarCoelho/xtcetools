@@ -138,6 +138,14 @@ JUnit 4 facility and can be visually run by selecting "Run->Test Project" on
 the NetBeans menu system.  A local copy of the `junit4` jar file may also have
 to be selected if it cannot be automatically located.
 
+#### Probably location of  `jfxrt.jar` ####
+JDK_LOCATION/jre/lib
+#### Steps to create `junit4` library ####
+1. Navigate to the junit [Github](https://github.com/junit-team/junit4/wiki/Download-and-Install) 
+2. Download the referenced jars under "Plain-old JAR" to a folder somewhere
+3. In Netbeans select "Tools->Libraries"
+4. Create a "New Library..." and name it junit4 and point it to your downloaded Jars
+
 ### Bad Path in Properties File ###
 
 The root of the source directory contains a build.xml file for the Ant tool.
