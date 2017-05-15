@@ -360,9 +360,9 @@ public class XTCEViewerContainerDrawing extends JPanel {
             int textPosY = aLineRightY;
             drawYCenteredString( ggg, parameterDesc, textPosX, textPosY );
 
-            int textWidth = getStringWidth( ggg, parameterDesc ) * 2;
-            if ( ( textPosX + textWidth + 200 ) > totalSizeX_ ) {
-                totalSizeX_ = textPosX + textWidth + 200;
+            int textWidth = getStringWidth( ggg, parameterDesc );
+            if ( ( textPosX + textWidth + 25 ) > totalSizeX_ ) {
+                totalSizeX_ = textPosX + textWidth + 25;
             }
 
             currentOffset -= upOffsetEach;
@@ -419,7 +419,12 @@ public class XTCEViewerContainerDrawing extends JPanel {
             contentModel_.getDescription();
         ggg.drawString( descMessage, textxpos, yposdesc );
 
-        totalSizeX_ = rectBaseX_ + linex2 + 25;
+        // in case this needs to extend further than was previously determined
+        // for the parameter name portion of the drawing
+
+        if ( rectBaseX_ + linex2 + 25 > totalSizeX_ ) {
+            totalSizeX_ = rectBaseX_ + linex2 + 25;
+        }
 
     }
 
@@ -887,8 +892,6 @@ public class XTCEViewerContainerDrawing extends JPanel {
 
         for ( XTCEContainerContentEntry entry : contentModel_.getContentList() ) {
 
-            //System.out.println( "Processing Drawing of " + entry.getName() );
-
             String containerName = ""; // NOI18N
             String itemName      = ""; // NOI18N
             String itemAliases   = ""; // NOI18N
@@ -914,7 +917,7 @@ public class XTCEViewerContainerDrawing extends JPanel {
                                                           showAliasNamespaces_,
                                                           preferredNamespace_ );
             } else if ( entry.getEntryType() == FieldType.CONSTANT ) {
-                itemName      = "FixedValue";
+                itemName      = "FixedValue"; // NOI18N
                 containerName = entry.getTelecommand().getName();
             }
 
