@@ -224,7 +224,8 @@ public class XTCETelecommandContentModel extends XTCEContainerContentModelBase {
                               null,
                               includedContainer );
 
-        processEndOfContainer( currentStartBit,
+        processEndOfContainer( currentTelecommand.getCommandContainer().getCommandContainerReference().getBinaryEncoding(),
+                               currentStartBit,
                                containerStartBit,
                                containerStartIndex );
 

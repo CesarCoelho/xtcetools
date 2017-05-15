@@ -185,6 +185,8 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
 
         totalContainerSize_ = totalSize.get();
 
+        //System.out.println( "Total Size is " + Long.toString( totalContainerSize_ ) );
+
         return getTotalSize();
 
     }
@@ -206,7 +208,8 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
                             null,
                             includedContainer );
 
-        processEndOfContainer( currentStartBit,
+        processEndOfContainer( currentContainer.getSequenceContainerReference().getBinaryEncoding(),
+                               currentStartBit,
                                containerStartBit,
                                containerStartIndex );
 
@@ -261,7 +264,7 @@ public class XTCEContainerContentModel extends XTCEContainerContentModelBase {
                                containerStartBit,
                                includedContainer );
 
-        applyRestrictions( currentContainer,
+        applyRestrictions( currentContainer, // base container, not parent
                            parentRestrictions,
                            parentSpaceSystem );
 

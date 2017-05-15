@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import org.omg.space.xtce.ArrayParameterRefEntryType;
 import org.omg.space.xtce.ArrayParameterRefEntryType.DimensionList;
+import org.omg.space.xtce.BinaryDataEncodingType;
 import org.omg.space.xtce.CalibratorType;
 import org.omg.space.xtce.ComparisonType;
 import org.omg.space.xtce.ContextCalibratorType;
@@ -942,7 +943,15 @@ public abstract class XTCEContainerContentModelBase {
 
         // TODO Problems with Aggregate inside Array Parameters not found!
         //parameterPath = parameterPath.replaceAll( "\\[[0-9]+\\]", "" );
-        //System.out.println( "Looking for " + parameterPath );
+        //System.out.println( "Looking Cont SS '" + currentSpaceSystemPath + "' named " + currentContainer.getName() ); // NOI18N
+        //System.out.println( "Looking for '" + parameterPath + "'" ); // NOI18N
+
+        // this code block is the search of last resort to take into account
+        // that the parameterRef MAY be aiming inside of an Aggregate using the
+        // path separator '/' do get to a Member of a Parameter Aggregate.
+        // This is a bit of a hack because XTCE 1.1 does not allow the period
+        // character in a reference.  This will be fixed in the official 1.2
+        // specification.
 
         int idx;
 
@@ -966,6 +975,8 @@ public abstract class XTCEContainerContentModelBase {
             }
 
         } while ( idx > 0 );
+
+        // end of Aggregate search hack
 
         throw new XTCEDatabaseException(
             XTCEFunctions.getText( "error_encdec_cannot_find_parameter" ) + // NOI18N
@@ -1261,9 +1272,10 @@ public abstract class XTCEContainerContentModelBase {
 
     }
 
-    protected void processEndOfContainer( RunningStartBit currentStartBit,
-                                          long            containerStartBit,
-                                          long            containerStartIndex ) {
+    protected void processEndOfContainer( BinaryDataEncodingType dataEncoding,
+                                          RunningStartBit        currentStartBit,
+                                          long                   containerStartBit,
+                                          long                   containerStartIndex ) {
 
         //System.out.println( "entering process end cur start bit " +
         //                    Long.toString( currentStartBit.get() ) +
@@ -1288,7 +1300,56 @@ public abstract class XTCEContainerContentModelBase {
         if ( currentStartBit.get() < containerEndBit ) {
             currentStartBit.set( containerEndBit );
         }
+
         //System.out.println( "Set next start bit in end of container to " + Long.toString( currentStartBit.get() ) );
+
+        // check the container specification in the xml to see if the auto
+        // detect of the container size should be overrridden with a specific
+        // value
+
+        long maxSize = -1;
+
+        if ( ( dataEncoding                 != null ) &&
+             ( dataEncoding.getSizeInBits() != null ) ) {
+
+            if ( dataEncoding.getSizeInBits().getFixedValue() != null ) {
+                maxSize = Long.parseLong( dataEncoding.getSizeInBits().getFixedValue() );
+            } else if ( dataEncoding.getSizeInBits().getDynamicValue() != null ) {
+                warnings_.add( "'BinaryEncoding/SizeInBits/DynamicValue' " + // NOI18N
+                               XTCEFunctions.getText( "xml_element_not_yet_supported" ) + // NOI18N
+                               " " + // NOI18N
+                               getName() );
+            } else if ( dataEncoding.getSizeInBits().getDiscreteLookupList() != null ) {
+                warnings_.add( "'BinaryEncoding/SizeInBits/DiscreteLookupList' " + // NOI18N
+                               XTCEFunctions.getText( "xml_element_not_yet_supported" ) + // NOI18N
+                               " " + // NOI18N
+                               getName() );
+            }
+
+        }
+
+        // this block only applies when BinaryEncoding/SizeInBits was used
+
+        if ( maxSize != -1 ) {
+
+            if ( ( containerEndBit - containerStartBit ) < maxSize ) {
+                containerEndBit = containerStartBit + maxSize;
+            } else if ( ( containerEndBit - containerStartBit ) > maxSize ) {
+                // warning about container content exceeding max size spec
+                // do I truncate or attempt to truncate?
+                warnings_.add( XTCEFunctions.getText( "warning_contproc_containername") + // NOI18N
+                               "'" + // NOI18N
+                               getName() +
+                               "' " + // NOI18N
+                               XTCEFunctions.getText( "warning_contproc_exceedsmax" ) + // NOI18N
+                               " " + // NOI18N
+                               Long.toString( maxSize ) +
+                               " " + // NOI18N
+                               XTCEFunctions.getText( "warning_contproc_sizeinbitsdef" ) ); // NOI18N
+            }
+
+        }
+
         ArrayList<XTCEContainerContentEntry> endList = new ArrayList<>();
 
         // walk backwards through the content removing entries that are for the
@@ -1316,6 +1377,12 @@ public abstract class XTCEContainerContentModelBase {
             }
             //System.out.println( "Set next start bit for end item " + Long.toString( currentStartBit.get() ) );
             contentList_.add( entry );
+        }
+
+        // this does nothing unless a max size was defined
+
+        if ( maxSize != -1 ) {
+            currentStartBit.set( containerEndBit );
         }
 
     }

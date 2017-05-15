@@ -25,7 +25,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -105,7 +104,7 @@ public class XTCEViewerPreferences {
      */
 
     public boolean getValidateOnLoadOption() {
-        return prefs.getBoolean( "ValidateOnLoad", true );
+        return prefs.getBoolean( "ValidateOnLoad", true ); // NOI18N
     }
 
     /** Sets the user preference for exercising the XSD validation on any
@@ -122,7 +121,7 @@ public class XTCEViewerPreferences {
      */
 
     public void setValidateOnLoadOption( boolean flag ) {
-        prefs.putBoolean( "ValidateOnLoad", flag );
+        prefs.putBoolean( "ValidateOnLoad", flag ); // NOI18N
         save();
     }
 
@@ -136,7 +135,7 @@ public class XTCEViewerPreferences {
      */
 
     public boolean getShowAliasNamespacesOption() {
-        return prefs.getBoolean( "ShowAliasNamespaces", true );
+        return prefs.getBoolean( "ShowAliasNamespaces", true ); // NOI18N
     }
 
     /** Sets the user preference for showing the alias namespace on the
@@ -149,7 +148,7 @@ public class XTCEViewerPreferences {
      */
 
     public void setShowAliasNamespacesOption( boolean flag ) {
-        prefs.putBoolean( "ShowAliasNamespaces", flag );
+        prefs.putBoolean( "ShowAliasNamespaces", flag ); // NOI18N
         save();
     }
 
@@ -173,7 +172,7 @@ public class XTCEViewerPreferences {
      */
 
     public boolean getShowAllAliasNamespacesOption() {
-        return prefs.getBoolean( "ShowAllAliasNamespaces", true );
+        return prefs.getBoolean( "ShowAllAliasNamespaces", true ); // NOI18N
     }
 
     /** Sets the user preference for showing all available Aliases on the
@@ -196,9 +195,9 @@ public class XTCEViewerPreferences {
      */
 
     public void setShowAllAliasNamespacesOption( boolean flag ) {
-        prefs.putBoolean( "ShowAllAliasNamespaces", flag );
+        prefs.putBoolean( "ShowAllAliasNamespaces", flag ); // NOI18N
         if ( flag == true ) {
-            prefs.put( "PreferredAliasNamespace", "" );
+            prefs.put( "PreferredAliasNamespace", "" ); // NOI18N
         }
         save();
     }
@@ -212,7 +211,7 @@ public class XTCEViewerPreferences {
      */
 
     public boolean getUseXIncludeOption() {
-        return prefs.getBoolean( "UseXInclude", true );
+        return prefs.getBoolean( "UseXInclude", true ); // NOI18N
     }
 
     /** Sets the user preference for using the XInclude XML feature when
@@ -224,7 +223,7 @@ public class XTCEViewerPreferences {
      */
 
     public void setUseXIncludeOption( boolean flag ) {
-        prefs.putBoolean( "UseXInclude", flag );
+        prefs.putBoolean( "UseXInclude", flag ); // NOI18N
         save();
     }
 
@@ -242,7 +241,7 @@ public class XTCEViewerPreferences {
      */
 
     public String getPreferredAliasNamespaceOption() {
-        return prefs.get( "PreferredAliasNamespace", "" );
+        return prefs.get( "PreferredAliasNamespace", "" ); // NOI18N
     }
 
     /** Sets the user preference for which namespace to show Aliases for on
@@ -258,9 +257,9 @@ public class XTCEViewerPreferences {
      */
 
     public void setPreferredAliasNamespaceOption( String ns ) {
-        prefs.put( "PreferredAliasNamespace", ns );
+        prefs.put( "PreferredAliasNamespace", ns ); // NOI18N
         if ( ns.isEmpty() == true ) {
-            prefs.putBoolean( "ShowAllAliasNamespaces", true );
+            prefs.putBoolean( "ShowAllAliasNamespaces", true ); // NOI18N
         }
         save();
     }
@@ -274,7 +273,7 @@ public class XTCEViewerPreferences {
      */
 
     public int getRecentFilesMaxCountOption() {
-        return prefs.getInt( "RecentFilesMaxCount", 10 );
+        return prefs.getInt( "RecentFilesMaxCount", 10 ); // NOI18N
     }
 
     /** Sets the user preference for the number of files to store in the
@@ -287,7 +286,7 @@ public class XTCEViewerPreferences {
      */
 
     public void setRecentFilesMaxCountOption( int maxNum ) {
-        prefs.putInt( "RecentFilesMaxCount", maxNum );
+        prefs.putInt( "RecentFilesMaxCount", maxNum ); // NOI18N
         save();
     }
 
@@ -300,7 +299,7 @@ public class XTCEViewerPreferences {
      */
 
     public boolean getShowAllContainerConditionalsOption() {
-        return prefs.getBoolean( "ShowAllContainerConditionals", true );
+        return prefs.getBoolean( "ShowAllContainerConditionals", true ); // NOI18N
     }
 
     /** Sets the user preference for showing all available conditions and
@@ -312,7 +311,7 @@ public class XTCEViewerPreferences {
      */
 
     public void setShowAllContainerConditionalsOption( boolean flag ) {
-        prefs.putBoolean( "ShowAllContainerConditionals", flag );
+        prefs.putBoolean( "ShowAllContainerConditionals", flag ); // NOI18N
         save();
     }
 
@@ -324,7 +323,7 @@ public class XTCEViewerPreferences {
      */
 
     public String getContainerOrientationOption() {
-        return prefs.get( "ContainerDrawingOrientation", "LEFT_TO_RIGHT" );
+        return prefs.get( "ContainerDrawingOrientation", "LEFT_TO_RIGHT" ); // NOI18N
     }
 
     /** Sets the user preference for drawing containers and telecommands
@@ -336,9 +335,9 @@ public class XTCEViewerPreferences {
      */
 
     public void setContainerOrientationOption( String orientDrawingAs ) {
-        if ( ( orientDrawingAs.equals( "LEFT_TO_RIGHT" ) == true ) ||
-             ( orientDrawingAs.equals( "TOP_TO_BOTTOM" ) == true ) ) {
-            prefs.put( "ContainerDrawingOrientation", orientDrawingAs );
+        if ( ( orientDrawingAs.equals( "LEFT_TO_RIGHT" ) == true ) || // NOI18N
+             ( orientDrawingAs.equals( "TOP_TO_BOTTOM" ) == true ) ) { // NOI18N
+            prefs.put( "ContainerDrawingOrientation", orientDrawingAs ); // NOI18N
             save();
         }
     }
@@ -356,7 +355,7 @@ public class XTCEViewerPreferences {
 
     public void updateRecentFilesList( JMenu recentItemsMenu, File dbFile ) {
 
-        List<String> files = getObject( "RecentFilesList" );
+        List<String> files = getObject( "RecentFilesList" ); // NOI18N
         if ( dbFile != null ) {
             if ( files.contains( dbFile.getAbsolutePath() ) == true ) {
                 files.remove( dbFile.getAbsolutePath() );
@@ -385,7 +384,7 @@ public class XTCEViewerPreferences {
             recentItemsMenu.add( item );
         }
 
-        putObject( "RecentFilesList", files );
+        putObject( "RecentFilesList", files ); // NOI18N
         save();
 
     }
@@ -405,62 +404,61 @@ public class XTCEViewerPreferences {
 
     public void updateExampleFilesList( JMenu exampleItemsMenu ) {
 
-        List<File> files = new ArrayList<>();
+        final String     exPath = "org/xtce/toolkit/database/examples"; // NOI18N
+        final List<File> files  = new ArrayList<>();
+        final URL        dirUrl = ClassLoader.getSystemResource( exPath ); // NOI18N
 
-        URL dbFilesDirectoryUrl =
-            ClassLoader.getSystemResource( "org/xtce/toolkit/database/examples" ); // NOI18N
+        if ( dirUrl != null ) {
 
-        if ( dbFilesDirectoryUrl != null ) {
             try {
-                File dir = new File( dbFilesDirectoryUrl.toURI() );
-                for ( File nextFile : dir.listFiles() ) {
+                File dir = new File( dirUrl.toURI() );
+                for ( final File nextFile : dir.listFiles() ) {
                     if ( ( nextFile.isFile()                     == true ) &&
-                         ( nextFile.getName().endsWith( ".xml" ) == true ) ) {
+                         ( nextFile.getName().endsWith( ".xml" ) == true ) ) { // NOI18N
                         files.add( nextFile );
                     }
                 }
             } catch ( Exception ex ) {
-                // skip it, do nothing for now - "examples" could be file
+                // skip it, do nothing for now - "examples" could be file too
                 exampleItemsMenu.removeAll();
                 return;
             }
+
         }
 
         exampleItemsMenu.removeAll();
 
         if ( files.isEmpty() == true ) {
-            final URL example1 = ClassLoader.getSystemResource(
-                "org/xtce/toolkit/database/examples/BogusSAT-2.xml" ); // NOI18N
-            final URL example2 = ClassLoader.getSystemResource(
-                "org/xtce/toolkit/database/examples/GovSat_2_0_1.xml" ); // NOI18N
-            if ( example1 != null ) {
-                JMenuItem item1 = new JMenuItem( example1.getFile() );
-                item1.addActionListener( new ActionListener() {
-                    @Override
-                    public void actionPerformed( ActionEvent evt ) {
-                        viewer.openFile( example1,
-                                         true,
-                                         false,
-                                         false );
-                    }
-                });
-                exampleItemsMenu.add( item1 );
+
+            final List<URL> examples = new ArrayList<>();
+            examples.add( ClassLoader.getSystemResource( exPath + "/BogusSAT-2.xml" ) ); // NOI18N
+            examples.add( ClassLoader.getSystemResource( exPath + "/GovSat_2_0_1.xml" ) ); // NOI18N
+            examples.add( ClassLoader.getSystemResource( exPath + "/Diagnostic_Log_Packets.xml" ) ); // NOI18N
+
+            for ( final URL example : examples ) {
+
+                if ( example != null ) {
+
+                    JMenuItem item = new JMenuItem( example.getFile() );
+                    item.addActionListener( new ActionListener() {
+                        @Override
+                        public void actionPerformed( ActionEvent evt ) {
+                            viewer.openFile( example,
+                                             true,
+                                             false,
+                                             false );
+                        }
+                    });
+                    exampleItemsMenu.add( item );
+
+                }
+
             }
-            if ( example2 != null ) {
-                JMenuItem item2 = new JMenuItem( example2.getFile() );
-                item2.addActionListener( new ActionListener() {
-                    @Override
-                    public void actionPerformed( ActionEvent evt ) {
-                        viewer.openFile( example2,
-                                         true,
-                                         true,
-                                         false );
-                    }
-                });
-                exampleItemsMenu.add( item2 );
-            }
+
         } else {
+
             for ( int iii = ( files.size() - 1 ); iii >= 0; --iii ) {
+
                 JMenuItem item = new JMenuItem( files.get( iii ).getName() );
                 final File actionFile = files.get( iii );
                 item.addActionListener( new ActionListener() {
@@ -473,7 +471,9 @@ public class XTCEViewerPreferences {
                     }
                 });
                 exampleItemsMenu.add( item );
+
             }
+
         }
 
     }
@@ -485,7 +485,7 @@ public class XTCEViewerPreferences {
      */
 
     public void clearRecentFilesList( JMenu recentItemsMenu ) {
-        putObject( "RecentFilesList", null );
+        putObject( "RecentFilesList", null ); // NOI18N
         recentItemsMenu.removeAll();
         save();
     }
@@ -499,7 +499,7 @@ public class XTCEViewerPreferences {
      */
 
     public List<String> getSavedXPathQueries() {
-        return getObject( "XPathQueries" );
+        return getObject( "XPathQueries" ); // NOI18N
     }
 
     /** Adds another XPath Query item to the saved cache with a limit of 25
@@ -511,7 +511,7 @@ public class XTCEViewerPreferences {
 
     public void addSavedXPathQuerySearch( String searchItem ) {
         addFindSearch( searchItem,
-                       "XPathQueries",
+                       "XPathQueries", // NOI18N
                        getSavedXPathQueries() );
     }
 
@@ -523,7 +523,7 @@ public class XTCEViewerPreferences {
 
     public void removeSavedXPathQuerySearch( String searchItem ) {
         removeFindSearch( searchItem,
-                          "XPathQueries",
+                          "XPathQueries", // NOI18N
                           getSavedXPathQueries() );
     }
 
@@ -536,7 +536,7 @@ public class XTCEViewerPreferences {
      */
 
     public List<String> getRecentFindParameterSearches() {
-        return getObject( "FindParameterSearches" );
+        return getObject( "FindParameterSearches" ); // NOI18N
     }
 
     /** Adds another Find Parameter Search Text item to the history with a
@@ -549,7 +549,7 @@ public class XTCEViewerPreferences {
 
     public void addFindParameterSearch( String searchItem ) {
         addFindSearch( searchItem,
-                       "FindParameterSearches",
+                       "FindParameterSearches", // NOI18N
                        getRecentFindParameterSearches() );
     }
 
@@ -562,7 +562,7 @@ public class XTCEViewerPreferences {
      */
 
     public List<String> getRecentFindContainerSearches() {
-        return getObject( "FindContainerSearches" );
+        return getObject( "FindContainerSearches" ); // NOI18N
     }
 
     /** Adds another Find Container Search Text item to the history with a
@@ -575,7 +575,7 @@ public class XTCEViewerPreferences {
 
     public void addFindContainerSearch( String searchItem ) {
         addFindSearch( searchItem,
-                       "FindContainerSearches",
+                       "FindContainerSearches", // NOI18N
                        getRecentFindContainerSearches() );
     }
 
@@ -588,7 +588,7 @@ public class XTCEViewerPreferences {
      */
 
     public List<String> getRecentFindTelecommandSearches() {
-        return getObject( "FindTelecommandSearches" );
+        return getObject( "FindTelecommandSearches" ); // NOI18N
     }
 
     /** Adds another Find Telecommand Search Text item to the history with a
@@ -601,7 +601,7 @@ public class XTCEViewerPreferences {
 
     public void addFindTelecommandSearch( String searchItem ) {
         addFindSearch( searchItem,
-                       "FindTelecommandSearches",
+                       "FindTelecommandSearches", // NOI18N
                        getRecentFindTelecommandSearches() );
     }
 
@@ -640,8 +640,8 @@ public class XTCEViewerPreferences {
      */
 
     public Locale getLanguagePreference() {
-        String language = prefs.get( "Language", "en" );
-        String country  = prefs.get( "Country",  "US" );
+        String language = prefs.get( "Language", "en" ); // NOI18N
+        String country  = prefs.get( "Country",  "US" ); // NOI18N
         return new Locale( language, country );
     }
 
@@ -652,8 +652,8 @@ public class XTCEViewerPreferences {
      */
 
     public void setLanguagePreference( Locale locale ) {
-        prefs.put( "Language", locale.getLanguage() );
-        prefs.put( "Country",  locale.getCountry() );
+        prefs.put( "Language", locale.getLanguage() ); // NOI18N
+        prefs.put( "Country",  locale.getCountry() ); // NOI18N
         save();
     }
 
@@ -688,14 +688,14 @@ public class XTCEViewerPreferences {
         } catch ( BackingStoreException ex ) {
             if ( ( viewer != null ) && ( preferenceSaveWarnings == true ) ) {
                 String message =
-                    XTCEFunctions.getText( "preference_save_error_message" ) +
+                    XTCEFunctions.getText( "preference_save_error_message" ) + // NOI18N
                     "\n\n" +
                     ex.getLocalizedMessage();
-                String[] options = { XTCEFunctions.getText( "general_dismiss_text" ),
-                                     XTCEFunctions.getText( "general_no_more_warning" ) };
+                String[] options = { XTCEFunctions.getText( "general_dismiss_text" ), // NOI18N
+                                     XTCEFunctions.getText( "general_no_more_warning" ) }; // NOI18N
                 int nnn = JOptionPane.showOptionDialog( viewer,
                                                         message,
-                                                        XTCEFunctions.getText( "general_warning" ),
+                                                        XTCEFunctions.getText( "general_warning" ), // NOI18N
                                                         JOptionPane.YES_NO_OPTION,
                                                         JOptionPane.WARNING_MESSAGE,
                                                         null,
@@ -706,7 +706,7 @@ public class XTCEViewerPreferences {
                 }
             } else if ( preferenceSaveWarnings == true ) {
                 System.out.println( XTCEFunctions.generalWarningPrefix() +
-                    XTCEFunctions.getText( "preference_save_log_message" ) +
+                    XTCEFunctions.getText( "preference_save_log_message" ) + // NOI18N
                     " " +
                     ex.getLocalizedMessage() );
                 preferenceSaveWarnings = false;
@@ -922,11 +922,11 @@ public class XTCEViewerPreferences {
             return bytesToObject( raw );
 
         } catch ( IOException ex ) {
-            System.out.println( "IOException: " + ex.getLocalizedMessage() );
+            System.out.println( "IOException: " + ex.getLocalizedMessage() ); // NOI18N
         } catch ( BackingStoreException ex ) {
-            System.out.println( "BackingStoreException: " + ex.getLocalizedMessage() );
+            System.out.println( "BackingStoreException: " + ex.getLocalizedMessage() ); // NOI18N
         } catch ( ClassNotFoundException ex ) {
-            System.out.println( "ClassNotFoundException: " + ex.getLocalizedMessage() );
+            System.out.println( "ClassNotFoundException: " + ex.getLocalizedMessage() ); // NOI18N
         }
 
         return new ArrayList<>();
@@ -963,9 +963,9 @@ public class XTCEViewerPreferences {
             }
 
         } catch ( IOException ex ) {
-            System.out.println( "IOException: " + ex.getLocalizedMessage() );
+            System.out.println( "IOException: " + ex.getLocalizedMessage() ); // NOI18N
         } catch ( BackingStoreException ex ) {
-            System.out.println( "BackingStoreException: " + ex.getLocalizedMessage() );
+            System.out.println( "BackingStoreException: " + ex.getLocalizedMessage() ); // NOI18N
         }
 
     }

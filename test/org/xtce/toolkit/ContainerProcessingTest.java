@@ -37,7 +37,7 @@ public class ContainerProcessingTest {
     public ContainerProcessingTest() {
 
         try {
-            loadDocument();
+            loadDocuments();
         } catch ( Throwable ex ) {
             Assert.fail( "Cannot start test: " + ex.getLocalizedMessage() );
         }
@@ -2218,6 +2218,306 @@ public class ContainerProcessingTest {
     }
 
     @Test
+    public void processContainerWithFixedSize() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        String containerName =
+            "/Payload_Diagnostic_Buffer/Diag_Formats/FMT1_HIST_REC_SNAPSHOT";
+
+        try {
+
+            XTCETMContainer container = db2_.getContainer( containerName );
+
+            XTCEContainerContentModel model =
+                db2_.processContainer( container, null, false );
+
+            long sizeInBytes = model.getTotalSize();
+
+            Assert.assertTrue( "Container size of " + containerName + " is " +
+                Long.toString( sizeInBytes ) + " but should be 104 bits",
+                sizeInBytes == 104 );
+
+            List<XTCEContainerContentEntry> entries = model.getContentList();
+
+            long items = 0;
+
+            for ( XTCEContainerContentEntry entry : entries ) {
+
+                switch (entry.getName()) {
+                    case "REC_TIME":
+                        ++items;
+                        checkEntry( entry, "64", "0", "", "", "", "" );
+                        break;
+                    case "FLEETID":
+                        ++items;
+                        checkEntry( entry, "6", "66", "", "", "", "" );
+                        break;
+                    case "CONTINUATION_FLAG":
+                        ++items;
+                        checkEntry( entry, "1", "72", "", "", "", "" );
+                        break;
+                    case "LAST_REC_FLAG":
+                        ++items;
+                        checkEntry( entry, "1", "73", "", "", "", "" );
+                        break;
+                    case "ANT_BEAMID":
+                        ++items;
+                        checkEntry( entry, "6", "74", "", "", "", "" );
+                        break;
+                    case "REUSE_TYPE":
+                        ++items;
+                        checkEntry( entry, "1", "80", "", "", "", "" );
+                        break;
+                    case "RF_TIMESLOT":
+                        ++items;
+                        checkEntry( entry, "2", "81", "", "", "", "" );
+                        break;
+                    case "RX_MODEM_PORTID":
+                        ++items;
+                        checkEntry( entry, "5", "86", "", "", "", "" );
+                        break;
+                    case "TX_MODEM_PORTID":
+                        ++items;
+                        checkEntry( entry, "5", "94", "", "", "", "" );
+                        break;
+                }
+
+            }
+
+            Assert.assertTrue( "Container parameter count of " + containerName + " is " +
+                Long.toString( items ) + " but should be 9 items",
+                items == 9 );
+
+            assertOnWarnings( model );
+
+        } catch ( Exception ex ) {
+            //ex.printStackTrace();
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+    }
+
+    @Test
+    public void processContainerWithFixedSizeIncluded() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        String containerName =
+            "/Payload_Diagnostic_Buffer/Diag_Formats/FORMAT1";
+
+        try {
+
+            XTCETMContainer container = db2_.getContainer( containerName );
+
+            XTCEContainerContentModel model =
+                db2_.processContainer( container, null, false );
+
+            long sizeInBytes = model.getTotalSize();
+
+            Assert.assertTrue( "Container size of " + containerName + " is " +
+                Long.toString( sizeInBytes ) + " but should be 136 bits",
+                sizeInBytes == 136 );
+
+            List<XTCEContainerContentEntry> entries = model.getContentList();
+
+            long items = 0;
+
+            for ( XTCEContainerContentEntry entry : entries ) {
+
+                switch (entry.getName()) {
+                    case "LOG_RECORD_LENGTH":
+                        ++items;
+                        checkEntry( entry, "16", "0", "", "", "", "" );
+                        break;
+                    case "FMT1_REC_COUNT":
+                        ++items;
+                        checkEntry( entry, "16", "0", "", "", "", "" );
+                        break;
+                    case "FSW_SUBSYS_NAME":
+                        ++items;
+                        checkEntry( entry, "8", "16", "", "", "", "" );
+                        break;
+                    case "FORMAT_ID":
+                        ++items;
+                        checkEntry( entry, "8", "24", "==FMT1{cal}", "", "", "" );
+                        break;
+                    case "REC_TIME":
+                        ++items;
+                        checkEntry( entry, "64", "32", "", "", "", "" );
+                        break;
+                    case "FLEETID":
+                        ++items;
+                        checkEntry( entry, "6", "98", "", "", "", "" );
+                        break;
+                    case "CONTINUATION_FLAG":
+                        ++items;
+                        checkEntry( entry, "1", "104", "", "", "", "" );
+                        break;
+                    case "LAST_REC_FLAG":
+                        ++items;
+                        checkEntry( entry, "1", "105", "", "", "", "" );
+                        break;
+                    case "ANT_BEAMID":
+                        ++items;
+                        checkEntry( entry, "6", "106", "", "", "", "" );
+                        break;
+                    case "REUSE_TYPE":
+                        ++items;
+                        checkEntry( entry, "1", "112", "", "", "", "" );
+                        break;
+                    case "RF_TIMESLOT":
+                        ++items;
+                        checkEntry( entry, "2", "113", "", "", "", "" );
+                        break;
+                    case "RX_MODEM_PORTID":
+                        ++items;
+                        checkEntry( entry, "5", "118", "", "", "", "" );
+                        break;
+                    case "TX_MODEM_PORTID":
+                        ++items;
+                        checkEntry( entry, "5", "126", "", "", "", "" );
+                        break;
+                }
+
+            }
+
+            Assert.assertTrue( "Container parameter count of " + containerName + " is " +
+                Long.toString( items ) + " but should be 13 items",
+                items == 13 );
+
+            for( String warning : model.getWarnings() ) {
+                if ( warning.contains( "overlaps item" ) == false ) {
+                    assertOnWarnings( model );
+                }
+            }
+
+        } catch ( Exception ex ) {
+            //ex.printStackTrace();
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+    }
+
+    @Test
+    public void processContainerWithFixedSizeIncludedMiddle() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        String containerName =
+            "/Payload_Diagnostic_Buffer/Diag_Formats/FORMAT2";
+
+        try {
+
+            XTCETMContainer container = db2_.getContainer( containerName );
+
+            XTCEContainerContentModel model =
+                db2_.processContainer( container, null, false );
+
+            long sizeInBytes = model.getTotalSize();
+
+            Assert.assertTrue( "Container size of " + containerName + " is " +
+                Long.toString( sizeInBytes ) + " but should be 184 bits",
+                sizeInBytes == 184 );
+
+            List<XTCEContainerContentEntry> entries = model.getContentList();
+
+            long items = 0;
+
+            for ( XTCEContainerContentEntry entry : entries ) {
+
+                switch (entry.getName()) {
+                    case "LOG_RECORD_LENGTH":
+                        ++items;
+                        checkEntry( entry, "16", "0", "", "", "", "" );
+                        break;
+                    case "FMT2_REC_COUNT":
+                        ++items;
+                        checkEntry( entry, "16", "0", "", "", "", "" );
+                        break;
+                    case "FSW_SUBSYS_NAME":
+                        ++items;
+                        checkEntry( entry, "8", "16", "", "", "", "" );
+                        break;
+                    case "FORMAT_ID":
+                        ++items;
+                        checkEntry( entry, "8", "24", "==FMT2{cal}", "", "", "" );
+                        break;
+                    case "REC_TIME":
+                        ++items;
+                        checkEntry( entry, "64", "32", "", "", "", "" );
+                        break;
+                    case "FLEETID":
+                        ++items;
+                        checkEntry( entry, "6", "98", "", "", "", "" );
+                        break;
+                    case "CONTINUATION_FLAG":
+                        ++items;
+                        checkEntry( entry, "1", "104", "", "", "", "" );
+                        break;
+                    case "LAST_REC_FLAG":
+                        ++items;
+                        checkEntry( entry, "1", "105", "", "", "", "" );
+                        break;
+                    case "ANT_BEAMID":
+                        ++items;
+                        checkEntry( entry, "6", "106", "", "", "", "" );
+                        break;
+                    case "REUSE_TYPE":
+                        ++items;
+                        checkEntry( entry, "1", "112", "", "", "", "" );
+                        break;
+                    case "RF_TIMESLOT":
+                        ++items;
+                        checkEntry( entry, "2", "113", "", "", "", "" );
+                        break;
+                    case "RX_MODEM_PORTID":
+                        ++items;
+                        checkEntry( entry, "5", "118", "", "", "", "" );
+                        break;
+                    case "TX_MODEM_PORTID":
+                        ++items;
+                        checkEntry( entry, "5", "126", "", "", "", "" );
+                        break;
+                    case "FMT2_EXTRA_DATA_16":
+                        ++items;
+                        checkEntry( entry, "16", "136", "", "", "", "" );
+                        break;
+                    case "FMT2_EXTRA_DATA_32":
+                        ++items;
+                        checkEntry( entry, "32", "152", "", "", "", "" );
+                        break;
+                }
+
+            }
+
+            Assert.assertTrue( "Container parameter count of " + containerName + " is " +
+                Long.toString( items ) + " but should be 15 items",
+                items == 15 );
+
+            for( String warning : model.getWarnings() ) {
+                if ( warning.contains( "overlaps item" ) == false ) {
+                    assertOnWarnings( model );
+                }
+            }
+
+        } catch ( Exception ex ) {
+            //ex.printStackTrace();
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+    }
+
+    @Test
     public void testContainmentCheck() {
 
         final String methodName =
@@ -2486,18 +2786,26 @@ public class ContainerProcessingTest {
 
     }
 
-    private void loadDocument() throws XTCEDatabaseException {
+    private void loadDocuments() throws XTCEDatabaseException {
 
-        System.out.println( "Loading the BoguSAT-2.xml demo database" );
+        String path = "src/org/xtce/toolkit/database/examples";
 
-        String file = "src/org/xtce/toolkit/database/examples/BogusSAT-2.xml";
+        File file1 = new File ( path + "/BogusSAT-2.xml" );
+        File file2 = new File ( path + "/Diagnostic_Log_Packets.xml" );
 
-        db_ = new XTCEDatabase( new File( file ), false, false, true );
+        System.out.println( "Loading the " + file1.getName() + " demo database" );
+
+        db_  = new XTCEDatabase( file1, false, false, true );
+
+        System.out.println( "Loading the " + file2.getName() + " demo database" );
+
+        db2_ = new XTCEDatabase( file2, false, false, true );
 
     }
 
     // Private Data Members
 
-    private XTCEDatabase  db_  = null;
+    private XTCEDatabase db_;
+    private XTCEDatabase db2_;
 
 }

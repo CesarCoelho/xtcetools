@@ -243,7 +243,7 @@ public class XTCEItemValue {
 
         clearWarnings();
 
-        if ( rawBitOrder_.equals( "mostSignificantBitFirst" ) == false ) {
+        if ( rawBitOrder_.equals( "mostSignificantBitFirst" ) == false ) { // NOI18N
             warn( itemName_ +
                   " " + // NOI18N
                   XTCEFunctions.getText( "error_encdec_rawbitorder" ) + // NOI18N
@@ -270,8 +270,7 @@ public class XTCEItemValue {
                 return numericValue.toString();
 
             case signMagnitude: {
-                int sizeInBits = rawSizeInBits_;
-                BigInteger halfValue = BigInteger.valueOf( 2 ).pow( sizeInBits - 1 );
+                BigInteger halfValue = BigInteger.valueOf( 2 ).pow( rawSizeInBits_ - 1 );
                 if ( numericValue.compareTo( halfValue ) >= 0 ) {
                     numericValue = numericValue.subtract( halfValue ).negate();
                 }
@@ -280,9 +279,8 @@ public class XTCEItemValue {
             }
 
             case twosComplement: {
-                int sizeInBits = rawSizeInBits_;
-                BigInteger halfValue = BigInteger.valueOf( 2 ).pow( sizeInBits - 1 );
-                BigInteger fullValue = BigInteger.valueOf( 2 ).pow( sizeInBits );
+                BigInteger halfValue = BigInteger.valueOf( 2 ).pow( rawSizeInBits_ - 1 );
+                BigInteger fullValue = BigInteger.valueOf( 2 ).pow( rawSizeInBits_ );
                 if ( numericValue.compareTo( halfValue ) >= 0 ) {
                     numericValue = numericValue.subtract( fullValue );
                 }
@@ -291,9 +289,8 @@ public class XTCEItemValue {
             }
 
             case onesComplement: {
-                int sizeInBits = rawSizeInBits_;
-                BigInteger halfValue = BigInteger.valueOf( 2 ).pow( sizeInBits - 1 );
-                BigInteger fullValue = BigInteger.valueOf( 2 ).pow( sizeInBits );
+                BigInteger halfValue = BigInteger.valueOf( 2 ).pow( rawSizeInBits_ - 1 );
+                BigInteger fullValue = BigInteger.valueOf( 2 ).pow( rawSizeInBits_ );
                 if ( numericValue.compareTo( halfValue ) >= 0 ) {
                     numericValue = numericValue.subtract( fullValue ).add( BigInteger.ONE );
                 }
@@ -301,13 +298,12 @@ public class XTCEItemValue {
                 return numericValue.toString();
             }
 
-            case IEEE754_1985: {
-                int sizeInBits = rawSizeInBits_;
-                if ( sizeInBits == 32 ) {
+            case IEEE754_1985:
+                if ( rawSizeInBits_ == 32 ) {
                     Float floatValue = Float.intBitsToFloat( numericValue.intValue() );
                     isFloatRawValueReasonable( floatValue );
                     return floatValue.toString();
-                } else if ( sizeInBits == 64 ) {
+                } else if ( rawSizeInBits_ == 64 ) {
                     Double doubleValue = Double.longBitsToDouble( numericValue.longValue() );
                     isFloatRawValueReasonable( doubleValue );
                     return doubleValue.toString();
@@ -324,15 +320,13 @@ public class XTCEItemValue {
                           ")" ); // NOI18N
                 }
                 break;
-            }
 
-            case MILSTD_1750A: {
-                int sizeInBits = rawSizeInBits_;
-                if ( ( sizeInBits == 16 ) ||
-                     ( sizeInBits == 32 ) ||
-                     ( sizeInBits == 48 ) ) {
+            case MILSTD_1750A:
+                if ( ( rawSizeInBits_ == 16 ) ||
+                     ( rawSizeInBits_ == 32 ) ||
+                     ( rawSizeInBits_ == 48 ) ) {
                     MilStd1750A floatValue = new MilStd1750A( numericValue,
-                                                              sizeInBits );
+                                                              rawSizeInBits_ );
                     isFloatRawValueReasonable( floatValue.toIeeeDouble() );
                     return floatValue.toString();
                 } else {
@@ -348,7 +342,6 @@ public class XTCEItemValue {
                           ")" ); // NOI18N
                 }
                 break;
-            }
 
             case binary:
                 return "0x" + numericValue.toString( 16 ); // NOI18N
@@ -1402,8 +1395,18 @@ public class XTCEItemValue {
 
         try {
 
-            BigDecimal decimalValue = new BigDecimal( calValue );
-            BigInteger retValue     = decimalValue.toBigIntegerExact();
+            // the idea here is to allow for a tolerance when doing the
+            // conversion of string to integer taking into account that float
+            // calculations can have noise.  if the decimal is substantive,
+            // then an exception is thrown from toBigIntegerExact().
+
+            BigInteger largerValue =
+                new BigDecimal( calValue ).movePointRight( 6 ).toBigInteger();
+
+            BigDecimal smallerValue =
+                new BigDecimal( largerValue.divide( new BigInteger( "1000000" ) ) );
+
+            BigInteger retValue = smallerValue.toBigIntegerExact();
 
             if ( validRange_.isValidRangeApplied() == true ) {
 

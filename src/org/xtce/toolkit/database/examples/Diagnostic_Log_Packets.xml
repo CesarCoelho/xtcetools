@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+Copyright 2017 David Overeem (dovereem@cox.net)
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<SpaceSystem name="Payload_Diagnostic_Buffer" xmlns="http://www.omg.org/space/xtce" xmlns:xtce="http://www.omg.org/space/xtce" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" shortDescription="This Space System contains message definitions in the payload diagnostic log buffer" xsi:schemaLocation="http://www.omg.org/space/xtce SpaceSystemV1.2-27Feb2014-mods.xsd">
+	<LongDescription>This buffer on the satellite is not directly telemetered, rather it is downloaded and processed separately.  This demo SpaceSystem illustrates how a Stream can be defined for a non-telemetered buffer download (or upload) and be processed by software.  Although only 1 format is defined in the inheritance, multiple formats can be defined.</LongDescription>
+	<TelemetryMetaData>
+		<ParameterTypeSet>
+			<IntegerParameterType name="LOG_RECORD_LENGTH_TYPE" shortDescription="The size of the log record in bytes up to 1024 where 4 bytes is reserved for the record header">
+				<UnitSet>
+					<Unit description="length">bytes</Unit>
+				</UnitSet>
+				<IntegerDataEncoding encoding="unsigned" sizeInBits="16"/>
+                                <!-- 1 record to 10 records -->
+				<ValidRange minInclusive="17" maxInclusive="134"/>
+			</IntegerParameterType>
+			<EnumeratedParameterType name="FSW_SUBSYS_NAME_TYPE" shortDescription="Flight software internal subsystem name code">
+				<UnitSet/>
+				<IntegerDataEncoding encoding="unsigned" sizeInBits="8"/>
+				<EnumerationList>
+					<Enumeration label="COREINF" value="0" shortDescription="Common Infrastructure Software"/>
+					<Enumeration label="ANTCTRL" value="1" shortDescription="Payload Antenna Control Software"/>
+					<Enumeration label="TCMGMNT" value="2" shortDescription="Telecommand Management Software"/>
+					<Enumeration label="TIME" value="3" shortDescription="Time Keeping Software"/>
+					<Enumeration label="TMMGMNT" value="4" shortDescription="Telemetry Management Software"/>
+					<Enumeration label="INTERFACE" value="5" shortDescription="Bus and Payload Hardware Interface Software"/>
+					<Enumeration label="MW1553" value="6" shortDescription="1553 Communications Interface Software"/>
+				</EnumerationList>
+			</EnumeratedParameterType>
+			<EnumeratedParameterType name="DIAG_LOG_FORMAT_TYPE" shortDescription="Format of the diagnostic log record in the downloaded buffer">
+				<UnitSet/>
+				<IntegerDataEncoding encoding="unsigned" sizeInBits="8"/>
+				<EnumerationList>
+					<Enumeration value="0" label="FMT1"/>
+					<Enumeration value="1" label="FMT2"/>
+				</EnumerationList>
+			</EnumeratedParameterType>
+			<IntegerParameterType name="Extra_Data_16_TYPE" shortDescription="Some additional data for the diagnostic record">
+				<UnitSet/>
+				<IntegerDataEncoding encoding="unsigned" sizeInBits="16"/>
+			</IntegerParameterType>
+			<IntegerParameterType name="Extra_Data_32_TYPE" shortDescription="Some additional data for the diagnostic record">
+				<UnitSet/>
+				<IntegerDataEncoding encoding="unsigned" sizeInBits="32"/>
+			</IntegerParameterType>
+		</ParameterTypeSet>
+		<ParameterSet>
+			<Parameter name="LOG_RECORD_LENGTH" parameterTypeRef="LOG_RECORD_LENGTH_TYPE">
+				<ParameterProperties dataSource="telemetered" readOnly="true"/>
+			</Parameter>
+			<Parameter name="FSW_SUBSYS_NAME" parameterTypeRef="FSW_SUBSYS_NAME_TYPE">
+				<ParameterProperties dataSource="telemetered" readOnly="true"/>
+			</Parameter>
+			<Parameter name="FORMAT_ID" parameterTypeRef="DIAG_LOG_FORMAT_TYPE">
+				<ParameterProperties dataSource="telemetered" readOnly="true"/>
+			</Parameter>
+		</ParameterSet>
+		<ContainerSet>
+			<SequenceContainer abstract="true" name="LOG_RECORD_HEADER">
+				<LongDescription>This is the header definition for the TRD records that appear in the ASW TSB download files.</LongDescription>
+				<!-- BinaryEncoding>
+					<ErrorDetectCorrect>
+						<CRC-CCITT>
+						<CRC reference="start" bitsFromReference="0" width="16" reflectData="false" reflectRemainder="false">
+							<Polynomial>
+								<0x1021>
+								<Term coefficient="1" exponent="16"/>
+								<Term coefficient="1" exponent="12"/>
+								<Term coefficient="1" exponent="5"/>
+								<Term coefficient="1" exponent="0"/>
+							</Polynomial>
+							<InitRemainder>ffff</InitRemainder>
+							<FinalXOR>0000</FinalXOR>
+						</CRC>
+					</ErrorDetectCorrect>
+				</BinaryEncoding -->
+				<EntryList>
+					<ParameterRefEntry parameterRef="LOG_RECORD_LENGTH"/>
+					<ParameterRefEntry parameterRef="FSW_SUBSYS_NAME"/>
+					<ParameterRefEntry parameterRef="FORMAT_ID"/>
+				</EntryList>
+			</SequenceContainer>
+		</ContainerSet>
+		<StreamSet>
+			<VariableFrameStream name="DIAG_LOG">
+				<ContainerRef containerRef="LOG_RECORD_HEADER"/>
+				<SyncStrategy>
+					<Flag/>
+				</SyncStrategy>
+			</VariableFrameStream>
+		</StreamSet>
+	</TelemetryMetaData>
+	<SpaceSystem name="Diag_Formats" shortDescription="This contains the definitions for the diagnostic log formats that can exist in thedownloaded records.">
+		<LongDescription>Separating the diagnostic formats into this SpaceSystem separates the header definition of the diagnistic buffer formats in the download from the individual record definitions.  It also illustrates the use of relative parameter references.</LongDescription>
+		<TelemetryMetaData>
+			<ParameterTypeSet>
+                            <AbsoluteTimeParameterType name="POSIXTimeType" shortDescription="POSIX UNIX Time 'timeval' which is 2 unsigned 32 bit integers">
+				<Encoding>
+					<IntegerDataEncoding sizeInBits="64"/>
+				</Encoding>
+				<ReferenceTime>
+					<Epoch>1970-01-01</Epoch>
+				</ReferenceTime>
+                            </AbsoluteTimeParameterType>
+				<IntegerParameterType name="FMT1_REC_COUNT_TYPE" shortDescription="Count of the number of records in the format 1 buffer">
+					<UnitSet>
+						<Unit description="counts">records</Unit>
+					</UnitSet>
+					<IntegerDataEncoding encoding="unsigned" sizeInBits="16">
+						<DefaultCalibrator>
+							<PolynomialCalibrator>
+								<Term coefficient="-4" exponent="0"/>
+								<Term coefficient="0.07692307692308" exponent="1"/>
+							</PolynomialCalibrator>
+						</DefaultCalibrator>
+					</IntegerDataEncoding>
+				</IntegerParameterType>
+				<IntegerParameterType name="FMT2_REC_COUNT_TYPE" shortDescription="Count of the number of records in the format 2 buffer">
+					<UnitSet>
+						<Unit description="counts">records</Unit>
+					</UnitSet>
+					<IntegerDataEncoding encoding="unsigned" sizeInBits="16">
+						<DefaultCalibrator>
+							<PolynomialCalibrator>
+								<Term coefficient="-4" exponent="0"/>
+								<Term coefficient="0.111111" exponent="1"/>
+							</PolynomialCalibrator>
+						</DefaultCalibrator>
+					</IntegerDataEncoding>
+				</IntegerParameterType>
+				<IntegerParameterType name="FLEETID_TYPE" shortDescription="Fleet network host id number">
+					<UnitSet/>
+					<IntegerDataEncoding encoding="unsigned" sizeInBits="6"/>
+					<ValidRange minInclusive="1" maxInclusive="32"/>
+				</IntegerParameterType>
+				<BooleanParameterType name="BITFLAG_TYPE" zeroStringValue="False" oneStringValue="True">
+					<UnitSet/>
+					<IntegerDataEncoding encoding="unsigned" sizeInBits="1"/>
+				</BooleanParameterType>
+				<IntegerParameterType name="ANT_BEAMID_TYPE" shortDescription="Antenna beam assignment (1-10)">
+					<UnitSet/>
+					<IntegerDataEncoding encoding="unsigned" sizeInBits="6"/>
+					<ValidRange minInclusive="1" maxInclusive="10"/>
+				</IntegerParameterType>
+				<BooleanParameterType name="REUSE_TYPE_TYPE" zeroStringValue="BASICVISIT" oneStringValue="WILDCARD" shortDescription="Type of the reuse unit being added or deleted">
+					<UnitSet/>
+					<IntegerDataEncoding encoding="unsigned" sizeInBits="1"/>
+				</BooleanParameterType>
+				<IntegerParameterType name="RF_TIMESLOT_TYPE" shortDescription="Contains the TX/RX timeslot (1-4 calibrated, 0-3 raw)">
+					<UnitSet/>
+					<IntegerDataEncoding encoding="unsigned" sizeInBits="2">
+						<DefaultCalibrator>
+							<PolynomialCalibrator>
+								<Term coefficient="1" exponent="0"/>
+								<Term coefficient="1" exponent="1"/>
+							</PolynomialCalibrator>
+						</DefaultCalibrator>
+					</IntegerDataEncoding>
+				</IntegerParameterType>
+				<IntegerParameterType name="MODEM_PORTID_TYPE" shortDescription="Contains the modem port id (1-12 calibrated, 0-11 raw)">
+					<UnitSet/>
+					<IntegerDataEncoding encoding="unsigned" sizeInBits="5">
+						<DefaultCalibrator>
+							<PolynomialCalibrator>
+								<Term coefficient="1" exponent="0"/>
+								<Term coefficient="1" exponent="1"/>
+							</PolynomialCalibrator>
+						</DefaultCalibrator>
+					</IntegerDataEncoding>
+					<ValidRange minInclusive="0" maxInclusive="11"/>
+				</IntegerParameterType>
+			</ParameterTypeSet>
+			<ParameterSet>
+				<Parameter name="FMT1_REC_COUNT" parameterTypeRef="FMT1_REC_COUNT_TYPE">
+					<ParameterProperties dataSource="telemetered" readOnly="true"/>
+				</Parameter>
+				<Parameter name="FMT2_REC_COUNT" parameterTypeRef="FMT2_REC_COUNT_TYPE">
+					<ParameterProperties dataSource="telemetered" readOnly="true"/>
+				</Parameter>
+				<Parameter name="REC_TIME" parameterTypeRef="POSIXTimeType">
+					<ParameterProperties dataSource="telemetered" readOnly="true"/>
+				</Parameter>
+				<Parameter name="FLEETID" parameterTypeRef="FLEETID_TYPE">
+					<ParameterProperties dataSource="telemetered" readOnly="true"/>
+				</Parameter>
+				<Parameter name="CONTINUATION_FLAG" parameterTypeRef="BITFLAG_TYPE" shortDescription="Flag to indicate if this record is the first or middle measurement">
+					<ParameterProperties dataSource="telemetered" readOnly="true"/>
+				</Parameter>
+				<Parameter name="LAST_REC_FLAG" parameterTypeRef="BITFLAG_TYPE" shortDescription="Flag to indicate if this record is the last measurement">
+					<ParameterProperties dataSource="telemetered" readOnly="true"/>
+				</Parameter>
+				<Parameter name="ANT_BEAMID" parameterTypeRef="ANT_BEAMID_TYPE">
+					<ParameterProperties dataSource="telemetered" readOnly="true"/>
+				</Parameter>
+				<Parameter name="REUSE_TYPE" parameterTypeRef="REUSE_TYPE_TYPE">
+					<ParameterProperties dataSource="telemetered" readOnly="true"/>
+				</Parameter>
+				<Parameter name="RF_TIMESLOT" parameterTypeRef="RF_TIMESLOT_TYPE">
+					<ParameterProperties dataSource="telemetered" readOnly="true"/>
+				</Parameter>
+				<Parameter name="RX_MODEM_PORTID" parameterTypeRef="MODEM_PORTID_TYPE">
+					<ParameterProperties dataSource="telemetered" readOnly="true"/>
+				</Parameter>
+				<Parameter name="TX_MODEM_PORTID" parameterTypeRef="MODEM_PORTID_TYPE">
+					<ParameterProperties dataSource="telemetered" readOnly="true"/>
+				</Parameter>
+				<Parameter name="FMT2_EXTRA_DATA_16" parameterTypeRef="../Extra_Data_16_TYPE">
+					<ParameterProperties dataSource="telemetered" readOnly="true"/>
+				</Parameter>
+				<Parameter name="FMT2_EXTRA_DATA_32" parameterTypeRef="../Extra_Data_32_TYPE">
+					<ParameterProperties dataSource="telemetered" readOnly="true"/>
+				</Parameter>
+			</ParameterSet>
+			<ContainerSet>
+				<SequenceContainer name="FORMAT1" shortDescription="Format 1 Record List">
+					<LongDescription>This example shows how format 1 buffer downloads can have a variable number of records.  The header does not contain a count, rather it contains a length.  The number of records is computed by using a parameter overlaid on top of the length and then calibrated using a polynomial calibator to get the record count for the RepeatEntry element in this container.</LongDescription>
+					<EntryList>
+						<ParameterRefEntry parameterRef="FMT1_REC_COUNT">
+							<LocationInContainerInBits referenceLocation="containerStart">
+								<FixedValue>0</FixedValue>
+							</LocationInContainerInBits>
+						</ParameterRefEntry>
+						<ContainerRefEntry containerRef="FMT1_HIST_REC_SNAPSHOT">
+							<LocationInContainerInBits referenceLocation="containerStart">
+								<FixedValue>32</FixedValue>
+							</LocationInContainerInBits>
+							<RepeatEntry>
+								<Count>
+									<DynamicValue>
+										<ParameterInstanceRef parameterRef="FMT1_REC_COUNT"/>
+									</DynamicValue>
+								</Count>
+							</RepeatEntry>
+						</ContainerRefEntry>
+					</EntryList>
+					<BaseContainer containerRef="../LOG_RECORD_HEADER">
+						<RestrictionCriteria>
+							<Comparison parameterRef="FORMAT_ID" value="FMT1"/>
+						</RestrictionCriteria>
+					</BaseContainer>
+				</SequenceContainer>
+				<SequenceContainer name="FORMAT2" shortDescription="Format 2 Record List">
+					<LongDescription>This example shows how format 2 buffer downloads can have a variable number of records.  The header does not contain a count, rather it contains a length.  The number of records is computed by using a parameter overlaid on top of the length and then calibrated using a polynomial calibator to get the record count for the RepeatEntry element in this container.</LongDescription>
+					<EntryList>
+						<ParameterRefEntry parameterRef="FMT2_REC_COUNT">
+							<LocationInContainerInBits referenceLocation="containerStart">
+								<FixedValue>0</FixedValue>
+							</LocationInContainerInBits>
+						</ParameterRefEntry>
+						<ContainerRefEntry containerRef="FMT1_HIST_REC_SNAPSHOT">
+							<LocationInContainerInBits referenceLocation="containerStart">
+								<FixedValue>32</FixedValue>
+							</LocationInContainerInBits>
+							<RepeatEntry>
+								<Count>
+									<DynamicValue>
+										<ParameterInstanceRef parameterRef="FMT2_REC_COUNT"/>
+									</DynamicValue>
+								</Count>
+							</RepeatEntry>
+						</ContainerRefEntry>
+						<ParameterRefEntry parameterRef="FMT2_EXTRA_DATA_16"/>
+						<ParameterRefEntry parameterRef="FMT2_EXTRA_DATA_32"/>
+					</EntryList>
+					<BaseContainer containerRef="../LOG_RECORD_HEADER">
+						<RestrictionCriteria>
+							<Comparison parameterRef="/Payload_Diagnostic_Buffer/FORMAT_ID" value="FMT2"/>
+						</RestrictionCriteria>
+					</BaseContainer>
+				</SequenceContainer>
+				<SequenceContainer name="FMT1_HIST_REC_SNAPSHOT" shortDescription="History Record Entry">
+					<LongDescription>This record definition is completely made up and would make no physical sense to an engineer.  This container demonstrates the capability to set a fixed size for the container.  This feature should only be used if absolutely necessary.  Generally, automatic size determination based on the container content should be preferred.</LongDescription>
+					<BinaryEncoding>
+						<SizeInBits>
+							<FixedValue>104</FixedValue>
+						</SizeInBits>
+					</BinaryEncoding>
+					<EntryList>
+						<ParameterRefEntry parameterRef="REC_TIME"/>
+						<ParameterRefEntry parameterRef="FLEETID">
+							<LocationInContainerInBits referenceLocation="previousEntry">
+								<FixedValue>2</FixedValue>
+							</LocationInContainerInBits>
+						</ParameterRefEntry>
+						<ParameterRefEntry parameterRef="CONTINUATION_FLAG"/>
+						<ParameterRefEntry parameterRef="LAST_REC_FLAG"/>
+						<ParameterRefEntry parameterRef="ANT_BEAMID"/>
+						<ParameterRefEntry parameterRef="REUSE_TYPE"/>
+						<ParameterRefEntry parameterRef="RF_TIMESLOT"/>
+						<ParameterRefEntry parameterRef="RX_MODEM_PORTID">
+							<LocationInContainerInBits referenceLocation="previousEntry">
+								<FixedValue>3</FixedValue>
+							</LocationInContainerInBits>
+						</ParameterRefEntry>
+						<ParameterRefEntry parameterRef="TX_MODEM_PORTID">
+							<LocationInContainerInBits referenceLocation="previousEntry">
+								<FixedValue>3</FixedValue>
+							</LocationInContainerInBits>
+						</ParameterRefEntry>
+					</EntryList>
+				</SequenceContainer>
+			</ContainerSet>
+		</TelemetryMetaData>
+	</SpaceSystem>
+</SpaceSystem>
