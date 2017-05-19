@@ -630,7 +630,7 @@ public class ParameterTest {
         int expected;
 
         params = db_.getTelemetryParameters();
-        expected = 113;
+        expected = 141;
         if ( params.size() != expected ) {
             Assert.fail( "Should have seen " +
                          Integer.toString( expected ) +
@@ -648,7 +648,7 @@ public class ParameterTest {
                          " instead" );
         }
         params = db_.getParameters();
-        expected = 114;
+        expected = 142;
         if ( params.size() != expected ) {
             Assert.fail( "Should have seen " +
                          Integer.toString( expected ) +

@@ -200,12 +200,30 @@ public class ExporterTest {
             Assert.assertTrue( "Should have 0 string response for parameters",
                                msgs.isEmpty() );
 
+            if ( msgs.isEmpty() == false ) {
+                for( String msg : msgs ) {
+                    System.out.println( "Warning Output: " + msg );
+                }
+            }
+
             msgs = e2.exportContainers( cExportFile );
+
+            if ( msgs.isEmpty() == false ) {
+                for( String msg : msgs ) {
+                    System.out.println( "Warning Output: " + msg );
+                }
+            }
 
             Assert.assertTrue( "Should have 0 string response for containers",
                                msgs.isEmpty() );
 
             msgs = e2.exportTelecommands( tExportFile );
+
+            if ( msgs.isEmpty() == false ) {
+                for( String msg : msgs ) {
+                    System.out.println( "Warning Output: " + msg );
+                }
+            }
 
             Assert.assertTrue( "Should have 0 string response for telecommands",
                                msgs.isEmpty() );
@@ -330,15 +348,33 @@ public class ExporterTest {
 
             msgs = e2.exportParameters( pExportFile );
 
+            if ( msgs.isEmpty() == false ) {
+                for( String msg : msgs ) {
+                    System.out.println( "Warning Output: " + msg );
+                }
+            }
+
             Assert.assertTrue( "Should have 0 string response for parameters",
                                msgs.isEmpty() );
 
             msgs = e2.exportContainers( cExportFile );
 
+            if ( msgs.isEmpty() == false ) {
+                for( String msg : msgs ) {
+                    System.out.println( "Warning Output: " + msg );
+                }
+            }
+
             Assert.assertTrue( "Should have 0 string response for containers",
                                msgs.isEmpty() );
 
             msgs = e2.exportTelecommands( tExportFile );
+
+            if ( msgs.isEmpty() == false ) {
+                for( String msg : msgs ) {
+                    System.out.println( "Warning Output: " + msg );
+                }
+            }
 
             Assert.assertTrue( "Should have 0 string response for telecommands",
                                msgs.isEmpty() );

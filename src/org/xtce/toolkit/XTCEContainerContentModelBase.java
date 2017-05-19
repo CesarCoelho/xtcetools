@@ -1368,15 +1368,25 @@ public abstract class XTCEContainerContentModelBase {
         // them back to the content list at the end.
 
         for ( XTCEContainerContentEntry entry : endList ) {
+
             String sb      = entry.getStartBit().replaceFirst( "E", "" ); // NOI18N
             long   offset  = Long.parseLong( sb );
             long   rawsize = Long.parseLong( entry.getRawSizeInBits() );
+
             entry.setStartBit( containerEndBit - offset );
+
             if ( currentStartBit.get() < ( containerEndBit - offset + rawsize ) ) {
                 currentStartBit.set( containerEndBit - offset + rawsize );
+                // below might be an issue for multiple containerEnd entries
+                // and might need a temporary variable
+                if ( containerEndBit < currentStartBit.get() ) {
+                    containerEndBit = currentStartBit.get();
+                }
             }
+
             //System.out.println( "Set next start bit for end item " + Long.toString( currentStartBit.get() ) );
             contentList_.add( entry );
+
         }
 
         // this does nothing unless a max size was defined

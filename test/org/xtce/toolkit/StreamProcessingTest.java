@@ -78,7 +78,7 @@ public class StreamProcessingTest {
 
             List<XTCETMStream> streams = db_.getStreams();
 
-            long expected = 6;
+            long expected = 7;
 
             Assert.assertTrue( "Should have found " +
                 Long.toString( expected ) + " streams, but found instead " +
@@ -99,6 +99,8 @@ public class StreamProcessingTest {
                 "/BogusSAT/LOG_MSGS/LOG_DYNAMIC_MEMORY";
             String root6 =
                 "/BogusSAT/LOG_MSGS/LOG_ALL";
+            String root7 =
+                "/BogusSAT/SC001/Onboard_Processor_Config/Processor_Config_Table";
 
             for ( XTCETMStream stream : streams ) {
                 if ( stream.getName().equals( "CALTABLE" ) == true ) {
@@ -124,6 +126,10 @@ public class StreamProcessingTest {
                 } else if ( stream.getName().equals( "LOG_ALL" ) == true ) {
                     Assert.assertTrue( "Stream LOG_ALL should have root " + root6,
                                        stream.getStreamRootContainer().getFullPath().equals( root6 ) );
+                    ++found;
+                } else if ( stream.getName().equals( "CFGTABLE" ) == true ) {
+                    Assert.assertTrue( "Stream CFGTABLE should have root " + root7,
+                                       stream.getStreamRootContainer().getFullPath().equals( root7 ) );
                     ++found;
                 }
             }
