@@ -15,7 +15,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<SpaceSystem name="Payload_Diagnostic_Buffer" xmlns="http://www.omg.org/space/xtce" xmlns:xtce="http://www.omg.org/space/xtce" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" shortDescription="This Space System contains message definitions in the payload diagnostic log buffer" xsi:schemaLocation="http://www.omg.org/space/xtce SpaceSystemV1.2-27Feb2014-mods.xsd">
+<SpaceSystem name="Payload_Diagnostic_Buffer" xmlns="http://www.omg.org/space/xtce" xmlns:xtce="http://www.omg.org/space/xtce" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" shortDescription="This Space System contains message definitions in the payload diagnostic log buffer" xsi:schemaLocation="http://www.omg.org/space/xtce ../../../../omg/space/xtce/schema/SpaceSystemV1.2-27Feb2014-mods.xsd">
 	<LongDescription>This buffer on the satellite is not directly telemetered, rather it is downloaded and processed separately.  This demo SpaceSystem illustrates how a Stream can be defined for a non-telemetered buffer download (or upload) and be processed by software.  Although only 1 format is defined in the inheritance, multiple formats can be defined.</LongDescription>
 	<TelemetryMetaData>
 		<ParameterTypeSet>
