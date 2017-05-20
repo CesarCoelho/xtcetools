@@ -1043,8 +1043,9 @@ public abstract class XTCEContainerContentModelBase {
 
     protected void applyBinaryValue( XTCEContainerContentEntry entry ) {
 
-        if ( ( binaryValues_                 == null ) ||
-             ( entry.getStartBit().isEmpty() == true ) ) {
+        if ( ( binaryValues_                         == null ) ||
+             ( entry.getStartBit().isEmpty()         == true ) ||
+             ( entry.getStartBit().startsWith( "E" ) == true ) ) { // NOI18N
             return;
         }
 
@@ -1386,6 +1387,10 @@ public abstract class XTCEContainerContentModelBase {
 
             //System.out.println( "Set next start bit for end item " + Long.toString( currentStartBit.get() ) );
             contentList_.add( entry );
+
+            // these were unable to apply during the rest of the container
+            // processing because the actual start bit was not known until now
+            applyBinaryValue( entry );
 
         }
 

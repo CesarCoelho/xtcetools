@@ -1016,6 +1016,487 @@ public class ContainerDecodingTest {
 
     }
 
+    @Test
+    public void processContainerWithParameterAtEndInheritance1() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        String containerName = "/BogusSAT/SC001/Onboard_Processor_Config/Processor_1_Config_Table";
+
+        String binFilename =
+            "test/org/xtce/toolkit/test/Container-Proc_1_Cfg_Table.bin";
+
+        try {
+
+            XTCETMContainer container = db_.getContainer( containerName );
+
+            XTCEContainerContentModel model =
+                db_.processContainer( container,
+                                      readBytesFromFile( binFilename ) );
+
+            long sizeInBytes = model.getTotalSize();
+
+            Assert.assertTrue( "Container size of " + containerName + " is " +
+                Long.toString( sizeInBytes ) + " but should be 180 bits",
+                sizeInBytes == 180 );
+
+            List<XTCEContainerContentEntry> entries = model.getContentList();
+
+            long items = 0;
+
+            for ( XTCEContainerContentEntry entry : entries ) {
+
+                switch (entry.getName()) {
+                    case "Table_Processor_ID":
+                        ++items;
+                        checkEntry( entry, "8", "0", "==PROCESSOR1{cal}", "NOT_YET_SET", "", "" );
+                        break;
+                    case "Config_Log_Levels":
+                        ++items;
+                        checkEntry( entry, "", "", "", "", "", "" );
+                        break;
+                    case "Config_Log_Levels.COREINF":
+                        ++items;
+                        checkEntry( entry, "4", "8", "==info{cal}", "warning", "", "" );
+                        break;
+                    case "Config_Log_Levels.ANTCTRL":
+                        ++items;
+                        checkEntry( entry, "4", "12", "==debug{cal}", "warning", "", "" );
+                        break;
+                    case "Config_Log_Levels.TCMGMNT":
+                        ++items;
+                        checkEntry( entry, "4", "16", "==info{cal}", "warning", "", "" );
+                        break;
+                    case "Config_Log_Levels.TIME":
+                        ++items;
+                        checkEntry( entry, "4", "20", "==warning{cal}", "warning", "", "" );
+                        break;
+                    case "Config_Log_Levels.TMMGMNT":
+                        ++items;
+                        checkEntry( entry, "4", "24", "==error{cal}", "warning", "", "" );
+                        break;
+                    case "Config_Log_Levels.INTERFACE":
+                        ++items;
+                        checkEntry( entry, "4", "28", "==warning{cal}", "warning", "", "" );
+                        break;
+                    case "Config_Log_Levels.MW1553":
+                        ++items;
+                        checkEntry( entry, "4", "32", "==info{cal}", "warning", "", "" );
+                        break;
+                    case "Config_Watchdog":
+                        ++items;
+                        checkEntry( entry, "16", "44", "==30{cal}", "5", "", "" );
+                        break;
+                    case "Config_PROM_Access":
+                        ++items;
+                        checkEntry( entry, "", "", "", "", "", "" );
+                        break;
+                    case "Config_PROM_Access.Read":
+                        ++items;
+                        checkEntry( entry, "16", "60", "==1000{cal}", "100", "", "" );
+                        break;
+                    case "Config_PROM_Access.Write":
+                        ++items;
+                        checkEntry( entry, "16", "76", "==99{cal}", "100", "", "" );
+                        break;
+                    case "Config_PROM_Access.Erase":
+                        ++items;
+                        checkEntry( entry, "16", "92", "==250{cal}", "100", "", "" );
+                        break;
+                    case "Config_PROM_Access.Lock":
+                        ++items;
+                        checkEntry( entry, "16", "108", "==31000{cal}", "100", "", "" );
+                        break;
+                    case "Config_Self_Test":
+                        ++items;
+                        checkEntry( entry, "", "", "", "", "", "" );
+                        break;
+                    case "Config_Self_Test.pad_2bits":
+                        ++items;
+                        checkEntry( entry, "2", "124", "==0x0{cal}", "0x00", "", "" );
+                        break;
+                    case "Config_Self_Test.Antenna":
+                        ++items;
+                        checkEntry( entry, "1", "126", "==ENABLED{cal}", "ENABLED", "", "" );
+                        break;
+                    case "Config_Self_Test.CPU":
+                        ++items;
+                        checkEntry( entry, "1", "127", "==ENABLED{cal}", "ENABLED", "", "" );
+                        break;
+                    case "Config_Self_Test.RAM":
+                        ++items;
+                        checkEntry( entry, "1", "128", "==DISABLED{cal}", "ENABLED", "", "" );
+                        break;
+                    case "Config_Self_Test.EEPROM":
+                        ++items;
+                        checkEntry( entry, "1", "129", "==DISABLED{cal}", "ENABLED", "", "" );
+                        break;
+                    case "Config_Self_Test.Flash":
+                        ++items;
+                        checkEntry( entry, "1", "130", "==ENABLED{cal}", "ENABLED", "", "" );
+                        break;
+                    case "Config_Self_Test.Modem":
+                        ++items;
+                        checkEntry( entry, "1", "131", "==ENABLED{cal}", "ENABLED", "", "" );
+                        break;
+                    case "Config_Clock_ID":
+                        ++items;
+                        checkEntry( entry, "8", "132", "==PRIMARY{cal}", "PRIMARY", "", "" );
+                        break;
+                    case "Config_Ant_Power_Level":
+                        ++items;
+                        checkEntry( entry, "16", "140", "==5.8{cal}", "-0.6", "", "" );
+                        break;
+                    case "Config_Payload_IF_ID":
+                        ++items;
+                        checkEntry( entry, "4", "156", "==LINK1{cal}", "LINK1", "", "" );
+                        break;
+                    case "Config_Payload_Perf":
+                        ++items;
+                        checkEntry( entry, "4", "160", "==NORMAL{cal}", "NORMAL", "", "" );
+                        break;
+                    case "Table_CRC_Value":
+                        ++items;
+                        checkEntry( entry, "16", "164", "==0xabcd{cal}", "", "", "" );
+                        break;
+                }
+
+            }
+
+            Assert.assertTrue( "Container parameter count of " + containerName + " is " +
+                Long.toString( items ) + " but should be 28 items",
+                items == 28 );
+
+            assertOnWarnings( model );
+
+        } catch ( Exception ex ) {
+            //ex.printStackTrace();
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+    }
+
+    @Test
+    public void processContainerWithParameterAtEndInheritance2() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        String containerName = "/BogusSAT/SC001/Onboard_Processor_Config/Processor_2_Config_Table";
+
+        String binFilename =
+            "test/org/xtce/toolkit/test/Container-Proc_2_Cfg_Table.bin";
+
+        try {
+
+            XTCETMContainer container = db_.getContainer( containerName );
+
+            XTCEContainerContentModel model =
+                db_.processContainer( container,
+                                      readBytesFromFile( binFilename ) );
+
+            long sizeInBytes = model.getTotalSize();
+
+            Assert.assertTrue( "Container size of " + containerName + " is " +
+                Long.toString( sizeInBytes ) + " but should be 172 bits",
+                sizeInBytes == 172 );
+
+            List<XTCEContainerContentEntry> entries = model.getContentList();
+
+            long items = 0;
+
+            for ( XTCEContainerContentEntry entry : entries ) {
+
+                switch (entry.getName()) {
+                    case "Table_Processor_ID":
+                        ++items;
+                        checkEntry( entry, "8", "0", "==PROCESSOR2{cal}", "NOT_YET_SET", "", "" );
+                        break;
+                    case "Config_Log_Levels":
+                        ++items;
+                        checkEntry( entry, "", "", "", "", "", "" );
+                        break;
+                    case "Config_Log_Levels.COREINF":
+                        ++items;
+                        checkEntry( entry, "4", "8", "==info{cal}", "warning", "", "" );
+                        break;
+                    case "Config_Log_Levels.ANTCTRL":
+                        ++items;
+                        checkEntry( entry, "4", "12", "==debug{cal}", "warning", "", "" );
+                        break;
+                    case "Config_Log_Levels.TCMGMNT":
+                        ++items;
+                        checkEntry( entry, "4", "16", "==info{cal}", "warning", "", "" );
+                        break;
+                    case "Config_Log_Levels.TIME":
+                        ++items;
+                        checkEntry( entry, "4", "20", "==warning{cal}", "warning", "", "" );
+                        break;
+                    case "Config_Log_Levels.TMMGMNT":
+                        ++items;
+                        checkEntry( entry, "4", "24", "==error{cal}", "warning", "", "" );
+                        break;
+                    case "Config_Log_Levels.INTERFACE":
+                        ++items;
+                        checkEntry( entry, "4", "28", "==warning{cal}", "warning", "", "" );
+                        break;
+                    case "Config_Log_Levels.MW1553":
+                        ++items;
+                        checkEntry( entry, "4", "32", "==info{cal}", "warning", "", "" );
+                        break;
+                    case "Config_Watchdog":
+                        ++items;
+                        checkEntry( entry, "16", "44", "==30{cal}", "5", "", "" );
+                        break;
+                    case "Config_PROM_Access":
+                        ++items;
+                        checkEntry( entry, "", "", "", "", "", "" );
+                        break;
+                    case "Config_PROM_Access.Read":
+                        ++items;
+                        checkEntry( entry, "16", "60", "==1000{cal}", "100", "", "" );
+                        break;
+                    case "Config_PROM_Access.Write":
+                        ++items;
+                        checkEntry( entry, "16", "76", "==99{cal}", "100", "", "" );
+                        break;
+                    case "Config_PROM_Access.Erase":
+                        ++items;
+                        checkEntry( entry, "16", "92", "==250{cal}", "100", "", "" );
+                        break;
+                    case "Config_PROM_Access.Lock":
+                        ++items;
+                        checkEntry( entry, "16", "108", "==31000{cal}", "100", "", "" );
+                        break;
+                    case "Config_Self_Test":
+                        ++items;
+                        checkEntry( entry, "", "", "", "", "", "" );
+                        break;
+                    case "Config_Self_Test.pad_2bits":
+                        ++items;
+                        checkEntry( entry, "2", "124", "==0x0{cal}", "0x00", "", "" );
+                        break;
+                    case "Config_Self_Test.Antenna":
+                        ++items;
+                        checkEntry( entry, "1", "126", "==ENABLED{cal}", "ENABLED", "", "" );
+                        break;
+                    case "Config_Self_Test.CPU":
+                        ++items;
+                        checkEntry( entry, "1", "127", "==ENABLED{cal}", "ENABLED", "", "" );
+                        break;
+                    case "Config_Self_Test.RAM":
+                        ++items;
+                        checkEntry( entry, "1", "128", "==DISABLED{cal}", "ENABLED", "", "" );
+                        break;
+                    case "Config_Self_Test.EEPROM":
+                        ++items;
+                        checkEntry( entry, "1", "129", "==DISABLED{cal}", "ENABLED", "", "" );
+                        break;
+                    case "Config_Self_Test.Flash":
+                        ++items;
+                        checkEntry( entry, "1", "130", "==ENABLED{cal}", "ENABLED", "", "" );
+                        break;
+                    case "Config_Self_Test.Modem":
+                        ++items;
+                        checkEntry( entry, "1", "131", "==ENABLED{cal}", "ENABLED", "", "" );
+                        break;
+                    case "Config_Clock_ID":
+                        ++items;
+                        checkEntry( entry, "8", "132", "==PRIMARY{cal}", "PRIMARY", "", "" );
+                        break;
+                    case "Config_Ant_Power_Level":
+                        ++items;
+                        checkEntry( entry, "16", "140", "==5.0{cal}", "-0.6", "", "" );
+                        break;
+                    case "Table_CRC_Value":
+                        ++items;
+                        checkEntry( entry, "16", "156", "==0xabcd{cal}", "", "", "" );
+                        break;
+                }
+
+            }
+
+            Assert.assertTrue( "Container parameter count of " + containerName + " is " +
+                Long.toString( items ) + " but should be 26 items",
+                items == 26 );
+
+            assertOnWarnings( model );
+
+        } catch ( Exception ex ) {
+            //ex.printStackTrace();
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+    }
+
+    @Test
+    public void processContainerWithParameterAtEndInheritanceAndGapContainer() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        String containerName = "/BogusSAT/SC001/Onboard_Processor_Config/Processor_3_Config_Table";
+
+        String binFilename =
+            "test/org/xtce/toolkit/test/Container-Proc_3_Cfg_Table.bin";
+
+        try {
+
+            XTCETMContainer container = db_.getContainer( containerName );
+
+            XTCEContainerContentModel model =
+                db_.processContainer( container,
+                                      readBytesFromFile( binFilename ) );
+
+            long sizeInBytes = model.getTotalSize();
+
+            Assert.assertTrue( "Container size of " + containerName + " is " +
+                Long.toString( sizeInBytes ) + " but should be 204 bits",
+                sizeInBytes == 204 );
+
+            List<XTCEContainerContentEntry> entries = model.getContentList();
+
+            long items = 0;
+
+            for ( XTCEContainerContentEntry entry : entries ) {
+
+                switch (entry.getName()) {
+                    case "Table_Processor_ID":
+                        ++items;
+                        checkEntry( entry, "8", "0", "==PROCESSOR3{cal}", "NOT_YET_SET", "", "" );
+                        break;
+                    case "Config_Log_Levels":
+                        ++items;
+                        checkEntry( entry, "", "", "", "", "", "" );
+                        break;
+                    case "Config_Log_Levels.COREINF":
+                        ++items;
+                        checkEntry( entry, "4", "8", "==info{cal}", "warning", "", "" );
+                        break;
+                    case "Config_Log_Levels.ANTCTRL":
+                        ++items;
+                        checkEntry( entry, "4", "12", "==debug{cal}", "warning", "", "" );
+                        break;
+                    case "Config_Log_Levels.TCMGMNT":
+                        ++items;
+                        checkEntry( entry, "4", "16", "==info{cal}", "warning", "", "" );
+                        break;
+                    case "Config_Log_Levels.TIME":
+                        ++items;
+                        checkEntry( entry, "4", "20", "==warning{cal}", "warning", "", "" );
+                        break;
+                    case "Config_Log_Levels.TMMGMNT":
+                        ++items;
+                        checkEntry( entry, "4", "24", "==error{cal}", "warning", "", "" );
+                        break;
+                    case "Config_Log_Levels.INTERFACE":
+                        ++items;
+                        checkEntry( entry, "4", "28", "==warning{cal}", "warning", "", "" );
+                        break;
+                    case "Config_Log_Levels.MW1553":
+                        ++items;
+                        checkEntry( entry, "4", "32", "==info{cal}", "warning", "", "" );
+                        break;
+                    case "Config_Watchdog":
+                        ++items;
+                        checkEntry( entry, "16", "44", "==30{cal}", "5", "", "" );
+                        break;
+                    case "Config_PROM_Access":
+                        ++items;
+                        checkEntry( entry, "", "", "", "", "", "" );
+                        break;
+                    case "Config_PROM_Access.Read":
+                        ++items;
+                        checkEntry( entry, "16", "60", "==1000{cal}", "100", "", "" );
+                        break;
+                    case "Config_PROM_Access.Write":
+                        ++items;
+                        checkEntry( entry, "16", "76", "==99{cal}", "100", "", "" );
+                        break;
+                    case "Config_PROM_Access.Erase":
+                        ++items;
+                        checkEntry( entry, "16", "92", "==250{cal}", "100", "", "" );
+                        break;
+                    case "Config_PROM_Access.Lock":
+                        ++items;
+                        checkEntry( entry, "16", "108", "==31000{cal}", "100", "", "" );
+                        break;
+                    case "Config_Self_Test":
+                        ++items;
+                        checkEntry( entry, "", "", "", "", "", "" );
+                        break;
+                    case "Config_Self_Test.pad_2bits":
+                        ++items;
+                        checkEntry( entry, "2", "124", "==0x0{cal}", "0x00", "", "" );
+                        break;
+                    case "Config_Self_Test.Antenna":
+                        ++items;
+                        checkEntry( entry, "1", "126", "==ENABLED{cal}", "ENABLED", "", "" );
+                        break;
+                    case "Config_Self_Test.CPU":
+                        ++items;
+                        checkEntry( entry, "1", "127", "==ENABLED{cal}", "ENABLED", "", "" );
+                        break;
+                    case "Config_Self_Test.RAM":
+                        ++items;
+                        checkEntry( entry, "1", "128", "==DISABLED{cal}", "ENABLED", "", "" );
+                        break;
+                    case "Config_Self_Test.EEPROM":
+                        ++items;
+                        checkEntry( entry, "1", "129", "==DISABLED{cal}", "ENABLED", "", "" );
+                        break;
+                    case "Config_Self_Test.Flash":
+                        ++items;
+                        checkEntry( entry, "1", "130", "==ENABLED{cal}", "ENABLED", "", "" );
+                        break;
+                    case "Config_Self_Test.Modem":
+                        ++items;
+                        checkEntry( entry, "1", "131", "==ENABLED{cal}", "ENABLED", "", "" );
+                        break;
+                    case "Config_Clock_ID":
+                        ++items;
+                        checkEntry( entry, "8", "132", "==PRIMARY{cal}", "PRIMARY", "", "" );
+                        break;
+                    case "Config_Ant_Power_Level":
+                        ++items;
+                        checkEntry( entry, "16", "140", "==7.5{cal}", "-0.6", "", "" );
+                        break;
+                    case "Config_Payload_IF_ID":
+                        ++items;
+                        checkEntry( entry, "4", "180", "==LINK1{cal}", "LINK1", "", "" );
+                        break;
+                    case "Config_Payload_Perf":
+                        ++items;
+                        checkEntry( entry, "4", "184", "==NORMAL{cal}", "NORMAL", "", "" );
+                        break;
+                    case "Table_CRC_Value":
+                        ++items;
+                        checkEntry( entry, "16", "188", "==0xabcd{cal}", "", "", "" );
+                        break;
+                }
+
+            }
+
+            Assert.assertTrue( "Container parameter count of " + containerName + " is " +
+                Long.toString( items ) + " but should be 28 items",
+                items == 28 );
+
+            assertOnWarnings( model );
+
+        } catch ( Exception ex ) {
+            //ex.printStackTrace();
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+    }
+
     private void checkEntry( XTCEContainerContentEntry entry,
                              String                    sizeInBits,
                              String                    startBit,

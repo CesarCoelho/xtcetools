@@ -188,6 +188,26 @@ print FILE11 pack( "n", 0xbcd0 ); # Table_CRC_Value
 
 close( FILE11 );
 
+open( FILE12, ">Container-Proc_3_Cfg_Table.bin" );
+binmode( FILE12 );
+
+# watch out here for the non-byte aligned values!
+print FILE12 pack( "C", 0x03 ); # Table_Processor_ID = PROCESSOR3
+print FILE12 pack( "N", 0x10123210 ); # Config_Log_Levels
+print FILE12 pack( "C", 0x00 ); # empty space in container
+print FILE12 pack( "n", 0x01e0 ); # Config_Watchdog = 30
+print FILE12 pack( "n", 0x3e80 ); # Config_PROM_Access = 1000
+print FILE12 pack( "n", 0x0630 ); # Config_PROM_Access = 2
+print FILE12 pack( "n", 0x0fa7 ); # Config_PROM_Access = 250
+print FILE12 pack( "n", 0x9183 ); # Config_PROM_Access = 31000
+print FILE12 pack( "C", 0x30 ); # Config_Self_Test = on,on,off,off,on,on
+print FILE12 pack( "C", 0x00 ); # Config_Clock_ID = PRIMARY
+print FILE12 pack( "n", 0x0060 ); # Config_Ant_Power_Level = 7.5
+print FILE12 pack( "N", 0x0000012a ); # Config_Payload_IF_ID = LINK1, Config_Payload_Perf = NORMAL
+print FILE12 pack( "n", 0xbcd0 ); # Table_CRC_Value
+
+close( FILE12 );
+
 if ( -f "Container-10000Packets.bin" ) {
    system( "rm", "-f", "Container-10000Packets.bin" );
 }
