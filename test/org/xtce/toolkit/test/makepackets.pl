@@ -149,11 +149,50 @@ print FILE6 pack( "C3", 0x41, 0xa4, 0xce ); # Solar_Array_Voltage_1 = 5.0, 2 = 2
 
 close( FILE6 );
 
+open( FILE10, ">Container-Proc_1_Cfg_Table.bin" );
+binmode( FILE10 );
+
+# watch out here for the non-byte aligned values!
+print FILE10 pack( "C", 0x01 ); # Table_Processor_ID = PROCESSOR1
+print FILE10 pack( "N", 0x10123210 ); # Config_Log_Levels
+print FILE10 pack( "C", 0x00 ); # empty space in container
+print FILE10 pack( "n", 0x01e0 ); # Config_Watchdog = 30
+print FILE10 pack( "n", 0x3e80 ); # Config_PROM_Access = 1000
+print FILE10 pack( "n", 0x0630 ); # Config_PROM_Access = 2
+print FILE10 pack( "n", 0x0fa7 ); # Config_PROM_Access = 250
+print FILE10 pack( "n", 0x9183 ); # Config_PROM_Access = 31000
+print FILE10 pack( "C", 0x30 ); # Config_Self_Test = on,on,off,off,on,on
+print FILE10 pack( "C", 0x00 ); # Config_Clock_ID = PRIMARY
+print FILE10 pack( "n", 0x0061 ); # Config_Ant_Power_Level = 5.8
+print FILE10 pack( "C", 0x2a ); # Config_Payload_IF_ID = LINK1, Config_Payload_Perf = NORMAL
+print FILE10 pack( "n", 0xbcd0 ); # Table_CRC_Value
+
+close( FILE10 );
+
+open( FILE11, ">Container-Proc_2_Cfg_Table.bin" );
+binmode( FILE11 );
+
+# watch out here for the non-byte aligned values!
+print FILE11 pack( "C", 0x02 ); # Table_Processor_ID = PROCESSOR2
+print FILE11 pack( "N", 0x10123210 ); # Config_Log_Levels
+print FILE11 pack( "C", 0x00 ); # empty space in container
+print FILE11 pack( "n", 0x01e0 ); # Config_Watchdog = 30
+print FILE11 pack( "n", 0x3e80 ); # Config_PROM_Access = 1000
+print FILE11 pack( "n", 0x0630 ); # Config_PROM_Access = 2
+print FILE11 pack( "n", 0x0fa7 ); # Config_PROM_Access = 250
+print FILE11 pack( "n", 0x9183 ); # Config_PROM_Access = 31000
+print FILE11 pack( "C", 0x30 ); # Config_Self_Test = on,on,off,off,on,on
+print FILE11 pack( "C", 0x00 ); # Config_Clock_ID = PRIMARY
+print FILE11 pack( "n", 0x006a ); # Config_Ant_Power_Level = 5.8
+print FILE11 pack( "n", 0xbcd0 ); # Table_CRC_Value
+
+close( FILE11 );
+
 if ( -f "Container-10000Packets.bin" ) {
    system( "rm", "-f", "Container-10000Packets.bin" );
 }
 
-if ( -f "Container-UniquePackets.bin" ) {
+if ( -f "Conatainer-UniquePackets.bin" ) {
    system( "rm", "-f", "Container-UniquePackets.bin" );
 }
 

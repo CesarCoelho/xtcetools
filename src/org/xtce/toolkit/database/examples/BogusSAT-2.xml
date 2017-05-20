@@ -962,7 +962,7 @@ limitations under the License.
 						<xtce:IntegerDataEncoding encoding="twosComplement" sizeInBits="16">
 							<xtce:DefaultCalibrator name="Default_Counts" shortDescription="This calibrator is used for PROCESSOR3">
 								<xtce:PolynomialCalibrator>
-									<xtce:Term coefficient="1" exponent="0"/>
+									<xtce:Term coefficient="1.5" exponent="0"/>
 									<xtce:Term coefficient="1" exponent="1"/>
 								</xtce:PolynomialCalibrator>
 							</xtce:DefaultCalibrator>
