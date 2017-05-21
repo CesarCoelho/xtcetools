@@ -170,7 +170,129 @@ public class ExampleCodeTest {
         }
 
     }
-    
+
+    @Test
+    public void testParameterDefaultValueDumpWithName() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        String cwd = System.getProperty( "user.dir" );
+        System.out.println( "CWD: " + cwd );
+
+        try {
+
+            ProcessBuilder proc = new ProcessBuilder( 
+                "java",
+                "-classpath",
+                "dist/XTCETools.jar",
+                "org.xtce.toolkit.examples.ParameterDefaultValueDump",
+                "src/org/xtce/toolkit/database/examples/BogusSAT-2.xml",
+                "Config*" );
+
+            run( proc );
+
+        } catch ( Exception ex ) {
+            Assert.fail( "Should not have gotten an exception: " +
+                         ex.getLocalizedMessage() );
+        }
+
+    }
+
+    @Test
+    public void testParameterDefaultValueDumpWithAlias() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        String cwd = System.getProperty( "user.dir" );
+        System.out.println( "CWD: " + cwd );
+
+        try {
+
+            ProcessBuilder proc = new ProcessBuilder( 
+                "java",
+                "-classpath",
+                "dist/XTCETools.jar",
+                "org.xtce.toolkit.examples.ParameterDefaultValueDump",
+                "src/org/xtce/toolkit/database/examples/BogusSAT-2.xml",
+                "cfg_*",
+                "--aliasns=FSW" );
+
+            run( proc );
+
+        } catch ( Exception ex ) {
+            Assert.fail( "Should not have gotten an exception: " +
+                         ex.getLocalizedMessage() );
+        }
+
+    }
+
+    @Test
+    public void testContainerDefaultValueDumpWithName() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        String cwd = System.getProperty( "user.dir" );
+        System.out.println( "CWD: " + cwd );
+
+        try {
+
+            ProcessBuilder proc = new ProcessBuilder( 
+                "java",
+                "-classpath",
+                "dist/XTCETools.jar",
+                "org.xtce.toolkit.examples.ContainerDefaultValueDump",
+                "src/org/xtce/toolkit/database/examples/BogusSAT-2.xml",
+                "Processor_1_Config_Table" );
+
+            run( proc );
+
+        } catch ( Exception ex ) {
+            Assert.fail( "Should not have gotten an exception: " +
+                         ex.getLocalizedMessage() );
+        }
+
+    }
+
+    @Test
+    public void testContainerDefaultValueDumpWithAlias() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        String cwd = System.getProperty( "user.dir" );
+        System.out.println( "CWD: " + cwd );
+
+        try {
+
+            ProcessBuilder proc = new ProcessBuilder( 
+                "java",
+                "-classpath",
+                "dist/XTCETools.jar",
+                "org.xtce.toolkit.examples.ContainerDefaultValueDump",
+                "src/org/xtce/toolkit/database/examples/BogusSAT-2.xml",
+                "Processor_2_Config_Table",
+                "--aliasns=FSW" );
+
+            run( proc );
+
+        } catch ( Exception ex ) {
+            Assert.fail( "Should not have gotten an exception: " +
+                         ex.getLocalizedMessage() );
+        }
+
+    }
+
     private void run( ProcessBuilder proc ) throws IOException, InterruptedException {
 
         proc.redirectErrorStream( true );

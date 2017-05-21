@@ -1,5 +1,5 @@
 <#if licenseFirst??>
-${licenseFirst} Copyright 2016 David Overeem (dovereem@cox.net)
+${licenseFirst} Copyright 2017 David Overeem (dovereem@cox.net)
 </#if>
 ${licensePrefix}
 ${licensePrefix}Licensed under the Apache License, Version 2.0 (the "License");
