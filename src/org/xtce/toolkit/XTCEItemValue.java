@@ -736,11 +736,16 @@ public class XTCEItemValue {
                     uncalValue = BigInteger.valueOf( Float.floatToRawIntBits( uncalValue.floatValue() ) );
                 } else if ( rawSizeInBits_ == 64 ) {
                     uncalValue = BigInteger.valueOf( Double.doubleToRawLongBits( uncalValue.doubleValue() ) );
-                } else if ( rawSizeInBits_ == 128 ) {
+                } else {
                     warn( "Unsupported encoding type for " +
                           itemName_ +
                           " Encoding: " +
-                          rawTypeName_ );
+                          rawTypeName_ +
+                          " (" + // NOI18N
+                          Integer.toString( rawSizeInBits_ ) +
+                          " " + // NOI18N
+                          XTCEFunctions.getText( "general_bits" ) + // NOI18N
+                          ")" ); // NOI18N
                 }
             }
         } else if ( rawTypeName_ == RawType.MILSTD_1750A ) {
@@ -757,7 +762,12 @@ public class XTCEItemValue {
                     warn( "Unsupported encoding type for " +
                           itemName_ +
                           " Encoding: " +
-                          rawTypeName_ );
+                          rawTypeName_ +
+                          " (" + // NOI18N
+                          Integer.toString( rawSizeInBits_ ) +
+                          " " + // NOI18N
+                          XTCEFunctions.getText( "general_bits" ) + // NOI18N
+                          ")" ); // NOI18N
                 }
             }
         } else if ( rawTypeName_ == RawType.UTF8 ) {
@@ -851,11 +861,16 @@ public class XTCEItemValue {
                     intValue = BigInteger.valueOf( Float.floatToRawIntBits( uncalValue.floatValue() ) );
                 } else if ( rawSizeInBits_ == 64 ) {
                     intValue = BigInteger.valueOf( Double.doubleToRawLongBits( uncalValue.doubleValue() ) );
-                } else if ( rawSizeInBits_ == 128 ) {
+                } else {
                     warn( "Unsupported encoding type for " +
                           itemName_ +
                           " Encoding: " +
-                          rawTypeName_ );
+                          rawTypeName_ +
+                          " (" + // NOI18N
+                          Integer.toString( rawSizeInBits_ ) +
+                          " " + // NOI18N
+                          XTCEFunctions.getText( "general_bits" ) + // NOI18N
+                          ")" ); // NOI18N
                 }
             }
         } else if ( rawTypeName_ == RawType.MILSTD_1750A ) {
@@ -872,7 +887,12 @@ public class XTCEItemValue {
                     warn( "Unsupported encoding type for " +
                           itemName_ +
                           " Encoding: " +
-                          rawTypeName_ );
+                          rawTypeName_ +
+                          " (" + // NOI18N
+                          Integer.toString( rawSizeInBits_ ) +
+                          " " + // NOI18N
+                          XTCEFunctions.getText( "general_bits" ) + // NOI18N
+                          ")" ); // NOI18N
                 }
             }
         } else if ( rawTypeName_ == RawType.UTF8 ) {

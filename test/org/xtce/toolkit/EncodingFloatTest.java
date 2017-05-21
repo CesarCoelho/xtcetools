@@ -37,7 +37,7 @@ public class EncodingFloatTest {
     public EncodingFloatTest() {
 
         try {
-            loadDocument();
+            loadDocuments();
         } catch ( Throwable ex ) {
             Assert.fail( "Cannot start test: " + ex.getLocalizedMessage() );
         }
@@ -161,6 +161,41 @@ public class EncodingFloatTest {
 
             errors += check( "FOOBAR",
                              "Basic_Float64 Invalid String value for uncalibrate IEEE754_1985 of 'FOOBAR'" );
+
+            System.out.println( "" );
+
+        } catch ( Throwable ex ) {
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+        if ( errors != 0 ) {
+            Assert.fail( "Not all checks passed" );
+        }
+
+    }
+
+    @Test
+    public void testFloatParameterTypesRawInvalidSize() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        long errors = 0;
+
+        try {
+
+            System.out.println( "Testing EU Float Raw ieee23 bogus" );
+
+            getParameterItemValueObj2( "/UNIT_TEST",
+                                       "FLOAT_IEEE_INVALID_RAW" );
+
+            errors += check( "0.0", "Unsupported encoding type for FLOAT_IEEE_INVALID_RAW Encoding: IEEE754_1985 (23 bits)" );
+
+            errors += check( (float)0.0, "Unsupported encoding type for FLOAT_IEEE_INVALID_RAW Encoding: IEEE754_1985 (23 bits)" );
+
+            errors += check( 0.0, "Unsupported encoding type for FLOAT_IEEE_INVALID_RAW Encoding: IEEE754_1985 (23 bits)" );
 
             System.out.println( "" );
 
@@ -473,6 +508,41 @@ public class EncodingFloatTest {
 
             errors += check( "FOOBAR",
                              "Basic_MilFloat48 Invalid String value for uncalibrate MILSTD_1750A of 'FOOBAR'" );
+
+            System.out.println( "" );
+
+        } catch ( Throwable ex ) {
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+        if ( errors != 0 ) {
+            Assert.fail( "Not all checks passed" );
+        }
+
+    }
+
+    @Test
+    public void testMilStdParameterTypesRawInvalidSize() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        long errors = 0;
+
+        try {
+
+            System.out.println( "Testing EU Float Raw milstd39 (bogus)" );
+
+            getParameterItemValueObj2( "/UNIT_TEST",
+                                       "FLOAT_MILSTD_INVALID_RAW" );
+
+            errors += check( "0.0", "Unsupported encoding type for FLOAT_MILSTD_INVALID_RAW Encoding: MILSTD_1750A (39 bits)" );
+
+            errors += check( (float)0.0, "Unsupported encoding type for FLOAT_MILSTD_INVALID_RAW Encoding: MILSTD_1750A (39 bits)" );
+
+            errors += check( 0.0, "Unsupported encoding type for FLOAT_MILSTD_INVALID_RAW Encoding: MILSTD_1750A (39 bits)" );
 
             System.out.println( "" );
 
@@ -873,19 +943,41 @@ public class EncodingFloatTest {
 
     }
 
-    private void loadDocument() throws XTCEDatabaseException {
+    private void getParameterItemValueObj2( String path, String name )
+        throws XTCEDatabaseException {
 
-        System.out.println( "Loading the BogusSAT-1.xml demo database" );
+        ppp_ = db2_.getSpaceSystem( path ).getTelemetryParameter( name );
 
-        String file = "test/org/xtce/toolkit/test/BogusSAT-1.xml";
+        vvv_ = new XTCEItemValue( ppp_ );
+        if ( vvv_.isValid() == false ) {
+            throw new XTCEDatabaseException( "Parameter " +
+                                             ppp_.getName() +
+                                             " missing encoding information" );
+        }
 
-        db_ = new XTCEDatabase( new File( file ), false, false, true );
+    }
+
+    private void loadDocuments() throws XTCEDatabaseException {
+
+        String path = "test/org/xtce/toolkit/test";
+
+        File file1 = new File ( path + "/BogusSAT-1.xml" );
+        File file2 = new File ( path + "/UnitTests.xml" );
+
+        System.out.println( "Loading the " + file1.getName() + " demo database" );
+
+        db_  = new XTCEDatabase( file1, false, false, true );
+
+        System.out.println( "Loading the " + file2.getName() + " demo database" );
+
+        db2_ = new XTCEDatabase( file2, false, false, true );
 
     }
 
     // Private Data Members
 
-    private XTCEDatabase  db_  = null;
+    private XTCEDatabase db_;
+    private XTCEDatabase db2_;
     private XTCEParameter ppp_ = null;
     private XTCEItemValue vvv_ = null;
 

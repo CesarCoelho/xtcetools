@@ -41,7 +41,7 @@ public class DecodingTest {
     public DecodingTest() {
 
         try {
-            loadDocument();
+            loadDocuments();
         } catch ( Throwable ex ) {
             Assert.fail( "Cannot start test: " + ex.getLocalizedMessage() );
         }
@@ -738,6 +738,43 @@ public class DecodingTest {
     }
 
     @Test
+    public void testFloatParameterTypesRawInvalidSize() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        long errors = 0;
+
+        try {
+
+            System.out.println( "Testing EU Float Raw ieee23 bogus" );
+
+            getParameterItemValueObj2( "/UNIT_TEST",
+                                       "FLOAT_IEEE_INVALID_RAW" );
+
+            errors += checkFail( "0x0000000000", "FLOAT_IEEE_INVALID_RAW Raw encoding for type named: IEEE754_1985 (23 bits)" );
+
+            errors += checkFail( "0x4000000000", "FLOAT_IEEE_INVALID_RAW Raw encoding for type named: IEEE754_1985 (23 bits)" );
+
+            errors += checkFail( "0x4000000100", "FLOAT_IEEE_INVALID_RAW Raw encoding for type named: IEEE754_1985 (23 bits)" );
+
+            errors += checkFail( "0x69a3b50754", "FLOAT_IEEE_INVALID_RAW Raw encoding for type named: IEEE754_1985 (23 bits)" );
+
+            System.out.println( "" );
+
+        } catch ( Throwable ex ) {
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+        if ( errors != 0 ) {
+            Assert.fail( "Not all checks passed" );
+        }
+
+    }
+
+    @Test
     public void testFloatParameterTypesRawMilStd16() {
 
         final String methodName =
@@ -861,6 +898,43 @@ public class DecodingTest {
                                  "0x69a3b50754ab" );
 
             // need negative value
+
+            System.out.println( "" );
+
+        } catch ( Throwable ex ) {
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+        if ( errors != 0 ) {
+            Assert.fail( "Not all checks passed" );
+        }
+
+    }
+
+    @Test
+    public void testFloatParameterTypesRawMilStdInvalidSize() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        long errors = 0;
+
+        try {
+
+            System.out.println( "Testing EU Float Raw milstd39 bogus" );
+
+            getParameterItemValueObj2( "/UNIT_TEST",
+                                       "FLOAT_MILSTD_INVALID_RAW" );
+
+            errors += checkFail( "0x0000000000", "FLOAT_MILSTD_INVALID_RAW Raw encoding for type named: MILSTD_1750A (39 bits)" );
+
+            errors += checkFail( "0x4000000000", "FLOAT_MILSTD_INVALID_RAW Raw encoding for type named: MILSTD_1750A (39 bits)" );
+
+            errors += checkFail( "0x4000000100", "FLOAT_MILSTD_INVALID_RAW Raw encoding for type named: MILSTD_1750A (39 bits)" );
+
+            errors += checkFail( "0x69a3b50754", "FLOAT_MILSTD_INVALID_RAW Raw encoding for type named: MILSTD_1750A (39 bits)" );
 
             System.out.println( "" );
 
@@ -1652,6 +1726,21 @@ public class DecodingTest {
 
     }
 
+    private void getParameterItemValueObj2( String path,
+                                            String name )
+        throws XTCEDatabaseException {
+
+        ppp_ = db2_.getSpaceSystem( path ).getTelemetryParameter( name );
+
+        vvv_ = new XTCEItemValue( ppp_ );
+        if ( vvv_.isValid() == false ) {
+            throw new XTCEDatabaseException( "Parameter " +
+                                             ppp_.getName() +
+                                             " missing encoding information" );
+        }
+
+    }
+
     private void getParameterItemValueObj( String path,
                                            String name,
                                            String pathContextMatcher,
@@ -1718,19 +1807,93 @@ public class DecodingTest {
 
     }
 
-    private void loadDocument() throws XTCEDatabaseException {
+    private void getParameterItemValueObj2( String path,
+                                            String name,
+                                            String pathContextMatcher,
+                                            String nameContextMatcher,
+                                            String calValueMatch )
+        throws XTCEDatabaseException {
 
-        System.out.println( "Loading the BogusSAT-1.xml demo database" );
+        // this should NOT serve as an example of how to do this because it is
+        // not general, rather it is crafted for these test cases and nothing
+        // more.
 
-        String file = "test/org/xtce/toolkit/test/BogusSAT-1.xml";
+        ppp_ = db2_.getSpaceSystem( path )
+                   .getTelemetryParameter( name );
 
-        db_ = new XTCEDatabase( new File( file ), false, false, true );
+        XTCEParameter contextMatcher =
+            db2_.getSpaceSystem( pathContextMatcher )
+                .getTelemetryParameter( nameContextMatcher );
+
+        List<ContextCalibratorType> calibrators = ppp_.getContextCalibrators();
+
+        if ( calibrators == null ) {
+            throw new XTCEDatabaseException( "Parameter " +
+                                             ppp_.getName() +
+                                             " missing context calibrators" );
+        }
+
+        // this only supports single match cases, not the list of comparisons
+
+        vvv_ = null;
+
+        for ( ContextCalibratorType calibrator : calibrators ) {
+
+            MatchCriteriaType matcher = calibrator.getContextMatch();
+            String parameterRef = matcher.getComparison().getParameterRef();
+            String matchParameterAbsPath = XTCEFunctions.resolvePathReference( path, parameterRef );
+            String matchParameterPath = XTCEFunctions.getPathNameFromReferenceString( matchParameterAbsPath );
+            String matchParameterName = XTCEFunctions.getNameFromPathReferenceString( matchParameterAbsPath );
+
+            XTCEParameter matchParameter =
+                db2_.getSpaceSystem( matchParameterPath )
+                    .getTelemetryParameter( matchParameterName );
+
+            if ( matchParameter.equals( contextMatcher ) == true ) {
+                String calValue = matcher.getComparison().getValue();
+                if ( calValue.equals( calValueMatch ) == true ) {
+                    vvv_ = new XTCEItemValue( ppp_, calibrator.getCalibrator() );
+                    break;
+                }
+            }
+
+        }
+
+        // no context match uses the default calibrator
+
+        if ( vvv_ == null ) {
+            vvv_ = new XTCEItemValue( ppp_, ppp_.getDefaultCalibrator() );
+        }
+
+        if ( vvv_.isValid() == false ) {
+            throw new XTCEDatabaseException( "Parameter " +
+                                             ppp_.getName() +
+                                             " missing encoding information" );
+        }
+
+    }
+
+    private void loadDocuments() throws XTCEDatabaseException {
+
+        String path = "test/org/xtce/toolkit/test";
+
+        File file1 = new File ( path + "/BogusSAT-1.xml" );
+        File file2 = new File ( path + "/UnitTests.xml" );
+
+        System.out.println( "Loading the " + file1.getName() + " demo database" );
+
+        db_  = new XTCEDatabase( file1, false, false, true );
+
+        System.out.println( "Loading the " + file2.getName() + " demo database" );
+
+        db2_ = new XTCEDatabase( file2, false, false, true );
 
     }
 
     // Private Data Members
 
-    private XTCEDatabase  db_  = null;
+    private XTCEDatabase db_;
+    private XTCEDatabase db2_;
     private XTCEParameter ppp_ = null;
     private XTCEItemValue vvv_ = null;
 
