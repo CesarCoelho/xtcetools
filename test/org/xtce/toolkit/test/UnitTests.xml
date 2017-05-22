@@ -114,6 +114,10 @@ limitations under the License.
 				<xtce:UnitSet/>
 				<xtce:FloatDataEncoding encoding="IEEE754_1985" sizeInBits="23"/>
 			</xtce:FloatParameterType>
+			<xtce:FloatParameterType name="FLOAT_IEEE_UNSUPPORTED_RAW_TYPE" signed="true" initialValue="9.0">
+				<xtce:UnitSet/>
+				<xtce:FloatDataEncoding encoding="IEEE754_1985" sizeInBits="128"/>
+			</xtce:FloatParameterType>
 		</xtce:ParameterTypeSet>
 		<xtce:ParameterSet>
 			<xtce:Parameter name="INT_WITH_ALIAS" parameterTypeRef="I1_TYPE">
@@ -180,6 +184,7 @@ limitations under the License.
                         <xtce:Parameter name="INT_ALLNEG_RANGE_RAW" parameterTypeRef="INT_ALLNEG_RANGE_RAW_TYPE"/>
                         <xtce:Parameter name="FLOAT_MILSTD_INVALID_RAW" parameterTypeRef="FLOAT_MILSTD_INVALID_RAW_TYPE"/>
                         <xtce:Parameter name="FLOAT_IEEE_INVALID_RAW" parameterTypeRef="FLOAT_IEEE_INVALID_RAW_TYPE"/>
+                        <xtce:Parameter name="FLOAT_IEEE_UNSUPPORTED_RAW" parameterTypeRef="FLOAT_IEEE_UNSUPPORTED_RAW_TYPE"/>
 		</xtce:ParameterSet>
 	</xtce:TelemetryMetaData>
         <xtce:SpaceSystem name="ANCDATA_SS_TEST">

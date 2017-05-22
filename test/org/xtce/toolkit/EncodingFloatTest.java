@@ -175,6 +175,41 @@ public class EncodingFloatTest {
     }
 
     @Test
+    public void testFloatParameterTypesRaw128() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        long errors = 0;
+
+        try {
+
+            System.out.println( "Testing EU Float Raw ieee128 not yet supported" );
+
+            getParameterItemValueObj2( "/UNIT_TEST",
+                                       "FLOAT_IEEE_UNSUPPORTED_RAW" );
+
+            errors += check( "0.0", "FLOAT_IEEE_UNSUPPORTED_RAW Raw encoding type not yet supported: IEEE754_1985 (128 bits)" );
+
+            errors += check( (float)0.0, "FLOAT_IEEE_UNSUPPORTED_RAW Raw encoding type not yet supported: IEEE754_1985 (128 bits)" );
+
+            errors += check( 0.0, "FLOAT_IEEE_UNSUPPORTED_RAW Raw encoding type not yet supported: IEEE754_1985 (128 bits)" );
+
+            System.out.println( "" );
+
+        } catch ( Throwable ex ) {
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+        if ( errors != 0 ) {
+            Assert.fail( "Not all checks passed" );
+        }
+
+    }
+
+    @Test
     public void testFloatParameterTypesRawInvalidSize() {
 
         final String methodName =
@@ -191,11 +226,11 @@ public class EncodingFloatTest {
             getParameterItemValueObj2( "/UNIT_TEST",
                                        "FLOAT_IEEE_INVALID_RAW" );
 
-            errors += check( "0.0", "Unsupported encoding type for FLOAT_IEEE_INVALID_RAW Encoding: IEEE754_1985 (23 bits)" );
+            errors += check( "0.0", "FLOAT_IEEE_INVALID_RAW Raw encoding for type named: IEEE754_1985 (23 bits)" );
 
-            errors += check( (float)0.0, "Unsupported encoding type for FLOAT_IEEE_INVALID_RAW Encoding: IEEE754_1985 (23 bits)" );
+            errors += check( (float)0.0, "FLOAT_IEEE_INVALID_RAW Raw encoding for type named: IEEE754_1985 (23 bits)" );
 
-            errors += check( 0.0, "Unsupported encoding type for FLOAT_IEEE_INVALID_RAW Encoding: IEEE754_1985 (23 bits)" );
+            errors += check( 0.0, "FLOAT_IEEE_INVALID_RAW Raw encoding for type named: IEEE754_1985 (23 bits)" );
 
             System.out.println( "" );
 
@@ -538,11 +573,11 @@ public class EncodingFloatTest {
             getParameterItemValueObj2( "/UNIT_TEST",
                                        "FLOAT_MILSTD_INVALID_RAW" );
 
-            errors += check( "0.0", "Unsupported encoding type for FLOAT_MILSTD_INVALID_RAW Encoding: MILSTD_1750A (39 bits)" );
+            errors += check( "0.0", "FLOAT_MILSTD_INVALID_RAW Raw encoding for type named: MILSTD_1750A (39 bits)" );
 
-            errors += check( (float)0.0, "Unsupported encoding type for FLOAT_MILSTD_INVALID_RAW Encoding: MILSTD_1750A (39 bits)" );
+            errors += check( (float)0.0, "FLOAT_MILSTD_INVALID_RAW Raw encoding for type named: MILSTD_1750A (39 bits)" );
 
-            errors += check( 0.0, "Unsupported encoding type for FLOAT_MILSTD_INVALID_RAW Encoding: MILSTD_1750A (39 bits)" );
+            errors += check( 0.0, "FLOAT_MILSTD_INVALID_RAW Raw encoding for type named: MILSTD_1750A (39 bits)" );
 
             System.out.println( "" );
 

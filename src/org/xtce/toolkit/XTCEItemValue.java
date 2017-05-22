@@ -81,7 +81,7 @@ public class XTCEItemValue {
         // unless exists
         NameDescriptionType typeObj = item.getTypeReference();
         if ( typeObj == null ) {
-            warn( itemName_ + " " +
+            warn( itemName_ + " " + // NOI18N
                   XTCEFunctions.getText( "error_encdec_notype" ) ); // NOI18N
             validObject_ = false;
             return;
@@ -307,6 +307,17 @@ public class XTCEItemValue {
                     Double doubleValue = Double.longBitsToDouble( numericValue.longValue() );
                     isFloatRawValueReasonable( doubleValue );
                     return doubleValue.toString();
+                } else if ( rawSizeInBits_ == 128 ) {
+                    warn( itemName_ +
+                          " " + // NOI18N
+                          XTCEFunctions.getText( "error_encdec_rawtypenotsupported" ) + // NOI18N
+                          ": " + // NOI18N
+                          rawTypeName_ +
+                          " (" + // NOI18N
+                          Integer.toString( rawSizeInBits_ ) +
+                          " " + // NOI18N
+                          XTCEFunctions.getText( "general_bits" ) + // NOI18N
+                          ")" ); // NOI18N
                 } else {
                     warn( itemName_ +
                           " " + // NOI18N
@@ -586,9 +597,13 @@ public class XTCEItemValue {
             } else if ( rawTypeName_ == RawType.binary ) {
                 // need to know EU type here!
                 if ( uncalValue.contains( "-" ) == true ) { // NOI18N
-                    warn( itemName_ + " Invalid value for binary " +
-                          "encoding '" + uncalValue + "', negative has no " +
-                          "meaning in a binary context." );
+                    warn( itemName_ +
+                          " " + // NOI18N
+                          XTCEFunctions.getText( "error_encdec_binaryinvalid" ) + // NOI18N
+                          " '" + // NOI18N
+                          uncalValue +
+                          "'.  " + // NOI18N
+                          XTCEFunctions.getText( "error_encdec_binarynegative" ) ); // NOI18N
                 } else {
                     String lowerCalValue = uncalValue.toLowerCase();
                     intValue = integerStringToBigInteger( lowerCalValue );
@@ -618,28 +633,46 @@ public class XTCEItemValue {
                 }
                 intValue = encodeUtfString( retValue );
             } else if ( euTypeName_ == EngineeringType.DURATION ) {
-                // TODO Add DURATION Type
-                warn( "Relative Time Type Not Yet Supported for " + itemName_ );
+                // TODO Add RelativeTime (DURATION) Type
+                warn( itemName_ +
+                      " " + // NOI18N
+                      XTCEFunctions.getText( "error_encdec_engtypenotsupported" ) + // NOI18N
+                      ": " + // NOI18N
+                      euTypeName_ );
+            } else if ( euTypeName_ == EngineeringType.STRUCTURE ) {
+                warn( itemName_ +
+                      " " + // NOI18N
+                      XTCEFunctions.getText( "error_encdec_aggregate" ) ); // NOI18N
+            } else if ( euTypeName_ == EngineeringType.ARRAY ) {
+                warn( itemName_ +
+                      " " + // NOI18N
+                      XTCEFunctions.getText( "error_encdec_array" ) ); // NOI18N
             } else {
-                warn( "AGGREGATE and ARRAY types for item " + itemName_ +
-                      " cannot directly be encoded." + 
-                      "  Use their children instead" );
+                warn( itemName_ +
+                      " " + // NOI18N
+                      XTCEFunctions.getText( "error_encdec_engtypenotsupported" ) + // NOI18N
+                      ": " + // NOI18N
+                      euTypeName_ );
             }
 
         } catch ( NumberFormatException ex ) {
             warn( itemName_ +
-                  " Invalid String value for encoding " +
+                  " " + // NOI18N
+                  XTCEFunctions.getText ( "error_encdec_stringinvalid" ) + // NOI18N
+                  " " + // NOI18N
                   rawTypeName_ +
-                  " of '" +
+                  ": '" + // NOI18N
                   uncalValue +
-                  "'" );
+                  "'" ); // NOI18N
         } catch ( ArithmeticException ex ) {
             warn( itemName_ +
-                  " Invalid Decimal value for encoding " +
+                  " " +  // NOI18N
+                  XTCEFunctions.getText ( "error_encdec_decimalinvalid" ) + // NOI18N
+                  " " + // NOI18N
                   rawTypeName_ +
-                  " of '" +
+                  ": '" + // NOI18N
                   uncalValue +
-                  "'" );
+                  "'" ); // NOI18N
         }
 
         return makeBitSetFromBigInteger( intValue );
@@ -669,7 +702,7 @@ public class XTCEItemValue {
         }
 
         if ( rawTypeName_ == RawType.unsigned ) {
-            BigInteger max = new BigInteger( "2" ).pow( rawSizeInBits_ );
+            BigInteger max = new BigInteger( "2" ).pow( rawSizeInBits_ ); // NOI18N
             if ( uncalValue.compareTo( max ) == 1 ) {
                 warn( itemName_ + " overflow value '" + uncalValue +
                       "', larger than available encoding bits." );
@@ -678,7 +711,7 @@ public class XTCEItemValue {
                 uncalValue = BigInteger.ZERO;
             }
         } else if ( rawTypeName_ == RawType.signMagnitude ) {
-            BigInteger max = new BigInteger( "2" ).pow( rawSizeInBits_ - 1 );
+            BigInteger max = new BigInteger( "2" ).pow( rawSizeInBits_ - 1 ); // NOI18N
             BigInteger min = max.negate();
             if ( uncalValue.compareTo( max ) == 1 ) {
                 warn( itemName_ + " overflow value '" + uncalValue +
@@ -696,7 +729,7 @@ public class XTCEItemValue {
                 uncalValue = uncalValue.setBit( rawSizeInBits_ - 1 );
             }
         } else if ( rawTypeName_ == RawType.twosComplement ) {
-            BigInteger max = new BigInteger( "2" ).pow( rawSizeInBits_ - 1 );
+            BigInteger max = new BigInteger( "2" ).pow( rawSizeInBits_ - 1 ); // NOI18N
             BigInteger min = max.negate();
             if ( uncalValue.compareTo( max ) == 1 ) {
                 warn( itemName_ + " overflow value '" + uncalValue +
@@ -710,7 +743,7 @@ public class XTCEItemValue {
                 uncalValue = BigInteger.ZERO;
             }
         } else if ( rawTypeName_ == RawType.onesComplement ) {
-            BigInteger max = new BigInteger( "2" ).pow( rawSizeInBits_ - 1 );
+            BigInteger max = new BigInteger( "2" ).pow( rawSizeInBits_ - 1 ); // NOI18N
             BigInteger min = max.negate();
             if ( uncalValue.compareTo( max ) == 1 ) {
                 warn( itemName_ + " overflow value '" + uncalValue +
@@ -736,10 +769,22 @@ public class XTCEItemValue {
                     uncalValue = BigInteger.valueOf( Float.floatToRawIntBits( uncalValue.floatValue() ) );
                 } else if ( rawSizeInBits_ == 64 ) {
                     uncalValue = BigInteger.valueOf( Double.doubleToRawLongBits( uncalValue.doubleValue() ) );
+                } else if ( rawSizeInBits_ == 128 ) {
+                    warn( itemName_ +
+                          " " + // NOI18N
+                          XTCEFunctions.getText( "error_encdec_rawtypenotsupported" ) + // NOI18N
+                          ": " + // NOI18N
+                          rawTypeName_ +
+                          " (" + // NOI18N
+                          Integer.toString( rawSizeInBits_ ) +
+                          " " + // NOI18N
+                          XTCEFunctions.getText( "general_bits" ) + // NOI18N
+                          ")" ); // NOI18N
                 } else {
-                    warn( "Unsupported encoding type for " +
-                          itemName_ +
-                          " Encoding: " +
+                    warn( itemName_ +
+                          " " + // NOI18N
+                          XTCEFunctions.getText( "error_encdec_rawenctype" ) + // NOI18N
+                          ": " + // NOI18N
                           rawTypeName_ +
                           " (" + // NOI18N
                           Integer.toString( rawSizeInBits_ ) +
@@ -759,9 +804,10 @@ public class XTCEItemValue {
                                                             rawSizeInBits_ );
                     uncalValue = BigInteger.valueOf( milValue.toRawBits() );
                 } else {
-                    warn( "Unsupported encoding type for " +
-                          itemName_ +
-                          " Encoding: " +
+                    warn( itemName_ +
+                          " " + // NOI18N
+                          XTCEFunctions.getText( "error_encdec_rawenctype" ) + // NOI18N
+                          ": " + // NOI18N
                           rawTypeName_ +
                           " (" + // NOI18N
                           Integer.toString( rawSizeInBits_ ) +
@@ -782,18 +828,37 @@ public class XTCEItemValue {
             }
             uncalValue = encodeUtfString( retValue );
         } else if ( euTypeName_ == EngineeringType.TIME ) {
-            // TODO Add TIME Type
-            warn( "Absolute Time Type Not Yet Supported for " + itemName_ );
+            // TODO Add AbsoluteTime (TIME) Type
+            warn( itemName_ +
+                  " " + // NOI18N
+                  XTCEFunctions.getText( "error_encdec_engtypenotsupported" ) + // NOI18N
+                  ": " + // NOI18N
+                  euTypeName_ );
             uncalValue = BigInteger.ZERO;
         } else if ( euTypeName_ == EngineeringType.DURATION ) {
-            // TODO Add DURATION Type
-            warn( "Relative Time Type Not Yet Supported for " + itemName_ );
+            // TODO Add RelativeTime (DURATION) Type
+            warn( itemName_ +
+                  " " + // NOI18N
+                  XTCEFunctions.getText( "error_encdec_engtypenotsupported" ) + // NOI18N
+                  ": " + // NOI18N
+                  euTypeName_ );
+            uncalValue = BigInteger.ZERO;
+        } else if ( euTypeName_ == EngineeringType.STRUCTURE ) {
+            warn( itemName_ +
+                  " " + // NOI18N
+                  XTCEFunctions.getText( "error_encdec_aggregate" ) ); // NOI18N
+            uncalValue = BigInteger.ZERO;
+        } else if ( euTypeName_ == EngineeringType.ARRAY ) {
+            warn( itemName_ +
+                  " " + // NOI18N
+                  XTCEFunctions.getText( "error_encdec_array" ) ); // NOI18N
             uncalValue = BigInteger.ZERO;
         } else {
-            warn( "AGGREGATE and ARRAY types for item " +
-                  itemName_ +
-                  " cannot directly be encoded." + 
-                  "  Use their children instead" );
+            warn( itemName_ +
+                  " " + // NOI18N
+                  XTCEFunctions.getText( "error_encdec_engtypenotsupported" ) + // NOI18N
+                  ": " + // NOI18N
+                  euTypeName_ );
             uncalValue = BigInteger.ZERO;
         }
 
@@ -842,17 +907,25 @@ public class XTCEItemValue {
                 return getRawFromUncalibrated( uncalValue.toBigIntegerExact() );
             } catch ( NumberFormatException ex ) {
                 warn( itemName_ +
-                      " Invalid Decimal value for encoding " +
+                      " " +  // NOI18N
+                      XTCEFunctions.getText ( "error_encdec_decimalinvalid" ) + // NOI18N
+                      " " + // NOI18N
                       rawTypeName_ +
-                      " of '" +
+                      ": '" + // NOI18N
                       uncalValue +
-                      "'" );
+                      "'" ); // NOI18N
             }
         } else if ( rawTypeName_ == RawType.binary ) {
-            warn( "Unsupported encoding type for " +
-                  itemName_ +
-                  " Encoding: " +
-                  rawTypeName_ );
+            warn( itemName_ +
+                  " " + // NOI18N
+                  XTCEFunctions.getText( "error_encdec_rawtypenotsupported" ) + // NOI18N
+                  ": " + // NOI18N
+                  rawTypeName_ +
+                  " (" + // NOI18N
+                  Integer.toString( rawSizeInBits_ ) +
+                  " " + // NOI18N
+                  XTCEFunctions.getText( "general_bits" ) + // NOI18N
+                  ")" ); // NOI18N
         } else if ( rawTypeName_ == RawType.IEEE754_1985 ) {
             if ( isFloatRawValueReasonable( uncalValue.doubleValue() ) == false ) {
                 intValue = BigInteger.ZERO;
@@ -861,10 +934,22 @@ public class XTCEItemValue {
                     intValue = BigInteger.valueOf( Float.floatToRawIntBits( uncalValue.floatValue() ) );
                 } else if ( rawSizeInBits_ == 64 ) {
                     intValue = BigInteger.valueOf( Double.doubleToRawLongBits( uncalValue.doubleValue() ) );
+                } else if ( rawSizeInBits_ == 128 ) {
+                    warn( itemName_ +
+                          " " + // NOI18N
+                          XTCEFunctions.getText( "error_encdec_rawtypenotsupported" ) + // NOI18N
+                          ": " + // NOI18N
+                          rawTypeName_ +
+                          " (" + // NOI18N
+                          Integer.toString( rawSizeInBits_ ) +
+                          " " + // NOI18N
+                          XTCEFunctions.getText( "general_bits" ) + // NOI18N
+                          ")" ); // NOI18N
                 } else {
-                    warn( "Unsupported encoding type for " +
-                          itemName_ +
-                          " Encoding: " +
+                    warn( itemName_ +
+                          " " + // NOI18N
+                          XTCEFunctions.getText( "error_encdec_rawenctype" ) + // NOI18N
+                          ": " + // NOI18N
                           rawTypeName_ +
                           " (" + // NOI18N
                           Integer.toString( rawSizeInBits_ ) +
@@ -884,9 +969,10 @@ public class XTCEItemValue {
                                                             rawSizeInBits_ );
                     intValue = BigInteger.valueOf( milValue.toRawBits() );
                 } else {
-                    warn( "Unsupported encoding type for " +
-                          itemName_ +
-                          " Encoding: " +
+                    warn( itemName_ +
+                          " " + // NOI18N
+                          XTCEFunctions.getText( "error_encdec_rawenctype" ) + // NOI18N
+                          ": " + // NOI18N
                           rawTypeName_ +
                           " (" + // NOI18N
                           Integer.toString( rawSizeInBits_ ) +
@@ -907,16 +993,33 @@ public class XTCEItemValue {
             }
             intValue = encodeUtfString( retValue );
         } else if ( euTypeName_ == EngineeringType.TIME ) {
-            // TODO Add TIME Type
-            warn( "Absolute Time Type Not Yet Supported for " + itemName_ );
+            // TODO Add AbsoluteTime (TIME) Type
+            warn( itemName_ +
+                  " " + // NOI18N
+                  XTCEFunctions.getText( "error_encdec_engtypenotsupported" ) + // NOI18N
+                  ": " + // NOI18N
+                  euTypeName_ );
         } else if ( euTypeName_ == EngineeringType.DURATION ) {
-            // TODO Add DURATION Type
-            warn( "Relative Time Type Not Yet Supported for " + itemName_ );
+            // TODO Add RelativeTime (DURATION) Type
+            warn( itemName_ +
+                  " " + // NOI18N
+                  XTCEFunctions.getText( "error_encdec_engtypenotsupported" ) + // NOI18N
+                  ": " + // NOI18N
+                  euTypeName_ );
+        } else if ( euTypeName_ == EngineeringType.STRUCTURE ) {
+            warn( itemName_ +
+                  " " + // NOI18N
+                  XTCEFunctions.getText( "error_encdec_aggregate" ) ); // NOI18N
+        } else if ( euTypeName_ == EngineeringType.ARRAY ) {
+            warn( itemName_ +
+                  " " + // NOI18N
+                  XTCEFunctions.getText( "error_encdec_array" ) ); // NOI18N
         } else {
-            warn( "AGGREGATE and ARRAY types for item " +
-                  itemName_ +
-                  " cannot directly be encoded." + 
-                  "  Use their children instead" );
+            warn( itemName_ +
+                  " " + // NOI18N
+                  XTCEFunctions.getText( "error_encdec_engtypenotsupported" ) + // NOI18N
+                  ": " + // NOI18N
+                  euTypeName_ );
         }
 
         return makeBitSetFromBigInteger( intValue );
@@ -986,20 +1089,20 @@ public class XTCEItemValue {
                 return uncalibrateStringType( euValue );
 
             case BINARY:
-                return "0x" +
+                return "0x" + // NOI18N
                        integerStringToBigInteger( euValue ).toString( 16 );
 
             case FLOAT32:
             case FLOAT64:
             case FLOAT128:
                 try {
-                    if ( euValue.startsWith( "0x" ) == true ) {
-                        BigInteger intValue = new BigInteger( euValue.replaceFirst( "0x", "" ), 16 );
+                    if ( euValue.startsWith( "0x" ) == true ) { // NOI18N
+                        BigInteger intValue = new BigInteger( euValue.replaceFirst( "0x", "" ), 16 ); // NOI18N
                         BigDecimal calValue = new BigDecimal( intValue );
                         //isFloatRawValueReasonable( calValue.doubleValue() );
                         return uncalibrateFloatType( calValue );
-                    } else if ( euValue.startsWith( "0X" ) == true ) {
-                        BigInteger intValue = new BigInteger( euValue.replaceFirst( "0X", "" ), 16 );
+                    } else if ( euValue.startsWith( "0X" ) == true ) { // NOI18N
+                        BigInteger intValue = new BigInteger( euValue.replaceFirst( "0X", "" ), 16 ); // NOI18N
                         BigDecimal calValue = new BigDecimal( intValue );
                         //isFloatRawValueReasonable( calValue.doubleValue() );
                         return uncalibrateFloatType( calValue );
@@ -1020,10 +1123,10 @@ public class XTCEItemValue {
             case UNSIGNED:
             case SIGNED:
                 try {
-                    if ( euValue.startsWith( "0x" ) == true ) {
-                        return uncalibrateIntegerType( new BigInteger( euValue.replaceFirst( "0x", "" ), 16 ) );
-                    } else if ( euValue.startsWith( "0X" ) == true ) {
-                        return uncalibrateIntegerType( new BigInteger( euValue.replaceFirst( "0X", "" ), 16 ) );
+                    if ( euValue.startsWith( "0x" ) == true ) { // NOI18N
+                        return uncalibrateIntegerType( new BigInteger( euValue.replaceFirst( "0x", "" ), 16 ) ); // NOI18N
+                    } else if ( euValue.startsWith( "0X" ) == true ) { // NOI18N
+                        return uncalibrateIntegerType( new BigInteger( euValue.replaceFirst( "0X", "" ), 16 ) ); // NOI18N
                     }
                     BigDecimal testValue = new BigDecimal( euValue );
                     if ( ( testValue.doubleValue() % 1 ) != 0 ) {
@@ -1053,15 +1156,32 @@ public class XTCEItemValue {
                 break;
 
             case DURATION:
-                // TODO Add DURATION Type
-                warn( "Relative Time Type Not Yet Supported for " + itemName_ );
+                // TODO Add RelativeTime (DURATION) Type
+                warn( itemName_ +
+                      " " + // NOI18N
+                      XTCEFunctions.getText( "error_encdec_engtypenotsupported" ) + // NOI18N
+                      ": " + // NOI18N
+                      euTypeName_ );
+                break;
+
+            case STRUCTURE:
+                warn( itemName_ +
+                      " " + // NOI18N
+                      XTCEFunctions.getText( "error_encdec_aggregate" ) ); // NOI18N
+                break;
+
+            case ARRAY:
+                warn( itemName_ +
+                      " " + // NOI18N
+                      XTCEFunctions.getText( "error_encdec_array" ) ); // NOI18N
                 break;
 
             default:
-                warn( "AGGREGATE and ARRAY types for item " +
-                      itemName_ +
-                      " cannot directly be encoded." + 
-                      "  Use their children instead" );
+                warn( itemName_ +
+                      " " + // NOI18N
+                      XTCEFunctions.getText( "error_encdec_engtypenotsupported" ) + // NOI18N
+                      ": " + // NOI18N
+                      euTypeName_ );
                 break;
 
         }
@@ -1187,6 +1307,9 @@ public class XTCEItemValue {
     /** Function to resolve a numeric uncalibrated value to a Calibrated EU
      * Boolean string value.
      *
+     * It appears that this function is no longer used and is proposed for
+     * removal in a later commit.
+     *
      * @param uncalValue long containing the raw value, which will result in
      * a warning if the value is not either 0 or 1.
      *
@@ -1194,6 +1317,7 @@ public class XTCEItemValue {
      *
      */
 
+    @Deprecated
     private String booleanTypeFromUncalibrated( final long uncalValue ) {
 
         if ( uncalValue == 0 ) {
@@ -1265,6 +1389,9 @@ public class XTCEItemValue {
     /** Function to resolve a numeric uncalibrated value to a Calibrated EU
      *  Enumerated string value.
      *
+     * It appears that this function is no longer used and is proposed for
+     * removal in a later commit.
+     *
      * @param uncalValue BigInteger containing the uncalibrated value.  A
      * warning will be recorded if the number does not resolve to a label.
      *
@@ -1273,6 +1400,7 @@ public class XTCEItemValue {
      *
      */
 
+    @Deprecated
     private String enumeratedTypeFromUncalibrated( final BigInteger uncalValue ) {
 
         for ( ValueEnumerationType enumItem : enums_ ) {
@@ -1290,7 +1418,7 @@ public class XTCEItemValue {
         warn( itemName_ + " No enumeration label found for value of '" +
               uncalValue.toString() + "'");
 
-        return "";
+        return ""; // NOI18N
 
     }
 
@@ -1304,7 +1432,7 @@ public class XTCEItemValue {
             case onesComplement: {
                 BigInteger uncalValue = integerEncodingUncalibrate( calValue );
                 if ( isIntegerRawValueReasonable( uncalValue ) == false ) {
-                    return "0";
+                    return "0"; // NOI18N
                 }
                 return uncalValue.toString();
             }
@@ -1317,7 +1445,7 @@ public class XTCEItemValue {
                 BigDecimal uncalValue =
                     floatEncodingUncalibrate( new BigDecimal( calValue ) );
                 if ( isFloatRawValueReasonable( uncalValue.doubleValue() ) == false ) {
-                    return "0.0";
+                    return "0.0"; // NOI18N
                 }
                 return Double.toString( uncalValue.doubleValue() );
             }
@@ -1334,7 +1462,7 @@ public class XTCEItemValue {
 
         }
 
-        return "0";
+        return "0"; // NOI18N
 
     }
 
@@ -1348,7 +1476,7 @@ public class XTCEItemValue {
             case onesComplement: {
                 BigInteger uncalValue = integerEncodingUncalibrate( calValue );
                 if ( isIntegerRawValueReasonable( uncalValue ) == false ) {
-                    return "0";
+                    return "0"; // NOI18N
                 }
                 return uncalValue.toString();
             }
@@ -1361,7 +1489,7 @@ public class XTCEItemValue {
                 BigDecimal uncalValue =
                     floatEncodingUncalibrate( calValue );
                 if ( isFloatRawValueReasonable( uncalValue.doubleValue() ) == false ) {
-                    return "0.0";
+                    return "0.0"; // NOI18N
                 }
                 return Double.toString( uncalValue.doubleValue() );
             }
@@ -1390,12 +1518,12 @@ public class XTCEItemValue {
         String retValue = new String( uncalValue.toByteArray(),
                                       Charset.forName( encoding ) );
         if ( retValue.length() == 0 ) {
-            return "";
+            return ""; // NOI18N
         }
         int endIndex = retValue.length() - 1;
-        while ( retValue.charAt( endIndex ) == '\0' ) {
+        while ( retValue.charAt( endIndex ) == '\0' ) { // NOI18N
             if ( endIndex == 0 ) {
-                return "";
+                return ""; // NOI18N
             } else {
                 retValue = retValue.substring( 0, endIndex );
             }
@@ -1424,7 +1552,7 @@ public class XTCEItemValue {
                 new BigDecimal( calValue ).movePointRight( 6 ).toBigInteger();
 
             BigDecimal smallerValue =
-                new BigDecimal( largerValue.divide( new BigInteger( "1000000" ) ) );
+                new BigDecimal( largerValue.divide( new BigInteger( "1000000" ) ) ); // NOI18N
 
             BigInteger retValue = smallerValue.toBigIntegerExact();
 
@@ -1845,7 +1973,7 @@ public class XTCEItemValue {
             }
         }
 
-        if ( rawBitOrder_.equals( "mostSignificantBitFirst" ) == true ) {
+        if ( rawBitOrder_.equals( "mostSignificantBitFirst" ) == true ) { // NOI18N
             for ( int iii = rawSizeInBits_ - 1; iii >= 0; --iii ) {
                 rawBits.set( iii, rawValue.testBit( iii ) );
             }
@@ -1870,6 +1998,10 @@ public class XTCEItemValue {
 
     private void setValidRangeAttributes( final XTCETypedObject item ) {
 
+        validRange_ = item.getValidRange();
+
+        // these private members are probably not necessary.  might remove
+
         NameDescriptionType typeObj = item.getTypeReference();
 
         if ( typeObj instanceof BooleanDataType ) {
@@ -1877,15 +2009,13 @@ public class XTCEItemValue {
             booleanOneString_  = ((BooleanDataType)typeObj).getOneStringValue();
         }
 
-        validRange_ = item.getValidRange();
-
     }
 
     private BitSet makeBitSetFromBigInteger( final BigInteger rawValue ) {
 
         BitSet rawBits = new BitSet( rawSizeInBits_ );
 
-        if ( rawBitOrder_.equals( "mostSignificantBitFirst" ) == true ) {
+        if ( rawBitOrder_.equals( "mostSignificantBitFirst" ) == true ) { // NOI18N
             for ( int iii = rawSizeInBits_ - 1; iii >= 0; --iii ) {
                 rawBits.set( iii, rawValue.testBit( iii ) );
             }
@@ -1926,14 +2056,14 @@ public class XTCEItemValue {
 
         int byteCount = bitCount / 8;
 
-        StringBuilder sb = new StringBuilder( "0x" );
+        StringBuilder sb = new StringBuilder( "0x" ); // NOI18N
 
         byte[] bytes = bits.toByteArray();
         for ( int iii = byteCount - 1; iii >= 0; --iii ) {
             if ( iii < bytes.length ) {
-                sb.append( String.format( "%02x", bytes[iii] ) );
+                sb.append( String.format( "%02x", bytes[iii] ) ); // NOI18N
             } else {
-                sb.append( "00" );
+                sb.append( "00" ); // NOI18N
             }
         }
 
@@ -1965,9 +2095,9 @@ public class XTCEItemValue {
 
         for ( int iii = byteCount - 1; iii >= 0; --iii ) {
             if ( iii < bytes.length ) {
-                sb.append( String.format( "%02x", bytes[iii] ) );
+                sb.append( String.format( "%02x", bytes[iii] ) ); // NOI18N
             } else {
-                sb.append( "00" );
+                sb.append( "00" ); // NOI18N
             }
         }
 
@@ -2001,7 +2131,7 @@ public class XTCEItemValue {
         StringBuilder sb = new StringBuilder();
 
         for ( int iii = rawSizeInBits_ - 1; iii >= 0; --iii ) {
-            sb.append( bits.get( iii ) == true ? "1" : "0" );
+            sb.append( bits.get( iii ) == true ? "1" : "0" ); // NOI18N
         }
 
         return sb.toString();
@@ -2032,9 +2162,9 @@ public class XTCEItemValue {
         try {
 
             String reasValue = rawValue.toLowerCase();
-            if ( reasValue.startsWith( "0x" ) == true ) {
+            if ( reasValue.startsWith( "0x" ) == true ) { // NOI18N
                 rawInteger =
-                    new BigInteger( reasValue.replaceFirst( "0x", "" ), 16 );
+                    new BigInteger( reasValue.replaceFirst( "0x", "" ), 16 ); // NOI18N
             } else {
                 rawInteger = new BigInteger( reasValue );
             }

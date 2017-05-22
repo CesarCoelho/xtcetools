@@ -219,7 +219,7 @@ public class EncodingEnumeratedTest {
             errors += check( "TEST",    "0x00000001", "00000000000000000000000000000001" );
             errors += check( "STANDBY", "0x00000003", "00000000000000000000000000000011" );
             errors += check( "FAILED",  "0x00000006", "00000000000000000000000000000110" );
-            errors += check( "NEGNUM",  "enum_binary Invalid value for binary encoding '-2', negative has no meaning in a binary context." );
+            errors += check( "NEGNUM",  "enum_binary Invalid value for binary encoding of '-2'.  Negative values do not have a meaning in a binary context." );
             errors += check( "FOOBAR",  "enum_binary Invalid EU Enumeration value of 'FOOBAR'" );
 
             System.out.println( "" );

@@ -202,7 +202,7 @@ public class EncodingStringTest {
                                       "Basic_string_uint32" );
 
             errors += check( "This is a test",
-                             "Basic_string_uint32 Invalid String value for encoding unsigned of 'This is a test'" );
+                             "Basic_string_uint32 Invalid string value for encoding of raw type unsigned: 'This is a test'" );
 
             errors += check( "",
                              "0x00000000",
@@ -213,7 +213,7 @@ public class EncodingStringTest {
                              "00000000000000000000000000000101" );
 
             errors += check( 1.25,
-                             "Basic_string_uint32 Invalid Decimal value for encoding unsigned of '1.25'" );
+                             "Basic_string_uint32 Invalid decimal value for encoding of raw type unsigned: '1.25'" );
 
             errors += check( (float)99.0,
                              "0x00000063",
@@ -256,7 +256,7 @@ public class EncodingStringTest {
                                       "Basic_string_int32_signmag" );
 
             errors += check( "This is a test",
-                             "Basic_string_int32_signmag Invalid String value for encoding signMagnitude of 'This is a test'" );
+                             "Basic_string_int32_signmag Invalid string value for encoding of raw type signMagnitude: 'This is a test'" );
 
             errors += check( "",
                              "0x00000000",
@@ -271,7 +271,7 @@ public class EncodingStringTest {
                              "10000000000000000000000000000110" );
 
             errors += check( 1.25,
-                             "Basic_string_int32_signmag Invalid Decimal value for encoding signMagnitude of '1.25'" );
+                             "Basic_string_int32_signmag Invalid decimal value for encoding of raw type signMagnitude: '1.25'" );
 
             errors += check( (float)99.0,
                              "0x00000063",
@@ -314,7 +314,7 @@ public class EncodingStringTest {
                                       "Basic_string_int32_twoscomp" );
 
             errors += check( "This is a test",
-                             "Basic_string_int32_twoscomp Invalid String value for encoding twosComplement of 'This is a test'" );
+                             "Basic_string_int32_twoscomp Invalid string value for encoding of raw type twosComplement: 'This is a test'" );
 
             errors += check( "",
                              "0x00000000",
@@ -329,7 +329,7 @@ public class EncodingStringTest {
                              "11111111111111111111111111111010" );
 
             errors += check( 1.25,
-                             "Basic_string_int32_twoscomp Invalid Decimal value for encoding twosComplement of '1.25'" );
+                             "Basic_string_int32_twoscomp Invalid decimal value for encoding of raw type twosComplement: '1.25'" );
 
             errors += check( (float)99.0,
                              "0x00000063",
@@ -372,7 +372,7 @@ public class EncodingStringTest {
                                       "Basic_string_int32_onescomp" );
 
             errors += check( "This is a test",
-                             "Basic_string_int32_onescomp Invalid String value for encoding onesComplement of 'This is a test'" );
+                             "Basic_string_int32_onescomp Invalid string value for encoding of raw type onesComplement: 'This is a test'" );
 
             errors += check( "",
                              "0x00000000",
@@ -387,7 +387,7 @@ public class EncodingStringTest {
                              "11111111111111111111111111111001" );
 
             errors += check( 1.25,
-                             "Basic_string_int32_onescomp Invalid Decimal value for encoding onesComplement of '1.25'" );
+                             "Basic_string_int32_onescomp Invalid decimal value for encoding of raw type onesComplement: '1.25'" );
 
             errors += check( (float)99.0,
                              "0x00000063",
@@ -430,7 +430,7 @@ public class EncodingStringTest {
                                       "Basic_string_float32" );
 
             errors += check( "This is a test",
-                             "Basic_string_float32 Invalid String value for encoding IEEE754_1985 of 'This is a test'" );
+                             "Basic_string_float32 Invalid string value for encoding of raw type IEEE754_1985: 'This is a test'" );
 
             errors += check( "",
                              "0x00000000",
@@ -457,7 +457,7 @@ public class EncodingStringTest {
                                       "Basic_string_float64" );
 
             errors += check( "This is a test",
-                             "Basic_string_float64 Invalid String value for encoding IEEE754_1985 of 'This is a test'" );
+                             "Basic_string_float64 Invalid string value for encoding of raw type IEEE754_1985: 'This is a test'" );
 
             errors += check( "",
                              "0x0000000000000000",
