@@ -1339,7 +1339,7 @@ public abstract class XTCEContainerContentModelBase {
                 // warning about container content exceeding max size spec
                 // do I truncate or attempt to truncate?
                 warnings_.add( XTCEFunctions.getText( "warning_contproc_containername") + // NOI18N
-                               "'" + // NOI18N
+                               " '" + // NOI18N
                                getName() +
                                "' " + // NOI18N
                                XTCEFunctions.getText( "warning_contproc_exceedsmax" ) + // NOI18N
