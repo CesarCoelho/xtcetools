@@ -1457,6 +1457,39 @@ limitations under the License.
 							<xtce:Enumeration label="HIGH" value="2"/>
 						</xtce:EnumerationList>
 					</xtce:EnumeratedParameterType>
+					<xtce:FloatParameterType name="Float_MathOpCal_1_Type" sizeInBits="32" shortDescription="This is a float parameter with a simple math operation calibrator">
+						<xtce:UnitSet/>
+						<xtce:FloatDataEncoding bitOrder="mostSignificantBitFirst" encoding="IEEE754_1985" sizeInBits="32">
+							<xtce:DefaultCalibrator>
+                                                            <xtce:MathOperationCalibrator>
+                                                                <xtce:ValueOperand>0.5</xtce:ValueOperand>
+                                                                <xtce:ThisParameterOperand/>
+                                                                <xtce:Operator>*</xtce:Operator>
+                                                                <xtce:ValueOperand>1.25</xtce:ValueOperand>
+                                                                <xtce:Operator>+</xtce:Operator>
+                                                            </xtce:MathOperationCalibrator>
+							</xtce:DefaultCalibrator>
+						</xtce:FloatDataEncoding>
+					</xtce:FloatParameterType>
+					<xtce:FloatParameterType name="Float_MathOpCal_2_Type" sizeInBits="64" shortDescription="This is a float parameter with a longer math operation calibrator">
+						<xtce:UnitSet/>
+						<xtce:FloatDataEncoding bitOrder="mostSignificantBitFirst" encoding="IEEE754_1985" sizeInBits="64">
+							<xtce:DefaultCalibrator>
+                                                            <xtce:MathOperationCalibrator>
+                                                                <!-- Equation in "infix" notation: 64 * log(2)[1.234 * value] also is 64 * (ln[1.234 * value] / ln[2]) -->
+                                                                <xtce:ValueOperand>1.234</xtce:ValueOperand>
+                                                                <xtce:ThisParameterOperand/>
+                                                                <xtce:Operator>*</xtce:Operator>
+                                                                <xtce:Operator>ln</xtce:Operator>
+                                                                <xtce:ValueOperand>2.0</xtce:ValueOperand>
+                                                                <xtce:Operator>ln</xtce:Operator>
+                                                                <xtce:Operator>/</xtce:Operator>
+                                                                <xtce:ValueOperand>64.0</xtce:ValueOperand>
+                                                                <xtce:Operator>*</xtce:Operator>
+                                                            </xtce:MathOperationCalibrator>
+							</xtce:DefaultCalibrator>
+						</xtce:FloatDataEncoding>
+					</xtce:FloatParameterType>
 				</xtce:ParameterTypeSet>
 				<xtce:ParameterSet>
 					<xtce:Parameter name="Battery_Charge_Mode" parameterTypeRef="Battery_Charge_Mode_Type">
@@ -1590,6 +1623,16 @@ limitations under the License.
 					</xtce:Parameter>
 					<xtce:Parameter name="EarthSensorLevel" parameterTypeRef="EarthSensorSplineCalType" shortDescription="Illumination level of the earth sensor">
 						<xtce:ParameterProperties dataSource="telemetered" readOnly="true"/>
+					</xtce:Parameter>
+					<xtce:Parameter name="Float_MathOpCal_1" parameterTypeRef="Float_MathOpCal_1_Type">
+						<xtce:ParameterProperties dataSource="telemetered" readOnly="true">
+							<xtce:SystemName>NONE</xtce:SystemName>
+						</xtce:ParameterProperties>
+					</xtce:Parameter>
+					<xtce:Parameter name="Float_MathOpCal_2" parameterTypeRef="Float_MathOpCal_2_Type">
+						<xtce:ParameterProperties dataSource="telemetered" readOnly="true">
+							<xtce:SystemName>NONE</xtce:SystemName>
+						</xtce:ParameterProperties>
 					</xtce:Parameter>
 				</xtce:ParameterSet>
 				<xtce:ContainerSet>

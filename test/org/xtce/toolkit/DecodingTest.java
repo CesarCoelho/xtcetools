@@ -28,8 +28,11 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.Ignore;
+import org.omg.space.xtce.CalibratorType;
+import org.omg.space.xtce.CalibratorType.MathOperationCalibrator;
 import org.omg.space.xtce.ContextCalibratorType;
 import org.omg.space.xtce.MatchCriteriaType;
+import org.xtce.math.MathOperationCalibration;
 
 /**
  *
@@ -1060,6 +1063,172 @@ public class DecodingTest {
     }
 
     @Test
+    public void testFloatParameterTypesWithRawFloatOrder0Calibrator() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        long errors = 0;
+
+        try {
+
+            System.out.println( "Testing EU Float Raw Float Bad Calibrator" );
+
+            getParameterItemValueObj( "/BogusSAT/SC001/BusElectronics",
+                                      "Float_Order0_PolyTerms" );
+
+            errors += checkPass( "2.2",
+                                 "0x00df" );
+
+
+            errors += checkPass( "2.2",
+                                 "0x00af" );
+
+            System.out.println( "" );
+
+        } catch ( Throwable ex ) {
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+        if ( errors != 0 ) {
+            Assert.fail( "Not all checks passed" );
+        }
+
+    }
+
+    @Test
+    public void testFloatParameterTypesWithRawFloatBadCalibrator() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        long errors = 0;
+
+        try {
+
+            System.out.println( "Testing EU Float Raw Float Bad Calibrator" );
+
+            getParameterItemValueObj( "/BogusSAT/SC001/BusElectronics",
+                                      "Float_Missing_PolyTerms" );
+
+            errors += checkFail( 7.0,
+                                 "Float_Missing_PolyTerms No terms specified for the polynomial calibrator." );
+
+            getParameterItemValueObj( "/BogusSAT/SC001/BusElectronics",
+                                      "Float_Missing_SplinePoints" );
+
+            errors += checkFail( 7.0,
+                                 "Float_Missing_SplinePoints Spline calibrator does not have at least 2 points to work from." );
+
+            getParameterItemValueObj( "/BogusSAT/SC001/BusElectronics",
+                                      "Spline_Quad_Interpolate_Bad" );
+
+            errors += checkFail( 1.0,
+                                 "Spline_Quad_Interpolate_Bad Unsupported order of approximation for spline points of '2', Only flat and linear orders 0 and 1 are supported." );
+
+            getParameterItemValueObj( "/BogusSAT/SC001/BusElectronics",
+                                      "Float_MathOpCal_3" );
+
+            errors += checkFail( 7.0,
+                                 "Float_MathOpCal_3 Invalid postfix expression evaluation, stack size is 0" );
+
+            try {
+                CalibratorType defCalObj3 = ppp_.getDefaultCalibrator();
+                MathOperationCalibrator mathCalObj3 = defCalObj3.getMathOperationCalibrator();
+                MathOperationCalibration calObj3 = new MathOperationCalibration( mathCalObj3 );
+                System.out.println( "FAILED: Expected exception from calObj3.toInfixString(): " + calObj3.toInfixString() );
+                ++errors;
+            } catch ( XTCEDatabaseException ex ) {
+                System.out.println( "PASSED: Exception from calObj3.toInfixString(): " + ex.getLocalizedMessage() );
+            }
+
+            //getParameterItemValueObj( "/BogusSAT/SC001/BusElectronics",
+            //                          "Float_MathOpCal_2" );
+
+            //errors += checkFail( 5.0,
+            //                     "Float_MathOpCal_2 Non-terminating decimal expansion; no exact representable decimal result." );
+
+            getParameterItemValueObj( "/BogusSAT/SC001/BusElectronics",
+                                      "Float_MathOpCal_4" );
+
+            errors += checkFail( 1.0,
+                                 "Float_MathOpCal_4 Unsupported MathOperation element ParameterInstanceRefType" );
+
+            CalibratorType defCalObj = ppp_.getDefaultCalibrator();
+            MathOperationCalibrator mathCalObj = defCalObj.getMathOperationCalibrator();
+            MathOperationCalibration calObj = new MathOperationCalibration( mathCalObj );
+
+            Assert.assertEquals( "3.0 Float_MathOpCal_1.cal * Float_MathOpCal_2.uncal +",
+                                 calObj.toString() );
+
+            Assert.assertEquals( "((3.0 * Float_MathOpCal_1.cal) + Float_MathOpCal_2.uncal)",
+                                 calObj.toInfixString() );
+
+            getParameterItemValueObj( "/BogusSAT/SC001/BusElectronics",
+                                      "Float_MathOpCal_5" );
+
+            errors += checkFail( 1.0,
+                                 "Float_MathOpCal_5 Invalid postfix expression evaluation, stack size is 0" );
+
+            try {
+                CalibratorType defCalObj5 = ppp_.getDefaultCalibrator();
+                MathOperationCalibrator mathCalObj5 = defCalObj5.getMathOperationCalibrator();
+                MathOperationCalibration calObj5 = new MathOperationCalibration( mathCalObj5 );
+                System.out.println( "FAILED: Expected exception from calObj5.toInfixString(): " + calObj5.toInfixString() );
+                ++errors;
+            } catch ( XTCEDatabaseException ex ) {
+                System.out.println( "PASSED: Exception from calObj5.toInfixString(): " + ex.getLocalizedMessage() );
+            }
+
+            getParameterItemValueObj( "/BogusSAT/SC001/BusElectronics",
+                                      "Float_MathOpCal_6" );
+
+            errors += checkFail( 1.0,
+                                 "Float_MathOpCal_6 Unsupported math operator 'foo'" );
+
+            try {
+                CalibratorType defCalObj6 = ppp_.getDefaultCalibrator();
+                MathOperationCalibrator mathCalObj6 = defCalObj6.getMathOperationCalibrator();
+                MathOperationCalibration calObj6 = new MathOperationCalibration( mathCalObj6 );
+                System.out.println( "FAILED: Expected exception from calObj6.toInfixString(): " + calObj6.toInfixString() );
+                ++errors;
+            } catch ( XTCEDatabaseException ex ) {
+                System.out.println( "PASSED: Exception from calObj6.toInfixString(): " + ex.getLocalizedMessage() );
+            }
+
+            getParameterItemValueObj( "/BogusSAT/SC001/BusElectronics",
+                                      "Float_MathOpCal_10" );
+
+            errors += checkFail( 1.0,
+                                 "Float_MathOpCal_10 Division by zero in expression" );
+
+            try {
+                CalibratorType defCalObj10 = ppp_.getDefaultCalibrator();
+                MathOperationCalibrator mathCalObj10 = defCalObj10.getMathOperationCalibrator();
+                MathOperationCalibration calObj10 = new MathOperationCalibration( mathCalObj10 );
+                System.out.println( "PASSED: No exception from calObj10.toInfixString(): " + calObj10.toInfixString() );
+            } catch ( XTCEDatabaseException ex ) {
+                System.out.println( "FAILED: Exception from calObj10.toInfixString(): " + ex.getLocalizedMessage() );
+                ++errors;
+            }
+
+            System.out.println( "" );
+
+        } catch ( Throwable ex ) {
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+        if ( errors != 0 ) {
+            Assert.fail( "Not all checks passed" );
+        }
+
+    }
+
+    @Test
     public void testFloatParameterTypesWithRawFloatSplineCalibrator() {
 
         final String methodName =
@@ -1102,6 +1271,228 @@ public class DecodingTest {
 
             //errors += check( 5.0,
             //                 "Spline Calibrator for Spline_Demo does not bound calibrated value 5.0 and extrapolate is false" );
+
+            System.out.println( "" );
+
+        } catch ( Throwable ex ) {
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+        if ( errors != 0 ) {
+            Assert.fail( "Not all checks passed" );
+        }
+
+    }
+
+    @Test
+    public void testFloatParameterTypesWithRawFloatMathOperationCalibrator1() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        long errors = 0;
+
+        try {
+
+            System.out.println( "Testing EU Float Raw float MathOperation Calibrator 1" );
+
+            getParameterItemValueObj( "/BogusSAT/SC001/BusElectronics",
+                                      "Float_MathOpCal_1" );
+
+            errors += checkPass( "3.25",
+                                 "0x40800000" );
+
+            CalibratorType defCalObj = ppp_.getDefaultCalibrator();
+            MathOperationCalibrator mathCalObj = defCalObj.getMathOperationCalibrator();
+            MathOperationCalibration calObj = new MathOperationCalibration( mathCalObj );
+
+            Assert.assertEquals( "0.5 uncal * 1.25 +",
+                                 calObj.toString() );
+
+            Assert.assertEquals( "((0.5 * uncal) + 1.25)",
+                                 calObj.toInfixString() );
+
+            System.out.println( "" );
+
+        } catch ( Throwable ex ) {
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+        if ( errors != 0 ) {
+            Assert.fail( "Not all checks passed" );
+        }
+
+    }
+
+    @Test
+    public void testFloatParameterTypesWithRawFloatMathOperationCalibrator2() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        long errors = 0;
+
+        try {
+
+            System.out.println( "Testing EU Float Raw float MathOperation Calibrator 2" );
+
+            getParameterItemValueObj( "/BogusSAT/SC001/BusElectronics",
+                                      "Float_MathOpCal_2" );
+
+            errors += checkPass( "-129.189484825602022510793176479637622833251953125000000",
+                                 "0x3fc999999999999a" ); // 0.2
+
+            errors += checkPass( "168.01731131998036516961292363703250885009765625000000",
+                                 "0x4014000000000000" ); // 5.0
+
+            CalibratorType defCalObj = ppp_.getDefaultCalibrator();
+            MathOperationCalibrator mathCalObj = defCalObj.getMathOperationCalibrator();
+            MathOperationCalibration calObj = new MathOperationCalibration( mathCalObj );
+
+            Assert.assertEquals( "1.234 uncal * ln 2.0 ln / 64.0 *",
+                                 calObj.toString() );
+
+            Assert.assertEquals( "((ln[(1.234 * uncal)] / ln[2.0] ) * 64.0)",
+                                 calObj.toInfixString() );
+
+            System.out.println( "" );
+
+        } catch ( Throwable ex ) {
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+        if ( errors != 0 ) {
+            Assert.fail( "Not all checks passed" );
+        }
+
+    }
+
+    @Test
+    public void testFloatParameterTypesWithRawFloatMathOperationCalibrator7() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        long errors = 0;
+
+        try {
+
+            System.out.println( "Testing EU Float Raw float MathOperation Calibrator 7" );
+
+            getParameterItemValueObj( "/BogusSAT/SC001/BusElectronics",
+                                      "Float_MathOpCal_7" );
+
+            errors += checkPass( "64",
+                                 "0x3fc999999999999a" ); // 0.2
+
+            errors += checkPass( "64",
+                                 "0x4014000000000000" ); // 5.0
+
+            CalibratorType defCalObj = ppp_.getDefaultCalibrator();
+            MathOperationCalibrator mathCalObj = defCalObj.getMathOperationCalibrator();
+            MathOperationCalibration calObj = new MathOperationCalibration( mathCalObj );
+
+            Assert.assertEquals( "5.0 3.0 - 3.0 ^ 92.0 + log 1/x -4.0 * abs 5.0 swap - 2.0 - asin cos acos sin acos atan 19.0 + 8.0 % 4.0 y^x",
+                                 calObj.toString() );
+
+            Assert.assertEquals( "(4.0 ^ ((atan[acos[sin[acos[cos[asin[((abs[((1.0 / log[(((5.0 - 3.0) ^ 3.0) + 92.0)]) * -4.0)] - 5.0) - 2.0)]]]]]] + 19.0) % 8.0) )",
+                                 calObj.toInfixString() );
+
+            System.out.println( "" );
+
+        } catch ( Throwable ex ) {
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+        if ( errors != 0 ) {
+            Assert.fail( "Not all checks passed" );
+        }
+
+    }
+
+    @Test
+    public void testFloatParameterTypesWithRawFloatMathOperationCalibrator8() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        long errors = 0;
+
+        try {
+
+            System.out.println( "Testing EU Float Raw float MathOperation Calibrator 8" );
+
+            getParameterItemValueObj( "/BogusSAT/SC001/BusElectronics",
+                                      "Float_MathOpCal_8" );
+
+            errors += checkPass( "2.718281828459045090795598298427648842334747314453125",
+                                 "0x3fc999999999999a" ); // 0.2
+
+            errors += checkPass( "2.718281828459045090795598298427648842334747314453125",
+                                 "0x4014000000000000" ); // 5.0
+
+            CalibratorType defCalObj = ppp_.getDefaultCalibrator();
+            MathOperationCalibrator mathCalObj = defCalObj.getMathOperationCalibrator();
+            MathOperationCalibration calObj = new MathOperationCalibration( mathCalObj );
+
+            Assert.assertEquals( "99.0 100.0 == 12.0 != 1.0 == 1.0 != 5.0 < 0.0 < 5.0 > -1.0 > 1.0 <= 2.0 <= 0.0 <= 4.0 >= 0.0 >= 0.0 >= e^x",
+                                 calObj.toString() );
+
+            Assert.assertEquals( "(e ^ ((((((((((((((99.0 == 100.0) != 12.0) == 1.0) != 1.0) < 5.0) < 0.0) > 5.0) > -1.0) <= 1.0) <= 2.0) <= 0.0) >= 4.0) >= 0.0) >= 0.0))",
+                                 calObj.toInfixString() );
+
+            System.out.println( "" );
+
+        } catch ( Throwable ex ) {
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+        if ( errors != 0 ) {
+            Assert.fail( "Not all checks passed" );
+        }
+
+    }
+
+    @Test
+    public void testFloatParameterTypesWithRawFloatMathOperationCalibrator9() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        long errors = 0;
+
+        try {
+
+            System.out.println( "Testing EU Float Raw float MathOperation Calibrator 9" );
+
+            getParameterItemValueObj( "/BogusSAT/SC001/BusElectronics",
+                                      "Float_MathOpCal_9" );
+
+            errors += checkPass( "1.707298654565544193673076733830384910106658935546875",
+                                 "0x3fc999999999999a" ); // 0.2
+
+            errors += checkPass( "1.707298654565544193673076733830384910106658935546875",
+                                 "0x4014000000000000" ); // 5.0
+
+            CalibratorType defCalObj = ppp_.getDefaultCalibrator();
+            MathOperationCalibrator mathCalObj = defCalObj.getMathOperationCalibrator();
+            MathOperationCalibration calObj = new MathOperationCalibration( mathCalObj );
+
+            Assert.assertEquals( "90.0 1.0 - cos 89.0 + cos 45.0 + tan tanh cosh sinh",
+                                 calObj.toString() );
+
+            Assert.assertEquals( "sinh[cosh[tanh[tan[(cos[(cos[(90.0 - 1.0)] + 89.0)] + 45.0)]]]]",
+                                 calObj.toInfixString() );
 
             System.out.println( "" );
 

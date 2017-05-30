@@ -24,18 +24,16 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.BitSet;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import org.omg.space.xtce.AbsoluteTimeDataType;
 import org.omg.space.xtce.BooleanDataType;
 import org.omg.space.xtce.CalibratorType;
-import org.omg.space.xtce.CalibratorType.MathOperationCalibrator;
-import org.omg.space.xtce.CalibratorType.SplineCalibrator;
 import org.omg.space.xtce.NameDescriptionType;
-import org.omg.space.xtce.PolynomialType;
-import org.omg.space.xtce.SplinePointType;
 import org.omg.space.xtce.ValueEnumerationType;
+import org.xtce.math.Calibration;
+import org.xtce.math.MathOperationCalibration;
+import org.xtce.math.PolynomialCalibration;
+import org.xtce.math.SplineCalibration;
 import org.xtce.toolkit.XTCETypedObject.EngineeringType;
 import org.xtce.toolkit.XTCETypedObject.RawType;
 
@@ -1086,7 +1084,7 @@ public class XTCEItemValue {
             }
 
             case STRING:
-                return uncalibrateStringType( euValue );
+                return euValue;
 
             case BINARY:
                 return "0x" + // NOI18N
@@ -1304,36 +1302,6 @@ public class XTCEItemValue {
 
     }
 
-    /** Function to resolve a numeric uncalibrated value to a Calibrated EU
-     * Boolean string value.
-     *
-     * It appears that this function is no longer used and is proposed for
-     * removal in a later commit.
-     *
-     * @param uncalValue long containing the raw value, which will result in
-     * a warning if the value is not either 0 or 1.
-     *
-     * @return String containing the Boolean EU type text.
-     *
-     */
-
-    @Deprecated
-    private String booleanTypeFromUncalibrated( final long uncalValue ) {
-
-        if ( uncalValue == 0 ) {
-            return booleanZeroString_;
-        } else if ( uncalValue == 1 ) {
-            return booleanOneString_;
-        } else {
-            warn( itemName_ +
-                  " Invalid raw value of '" +
-                  Long.toString( uncalValue ) +
-                  "' for Boolean EU type" );
-            return booleanZeroString_;
-        }
-
-    }
-
     /** Function to resolve an Enumerated Engineering Type into the numeric
      * calibrated value.
      *
@@ -1386,42 +1354,6 @@ public class XTCEItemValue {
 
     }
 
-    /** Function to resolve a numeric uncalibrated value to a Calibrated EU
-     *  Enumerated string value.
-     *
-     * It appears that this function is no longer used and is proposed for
-     * removal in a later commit.
-     *
-     * @param uncalValue BigInteger containing the uncalibrated value.  A
-     * warning will be recorded if the number does not resolve to a label.
-     *
-     * @return String containing the Enumerated EU type text, or an empty
-     * string if no label was found for the numeric value.
-     *
-     */
-
-    @Deprecated
-    private String enumeratedTypeFromUncalibrated( final BigInteger uncalValue ) {
-
-        for ( ValueEnumerationType enumItem : enums_ ) {
-            BigInteger value    = enumItem.getValue();
-            BigInteger maxValue = value;
-            if ( enumItem.getMaxValue() != null ) {
-                maxValue = enumItem.getMaxValue();
-            }
-            if ( ( uncalValue.compareTo( value )    > -1 ) &&
-                 ( uncalValue.compareTo( maxValue ) < 1  ) ) {
-                return enumItem.getLabel();
-            }
-        }
-
-        warn( itemName_ + " No enumeration label found for value of '" +
-              uncalValue.toString() + "'");
-
-        return ""; // NOI18N
-
-    }
-
     private String uncalibrateIntegerType( final BigInteger calValue ) {
 
         switch ( rawTypeName_ ) {
@@ -1430,7 +1362,8 @@ public class XTCEItemValue {
             case signMagnitude:
             case twosComplement:
             case onesComplement: {
-                BigInteger uncalValue = integerEncodingUncalibrate( calValue );
+                BigDecimal decValue   = floatEncodingUncalibrate( calValue );
+                BigInteger uncalValue = decValue.toBigInteger();
                 if ( isIntegerRawValueReasonable( uncalValue ) == false ) {
                     return "0"; // NOI18N
                 }
@@ -1455,9 +1388,10 @@ public class XTCEItemValue {
                 return calValue.toString();
 
             default:
-                warn( "Unrecognized encoding type for " +
-                      itemName_ +
-                      " Encoding: " +
+                warn( itemName_ +
+                      " " + // NOI18N
+                      XTCEFunctions.getText( "error_encdec_rawtypenotsupported" ) + // NOI18N
+                      ": " + // NOI18N
                       rawTypeName_ );
 
         }
@@ -1474,7 +1408,8 @@ public class XTCEItemValue {
             case signMagnitude:
             case twosComplement:
             case onesComplement: {
-                BigInteger uncalValue = integerEncodingUncalibrate( calValue );
+                BigDecimal decValue   = floatEncodingUncalibrate( calValue );
+                BigInteger uncalValue = decValue.toBigInteger();
                 if ( isIntegerRawValueReasonable( uncalValue ) == false ) {
                     return "0"; // NOI18N
                 }
@@ -1499,9 +1434,10 @@ public class XTCEItemValue {
                 return calValue.toString();
 
             default:
-                warn( "Unrecognized encoding type for " +
-                      itemName_ +
-                      " Encoding: " +
+                warn( itemName_ +
+                      " " + // NOI18N
+                      XTCEFunctions.getText( "error_encdec_rawtypenotsupported" ) + // NOI18N
+                      ": " + // NOI18N
                       rawTypeName_ );
 
         }
@@ -1533,12 +1469,6 @@ public class XTCEItemValue {
 
     }
 
-    private String uncalibrateStringType( final String calValue ) {
-
-        return calValue;
-
-    }
-
     private String getCalibratedFromIntegerString( final String calValue ) {
 
         try {
@@ -1557,49 +1487,7 @@ public class XTCEItemValue {
             BigInteger retValue = smallerValue.toBigIntegerExact();
 
             if ( validRange_.isValidRangeApplied() == true ) {
-
-                try {
-                    if ( validRange_.isHighValueCalibrated() == true ) {
-                        BigInteger high = new BigInteger( validRange_.getHighValue() );
-                        if ( validRange_.isHighValueInclusive() == true ) {
-                            if ( high.compareTo( retValue ) == -1 ) {
-                                warn( itemName_ + " Calibrated value '" +
-                                      calValue + "' is too large for valid " +
-                                      "inclusive max value of '" +
-                                      validRange_.getHighValue() + "'" );
-                            }
-                        } else {
-                            if ( high.compareTo( retValue ) < 1 ) {
-                                warn( itemName_ + " Calibrated value '" +
-                                      calValue + "' is too large for valid " +
-                                      "exclusive max value of '" +
-                                      validRange_.getHighValue() + "'" );
-                            }
-                        }
-                    }
-                    if ( validRange_.isLowValueCalibrated() == true ) {
-                        BigInteger low = new BigInteger( validRange_.getLowValue() );
-                        if ( validRange_.isLowValueInclusive() == true ) {
-                            if ( low.compareTo( retValue ) == 1 ) {
-                                warn( itemName_ + " Calibrated value '" +
-                                      calValue + "' is too small for valid " +
-                                      "inclusive min value of '" +
-                                      validRange_.getLowValue() + "'" );
-                            }
-                        } else {
-                            if ( low.compareTo( retValue ) > -1 ) {
-                                warn( itemName_ + " Calibrated value '" +
-                                      calValue + "' is too small for valid " +
-                                      "exclusive min value of '" +
-                                      validRange_.getLowValue() + "'" );
-                            }
-                        }
-                    }
-                } catch ( NumberFormatException ex ) {
-                    warn( itemName_ + " Valid Range contains value that " +
-                          "is not representative of an integer" );
-                }
-
+                checkValidRangeCalibrated( new BigDecimal( retValue ), calValue );
             }
 
             return retValue.toString();
@@ -1618,51 +1506,15 @@ public class XTCEItemValue {
     private String getCalibratedFromFloatString( final String calValue ) {
 
         try {
+
             BigDecimal retValue = new BigDecimal( calValue );
+
             if ( validRange_.isValidRangeApplied() == true ) {
-                try {
-                    if ( validRange_.isHighValueCalibrated() == true ) {
-                        BigDecimal high = new BigDecimal( validRange_.getHighValue() );
-                        if ( validRange_.isHighValueInclusive() == true ) {
-                            if ( high.compareTo( retValue ) == -1 ) {
-                                warn( itemName_ + " Calibrated value '" +
-                                      calValue + "' is too large for valid " +
-                                      "inclusive max value of '" +
-                                      validRange_.getHighValue() + "'" );
-                            }
-                        } else {
-                            if ( high.compareTo( retValue ) < 1 ) {
-                                warn( itemName_ + " Calibrated value '" +
-                                      calValue + "' is too large for valid " +
-                                      "exclusive max value of '" +
-                                      validRange_.getHighValue() + "'" );
-                            }
-                        }
-                    }
-                    if ( validRange_.isLowValueCalibrated() == true ) {
-                        BigDecimal low = new BigDecimal( validRange_.getLowValue() );
-                        if ( validRange_.isLowValueInclusive() == true ) {
-                            if ( low.compareTo( retValue ) == 1 ) {
-                                warn( itemName_ + " Calibrated value '" +
-                                      calValue + "' is too small for valid " +
-                                      "inclusive min value of '" +
-                                      validRange_.getLowValue() + "'" );
-                            }
-                        } else {
-                            if ( low.compareTo( retValue ) > -1 ) {
-                                warn( itemName_ + " Calibrated value '" +
-                                      calValue + "' is too small for valid " +
-                                      "exclusive min value of '" +
-                                      validRange_.getLowValue() + "'" );
-                            }
-                        }
-                    }
-                } catch ( NumberFormatException ex ) {
-                    warn( itemName_ + " Valid Range contains value that " +
-                          "is not representative of a floating point number" );
-                }
+                checkValidRangeCalibrated( retValue, calValue );
             }
+
             return retValue.toString();
+
         } catch ( NumberFormatException ex ) {
             warn( itemName_ + " Calibrated value '" +
                   calValue + "' is not representative of a floating " +
@@ -1728,12 +1580,62 @@ public class XTCEItemValue {
 
     }
 
+    private void checkValidRangeCalibrated( BigDecimal retValue,
+                                            String     calValue ) {
+
+        try {
+
+            if ( validRange_.isHighValueCalibrated() == true ) {
+                BigDecimal high = new BigDecimal( validRange_.getHighValue() );
+                if ( validRange_.isHighValueInclusive() == true ) {
+                    if ( high.compareTo( retValue ) == -1 ) {
+                        warn( itemName_ + " Calibrated value '" +
+                              calValue + "' is too large for valid " +
+                              "inclusive max value of '" +
+                              validRange_.getHighValue() + "'" );
+                    }
+                } else {
+                    if ( high.compareTo( retValue ) < 1 ) {
+                        warn( itemName_ + " Calibrated value '" +
+                              calValue + "' is too large for valid " +
+                              "exclusive max value of '" +
+                              validRange_.getHighValue() + "'" );
+                    }
+                }
+            }
+
+            if ( validRange_.isLowValueCalibrated() == true ) {
+                BigDecimal low = new BigDecimal( validRange_.getLowValue() );
+                if ( validRange_.isLowValueInclusive() == true ) {
+                    if ( low.compareTo( retValue ) == 1 ) {
+                        warn( itemName_ + " Calibrated value '" +
+                              calValue + "' is too small for valid " +
+                              "inclusive min value of '" +
+                              validRange_.getLowValue() + "'" );
+                    }
+                } else {
+                    if ( low.compareTo( retValue ) > -1 ) {
+                        warn( itemName_ + " Calibrated value '" +
+                              calValue + "' is too small for valid " +
+                              "exclusive min value of '" +
+                              validRange_.getLowValue() + "'" );
+                    }
+                }
+            }
+
+        } catch ( NumberFormatException ex ) {
+            warn( itemName_ + " Valid Range contains value that " +
+                  "is not representative of the numeric engineering type " +
+                  euTypeName_ );
+        }
+
+    }
+
     /** Private method to calculate and apply the calibrator to the
      * uncalibrated value.
      *
-     * This method does not support ContextCalibrator and
-     * MathOperationCalibrator elements and will record a warning.
-     * ContextCalibrators are quietly ignored.
+     * This method does not support MathOperationCalibrator elements and will
+     * record a warning.  MathOperationCalibrators are quietly ignored.
      *
      * @param uncalValue String containing the uncalibrated value derived from
      * the raw binary value in the stream.
@@ -1745,165 +1647,36 @@ public class XTCEItemValue {
 
     private String applyCalibrator( final String uncalValue ) {
 
-        CalibratorType calNode = defCal_;
-        if ( calNode == null ) {
+        if ( defCal_ == null ) {
             return uncalValue;
         }
 
-        double xValue = Double.valueOf( uncalValue );
+        try {
 
-        if ( calNode.getPolynomialCalibrator() != null ) {
-            PolynomialType polyCalNode = calNode.getPolynomialCalibrator();
-            List<PolynomialType.Term> terms = polyCalNode.getTerm();
-            double doubleValue = applyPolynomial( xValue, terms );
-            return Double.toString( doubleValue );
-        } else if ( calNode.getSplineCalibrator() != null ) {
-            SplineCalibrator      splineNode  = calNode.getSplineCalibrator();
-            BigInteger            order       = splineNode.getOrder();
-            boolean               extrapolate = splineNode.isExtrapolate();
-            List<SplinePointType> points      = splineNode.getSplinePoint();
-            double doubleValue = applySpline( xValue, order, extrapolate, points );
-            return Double.toString( doubleValue );
-        } else {
-            warn( itemName_ + " Unsupported calibrator form" );
-        }
+            Calibration calObj;
 
-        return "";
-
-    }
-
-    /** Private method to apply a Polynomial Calibrator to an uncalibrated
-     * value.
-     *
-     * This method doesn't care which order the coefficient/exponent terms
-     * appears because of the commutative property of addition, so any
-     * sequence of terms may be specified in XTCE and this function will apply
-     * them as they are specified.
-     *
-     * This function is not concerned with the encoding type (integer or float)
-     * when performing the calculation.  The calculation is always done in the
-     * floating point space and if the engineering type is integer, then it
-     * will be later rounded back.  This could be a point of controversy.
-     *
-     * @param xValue double containing the uncalibrated value.
-     *
-     * @param terms List of the Term elements in the XTCE Polynomial Calibrator
-     * element.
-     *
-     * @return double containing the results.
-     *
-     */
-
-    private double applyPolynomial( final double                    xValue,
-                                    final List<PolynomialType.Term> terms ) {
-
-        double yValue = 0.0;
-        for ( PolynomialType.Term term : terms ) {
-            double coeff    = term.getCoefficient();
-            double exponent = term.getExponent().doubleValue();
-            double powTerm  = Math.pow( xValue, exponent );
-            yValue += coeff * powTerm;
-        }
-        return yValue;
-
-    }
-
-    /** Private method to apply a Spline Calibrator, otherwise known as a
-     * "piecewise function", to an uncalibrated raw value.
-     *
-     * The Spline Point pairs in XTCE are expected to be in sequential order
-     * from lowest to highest raw value.  The first two points are mandatory
-     * and subsequent points are made by adding one new point and dropping the
-     * previous low point.  This assures that the evaluation is continuous.  It
-     * is also assumed that they are in order from lowest raw value to highest
-     * raw value.
-     *
-     * @param xValue double containing the uncalibrated value.
-     *
-     * @param order BigInteger indicating the order of interpolation between
-     * the points.  This can be 0, which is a flat line from the low point to
-     * the high point, 1 for a linear interpolation, and 2 for a quadratic
-     * interpolation.  In the event that the value is exactly at the high
-     * point of the pair of points, then the value is evaluated when the next
-     * pair occurs and the value is at the low point.
-     *
-     * @param extrapolate boolean indicating if the value should be
-     * extrapolated when outside of the spline point pairs based on the curve
-     * from the first or last spline point set, respectively.
-     *
-     * @param points List of SplinePointType objects from the SplinePoint
-     * elements in the XTCE SplineCalibrator element.  Two more more of these
-     * will always exist per the XTCE schema definition.
-     *
-     * @return BigDecimal containing the results.
-     *
-     */
-
-    private double applySpline( final double                xValue,
-                                final BigInteger            order,
-                                final boolean               extrapolate,
-                                final List<SplinePointType> points ) {
-
-        // TODO: Support quadratics because I did it on the other side
-
-        if ( ( order.intValue() > 1 ) || ( order.intValue() < 0 ) ) {
-            warn( itemName_ + " Unsupported Spline " +
-                  "order of approximation " + order.toString() +
-                  ", only flat and linear (0, 1) are supported." );
-            return xValue;
-        }
-
-        if ( points.size() < 2 ) {
-            warn( itemName_ + " Needs at least 2 spline points to calibrate" );
-            return xValue;
-        }
-
-        double rawLow  = points.get( 0 ).getRaw();
-        double calLow  = points.get( 0 ).getCalibrated();
-        double rawHigh = rawLow;
-        double calHigh = calLow;
-
-        for ( int iii = 1; iii < points.size(); ++iii ) {
-            rawHigh = points.get( iii ).getRaw();
-            calHigh = points.get( iii ).getCalibrated();
-            if ( ( xValue >= rawLow ) && ( xValue <= rawHigh ) ) {
-                if ( order.intValue() == 0 ) {
-                    // if it equals rawHigh, then take the next one as there is
-                    // a discontinuity and this is how I handled it
-                    if ( xValue < rawHigh ) {
-                        return calLow;
-                    }
-                } else if ( order.intValue() == 1 ) {
-                    if ( rawHigh - rawLow == 0.0 ) {
-                        warn( "Spline Calibrator for " +
-                              itemName_ +
-                              " has infinite slope between cal values " +
-                              Double.toString( calLow ) +
-                              " and " +
-                              Double.toString( calHigh ) );
-                        return calLow;
-                    }
-                    double slope = ( calHigh - calLow ) / ( rawHigh - rawLow );
-                    double intercept = calLow - ( slope * rawLow );
-                    //double slope = ( rawHigh - rawLow ) / ( calHigh - calLow );
-                    //System.out.println( "xvalue = " + new Double( xValue ).toString() +
-                    //    " slope = " + new Double( slope ).toString() +
-                    //    " calLow = " + new Double( calLow ).toString() +
-                    //    " calHigh = " + new Double( calHigh ).toString() );
-                    return ( slope * xValue ) + intercept;
-                }
+            if ( defCal_.getPolynomialCalibrator() != null ) {
+                calObj = new PolynomialCalibration( defCal_.getPolynomialCalibrator(), validRange_, rawSizeInBits_, rawTypeName_ );
+            } else if ( defCal_.getSplineCalibrator() != null ) {
+                calObj = new SplineCalibration( defCal_.getSplineCalibrator() );
+            } else if ( defCal_.getMathOperationCalibrator() != null ) {
+                calObj = new MathOperationCalibration( defCal_.getMathOperationCalibrator() );
+            } else {
+                warn( itemName_ +
+                      " " + // NOI18N
+                      XTCEFunctions.getText( "error_encdec_unknown_calibrator" ) ); // NOI18N
+                return uncalValue;
             }
-            rawLow = rawHigh;
-            calLow = calHigh;
+
+            return calObj.calibrate( Double.valueOf( uncalValue ) ).toString();
+
+        } catch ( XTCEDatabaseException ex ) {
+
+            warn( itemName_ + " " + ex.getLocalizedMessage() ); // NOI18N
+
         }
 
-        if ( extrapolate == true ) {
-            warn( itemName_ + " Extrapolation is not yet supported" );
-        }
-
-        // TODO out of bounds case, add extrapolate support
-
-        return calHigh;
+        return uncalValue;
 
     }
 
@@ -2178,392 +1951,34 @@ public class XTCEItemValue {
 
     }
 
-    private BigDecimal floatEncodingUncalibrate( final BigDecimal calValue ) {
+    private BigDecimal floatEncodingUncalibrate( final Number calValue ) {
 
-        if ( defCal_ == null ) {
-            return calValue;
-        }
+        try {
 
-        PolynomialType polyCal = defCal_.getPolynomialCalibrator();
-        if ( polyCal != null ) {
-            HashMap<BigInteger, BigDecimal> terms     = new HashMap<>();
-            List<PolynomialType.Term>       xtceTerms = polyCal.getTerm();
-            long maxExponent = 0;
-            for ( PolynomialType.Term term : xtceTerms ) {
-                if ( term.getCoefficient() != 0.0 ) {
-                    terms.put( term.getExponent(), new BigDecimal( term.getCoefficient() ) );
-                    if ( term.getExponent().longValue() > maxExponent ) {
-                        maxExponent = term.getExponent().longValue();
-                    }
-                }
-            }
-            if ( maxExponent <= 1 ) {
-                double value = calValue.doubleValue();
-                if ( terms.containsKey( BigInteger.ZERO ) == true ) {
-                    value -= terms.get( BigInteger.ZERO ).doubleValue();
-                }
-                if ( terms.containsKey( BigInteger.ONE ) == true ) {
-                    value /= terms.get( BigInteger.ONE ).doubleValue();
-                }
-                return new BigDecimal( value );
-            } else if ( maxExponent == 2 ) {
-                final BigInteger inttwo = new BigInteger( "2" );
-                // evaluate b^2 -4ac to determine if roots exist
-                double aaa = 0.0;
-                double bbb = 0.0;
-                double ccc = -1.0 * calValue.doubleValue();
-                if ( terms.containsKey( BigInteger.ZERO ) == true ) {
-                    ccc += terms.get( BigInteger.ZERO ).doubleValue();
-                }
-                if ( terms.containsKey( BigInteger.ONE ) == true ) {
-                    bbb = terms.get( BigInteger.ONE ).doubleValue();
-                }
-                if ( terms.containsKey( inttwo ) == true ) {
-                    aaa = terms.get( inttwo ).doubleValue();
-                }
-                double discriminant = Math.pow( bbb, 2 ) - ( 4.0 * aaa * ccc );
-                if ( discriminant < 0 ) {
-                    warn( "Polynomial Calibrator for " +
-                          itemName_ +
-                          " has no real roots for EU value " +
-                          calValue.toString() );
-                    return BigDecimal.ZERO;
-                }
-                double posroot = Math.sqrt( discriminant );
-                double root1   = ( ( bbb * -1.0 ) - posroot ) / ( 2.0 * aaa );
-                double root2   = ( ( bbb * -1.0 ) + posroot ) / ( 2.0 * aaa );
-                //System.out.println( "Root1 = " + Double.toString( root1 ) + " Root2 = " + Double.toString( root2 ) );
-                double bestPick = findBestRoot( root1, root2 );
-                return new BigDecimal( bestPick );
+            Calibration calObj;
+
+            if ( defCal_ == null ) {
+                return new BigDecimal( calValue.toString() );
+            } else if ( defCal_.getPolynomialCalibrator() != null ) {
+                calObj = new PolynomialCalibration( defCal_.getPolynomialCalibrator(), validRange_, rawSizeInBits_, rawTypeName_ );
+            } else if ( defCal_.getSplineCalibrator() != null ) {
+                calObj = new SplineCalibration( defCal_.getSplineCalibrator() );
+            } else if ( defCal_.getMathOperationCalibrator() != null ) {
+                calObj = new MathOperationCalibration( defCal_.getMathOperationCalibrator() );
             } else {
-                warn( "Polynomial Calibrator for " +
-                      itemName_ +
-                      " contains exponent power as high as " +
-                      Long.toString( maxExponent ) +
-                      ".  Not supported by this toolkit." );
-                return BigDecimal.ZERO;
+                warn( itemName_ +
+                      " " + // NOI18N
+                      XTCEFunctions.getText( "error_encdec_unknown_calibrator" ) ); // NOI18N
+                return new BigDecimal( calValue.toString() );
             }
+
+            return new BigDecimal( calObj.uncalibrate( calValue ).doubleValue() );
+
+        } catch ( XTCEDatabaseException ex ) {
+            warn( itemName_ + " " + ex.getLocalizedMessage() ); // NOI18N
         }
 
-        SplineCalibrator splineCal = defCal_.getSplineCalibrator();
-        if ( splineCal != null ) {
-            long    interpolateOrder = splineCal.getOrder().longValue();
-            boolean extrapolate      = splineCal.isExtrapolate();
-            List<SplinePointType> points = splineCal.getSplinePoint();
-            ArrayList<BigDecimal> calList = new ArrayList<>();
-            ArrayList<BigDecimal> rawList = new ArrayList<>();
-            for ( SplinePointType point : points ) {
-                calList.add( new BigDecimal( point.getCalibrated() ) );
-                rawList.add( new BigDecimal( point.getRaw() ) );
-            }
-            BigDecimal minCalValue = calList.get( 0 );
-            BigDecimal maxCalValue = calList.get( calList.size() - 1);
-            for ( BigDecimal cal : calList ) {
-                if ( cal.min( minCalValue ) == cal ) {
-                    minCalValue = cal;
-                }
-                if ( cal.max( maxCalValue ) == cal ) {
-                    maxCalValue = cal;
-                }
-            }
-            if ( extrapolate == false ) {
-                if ( ( calValue.compareTo( minCalValue ) < 0 ) ||
-                     ( calValue.compareTo( maxCalValue ) > 0 ) ) {
-                    warn( "Spline Calibrator for " +
-                          itemName_ +
-                          " does not bound calibrated value " +
-                          calValue.toString() +
-                          " and extrapolate is false" );
-                    return BigDecimal.ZERO;
-                }
-            }
-            // shema requires two spline points minimum, so this should never
-            // hit a null case where a spline point is not found.
-            BigDecimal rawValue1 = null;
-            BigDecimal rawValue2 = null;
-            BigDecimal calValue1 = null;
-            BigDecimal calValue2 = null;
-            Iterator<BigDecimal> calitr = calList.iterator();
-            Iterator<BigDecimal> rawitr = rawList.iterator();
-            if ( calitr.hasNext() == true ) {
-                calValue1 = calitr.next();
-                rawValue1 = rawitr.next();
-            }
-            while ( calitr.hasNext() == true ) {
-                if ( calValue2 != null ) {
-                    calValue1 = calValue2;
-                    rawValue1 = rawValue2;
-                }
-                calValue2 = calitr.next();
-                rawValue2 = rawitr.next();
-                //System.out.println( "Cals: cal1 = " + calValue1.toString() +
-                //                    " cal2 = " + calValue2.toString() );
-                if ( ( calValue1.compareTo( calValue ) <= 0 ) &&
-                     ( calValue2.compareTo( calValue ) >= 0 ) ) {
-                    if ( calValue.equals( calValue1 ) == true ) {
-                        return rawValue1;
-                    } else if ( calValue.equals( calValue2 ) == true ) {
-                        return rawValue2;
-                    }
-                    break;
-                }
-            }
-            if ( rawValue1 == null || rawValue2 == null ) {
-                warn( "Spline Calibrator for " +
-                      itemName_ +
-                      " does not bound calibrated value " +
-                      calValue.toString() );
-                return BigDecimal.ZERO;
-            }
-            //System.out.println( calValue.toString() +
-            //                    " Order = " + Long.toString( interpolateOrder ) +
-            //                    " y2 = " + calValue2.toString() +
-            //                    " y1 = " + calValue1.toString() +
-            //                    " x2 = " + rawValue2.toString() +
-            //                    " x1 = " + rawValue2.toString() );
-            double y2 = calValue2.doubleValue();
-            double y1 = calValue1.doubleValue();
-            double x2 = rawValue2.doubleValue();
-            double x1 = rawValue1.doubleValue();
-            if ( interpolateOrder == 0 ) {
-                return new BigDecimal( ( x1 + x2 ) / 2.0 );
-            } else if ( interpolateOrder == 1 ) {
-                if ( x2 - x1 == 0.0 ) {
-                    warn( "Spline Calibrator for " +
-                          itemName_ +
-                          " has infinite slope between cal values " +
-                          Double.toString( y1 ) +
-                          " and " +
-                          Double.toString( y2 ) );
-                    return new BigDecimal( x1 );
-                }
-                double slope = ( y2 - y1 ) / ( x2 - x1 );
-                //System.out.println( "Slope = " + Double.toString( slope ) );
-                if ( slope == 0.0 ) {
-                    // does not matter which since slope is 0
-                    return new BigDecimal( x1 );
-                }
-                double rawValue = ( calValue.doubleValue() - y1 ) / slope + x1;
-                //System.out.println( "Raw = " + Double.toString( rawValue ) );
-                return new BigDecimal( rawValue );
-            } else {
-                warn( "Spline Calibrator for " +
-                      itemName_ +
-                      " contains interpolate order of " +
-                      Long.toString( interpolateOrder ) +
-                      ".  Not supported by this toolkit." );
-                return BigDecimal.ZERO;
-            }
-        }
-
-        MathOperationCalibrator mathCal = defCal_.getMathOperationCalibrator();
-        if ( mathCal != null ) {
-            warn( "MathOperationCalibrator for " +
-                  itemName_ +
-                  " not supported" );
-            return BigDecimal.ZERO;
-        }
-
-        return calValue;
-
-    }
-
-    private BigInteger integerEncodingUncalibrate( final BigDecimal calValue ) {
-
-        if ( defCal_ == null ) {
-            return BigInteger.valueOf( Math.round( calValue.doubleValue() ) );
-        }
-
-        PolynomialType polyCal = defCal_.getPolynomialCalibrator();
-        if ( polyCal != null ) {
-            HashMap<BigInteger, BigDecimal> terms       = new HashMap<>();
-            List<PolynomialType.Term>       xtceTerms   = polyCal.getTerm();
-            long                            maxExponent = 0;
-            for ( PolynomialType.Term term : xtceTerms ) {
-                if ( term.getCoefficient() != 0.0 ) {
-                    terms.put( term.getExponent(), new BigDecimal( term.getCoefficient() ) );
-                    if ( term.getExponent().longValue() > maxExponent ) {
-                        maxExponent = term.getExponent().longValue();
-                    }
-                }
-            }
-            if ( maxExponent <= 1 ) {
-                double value = calValue.doubleValue();
-                if ( terms.containsKey( BigInteger.ZERO ) == true ) {
-                    value -= terms.get( BigInteger.ZERO ).doubleValue();
-                }
-                if ( terms.containsKey( BigInteger.ONE ) == true ) {
-                    value /= terms.get( BigInteger.ONE ).doubleValue();
-                }
-                return BigInteger.valueOf( Double.valueOf( value ).longValue() );
-            } else if ( maxExponent == 2 ) {
-                final BigInteger inttwo = new BigInteger( "2" );
-                // evaluate b^2 -4ac to determine if roots exist
-                double aaa = 0.0;
-                double bbb = 0.0;
-                double ccc = -1.0 * calValue.doubleValue();
-                if ( terms.containsKey( BigInteger.ZERO ) == true ) {
-                    ccc += terms.get( BigInteger.ZERO ).doubleValue();
-                }
-                if ( terms.containsKey( BigInteger.ONE ) == true ) {
-                    bbb = terms.get( BigInteger.ONE ).doubleValue();
-                }
-                if ( terms.containsKey( inttwo ) == true ) {
-                    aaa = terms.get( inttwo ).doubleValue();
-                }
-                double discriminant = Math.pow( bbb, 2 ) - ( 4.0 * aaa * ccc );
-                if ( discriminant < 0 ) {
-                    warn( "Polynomial Calibrator for " +
-                          itemName_ +
-                          " has no real roots for EU value " +
-                          calValue.toString() );
-                    return BigInteger.ZERO;
-                }
-                double posroot = Math.sqrt( discriminant );
-                double root1   = ( ( bbb * -1.0 ) - posroot ) / ( 2.0 * aaa );
-                double root2   = ( ( bbb * -1.0 ) + posroot ) / ( 2.0 * aaa );
-                //System.out.println( "Root1 = " + Double.toString( root1 ) + " Root2 = " + Double.toString( root2 ) );
-                double bestPick = findBestRoot( root1, root2 );
-                return BigInteger.valueOf( Math.round( bestPick ) );
-            } else {
-                warn( "Polynomial Calibrator for " +
-                      itemName_ +
-                      " contains exponent power as high as " +
-                      Long.toString( maxExponent ) +
-                      ".  Not supported by this toolkit." );
-                return BigInteger.ZERO;
-            }
-        }
-
-        SplineCalibrator splineCal = defCal_.getSplineCalibrator();
-        if ( splineCal != null ) {
-            long    interpolateOrder = splineCal.getOrder().longValue();
-            boolean extrapolate      = splineCal.isExtrapolate();
-            List<SplinePointType> points = splineCal.getSplinePoint();
-            ArrayList<BigDecimal> calList = new ArrayList<>();
-            ArrayList<BigDecimal> rawList = new ArrayList<>();
-            for ( SplinePointType point : points ) {
-                calList.add( new BigDecimal( point.getCalibrated() ) );
-                rawList.add( new BigDecimal( point.getRaw() ) );
-            }
-            BigDecimal minCalValue = calList.get( 0 );
-            BigDecimal maxCalValue = calList.get( calList.size() - 1);
-            for ( BigDecimal cal : calList ) {
-                if ( cal.min( minCalValue ) == cal ) {
-                    minCalValue = cal;
-                }
-                if ( cal.max( maxCalValue ) == cal ) {
-                    maxCalValue = cal;
-                }
-            }
-            if ( extrapolate == false ) {
-                if ( ( calValue.compareTo( minCalValue ) < 0 ) ||
-                     ( calValue.compareTo( maxCalValue ) > 0 ) ) {
-                    warn( "Spline Calibrator for " +
-                          itemName_ +
-                          " does not bound calibrated value " +
-                          calValue.toString() +
-                          " and extrapolate is false" );
-                    return BigInteger.ZERO;
-                }
-            }
-            BigDecimal rawValue1 = null;
-            BigDecimal rawValue2 = null;
-            BigDecimal calValue1 = null;
-            BigDecimal calValue2 = null;
-            Iterator<BigDecimal> calitr = calList.iterator();
-            Iterator<BigDecimal> rawitr = rawList.iterator();
-            if ( calitr.hasNext() == true ) {
-                calValue1 = calitr.next();
-                rawValue1 = rawitr.next();
-            }
-            while ( calitr.hasNext() == true ) {
-                if ( calValue2 != null ) {
-                    calValue1 = calValue2;
-                    rawValue1 = rawValue2;
-                }
-                calValue2 = calitr.next();
-                rawValue2 = rawitr.next();
-                //System.out.println( "Cals: cal1 = " + calValue1.toString() +
-                //                    " cal2 = " + calValue2.toString() );
-                if ( ( calValue1.compareTo( calValue ) <= 0 ) &&
-                     ( calValue2.compareTo( calValue ) >= 0 ) ) {
-                    if ( calValue.equals( calValue1 ) == true ) {
-                        return rawValue1.toBigInteger();
-                    } else if ( calValue.equals( calValue2 ) == true ) {
-                        return rawValue2.toBigInteger();
-                    }
-                    break;
-                }
-            }
-            if ( rawValue1 == null || rawValue2 == null ) {
-                warn( "Spline Calibrator for " +
-                      itemName_ +
-                      " does not bound calibrated value " +
-                      calValue.toString() );
-                return BigInteger.ZERO;
-            }
-            //System.out.println( calValue.toString() +
-            //                    " Order = " + Long.toString( interpolateOrder ) +
-            //                    " y2 = " + calValue2.toString() +
-            //                    " y1 = " + calValue1.toString() +
-            //                    " x2 = " + rawValue2.toString() +
-            //                    " x1 = " + rawValue2.toString() );
-            double y2 = calValue2.doubleValue();
-            double y1 = calValue1.doubleValue();
-            double x2 = rawValue2.doubleValue();
-            double x1 = rawValue1.doubleValue();
-            if ( interpolateOrder == 0 ) {
-                return new BigDecimal( ( x1 + x2 ) / 2.0 ).toBigInteger();
-            } else if ( interpolateOrder == 1 ) {
-                if ( x2 - x1 == 0.0 ) {
-                    warn( "Spline Calibrator for " +
-                          itemName_ +
-                          " has infinite slope between cal values " +
-                          Double.toString( y1 ) +
-                          " and " +
-                          Double.toString( y2 ) );
-                    return new BigDecimal( x1 ).toBigInteger();
-                }
-                double slope = ( y2 - y1 ) / ( x2 - x1 );
-                //System.out.println( "Slope = " + Double.toString( slope ) );
-                if ( slope == 0.0 ) {
-                    // does not matter which since slope is 0
-                    return new BigDecimal( x1 ).toBigInteger();
-                }
-                double rawValue = ( calValue.doubleValue() - y1 ) / slope + x1;
-                //System.out.println( "Raw = " + Double.toString( rawValue ) );
-                return new BigDecimal( rawValue ).toBigInteger();
-            } else {
-                warn( "Spline Calibrator for " +
-                      itemName_ +
-                      " contains interpolate order of " +
-                      Long.toString( interpolateOrder ) +
-                      ".  Not supported by this toolkit." );
-                return BigInteger.ZERO;
-            }
-        }
-
-        MathOperationCalibrator mathCal = defCal_.getMathOperationCalibrator();
-        if ( mathCal != null ) {
-            warn( "MathOperationCalibrator for " +
-                  itemName_ +
-                  " not supported" );
-            return BigInteger.ZERO;
-        }
-
-        return BigInteger.valueOf( calValue.longValue() );
-
-    }
-
-    private BigInteger integerEncodingUncalibrate( final BigInteger calValue ) {
-
-        if ( defCal_ == null ) {
-            return calValue;
-        }
-
-        // TODO customize this version of the function later
-        return integerEncodingUncalibrate( new BigDecimal( calValue ) );
+        return new BigDecimal( calValue.toString() );
 
     }
 
@@ -2790,90 +2205,6 @@ public class XTCEItemValue {
         }
 
         return true;
-
-    }
-
-    private double findBestRoot( double root1, double root2 ) {
-
-        // function is never called if BOTH are invalid since we checked the
-        // discriminant earlier.
-        if ( ( true  == Double.isNaN( root1 )    ) ||
-             ( root1 == Double.POSITIVE_INFINITY ) ||
-             ( root1 == Double.NEGATIVE_INFINITY ) ) {
-            root1 = root2;
-        }
-        if ( ( true  == Double.isNaN( root2 )    ) ||
-             ( root2 == Double.POSITIVE_INFINITY ) ||
-             ( root2 == Double.NEGATIVE_INFINITY ) ) {
-            root2 = root1;
-        }
-
-        if ( rawTypeName_ == RawType.unsigned ) {
-            // TODO worry about inclusive versus exclusive
-            long minValue = 0;
-            long maxValue = (long)Math.pow( 2, rawSizeInBits_  ) - 1;
-            if ( ( validRange_.isValidRangeApplied()  == true  ) &&
-                 ( validRange_.isLowValueCalibrated() == false ) ) {
-                minValue = Math.round( Double.parseDouble( validRange_.getLowValue() ) );
-            }
-            if ( ( validRange_.isValidRangeApplied()   == true  ) &&
-                 ( validRange_.isHighValueCalibrated() == false ) ) {
-                maxValue = Math.round( Double.parseDouble( validRange_.getHighValue() ) );
-            }
-            if ( ( root1 >= minValue ) && ( root1 <= maxValue ) ) {
-                return root1;
-            } else if ( ( root2 >= minValue ) && ( root2 <= maxValue ) ) {
-                return root2;
-            } else {
-                warn( "Polynomial Calibrator for " +
-                      itemName_ +
-                      " contains roots of " +
-                      Double.toString( root1 ) +
-                      " and " +
-                      Double.toString( root2 ) +
-                      ", neither of which are in the range of " +
-                      Long.toString( minValue ) +
-                      " to " +
-                      Long.toString( maxValue ) +
-                      " for encoding " +
-                      rawTypeName_ );
-                return 0.0;
-            }
-        } else if ( ( rawTypeName_ == RawType.signMagnitude  ) ||
-                    ( rawTypeName_ == RawType.twosComplement ) ||
-                    ( rawTypeName_ == RawType.onesComplement ) ) {
-            // TODO worry about inclusive versus exclusive
-            long minValue = -1 * (long)Math.pow( 2, ( rawSizeInBits_ - 1 ) );
-            long maxValue = (long)Math.pow( 2, ( rawSizeInBits_ - 1 ) ) - 1;
-            if ( ( validRange_.isValidRangeApplied()  == true  ) &&
-                 ( validRange_.isLowValueCalibrated() == false ) ) {
-                minValue = Math.round( Double.parseDouble( validRange_.getLowValue() ) );
-            }
-            if ( ( validRange_.isValidRangeApplied()   == true  ) &&
-                 ( validRange_.isHighValueCalibrated() == false ) ) {
-                maxValue = Math.round( Double.parseDouble( validRange_.getHighValue() ) );
-            }
-            if ( ( root1 >= minValue ) && ( root1 <= maxValue ) ) {
-                return root1;
-            } else if ( ( root2 >= minValue ) && ( root2 <= maxValue ) ) {
-                return root2;
-            } else {
-                warn( "Polynomial Calibrator for " +
-                      itemName_ +
-                      " contains roots of " +
-                      Double.toString( root1 ) +
-                      " and " +
-                      Double.toString( root2 ) +
-                      ", neither of which are in the range of " +
-                      Long.toString( minValue ) +
-                      " to " +
-                      Long.toString( maxValue ) +
-                      " for encoding " +
-                      rawTypeName_ );
-                return 0.0;
-            }
-        }
-        return root1;
 
     }
 

@@ -364,6 +364,295 @@ limitations under the License.
 							</xtce:DefaultCalibrator>
 						</xtce:FloatDataEncoding>
 					</xtce:FloatParameterType>
+					<xtce:FloatParameterType name="Spline_Quad_Interpolate_Type" sizeInBits="64" shortDescription="This is a float parameter with a float spline encoding and unsupported interpolation">
+						<xtce:UnitSet/>
+						<xtce:FloatDataEncoding bitOrder="mostSignificantBitFirst" encoding="IEEE754_1985" sizeInBits="64">
+							<xtce:DefaultCalibrator>
+								<xtce:SplineCalibrator order="2" extrapolate="false">
+									<xtce:SplinePoint raw="-6.0" calibrated="1.0"/>
+									<xtce:SplinePoint raw="-3.0" calibrated="2.0"/>
+									<xtce:SplinePoint raw="-1.0" calibrated="3.0"/>
+									<xtce:SplinePoint raw="1.0" calibrated="3.0"/>
+									<xtce:SplinePoint raw="3.0" calibrated="2.0"/>
+									<xtce:SplinePoint raw="6.0" calibrated="1.0"/>
+								</xtce:SplineCalibrator>
+							</xtce:DefaultCalibrator>
+						</xtce:FloatDataEncoding>
+					</xtce:FloatParameterType>
+					<xtce:FloatParameterType name="Spline_Quad_Infinite_Slope_Type" sizeInBits="64" shortDescription="This is a float parameter with a float spline encoding and infinite slope - no good">
+						<xtce:UnitSet/>
+						<xtce:FloatDataEncoding bitOrder="mostSignificantBitFirst" encoding="IEEE754_1985" sizeInBits="64">
+							<xtce:DefaultCalibrator>
+								<xtce:SplineCalibrator order="1" extrapolate="false">
+									<xtce:SplinePoint raw="-6.0" calibrated="1.0"/>
+									<xtce:SplinePoint raw="-3.0" calibrated="2.0"/>
+									<xtce:SplinePoint raw="-1.0" calibrated="3.0"/>
+									<xtce:SplinePoint raw="1.0" calibrated="3.0"/>
+                                                                        <xtce:SplinePoint raw="1.0" calibrated="2.5"/>
+									<xtce:SplinePoint raw="3.0" calibrated="2.0"/>
+									<xtce:SplinePoint raw="6.0" calibrated="1.0"/>
+								</xtce:SplineCalibrator>
+							</xtce:DefaultCalibrator>
+						</xtce:FloatDataEncoding>
+					</xtce:FloatParameterType>
+					<xtce:FloatParameterType name="Float_Missing_PolyTerms_Type" sizeInBits="32" shortDescription="This is a float parameter with no terms in a polynomial calibrator (invalid)">
+						<xtce:UnitSet/>
+						<xtce:FloatDataEncoding bitOrder="mostSignificantBitFirst" encoding="IEEE754_1985" sizeInBits="32">
+							<xtce:DefaultCalibrator>
+								<xtce:PolynomialCalibrator/>
+							</xtce:DefaultCalibrator>
+						</xtce:FloatDataEncoding>
+						<xtce:ValidRange minInclusive="-10.00" maxInclusive="10.00" rangeAppliesToCalibrated="false"/>
+					</xtce:FloatParameterType>
+					<xtce:FloatParameterType name="Float_Missing_SplinePoints_Type" sizeInBits="32" shortDescription="This is a float parameter with no points in a spline calibrator (invalid)">
+						<xtce:UnitSet/>
+						<xtce:FloatDataEncoding bitOrder="mostSignificantBitFirst" encoding="IEEE754_1985" sizeInBits="32">
+							<xtce:DefaultCalibrator>
+								<xtce:SplineCalibrator/>
+							</xtce:DefaultCalibrator>
+						</xtce:FloatDataEncoding>
+						<xtce:ValidRange minInclusive="-10.00" maxInclusive="10.00" rangeAppliesToCalibrated="false"/>
+					</xtce:FloatParameterType>
+					<xtce:FloatParameterType name="Float_Order0_PolyTerms_Type" sizeInBits="32" shortDescription="This is a float parameter with an order 0 polynomial calibrator">
+						<xtce:UnitSet/>
+						<xtce:FloatDataEncoding bitOrder="mostSignificantBitFirst" encoding="IEEE754_1985" sizeInBits="32">
+							<xtce:DefaultCalibrator>
+								<xtce:PolynomialCalibrator>
+									<xtce:Term exponent="0" coefficient="2.2"/>
+								</xtce:PolynomialCalibrator>
+							</xtce:DefaultCalibrator>
+						</xtce:FloatDataEncoding>
+						<xtce:ValidRange minInclusive="-10.00" maxInclusive="100.00" rangeAppliesToCalibrated="false"/>
+					</xtce:FloatParameterType>
+					<xtce:FloatParameterType name="Float_Order1_PolyTerms_Type" sizeInBits="32" shortDescription="This is a float parameter with an order 1 polynomial calibrator">
+						<xtce:UnitSet/>
+						<xtce:FloatDataEncoding bitOrder="mostSignificantBitFirst" encoding="IEEE754_1985" sizeInBits="32">
+							<xtce:DefaultCalibrator>
+								<xtce:PolynomialCalibrator>
+									<xtce:Term exponent="0" coefficient="0.5"/>
+                                                                        <xtce:Term exponent="1" coefficient="1.5"/>
+								</xtce:PolynomialCalibrator>
+							</xtce:DefaultCalibrator>
+						</xtce:FloatDataEncoding>
+						<xtce:ValidRange minInclusive="-10.00" maxInclusive="100.00" rangeAppliesToCalibrated="false"/>
+					</xtce:FloatParameterType>
+					<xtce:FloatParameterType name="Float_Order3_PolyTerms_Type" sizeInBits="32" shortDescription="This is a float parameter with an order 3 polynomial calibrator">
+						<xtce:UnitSet/>
+						<xtce:FloatDataEncoding bitOrder="mostSignificantBitFirst" encoding="IEEE754_1985" sizeInBits="32">
+							<xtce:DefaultCalibrator>
+								<xtce:PolynomialCalibrator>
+									<xtce:Term exponent="0" coefficient="0.5"/>
+                                                                        <xtce:Term exponent="1" coefficient="1.5"/>
+                                                                        <xtce:Term exponent="3" coefficient="0.1"/>
+								</xtce:PolynomialCalibrator>
+							</xtce:DefaultCalibrator>
+						</xtce:FloatDataEncoding>
+						<xtce:ValidRange minInclusive="-10.00" maxInclusive="100.00" rangeAppliesToCalibrated="false"/>
+					</xtce:FloatParameterType>
+					<xtce:FloatParameterType name="Float_MathOpCal_1_Type" sizeInBits="32" shortDescription="This is a float parameter with a simple math operation calibrator">
+						<xtce:UnitSet/>
+						<xtce:FloatDataEncoding bitOrder="mostSignificantBitFirst" encoding="IEEE754_1985" sizeInBits="32">
+							<xtce:DefaultCalibrator>
+                                                            <xtce:MathOperationCalibrator>
+                                                                <xtce:ValueOperand>0.5</xtce:ValueOperand>
+                                                                <xtce:ThisParameterOperand/>
+                                                                <xtce:Operator>*</xtce:Operator>
+                                                                <xtce:ValueOperand>1.25</xtce:ValueOperand>
+                                                                <xtce:Operator>+</xtce:Operator>
+                                                            </xtce:MathOperationCalibrator>
+							</xtce:DefaultCalibrator>
+						</xtce:FloatDataEncoding>
+					</xtce:FloatParameterType>
+					<xtce:FloatParameterType name="Float_MathOpCal_2_Type" sizeInBits="64" shortDescription="This is a float parameter with a longer math operation calibrator">
+						<xtce:UnitSet/>
+						<xtce:FloatDataEncoding bitOrder="mostSignificantBitFirst" encoding="IEEE754_1985" sizeInBits="64">
+							<xtce:DefaultCalibrator>
+                                                            <xtce:MathOperationCalibrator>
+                                                                <!-- Equation in "infix" notation: 64 * log(2)[1.234 * value] also is 64 * (ln[1.234 * value] / ln[2]) -->
+                                                                <xtce:ValueOperand>1.234</xtce:ValueOperand>
+                                                                <xtce:ThisParameterOperand/>
+                                                                <xtce:Operator>*</xtce:Operator>
+                                                                <xtce:Operator>ln</xtce:Operator>
+                                                                <xtce:ValueOperand>2.0</xtce:ValueOperand>
+                                                                <xtce:Operator>ln</xtce:Operator>
+                                                                <xtce:Operator>/</xtce:Operator>
+                                                                <xtce:ValueOperand>64.0</xtce:ValueOperand>
+                                                                <xtce:Operator>*</xtce:Operator>
+                                                            </xtce:MathOperationCalibrator>
+							</xtce:DefaultCalibrator>
+						</xtce:FloatDataEncoding>
+					</xtce:FloatParameterType>
+					<xtce:FloatParameterType name="Float_MathOpCal_3_Type" sizeInBits="32" shortDescription="This is a float parameter with no operations in math operation calibrator">
+						<xtce:UnitSet/>
+						<xtce:FloatDataEncoding bitOrder="mostSignificantBitFirst" encoding="IEEE754_1985" sizeInBits="32">
+							<xtce:DefaultCalibrator>
+                                                            <xtce:MathOperationCalibrator/>
+							</xtce:DefaultCalibrator>
+						</xtce:FloatDataEncoding>
+					</xtce:FloatParameterType>
+					<xtce:FloatParameterType name="Float_MathOpCal_4_Type" sizeInBits="32" shortDescription="This is a float parameter with unsupported element in math operation calibrator">
+						<xtce:UnitSet/>
+						<xtce:FloatDataEncoding bitOrder="mostSignificantBitFirst" encoding="IEEE754_1985" sizeInBits="32">
+							<xtce:DefaultCalibrator>
+                                                            <xtce:MathOperationCalibrator>
+                                                                <xtce:ValueOperand>3.0</xtce:ValueOperand>
+                                                                <xtce:ParameterInstanceRefOperand parameterRef="Float_MathOpCal_1"/>
+                                                                <xtce:Operator>*</xtce:Operator>
+                                                                <xtce:ParameterInstanceRefOperand parameterRef="Float_MathOpCal_2" useCalibratedValue="false"/>
+                                                                <xtce:Operator>+</xtce:Operator>
+                                                            </xtce:MathOperationCalibrator>
+							</xtce:DefaultCalibrator>
+						</xtce:FloatDataEncoding>
+					</xtce:FloatParameterType>
+					<xtce:FloatParameterType name="Float_MathOpCal_5_Type" sizeInBits="32" shortDescription="This is a float parameter with short stack in math operation calibrator">
+						<xtce:UnitSet/>
+						<xtce:FloatDataEncoding bitOrder="mostSignificantBitFirst" encoding="IEEE754_1985" sizeInBits="32">
+							<xtce:DefaultCalibrator>
+                                                            <xtce:MathOperationCalibrator>
+                                                                <xtce:ValueOperand>3.0</xtce:ValueOperand>
+                                                                <xtce:Operator>+</xtce:Operator>
+                                                            </xtce:MathOperationCalibrator>
+							</xtce:DefaultCalibrator>
+						</xtce:FloatDataEncoding>
+					</xtce:FloatParameterType>
+					<xtce:FloatParameterType name="Float_MathOpCal_6_Type" sizeInBits="32" shortDescription="This is a float parameter with unsupported operator in math operation calibrator">
+						<xtce:UnitSet/>
+						<xtce:FloatDataEncoding bitOrder="mostSignificantBitFirst" encoding="IEEE754_1985" sizeInBits="32">
+							<xtce:DefaultCalibrator>
+                                                            <xtce:MathOperationCalibrator>
+                                                                <xtce:ValueOperand>3.0</xtce:ValueOperand>
+                                                                <xtce:ThisParameterOperand/>
+                                                                <xtce:Operator>foo</xtce:Operator>
+                                                            </xtce:MathOperationCalibrator>
+							</xtce:DefaultCalibrator>
+						</xtce:FloatDataEncoding>
+					</xtce:FloatParameterType>
+					<xtce:FloatParameterType name="Float_MathOpCal_7_Type" sizeInBits="64" shortDescription="This is a float parameter with lots of operators in math operation calibrator">
+						<xtce:UnitSet/>
+						<xtce:FloatDataEncoding bitOrder="mostSignificantBitFirst" encoding="IEEE754_1985" sizeInBits="64">
+							<xtce:DefaultCalibrator>
+                                                            <xtce:MathOperationCalibrator>
+                                                                <xtce:ValueOperand>5.0</xtce:ValueOperand>
+                                                                <xtce:ValueOperand>3.0</xtce:ValueOperand>
+                                                                <xtce:Operator>-</xtce:Operator>
+                                                                <xtce:ValueOperand>3.0</xtce:ValueOperand>
+                                                                <xtce:Operator>^</xtce:Operator>
+                                                                <xtce:ValueOperand>92</xtce:ValueOperand>
+                                                                <xtce:Operator>+</xtce:Operator>
+                                                                <xtce:Operator>log</xtce:Operator>
+                                                                <xtce:Operator>1/x</xtce:Operator>
+                                                                <xtce:ValueOperand>-4.0</xtce:ValueOperand>
+                                                                <xtce:Operator>*</xtce:Operator>
+                                                                <xtce:Operator>abs</xtce:Operator>
+                                                                <xtce:ValueOperand>5.0</xtce:ValueOperand>
+                                                                <xtce:Operator>swap</xtce:Operator>
+                                                                <xtce:Operator>-</xtce:Operator>
+                                                                <xtce:ValueOperand>2.0</xtce:ValueOperand>
+                                                                <xtce:Operator>-</xtce:Operator>
+                                                                <xtce:Operator>asin</xtce:Operator>
+                                                                <xtce:Operator>cos</xtce:Operator>
+                                                                <xtce:Operator>acos</xtce:Operator>
+                                                                <xtce:Operator>sin</xtce:Operator>
+                                                                <xtce:Operator>acos</xtce:Operator>
+                                                                <xtce:Operator>atan</xtce:Operator>
+                                                                <xtce:ValueOperand>19.0</xtce:ValueOperand>
+                                                                <xtce:Operator>+</xtce:Operator>
+                                                                <xtce:ValueOperand>8.0</xtce:ValueOperand>
+                                                                <xtce:Operator>%</xtce:Operator>
+                                                                <xtce:ValueOperand>4.0</xtce:ValueOperand>
+                                                                <xtce:Operator>y^x</xtce:Operator>
+                                                            </xtce:MathOperationCalibrator>
+							</xtce:DefaultCalibrator>
+						</xtce:FloatDataEncoding>
+					</xtce:FloatParameterType>
+					<xtce:FloatParameterType name="Float_MathOpCal_8_Type" sizeInBits="64" shortDescription="This is a float parameter with lots of operators in math operation calibrator">
+						<xtce:UnitSet/>
+						<xtce:FloatDataEncoding bitOrder="mostSignificantBitFirst" encoding="IEEE754_1985" sizeInBits="64">
+							<xtce:DefaultCalibrator>
+                                                            <xtce:MathOperationCalibrator>
+                                                                <xtce:ValueOperand>99</xtce:ValueOperand>
+                                                                <xtce:ValueOperand>100</xtce:ValueOperand>
+                                                                <xtce:Operator>==</xtce:Operator>
+                                                                <xtce:ValueOperand>12</xtce:ValueOperand>
+                                                                <xtce:Operator>!=</xtce:Operator>
+                                                                <xtce:ValueOperand>1</xtce:ValueOperand>
+                                                                <xtce:Operator>==</xtce:Operator>
+                                                                <xtce:ValueOperand>1</xtce:ValueOperand>
+                                                                <xtce:Operator>!=</xtce:Operator>
+                                                                <xtce:ValueOperand>5</xtce:ValueOperand>
+                                                                <xtce:Operator>&lt;</xtce:Operator>
+                                                                <xtce:ValueOperand>0</xtce:ValueOperand>
+                                                                <xtce:Operator>&lt;</xtce:Operator>
+                                                                <xtce:ValueOperand>5</xtce:ValueOperand>
+                                                                <xtce:Operator>&gt;</xtce:Operator>
+                                                                <xtce:ValueOperand>-1</xtce:ValueOperand>
+                                                                <xtce:Operator>&gt;</xtce:Operator>
+                                                                <xtce:ValueOperand>1</xtce:ValueOperand>
+                                                                <xtce:Operator>&lt;=</xtce:Operator>
+                                                                <xtce:ValueOperand>2</xtce:ValueOperand>
+                                                                <xtce:Operator>&lt;=</xtce:Operator>
+                                                                <xtce:ValueOperand>0</xtce:ValueOperand>
+                                                                <xtce:Operator>&lt;=</xtce:Operator>
+                                                                <xtce:ValueOperand>4</xtce:ValueOperand>
+                                                                <xtce:Operator>&gt;=</xtce:Operator>
+                                                                <xtce:ValueOperand>0</xtce:ValueOperand>
+                                                                <xtce:Operator>&gt;=</xtce:Operator>
+                                                                <xtce:ValueOperand>0</xtce:ValueOperand>
+                                                                <xtce:Operator>&gt;=</xtce:Operator>
+                                                                <xtce:Operator>e^x</xtce:Operator>
+                                                            </xtce:MathOperationCalibrator>
+							</xtce:DefaultCalibrator>
+						</xtce:FloatDataEncoding>
+					</xtce:FloatParameterType>
+					<xtce:FloatParameterType name="Float_MathOpCal_9_Type" sizeInBits="64" shortDescription="This is a float parameter with lots of operators in math operation calibrator">
+						<xtce:UnitSet/>
+						<xtce:FloatDataEncoding bitOrder="mostSignificantBitFirst" encoding="IEEE754_1985" sizeInBits="64">
+							<xtce:DefaultCalibrator>
+                                                            <xtce:MathOperationCalibrator>
+                                                                <xtce:ValueOperand>90</xtce:ValueOperand>
+                                                                <xtce:ValueOperand>1</xtce:ValueOperand>
+                                                                <xtce:Operator>-</xtce:Operator>
+                                                                <xtce:Operator>cos</xtce:Operator>
+                                                                <xtce:ValueOperand>89</xtce:ValueOperand>
+                                                                <xtce:Operator>+</xtce:Operator>
+                                                                <xtce:Operator>cos</xtce:Operator>
+                                                                <xtce:ValueOperand>45</xtce:ValueOperand>
+                                                                <xtce:Operator>+</xtce:Operator>
+                                                                <xtce:Operator>tan</xtce:Operator>
+                                                                <xtce:Operator>tanh</xtce:Operator>
+                                                                <xtce:Operator>cosh</xtce:Operator>
+                                                                <xtce:Operator>sinh</xtce:Operator>
+                                                            </xtce:MathOperationCalibrator>
+							</xtce:DefaultCalibrator>
+						</xtce:FloatDataEncoding>
+					</xtce:FloatParameterType>
+					<xtce:FloatParameterType name="Float_MathOpCal_10_Type" sizeInBits="32" shortDescription="This is a float parameter with arithmetic exception in math operation calibrator">
+						<xtce:UnitSet/>
+						<xtce:FloatDataEncoding bitOrder="mostSignificantBitFirst" encoding="IEEE754_1985" sizeInBits="32">
+							<xtce:DefaultCalibrator>
+                                                            <xtce:MathOperationCalibrator>
+                                                                <!-- multi-purpose bad expression, throws on divide by zero but catches extra operators on infix print -->
+                                                                <xtce:ThisParameterOperand/>
+                                                                <xtce:ValueOperand>0.0</xtce:ValueOperand>
+                                                                <xtce:Operator>/</xtce:Operator>
+                                                                <xtce:Operator>x!</xtce:Operator>
+                                                                <xtce:Operator>atanh</xtce:Operator>
+                                                                <xtce:Operator>acosh</xtce:Operator>
+                                                                <xtce:Operator>asinh</xtce:Operator>
+                                                                <xtce:ValueOperand>2</xtce:ValueOperand>
+                                                                <xtce:Operator>&amp;</xtce:Operator>
+                                                                <xtce:ValueOperand>3</xtce:ValueOperand>
+                                                                <xtce:Operator>|</xtce:Operator>
+                                                                <xtce:ValueOperand>2</xtce:ValueOperand>
+                                                                <xtce:Operator>&lt;&lt;</xtce:Operator>
+                                                                <xtce:ValueOperand>1</xtce:ValueOperand>
+                                                                <xtce:Operator>&gt;&gt;</xtce:Operator>
+                                                                <xtce:ValueOperand>1</xtce:ValueOperand>
+                                                                <xtce:Operator>&gt;&gt;&gt;</xtce:Operator>
+                                                            </xtce:MathOperationCalibrator>
+							</xtce:DefaultCalibrator>
+						</xtce:FloatDataEncoding>
+					</xtce:FloatParameterType>
 					<xtce:BooleanParameterType name="Solar_Array_Voltage_State_Type" initialValue="OFF" zeroStringValue="OFF" oneStringValue="ON" shortDescription="The operational state of the solar array voltage sensor">
 						<xtce:UnitSet/>
 						<xtce:IntegerDataEncoding bitOrder="mostSignificantBitFirst" encoding="unsigned" sizeInBits="8" changeThreshold="1"/>
@@ -506,6 +795,91 @@ limitations under the License.
 							<xtce:SystemName>NONE</xtce:SystemName>
 						</xtce:ParameterProperties>
 					</xtce:Parameter>
+					<xtce:Parameter name="Spline_Quad_Interpolate_Bad" parameterTypeRef="Spline_Quad_Interpolate_Type">
+						<xtce:ParameterProperties dataSource="telemetered" readOnly="true">
+							<xtce:SystemName>NONE</xtce:SystemName>
+						</xtce:ParameterProperties>
+					</xtce:Parameter>
+					<xtce:Parameter name="Spline_Quad_Infinite_Slope" parameterTypeRef="Spline_Quad_Infinite_Slope_Type">
+						<xtce:ParameterProperties dataSource="telemetered" readOnly="true">
+							<xtce:SystemName>NONE</xtce:SystemName>
+						</xtce:ParameterProperties>
+					</xtce:Parameter>
+					<xtce:Parameter name="Float_Missing_PolyTerms" parameterTypeRef="Float_Missing_PolyTerms_Type">
+						<xtce:ParameterProperties dataSource="telemetered" readOnly="true">
+							<xtce:SystemName>NONE</xtce:SystemName>
+						</xtce:ParameterProperties>
+					</xtce:Parameter>
+					<xtce:Parameter name="Float_Missing_SplinePoints" parameterTypeRef="Float_Missing_SplinePoints_Type">
+						<xtce:ParameterProperties dataSource="telemetered" readOnly="true">
+							<xtce:SystemName>NONE</xtce:SystemName>
+						</xtce:ParameterProperties>
+					</xtce:Parameter>
+					<xtce:Parameter name="Float_Order0_PolyTerms" parameterTypeRef="Float_Order0_PolyTerms_Type">
+						<xtce:ParameterProperties dataSource="telemetered" readOnly="true">
+							<xtce:SystemName>NONE</xtce:SystemName>
+						</xtce:ParameterProperties>
+					</xtce:Parameter>
+					<xtce:Parameter name="Float_Order1_PolyTerms" parameterTypeRef="Float_Order1_PolyTerms_Type">
+						<xtce:ParameterProperties dataSource="telemetered" readOnly="true">
+							<xtce:SystemName>NONE</xtce:SystemName>
+						</xtce:ParameterProperties>
+					</xtce:Parameter>
+					<xtce:Parameter name="Float_Order3_PolyTerms" parameterTypeRef="Float_Order3_PolyTerms_Type">
+						<xtce:ParameterProperties dataSource="telemetered" readOnly="true">
+							<xtce:SystemName>NONE</xtce:SystemName>
+						</xtce:ParameterProperties>
+					</xtce:Parameter>
+					<xtce:Parameter name="Float_MathOpCal_1" parameterTypeRef="Float_MathOpCal_1_Type">
+						<xtce:ParameterProperties dataSource="telemetered" readOnly="true">
+							<xtce:SystemName>NONE</xtce:SystemName>
+						</xtce:ParameterProperties>
+					</xtce:Parameter>
+					<xtce:Parameter name="Float_MathOpCal_2" parameterTypeRef="Float_MathOpCal_2_Type">
+						<xtce:ParameterProperties dataSource="telemetered" readOnly="true">
+							<xtce:SystemName>NONE</xtce:SystemName>
+						</xtce:ParameterProperties>
+					</xtce:Parameter>
+					<xtce:Parameter name="Float_MathOpCal_3" parameterTypeRef="Float_MathOpCal_3_Type">
+						<xtce:ParameterProperties dataSource="telemetered" readOnly="true">
+							<xtce:SystemName>NONE</xtce:SystemName>
+						</xtce:ParameterProperties>
+					</xtce:Parameter>
+					<xtce:Parameter name="Float_MathOpCal_4" parameterTypeRef="Float_MathOpCal_4_Type">
+						<xtce:ParameterProperties dataSource="telemetered" readOnly="true">
+							<xtce:SystemName>NONE</xtce:SystemName>
+						</xtce:ParameterProperties>
+					</xtce:Parameter>
+					<xtce:Parameter name="Float_MathOpCal_5" parameterTypeRef="Float_MathOpCal_5_Type">
+						<xtce:ParameterProperties dataSource="telemetered" readOnly="true">
+							<xtce:SystemName>NONE</xtce:SystemName>
+						</xtce:ParameterProperties>
+					</xtce:Parameter>
+					<xtce:Parameter name="Float_MathOpCal_6" parameterTypeRef="Float_MathOpCal_6_Type">
+						<xtce:ParameterProperties dataSource="telemetered" readOnly="true">
+							<xtce:SystemName>NONE</xtce:SystemName>
+						</xtce:ParameterProperties>
+					</xtce:Parameter>
+					<xtce:Parameter name="Float_MathOpCal_7" parameterTypeRef="Float_MathOpCal_7_Type">
+						<xtce:ParameterProperties dataSource="telemetered" readOnly="true">
+							<xtce:SystemName>NONE</xtce:SystemName>
+						</xtce:ParameterProperties>
+					</xtce:Parameter>
+					<xtce:Parameter name="Float_MathOpCal_8" parameterTypeRef="Float_MathOpCal_8_Type">
+						<xtce:ParameterProperties dataSource="telemetered" readOnly="true">
+							<xtce:SystemName>NONE</xtce:SystemName>
+						</xtce:ParameterProperties>
+					</xtce:Parameter>
+					<xtce:Parameter name="Float_MathOpCal_9" parameterTypeRef="Float_MathOpCal_9_Type">
+						<xtce:ParameterProperties dataSource="telemetered" readOnly="true">
+							<xtce:SystemName>NONE</xtce:SystemName>
+						</xtce:ParameterProperties>
+					</xtce:Parameter>
+					<xtce:Parameter name="Float_MathOpCal_10" parameterTypeRef="Float_MathOpCal_10_Type">
+						<xtce:ParameterProperties dataSource="telemetered" readOnly="true">
+							<xtce:SystemName>NONE</xtce:SystemName>
+						</xtce:ParameterProperties>
+					</xtce:Parameter>
 					<xtce:Parameter name="Solar_Array_Voltage_1" parameterTypeRef="Solar_Array_Voltage_Type">
 						<xtce:AliasSet>
 							<xtce:Alias nameSpace="ID" alias="100345"/>
@@ -600,6 +974,131 @@ limitations under the License.
 					</xtce:MathAlgorithm>
 				</xtce:AlgorithmSet>
 			</xtce:TelemetryMetaData>
+			<xtce:CommandMetaData>
+				<xtce:ArgumentTypeSet>
+					<xtce:IntegerArgumentType name="RW_UNIT_ID_Type" shortDescription="ID number of the reaction wheel">
+						<xtce:UnitSet/>
+						<xtce:IntegerDataEncoding sizeInBits="8" encoding="unsigned"/>
+						<xtce:ValidRange minInclusive="1" maxInclusive="2"/>
+					</xtce:IntegerArgumentType>
+					<xtce:EnumeratedArgumentType name="RW_PWR_STATE_Type" shortDescription="Flag to indicate if power should be turned on or off">
+						<xtce:UnitSet/>
+						<xtce:IntegerDataEncoding sizeInBits="8" encoding="unsigned"/>
+						<xtce:EnumerationList>
+							<xtce:Enumeration value="0" label="OFF"/>
+							<xtce:Enumeration value="1" label="ON"/>
+						</xtce:EnumerationList>
+					</xtce:EnumeratedArgumentType>
+					<xtce:EnumeratedArgumentType name="PHASE_Type">
+						<xtce:UnitSet/>
+						<xtce:IntegerDataEncoding sizeInBits="8" encoding="unsigned"/>
+						<xtce:EnumerationList>
+							<xtce:Enumeration value="0" label="SAFE"/>
+							<xtce:Enumeration value="1" label="LEOP"/>
+							<xtce:Enumeration value="2" label="ASCENT"/>
+							<xtce:Enumeration value="3" label="MISSION"/>
+							<xtce:Enumeration value="4" label="STORAGE"/>
+							<xtce:Enumeration value="5" label="DEBORBIT"/>
+						</xtce:EnumerationList>
+					</xtce:EnumeratedArgumentType>
+				</xtce:ArgumentTypeSet>
+				<xtce:MetaCommandSet>
+					<xtce:MetaCommand name="Reaction_Wheel_Control" shortDescription="Power on/off reaction wheel">
+						<xtce:LongDescription>This hardware telecommand directs the hardware to power on or off either of the 2 reaction wheels</xtce:LongDescription>
+						<xtce:AliasSet>
+							<xtce:Alias nameSpace="OPS" alias="RW_PWR"/>
+						</xtce:AliasSet>
+						<xtce:BaseMetaCommand metaCommandRef="../../CCSDSDirectTelecommand"/>
+						<xtce:ArgumentList>
+							<xtce:Argument name="RW_UNIT_ID" argumentTypeRef="RW_UNIT_ID_Type"/>
+							<xtce:Argument name="RW_PWR_STATE" argumentTypeRef="RW_PWR_STATE_Type"/>
+						</xtce:ArgumentList>
+						<xtce:CommandContainer name="Reaction_Wheel_Control_Container">
+							<xtce:EntryList>
+								<xtce:ArgumentRefEntry argumentRef="RW_UNIT_ID"/>
+								<xtce:ArgumentRefEntry argumentRef="RW_PWR_STATE"/>
+							</xtce:EntryList>
+							<xtce:BaseContainer containerRef="../../CCSDSDirectTelecommand"/>
+						</xtce:CommandContainer>
+					</xtce:MetaCommand>
+					<xtce:MetaCommand name="Reaction_Wheel_1_On" shortDescription="Turn power on for reaction wheel 1">
+						<xtce:LongDescription>This hardware telecommand is a derived form of 'Reaction_Wheel_Control' that turns ON reaction wheel 1</xtce:LongDescription>
+						<xtce:AliasSet>
+							<xtce:Alias nameSpace="OPS" alias="RW_1_ON"/>
+						</xtce:AliasSet>
+						<xtce:BaseMetaCommand metaCommandRef="Reaction_Wheel_Control">
+							<xtce:ArgumentAssignmentList>
+								<xtce:ArgumentAssignment argumentName="RW_UNIT_ID" argumentValue="1"/>
+								<xtce:ArgumentAssignment argumentName="RW_PWR_STATE" argumentValue="ON"/>
+							</xtce:ArgumentAssignmentList>
+						</xtce:BaseMetaCommand>
+						<xtce:CommandContainer name="Reaction_Wheel_1_On_Container">
+							<xtce:EntryList/>
+							<xtce:BaseContainer containerRef="Reaction_Wheel_Control_Container"/>
+						</xtce:CommandContainer>
+					</xtce:MetaCommand>
+					<xtce:MetaCommand name="Reaction_Wheel_1_Off" shortDescription="Turn power off for reaction wheel 1">
+						<xtce:LongDescription>This hardware telecommand is a derived form of 'Reaction_Wheel_Control' that turns OFF reaction wheel 1</xtce:LongDescription>
+						<xtce:AliasSet>
+							<xtce:Alias nameSpace="OPS" alias="RW_1_OFF"/>
+						</xtce:AliasSet>
+						<xtce:BaseMetaCommand metaCommandRef="Reaction_Wheel_Control">
+							<xtce:ArgumentAssignmentList>
+								<xtce:ArgumentAssignment argumentName="RW_UNIT_ID" argumentValue="1"/>
+								<xtce:ArgumentAssignment argumentName="RW_PWR_STATE" argumentValue="OFF"/>
+							</xtce:ArgumentAssignmentList>
+						</xtce:BaseMetaCommand>
+						<xtce:CommandContainer name="Reaction_Wheel_1_Off_Container">
+							<xtce:EntryList/>
+							<xtce:BaseContainer containerRef="Reaction_Wheel_Control_Container"/>
+						</xtce:CommandContainer>
+					</xtce:MetaCommand>
+					<xtce:MetaCommand name="Reaction_Wheel_2_On" shortDescription="Turn power on for reaction wheel 2">
+						<xtce:LongDescription>This hardware telecommand is a derived form of 'Reaction_Wheel_Control' that turns ON reaction wheel 2</xtce:LongDescription>
+						<xtce:AliasSet>
+							<xtce:Alias nameSpace="OPS" alias="RW_2_ON"/>
+						</xtce:AliasSet>
+						<xtce:BaseMetaCommand metaCommandRef="Reaction_Wheel_Control">
+							<xtce:ArgumentAssignmentList>
+								<xtce:ArgumentAssignment argumentName="RW_UNIT_ID" argumentValue="2"/>
+								<xtce:ArgumentAssignment argumentName="RW_PWR_STATE" argumentValue="ON"/>
+							</xtce:ArgumentAssignmentList>
+						</xtce:BaseMetaCommand>
+						<xtce:CommandContainer name="Reaction_Wheel_2_On_Container">
+							<xtce:EntryList/>
+							<xtce:BaseContainer containerRef="Reaction_Wheel_Control_Container"/>
+						</xtce:CommandContainer>
+					</xtce:MetaCommand>
+					<xtce:MetaCommand name="Reaction_Wheel_2_Off" shortDescription="Turn power off for reaction wheel 2">
+						<xtce:LongDescription>This hardware telecommand is a derived form of 'Reaction_Wheel_Control' that turns OFF reaction wheel 2</xtce:LongDescription>
+						<xtce:AliasSet>
+							<xtce:Alias nameSpace="OPS" alias="RW_2_OFF"/>
+						</xtce:AliasSet>
+						<xtce:BaseMetaCommand metaCommandRef="Reaction_Wheel_Control">
+							<xtce:ArgumentAssignmentList>
+								<xtce:ArgumentAssignment argumentName="RW_UNIT_ID" argumentValue="2"/>
+								<xtce:ArgumentAssignment argumentName="RW_PWR_STATE" argumentValue="OFF"/>
+							</xtce:ArgumentAssignmentList>
+						</xtce:BaseMetaCommand>
+						<xtce:CommandContainer name="Reaction_Wheel_2_Off_Container">
+							<xtce:EntryList/>
+							<xtce:BaseContainer containerRef="Reaction_Wheel_Control_Container"/>
+						</xtce:CommandContainer>
+					</xtce:MetaCommand>
+					<xtce:MetaCommand name="Set_Mission_Phase" shortDescription="Set the bus electronics mission phase">
+						<xtce:BaseMetaCommand metaCommandRef="/BogusSAT/CCSDSPUSTelecommand"/>
+						<xtce:ArgumentList>
+							<xtce:Argument name="PHASE" argumentTypeRef="PHASE_Type" shortDescription="Mission Operational Mode"/>
+						</xtce:ArgumentList>
+						<xtce:CommandContainer name="Set_Mission_Phase_Container">
+							<xtce:BaseContainer containerRef="/BogusSAT/CCSDSPUSTelecommand"/>
+							<xtce:EntryList>
+								<xtce:ArgumentRefEntry argumentRef="PHASE"/>
+							</xtce:EntryList>
+						</xtce:CommandContainer>
+					</xtce:MetaCommand>
+				</xtce:MetaCommandSet>
+			</xtce:CommandMetaData>
 		</xtce:SpaceSystem>
 		<xtce:SpaceSystem name="Payload1">
 			<xtce:LongDescription>This is the primary revenue generating payload software monitor and control data.</xtce:LongDescription>
@@ -796,6 +1295,71 @@ limitations under the License.
 					</xtce:Parameter>
 				</xtce:ParameterSet>
 			</xtce:TelemetryMetaData>
+			<xtce:CommandMetaData>
+				<xtce:ArgumentTypeSet>
+					<xtce:EnumeratedArgumentType name="Payload_State_Type">
+						<xtce:UnitSet/>
+						<xtce:IntegerDataEncoding encoding="signMagnitude" sizeInBits="8"/>
+						<xtce:EnumerationList>
+							<xtce:Enumeration value="-1" label="OFF"/>
+							<xtce:Enumeration value="1" label="ON"/>
+							<xtce:Enumeration value="0" label="STANDBY"/>
+						</xtce:EnumerationList>
+					</xtce:EnumeratedArgumentType>
+					<xtce:FloatArgumentType name="Output_Power_Type" shortDescription="Payload output power">
+						<xtce:UnitSet>
+							<xtce:Unit description="current">Amperes</xtce:Unit>
+						</xtce:UnitSet>
+						<xtce:FloatDataEncoding sizeInBits="32" encoding="IEEE754_1985"/>
+					</xtce:FloatArgumentType>
+					<xtce:AggregateArgumentType name="Config_Item_Type">
+						<xtce:MemberList>
+							<xtce:Member name="ADDRESS" typeRef="Address_Type"/>
+							<xtce:Member name="VALUE32" typeRef="Value32_Type"/>
+						</xtce:MemberList>
+					</xtce:AggregateArgumentType>
+					<xtce:IntegerArgumentType name="Address_Type" signed="false" shortDescription="Address of configurable">
+						<xtce:UnitSet/>
+						<xtce:IntegerDataEncoding sizeInBits="32" encoding="unsigned"/>
+					</xtce:IntegerArgumentType>
+					<xtce:IntegerArgumentType name="Value32_Type" shortDescription="New value to set to 32 bit integer item">
+						<xtce:UnitSet/>
+						<xtce:IntegerDataEncoding sizeInBits="32" encoding="unsigned"/>
+					</xtce:IntegerArgumentType>
+				</xtce:ArgumentTypeSet>
+				<xtce:MetaCommandSet>
+					<xtce:MetaCommand name="Payload_1_Control" shortDescription="Controls the state of payload operation">
+						<xtce:BaseMetaCommand metaCommandRef="/BogusSAT/CCSDSPUSTelecommand"/>
+						<xtce:ArgumentList>
+							<xtce:Argument name="STATE" argumentTypeRef="Payload_State_Type"/>
+							<xtce:Argument name="OUTPUT_POWER" argumentTypeRef="Output_Power_Type">
+								<xtce:LongDescription>Long Description of the output power argument</xtce:LongDescription>
+							</xtce:Argument>
+						</xtce:ArgumentList>
+						<xtce:CommandContainer name="Payload_1_Control_Container">
+							<xtce:BaseContainer containerRef="/BogusSAT/CCSDSPUSTelecommand"/>
+							<xtce:EntryList>
+								<xtce:ArgumentRefEntry argumentRef="STATE"/>
+								<xtce:FixedValueEntry binaryValue="f0" sizeInBits="8"/>
+								<xtce:ArgumentRefEntry argumentRef="OUTPUT_POWER"/>
+							</xtce:EntryList>
+						</xtce:CommandContainer>
+					</xtce:MetaCommand>
+					<xtce:MetaCommand name="Adjust_Payload_1_Config" shortDescription="Modify payload configuration">
+						<xtce:LongDescription>Modifies an internal configurable item at a provided address for the payload processor</xtce:LongDescription>
+						<xtce:BaseMetaCommand metaCommandRef="/BogusSAT/CCSDSPUSTelecommand"/>
+						<xtce:ArgumentList>
+							<xtce:Argument name="CFGITEM" argumentTypeRef="Config_Item_Type"/>
+						</xtce:ArgumentList>
+						<xtce:CommandContainer name="Payload_1_Control_Container">
+							<xtce:BaseContainer containerRef="/BogusSAT/CCSDSPUSTelecommand"/>
+							<xtce:EntryList>
+								<xtce:ArgumentRefEntry argumentRef="CFGITEM"/>
+							</xtce:EntryList>
+						</xtce:CommandContainer>
+					</xtce:MetaCommand>
+				</xtce:MetaCommandSet>
+			</xtce:CommandMetaData>
 		</xtce:SpaceSystem>
 		<xtce:SpaceSystem name="Payload2" xsi:nil="true"/>
 	</xtce:SpaceSystem>

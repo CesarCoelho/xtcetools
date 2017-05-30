@@ -35,6 +35,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
 import org.omg.space.xtce.CalibratorType;
+import org.omg.space.xtce.CalibratorType.MathOperationCalibrator;
 import org.omg.space.xtce.CalibratorType.SplineCalibrator;
 import org.omg.space.xtce.DescriptionType;
 import org.omg.space.xtce.DescriptionType.AncillaryDataSet.AncillaryData;
@@ -44,6 +45,7 @@ import org.omg.space.xtce.SplinePointType;
 import org.omg.space.xtce.ValueEnumerationType;
 import org.xtce.apps.editor.ui.XTCEViewerAncillaryDataRow;
 import org.xtce.apps.editor.ui.XTCEViewerFunctions;
+import org.xtce.math.MathOperationCalibration;
 import org.xtce.toolkit.XTCEFunctions;
 import org.xtce.toolkit.XTCETypedObject;
 import org.xtce.toolkit.XTCETypedObject.EngineeringType;
@@ -52,7 +54,10 @@ import org.xtce.toolkit.XTCEValidRange;
 //import org.scilab.forge.jlatexmath.TeXFormula;
 //import org.scilab.forge.jlatexmath.TeXIcon;
 
-/**
+/** The dialog box for the Parameter Detail.
+ *
+ * This was a very early part of the project and needs to be re-implemented.
+ * It is a mess.
  *
  * @author David Overeem
  *
@@ -120,6 +125,7 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
             writeEnumerationTable( hexCheckbox.isSelected() );
             writePolynomials();
             writeSplines();
+            writeMathOperations();
             writeValidRange();
         } else {
             parameterTypeReferenceText.setText( "Parameter ERROR: Broken Reference: " + parameter.getTypeReferenceFullPath() );
@@ -394,6 +400,42 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
 
     }
 
+    private void writeMathOperations() {
+
+        CalibratorType defaultCalibrator = parameter_.getDefaultCalibrator();
+
+        try {
+
+            MathOperationCalibrator mathCal =
+                defaultCalibrator.getMathOperationCalibrator();
+
+            if ( mathCal.getValueOperandOrThisParameterOperandOrParameterInstanceRefOperand().isEmpty() == false ) {
+
+                MathOperationCalibration calObj =
+                    new MathOperationCalibration( mathCal );
+
+                postfixTextArea.setText( calObj.toString() );
+                infixTextArea.setText( calObj.toInfixString() );
+
+            }
+
+        } catch ( NullPointerException ex ) {
+            // do nothing, math operation calibrator is not in use
+            postfixTextArea.setText( "" ); // NOI18N
+            infixTextArea.setText( "" ); // NOI18N
+        } catch ( XTCEDatabaseException ex ) {
+            postfixTextArea.setText(
+                XTCEFunctions.getText( "general_error_caps" ) + // NOI18N
+                ": " + // NOI18N
+                ex.getLocalizedMessage() );
+            infixTextArea.setText(
+                XTCEFunctions.getText( "general_error_caps" ) + // NOI18N
+                ": " + // NOI18N
+                ex.getLocalizedMessage() );
+        }
+
+    }
+
     private void writeValidRange() {
 
         XTCEValidRange rangeObj = parameter_.getValidRange();
@@ -560,6 +602,17 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
         removeSplinePointButton = new javax.swing.JButton();
         editSplinePointButton = new javax.swing.JButton();
         addSplinePointButton = new javax.swing.JButton();
+        mathOperationCalibratorsTab = new javax.swing.JPanel();
+        mathCalibratorsPanel = new javax.swing.JPanel();
+        mathOpLabel = new javax.swing.JLabel();
+        mathOpTabbedPane = new javax.swing.JTabbedPane();
+        mathOpPanel = new javax.swing.JPanel();
+        postfixLabel = new javax.swing.JLabel();
+        postfixScrollPane = new javax.swing.JScrollPane();
+        postfixTextArea = new javax.swing.JTextArea();
+        infixLabel = new javax.swing.JLabel();
+        infixScrollPane = new javax.swing.JScrollPane();
+        infixTextArea = new javax.swing.JTextArea();
         alarmDefinitionsTab = new javax.swing.JPanel();
         ancillaryDataTab = new javax.swing.JPanel();
         ancillaryDataPanel = new javax.swing.JPanel();
@@ -1367,6 +1420,92 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
 
         extraDetailsTabbedPane.addTab(bundle.getString("dialog_paramdetail_tabslinecal"), splineCalibratorsTab); // NOI18N
 
+        mathOpLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        mathOpLabel.setText(bundle.getString("dialog_paramdetail_mathcaltitle")); // NOI18N
+        mathOpLabel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        postfixLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        postfixLabel.setText(bundle.getString("dialog_paramdetail_postfix_expression")); // NOI18N
+
+        postfixTextArea.setColumns(20);
+        postfixTextArea.setRows(3);
+        postfixScrollPane.setViewportView(postfixTextArea);
+
+        infixLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        infixLabel.setText(bundle.getString("dialog_paramdetail_infix_expression")); // NOI18N
+
+        infixTextArea.setColumns(20);
+        infixTextArea.setRows(3);
+        infixScrollPane.setViewportView(infixTextArea);
+
+        javax.swing.GroupLayout mathOpPanelLayout = new javax.swing.GroupLayout(mathOpPanel);
+        mathOpPanel.setLayout(mathOpPanelLayout);
+        mathOpPanelLayout.setHorizontalGroup(
+            mathOpPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(mathOpPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(mathOpPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(postfixLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(postfixScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 533, Short.MAX_VALUE)
+                    .addComponent(infixLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(infixScrollPane))
+                .addContainerGap())
+        );
+        mathOpPanelLayout.setVerticalGroup(
+            mathOpPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mathOpPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(postfixLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(postfixScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(infixLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(infixScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(355, Short.MAX_VALUE))
+        );
+
+        mathOpTabbedPane.addTab("Default", mathOpPanel);
+
+        javax.swing.GroupLayout mathCalibratorsPanelLayout = new javax.swing.GroupLayout(mathCalibratorsPanel);
+        mathCalibratorsPanel.setLayout(mathCalibratorsPanelLayout);
+        mathCalibratorsPanelLayout.setHorizontalGroup(
+            mathCalibratorsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(mathOpLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(mathOpTabbedPane)
+        );
+        mathCalibratorsPanelLayout.setVerticalGroup(
+            mathCalibratorsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(mathCalibratorsPanelLayout.createSequentialGroup()
+                .addComponent(mathOpLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(mathOpTabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 567, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 44, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout mathOperationCalibratorsTabLayout = new javax.swing.GroupLayout(mathOperationCalibratorsTab);
+        mathOperationCalibratorsTab.setLayout(mathOperationCalibratorsTabLayout);
+        mathOperationCalibratorsTabLayout.setHorizontalGroup(
+            mathOperationCalibratorsTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 578, Short.MAX_VALUE)
+            .addGroup(mathOperationCalibratorsTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(mathOperationCalibratorsTabLayout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(mathCalibratorsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addContainerGap()))
+        );
+        mathOperationCalibratorsTabLayout.setVerticalGroup(
+            mathOperationCalibratorsTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 647, Short.MAX_VALUE)
+            .addGroup(mathOperationCalibratorsTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(mathOperationCalibratorsTabLayout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(mathCalibratorsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addContainerGap()))
+        );
+
+        extraDetailsTabbedPane.addTab(bundle.getString("dialog_paramdetail_tabmathcal"), mathOperationCalibratorsTab); // NOI18N
+
         javax.swing.GroupLayout alarmDefinitionsTabLayout = new javax.swing.GroupLayout(alarmDefinitionsTab);
         alarmDefinitionsTab.setLayout(alarmDefinitionsTabLayout);
         alarmDefinitionsTabLayout.setHorizontalGroup(
@@ -1861,6 +2000,9 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
     private javax.swing.JTabbedPane extraDetailsTabbedPane;
     private javax.swing.JCheckBox hexCheckbox;
     private javax.swing.JLabel highRangeLabel;
+    private javax.swing.JLabel infixLabel;
+    private javax.swing.JScrollPane infixScrollPane;
+    private javax.swing.JTextArea infixTextArea;
     private javax.swing.JTextField labelText;
     private javax.swing.JPanel latexDrawingPanel;
     private javax.swing.JPanel leftPanel;
@@ -1868,6 +2010,11 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
     private javax.swing.JTextArea longDescriptionField;
     private javax.swing.JLabel longDescriptionLabel;
     private javax.swing.JLabel lowRangeLabel;
+    private javax.swing.JPanel mathCalibratorsPanel;
+    private javax.swing.JLabel mathOpLabel;
+    private javax.swing.JPanel mathOpPanel;
+    private javax.swing.JTabbedPane mathOpTabbedPane;
+    private javax.swing.JPanel mathOperationCalibratorsTab;
     private javax.swing.JTextField maxValueText;
     private javax.swing.JLabel nameLabel;
     private javax.swing.JTextField nameTextField;
@@ -1879,6 +2026,9 @@ public class XTCEViewerParameterDetailDialog extends javax.swing.JDialog {
     private javax.swing.JPanel polynomialCalibratorsPanel;
     private javax.swing.JPanel polynomialCalibratorsTab;
     private javax.swing.JTabbedPane polynomialCalibratorsTabbedPane;
+    private javax.swing.JLabel postfixLabel;
+    private javax.swing.JScrollPane postfixScrollPane;
+    private javax.swing.JTextArea postfixTextArea;
     private javax.swing.JComboBox rangeAppliesToComboBox;
     private javax.swing.JCheckBox rangeHighInclusiveCheckbox;
     private javax.swing.JTextField rangeHighTextField;

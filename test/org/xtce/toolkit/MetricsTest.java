@@ -68,47 +68,82 @@ public class MetricsTest {
 
         XTCESpaceSystemMetrics metrics = db_.getMetrics();
 
-        if ( metrics.getNumberOfParameters() != 45 ) {
-            Assert.fail( "Should have found 42 total parameters" );
+        if ( metrics.getNumberOfParameters() != 62 ) {
+            Assert.fail( "Should have found 62 total parameters" +
+                         ", found instead " +
+                         Long.toString( metrics.getNumberOfParameters() ) );
         }
-        if ( metrics.getNumberOfTelemetryParameters() != 44 ) {
-            Assert.fail( "Should have found 41 total telemetry parameters" );
+
+        if ( metrics.getNumberOfTelemetryParameters() != 61 ) {
+            Assert.fail( "Should have found 61 total telemetry parameters" +
+                         ", found instead " +
+                         Long.toString( metrics.getNumberOfTelemetryParameters() ) );
         }
+
         if ( metrics.getNumberOfTelecommandParameters() != 1 ) {
-            Assert.fail( "Should have found 1 total telecommand parameters" );
+            Assert.fail( "Should have found 1 total telecommand parameters" +
+                         ", found instead " +
+                         Long.toString( metrics.getNumberOfTelecommandParameters() ) );
         }
-        if ( metrics.getNumberOfParameterTypes() != 43 ) {
-            Assert.fail( "Should have found 40 total parameter types" );
+
+        if ( metrics.getNumberOfParameterTypes() != 60 ) {
+            Assert.fail( "Should have found 60 total parameter types" +
+                         ", found instead " +
+                         Long.toString( metrics.getNumberOfParameterTypes() ) );
         }
-        if ( metrics.getNumberOfTelemetryParameterTypes() != 42 ) {
-            Assert.fail( "Should have found 39 total telemetry parameter types" );
+
+        if ( metrics.getNumberOfTelemetryParameterTypes() != 59 ) {
+            Assert.fail( "Should have found 59 total telemetry parameter types" +
+                         ", found instead " +
+                         Long.toString( metrics.getNumberOfTelemetryParameterTypes() ) );
         }
+
         if ( metrics.getNumberOfTelecommandParameterTypes() != 1 ) {
-            Assert.fail( "Should have found 1 total telecommand parameter types" );
+            Assert.fail( "Should have found 1 total telecommand parameter types" +
+                         ", found instead " +
+                         Long.toString( metrics.getNumberOfTelecommandParameterTypes() ) );
         }
 
         if ( metrics.getNumberOfContainers() != 5 ) {
-            Assert.fail( "Should have found 5 total containers" );
+            Assert.fail( "Should have found 5 total containers" +
+                         ", found instead " +
+                         Long.toString( metrics.getNumberOfContainers() ) );
         }
+
         if ( metrics.getNumberOfTelemetryContainers() != 5 ) {
-            Assert.fail( "Should have found 5 total telemetry containers" );
+            Assert.fail( "Should have found 5 total telemetry containers" +
+                         ", found instead " +
+                         Long.toString( metrics.getNumberOfTelemetryContainers() ) );
         }
+
         if ( metrics.getNumberOfTelecommandContainers() != 0 ) {
-            Assert.fail( "Should have found 0 total telecommand containers" );
+            Assert.fail( "Should have found 0 total telecommand containers" +
+                         ", found instead " +
+                         Long.toString( metrics.getNumberOfTelecommandContainers() ) );
         }
 
         if ( metrics.getNumberOfChildSpaceSystems() != 4 ) {
-            Assert.fail( "Should have found 4 child SpaceSystems" );
+            Assert.fail( "Should have found 4 child SpaceSystems" +
+                         ", found instead " +
+                         Long.toString( metrics.getNumberOfChildSpaceSystems() ) );
         }
 
-        if ( metrics.getNumberOfTelecommands() != 2 ) {
-            Assert.fail( "Should have found 2 total telecommands" );
+        if ( metrics.getNumberOfTelecommands() != 10 ) {
+            Assert.fail( "Should have found 10 total telecommands" +
+                         ", found instead " +
+                         Long.toString( metrics.getNumberOfTelecommands() ) );
         }
-        if ( metrics.getNumberOfTelecommandArguments() != 0 ) {
-            Assert.fail( "Should have found 0 total telecommand arguments" );
+
+        if ( metrics.getNumberOfTelecommandArguments() != 6 ) {
+            Assert.fail( "Should have found 6 total telecommand arguments" +
+                         ", found instead " +
+                         Long.toString( metrics.getNumberOfTelecommandArguments() ) );
         }
-        if ( metrics.getNumberOfTelecommandArgumentTypes() != 0 ) {
-            Assert.fail( "Should have found 0 total telecommand argument types" );
+
+        if ( metrics.getNumberOfTelecommandArgumentTypes() != 8 ) {
+            Assert.fail( "Should have found 8 total telecommand argument types" +
+                         ", found instead " +
+                         Long.toString( metrics.getNumberOfTelecommandArgumentTypes() ) );
         }
 
         if ( metrics.isDeepCount() == false ) {
@@ -190,6 +225,6 @@ public class MetricsTest {
 
     // Private Data Members
 
-    private XTCEDatabase  db_  = null;
+    private XTCEDatabase db_  = null;
 
 }

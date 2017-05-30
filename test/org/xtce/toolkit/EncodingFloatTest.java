@@ -18,6 +18,7 @@
 package org.xtce.toolkit;
 
 import java.io.File;
+import java.math.BigInteger;
 import java.util.BitSet;
 import java.util.List;
 import junit.framework.Assert;
@@ -26,6 +27,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.xtce.math.MilStd1750A;
 
 /**
  *
@@ -579,11 +581,33 @@ public class EncodingFloatTest {
 
             errors += check( 0.0, "FLOAT_MILSTD_INVALID_RAW Raw encoding for type named: MILSTD_1750A (39 bits)" );
 
-            System.out.println( "" );
-
         } catch ( Throwable ex ) {
             Assert.fail( ex.getLocalizedMessage() );
         }
+
+        try {
+            MilStd1750A milStdObj = new MilStd1750A( BigInteger.ONE, 23 );
+            System.out.println( "FAILED: Invalid size for MilStd1750A constructor did not throw" );
+            errors++;
+        } catch ( IllegalArgumentException ex ) {
+            System.out.println( "PASSED: Invalid size for MilStd1750A constructor" );
+        }
+
+        try {
+            MilStd1750A milStdObj = new MilStd1750A( 0.0, 23 );
+            System.out.println( "FAILED: Invalid size for MilStd1750A constructor did not throw" );
+            errors++;
+        } catch ( IllegalArgumentException ex ) {
+            System.out.println( "PASSED: Invalid size for MilStd1750A constructor" );
+        }
+
+        Assert.assertFalse( "FLOAT_MILSTD_INVALID_RAW should not report true from hasDefaultCalibrator()",
+                            ppp_.hasDefaultCalibrator() );
+
+        Assert.assertFalse( "FLOAT_MILSTD_INVALID_RAW should not report true from hasContextCalibrators()",
+                            ppp_.hasContextCalibrators() );
+
+        System.out.println( "" );
 
         if ( errors != 0 ) {
             Assert.fail( "Not all checks passed" );
@@ -609,16 +633,16 @@ public class EncodingFloatTest {
                                       "Quadratic_Demo_SingleRoot" );
 
             errors += check( "0",
-                             "Polynomial Calibrator for Quadratic_Demo_SingleRoot has no real roots for EU value 0" );
+                             "Quadratic_Demo_SingleRoot Polynomial calibrator has no real roots for calibrated value '0'" );
 
             errors += check( -1,
-                             "Polynomial Calibrator for Quadratic_Demo_SingleRoot has no real roots for EU value -1" );
+                             "Quadratic_Demo_SingleRoot Polynomial calibrator has no real roots for calibrated value '-1'" );
 
             errors += check( 0.0,
-                             "Polynomial Calibrator for Quadratic_Demo_SingleRoot has no real roots for EU value 0.0" );
+                             "Quadratic_Demo_SingleRoot Polynomial calibrator has no real roots for calibrated value '0.0'" );
 
             errors += check( (float)0.0,
-                             "Polynomial Calibrator for Quadratic_Demo_SingleRoot has no real roots for EU value 0.0" );
+                             "Quadratic_Demo_SingleRoot Polynomial calibrator has no real roots for calibrated value '0.0'" );
 
             errors += check( 1,
                              "0x00000000",
@@ -633,7 +657,7 @@ public class EncodingFloatTest {
                              "10111111101101010000010011110011" );
 
             errors += check( -5.0,
-                             "Polynomial Calibrator for Quadratic_Demo_SingleRoot has no real roots for EU value -5.0" );
+                             "Quadratic_Demo_SingleRoot Polynomial calibrator has no real roots for calibrated value '-5.0'" );
 
             errors += check( (float)5.0,
                              "0xc0000000",
@@ -654,8 +678,6 @@ public class EncodingFloatTest {
             errors += check( 102,
                              "Quadratic_Demo_SingleRoot Encoded value '-10.04987562112089' is too small for valid inclusive min value of '-10.0' on encoding of IEEE754_1985" );
 
-            System.out.println( "" );
-
         } catch ( Throwable ex ) {
             Assert.fail( ex.getLocalizedMessage() );
         }
@@ -663,6 +685,14 @@ public class EncodingFloatTest {
         if ( errors != 0 ) {
             Assert.fail( "Not all checks passed" );
         }
+
+        Assert.assertTrue( "Quadratic_Demo_SingleRoot should not report false from hasDefaultCalibrator()",
+                            ppp_.hasDefaultCalibrator() );
+
+        Assert.assertFalse( "Quadratic_Demo_SingleRoot should not report true from hasContextCalibrators()",
+                            ppp_.hasContextCalibrators() );
+
+        System.out.println( "" );
 
     }
 
@@ -708,7 +738,97 @@ public class EncodingFloatTest {
                              "11000000000000000000000000000000" );
 
             errors += check( -2.0,
-                             "Polynomial Calibrator for Quadratic_Demo_SingleRoot2 has no real roots for EU value -2.0" );
+                             "Quadratic_Demo_SingleRoot2 Polynomial calibrator has no real roots for calibrated value '-2.0'" );
+
+            System.out.println( "" );
+
+        } catch ( Throwable ex ) {
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+        if ( errors != 0 ) {
+            Assert.fail( "Not all checks passed" );
+        }
+
+    }
+
+    @Test
+    public void testFloatParameterTypesWithRawFloatOrder0Calibrator() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        long errors = 0;
+
+        try {
+
+            System.out.println( "Testing EU Float Raw float Order 0 Calibrator" );
+
+            getParameterItemValueObj( "/BogusSAT/SC001/BusElectronics",
+                                      "Float_Order0_PolyTerms" );
+
+            errors += check( "0",
+                             "0xc00ccccd",
+                             "11000000000011001100110011001101" );
+
+            errors += check( 0.0,
+                             "0xc00ccccd",
+                             "11000000000011001100110011001101" );
+
+            errors += check( (float)0.0,
+                             "0xc00ccccd",
+                             "11000000000011001100110011001101" );
+
+            //errors += check( 16,
+            //                 "0xc00ccccd",
+            //                 "11000000000011001100110011001101" );
+
+            System.out.println( "" );
+
+        } catch ( Throwable ex ) {
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+        if ( errors != 0 ) {
+            Assert.fail( "Not all checks passed" );
+        }
+
+    }
+
+    @Test
+    public void testFloatParameterTypesWithRawFloatOrder1Calibrator() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        long errors = 0;
+
+        try {
+
+            System.out.println( "Testing EU Float Raw float Order 1 (Linear) Calibrator" );
+
+            getParameterItemValueObj( "/BogusSAT/SC001/BusElectronics",
+                                      "Float_Order1_PolyTerms" );
+
+            errors += check( "0",
+                             "0xbeaaaaab",
+                             "10111110101010101010101010101011" );
+
+            errors += check( 0.0,
+                             "0xbeaaaaab",
+                             "10111110101010101010101010101011" );
+
+            errors += check( (float)0.0,
+                             "0xbeaaaaab",
+                             "10111110101010101010101010101011" );
+
+            //errors += check( 16,
+            //                 "0xc00ccccd",
+            //                 "11000000000011001100110011001101" );
 
             System.out.println( "" );
 
@@ -740,20 +860,20 @@ public class EncodingFloatTest {
                                       "Spline_Demo" );
 
             errors += check( "0",
-                             "Spline Calibrator for Spline_Demo does not bound calibrated value 0 and extrapolate is false" );
+                             "Spline_Demo Spline calibrator does not extrapolate and does not bound calibrated value '0'" );
 
             errors += check( 0.0,
-                             "Spline Calibrator for Spline_Demo does not bound calibrated value 0.0 and extrapolate is false" );
+                             "Spline_Demo Spline calibrator does not extrapolate and does not bound calibrated value '0.0'" );
 
             errors += check( (float)0.0,
-                             "Spline Calibrator for Spline_Demo does not bound calibrated value 0.0 and extrapolate is false" );
+                             "Spline_Demo Spline calibrator does not extrapolate and does not bound calibrated value '0.0'" );
 
             errors += check( 2,
                              "0xc008000000000000",
                              "1100000000001000000000000000000000000000000000000000000000000000" );
 
             errors += check( "-2",
-                             "Spline Calibrator for Spline_Demo does not bound calibrated value -2 and extrapolate is false" );
+                             "Spline_Demo Spline calibrator does not extrapolate and does not bound calibrated value '-2'" );
 
             errors += check( 3.0,
                              "0xbff0000000000000",
@@ -764,10 +884,10 @@ public class EncodingFloatTest {
                              "1100000000000000000000000000000000000000000000000000000000000000" );
 
             errors += check( -4.0,
-                             "Spline Calibrator for Spline_Demo does not bound calibrated value -4.0 and extrapolate is false" );
+                             "Spline_Demo Spline calibrator does not extrapolate and does not bound calibrated value '-4.0'" );
 
             errors += check( 5.0,
-                             "Spline Calibrator for Spline_Demo does not bound calibrated value 5.0 and extrapolate is false" );
+                             "Spline_Demo Spline calibrator does not extrapolate and does not bound calibrated value '5.0'" );
 
             System.out.println( "" );
 
@@ -781,6 +901,71 @@ public class EncodingFloatTest {
 
     }
 
+    @Test
+    public void testFloatParameterTypesWithRawFloatBadCalibrator() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        long errors = 0;
+
+        try {
+
+            System.out.println( "Testing EU Float Raw float Bad Calibrator" );
+
+            getParameterItemValueObj( "/BogusSAT/SC001/BusElectronics",
+                                      "Float_Missing_PolyTerms" );
+
+            errors += check( 5.0,
+                             "Float_Missing_PolyTerms No terms specified for the polynomial calibrator." );
+
+            getParameterItemValueObj( "/BogusSAT/SC001/BusElectronics",
+                                      "Float_Order3_PolyTerms" );
+
+            errors += check( 5.0,
+                             "Float_Order3_PolyTerms Polynomial calibrator has an exponent greater than 2, which is the maximum uncalibration exponent supported. (3)" );
+
+            getParameterItemValueObj( "/BogusSAT/SC001/BusElectronics",
+                                      "Float_Missing_SplinePoints" );
+
+            errors += check( 5.0,
+                             "Float_Missing_SplinePoints Spline calibrator does not have at least 2 points to work from." );
+
+            getParameterItemValueObj( "/BogusSAT/SC001/BusElectronics",
+                                      "Spline_Demo" );
+
+            errors += check( 1024.0,
+                             "Spline_Demo Spline calibrator does not extrapolate and does not bound calibrated value '1024.0'" );
+
+            //getParameterItemValueObj( "/BogusSAT/SC001/BusElectronics",
+            //                          "Spline_Quad_Infinite_Slope" );
+
+            //errors += check( 1.0, // not working and not sure why
+            //                 "Spline_Quad_Infinite_Slope" );
+
+            getParameterItemValueObj( "/BogusSAT/SC001/BusElectronics",
+                                      "Float_MathOpCal_3" );
+
+            errors += check( 5.0,
+                             "Float_MathOpCal_3 MathOperationCalibrator is not supported.  Returning uncalibrated value." );
+
+            System.out.println( "" );
+
+        } catch ( Throwable ex ) {
+            ex.printStackTrace();
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+        if ( errors != 0 ) {
+            Assert.fail( "Not all checks passed" );
+        }
+
+    }
+
+    //
+    
     /* Test Function Template
 
     @Test
