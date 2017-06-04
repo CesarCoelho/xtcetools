@@ -31,7 +31,6 @@ import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
@@ -671,9 +670,11 @@ public class XTCEFunctions {
                 resultsText.append( System.getProperty( "line.separator" ) ); // NOI18N
             }
 
+            stream.close();
+
             return resultsText.toString();
 
-        } catch ( TransformerException ex ) {
+        } catch ( Exception ex ) {
             throw new XTCEDatabaseException( ex );
         }
 
@@ -713,9 +714,11 @@ public class XTCEFunctions {
             Result target = new StreamResult( outStream );
             transformer.transform( source, target );
 
+            stream.close();
+
             return outStream.toString();
 
-        } catch ( TransformerException ex ) {
+        } catch ( Exception ex ) {
             throw new XTCEDatabaseException( ex );
         }
 

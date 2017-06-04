@@ -15,15 +15,14 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<xtce:SpaceSystem name="BogusSAT" xmlns:xtce="http://www.omg.org/space/xtce" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.omg.org/space/xtce SpaceSystemV1.2-27Feb2014-mods.xsd">
-	<xtce:LongDescription>This is a bogus satellite telemetry and telecommand database.  The purpose of BogusSAT is to exercise the capabilities of XTCE and the XTCE View tool.</xtce:LongDescription>
+<xtce:SpaceSystem name="UnitTest-Convert" xmlns:xtce="http://www.omg.org/space/xtce" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.omg.org/space/xtce SpaceSystemV1.2-27Feb2014-mods.xsd">
+	<xtce:LongDescription>This is a bogus satellite telemetry and telecommand database.  The purpose of this file is to unit test the XTCE 1.1 to 1.2 conversion feature.</xtce:LongDescription>
 	<xtce:Header validationStatus="Working" classification="NotClassified" version="1.0" date="27-10-2012">
 		<xtce:AuthorSet>
 			<xtce:Author>David Overeem, Member of the OMG SDTF and XTCE RTF</xtce:Author>
 		</xtce:AuthorSet>
 		<xtce:NoteSet>
-			<xtce:Note>The root SpaceSystem for BogusSAT contains the parameters needed to define the transport of data for any of the BogusSAT satellites in the fleet or constellation.</xtce:Note>
-                        <xtce:Note>This document is used for unit tests and has deliberate errors.  Do not trust this for examples.</xtce:Note>
+			<xtce:Note>Unit Test Database File</xtce:Note>
 		</xtce:NoteSet>
 	</xtce:Header>
 	<xtce:TelemetryMetaData>
@@ -59,6 +58,11 @@ limitations under the License.
 					<xtce:Enumeration value="9" label="Mission"/>
 					<xtce:Enumeration value="10" label="Safe"/>
 				</xtce:EnumerationList>
+                                <xtce:DefaultAlarm>
+                                    <xtce:EnumerationAlarmList>
+                                        <xtce:EnumerationAlarm alarmLevel="warning" enumerationValue="Safe"/>
+                                    </xtce:EnumerationAlarmList>
+                                </xtce:DefaultAlarm>
 			</xtce:EnumeratedParameterType>
 			<xtce:IntegerParameterType signed="false" name="CCSDSSCIDType">
 				<xtce:UnitSet/>
@@ -86,7 +90,7 @@ limitations under the License.
 				<xtce:UnitSet/>
 				<xtce:IntegerDataEncoding sizeInBits="2"/>
 			</xtce:IntegerParameterType>
-			<xtce:IntegerParameterType signed="false" name="CCSDSSourceSequenceCountType">
+			<xtce:IntegerParameterType signed="false" name="CCSDSSourceSequenceCountType" validRangeAppliesToCalibrated="false">
 				<xtce:UnitSet/>
 				<xtce:IntegerDataEncoding sizeInBits="14"/>
 			</xtce:IntegerParameterType>
@@ -96,6 +100,22 @@ limitations under the License.
 				</xtce:UnitSet>
 				<xtce:IntegerDataEncoding sizeInBits="16" bitOrder="mostSignificantBitFirst" encoding="unsigned"/>
 				<xtce:ValidRange minInclusive="13" maxInclusive="65536"/>
+			</xtce:IntegerParameterType>
+			<xtce:IntegerParameterType signed="false" name="CCSDSPUSErrorControlFieldType">
+				<xtce:UnitSet/>
+				<xtce:IntegerDataEncoding sizeInBits="16" bitOrder="mostSignificantBitFirst" encoding="unsigned">
+                                    <xtce:ErrorDetectCorrect>
+                                        <xtce:CRC>
+                                            <!-- CRC-16 in common use, also known as CRC-16-ANSI and CRC-16-IBM -->
+                                            <xtce:Polynomial>
+                                                <xtce:Term exponent="16" coefficient="1"/>
+                                                <xtce:Term exponent="15" coefficient="1"/>
+                                                <xtce:Term exponent="2" coefficient="1"/>
+                                                <xtce:Term exponent="0" coefficient="1"/>
+                                            </xtce:Polynomial>
+                                        </xtce:CRC>
+                                    </xtce:ErrorDetectCorrect>
+                                </xtce:IntegerDataEncoding>
 			</xtce:IntegerParameterType>
 		</xtce:ParameterTypeSet>
 		<xtce:ParameterSet>
@@ -115,6 +135,7 @@ limitations under the License.
 			<xtce:Parameter parameterTypeRef="CCSDSGroupFlagsType" name="CCSDSGroupFlags"/>
 			<xtce:Parameter parameterTypeRef="CCSDSSourceSequenceCountType" name="CCSDSSourceSequenceCount"/>
 			<xtce:Parameter parameterTypeRef="CCSDSPacketLengthType" name="CCSDSPacketLength"/>
+                        <xtce:Parameter parameterTypeRef="CCSDSPUSErrorControlFieldType" name="CCSDSPUSErrorControlField"/>
 			<xtce:Parameter parameterTypeRef="MissionType" name="Mission">
 				<xtce:ParameterProperties dataSource="local"/>
 			</xtce:Parameter>
@@ -242,14 +263,14 @@ limitations under the License.
 						<xtce:FloatDataEncoding bitOrder="mostSignificantBitFirst" encoding="IEEE754_1985" sizeInBits="32" changeThreshold="0.01"/>
 						<xtce:ValidRange minInclusive="0.0" maxInclusive="15.0"/>
 						<xtce:DefaultAlarm minViolations="1">
-							<xtce:StaticAlarmRanges>
+							<xtce:StaticAlarmRanges alarmForm="inside">
 								<xtce:WarningRange minExclusive="12.35" maxExclusive="13.80"/>
 								<xtce:CriticalRange minExclusive="12.10" maxExclusive="14.34"/>
 							</xtce:StaticAlarmRanges>
 						</xtce:DefaultAlarm>
 						<xtce:ContextAlarmList>
 							<xtce:ContextAlarm minViolations="1">
-								<xtce:StaticAlarmRanges>
+								<xtce:StaticAlarmRanges rangeForm="inside">
 									<xtce:WarningRange minInclusive="12.60" maxInclusive="14.00"/>
 									<xtce:CriticalRange minInclusive="12.35" maxInclusive="14.34"/>
 								</xtce:StaticAlarmRanges>
@@ -258,7 +279,7 @@ limitations under the License.
 								</xtce:ContextMatch>
 							</xtce:ContextAlarm>
 							<xtce:ContextAlarm minViolations="1">
-								<xtce:StaticAlarmRanges>
+								<xtce:StaticAlarmRanges rangeForm="inside">
 									<xtce:WarningRange minInclusive="12.35" maxInclusive="12.60"/>
 									<xtce:CriticalRange minInclusive="12.10" maxInclusive="13.00"/>
 								</xtce:StaticAlarmRanges>
@@ -268,7 +289,7 @@ limitations under the License.
 							</xtce:ContextAlarm>
 						</xtce:ContextAlarmList>
 					</xtce:FloatParameterType>
-					<xtce:FloatParameterType name="Battery_Current_Type" sizeInBits="32" shortDescription="This parameter describes the measured current draw">
+					<xtce:FloatParameterType name="Battery_Current_Type" sizeInBits="32" shortDescription="This parameter describes the measured current draw" validRangeAppliesToCalibrated="true">
 						<xtce:LongDescription>The battery on BogusSAT is a modeled by a typical flooded lead acid car battery.</xtce:LongDescription>
 						<xtce:UnitSet>
 							<xtce:Unit description="Current">Amperes</xtce:Unit>
@@ -276,7 +297,7 @@ limitations under the License.
 						<xtce:FloatDataEncoding bitOrder="mostSignificantBitFirst" encoding="IEEE754_1985" sizeInBits="32" changeThreshold="0.01"/>
 						<xtce:ValidRange minInclusive="-100.0" maxInclusive="100.0"/>
 						<xtce:DefaultAlarm minViolations="1">
-							<xtce:StaticAlarmRanges>
+							<xtce:StaticAlarmRanges alarmForm="outside">
 								<xtce:WarningRange minExclusive="-5.0" maxExclusive="10.0"/>
 								<xtce:CriticalRange minExclusive="-20.0" maxExclusive="15.0"/>
 							</xtce:StaticAlarmRanges>
@@ -319,7 +340,7 @@ limitations under the License.
 								</xtce:PolynomialCalibrator>
 							</xtce:DefaultCalibrator>
 						</xtce:IntegerDataEncoding>
-						<xtce:ValidRange minInclusive="0.00" maxInclusive="4000.00" rangeAppliesToCalibrated="true"/>
+						<xtce:ValidRange minInclusive="0.00" maxInclusive="4000.00" validRangeAppliesToCalibrated="true"/>
 						<xtce:DefaultAlarm minViolations="1">
 							<xtce:StaticAlarmRanges>
 								<xtce:CriticalRange minInclusive="-100.0" maxInclusive="100.0"/>
@@ -336,7 +357,7 @@ limitations under the License.
 								</xtce:PolynomialCalibrator>
 							</xtce:DefaultCalibrator>
 						</xtce:FloatDataEncoding>
-						<xtce:ValidRange minInclusive="-10.00" maxInclusive="10.00" rangeAppliesToCalibrated="false"/>
+						<xtce:ValidRange minInclusive="-10.00" maxInclusive="10.00" validRangeAppliesToCalibrated="false"/>
 					</xtce:FloatParameterType>
 					<xtce:FloatParameterType name="Quadratic_Demo_SingleRoot2_Type" sizeInBits="32" shortDescription="This is a float parameter with a float quadratic encoding">
 						<xtce:UnitSet/>
@@ -403,7 +424,7 @@ limitations under the License.
 								<xtce:PolynomialCalibrator/>
 							</xtce:DefaultCalibrator>
 						</xtce:FloatDataEncoding>
-						<xtce:ValidRange minInclusive="-10.00" maxInclusive="10.00" rangeAppliesToCalibrated="false"/>
+						<xtce:ValidRange minInclusive="-10.00" maxInclusive="10.00" validRangeAppliesToCalibrated="false"/>
 					</xtce:FloatParameterType>
 					<xtce:FloatParameterType name="Float_Missing_SplinePoints_Type" sizeInBits="32" shortDescription="This is a float parameter with no points in a spline calibrator (invalid)">
 						<xtce:UnitSet/>
@@ -412,7 +433,7 @@ limitations under the License.
 								<xtce:SplineCalibrator/>
 							</xtce:DefaultCalibrator>
 						</xtce:FloatDataEncoding>
-						<xtce:ValidRange minInclusive="-10.00" maxInclusive="10.00" rangeAppliesToCalibrated="false"/>
+						<xtce:ValidRange minInclusive="-10.00" maxInclusive="10.00" validRangeAppliesToCalibrated="false"/>
 					</xtce:FloatParameterType>
 					<xtce:FloatParameterType name="Float_Order0_PolyTerms_Type" sizeInBits="32" shortDescription="This is a float parameter with an order 0 polynomial calibrator">
 						<xtce:UnitSet/>
@@ -423,7 +444,7 @@ limitations under the License.
 								</xtce:PolynomialCalibrator>
 							</xtce:DefaultCalibrator>
 						</xtce:FloatDataEncoding>
-						<xtce:ValidRange minInclusive="-10.00" maxInclusive="100.00" rangeAppliesToCalibrated="false"/>
+						<xtce:ValidRange minInclusive="-10.00" maxInclusive="100.00" validRangeAppliesToCalibrated="false"/>
 					</xtce:FloatParameterType>
 					<xtce:FloatParameterType name="Float_Order1_PolyTerms_Type" sizeInBits="32" shortDescription="This is a float parameter with an order 1 polynomial calibrator">
 						<xtce:UnitSet/>
@@ -435,7 +456,7 @@ limitations under the License.
 								</xtce:PolynomialCalibrator>
 							</xtce:DefaultCalibrator>
 						</xtce:FloatDataEncoding>
-						<xtce:ValidRange minInclusive="-10.00" maxInclusive="100.00" rangeAppliesToCalibrated="false"/>
+						<xtce:ValidRange minInclusive="-10.00" maxInclusive="100.00" validRangeAppliesToCalibrated="false"/>
 					</xtce:FloatParameterType>
 					<xtce:FloatParameterType name="Float_Order3_PolyTerms_Type" sizeInBits="32" shortDescription="This is a float parameter with an order 3 polynomial calibrator">
 						<xtce:UnitSet/>
@@ -448,7 +469,7 @@ limitations under the License.
 								</xtce:PolynomialCalibrator>
 							</xtce:DefaultCalibrator>
 						</xtce:FloatDataEncoding>
-						<xtce:ValidRange minInclusive="-10.00" maxInclusive="100.00" rangeAppliesToCalibrated="false"/>
+						<xtce:ValidRange minInclusive="-10.00" maxInclusive="100.00" validRangeAppliesToCalibrated="false"/>
 					</xtce:FloatParameterType>
 					<xtce:FloatParameterType name="Float_MathOpCal_1_Type" sizeInBits="32" shortDescription="This is a float parameter with a simple math operation calibrator">
 						<xtce:UnitSet/>
@@ -662,7 +683,7 @@ limitations under the License.
 						<xtce:UnitSet>
 							<xtce:Unit>cd/m^2</xtce:Unit>
 						</xtce:UnitSet>
-						<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement">
+						<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment">
 							<xtce:DefaultCalibrator>
 								<xtce:PolynomialCalibrator>
 									<xtce:Term exponent="0" coefficient="-10.0"/>
@@ -695,11 +716,11 @@ limitations under the License.
 							</xtce:ContextCalibratorList>
 						</xtce:IntegerDataEncoding>
 					</xtce:FloatParameterType>
-					<xtce:FloatParameterType sizeInBits="64" name="EarthSensorSplineCalType">
+					<xtce:FloatParameterType sizeInBits="64" name="EarthSensorSplineCalType" validRangeAppliesToCalibrated="true">
 						<xtce:UnitSet>
 							<xtce:Unit>cd/m^2</xtce:Unit>
 						</xtce:UnitSet>
-						<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosComplement">
+						<xtce:IntegerDataEncoding sizeInBits="16" encoding="twosCompliment">
 							<xtce:DefaultCalibrator>
 								<xtce:SplineCalibrator order="1">
 									<xtce:SplinePoint raw="0" calibrated="0.0"/>
@@ -734,6 +755,7 @@ limitations under the License.
 								</xtce:ContextCalibrator>
 							</xtce:ContextCalibratorList>
 						</xtce:IntegerDataEncoding>
+                                                <xtce:ValidRange minInclusive="-5.0" maxInclusive="50.0"/>
 					</xtce:FloatParameterType>
 					<xtce:EnumeratedParameterType name="SunSensorModeType" initialValue="OFF">
 						<xtce:UnitSet/>
@@ -743,6 +765,12 @@ limitations under the License.
 							<xtce:Enumeration label="LOW" value="1"/>
 							<xtce:Enumeration label="HIGH" value="2"/>
 						</xtce:EnumerationList>
+                                                <xtce:DefaultAlarm>
+                                                    <xtce:EnumerationAlarmList>
+                                                        <xtce:EnumerationAlarm alarmLevel="warning" enumerationValue="LOW"/>
+                                                        <xtce:EnumerationAlarm alarmLevel="critical" enumerationValue="OFF"/>
+                                                    </xtce:EnumerationAlarmList>
+                                                </xtce:DefaultAlarm>
 					</xtce:EnumeratedParameterType>
 				</xtce:ParameterTypeSet>
 				<xtce:ParameterSet>
@@ -1211,7 +1239,7 @@ limitations under the License.
 					</xtce:IntegerParameterType>
 					<xtce:IntegerParameterType name="Basic_int32_twoscomp_Type" signed="true" sizeInBits="32" shortDescription="Generic signed 32 bit number with twos complement encoding">
 						<xtce:UnitSet/>
-						<xtce:IntegerDataEncoding bitOrder="mostSignificantBitFirst" encoding="twosComplement" sizeInBits="32" changeThreshold="1"/>
+						<xtce:IntegerDataEncoding bitOrder="mostSignificantBitFirst" encoding="twosCompliment" sizeInBits="32" changeThreshold="1"/>
 					</xtce:IntegerParameterType>
 					<xtce:IntegerParameterType name="Basic_int32_onescomp_Type" signed="true" sizeInBits="32" shortDescription="Generic signed 32 bit number with ones complement encoding">
 						<xtce:UnitSet/>
@@ -1295,6 +1323,20 @@ limitations under the License.
 						</xtce:ParameterProperties>
 					</xtce:Parameter>
 				</xtce:ParameterSet>
+                                <xtce:MessageSet>
+                                    <xtce:Message name="Message1">
+                                        <xtce:MatchCriteria>
+                                            <xtce:Comparison parameterRef="/UnitTest-Convert/switch" value="bad1"/>
+                                        </xtce:MatchCriteria>
+                                        <xtce:ContainRef containerRef="/UnitTest-Convert/foo"/>
+                                    </xtce:Message>
+                                    <xtce:Message name="Message2">
+                                        <xtce:MatchCriteria>
+                                            <xtce:Comparison parameterRef="/UnitTest-Convert/switch" value="bad2"/>
+                                        </xtce:MatchCriteria>
+                                        <xtce:ContainRef containerRef="/UnitTest-Convert/bar"/>
+                                    </xtce:Message>
+                                </xtce:MessageSet>
 			</xtce:TelemetryMetaData>
 			<xtce:CommandMetaData>
 				<xtce:ArgumentTypeSet>
@@ -1307,7 +1349,7 @@ limitations under the License.
 							<xtce:Enumeration value="0" label="STANDBY"/>
 						</xtce:EnumerationList>
 					</xtce:EnumeratedArgumentType>
-					<xtce:FloatArgumentType name="Output_Power_Type" shortDescription="Payload output power">
+					<xtce:FloatArgumentType name="Output_Power_Type" shortDescription="Payload output power" validRangeAppliesToCalibrated="true">
 						<xtce:UnitSet>
 							<xtce:Unit description="current">Amperes</xtce:Unit>
 						</xtce:UnitSet>
@@ -1323,9 +1365,10 @@ limitations under the License.
 						<xtce:UnitSet/>
 						<xtce:IntegerDataEncoding sizeInBits="32" encoding="unsigned"/>
 					</xtce:IntegerArgumentType>
-					<xtce:IntegerArgumentType name="Value32_Type" shortDescription="New value to set to 32 bit integer item">
+					<xtce:IntegerArgumentType name="Value32_Type" shortDescription="New value to set to 32 bit integer item" validRangeAppliesToCalibrated="false">
 						<xtce:UnitSet/>
 						<xtce:IntegerDataEncoding sizeInBits="32" encoding="unsigned"/>
+                                                <xtce:ValidRange minInclusive="0" maxInclusive="65536"/>
 					</xtce:IntegerArgumentType>
 				</xtce:ArgumentTypeSet>
 				<xtce:MetaCommandSet>

@@ -26,14 +26,8 @@ import java.util.BitSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathException;
-import javax.xml.xpath.XPathExpression;
-import javax.xml.xpath.XPathFactory;
 import org.omg.space.xtce.NameDescriptionType;
 import org.omg.space.xtce.SpaceSystemType;
-import org.w3c.dom.NodeList;
 
 /** The XTCEDatabase class is the first core object to be used by a client
  * that is working with an XTCE Database File.
@@ -150,29 +144,6 @@ public final class XTCEDatabase extends XTCEDatabaseParser {
 
     }
 
-    /** Retrieve the changed flag indicating if some part of the XTCE document
-     * has changed since it has last been saved.
-     *
-     * @return boolean indicating if a change has been made that has not been
-     * yet saved.
-     *
-     */
-
-    public boolean getChanged( ) {
-        return databaseChanged;
-    }
-
-    /** Set the change flag to indicate whether or not this XTCE document has
-     * been changed since the last time it was saved.
-     *
-     * @param changedFlag boolean to use to set the changed flag.
-     *
-     */
-
-    public void setChanged( boolean changedFlag ) {
-        databaseChanged = changedFlag;
-    }
-
     /** Retrieve the metrics for the XTCE document represented by this object.
      *
      * The metrics returned are inclusive and recursive to the top level Space
@@ -186,42 +157,6 @@ public final class XTCEDatabase extends XTCEDatabaseParser {
 
     public XTCESpaceSystemMetrics getMetrics( ) {
         return new XTCESpaceSystemMetrics( this );
-    }
-
-    /** Evaluate an arbitrary XPath Query Expression and return a generic
-     * NodeList object back or an exception with an error message.
-     *
-     * @param query String containing the XPath expression.
-     *
-     * @return NodeList containing 0 or more nodes that were located by the
-     * query.
-     *
-     * @throws XTCEDatabaseException in the event that the query contains an
-     * error or cannot otherwise be evaluated against the DOM tree.
-     *
-     */
-
-    public NodeList evaluateXPathQuery( String query ) throws XTCEDatabaseException {
-
-        if ( isReadOnly() == true ) {
-            throw new XTCEDatabaseException(
-                XTCEFunctions.getText( "error_xpath_readonly" ) ); // NOI18N
-        }
-
-        XPath xpath = XPathFactory.newInstance().newXPath();
-        xpath.setNamespaceContext( new XTCENamespaceContext() );
-
-        try {
-
-            XPathExpression expr = xpath.compile( query );
-            NodeList nnn = (NodeList)expr.evaluate( getDocumentElement(),
-                                                    XPathConstants.NODESET );
-            return nnn;
-
-        } catch ( XPathException ex ) {
-            throw new XTCEDatabaseException( ex );
-        }
-
     }
 
     /** Function to save the currently loaded database file.
@@ -1347,42 +1282,11 @@ public final class XTCEDatabase extends XTCEDatabaseParser {
 
     }
 
-    /** Private method to update a progress bar object.
-     *
-     * Currently not used for anything as the passed reference is always null.
-     *
-     * @param listener XTCEProgressListener object or a null reference if none
-     * is being used by the calling application.
-     *
-     * @param percentComplete int containing the current estimation of percent
-     * complete, from 0-100.
-     *
-     * @param currentStep String containing the name of the current step.
-     *
-     */
-
-    private void updateLoadProgress( XTCEProgressListener listener,
-                                     int                  percentComplete,
-                                     String               currentStep ) {
-
-        if ( listener != null ) {
-            listener.updateProgress( percentComplete, currentStep );
-            try {
-                Thread.sleep( 500 );
-            } catch ( InterruptedException ex ) {
-                // do nothing
-            }
-        }
-
-    }
-
     // Private Data Members
 
-    private SpaceSystemType topLevelSpaceSystem = null;
-    private boolean         databaseChanged     = false;
-
-    private Map<String, NameDescriptionType> parameterTypes   = null;
-    private Map<String, NameDescriptionType> argumentTypes    = null;
-    private List<XTCESpaceSystem>            spaceSystemCache = null;
+    private SpaceSystemType                  topLevelSpaceSystem = null;
+    private Map<String, NameDescriptionType> parameterTypes      = null;
+    private Map<String, NameDescriptionType> argumentTypes       = null;
+    private List<XTCESpaceSystem>            spaceSystemCache    = null;
 
 }

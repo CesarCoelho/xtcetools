@@ -1,0 +1,1410 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+Copyright 2015 David Overeem (dovereem@cox.net)
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<SpaceSystem name="UnitTest-Convert" xmlns="http://www.omg.org/space/xtce" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.omg.org/space/xtce SpaceSystemV1.2-27Feb2014-mods.xsd">
+	<LongDescription>This is a bogus satellite telemetry and telecommand database.  The purpose of this file is to unit test the XTCE 1.1 to 1.2 conversion feature.</LongDescription>
+	<Header validationStatus="Working" classification="NotClassified" version="1.0" date="27-10-2012">
+		<AuthorSet>
+			<Author>David Overeem, Member of the OMG SDTF and XTCE RTF</Author>
+		</AuthorSet>
+		<NoteSet>
+			<Note>Unit Test Database File</Note>
+		</NoteSet>
+	</Header>
+	<TelemetryMetaData>
+		<ParameterTypeSet>
+			<AbsoluteTimeParameterType name="POSIXTimeType" shortDescription="POSIX UNIX Time 'timeval' which is 2 unsigned 32 bit integers">
+				<Encoding>
+					<IntegerDataEncoding sizeInBits="64"/>
+				</Encoding>
+				<ReferenceTime>
+					<Epoch>1970-01-01</Epoch>
+				</ReferenceTime>
+			</AbsoluteTimeParameterType>
+			<EnumeratedParameterType name="TM_CHECKSUMType" initialValue="NotUsed">
+				<UnitSet/>
+				<EnumerationList>
+					<Enumeration label="NotUsed" value="0"/>
+					<Enumeration label="CRC" value="1"/>
+					<Enumeration label="Checksum" value="2"/>
+				</EnumerationList>
+			</EnumeratedParameterType>
+			<EnumeratedParameterType name="MissionType" shortDescription="Reserved Mission Phase and Operating Modes">
+				<UnitSet/>
+				<EnumerationList>
+					<Enumeration value="0" label="TestBed"/>
+					<Enumeration value="1" label="IntegrationTest"/>
+					<Enumeration value="2" label="Vibration"/>
+					<Enumeration value="3" label="ThermalVac"/>
+					<Enumeration value="4" label="EMC"/>
+					<Enumeration value="5" label="Platform"/>
+					<Enumeration value="6" label="Launch"/>
+					<Enumeration value="7" label="Orbit"/>
+					<Enumeration value="8" label="Checkout"/>
+					<Enumeration value="9" label="Mission"/>
+					<Enumeration value="10" label="Safe"/>
+				</EnumerationList>
+                                <DefaultAlarm>
+                                    <EnumerationAlarmList>
+                                        <EnumerationAlarm alarmLevel="warning" enumerationValue="Safe"/>
+                                    </EnumerationAlarmList>
+                                </DefaultAlarm>
+			</EnumeratedParameterType>
+			<IntegerParameterType signed="false" name="CCSDSSCIDType">
+				<UnitSet/>
+			</IntegerParameterType>
+			<IntegerParameterType signed="false" name="CCSDSVCIDType">
+				<UnitSet/>
+			</IntegerParameterType>
+			<IntegerParameterType signed="false" name="CCSDSVersionType">
+				<UnitSet/>
+				<IntegerDataEncoding sizeInBits="3"/>
+			</IntegerParameterType>
+			<IntegerParameterType signed="false" name="CCSDSTypeType">
+				<UnitSet/>
+				<IntegerDataEncoding sizeInBits="1"/>
+			</IntegerParameterType>
+			<IntegerParameterType signed="false" name="CCSDSSecHType">
+				<UnitSet/>
+				<IntegerDataEncoding sizeInBits="1"/>
+			</IntegerParameterType>
+			<IntegerParameterType signed="false" name="CCSDSAPIDType">
+				<UnitSet/>
+				<IntegerDataEncoding sizeInBits="11"/>
+			</IntegerParameterType>
+			<IntegerParameterType signed="false" name="CCSDSGroupFlagsType">
+				<UnitSet/>
+				<IntegerDataEncoding sizeInBits="2"/>
+			</IntegerParameterType>
+			<IntegerParameterType signed="false" name="CCSDSSourceSequenceCountType" validRangeAppliesToCalibrated="false">
+				<UnitSet/>
+				<IntegerDataEncoding sizeInBits="14"/>
+			</IntegerParameterType>
+			<IntegerParameterType signed="false" name="CCSDSPacketLengthType">
+				<UnitSet>
+					<Unit description="Size">Octets</Unit>
+				</UnitSet>
+				<IntegerDataEncoding sizeInBits="16" bitOrder="mostSignificantBitFirst" encoding="unsigned"/>
+				<ValidRange minInclusive="13" maxInclusive="65536"/>
+			</IntegerParameterType>
+			<IntegerParameterType signed="false" name="CCSDSPUSErrorControlFieldType">
+				<UnitSet/>
+				<IntegerDataEncoding sizeInBits="16" bitOrder="mostSignificantBitFirst" encoding="unsigned">
+                                    <ErrorDetectCorrect>
+                                        <CRC>
+                                            <!-- CRC-16 in common use, also known as CRC-16-ANSI and CRC-16-IBM -->
+                                            <Polynomial>
+                                                <Term exponent="16" coefficient="1"/>
+                                                <Term exponent="15" coefficient="1"/>
+                                                <Term exponent="2" coefficient="1"/>
+                                                <Term exponent="0" coefficient="1"/>
+                                            </Polynomial>
+                                        </CRC>
+                                    </ErrorDetectCorrect>
+                                </IntegerDataEncoding>
+			</IntegerParameterType>
+		</ParameterTypeSet>
+		<ParameterSet>
+			<Parameter parameterTypeRef="TM_CHECKSUMType" name="TM_CHECKSUM">
+				<ParameterProperties dataSource="constant" readOnly="true"/>
+			</Parameter>
+			<Parameter parameterTypeRef="CCSDSSCIDType" name="CCSDSSCID">
+				<ParameterProperties dataSource="local"/>
+			</Parameter>
+			<Parameter parameterTypeRef="CCSDSVCIDType" name="CCSDSVCID">
+				<ParameterProperties dataSource="local"/>
+			</Parameter>
+			<Parameter parameterTypeRef="CCSDSVersionType" name="CCSDSVersion"/>
+			<Parameter parameterTypeRef="CCSDSTypeType" name="CCSDSType"/>
+			<Parameter parameterTypeRef="CCSDSSecHType" name="CCSDSSecH"/>
+			<Parameter parameterTypeRef="CCSDSAPIDType" name="CCSDSAPID"/>
+			<Parameter parameterTypeRef="CCSDSGroupFlagsType" name="CCSDSGroupFlags"/>
+			<Parameter parameterTypeRef="CCSDSSourceSequenceCountType" name="CCSDSSourceSequenceCount"/>
+			<Parameter parameterTypeRef="CCSDSPacketLengthType" name="CCSDSPacketLength"/>
+                        <Parameter parameterTypeRef="CCSDSPUSErrorControlFieldType" name="CCSDSPUSErrorControlField"/>
+			<Parameter parameterTypeRef="MissionType" name="Mission">
+				<ParameterProperties dataSource="local"/>
+			</Parameter>
+		</ParameterSet>
+		<ContainerSet>
+			<SequenceContainer abstract="true" name="CCSDSPacket">
+				<LongDescription>Super-container for all CCSDS telemetry and command packets</LongDescription>
+				<EntryList>
+					<ParameterRefEntry parameterRef="CCSDSVersion"/>
+					<ParameterRefEntry parameterRef="CCSDSType"/>
+					<ParameterRefEntry parameterRef="CCSDSSecH"/>
+					<ParameterRefEntry parameterRef="CCSDSAPID"/>
+					<ParameterRefEntry parameterRef="CCSDSGroupFlags"/>
+					<ParameterRefEntry parameterRef="CCSDSSourceSequenceCount"/>
+					<ParameterRefEntry parameterRef="CCSDSPacketLength"/>
+				</EntryList>
+			</SequenceContainer>
+			<SequenceContainer abstract="true" name="CCSDSTelemetryPacket">
+				<LongDescription>Super-container for all CCSDS telemetry packets.</LongDescription>
+				<EntryList/>
+				<BaseContainer containerRef="CCSDSPacket">
+					<RestrictionCriteria>
+						<ComparisonList>
+							<Comparison value="0" parameterRef="CCSDSVersion"/>
+							<Comparison value="0" parameterRef="CCSDSType"/>
+						</ComparisonList>
+					</RestrictionCriteria>
+				</BaseContainer>
+			</SequenceContainer>
+			<SequenceContainer abstract="true" name="CCSDSPUSTelemetryPacket">
+				<LongDescription>Super-container for all CCSDS/ECSS PUS telemetry packets.</LongDescription>
+				<EntryList>
+					<ParameterRefEntry parameterRef="CCSDSPUSspare1"/>
+					<ParameterRefEntry parameterRef="CCSDSPUSVersion"/>
+					<ParameterRefEntry parameterRef="CCSDSPUSspare4"/>
+					<ParameterRefEntry parameterRef="CCSDSPUSService"/>
+					<ParameterRefEntry parameterRef="CCSDSPUSSubService"/>
+					<!-- this is where the PUS data field goes -->
+					<ParameterRefEntry parameterRef="CCSDSPUSErrorControlField">
+						<LocationInContainerInBits referenceLocation="containerEnd">
+							<FixedValue>16</FixedValue>
+						</LocationInContainerInBits>
+						<IncludeCondition>
+							<Comparison parameterRef="TM_CHECKSUM" value="NotUsed" useCalibratedValue="true" comparisonOperator="!="/>
+						</IncludeCondition>
+					</ParameterRefEntry>
+				</EntryList>
+				<BaseContainer containerRef="CCSDSTelemetryPacket">
+					<RestrictionCriteria>
+						<Comparison parameterRef="CCSDSSecH" value="1"/>
+					</RestrictionCriteria>
+				</BaseContainer>
+			</SequenceContainer>
+		</ContainerSet>
+	</TelemetryMetaData>
+	<CommandMetaData>
+		<ParameterTypeSet>
+			<EnumeratedParameterType name="TC_CHECKSUMType" initialValue="NotUsed">
+				<UnitSet/>
+				<EnumerationList>
+					<Enumeration label="NotUsed" value="0"/>
+					<Enumeration label="CRC" value="1"/>
+					<Enumeration label="Checksum" value="2"/>
+				</EnumerationList>
+			</EnumeratedParameterType>
+		</ParameterTypeSet>
+		<ParameterSet>
+			<Parameter parameterTypeRef="TC_CHECKSUMType" name="TC_CHECKSUM">
+				<ParameterProperties dataSource="constant" readOnly="true"/>
+			</Parameter>
+		</ParameterSet>
+		<MetaCommandSet>
+			<MetaCommand abstract="true" name="CCSDSCommand">
+				<LongDescription>Super-Command for all CCSDS commands.</LongDescription>
+				<CommandContainer name="CCSDSCommandPacket">
+					<LongDescription>Super-container for all CCSDS command packets.</LongDescription>
+					<EntryList/>
+					<BaseContainer containerRef="CCSDSPacket">
+						<RestrictionCriteria>
+							<ComparisonList>
+								<Comparison value="0" parameterRef="CCSDSVersion"/>
+								<Comparison value="1" parameterRef="CCSDSType"/>
+							</ComparisonList>
+						</RestrictionCriteria>
+					</BaseContainer>
+				</CommandContainer>
+			</MetaCommand>
+			<MetaCommand abstract="true" name="CCSDSPUSCommandPacket">
+				<LongDescription>Super-Command for all CCSDS/ECSS PUS command packets.</LongDescription>
+				<CommandContainer name="CCSDSPUSCommandPacket">
+					<EntryList/>
+					<BaseContainer containerRef="CCSDSCommandPacket">
+						<RestrictionCriteria>
+							<Comparison parameterRef="CCSDSSecH" value="1"/>
+						</RestrictionCriteria>
+					</BaseContainer>
+				</CommandContainer>
+			</MetaCommand>
+		</MetaCommandSet>
+	</CommandMetaData>
+	<SpaceSystem name="SC001" shortDescription="This is the first spacecraft in the BogusSAT system">
+		<SpaceSystem name="BusElectronics">
+			<Header validationStatus="Test" classification="NotClassified" version="Build0" date="27-10-2012"/>
+			<TelemetryMetaData>
+				<ParameterTypeSet>
+					<StringParameterType name="Bus_Fault_Message_Type" shortDescription="Bus Error Message">
+						<UnitSet/>
+						<StringDataEncoding bitOrder="mostSignificantBitFirst" encoding="UTF-8">
+							<SizeInBits>
+								<Fixed>
+									<FixedValue>128</FixedValue>
+								</Fixed>
+							</SizeInBits>
+						</StringDataEncoding>
+					</StringParameterType>
+					<BooleanParameterType name="Battery_Charge_Mode_Type" zeroStringValue="DISCHARGE" oneStringValue="CHARGE" shortDescription="This parameter indicates whether the charger is charging the battery">
+						<UnitSet/>
+						<IntegerDataEncoding bitOrder="mostSignificantBitFirst" encoding="unsigned" sizeInBits="1" changeThreshold="1"/>
+					</BooleanParameterType>
+					<FloatParameterType name="Battery_Voltage_Type" sizeInBits="32" shortDescription="This parameter describes the measured battery voltage">
+						<LongDescription>The battery on BogusSAT is a modeled by a typical flooded lead acid car battery.</LongDescription>
+						<UnitSet>
+							<Unit description="Potential">Volts</Unit>
+						</UnitSet>
+						<FloatDataEncoding bitOrder="mostSignificantBitFirst" encoding="IEEE754_1985" sizeInBits="32" changeThreshold="0.01"/>
+						<ValidRange minInclusive="0.0" maxInclusive="15.0"/>
+						<DefaultAlarm minViolations="1">
+							<StaticAlarmRanges alarmForm="inside">
+								<WarningRange minExclusive="12.35" maxExclusive="13.80"/>
+								<CriticalRange minExclusive="12.10" maxExclusive="14.34"/>
+							</StaticAlarmRanges>
+						</DefaultAlarm>
+						<ContextAlarmList>
+							<ContextAlarm minViolations="1">
+								<StaticAlarmRanges rangeForm="inside">
+									<WarningRange minInclusive="12.60" maxInclusive="14.00"/>
+									<CriticalRange minInclusive="12.35" maxInclusive="14.34"/>
+								</StaticAlarmRanges>
+								<ContextMatch>
+									<Comparison parameterRef="Battery_Charge_Mode" value="CHARGE"/>
+								</ContextMatch>
+							</ContextAlarm>
+							<ContextAlarm minViolations="1">
+								<StaticAlarmRanges rangeForm="inside">
+									<WarningRange minInclusive="12.35" maxInclusive="12.60"/>
+									<CriticalRange minInclusive="12.10" maxInclusive="13.00"/>
+								</StaticAlarmRanges>
+								<ContextMatch>
+									<Comparison parameterRef="Battery_Charge_Mode" value="DISCHARGE"/>
+								</ContextMatch>
+							</ContextAlarm>
+						</ContextAlarmList>
+					</FloatParameterType>
+					<FloatParameterType name="Battery_Current_Type" sizeInBits="32" shortDescription="This parameter describes the measured current draw" validRangeAppliesToCalibrated="true">
+						<LongDescription>The battery on BogusSAT is a modeled by a typical flooded lead acid car battery.</LongDescription>
+						<UnitSet>
+							<Unit description="Current">Amperes</Unit>
+						</UnitSet>
+						<FloatDataEncoding bitOrder="mostSignificantBitFirst" encoding="IEEE754_1985" sizeInBits="32" changeThreshold="0.01"/>
+						<ValidRange minInclusive="-100.0" maxInclusive="100.0"/>
+						<DefaultAlarm minViolations="1">
+							<StaticAlarmRanges alarmForm="outside">
+								<WarningRange minExclusive="-5.0" maxExclusive="10.0"/>
+								<CriticalRange minExclusive="-20.0" maxExclusive="15.0"/>
+							</StaticAlarmRanges>
+						</DefaultAlarm>
+					</FloatParameterType>
+					<FloatParameterType name="Battery_State_Of_Charge_Type" sizeInBits="32" shortDescription="Calculated battery state of charge">
+						<UnitSet>
+							<Unit>Percent</Unit>
+						</UnitSet>
+						<ValidRange minInclusive="0.0" maxInclusive="100.0"/>
+					</FloatParameterType>
+					<FloatParameterType name="Solar_Array_Voltage_Type" sizeInBits="32" shortDescription="This parameter describes the measured solar array output voltage at the charger">
+						<LongDescription>The solar array on BogusSAT is 10 230W Trina TSM-DA05 monocrystalline panels, wired in series.</LongDescription>
+						<UnitSet>
+							<Unit description="Potential">Volts</Unit>
+						</UnitSet>
+						<IntegerDataEncoding bitOrder="mostSignificantBitFirst" encoding="unsigned" sizeInBits="12" changeThreshold="1">
+							<DefaultCalibrator>
+								<PolynomialCalibrator>
+									<Term exponent="0" coefficient="-100.0"/>
+									<Term exponent="1" coefficient="0.1"/>
+								</PolynomialCalibrator>
+							</DefaultCalibrator>
+						</IntegerDataEncoding>
+						<ValidRange minInclusive="0.00" maxInclusive="4000.00"/>
+						<DefaultAlarm minViolations="2">
+							<StaticAlarmRanges>
+								<CriticalRange minInclusive="0.0" maxInclusive="370.0"/>
+							</StaticAlarmRanges>
+						</DefaultAlarm>
+					</FloatParameterType>
+					<FloatParameterType name="Quadratic_Demo_Type" sizeInBits="64" shortDescription="This is an analog parameter with a simple quadratic encoding">
+						<UnitSet/>
+						<IntegerDataEncoding bitOrder="mostSignificantBitFirst" encoding="unsigned" sizeInBits="16" changeThreshold="1">
+							<DefaultCalibrator shortDescription="this is y = x^2 + 2x - 8">
+								<PolynomialCalibrator>
+									<Term exponent="0" coefficient="-8"/>
+									<Term exponent="1" coefficient="2"/>
+									<Term exponent="2" coefficient="1"/>
+								</PolynomialCalibrator>
+							</DefaultCalibrator>
+						</IntegerDataEncoding>
+						<ValidRange minInclusive="0.00" maxInclusive="4000.00" validRangeAppliesToCalibrated="true"/>
+						<DefaultAlarm minViolations="1">
+							<StaticAlarmRanges>
+								<CriticalRange minInclusive="-100.0" maxInclusive="100.0"/>
+							</StaticAlarmRanges>
+						</DefaultAlarm>
+					</FloatParameterType>
+					<FloatParameterType name="Quadratic_Demo_SingleRoot_Type" sizeInBits="32" shortDescription="This is a float parameter with a float quadratic encoding">
+						<UnitSet/>
+						<FloatDataEncoding bitOrder="mostSignificantBitFirst" encoding="IEEE754_1985" sizeInBits="32">
+							<DefaultCalibrator shortDescription="this is y = x^2 + 1">
+								<PolynomialCalibrator>
+									<Term exponent="0" coefficient="1"/>
+									<Term exponent="2" coefficient="1"/>
+								</PolynomialCalibrator>
+							</DefaultCalibrator>
+						</FloatDataEncoding>
+						<ValidRange minInclusive="-10.00" maxInclusive="10.00" validRangeAppliesToCalibrated="false"/>
+					</FloatParameterType>
+					<FloatParameterType name="Quadratic_Demo_SingleRoot2_Type" sizeInBits="32" shortDescription="This is a float parameter with a float quadratic encoding">
+						<UnitSet/>
+						<FloatDataEncoding bitOrder="mostSignificantBitFirst" encoding="IEEE754_1985" sizeInBits="32">
+							<DefaultCalibrator shortDescription="this is y = x^2 - 4x + 4">
+								<PolynomialCalibrator>
+									<Term exponent="0" coefficient="4.0"/>
+									<Term exponent="1" coefficient="-4.0"/>
+									<Term exponent="2" coefficient="1"/>
+								</PolynomialCalibrator>
+							</DefaultCalibrator>
+						</FloatDataEncoding>
+					</FloatParameterType>
+					<FloatParameterType name="Spline_Demo_Type" sizeInBits="64" shortDescription="This is a float parameter with a float spline encoding">
+						<UnitSet/>
+						<FloatDataEncoding bitOrder="mostSignificantBitFirst" encoding="IEEE754_1985" sizeInBits="64">
+							<DefaultCalibrator>
+								<SplineCalibrator order="1" extrapolate="false">
+									<SplinePoint raw="-6.0" calibrated="1.0"/>
+									<SplinePoint raw="-3.0" calibrated="2.0"/>
+									<SplinePoint raw="-1.0" calibrated="3.0"/>
+									<SplinePoint raw="1.0" calibrated="3.0"/>
+									<SplinePoint raw="3.0" calibrated="2.0"/>
+									<SplinePoint raw="6.0" calibrated="1.0"/>
+								</SplineCalibrator>
+							</DefaultCalibrator>
+						</FloatDataEncoding>
+					</FloatParameterType>
+					<FloatParameterType name="Spline_Quad_Interpolate_Type" sizeInBits="64" shortDescription="This is a float parameter with a float spline encoding and unsupported interpolation">
+						<UnitSet/>
+						<FloatDataEncoding bitOrder="mostSignificantBitFirst" encoding="IEEE754_1985" sizeInBits="64">
+							<DefaultCalibrator>
+								<SplineCalibrator order="2" extrapolate="false">
+									<SplinePoint raw="-6.0" calibrated="1.0"/>
+									<SplinePoint raw="-3.0" calibrated="2.0"/>
+									<SplinePoint raw="-1.0" calibrated="3.0"/>
+									<SplinePoint raw="1.0" calibrated="3.0"/>
+									<SplinePoint raw="3.0" calibrated="2.0"/>
+									<SplinePoint raw="6.0" calibrated="1.0"/>
+								</SplineCalibrator>
+							</DefaultCalibrator>
+						</FloatDataEncoding>
+					</FloatParameterType>
+					<FloatParameterType name="Spline_Quad_Infinite_Slope_Type" sizeInBits="64" shortDescription="This is a float parameter with a float spline encoding and infinite slope - no good">
+						<UnitSet/>
+						<FloatDataEncoding bitOrder="mostSignificantBitFirst" encoding="IEEE754_1985" sizeInBits="64">
+							<DefaultCalibrator>
+								<SplineCalibrator order="1" extrapolate="false">
+									<SplinePoint raw="-6.0" calibrated="1.0"/>
+									<SplinePoint raw="-3.0" calibrated="2.0"/>
+									<SplinePoint raw="-1.0" calibrated="3.0"/>
+									<SplinePoint raw="1.0" calibrated="3.0"/>
+                                                                        <SplinePoint raw="1.0" calibrated="2.5"/>
+									<SplinePoint raw="3.0" calibrated="2.0"/>
+									<SplinePoint raw="6.0" calibrated="1.0"/>
+								</SplineCalibrator>
+							</DefaultCalibrator>
+						</FloatDataEncoding>
+					</FloatParameterType>
+					<FloatParameterType name="Float_Missing_PolyTerms_Type" sizeInBits="32" shortDescription="This is a float parameter with no terms in a polynomial calibrator (invalid)">
+						<UnitSet/>
+						<FloatDataEncoding bitOrder="mostSignificantBitFirst" encoding="IEEE754_1985" sizeInBits="32">
+							<DefaultCalibrator>
+								<PolynomialCalibrator/>
+							</DefaultCalibrator>
+						</FloatDataEncoding>
+						<ValidRange minInclusive="-10.00" maxInclusive="10.00" validRangeAppliesToCalibrated="false"/>
+					</FloatParameterType>
+					<FloatParameterType name="Float_Missing_SplinePoints_Type" sizeInBits="32" shortDescription="This is a float parameter with no points in a spline calibrator (invalid)">
+						<UnitSet/>
+						<FloatDataEncoding bitOrder="mostSignificantBitFirst" encoding="IEEE754_1985" sizeInBits="32">
+							<DefaultCalibrator>
+								<SplineCalibrator/>
+							</DefaultCalibrator>
+						</FloatDataEncoding>
+						<ValidRange minInclusive="-10.00" maxInclusive="10.00" validRangeAppliesToCalibrated="false"/>
+					</FloatParameterType>
+					<FloatParameterType name="Float_Order0_PolyTerms_Type" sizeInBits="32" shortDescription="This is a float parameter with an order 0 polynomial calibrator">
+						<UnitSet/>
+						<FloatDataEncoding bitOrder="mostSignificantBitFirst" encoding="IEEE754_1985" sizeInBits="32">
+							<DefaultCalibrator>
+								<PolynomialCalibrator>
+									<Term exponent="0" coefficient="2.2"/>
+								</PolynomialCalibrator>
+							</DefaultCalibrator>
+						</FloatDataEncoding>
+						<ValidRange minInclusive="-10.00" maxInclusive="100.00" validRangeAppliesToCalibrated="false"/>
+					</FloatParameterType>
+					<FloatParameterType name="Float_Order1_PolyTerms_Type" sizeInBits="32" shortDescription="This is a float parameter with an order 1 polynomial calibrator">
+						<UnitSet/>
+						<FloatDataEncoding bitOrder="mostSignificantBitFirst" encoding="IEEE754_1985" sizeInBits="32">
+							<DefaultCalibrator>
+								<PolynomialCalibrator>
+									<Term exponent="0" coefficient="0.5"/>
+                                                                        <Term exponent="1" coefficient="1.5"/>
+								</PolynomialCalibrator>
+							</DefaultCalibrator>
+						</FloatDataEncoding>
+						<ValidRange minInclusive="-10.00" maxInclusive="100.00" validRangeAppliesToCalibrated="false"/>
+					</FloatParameterType>
+					<FloatParameterType name="Float_Order3_PolyTerms_Type" sizeInBits="32" shortDescription="This is a float parameter with an order 3 polynomial calibrator">
+						<UnitSet/>
+						<FloatDataEncoding bitOrder="mostSignificantBitFirst" encoding="IEEE754_1985" sizeInBits="32">
+							<DefaultCalibrator>
+								<PolynomialCalibrator>
+									<Term exponent="0" coefficient="0.5"/>
+                                                                        <Term exponent="1" coefficient="1.5"/>
+                                                                        <Term exponent="3" coefficient="0.1"/>
+								</PolynomialCalibrator>
+							</DefaultCalibrator>
+						</FloatDataEncoding>
+						<ValidRange minInclusive="-10.00" maxInclusive="100.00" validRangeAppliesToCalibrated="false"/>
+					</FloatParameterType>
+					<FloatParameterType name="Float_MathOpCal_1_Type" sizeInBits="32" shortDescription="This is a float parameter with a simple math operation calibrator">
+						<UnitSet/>
+						<FloatDataEncoding bitOrder="mostSignificantBitFirst" encoding="IEEE754_1985" sizeInBits="32">
+							<DefaultCalibrator>
+                                                            <MathOperationCalibrator>
+                                                                <ValueOperand>0.5</ValueOperand>
+                                                                <ThisParameterOperand/>
+                                                                <Operator>*</Operator>
+                                                                <ValueOperand>1.25</ValueOperand>
+                                                                <Operator>+</Operator>
+                                                            </MathOperationCalibrator>
+							</DefaultCalibrator>
+						</FloatDataEncoding>
+					</FloatParameterType>
+					<FloatParameterType name="Float_MathOpCal_2_Type" sizeInBits="64" shortDescription="This is a float parameter with a longer math operation calibrator">
+						<UnitSet/>
+						<FloatDataEncoding bitOrder="mostSignificantBitFirst" encoding="IEEE754_1985" sizeInBits="64">
+							<DefaultCalibrator>
+                                                            <MathOperationCalibrator>
+                                                                <!-- Equation in "infix" notation: 64 * log(2)[1.234 * value] also is 64 * (ln[1.234 * value] / ln[2]) -->
+                                                                <ValueOperand>1.234</ValueOperand>
+                                                                <ThisParameterOperand/>
+                                                                <Operator>*</Operator>
+                                                                <Operator>ln</Operator>
+                                                                <ValueOperand>2.0</ValueOperand>
+                                                                <Operator>ln</Operator>
+                                                                <Operator>/</Operator>
+                                                                <ValueOperand>64.0</ValueOperand>
+                                                                <Operator>*</Operator>
+                                                            </MathOperationCalibrator>
+							</DefaultCalibrator>
+						</FloatDataEncoding>
+					</FloatParameterType>
+					<FloatParameterType name="Float_MathOpCal_3_Type" sizeInBits="32" shortDescription="This is a float parameter with no operations in math operation calibrator">
+						<UnitSet/>
+						<FloatDataEncoding bitOrder="mostSignificantBitFirst" encoding="IEEE754_1985" sizeInBits="32">
+							<DefaultCalibrator>
+                                                            <MathOperationCalibrator/>
+							</DefaultCalibrator>
+						</FloatDataEncoding>
+					</FloatParameterType>
+					<FloatParameterType name="Float_MathOpCal_4_Type" sizeInBits="32" shortDescription="This is a float parameter with unsupported element in math operation calibrator">
+						<UnitSet/>
+						<FloatDataEncoding bitOrder="mostSignificantBitFirst" encoding="IEEE754_1985" sizeInBits="32">
+							<DefaultCalibrator>
+                                                            <MathOperationCalibrator>
+                                                                <ValueOperand>3.0</ValueOperand>
+                                                                <ParameterInstanceRefOperand parameterRef="Float_MathOpCal_1"/>
+                                                                <Operator>*</Operator>
+                                                                <ParameterInstanceRefOperand parameterRef="Float_MathOpCal_2" useCalibratedValue="false"/>
+                                                                <Operator>+</Operator>
+                                                            </MathOperationCalibrator>
+							</DefaultCalibrator>
+						</FloatDataEncoding>
+					</FloatParameterType>
+					<FloatParameterType name="Float_MathOpCal_5_Type" sizeInBits="32" shortDescription="This is a float parameter with short stack in math operation calibrator">
+						<UnitSet/>
+						<FloatDataEncoding bitOrder="mostSignificantBitFirst" encoding="IEEE754_1985" sizeInBits="32">
+							<DefaultCalibrator>
+                                                            <MathOperationCalibrator>
+                                                                <ValueOperand>3.0</ValueOperand>
+                                                                <Operator>+</Operator>
+                                                            </MathOperationCalibrator>
+							</DefaultCalibrator>
+						</FloatDataEncoding>
+					</FloatParameterType>
+					<FloatParameterType name="Float_MathOpCal_6_Type" sizeInBits="32" shortDescription="This is a float parameter with unsupported operator in math operation calibrator">
+						<UnitSet/>
+						<FloatDataEncoding bitOrder="mostSignificantBitFirst" encoding="IEEE754_1985" sizeInBits="32">
+							<DefaultCalibrator>
+                                                            <MathOperationCalibrator>
+                                                                <ValueOperand>3.0</ValueOperand>
+                                                                <ThisParameterOperand/>
+                                                                <Operator>foo</Operator>
+                                                            </MathOperationCalibrator>
+							</DefaultCalibrator>
+						</FloatDataEncoding>
+					</FloatParameterType>
+					<FloatParameterType name="Float_MathOpCal_7_Type" sizeInBits="64" shortDescription="This is a float parameter with lots of operators in math operation calibrator">
+						<UnitSet/>
+						<FloatDataEncoding bitOrder="mostSignificantBitFirst" encoding="IEEE754_1985" sizeInBits="64">
+							<DefaultCalibrator>
+                                                            <MathOperationCalibrator>
+                                                                <ValueOperand>5.0</ValueOperand>
+                                                                <ValueOperand>3.0</ValueOperand>
+                                                                <Operator>-</Operator>
+                                                                <ValueOperand>3.0</ValueOperand>
+                                                                <Operator>^</Operator>
+                                                                <ValueOperand>92</ValueOperand>
+                                                                <Operator>+</Operator>
+                                                                <Operator>log</Operator>
+                                                                <Operator>1/x</Operator>
+                                                                <ValueOperand>-4.0</ValueOperand>
+                                                                <Operator>*</Operator>
+                                                                <Operator>abs</Operator>
+                                                                <ValueOperand>5.0</ValueOperand>
+                                                                <Operator>swap</Operator>
+                                                                <Operator>-</Operator>
+                                                                <ValueOperand>2.0</ValueOperand>
+                                                                <Operator>-</Operator>
+                                                                <Operator>asin</Operator>
+                                                                <Operator>cos</Operator>
+                                                                <Operator>acos</Operator>
+                                                                <Operator>sin</Operator>
+                                                                <Operator>acos</Operator>
+                                                                <Operator>atan</Operator>
+                                                                <ValueOperand>19.0</ValueOperand>
+                                                                <Operator>+</Operator>
+                                                                <ValueOperand>8.0</ValueOperand>
+                                                                <Operator>%</Operator>
+                                                                <ValueOperand>4.0</ValueOperand>
+                                                                <Operator>y^x</Operator>
+                                                            </MathOperationCalibrator>
+							</DefaultCalibrator>
+						</FloatDataEncoding>
+					</FloatParameterType>
+					<FloatParameterType name="Float_MathOpCal_8_Type" sizeInBits="64" shortDescription="This is a float parameter with lots of operators in math operation calibrator">
+						<UnitSet/>
+						<FloatDataEncoding bitOrder="mostSignificantBitFirst" encoding="IEEE754_1985" sizeInBits="64">
+							<DefaultCalibrator>
+                                                            <MathOperationCalibrator>
+                                                                <ValueOperand>99</ValueOperand>
+                                                                <ValueOperand>100</ValueOperand>
+                                                                <Operator>==</Operator>
+                                                                <ValueOperand>12</ValueOperand>
+                                                                <Operator>!=</Operator>
+                                                                <ValueOperand>1</ValueOperand>
+                                                                <Operator>==</Operator>
+                                                                <ValueOperand>1</ValueOperand>
+                                                                <Operator>!=</Operator>
+                                                                <ValueOperand>5</ValueOperand>
+                                                                <Operator>&lt;</Operator>
+                                                                <ValueOperand>0</ValueOperand>
+                                                                <Operator>&lt;</Operator>
+                                                                <ValueOperand>5</ValueOperand>
+                                                                <Operator>&gt;</Operator>
+                                                                <ValueOperand>-1</ValueOperand>
+                                                                <Operator>&gt;</Operator>
+                                                                <ValueOperand>1</ValueOperand>
+                                                                <Operator>&lt;=</Operator>
+                                                                <ValueOperand>2</ValueOperand>
+                                                                <Operator>&lt;=</Operator>
+                                                                <ValueOperand>0</ValueOperand>
+                                                                <Operator>&lt;=</Operator>
+                                                                <ValueOperand>4</ValueOperand>
+                                                                <Operator>&gt;=</Operator>
+                                                                <ValueOperand>0</ValueOperand>
+                                                                <Operator>&gt;=</Operator>
+                                                                <ValueOperand>0</ValueOperand>
+                                                                <Operator>&gt;=</Operator>
+                                                                <Operator>e^x</Operator>
+                                                            </MathOperationCalibrator>
+							</DefaultCalibrator>
+						</FloatDataEncoding>
+					</FloatParameterType>
+					<FloatParameterType name="Float_MathOpCal_9_Type" sizeInBits="64" shortDescription="This is a float parameter with lots of operators in math operation calibrator">
+						<UnitSet/>
+						<FloatDataEncoding bitOrder="mostSignificantBitFirst" encoding="IEEE754_1985" sizeInBits="64">
+							<DefaultCalibrator>
+                                                            <MathOperationCalibrator>
+                                                                <ValueOperand>90</ValueOperand>
+                                                                <ValueOperand>1</ValueOperand>
+                                                                <Operator>-</Operator>
+                                                                <Operator>cos</Operator>
+                                                                <ValueOperand>89</ValueOperand>
+                                                                <Operator>+</Operator>
+                                                                <Operator>cos</Operator>
+                                                                <ValueOperand>45</ValueOperand>
+                                                                <Operator>+</Operator>
+                                                                <Operator>tan</Operator>
+                                                                <Operator>tanh</Operator>
+                                                                <Operator>cosh</Operator>
+                                                                <Operator>sinh</Operator>
+                                                            </MathOperationCalibrator>
+							</DefaultCalibrator>
+						</FloatDataEncoding>
+					</FloatParameterType>
+					<FloatParameterType name="Float_MathOpCal_10_Type" sizeInBits="32" shortDescription="This is a float parameter with arithmetic exception in math operation calibrator">
+						<UnitSet/>
+						<FloatDataEncoding bitOrder="mostSignificantBitFirst" encoding="IEEE754_1985" sizeInBits="32">
+							<DefaultCalibrator>
+                                                            <MathOperationCalibrator>
+                                                                <!-- multi-purpose bad expression, throws on divide by zero but catches extra operators on infix print -->
+                                                                <ThisParameterOperand/>
+                                                                <ValueOperand>0.0</ValueOperand>
+                                                                <Operator>/</Operator>
+                                                                <Operator>x!</Operator>
+                                                                <Operator>atanh</Operator>
+                                                                <Operator>acosh</Operator>
+                                                                <Operator>asinh</Operator>
+                                                                <ValueOperand>2</ValueOperand>
+                                                                <Operator>&amp;</Operator>
+                                                                <ValueOperand>3</ValueOperand>
+                                                                <Operator>|</Operator>
+                                                                <ValueOperand>2</ValueOperand>
+                                                                <Operator>&lt;&lt;</Operator>
+                                                                <ValueOperand>1</ValueOperand>
+                                                                <Operator>&gt;&gt;</Operator>
+                                                                <ValueOperand>1</ValueOperand>
+                                                                <Operator>&gt;&gt;&gt;</Operator>
+                                                            </MathOperationCalibrator>
+							</DefaultCalibrator>
+						</FloatDataEncoding>
+					</FloatParameterType>
+					<BooleanParameterType name="Solar_Array_Voltage_State_Type" initialValue="OFF" zeroStringValue="OFF" oneStringValue="ON" shortDescription="The operational state of the solar array voltage sensor">
+						<UnitSet/>
+						<IntegerDataEncoding bitOrder="mostSignificantBitFirst" encoding="unsigned" sizeInBits="8" changeThreshold="1"/>
+					</BooleanParameterType>
+					<FloatParameterType sizeInBits="64" name="SunSensorPolyCalType">
+						<UnitSet>
+							<Unit>cd/m^2</Unit>
+						</UnitSet>
+						<IntegerDataEncoding sizeInBits="16" encoding="twosCompliment">
+							<DefaultCalibrator>
+								<PolynomialCalibrator>
+									<Term exponent="0" coefficient="-10.0"/>
+									<Term exponent="1" coefficient="5.0"/>
+								</PolynomialCalibrator>
+							</DefaultCalibrator>
+							<ContextCalibratorList>
+								<ContextCalibrator>
+									<ContextMatch>
+										<Comparison value="LOW" parameterRef="/BogusSAT/SC001/BusElectronics/SunSensorMode"/>
+									</ContextMatch>
+									<Calibrator>
+										<PolynomialCalibrator>
+											<Term exponent="0" coefficient="0.0"/>
+											<Term exponent="1" coefficient="5.0"/>
+										</PolynomialCalibrator>
+									</Calibrator>
+								</ContextCalibrator>
+								<ContextCalibrator>
+									<ContextMatch>
+										<Comparison value="HIGH" parameterRef="SunSensorMode"/>
+									</ContextMatch>
+									<Calibrator>
+										<PolynomialCalibrator>
+											<Term exponent="0" coefficient="0.0"/>
+											<Term exponent="1" coefficient="15.0"/>
+										</PolynomialCalibrator>
+									</Calibrator>
+								</ContextCalibrator>
+							</ContextCalibratorList>
+						</IntegerDataEncoding>
+					</FloatParameterType>
+					<FloatParameterType sizeInBits="64" name="EarthSensorSplineCalType" validRangeAppliesToCalibrated="true">
+						<UnitSet>
+							<Unit>cd/m^2</Unit>
+						</UnitSet>
+						<IntegerDataEncoding sizeInBits="16" encoding="twosCompliment">
+							<DefaultCalibrator>
+								<SplineCalibrator order="1">
+									<SplinePoint raw="0" calibrated="0.0"/>
+									<SplinePoint raw="10" calibrated="5.0"/>
+									<SplinePoint raw="20" calibrated="10.0"/>
+								</SplineCalibrator>
+							</DefaultCalibrator>
+							<ContextCalibratorList>
+								<ContextCalibrator>
+									<ContextMatch>
+										<Comparison value="LOW" parameterRef="EarthSensorMode"/>
+									</ContextMatch>
+									<Calibrator>
+										<SplineCalibrator order="1">
+											<SplinePoint raw="0" calibrated="5.0"/>
+											<SplinePoint raw="10" calibrated="10.0"/>
+											<SplinePoint raw="20" calibrated="15.0"/>
+										</SplineCalibrator>
+									</Calibrator>
+								</ContextCalibrator>
+								<ContextCalibrator>
+									<ContextMatch>
+										<Comparison value="HIGH" parameterRef="/BogusSAT/SC001/BusElectronics/EarthSensorMode"/>
+									</ContextMatch>
+									<Calibrator>
+										<SplineCalibrator order="0">
+											<SplinePoint raw="0" calibrated="10.0"/>
+											<SplinePoint raw="10" calibrated="15.0"/>
+											<SplinePoint raw="20" calibrated="20.0"/>
+										</SplineCalibrator>
+									</Calibrator>
+								</ContextCalibrator>
+							</ContextCalibratorList>
+						</IntegerDataEncoding>
+                                                <ValidRange minInclusive="-5.0" maxInclusive="50.0"/>
+					</FloatParameterType>
+					<EnumeratedParameterType name="SunSensorModeType" initialValue="OFF">
+						<UnitSet/>
+						<IntegerDataEncoding sizeInBits="8" encoding="unsigned"/>
+						<EnumerationList>
+							<Enumeration label="OFF" value="0"/>
+							<Enumeration label="LOW" value="1"/>
+							<Enumeration label="HIGH" value="2"/>
+						</EnumerationList>
+                                                <DefaultAlarm>
+                                                    <EnumerationAlarmList>
+                                                        <EnumerationAlarm alarmLevel="warning" enumerationValue="LOW"/>
+                                                        <EnumerationAlarm alarmLevel="critical" enumerationValue="OFF"/>
+                                                    </EnumerationAlarmList>
+                                                </DefaultAlarm>
+					</EnumeratedParameterType>
+				</ParameterTypeSet>
+				<ParameterSet>
+					<Parameter name="Battery_Charge_Mode" parameterTypeRef="Battery_Charge_Mode_Type">
+						<ParameterProperties dataSource="telemetered" readOnly="true">
+							<SystemName>EPS</SystemName>
+						</ParameterProperties>
+					</Parameter>
+					<Parameter name="Battery_Voltage" parameterTypeRef="Battery_Voltage_Type">
+						<ParameterProperties dataSource="telemetered" readOnly="true">
+							<SystemName>EPS</SystemName>
+						</ParameterProperties>
+					</Parameter>
+					<Parameter name="Battery_Current" parameterTypeRef="Battery_Current_Type">
+						<ParameterProperties dataSource="telemetered" readOnly="true">
+							<SystemName>EPS</SystemName>
+						</ParameterProperties>
+					</Parameter>
+					<Parameter name="Battery_State_Of_Charge" parameterTypeRef="Battery_State_Of_Charge_Type">
+						<ParameterProperties dataSource="derived" readOnly="true">
+							<SystemName>EPS</SystemName>
+						</ParameterProperties>
+					</Parameter>
+					<Parameter name="Solar_Array_Voltage_1_State" parameterTypeRef="Solar_Array_Voltage_State_Type">
+						<ParameterProperties dataSource="telemetered" readOnly="true">
+							<SystemName>EPS</SystemName>
+						</ParameterProperties>
+					</Parameter>
+					<Parameter name="Solar_Array_Voltage_2_State" parameterTypeRef="Solar_Array_Voltage_State_Type">
+						<ParameterProperties dataSource="telemetered" readOnly="true">
+							<SystemName>EPS</SystemName>
+						</ParameterProperties>
+					</Parameter>
+					<Parameter name="Quadratic_Demo" parameterTypeRef="Quadratic_Demo_Type">
+						<ParameterProperties dataSource="telemetered" readOnly="true">
+							<SystemName>NONE</SystemName>
+						</ParameterProperties>
+					</Parameter>
+					<Parameter name="Quadratic_Demo_SingleRoot" parameterTypeRef="Quadratic_Demo_SingleRoot_Type">
+						<ParameterProperties dataSource="telemetered" readOnly="true">
+							<SystemName>NONE</SystemName>
+						</ParameterProperties>
+					</Parameter>
+					<Parameter name="Quadratic_Demo_SingleRoot2" parameterTypeRef="Quadratic_Demo_SingleRoot2_Type">
+						<ParameterProperties dataSource="telemetered" readOnly="true">
+							<SystemName>NONE</SystemName>
+						</ParameterProperties>
+					</Parameter>
+					<Parameter name="Spline_Demo" parameterTypeRef="Spline_Demo_Type">
+						<ParameterProperties dataSource="telemetered" readOnly="true">
+							<SystemName>NONE</SystemName>
+						</ParameterProperties>
+					</Parameter>
+					<Parameter name="Spline_Quad_Interpolate_Bad" parameterTypeRef="Spline_Quad_Interpolate_Type">
+						<ParameterProperties dataSource="telemetered" readOnly="true">
+							<SystemName>NONE</SystemName>
+						</ParameterProperties>
+					</Parameter>
+					<Parameter name="Spline_Quad_Infinite_Slope" parameterTypeRef="Spline_Quad_Infinite_Slope_Type">
+						<ParameterProperties dataSource="telemetered" readOnly="true">
+							<SystemName>NONE</SystemName>
+						</ParameterProperties>
+					</Parameter>
+					<Parameter name="Float_Missing_PolyTerms" parameterTypeRef="Float_Missing_PolyTerms_Type">
+						<ParameterProperties dataSource="telemetered" readOnly="true">
+							<SystemName>NONE</SystemName>
+						</ParameterProperties>
+					</Parameter>
+					<Parameter name="Float_Missing_SplinePoints" parameterTypeRef="Float_Missing_SplinePoints_Type">
+						<ParameterProperties dataSource="telemetered" readOnly="true">
+							<SystemName>NONE</SystemName>
+						</ParameterProperties>
+					</Parameter>
+					<Parameter name="Float_Order0_PolyTerms" parameterTypeRef="Float_Order0_PolyTerms_Type">
+						<ParameterProperties dataSource="telemetered" readOnly="true">
+							<SystemName>NONE</SystemName>
+						</ParameterProperties>
+					</Parameter>
+					<Parameter name="Float_Order1_PolyTerms" parameterTypeRef="Float_Order1_PolyTerms_Type">
+						<ParameterProperties dataSource="telemetered" readOnly="true">
+							<SystemName>NONE</SystemName>
+						</ParameterProperties>
+					</Parameter>
+					<Parameter name="Float_Order3_PolyTerms" parameterTypeRef="Float_Order3_PolyTerms_Type">
+						<ParameterProperties dataSource="telemetered" readOnly="true">
+							<SystemName>NONE</SystemName>
+						</ParameterProperties>
+					</Parameter>
+					<Parameter name="Float_MathOpCal_1" parameterTypeRef="Float_MathOpCal_1_Type">
+						<ParameterProperties dataSource="telemetered" readOnly="true">
+							<SystemName>NONE</SystemName>
+						</ParameterProperties>
+					</Parameter>
+					<Parameter name="Float_MathOpCal_2" parameterTypeRef="Float_MathOpCal_2_Type">
+						<ParameterProperties dataSource="telemetered" readOnly="true">
+							<SystemName>NONE</SystemName>
+						</ParameterProperties>
+					</Parameter>
+					<Parameter name="Float_MathOpCal_3" parameterTypeRef="Float_MathOpCal_3_Type">
+						<ParameterProperties dataSource="telemetered" readOnly="true">
+							<SystemName>NONE</SystemName>
+						</ParameterProperties>
+					</Parameter>
+					<Parameter name="Float_MathOpCal_4" parameterTypeRef="Float_MathOpCal_4_Type">
+						<ParameterProperties dataSource="telemetered" readOnly="true">
+							<SystemName>NONE</SystemName>
+						</ParameterProperties>
+					</Parameter>
+					<Parameter name="Float_MathOpCal_5" parameterTypeRef="Float_MathOpCal_5_Type">
+						<ParameterProperties dataSource="telemetered" readOnly="true">
+							<SystemName>NONE</SystemName>
+						</ParameterProperties>
+					</Parameter>
+					<Parameter name="Float_MathOpCal_6" parameterTypeRef="Float_MathOpCal_6_Type">
+						<ParameterProperties dataSource="telemetered" readOnly="true">
+							<SystemName>NONE</SystemName>
+						</ParameterProperties>
+					</Parameter>
+					<Parameter name="Float_MathOpCal_7" parameterTypeRef="Float_MathOpCal_7_Type">
+						<ParameterProperties dataSource="telemetered" readOnly="true">
+							<SystemName>NONE</SystemName>
+						</ParameterProperties>
+					</Parameter>
+					<Parameter name="Float_MathOpCal_8" parameterTypeRef="Float_MathOpCal_8_Type">
+						<ParameterProperties dataSource="telemetered" readOnly="true">
+							<SystemName>NONE</SystemName>
+						</ParameterProperties>
+					</Parameter>
+					<Parameter name="Float_MathOpCal_9" parameterTypeRef="Float_MathOpCal_9_Type">
+						<ParameterProperties dataSource="telemetered" readOnly="true">
+							<SystemName>NONE</SystemName>
+						</ParameterProperties>
+					</Parameter>
+					<Parameter name="Float_MathOpCal_10" parameterTypeRef="Float_MathOpCal_10_Type">
+						<ParameterProperties dataSource="telemetered" readOnly="true">
+							<SystemName>NONE</SystemName>
+						</ParameterProperties>
+					</Parameter>
+					<Parameter name="Solar_Array_Voltage_1" parameterTypeRef="Solar_Array_Voltage_Type">
+						<AliasSet>
+							<Alias nameSpace="ID" alias="100345"/>
+							<Alias nameSpace="FOO" alias="Hello"/>
+						</AliasSet>
+						<ParameterProperties dataSource="telemetered" readOnly="true">
+							<SystemName>EPS</SystemName>
+							<ValidityCondition>
+								<Comparison parameterRef="Solar_Array_Voltage_1_State" value="ON"/>
+							</ValidityCondition>
+							<PhysicalAddressSet>
+								<PhysicalAddress sourceAddress="0xb000f100" sourceName="RAM"/>
+							</PhysicalAddressSet>
+						</ParameterProperties>
+					</Parameter>
+					<Parameter name="Solar_Array_Voltage_2" parameterTypeRef="Solar_Array_Voltage_Type">
+						<AliasSet>
+							<Alias nameSpace="ID" alias="100445"/>
+							<Alias nameSpace="ID" alias="123456"/>
+						</AliasSet>
+						<ParameterProperties dataSource="telemetered" readOnly="true">
+							<SystemName>EPS</SystemName>
+							<ValidityCondition>
+								<Comparison parameterRef="Solar_Array_Voltage_2_State" value="ON"/>
+							</ValidityCondition>
+							<PhysicalAddressSet>
+								<PhysicalAddress sourceAddress="0xb000f101" sourceName="RAM"/>
+							</PhysicalAddressSet>
+						</ParameterProperties>
+					</Parameter>
+					<Parameter name="Bus_Fault_Message" parameterTypeRef="Bus_Fault_Message_Type">
+						<AliasSet>
+							<Alias nameSpace="ID" alias="100999"/>
+						</AliasSet>
+						<ParameterProperties dataSource="telemetered" readOnly="true">
+							<SystemName>CPU</SystemName>
+							<PhysicalAddressSet>
+								<PhysicalAddress sourceAddress="0xb0010000" sourceName="RAM"/>
+							</PhysicalAddressSet>
+						</ParameterProperties>
+					</Parameter>
+					<Parameter name="SensorTime" parameterTypeRef="/BogusSAT/POSIXTimeType" shortDescription="Measurement time of the sensor data">
+						<ParameterProperties dataSource="telemetered" readOnly="true"/>
+					</Parameter>
+					<Parameter name="SunSensorMode" parameterTypeRef="SunSensorModeType" shortDescription="Operational mode of the sun sensor">
+						<ParameterProperties dataSource="telemetered" readOnly="true"/>
+					</Parameter>
+					<Parameter name="EarthSensorMode" parameterTypeRef="SunSensorModeType" shortDescription="Operational mode of the earth sensor">
+						<ParameterProperties dataSource="telemetered" readOnly="true"/>
+					</Parameter>
+					<Parameter name="SunSensorLevel" parameterTypeRef="SunSensorPolyCalType" shortDescription="Illumination level measurement of the sun sensor">
+						<ParameterProperties dataSource="telemetered" readOnly="true"/>
+					</Parameter>
+					<Parameter name="EarthSensorLevel" parameterTypeRef="EarthSensorSplineCalType" shortDescription="Illumination level of the earth sensor">
+						<ParameterProperties dataSource="telemetered" readOnly="true"/>
+					</Parameter>
+				</ParameterSet>
+				<ContainerSet>
+					<SequenceContainer name="SensorHistoryRecord">
+						<EntryList>
+							<ParameterRefEntry parameterRef="SensorTime"/>
+							<ParameterRefEntry parameterRef="SunSensorMode"/>
+							<ParameterRefEntry parameterRef="EarthSensorMode"/>
+							<ParameterRefEntry parameterRef="SunSensorLevel"/>
+							<ParameterRefEntry parameterRef="EarthSensorLevel"/>
+						</EntryList>
+					</SequenceContainer>
+					<SequenceContainer name="SensorHistoryBuffer">
+						<EntryList>
+							<ContainerRefEntry containerRef="SensorHistoryRecord">
+								<RepeatEntry>
+									<Count>
+										<FixedValue>4</FixedValue>
+									</Count>
+								</RepeatEntry>
+							</ContainerRefEntry>
+						</EntryList>
+					</SequenceContainer>
+				</ContainerSet>
+				<AlgorithmSet>
+					<MathAlgorithm name="ComputeBatterySOC" shortDescription="Compute the battery state of charge">
+						<MathOperation outputParameterRef="Battery_State_Of_Charge">
+							<ParameterInstanceRefOperand parameterRef="Battery_Voltage"/>
+							<ValueOperand>11.7</ValueOperand>
+							<Operator>-</Operator>
+							<ValueOperand>0.9</ValueOperand>
+							<Operator>/</Operator>
+							<TriggerSet>
+								<OnParameterUpdateTrigger parameterRef="Battery_Voltage"/>
+							</TriggerSet>
+						</MathOperation>
+					</MathAlgorithm>
+				</AlgorithmSet>
+			</TelemetryMetaData>
+			<CommandMetaData>
+				<ArgumentTypeSet>
+					<IntegerArgumentType name="RW_UNIT_ID_Type" shortDescription="ID number of the reaction wheel">
+						<UnitSet/>
+						<IntegerDataEncoding sizeInBits="8" encoding="unsigned"/>
+						<ValidRange minInclusive="1" maxInclusive="2"/>
+					</IntegerArgumentType>
+					<EnumeratedArgumentType name="RW_PWR_STATE_Type" shortDescription="Flag to indicate if power should be turned on or off">
+						<UnitSet/>
+						<IntegerDataEncoding sizeInBits="8" encoding="unsigned"/>
+						<EnumerationList>
+							<Enumeration value="0" label="OFF"/>
+							<Enumeration value="1" label="ON"/>
+						</EnumerationList>
+					</EnumeratedArgumentType>
+					<EnumeratedArgumentType name="PHASE_Type">
+						<UnitSet/>
+						<IntegerDataEncoding sizeInBits="8" encoding="unsigned"/>
+						<EnumerationList>
+							<Enumeration value="0" label="SAFE"/>
+							<Enumeration value="1" label="LEOP"/>
+							<Enumeration value="2" label="ASCENT"/>
+							<Enumeration value="3" label="MISSION"/>
+							<Enumeration value="4" label="STORAGE"/>
+							<Enumeration value="5" label="DEBORBIT"/>
+						</EnumerationList>
+					</EnumeratedArgumentType>
+				</ArgumentTypeSet>
+				<MetaCommandSet>
+					<MetaCommand name="Reaction_Wheel_Control" shortDescription="Power on/off reaction wheel">
+						<LongDescription>This hardware telecommand directs the hardware to power on or off either of the 2 reaction wheels</LongDescription>
+						<AliasSet>
+							<Alias nameSpace="OPS" alias="RW_PWR"/>
+						</AliasSet>
+						<BaseMetaCommand metaCommandRef="../../CCSDSDirectTelecommand"/>
+						<ArgumentList>
+							<Argument name="RW_UNIT_ID" argumentTypeRef="RW_UNIT_ID_Type"/>
+							<Argument name="RW_PWR_STATE" argumentTypeRef="RW_PWR_STATE_Type"/>
+						</ArgumentList>
+						<CommandContainer name="Reaction_Wheel_Control_Container">
+							<EntryList>
+								<ArgumentRefEntry argumentRef="RW_UNIT_ID"/>
+								<ArgumentRefEntry argumentRef="RW_PWR_STATE"/>
+							</EntryList>
+							<BaseContainer containerRef="../../CCSDSDirectTelecommand"/>
+						</CommandContainer>
+					</MetaCommand>
+					<MetaCommand name="Reaction_Wheel_1_On" shortDescription="Turn power on for reaction wheel 1">
+						<LongDescription>This hardware telecommand is a derived form of 'Reaction_Wheel_Control' that turns ON reaction wheel 1</LongDescription>
+						<AliasSet>
+							<Alias nameSpace="OPS" alias="RW_1_ON"/>
+						</AliasSet>
+						<BaseMetaCommand metaCommandRef="Reaction_Wheel_Control">
+							<ArgumentAssignmentList>
+								<ArgumentAssignment argumentName="RW_UNIT_ID" argumentValue="1"/>
+								<ArgumentAssignment argumentName="RW_PWR_STATE" argumentValue="ON"/>
+							</ArgumentAssignmentList>
+						</BaseMetaCommand>
+						<CommandContainer name="Reaction_Wheel_1_On_Container">
+							<EntryList/>
+							<BaseContainer containerRef="Reaction_Wheel_Control_Container"/>
+						</CommandContainer>
+					</MetaCommand>
+					<MetaCommand name="Reaction_Wheel_1_Off" shortDescription="Turn power off for reaction wheel 1">
+						<LongDescription>This hardware telecommand is a derived form of 'Reaction_Wheel_Control' that turns OFF reaction wheel 1</LongDescription>
+						<AliasSet>
+							<Alias nameSpace="OPS" alias="RW_1_OFF"/>
+						</AliasSet>
+						<BaseMetaCommand metaCommandRef="Reaction_Wheel_Control">
+							<ArgumentAssignmentList>
+								<ArgumentAssignment argumentName="RW_UNIT_ID" argumentValue="1"/>
+								<ArgumentAssignment argumentName="RW_PWR_STATE" argumentValue="OFF"/>
+							</ArgumentAssignmentList>
+						</BaseMetaCommand>
+						<CommandContainer name="Reaction_Wheel_1_Off_Container">
+							<EntryList/>
+							<BaseContainer containerRef="Reaction_Wheel_Control_Container"/>
+						</CommandContainer>
+					</MetaCommand>
+					<MetaCommand name="Reaction_Wheel_2_On" shortDescription="Turn power on for reaction wheel 2">
+						<LongDescription>This hardware telecommand is a derived form of 'Reaction_Wheel_Control' that turns ON reaction wheel 2</LongDescription>
+						<AliasSet>
+							<Alias nameSpace="OPS" alias="RW_2_ON"/>
+						</AliasSet>
+						<BaseMetaCommand metaCommandRef="Reaction_Wheel_Control">
+							<ArgumentAssignmentList>
+								<ArgumentAssignment argumentName="RW_UNIT_ID" argumentValue="2"/>
+								<ArgumentAssignment argumentName="RW_PWR_STATE" argumentValue="ON"/>
+							</ArgumentAssignmentList>
+						</BaseMetaCommand>
+						<CommandContainer name="Reaction_Wheel_2_On_Container">
+							<EntryList/>
+							<BaseContainer containerRef="Reaction_Wheel_Control_Container"/>
+						</CommandContainer>
+					</MetaCommand>
+					<MetaCommand name="Reaction_Wheel_2_Off" shortDescription="Turn power off for reaction wheel 2">
+						<LongDescription>This hardware telecommand is a derived form of 'Reaction_Wheel_Control' that turns OFF reaction wheel 2</LongDescription>
+						<AliasSet>
+							<Alias nameSpace="OPS" alias="RW_2_OFF"/>
+						</AliasSet>
+						<BaseMetaCommand metaCommandRef="Reaction_Wheel_Control">
+							<ArgumentAssignmentList>
+								<ArgumentAssignment argumentName="RW_UNIT_ID" argumentValue="2"/>
+								<ArgumentAssignment argumentName="RW_PWR_STATE" argumentValue="OFF"/>
+							</ArgumentAssignmentList>
+						</BaseMetaCommand>
+						<CommandContainer name="Reaction_Wheel_2_Off_Container">
+							<EntryList/>
+							<BaseContainer containerRef="Reaction_Wheel_Control_Container"/>
+						</CommandContainer>
+					</MetaCommand>
+					<MetaCommand name="Set_Mission_Phase" shortDescription="Set the bus electronics mission phase">
+						<BaseMetaCommand metaCommandRef="/BogusSAT/CCSDSPUSTelecommand"/>
+						<ArgumentList>
+							<Argument name="PHASE" argumentTypeRef="PHASE_Type" shortDescription="Mission Operational Mode"/>
+						</ArgumentList>
+						<CommandContainer name="Set_Mission_Phase_Container">
+							<BaseContainer containerRef="/BogusSAT/CCSDSPUSTelecommand"/>
+							<EntryList>
+								<ArgumentRefEntry argumentRef="PHASE"/>
+							</EntryList>
+						</CommandContainer>
+					</MetaCommand>
+				</MetaCommandSet>
+			</CommandMetaData>
+		</SpaceSystem>
+		<SpaceSystem name="Payload1">
+			<LongDescription>This is the primary revenue generating payload software monitor and control data.</LongDescription>
+			<Header validationStatus="Working" classification="NotClassified" version="Build2" date="27-10-2012"/>
+			<TelemetryMetaData>
+				<ParameterTypeSet>
+					<IntegerParameterType name="GENERIC_16BIT_UNSIGNED_INT" signed="false" sizeInBits="16" shortDescription="Generic unsigned 16 bit number">
+						<UnitSet/>
+						<IntegerDataEncoding bitOrder="mostSignificantBitFirst" encoding="unsigned" sizeInBits="16" changeThreshold="1"/>
+					</IntegerParameterType>
+					<StringParameterType name="Payload_Fault_Message_Type" shortDescription="Payload Error Message">
+						<UnitSet/>
+						<StringDataEncoding bitOrder="mostSignificantBitFirst" encoding="UTF-8">
+							<SizeInBits>
+								<TerminationChar>00</TerminationChar>
+							</SizeInBits>
+						</StringDataEncoding>
+						<SizeRangeInCharacters minInclusive="1" maxInclusive="256"/>
+					</StringParameterType>
+					<BinaryParameterType name="Payload_MD5_Type" shortDescription="MD5 Sum of Software Image">
+						<UnitSet/>
+						<BinaryDataEncoding bitOrder="mostSignificantBitFirst">
+							<SizeInBits>
+								<FixedValue>128</FixedValue>
+							</SizeInBits>
+						</BinaryDataEncoding>
+					</BinaryParameterType>
+					<BooleanParameterType name="Payload_1_State_Type" zeroStringValue="OFF" oneStringValue="ON" shortDescription="Payload 1 enable state">
+						<UnitSet/>
+						<IntegerDataEncoding bitOrder="mostSignificantBitFirst" sizeInBits="4" encoding="unsigned" changeThreshold="1"/>
+					</BooleanParameterType>
+					<EnumeratedParameterType name="Payload_1_Phase_Type" shortDescription="Operational Phase of Payload">
+						<UnitSet/>
+						<IntegerDataEncoding bitOrder="mostSignificantBitFirst" sizeInBits="4" encoding="unsigned" changeThreshold="1"/>
+						<EnumerationList>
+							<Enumeration label="TEST" value="1"/>
+							<Enumeration label="LAUNCH" value="2"/>
+							<Enumeration label="STANDBY" value="3"/>
+							<Enumeration label="ACTIVE" value="4"/>
+							<Enumeration label="SHUTDOWN" value="5"/>
+							<Enumeration label="FAILED" value="6" maxValue="16"/>
+						</EnumerationList>
+					</EnumeratedParameterType>
+					<EnumeratedParameterType name="Payload_1_Antenna_State_Type" shortDescription="Payload 1 antenna operational state">
+						<UnitSet/>
+						<EnumerationList>
+							<Enumeration label="OFF" value="0"/>
+							<Enumeration label="STANDBY" value="1"/>
+							<Enumeration label="SIGNAL_PRESENT" value="2"/>
+							<Enumeration label="ACQUIRED" value="3"/>
+							<Enumeration label="SIGNAL_LOST" value="4"/>
+							<Enumeration label="FAILED" value="5"/>
+						</EnumerationList>
+						<DefaultAlarm minViolations="1">
+							<EnumerationAlarmList>
+								<EnumerationAlarm enumerationLabel="FAILED" alarmLevel="critical"/>
+							</EnumerationAlarmList>
+						</DefaultAlarm>
+						<ContextAlarmList>
+							<ContextAlarm minViolations="1">
+								<EnumerationAlarmList>
+									<EnumerationAlarm enumerationLabel="SIGNAL_LOST" alarmLevel="warning"/>
+									<EnumerationAlarm enumerationLabel="OFF" alarmLevel="critical"/>
+									<EnumerationAlarm enumerationLabel="FAILED" alarmLevel="critical"/>
+								</EnumerationAlarmList>
+								<ContextMatch>
+									<Comparison parameterRef="Payload_1_State" value="ON" comparisonOperator="==" useCalibratedValue="true"/>
+								</ContextMatch>
+							</ContextAlarm>
+						</ContextAlarmList>
+					</EnumeratedParameterType>
+					<StringParameterType name="CPU_Fault_Message_Type" shortDescription="CPU Error Message">
+						<UnitSet/>
+						<StringDataEncoding bitOrder="mostSignificantBitFirst" encoding="UTF-16">
+							<SizeInBits>
+								<Fixed>
+									<FixedValue>64</FixedValue>
+								</Fixed>
+							</SizeInBits>
+						</StringDataEncoding>
+					</StringParameterType>
+					<FloatParameterType name="Basic_Float32_Type" sizeInBits="32" shortDescription="This is a float32 parameter with a simple float32 encoding">
+						<UnitSet/>
+						<FloatDataEncoding bitOrder="mostSignificantBitFirst" encoding="IEEE754_1985" sizeInBits="32" changeThreshold="0.001"/>
+					</FloatParameterType>
+					<FloatParameterType name="Basic_Float64_Type" sizeInBits="64" shortDescription="This is a float64 parameter with a simple float64 encoding">
+						<UnitSet/>
+						<FloatDataEncoding bitOrder="mostSignificantBitFirst" encoding="IEEE754_1985" sizeInBits="64" changeThreshold="0.000001"/>
+					</FloatParameterType>
+					<FloatParameterType name="Basic_MilFloat16_Type" sizeInBits="32" shortDescription="This is a float32 parameter with a milstd float16 encoding">
+						<UnitSet/>
+						<FloatDataEncoding bitOrder="mostSignificantBitFirst" encoding="MILSTD_1750A" sizeInBits="16" changeThreshold="0.001"/>
+					</FloatParameterType>
+					<FloatParameterType name="Basic_MilFloat32_Type" sizeInBits="32" shortDescription="This is a float32 parameter with a milstd float32 encoding">
+						<UnitSet/>
+						<FloatDataEncoding bitOrder="mostSignificantBitFirst" encoding="MILSTD_1750A" sizeInBits="32" changeThreshold="0.001"/>
+					</FloatParameterType>
+					<FloatParameterType name="Basic_MilFloat48_Type" sizeInBits="64" shortDescription="This is a float64 parameter with a milstd float48 encoding">
+						<UnitSet/>
+						<FloatDataEncoding bitOrder="mostSignificantBitFirst" encoding="MILSTD_1750A" sizeInBits="48" changeThreshold="0.001"/>
+					</FloatParameterType>
+					<IntegerParameterType name="Basic_uint32_Type" signed="false" sizeInBits="32" shortDescription="Generic unsigned 32 bit number">
+						<UnitSet/>
+						<IntegerDataEncoding bitOrder="mostSignificantBitFirst" encoding="unsigned" sizeInBits="32" changeThreshold="1"/>
+					</IntegerParameterType>
+					<IntegerParameterType name="Basic_int32_signmag_Type" signed="true" sizeInBits="32" shortDescription="Generic signed 32 bit number with sign magnitude encoding">
+						<UnitSet/>
+						<IntegerDataEncoding bitOrder="mostSignificantBitFirst" encoding="signMagnitude" sizeInBits="32" changeThreshold="1"/>
+					</IntegerParameterType>
+					<IntegerParameterType name="Basic_int32_twoscomp_Type" signed="true" sizeInBits="32" shortDescription="Generic signed 32 bit number with twos complement encoding">
+						<UnitSet/>
+						<IntegerDataEncoding bitOrder="mostSignificantBitFirst" encoding="twosCompliment" sizeInBits="32" changeThreshold="1"/>
+					</IntegerParameterType>
+					<IntegerParameterType name="Basic_int32_onescomp_Type" signed="true" sizeInBits="32" shortDescription="Generic signed 32 bit number with ones complement encoding">
+						<UnitSet/>
+						<IntegerDataEncoding bitOrder="mostSignificantBitFirst" encoding="onesComplement" sizeInBits="32" changeThreshold="1"/>
+					</IntegerParameterType>
+				</ParameterTypeSet>
+				<ParameterSet>
+					<Parameter name="Payload_1_State" parameterTypeRef="Payload_1_State_Type">
+						<ParameterProperties dataSource="telemetered" readOnly="true">
+							<SystemName>CPU</SystemName>
+						</ParameterProperties>
+					</Parameter>
+					<Parameter name="Payload_1_Phase" parameterTypeRef="Payload_1_Phase_Type">
+						<ParameterProperties dataSource="telemetered" readOnly="true">
+							<SystemName>CPU</SystemName>
+						</ParameterProperties>
+					</Parameter>
+					<Parameter name="Payload_1_Antenna_State" parameterTypeRef="Payload_1_Antenna_State_Type">
+						<ParameterProperties dataSource="telemetered" readOnly="true">
+							<SystemName>GCS</SystemName>
+						</ParameterProperties>
+					</Parameter>
+					<Parameter name="Payload_Fault_Message" parameterTypeRef="Payload_Fault_Message_Type">
+						<ParameterProperties dataSource="telemetered" readOnly="true">
+							<SystemName>CPU</SystemName>
+						</ParameterProperties>
+					</Parameter>
+					<Parameter name="CPU_Fault_Message" parameterTypeRef="CPU_Fault_Message_Type">
+						<ParameterProperties dataSource="telemetered" readOnly="true">
+							<SystemName>CPU</SystemName>
+						</ParameterProperties>
+					</Parameter>
+					<Parameter name="Payload_MD5" parameterTypeRef="Payload_MD5_Type">
+						<ParameterProperties dataSource="telemetered" readOnly="true">
+							<SystemName>CPU</SystemName>
+						</ParameterProperties>
+					</Parameter>
+					<Parameter name="Basic_Float32" parameterTypeRef="Basic_Float32_Type">
+						<ParameterProperties dataSource="telemetered" readOnly="true">
+							<SystemName>CPU</SystemName>
+						</ParameterProperties>
+					</Parameter>
+					<Parameter name="Basic_Float64" parameterTypeRef="Basic_Float64_Type">
+						<ParameterProperties dataSource="telemetered" readOnly="true">
+							<SystemName>CPU</SystemName>
+						</ParameterProperties>
+					</Parameter>
+					<Parameter name="Basic_MilFloat16" parameterTypeRef="Basic_MilFloat16_Type">
+						<ParameterProperties dataSource="telemetered" readOnly="true">
+							<SystemName>CPU</SystemName>
+						</ParameterProperties>
+					</Parameter>
+					<Parameter name="Basic_MilFloat32" parameterTypeRef="Basic_MilFloat32_Type">
+						<ParameterProperties dataSource="telemetered" readOnly="true">
+							<SystemName>CPU</SystemName>
+						</ParameterProperties>
+					</Parameter>
+					<Parameter name="Basic_MilFloat48" parameterTypeRef="Basic_MilFloat48_Type">
+						<ParameterProperties dataSource="telemetered" readOnly="true">
+							<SystemName>CPU</SystemName>
+						</ParameterProperties>
+					</Parameter>
+					<Parameter name="Basic_uint32" parameterTypeRef="Basic_uint32_Type">
+						<ParameterProperties dataSource="telemetered" readOnly="true">
+							<SystemName>CPU</SystemName>
+						</ParameterProperties>
+					</Parameter>
+					<Parameter name="Basic_int32_signmag" parameterTypeRef="Basic_int32_signmag_Type">
+						<ParameterProperties dataSource="telemetered" readOnly="true">
+							<SystemName>CPU</SystemName>
+						</ParameterProperties>
+					</Parameter>
+					<Parameter name="Basic_int32_twoscomp" parameterTypeRef="Basic_int32_twoscomp_Type">
+						<ParameterProperties dataSource="telemetered" readOnly="true">
+							<SystemName>CPU</SystemName>
+						</ParameterProperties>
+					</Parameter>
+					<Parameter name="Basic_int32_onescomp" parameterTypeRef="Basic_int32_onescomp_Type">
+						<ParameterProperties dataSource="telemetered" readOnly="true">
+							<SystemName>CPU</SystemName>
+						</ParameterProperties>
+					</Parameter>
+				</ParameterSet>
+                                <MessageSet>
+                                    <Message name="Message1">
+                                        <MatchCriteria>
+                                            <Comparison parameterRef="/UnitTest-Convert/switch" value="bad1"/>
+                                        </MatchCriteria>
+                                        <ContainRef containerRef="/UnitTest-Convert/foo"/>
+                                    </Message>
+                                    <Message name="Message2">
+                                        <MatchCriteria>
+                                            <Comparison parameterRef="/UnitTest-Convert/switch" value="bad2"/>
+                                        </MatchCriteria>
+                                        <ContainRef containerRef="/UnitTest-Convert/bar"/>
+                                    </Message>
+                                </MessageSet>
+			</TelemetryMetaData>
+			<CommandMetaData>
+				<ArgumentTypeSet>
+					<EnumeratedArgumentType name="Payload_State_Type">
+						<UnitSet/>
+						<IntegerDataEncoding encoding="signMagnitude" sizeInBits="8"/>
+						<EnumerationList>
+							<Enumeration value="-1" label="OFF"/>
+							<Enumeration value="1" label="ON"/>
+							<Enumeration value="0" label="STANDBY"/>
+						</EnumerationList>
+					</EnumeratedArgumentType>
+					<FloatArgumentType name="Output_Power_Type" shortDescription="Payload output power" validRangeAppliesToCalibrated="true">
+						<UnitSet>
+							<Unit description="current">Amperes</Unit>
+						</UnitSet>
+						<FloatDataEncoding sizeInBits="32" encoding="IEEE754_1985"/>
+					</FloatArgumentType>
+					<AggregateArgumentType name="Config_Item_Type">
+						<MemberList>
+							<Member name="ADDRESS" typeRef="Address_Type"/>
+							<Member name="VALUE32" typeRef="Value32_Type"/>
+						</MemberList>
+					</AggregateArgumentType>
+					<IntegerArgumentType name="Address_Type" signed="false" shortDescription="Address of configurable">
+						<UnitSet/>
+						<IntegerDataEncoding sizeInBits="32" encoding="unsigned"/>
+					</IntegerArgumentType>
+					<IntegerArgumentType name="Value32_Type" shortDescription="New value to set to 32 bit integer item" validRangeAppliesToCalibrated="false">
+						<UnitSet/>
+						<IntegerDataEncoding sizeInBits="32" encoding="unsigned"/>
+                                                <ValidRange minInclusive="0" maxInclusive="65536"/>
+					</IntegerArgumentType>
+				</ArgumentTypeSet>
+				<MetaCommandSet>
+					<MetaCommand name="Payload_1_Control" shortDescription="Controls the state of payload operation">
+						<BaseMetaCommand metaCommandRef="/BogusSAT/CCSDSPUSTelecommand"/>
+						<ArgumentList>
+							<Argument name="STATE" argumentTypeRef="Payload_State_Type"/>
+							<Argument name="OUTPUT_POWER" argumentTypeRef="Output_Power_Type">
+								<LongDescription>Long Description of the output power argument</LongDescription>
+							</Argument>
+						</ArgumentList>
+						<CommandContainer name="Payload_1_Control_Container">
+							<BaseContainer containerRef="/BogusSAT/CCSDSPUSTelecommand"/>
+							<EntryList>
+								<ArgumentRefEntry argumentRef="STATE"/>
+								<FixedValueEntry binaryValue="f0" sizeInBits="8"/>
+								<ArgumentRefEntry argumentRef="OUTPUT_POWER"/>
+							</EntryList>
+						</CommandContainer>
+					</MetaCommand>
+					<MetaCommand name="Adjust_Payload_1_Config" shortDescription="Modify payload configuration">
+						<LongDescription>Modifies an internal configurable item at a provided address for the payload processor</LongDescription>
+						<BaseMetaCommand metaCommandRef="/BogusSAT/CCSDSPUSTelecommand"/>
+						<ArgumentList>
+							<Argument name="CFGITEM" argumentTypeRef="Config_Item_Type"/>
+						</ArgumentList>
+						<CommandContainer name="Payload_1_Control_Container">
+							<BaseContainer containerRef="/BogusSAT/CCSDSPUSTelecommand"/>
+							<EntryList>
+								<ArgumentRefEntry argumentRef="CFGITEM"/>
+							</EntryList>
+						</CommandContainer>
+					</MetaCommand>
+				</MetaCommandSet>
+			</CommandMetaData>
+		</SpaceSystem>
+		<SpaceSystem name="Payload2" xsi:nil="true"/>
+	</SpaceSystem>
+</SpaceSystem>

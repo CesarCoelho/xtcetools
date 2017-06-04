@@ -36,6 +36,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -43,10 +44,16 @@ import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathException;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathFactory;
 import org.omg.space.xtce.SpaceSystemType;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
@@ -69,7 +76,7 @@ public abstract class XTCEDatabaseParser {
      *
      */
 
-    public File getFilename( ) {
+    public final File getFilename( ) {
         return xtceFilename_;
     }
 
@@ -79,8 +86,31 @@ public abstract class XTCEDatabaseParser {
      *
      */
 
-    protected void setFilename( File dbFile ) {
+    protected final void setFilename( File dbFile ) {
         xtceFilename_ = dbFile.getAbsoluteFile();
+    }
+
+    /** Retrieve the changed flag indicating if some part of the XTCE document
+     * has changed since it has last been saved.
+     *
+     * @return boolean indicating if a change has been made that has not been
+     * yet saved.
+     *
+     */
+
+    public final boolean getChanged( ) {
+        return databaseChanged_;
+    }
+
+    /** Set the change flag to indicate whether or not this XTCE document has
+     * been changed since the last time it was saved.
+     *
+     * @param changedFlag boolean to use to set the changed flag.
+     *
+     */
+
+    public final void setChanged( boolean changedFlag ) {
+        databaseChanged_ = changedFlag;
     }
 
     /** Retrieve the XTCE schema document that is applicable for this loaded
@@ -92,7 +122,7 @@ public abstract class XTCEDatabaseParser {
      *
      */
 
-    public String getSchemaFromDocument( ) {
+    public final String getSchemaFromDocument( ) {
         return XTCEConstants.DEFAULT_SCHEMA_FILE;
     }
 
@@ -105,7 +135,7 @@ public abstract class XTCEDatabaseParser {
      *
      */
 
-    public String getNamespaceFromDocument( ) {
+    public final String getNamespaceFromDocument( ) {
         /// @todo work on this document namespace
         return XTCEConstants.XTCE_NAMESPACE;
     }
@@ -119,7 +149,7 @@ public abstract class XTCEDatabaseParser {
      *
      */
 
-    public List<String> getDocumentWarnings( ) {
+    public final List<String> getDocumentWarnings( ) {
         return warnings_;
     }
 
@@ -130,7 +160,7 @@ public abstract class XTCEDatabaseParser {
      *
      */
 
-    public long getErrorCount( ) {
+    public final long getErrorCount( ) {
         return errorCount_;
     }
 
@@ -143,7 +173,7 @@ public abstract class XTCEDatabaseParser {
      *
      */
 
-    public boolean isReadOnly( ) {
+    public final boolean isReadOnly( ) {
         return ( domLoaded_ == false );
     }
 
@@ -490,35 +520,28 @@ public abstract class XTCEDatabaseParser {
             Unmarshaller     um  = jaxbContext_.createUnmarshaller();
             SAXParserFactory spf = SAXParserFactory.newInstance();
 
-            //System.out.println( "Got here 1" );
             spf.setXIncludeAware( applyXIncludes );
 	    spf.setNamespaceAware( true );
             if ( validateOnLoad == true ) {
                 spf.setSchema( schema );
             }
 
-            //System.out.println( "Got here 2" );
             SAXParser parser = spf.newSAXParser();
             //parser.setProperty( sunSchema_,
             //                    XMLConstants.W3C_XML_SCHEMA_NS_URI );
 
-            //System.out.println( "Got here 3" );
             XMLReader reader = parser.getXMLReader();
             reader.setErrorHandler( handler );
             um.setEventHandler( handler );
 
-            //System.out.println( "Got here 4" );
             SAXSource source =
                 new SAXSource( reader, new InputSource( dbStream ) );
 
-            //System.out.println( "Got here 5" );
             jaxbElementRoot_ = (JAXBElement)um.unmarshal( source );
 
-            //System.out.println( "Got here 6" );
             errorCount_ = handler.getErrorCount();
             warnings_   = handler.getMessages();
 
-            //System.out.println( "Got here 7" );
             Object candidate = jaxbElementRoot_.getValue();
 
             if ( candidate.getClass().equals( SpaceSystemType.class ) == false ) {
@@ -527,7 +550,6 @@ public abstract class XTCEDatabaseParser {
                 throw new XTCEDatabaseException( exceptionMessage );
             }
 
-            //System.out.println( "Got here 8" );
             domLoaded_       = false;
             domDocumentRoot_ = null;
             domBinder_       = null;
@@ -535,10 +557,8 @@ public abstract class XTCEDatabaseParser {
             return (SpaceSystemType)candidate;
 
         } catch ( UnmarshalException ex ) {
-            //System.out.println( "Got here 9" );
             throw new XTCEDatabaseException( handler.getMessages() );
         } catch ( NumberFormatException ex ) {
-            //System.out.println( "Got here 10" );
             String msg = XTCEFunctions.generalErrorPrefix() +
                          XTCEFunctions.getText( "general_numberexception" ) + // NOI18N
                          " '" + // NOI18N
@@ -548,10 +568,8 @@ public abstract class XTCEDatabaseParser {
             msgs.add( msg );
             throw new XTCEDatabaseException( msgs );
         } catch ( Exception ex ) {
-            //System.out.println( "Got here 11" );
             throw new XTCEDatabaseException( ex ); 
         } finally {
-            //System.out.println( "Got here 12" );
             System.setProperty( "user.dir", currentDir ); // NOI18N
         }
 
@@ -670,23 +688,56 @@ public abstract class XTCEDatabaseParser {
                 XTCEFunctions.getText( "error_isreadonly" ) ); // NOI18N
         }
 
+        TransformerFactory tfactory = TransformerFactory.newInstance();
+
         try {
 
             // thinking about this update, maybe it should be done when nodes
             // are edited to keep in sync for xpath
 
-            domBinder_.updateXML( jaxbElementRoot_ );
+            if ( databaseChanged_ == true ) {
+                domBinder_.updateXML( jaxbElementRoot_ );
+            }
 
-            TransformerFactory tf = TransformerFactory.newInstance();
-            Transformer        t  = tf.newTransformer();
+            Transformer xformer = tfactory.newTransformer();
 
-            t.transform( new DOMSource( domDocumentRoot_ ),
-                         new StreamResult( dbFile ) );
+            xformer.setOutputProperty( OutputKeys.INDENT, "yes" );
+            xformer.setOutputProperty( "{http://xml.apache.org/xslt}indent-amount", "4" );
+
+            xformer.transform( new DOMSource( domDocumentRoot_ ),
+                               new StreamResult( dbFile ) );
 
         } catch ( Exception ex ) {
             throw new XTCEDatabaseException( ex );
         }
         
+    }
+
+    /** Method to normalize the whitespace in the XML Document Object Model to
+     * make saved documents look clean.
+     *
+     * @throws XTCEDatabaseException in the event that the document is not well
+     * formed or it is loaded read-only, in which case the Document Object
+     * Model is not in use.
+     *
+     */
+
+    public void normalizeDocument() throws XTCEDatabaseException {
+
+        if ( isReadOnly() == true ) {
+            throw new XTCEDatabaseException(
+                XTCEFunctions.getText( "error_isreadonly" ) ); // NOI18N
+        }
+
+        String xpath = "//text()[normalize-space(.) = '']";
+
+        NodeList nodes = evaluateXPathQuery( xpath );
+
+        for( int iii = 0; iii < nodes.getLength(); ++iii ) {
+            Node node = nodes.item( iii );
+            node.getParentNode().removeChild( node );
+        }
+
     }
 
     /** Method to return the root document element from the Document Object
@@ -699,7 +750,7 @@ public abstract class XTCEDatabaseParser {
      *
      */
 
-    public Element getDocumentElement() throws XTCEDatabaseException {
+    public final Element getDocumentElement() throws XTCEDatabaseException {
 
         if ( isReadOnly() == true ) {
             throw new XTCEDatabaseException(
@@ -710,8 +761,66 @@ public abstract class XTCEDatabaseParser {
 
     }
 
+    /** Method to return the document object from the Document Object Model
+     * (DOM) of this XTCE document.
+     *
+     * @return Element containing the root SpaceSystem.
+     *
+     * @throws XTCEDatabaseException in the event that the document is opened
+     * read-only, in which case the DOM is not loaded or initialized.
+     *
+     */
+
+    public final Document getDocument() throws XTCEDatabaseException {
+
+        if ( isReadOnly() == true ) {
+            throw new XTCEDatabaseException(
+                XTCEFunctions.getText( "error_isreadonly" ) ); // NOI18N
+        }
+
+        return domDocumentRoot_;
+
+    }
+
+    /** Evaluate an arbitrary XPath Query Expression and return a generic
+     * NodeList object back or an exception with an error message.
+     *
+     * @param query String containing the XPath expression.
+     *
+     * @return NodeList containing 0 or more nodes that were located by the
+     * query.
+     *
+     * @throws XTCEDatabaseException in the event that the query contains an
+     * error or cannot otherwise be evaluated against the DOM tree.
+     *
+     */
+
+    public NodeList evaluateXPathQuery( String query ) throws XTCEDatabaseException {
+
+        if ( isReadOnly() == true ) {
+            throw new XTCEDatabaseException(
+                XTCEFunctions.getText( "error_xpath_readonly" ) ); // NOI18N
+        }
+
+        XPath xpath = XPathFactory.newInstance().newXPath();
+        xpath.setNamespaceContext( new XTCENamespaceContext() );
+
+        try {
+
+            XPathExpression expr = xpath.compile( query );
+            NodeList nnn = (NodeList)expr.evaluate( getDocumentElement(),
+                                                    XPathConstants.NODESET );
+            return nnn;
+
+        } catch ( XPathException ex ) {
+            throw new XTCEDatabaseException( ex );
+        }
+
+    }
+
     // Private Data Members
 
+    private boolean      databaseChanged_ = false;
     private File         xtceFilename_    = null;
     private List<String> warnings_        = new ArrayList<>();
     private long         errorCount_      = 0;

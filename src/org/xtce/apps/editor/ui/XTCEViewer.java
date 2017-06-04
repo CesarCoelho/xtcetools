@@ -17,6 +17,7 @@
 
 package org.xtce.apps.editor.ui;
 
+import org.xtce.apps.editor.dialogs.XTCEViewerFileUpgradeProgressDialog;
 import org.xtce.apps.editor.dialogs.XTCEViewerCreateEditSpaceSystemDialog;
 import org.xtce.apps.editor.dialogs.XTCEViewerXpathQueryDialog;
 import org.xtce.apps.editor.dialogs.XTCEViewerTelecommandFindDialog;
@@ -274,6 +275,7 @@ public class XTCEViewer extends javax.swing.JFrame {
         mainWindowSaveFileMenuItem = new javax.swing.JMenuItem();
         mainWindowCloseFileMenuItem = new javax.swing.JMenuItem();
         mainWindowCreateFileMenuItem = new javax.swing.JMenuItem();
+        mainWindowUpgradeFileMenuItem = new javax.swing.JMenuItem();
         mainWindowExitMenuItem = new javax.swing.JMenuItem();
         mainWindowEditMenu = new javax.swing.JMenu();
         mainWindowClearMessagesMenuItem = new javax.swing.JMenuItem();
@@ -863,7 +865,6 @@ public class XTCEViewer extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("xtceview");
         setMinimumSize(new java.awt.Dimension(800, 600));
-        setSize(new java.awt.Dimension(1150, 800));
 
         loadedFilenameLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         loadedFilenameLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -1524,6 +1525,14 @@ public class XTCEViewer extends javax.swing.JFrame {
             }
         });
         mainWindowFileMenu.add(mainWindowCreateFileMenuItem);
+
+        mainWindowUpgradeFileMenuItem.setText(bundle.getString("file_menu_upgrade_database_label")); // NOI18N
+        mainWindowUpgradeFileMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mainWindowUpgradeFileMenuItemActionPerformed(evt);
+            }
+        });
+        mainWindowFileMenu.add(mainWindowUpgradeFileMenuItem);
 
         mainWindowExitMenuItem.setText(bundle.getString("file_menu_exit_label")); // NOI18N
         mainWindowExitMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -4133,6 +4142,59 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     }//GEN-LAST:event_encodeTelecommandDrawingMenuItemActionPerformed
 
+    private void mainWindowUpgradeFileMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mainWindowUpgradeFileMenuItemActionPerformed
+
+        final int messageNoticeResult =
+            JOptionPane.showConfirmDialog( this,
+                                           XTCEFunctions.getText( "file_upgrade_info" ), // NOI18N
+                                           XTCEFunctions.getText( "general_information" ), // NOI18N
+                                           JOptionPane.OK_CANCEL_OPTION,
+                                           JOptionPane.INFORMATION_MESSAGE );
+
+        if ( messageNoticeResult == JOptionPane.CANCEL_OPTION ) {
+            return;
+        }
+
+        final XTCEViewerUpgradeFileChooser chs =
+            new XTCEViewerUpgradeFileChooser( prefs );
+
+        if ( chs.showOpenDialog( this ) != JFileChooser.APPROVE_OPTION ) {
+            return;
+        }
+
+        XTCEViewerFileUpgradeProgressDialog pbar =
+            new XTCEViewerFileUpgradeProgressDialog( chs.getSelectedFile(),
+                                                     chs.isXIncludeSelected(),
+                                                     this,
+                                                     true );
+
+        pbar.upgrade();
+        pbar.setVisible( true );
+
+        for ( final String message : pbar.getMessages() ) {
+            logMsg( message );
+        }
+
+        final int loadQuestionResult =
+            JOptionPane.showConfirmDialog( this,
+                                           XTCEFunctions.getText( "file_upgrade_load" ), // NOI18N
+                                           XTCEFunctions.getText( "file_menu_upgrade_database_label" ), // NOI18N
+                                           JOptionPane.YES_NO_OPTION,
+                                           JOptionPane.QUESTION_MESSAGE );
+
+        if ( loadQuestionResult == JOptionPane.YES_OPTION ) {
+            File savedFile = pbar.getSavedFile();
+            pbar = null; // free the memory from the conversion before loading
+            openFile( savedFile,
+                      chs.isXIncludeSelected(),
+                      false,  // no validation on load
+                      true ); // read only
+            prefs.updateRecentFilesList( mainWindowOpenRecentMenu,
+                                         chs.getSelectedFile() );
+        }
+
+    }//GEN-LAST:event_mainWindowUpgradeFileMenuItemActionPerformed
+
     public void goToParameter( String  parameterName,
                                String  spaceSystemName,
                                boolean isTelemetryParameter ) {
@@ -5712,6 +5774,7 @@ public class XTCEViewer extends javax.swing.JFrame {
     private javax.swing.JCheckBoxMenuItem mainWindowShowAllConditionalsMenuItem;
     private javax.swing.JMenu mainWindowShowMenu;
     private javax.swing.JMenuItem mainWindowShowMetricsMenuItem;
+    private javax.swing.JMenuItem mainWindowUpgradeFileMenuItem;
     private javax.swing.JCheckBoxMenuItem mainWindowUseXincludeMenuItem;
     private javax.swing.JCheckBoxMenuItem mainWindowValidateOnLoadMenuItem;
     private javax.swing.JScrollPane messagesDialogPanel;
