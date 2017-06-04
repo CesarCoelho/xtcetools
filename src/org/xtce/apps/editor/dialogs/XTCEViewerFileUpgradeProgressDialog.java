@@ -182,34 +182,48 @@ public class XTCEViewerFileUpgradeProgressDialog extends    JDialog
             try {
 
                 convObj_ = new XTCEDatabaseConverter( xmlFile_, useXInclude_ );
+
                 step_ = XTCEFunctions.getText( "file_upgrade_step02" ); // NOI18N
                 setProgress( 10 );
                 count_ += convObj_.convertTwosComplement();
+
                 step_ = XTCEFunctions.getText( "file_upgrade_step03" ); // NOI18N
                 setProgress( 20 );
                 count_ += convObj_.convertEnumerationAlarmValue();
+
                 step_ = XTCEFunctions.getText( "file_upgrade_step04" ); // NOI18N
                 setProgress( 30 );
                 count_ += convObj_.convertMessageContainRef();
+
                 step_ = XTCEFunctions.getText( "file_upgrade_step05" ); // NOI18N
                 setProgress( 40 );
                 count_ += convObj_.convertEmptyUnitSets();
+
                 step_ = XTCEFunctions.getText( "file_upgrade_step06" ); // NOI18N
                 setProgress( 50 );
                 count_ += convObj_.convertValidRangeCalibratedAttribute();
+
                 step_ = XTCEFunctions.getText( "file_upgrade_step07" ); // NOI18N
                 setProgress( 60 );
                 count_ += convObj_.convertErrorDetectCRC();
+
                 step_ = XTCEFunctions.getText( "file_upgrade_step08" ); // NOI18N
                 setProgress( 70 );
                 count_ += convObj_.convertAlarmFormToRangeForm();
+
                 step_ = XTCEFunctions.getText( "file_upgrade_step09" ); // NOI18N
                 setProgress( 80 );
                 count_ += convObj_.convertBlockMetaCommandStepArguments();
+
                 step_ = XTCEFunctions.getText( "file_upgrade_step10" ); // NOI18N
+                setProgress( 85 );
+                count_ += convObj_.convertTimeOfDayEpoch();
+
+                step_ = XTCEFunctions.getText( "file_upgrade_step11" ); // NOI18N
                 setProgress( 95 );
                 convObj_.normalizeDocument();
-                step_ = XTCEFunctions.getText( "file_upgrade_step11" ); // NOI18N
+
+                step_ = XTCEFunctions.getText( "file_upgrade_step12" ); // NOI18N
                 setProgress( 95 );
                 convObj_.save();
 

@@ -32,7 +32,7 @@ limitations under the License.
 					<IntegerDataEncoding sizeInBits="64"/>
 				</Encoding>
 				<ReferenceTime>
-					<Epoch>1970-01-01</Epoch>
+					<Epoch timeOfDay="01:00:30Z">1970-01-01</Epoch>
 				</ReferenceTime>
 			</AbsoluteTimeParameterType>
 			<EnumeratedParameterType name="TM_CHECKSUMType" initialValue="NotUsed">

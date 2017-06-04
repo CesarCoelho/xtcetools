@@ -73,7 +73,7 @@ public class UpgradeTest {
             XTCEDatabaseConverter converter =
                 new XTCEDatabaseConverter( xmlFile, false );
 
-            long expected = 75;
+            long expected = 76;
             long count    = converter.upgrade();
 
             converter.normalizeDocument();
@@ -88,7 +88,7 @@ public class UpgradeTest {
                                Long.toString( expected ) +
                                " items converted, instead it was " +
                                Long.toString( count ),
-                               count == 75 );
+                               count == expected );
 
             Assert.assertTrue( "Failed to save file", success );
 
@@ -120,7 +120,7 @@ public class UpgradeTest {
             XTCEDatabaseConverter converter =
                 new XTCEDatabaseConverter( xmlFile, false );
 
-            long expected = 75;
+            long expected = 76;
             long count    = converter.upgrade();
 
             converter.normalizeDocument();
@@ -135,7 +135,7 @@ public class UpgradeTest {
                                Long.toString( expected ) +
                                " items converted, instead it was " +
                                Long.toString( count ),
-                               count == 75 );
+                               count == expected );
 
             Assert.assertTrue( "Failed to save file", success );
 

@@ -32,7 +32,7 @@ limitations under the License.
 					<xtce:IntegerDataEncoding sizeInBits="64"/>
 				</xtce:Encoding>
 				<xtce:ReferenceTime>
-					<xtce:Epoch>1970-01-01</xtce:Epoch>
+					<xtce:Epoch timeOfDay="01:00:30Z">1970-01-01</xtce:Epoch>
 				</xtce:ReferenceTime>
 			</xtce:AbsoluteTimeParameterType>
 			<xtce:EnumeratedParameterType name="TM_CHECKSUMType" initialValue="NotUsed">

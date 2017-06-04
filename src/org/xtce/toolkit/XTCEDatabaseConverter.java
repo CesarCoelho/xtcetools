@@ -90,6 +90,7 @@ public class XTCEDatabaseConverter extends XTCEDatabaseParser {
         numberConverted += convertErrorDetectCRC();
         numberConverted += convertAlarmFormToRangeForm();
         numberConverted += convertBlockMetaCommandStepArguments();
+        numberConverted += convertTimeOfDayEpoch();
 
         messages_.add( Long.toString( numberConverted ) +
                        " " + // NOI18N
@@ -362,9 +363,9 @@ public class XTCEDatabaseConverter extends XTCEDatabaseParser {
                     messages_.add( query +
                                    ": In Type named '" +
                                    typeName +
-                                   "', Cannot auto-convert CRC.  " +
+                                   "', cannot auto-convert CRC.  " +
                                    "Term elements removed.  " +
-                                   "Specify new attributes." );
+                                   "Manually modify content." );
 
                     nodes.item( iii ).setTextContent( "" );
 
@@ -460,6 +461,79 @@ public class XTCEDatabaseConverter extends XTCEDatabaseParser {
                                                   "argumentValue" ); // NOI18N
                     }
                 }
+            }
+
+        } catch ( Exception ex ) {
+            messages_.add( XTCEFunctions.getText( "general_error_caps" ) + // NOI18N
+                           " " + // NOI18N
+                           ex.getLocalizedMessage() );
+        }
+
+        //System.out.println( "count = " + Long.toString( numberConverted ) );
+        return numberConverted;
+
+    }
+
+    /** Convert the timeOfDay attribute value to the Epoch text content.
+     *
+     * Removing an attribute and relocating data
+     *
+     * This only applies to a very small number of users who incorporated the
+     * original XTCE 1.2 proposal with extensions provided by this toolkit.
+     * Pure XTCE 1.1 users would not have any cases of this conversion.
+     *
+     * @return long containing the number of timeOfDay attributes that
+     * were changed to Epoch element content.
+     *
+     */
+
+    public long convertTimeOfDayEpoch() {
+
+        long numberConverted = 0;
+
+        try {
+
+            String[] queries = {
+                "//xtce:ParameterTypeSet/*/xtce:ReferenceTime/xtce:Epoch/@timeOfDay", // NOI18N
+                "//xtce:ArgumentTypeSet/*/xtce:ReferenceTime/xtce:Epoch/@timeOfDay" // NOI18N
+            };
+
+            for ( String query : queries ) {
+
+                NodeList nodes = evaluateXPathQuery( query );
+
+                for ( int iii = 0; iii < nodes.getLength(); ++iii ) {
+
+                    Element  parent     = ((Attr)nodes.item( iii )).getOwnerElement();
+                    String   timeString = nodes.item( iii ).getNodeValue();
+                    String   dateString = parent.getTextContent();
+
+                    if ( dateString.matches( "^[0-9]{4}-[0-9]{2}-[0-9]{2}" ) == true ) {
+
+                        dateString = dateString.substring( 0, 10 ) +
+                                     "T" +
+                                     timeString;
+                        if ( dateString.matches( "[0-9]$" ) == true ) {
+                            dateString += "Z";
+                        }
+                        parent.setTextContent( dateString );
+                        parent.removeAttribute( "timeOfDay" );
+                        ++numberConverted;
+
+                    } else {
+
+                        messages_.add( query +
+                                       ": In Type named '" +
+                                       ( (Element)parent.getParentNode()
+                                                        .getParentNode() )
+                                                        .getAttribute( "name" ) +
+                                       "', cannot auto-convert Epoch/@timeOfDay.  " +
+                                       "Manually modify content." );
+
+                    }
+
+                }
+
             }
 
         } catch ( Exception ex ) {
