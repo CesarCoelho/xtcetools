@@ -31,6 +31,7 @@ import org.omg.space.xtce.DescriptionType.AncillaryDataSet.AncillaryData;
  *
  * @author dovereem
  */
+
 public class AncillaryLogicTest {
     
     public AncillaryLogicTest() {

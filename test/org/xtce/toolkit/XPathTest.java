@@ -14,13 +14,14 @@
  * limitations under the License.
  * 
  */
+
 package org.xtce.toolkit;
 
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Iterator;
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -32,6 +33,7 @@ import org.w3c.dom.NodeList;
  *
  * @author dovereem
  */
+
 public class XPathTest {
     
     public XPathTest() {

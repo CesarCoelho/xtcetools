@@ -24,7 +24,7 @@ import javax.xml.bind.ValidationEvent;
 import javax.xml.bind.ValidationEventLocator;
 import javax.xml.bind.helpers.ValidationEventImpl;
 import javax.xml.bind.helpers.ValidationEventLocatorImpl;
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -38,6 +38,7 @@ import org.xml.sax.SAXParseException;
  *
  * @author dovereem
  */
+
 public class SchemaErrorHandlerTest {
     
     public SchemaErrorHandlerTest() {

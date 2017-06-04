@@ -21,7 +21,7 @@ import java.io.File;
 import java.math.BigInteger;
 import java.util.BitSet;
 import java.util.List;
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

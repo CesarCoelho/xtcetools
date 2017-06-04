@@ -20,7 +20,7 @@ package org.xtce.toolkit;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

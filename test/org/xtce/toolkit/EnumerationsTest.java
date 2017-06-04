@@ -14,9 +14,10 @@
  * limitations under the License.
  * 
  */
+
 package org.xtce.toolkit;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -30,6 +31,7 @@ import org.xtce.toolkit.XTCETypedObject.RawType;
  *
  * @author dovereem
  */
+
 public class EnumerationsTest {
     
     public EnumerationsTest() {
