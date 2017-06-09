@@ -189,10 +189,7 @@ public class XTCEDatabaseConverter extends XTCEDatabaseParser {
                 evaluateXPathQuery( "//xtce:TelemetryMetaData/xtce:MessageSet/xtce:Message/xtce:ContainRef" ); // NOI18N
 
             for ( int iii = 0; iii < nodes.getLength(); ++iii ) {
-                Element element = (Element)nodes.item( iii );
-                getDocument().renameNode( element,
-                                          element.getNamespaceURI(),
-                                          "xtce:ContainerRef" ); // NOI18N
+                renameElement( (Element)nodes.item( iii ), "ContainerRef" ); // NOI18N
                 ++numberConverted;
             }
 
@@ -282,8 +279,8 @@ public class XTCEDatabaseConverter extends XTCEDatabaseParser {
 
                     for ( int jjj = 0; jjj < children.getLength(); ++jjj ) {
                         Node node = children.item( jjj );
-                        if ( ( node.getNodeType()                             == Node.ELEMENT_NODE ) &&
-                             ( node.getNodeName().equals( "xtce:ValidRange" ) == true              ) ) { // NOI18N
+                        if ( ( node.getNodeType()                          == Node.ELEMENT_NODE ) &&
+                             ( node.getNodeName().endsWith( "ValidRange" ) == true              ) ) { // NOI18N
                             ((Element)node).setAttribute( "validRangeAppliesToCalibrated", value ); // NOI18N
                         }
                     }
@@ -438,26 +435,22 @@ public class XTCEDatabaseConverter extends XTCEDatabaseParser {
                 evaluateXPathQuery( "//xtce:CommandMetaData/xtce:MetaCommandSet/xtce:BlockMetaCommand/xtce:MetaCommandStepList/xtce:MetaCommandStep/xtce:ArgumentList" ); // NOI18N
 
             for ( int iii = 0; iii < nodes.getLength(); ++iii ) {
-                getDocument().renameNode( nodes.item( iii ),
-                                          nodes.item( iii ).getNamespaceURI(),
-                                          "ArgumentAssignmentList" ); // NOI18N
+                renameElement( (Element)nodes.item( iii ), "ArgumentAssignmentList" ); // NOI18N
                 ++numberConverted;
                 NodeList children = nodes.item( iii ).getChildNodes();
                 for ( int jjj = 0; jjj < children.getLength(); ++jjj ) {
-                    Node node = children.item( iii );
-                    if ( ( node.getNodeType() == Node.ELEMENT_NODE ) &&
-                         ( node.getNodeName().equals( "Argument" ) == true ) ) { // NOI18N
-                        getDocument().renameNode( node,
-                                                  node.getNamespaceURI(),
-                                                  "ArgumentAssignment" ); // NOI18N
+                    Node node = children.item( jjj );
+                    if ( ( node.getNodeType()                        == Node.ELEMENT_NODE ) &&
+                         ( node.getNodeName().endsWith( "Argument" ) == true              ) ) { // NOI18N
+                        renameElement( (Element)node, "ArgumentAssignment" ); // NOI18N
                         NamedNodeMap attrs = node.getAttributes();
                         Node nameAttr = attrs.getNamedItem( "name" ); // NOI18N
                         getDocument().renameNode( nameAttr,
                                                   nameAttr.getNamespaceURI(),
                                                   "argumentName" ); // NOI18N
                         Node valueAttr = attrs.getNamedItem( "value" ); // NOI18N
-                        getDocument().renameNode( nameAttr,
-                                                  nameAttr.getNamespaceURI(),
+                        getDocument().renameNode( valueAttr,
+                                                  valueAttr.getNamespaceURI(),
                                                   "argumentValue" ); // NOI18N
                     }
                 }

@@ -1126,6 +1126,22 @@ limitations under the License.
 							</EntryList>
 						</CommandContainer>
 					</MetaCommand>
+                                        <BlockMetaCommand name="Disable_All_Wheels" shortDescription="This telecommand is pre-defined to shut down all reaction wheels">
+                                            <MetaCommandStepList>
+                                                <MetaCommandStep metaCommandRef="Reaction_Wheel_1_Off">
+                                                    <ArgumentList>
+                                                        <Argument name="RW_UNIT_ID" value="1"/>
+                                                        <Argument name="RW_PWR_STATE" value="OFF"/>
+                                                    </ArgumentList>
+                                                </MetaCommandStep>
+                                                <MetaCommandStep metaCommandRef="Reaction_Wheel_2_Off">
+                                                    <ArgumentList>
+                                                        <Argument name="RW_UNIT_ID" value="2"/>
+                                                        <Argument name="RW_PWR_STATE" value="OFF"/>
+                                                    </ArgumentList>
+                                                </MetaCommandStep>
+                                            </MetaCommandStepList>
+                                        </BlockMetaCommand>
 				</MetaCommandSet>
 			</CommandMetaData>
 		</SpaceSystem>

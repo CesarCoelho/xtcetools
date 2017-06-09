@@ -73,7 +73,7 @@ public class UpgradeTest {
             XTCEDatabaseConverter converter =
                 new XTCEDatabaseConverter( xmlFile, false );
 
-            long expected = 76;
+            long expected = 78;
             long count    = converter.upgrade();
 
             converter.normalizeDocument();
@@ -120,7 +120,7 @@ public class UpgradeTest {
             XTCEDatabaseConverter converter =
                 new XTCEDatabaseConverter( xmlFile, false );
 
-            long expected = 76;
+            long expected = 78;
             long count    = converter.upgrade();
 
             converter.normalizeDocument();

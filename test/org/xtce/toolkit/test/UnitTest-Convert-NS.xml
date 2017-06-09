@@ -1126,6 +1126,22 @@ limitations under the License.
 							</xtce:EntryList>
 						</xtce:CommandContainer>
 					</xtce:MetaCommand>
+                                        <xtce:BlockMetaCommand name="Disable_All_Wheels" shortDescription="This telecommand is pre-defined to shut down all reaction wheels">
+                                            <xtce:MetaCommandStepList>
+                                                <xtce:MetaCommandStep metaCommandRef="Reaction_Wheel_1_Off">
+                                                    <xtce:ArgumentList>
+                                                        <xtce:Argument name="RW_UNIT_ID" value="1"/>
+                                                        <xtce:Argument name="RW_PWR_STATE" value="OFF"/>
+                                                    </xtce:ArgumentList>
+                                                </xtce:MetaCommandStep>
+                                                <xtce:MetaCommandStep metaCommandRef="Reaction_Wheel_2_Off">
+                                                    <xtce:ArgumentList>
+                                                        <xtce:Argument name="RW_UNIT_ID" value="2"/>
+                                                        <xtce:Argument name="RW_PWR_STATE" value="OFF"/>
+                                                    </xtce:ArgumentList>
+                                                </xtce:MetaCommandStep>
+                                            </xtce:MetaCommandStepList>
+                                        </xtce:BlockMetaCommand>
 				</xtce:MetaCommandSet>
 			</xtce:CommandMetaData>
 		</xtce:SpaceSystem>

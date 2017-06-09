@@ -818,6 +818,35 @@ public abstract class XTCEDatabaseParser {
 
     }
 
+    /** Rename an Element node in the Document Object Model assuming that it is
+     * the XTCE namespace but consider that the XTCE URI might be the default
+     * namespace, in which case there is no prefix, or it could have the
+     * xtce: prefix.
+     *
+     * @param element Element to rename
+     *
+     * @param newName String containing the new element name
+     *
+     */
+
+    protected void renameElement( final Element element,
+                                  final String  newName )
+        throws XTCEDatabaseException {
+
+        String prefix = element.getPrefix();
+
+        if ( prefix == null ) {
+            prefix = "";
+        } else {
+            prefix = prefix + ":"; // NOI18N
+        }
+
+        getDocument().renameNode( element,
+                                  element.getNamespaceURI(),
+                                  prefix + newName );
+
+    }
+
     // Private Data Members
 
     private boolean      databaseChanged_ = false;
