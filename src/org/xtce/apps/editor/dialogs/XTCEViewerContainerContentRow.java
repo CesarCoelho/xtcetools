@@ -443,7 +443,6 @@ public class XTCEViewerContainerContentRow extends javax.swing.JPanel {
             XTCEItemValue valueObj = new XTCEItemValue( entry_.getParameter() );
             BigInteger rawInteger = valueObj.integerStringToBigInteger( rawValue );
             BitSet     bits       = valueObj.encodeRawBits( rawInteger );
-            String     binValue   = valueObj.bitSetToBinary( bits );
             String     uncalValue = valueObj.getUncalibratedFromRaw( bits );
             value = new XTCEContainerEntryValue( entry_.getParameter(),
                                                  uncalValue,
@@ -453,7 +452,6 @@ public class XTCEViewerContainerContentRow extends javax.swing.JPanel {
             XTCEItemValue valueObj = new XTCEItemValue( entry_.getArgument() );
             BigInteger rawInteger = valueObj.integerStringToBigInteger( rawValue );
             BitSet     bits       = valueObj.encodeRawBits( rawInteger );
-            String     binValue   = valueObj.bitSetToBinary( bits );
             String     uncalValue = valueObj.getUncalibratedFromRaw( bits );
             value = new XTCEContainerEntryValue( entry_.getArgument(),
                                                  uncalValue,
