@@ -82,6 +82,7 @@ import org.xtce.toolkit.XTCEDatabaseConverter;
  * 
  *     }
  * }
+ * }
  * </pre>
  *
  * @author David Overeem
