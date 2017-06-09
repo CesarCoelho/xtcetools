@@ -128,8 +128,6 @@ public class DumpParameterListExample {
 
         }
 
-        System.exit( 0 );
-
     }
 
 }

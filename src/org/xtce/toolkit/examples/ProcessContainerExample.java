@@ -218,8 +218,6 @@ public class ProcessContainerExample {
 
         }
 
-        System.exit( 0 );
-
     }
 
 }
