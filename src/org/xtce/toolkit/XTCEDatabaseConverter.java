@@ -35,14 +35,29 @@ import org.w3c.dom.NodeList;
  * should not be considered "ready".  It is only a first cut to get some of
  * the work out of the way.
  *
- * None of the intermediate conversion functions are yet documented because
- * they are all considered to still be in work and may change at any time.
- *
  * @author dovereem
  *
  */
 
 public class XTCEDatabaseConverter extends XTCEDatabaseParser {
+
+    /** Constructor
+     *
+     * Create and initialize an instance of the XTCE Database Converter for
+     * schema 1.1 to 1.2.  The provided file is loaded and if successful, the
+     * user can begin the conversion with the upgrade() method, or select
+     * specific step methods.
+     *
+     * @param file File containing the XTCE database XML file to load and use
+     * for the conversion operation.
+     *
+     * @param useXInclude boolean indicating if XInclude processing should be
+     * enabled during load.
+     *
+     * @throws XTCEDatabaseException thrown in the event that the file cannot
+     * be suitably loaded for conversion.
+     *
+     */
 
     public XTCEDatabaseConverter( final File file, final boolean useXInclude )
         throws XTCEDatabaseException {
@@ -61,7 +76,7 @@ public class XTCEDatabaseConverter extends XTCEDatabaseParser {
     /** Retrieve the messages that were generated, if any, during the file
      * conversion/upgrade activity.
      *
-     * @return List of String objects containing the nessages.  This return
+     * @return List of String objects containing the messages.  This return
      * will never be null, but it can be an empty list.
      *
      */
@@ -425,6 +440,18 @@ public class XTCEDatabaseConverter extends XTCEDatabaseParser {
 
     }
 
+    /** Convert the ArgumentList to ArgumentAssignmentList in the
+     * BlockMetaCommand elements.
+     *
+     * CHanging the name of an element and also the child elements and
+     * attributes.
+     *
+     * @return long containing the number of ArgumentList elements that
+     * were changed to ArgumentAssignmentList elements with modified child
+     * elements and attributes.
+     *
+     */
+
     public long convertBlockMetaCommandStepArguments() {
 
         long numberConverted = 0;
@@ -540,7 +567,7 @@ public class XTCEDatabaseConverter extends XTCEDatabaseParser {
 
     }
 
-    /** Conclude the conversion/upgrade by saving the XML content to aa
+    /** Conclude the conversion/upgrade by saving the XML content to an
      * automatically generated filename.
      *
      * The file will be overwritten if it already exists.  The old file name
