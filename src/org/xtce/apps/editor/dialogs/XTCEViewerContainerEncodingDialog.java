@@ -171,8 +171,8 @@ public class XTCEViewerContainerEncodingDialog extends javax.swing.JDialog {
         binaryTextField.setColumns(20);
         binaryTextField.setRows(8);
         binaryTextField.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                binaryTextFieldKeyTyped(evt);
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                binaryTextFieldKeyPressed(evt);
             }
         });
         binaryTextFieldScrollPane.setViewportView(binaryTextField);
@@ -252,11 +252,11 @@ public class XTCEViewerContainerEncodingDialog extends javax.swing.JDialog {
 
     }//GEN-LAST:event_dismissButtonActionPerformed
 
-    private void binaryTextFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_binaryTextFieldKeyTyped
+    private void binaryTextFieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_binaryTextFieldKeyPressed
 
         XTCEViewerFunctions.copyPasteTextArea( evt, binaryTextField );
 
-    }//GEN-LAST:event_binaryTextFieldKeyTyped
+    }//GEN-LAST:event_binaryTextFieldKeyPressed
 
     /** Method to repopulate the existing dialog when a value changes.
      *

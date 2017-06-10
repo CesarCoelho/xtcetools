@@ -31,6 +31,7 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTree;
 import javax.swing.SwingUtilities;
+import javax.swing.text.JTextComponent;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
@@ -247,39 +248,22 @@ public class XTCEViewerFunctions {
      *
      * @param evt KeyEvent object from the Swing callback.
      *
-     * @param textArea JTextArea to copy or paste from.
+     * @param textArea JTextComponent to cut, copy, paste to or from.
      *
      */
 
-    public static void copyPasteTextArea( KeyEvent evt, JTextArea textArea ) {
+    public static void copyPasteTextArea( KeyEvent evt, JTextComponent textArea ) {
 
-        if ( evt.isControlDown() == false ) {
+        if ( evt.isMetaDown() == false ) {
             return;
         }
 
-        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-
         if ( evt.getKeyChar() == 'c' ) {
-
-            if ( textArea.getSelectedText() == null ) {
-                return;
-            }
-
-            StringSelection selection =
-                new StringSelection( textArea.getSelectedText() );
-
-            clipboard.setContents( selection, selection );
-
+            textArea.copy();
         } else if ( evt.getKeyChar() == 'v' ) {
-
-            try {
-                String text =
-                    (String)clipboard.getData( DataFlavor.stringFlavor );
-                textArea.setText( text );
-            } catch ( Exception ex ) {
-                // do nothing
-            }
-
+            textArea.paste();
+        } else if ( evt.getKeyChar() == 'x' ) {
+            textArea.cut();
         }
 
     }

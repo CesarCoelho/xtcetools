@@ -20,6 +20,7 @@ package org.xtce.apps.editor.dialogs;
 import java.awt.event.WindowEvent;
 import java.math.BigInteger;
 import java.util.BitSet;
+import org.xtce.apps.editor.ui.XTCEViewerFunctions;
 import org.xtce.toolkit.XTCEFunctions;
 import org.xtce.toolkit.XTCEItemValue;
 import org.xtce.toolkit.XTCETypedObject;
@@ -130,6 +131,24 @@ public class XTCEViewerEncodeDecodeItemDialog extends javax.swing.JDialog {
 
         warningsLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         warningsLabel.setText(bundle.getString("general_warnings")); // NOI18N
+
+        calibratedValueField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                calibratedValueFieldKeyPressed(evt);
+            }
+        });
+
+        uncalibratedValueField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                uncalibratedValueFieldKeyPressed(evt);
+            }
+        });
+
+        rawValueField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                rawValueFieldKeyPressed(evt);
+            }
+        });
 
         binaryValueField.setEditable(false);
 
@@ -351,6 +370,24 @@ public class XTCEViewerEncodeDecodeItemDialog extends javax.swing.JDialog {
         resetCaretPositions();
 
     }//GEN-LAST:event_makeFromUncalibratedButtonActionPerformed
+
+    private void calibratedValueFieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_calibratedValueFieldKeyPressed
+
+        XTCEViewerFunctions.copyPasteTextArea( evt, calibratedValueField );
+
+    }//GEN-LAST:event_calibratedValueFieldKeyPressed
+
+    private void uncalibratedValueFieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_uncalibratedValueFieldKeyPressed
+
+        XTCEViewerFunctions.copyPasteTextArea( evt, uncalibratedValueField );
+
+    }//GEN-LAST:event_uncalibratedValueFieldKeyPressed
+
+    private void rawValueFieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_rawValueFieldKeyPressed
+
+        XTCEViewerFunctions.copyPasteTextArea( evt, rawValueField );
+
+    }//GEN-LAST:event_rawValueFieldKeyPressed
 
     private void showWarnings() {
 
