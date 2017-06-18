@@ -77,6 +77,8 @@ import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 import org.xtce.apps.editor.dialogs.XTCEViewerArgumentXmlDialog;
 import org.xtce.apps.editor.dialogs.XTCEViewerContainerEncodingDialog;
+import org.xtce.apps.editor.dialogs.XTCEViewerDatabaseCompressorDialog;
+import org.xtce.apps.editor.dialogs.XTCEViewerFileCompressProgressDialog;
 import org.xtce.toolkit.XTCEAbsoluteTimeType;
 import org.xtce.toolkit.XTCEContainerContentEntry.FieldType;
 import org.xtce.toolkit.XTCEContainerEntryValue;
@@ -275,6 +277,7 @@ public class XTCEViewer extends javax.swing.JFrame {
         mainWindowSaveFileMenuItem = new javax.swing.JMenuItem();
         mainWindowCloseFileMenuItem = new javax.swing.JMenuItem();
         mainWindowCreateFileMenuItem = new javax.swing.JMenuItem();
+        mainWindowCompressFileMenuItem = new javax.swing.JMenuItem();
         mainWindowUpgradeFileMenuItem = new javax.swing.JMenuItem();
         mainWindowExitMenuItem = new javax.swing.JMenuItem();
         mainWindowEditMenu = new javax.swing.JMenu();
@@ -1525,6 +1528,14 @@ public class XTCEViewer extends javax.swing.JFrame {
             }
         });
         mainWindowFileMenu.add(mainWindowCreateFileMenuItem);
+
+        mainWindowCompressFileMenuItem.setText(bundle.getString("file_menu_compress_database_label")); // NOI18N
+        mainWindowCompressFileMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mainWindowCompressFileMenuItemActionPerformed(evt);
+            }
+        });
+        mainWindowFileMenu.add(mainWindowCompressFileMenuItem);
 
         mainWindowUpgradeFileMenuItem.setText(bundle.getString("file_menu_upgrade_database_label")); // NOI18N
         mainWindowUpgradeFileMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -4195,6 +4206,43 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     }//GEN-LAST:event_mainWindowUpgradeFileMenuItemActionPerformed
 
+    private void mainWindowCompressFileMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mainWindowCompressFileMenuItemActionPerformed
+
+        final XTCEViewerDatabaseCompressorDialog dialog =
+            new XTCEViewerDatabaseCompressorDialog( this, true );
+
+        dialog.setVisible( true );
+
+        if ( dialog.proceed() == false ) {
+            return;
+        }
+
+        final Properties options = dialog.getSelectedOptions();
+
+        final XTCEViewerCompressFileChooser chs =
+            new XTCEViewerCompressFileChooser( prefs );
+
+        if ( chs.showOpenDialog( this ) != JFileChooser.APPROVE_OPTION ) {
+            return;
+        }
+
+        options.put( "XINCLUDE", chs.isXIncludeSelected() );
+
+        XTCEViewerFileCompressProgressDialog pbar =
+            new XTCEViewerFileCompressProgressDialog( chs.getSelectedFile(),
+                                                      options,
+                                                      this,
+                                                      true );
+
+        pbar.compress();
+        pbar.setVisible( true );
+
+        for ( final String message : pbar.getMessages() ) {
+            logMsg( message );
+        }
+
+    }//GEN-LAST:event_mainWindowCompressFileMenuItemActionPerformed
+
     public void goToParameter( String  parameterName,
                                String  spaceSystemName,
                                boolean isTelemetryParameter ) {
@@ -5562,22 +5610,27 @@ public class XTCEViewer extends javax.swing.JFrame {
         }
         //</editor-fold>
 
-        /*
-        Properties props = System.getProperties();
-        Enumeration<?> keys = props.propertyNames();
-        while ( keys.hasMoreElements() == true ) {
-            String key = (String)keys.nextElement();
-            System.out.println( key + " = " + props.getProperty( key ) ); // NOI18N
-        }
+        /* Properties props = System.getProperties();
+
+        //Enumeration<?> keys = props.propertyNames();
+        //while ( keys.hasMoreElements() == true ) {
+        //    String key = (String)keys.nextElement();
+        //    System.out.println( key + " = " + props.getProperty( key ) ); // NOI18N
+        //}
 
         try {
             if ( System.getProperty( "os.name" ).equals( "Mac OS X" ) == true ) { // NOI18N
                 System.setProperty( "apple.laf.useScreenMenuBar", "true" ); // NOI18N
                 //System.setProperty( "apple.awt.brushMetalLook", "true" ); // NOI18N
+                //InputMap im = (InputMap) UIManager.get( "TextField.focusInputMap" );
+                //im.put( KeyStroke.getKeyStroke( KeyEvent.VK_C, KeyEvent.META_DOWN_MASK ), DefaultEditorKit.copyAction );
+                //im.put( KeyStroke.getKeyStroke( KeyEvent.VK_V, KeyEvent.META_DOWN_MASK ), DefaultEditorKit.pasteAction );
+                //im.put( KeyStroke.getKeyStroke( KeyEvent.VK_X, KeyEvent.META_DOWN_MASK ), DefaultEditorKit.cutAction );
+                //System.out.println( "setting mac" );
             }
         } catch ( Throwable ex ) {
             // do nothing and proceed in default mode
-        }*/
+        } */
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater( new Runnable() {
@@ -5735,6 +5788,7 @@ public class XTCEViewer extends javax.swing.JFrame {
     private javax.swing.JMenuItem mainWindowClearMessagesMenuItem;
     private javax.swing.JMenuItem mainWindowClearRecentFilesMenuItem;
     private javax.swing.JMenuItem mainWindowCloseFileMenuItem;
+    private javax.swing.JMenuItem mainWindowCompressFileMenuItem;
     private javax.swing.JMenuItem mainWindowCreateFileMenuItem;
     private javax.swing.JCheckBoxMenuItem mainWindowEditDocumentMenuItem;
     private javax.swing.JMenu mainWindowEditMenu;

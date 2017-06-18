@@ -27,7 +27,6 @@ import java.util.Date;
 import java.util.TimeZone;
 import org.omg.space.xtce.AbsoluteTimeDataType;
 import org.omg.space.xtce.IntegerDataEncodingType;
-import org.omg.space.xtce.ReferenceTimeType.Epoch;
 
 /** This class implements UNIX POSIX time to support AbsoluteTimeDataType
  * elements in an XTCE document.

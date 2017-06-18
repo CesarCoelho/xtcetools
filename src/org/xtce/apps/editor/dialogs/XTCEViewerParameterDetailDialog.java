@@ -17,27 +17,19 @@
 
 package org.xtce.apps.editor.dialogs;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import org.xtce.toolkit.XTCEDatabaseException;
 import org.xtce.toolkit.XTCEParameter;
 import org.xtce.toolkit.XTCEAlias;
 import java.awt.event.WindowEvent;
-import java.awt.image.BufferedImage;
-import java.awt.Insets;
-import java.util.ArrayList;
 import java.util.List;
 import java.math.BigInteger;
 import javax.swing.BoxLayout;
 import javax.swing.JOptionPane;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
 import org.omg.space.xtce.CalibratorType;
 import org.omg.space.xtce.CalibratorType.MathOperationCalibrator;
 import org.omg.space.xtce.CalibratorType.SplineCalibrator;
-import org.omg.space.xtce.DescriptionType;
 import org.omg.space.xtce.DescriptionType.AncillaryDataSet.AncillaryData;
 import org.omg.space.xtce.ParameterTypeSetType.BooleanParameterType;
 import org.omg.space.xtce.PolynomialType;
@@ -47,7 +39,6 @@ import org.xtce.apps.editor.ui.XTCEViewerAncillaryDataRow;
 import org.xtce.apps.editor.ui.XTCEViewerFunctions;
 import org.xtce.math.MathOperationCalibration;
 import org.xtce.toolkit.XTCEFunctions;
-import org.xtce.toolkit.XTCETypedObject;
 import org.xtce.toolkit.XTCETypedObject.EngineeringType;
 import org.xtce.toolkit.XTCEValidRange;
 //import org.scilab.forge.jlatexmath.TeXConstants;

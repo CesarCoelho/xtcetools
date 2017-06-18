@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Stack;
 import org.omg.space.xtce.CalibratorType.MathOperationCalibrator;
 import org.omg.space.xtce.ParameterInstanceRefType;
+import org.omg.space.xtce.ParameterRefType;
 import org.xtce.toolkit.XTCEDatabaseException;
 import org.xtce.toolkit.XTCEFunctions;
 
@@ -273,7 +274,7 @@ public class MathOperationCalibration implements Calibration {
                 // XTCE element ParameterInstanceRefOperand (add later)
                 } else if ( term instanceof ParameterInstanceRefType ) {
 
-                    String pref  = ((ParameterInstanceRefType)term).getParameterRef();
+                    String pref  = ((ParameterRefType)term).getParameterRef();
                     String pname = XTCEFunctions.getNameFromPathReferenceString( pref );
 
                     if ( ((ParameterInstanceRefType)term).isUseCalibratedValue() == true ) {

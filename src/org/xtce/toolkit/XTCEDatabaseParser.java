@@ -50,6 +50,7 @@ import javax.xml.xpath.XPathException;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathFactory;
 import org.omg.space.xtce.SpaceSystemType;
+import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -827,6 +828,9 @@ public abstract class XTCEDatabaseParser {
      *
      * @param newName String containing the new element name
      *
+     * @throws XTCEDatabaseException in the event that the document object
+     * does not exist because the document is in read-only mode.
+     *
      */
 
     protected void renameElement( final Element element,
@@ -836,14 +840,92 @@ public abstract class XTCEDatabaseParser {
         String prefix = element.getPrefix();
 
         if ( prefix == null ) {
-            prefix = "";
+            prefix = ""; // NOI18N
         } else {
-            prefix = prefix + ":"; // NOI18N
+            prefix += ":"; // NOI18N
         }
 
         getDocument().renameNode( element,
                                   element.getNamespaceURI(),
                                   prefix + newName );
+
+    }
+
+    /** Remove an attribute node from an element in the Document Object Model
+     * when the attribute contains the default value.
+     *
+     * @param element Element object from the DOM to search for the attribute.
+     *
+     * @param name String containing the name of the attribute to check.
+     *
+     * @param value String containing the default value of the attribute.
+     *
+     * @return boolean indicating if the attribute was removed.
+     *
+     */
+
+    protected boolean removeDefaultAttribute( final Element element,
+                                              final String  name,
+                                              final String  value ) {
+
+        Attr attrNode = element.getAttributeNode( name );
+
+        if ( ( attrNode                            != null ) &&
+             ( attrNode.getValue().equals( value ) == true ) ) {
+
+            element.removeAttributeNode( attrNode );
+            return true;
+
+        }
+
+        return false;
+
+    }
+
+    /** Update the History elements in the XTCE document before saving, only if
+     * the document uses the Header element.
+     *
+     * @param messages List of strings to add to the HistorySet element with
+     * each message being 1 new History element.
+     *
+     * @throws XTCEDatabaseException Unlikely to be thrown, but can occur if
+     * the document is malformed according to the schema.
+     *
+     */
+
+    protected void updateHistorySet( final List<String> messages )
+        throws XTCEDatabaseException {
+
+        NodeList nodes = evaluateXPathQuery( "xtce:Header" ); // NOI18N
+
+        if ( nodes.getLength() == 0 ) {
+            return;
+        }
+
+        // first find the HistorySet and if it does not exist under the Header
+        // then make one.
+
+        NodeList histNodes =
+            ((Element)nodes.item( 0 )).getElementsByTagName( "xtce:HistorySet" ); // NOI18N
+
+        Element historySetElement;
+
+        if ( histNodes.getLength() == 0 ) {
+            historySetElement = getDocument().createElement( "xtce:HistorySet" ); // NOI18N
+            nodes.item( 0 ).appendChild( historySetElement );
+        } else {
+            historySetElement = ((Element)histNodes.item( 0 ));
+        }
+
+        // add each of the messages as a History element in the HistorySet
+
+        for ( String message : messages ) {
+            Element history = getDocument().createElement( "xtce:History" ); // NOI18N
+            history.setTextContent( message );
+            historySetElement.appendChild( history );
+        }
+
+        databaseChanged_ = true;
 
     }
 

@@ -223,8 +223,8 @@ public class XTCEDatabaseConverter extends XTCEDatabaseParser {
      *
      * Removing an element
      *
-     * @return long containing the number of ContainRef elements that were
-     * renamed to ContainerRef in the MessageSet.
+     * @return long containing the number of UnitSet elements that were
+     * removed.
      *
      */
 
@@ -241,12 +241,8 @@ public class XTCEDatabaseConverter extends XTCEDatabaseParser {
                 if ( nodes.item( iii ).hasChildNodes() == false ) {
                     Node parent = nodes.item( iii ).getParentNode();
                     parent.removeChild( nodes.item( iii ) );
-                    NodeList children = parent.getChildNodes();
-                    for ( int jjj = 0; jjj < children.getLength(); ++jjj ) {
-                        if ( children.item( jjj ).getNodeType() == Node.TEXT_NODE ) {
-                            parent.removeChild( children.item( jjj) );
-                        }
-                    }
+                    // dead text node no longer needs to be removed because
+                    // of the normalize method called before saving
                     ++numberConverted;
                 }
             }
@@ -372,14 +368,11 @@ public class XTCEDatabaseConverter extends XTCEDatabaseParser {
                     String typeName =
                         ((Element)typeNode).getAttribute( "name" ); // NOI18N
 
-                    messages_.add( query +
-                                   ": In Type named '" +
-                                   typeName +
-                                   "', cannot auto-convert CRC.  " +
-                                   "Term elements removed.  " +
-                                   "Manually modify content." );
+                    messages_.add( typeName +
+                                   ": " + // NOI18N
+                                   XTCEFunctions.getText( "file_upgrade_notice_crc" ) ); // NOI18N
 
-                    nodes.item( iii ).setTextContent( "" );
+                    nodes.item( iii ).setTextContent( "" ); // NOI18N
 
                     ++numberConverted;
 
@@ -459,7 +452,12 @@ public class XTCEDatabaseConverter extends XTCEDatabaseParser {
         try {
 
             NodeList nodes =
-                evaluateXPathQuery( "//xtce:CommandMetaData/xtce:MetaCommandSet/xtce:BlockMetaCommand/xtce:MetaCommandStepList/xtce:MetaCommandStep/xtce:ArgumentList" ); // NOI18N
+                evaluateXPathQuery( "//xtce:CommandMetaData" + // NOI18N
+                                    "/xtce:MetaCommandSet" + // NOI18N
+                                    "/xtce:BlockMetaCommand" + // NOI18N
+                                    "/xtce:MetaCommandStepList" + // NOI18N
+                                    "/xtce:MetaCommandStep" + // NOI18N
+                                    "/xtce:ArgumentList" ); // NOI18N
 
             for ( int iii = 0; iii < nodes.getLength(); ++iii ) {
                 renameElement( (Element)nodes.item( iii ), "ArgumentAssignmentList" ); // NOI18N
@@ -528,27 +526,25 @@ public class XTCEDatabaseConverter extends XTCEDatabaseParser {
                     String   timeString = nodes.item( iii ).getNodeValue();
                     String   dateString = parent.getTextContent();
 
-                    if ( dateString.matches( "^[0-9]{4}-[0-9]{2}-[0-9]{2}" ) == true ) {
+                    if ( dateString.matches( "^[0-9]{4}-[0-9]{2}-[0-9]{2}" ) == true ) { // NOI18N
 
                         dateString = dateString.substring( 0, 10 ) +
-                                     "T" +
+                                     "T" + // NOI18N
                                      timeString;
                         if ( dateString.matches( "[0-9]$" ) == true ) {
-                            dateString += "Z";
+                            dateString += "Z"; // NOI18N
                         }
                         parent.setTextContent( dateString );
-                        parent.removeAttribute( "timeOfDay" );
+                        parent.removeAttribute( "timeOfDay" ); // NOI18N
                         ++numberConverted;
 
                     } else {
 
-                        messages_.add( query +
-                                       ": In Type named '" +
-                                       ( (Element)parent.getParentNode()
+                        messages_.add( ( (Element)parent.getParentNode()
                                                         .getParentNode() )
                                                         .getAttribute( "name" ) +
-                                       "', cannot auto-convert Epoch/@timeOfDay.  " +
-                                       "Manually modify content." );
+                                       ": " +
+                                       XTCEFunctions.getText( "file_upgrade_notice_epoch" ) );
 
                     }
 
@@ -610,7 +606,7 @@ public class XTCEDatabaseConverter extends XTCEDatabaseParser {
         try {
 
             if ( messages_.isEmpty() == false ) {
-                updateHistorySet();
+                updateHistorySet( messages_ );
             }
 
             saveDatabase( xmlFile );
@@ -628,47 +624,6 @@ public class XTCEDatabaseConverter extends XTCEDatabaseParser {
         setFilename( xmlFile );
 
         return true;
-
-    }
-
-    /** Update the History elements in the XTCE document before saving, only if
-     * the document uses the Header element.
-     *
-     * @throws XTCEDatabaseException Unlikely to be thrown, but can occur if
-     * the document is malformed according to the schema.
-     *
-     */
-
-    private void updateHistorySet() throws XTCEDatabaseException {
-
-        NodeList nodes = evaluateXPathQuery( "xtce:Header" );
-
-        if ( nodes.getLength() == 0 ) {
-            return;
-        }
-
-        // first find the HistorySet and if it does not exist under the Header
-        // then make one.
-
-        NodeList histNodes =
-            ((Element)nodes.item( 0 )).getElementsByTagName( "xtce:HistorySet" );
-
-        Element historySetElement;
-
-        if ( histNodes.getLength() == 0 ) {
-            historySetElement = getDocument().createElement( "xtce:HistorySet" );
-            nodes.item( 0 ).appendChild( historySetElement );
-        } else {
-            historySetElement = ((Element)histNodes.item( 0 ));
-        }
-
-        // add each of the messages as a History element in the HistorySet
-
-        for ( String message : messages_ ) {
-            Element history = getDocument().createElement( "xtce:History" );
-            history.setTextContent( message );
-            historySetElement.appendChild( history );
-        }
 
     }
 

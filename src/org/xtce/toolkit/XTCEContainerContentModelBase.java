@@ -1650,15 +1650,15 @@ public abstract class XTCEContainerContentModelBase {
 
     protected final class RunningStartBit {
 
-        public final long get() {
+        public long get() {
             return currentStartBit;
         }
 
-        public final void set( long value ) {
+        public void set( long value ) {
             currentStartBit = value;
         }
 
-        public final void add( long sizeValue ) {
+        public void add( long sizeValue ) {
             currentStartBit += sizeValue;
         }
 

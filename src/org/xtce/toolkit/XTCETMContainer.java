@@ -87,7 +87,7 @@ public class XTCETMContainer extends XTCENamedObject {
 
         Boolean result = container_.isAbstract();
 
-        return ( result == null ? false : result.booleanValue() );
+        return ( result == null ? false : result );
 
     }
 

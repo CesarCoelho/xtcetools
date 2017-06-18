@@ -25,7 +25,7 @@ import java.awt.event.WindowEvent;
  *
  */
 
-public class XTCEViewerAliasNamespaceDialog extends javax.swing.JDialog {
+public final class XTCEViewerAliasNamespaceDialog extends javax.swing.JDialog {
 
     /**
      * Creates new form XTCEAliasNamespaceDialog

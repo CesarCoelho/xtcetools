@@ -26,7 +26,7 @@ import org.xtce.toolkit.XTCESpaceSystem;
  *
  */
 
-public class XTCEViewerSpaceSystemDetails extends javax.swing.JPanel {
+public final class XTCEViewerSpaceSystemDetails extends javax.swing.JPanel {
 
     /**
      * Creates new form XTCEViewerSpaceSystemDetails

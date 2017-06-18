@@ -18,9 +18,6 @@
 package org.xtce.apps.editor.dialogs;
 
 import java.awt.Point;
-import java.awt.Toolkit;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.StringSelection;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.BitSet;
@@ -308,7 +305,7 @@ public class XTCEViewerContainerEncodingDialog extends javax.swing.JDialog {
 
         } catch ( Exception ex ) {
             warnings.append( ex.getLocalizedMessage() );
-            ex.printStackTrace();
+            //ex.printStackTrace();
         }
 
         warnings.setCaretPosition( 0 );
