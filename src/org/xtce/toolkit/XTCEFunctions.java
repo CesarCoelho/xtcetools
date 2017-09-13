@@ -412,8 +412,8 @@ public class XTCEFunctions {
     /** Retrieve a "cleaned up" hex string from a user input hexadecimal field.
      *
      * The output will have any leading "0x" removed, will be in lower case,
-     * will contain no whitespace, and no commas or semicolons.  At present,
-     * this function does not guarantee viability of the string from a
+     * will contain no whitespace, no commas, no periods, or semicolons.  At
+     * present this function does not guarantee viability of the string from a
      * "NumberFormatException" when parsing.
      *
      * @param inputText String containing user input text.
@@ -424,7 +424,7 @@ public class XTCEFunctions {
 
     public static String getCleanHexString( final String inputText ) {
 
-        String text = inputText.replaceAll( "[ ,;\r\f\n\t]", "" ); // NOI18N
+        String text = inputText.replaceAll( "[ ,;\r\f\n\t.]", "" ); // NOI18N
         text = text.toLowerCase();
         if ( text.startsWith( "0x" ) == true ) { // NOI18N
             text = text.replaceFirst( "0x", "" ); // NOI18N
