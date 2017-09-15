@@ -50,7 +50,10 @@ import org.xtce.toolkit.XTCEContainerContentModel;
 import java.io.File;
 import javax.swing.JFileChooser;
 import java.awt.event.WindowEvent;
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -66,6 +69,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTree;
+import javax.swing.ProgressMonitorInputStream;
 import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -1865,12 +1869,14 @@ public class XTCEViewer extends javax.swing.JFrame {
         int status = chs.showOpenDialog( this );
 
         if (status == JFileChooser.APPROVE_OPTION) {
-            openFile( chs.getSelectedFile(),
-                      chs.isXIncludeSelected(),
-                      chs.isValidateSelected(),
-                      chs.isReadOnlySelected() );
-            prefs.updateRecentFilesList( mainWindowOpenRecentMenu,
-                                         chs.getSelectedFile() );
+            boolean found = openFile( chs.getSelectedFile(),
+                                      chs.isXIncludeSelected(),
+                                      chs.isValidateSelected(),
+                                      chs.isReadOnlySelected() );
+            if ( found == true ) {
+                prefs.updateRecentFilesList( mainWindowOpenRecentMenu,
+                                             chs.getSelectedFile() );
+            }
         }
 
     }//GEN-LAST:event_mainWindowOpenFileMenuItemActionPerformed
@@ -4196,12 +4202,14 @@ public class XTCEViewer extends javax.swing.JFrame {
         if ( loadQuestionResult == JOptionPane.YES_OPTION ) {
             File savedFile = pbar.getSavedFile();
             pbar = null; // free the memory from the conversion before loading
-            openFile( savedFile,
-                      chs.isXIncludeSelected(),
-                      false,  // no validation on load
-                      true ); // read only
-            prefs.updateRecentFilesList( mainWindowOpenRecentMenu,
-                                         chs.getSelectedFile() );
+            boolean found = openFile( savedFile,
+                                      chs.isXIncludeSelected(),
+                                      false,  // no validation on load
+                                      true ); // read only
+            if ( found == true ) {
+                prefs.updateRecentFilesList( mainWindowOpenRecentMenu,
+                                             chs.getSelectedFile() );
+            }
         }
 
     }//GEN-LAST:event_mainWindowUpgradeFileMenuItemActionPerformed
@@ -5219,7 +5227,8 @@ public class XTCEViewer extends javax.swing.JFrame {
      * might already be loaded and offering the user an opportunity to save
      * this or cancel before closing an already open file.
      *
-     * @param dbFile File object in Java to use to open the file.
+     * @param dbFile Generic object in Java to use to open the file.  It must
+     * be either a File or URL object.
      *
      * @param applyXInclude Boolean indicating if the file should be opened
      * with XInclude processing enabled.
@@ -5230,12 +5239,14 @@ public class XTCEViewer extends javax.swing.JFrame {
      * @param readOnly Boolean indicating if the file should be opened in
      * read-only state for performance.
      *
+     * @return boolean indicating if the stream opened on a found file.
+     *
      */
 
-    public void openFile( final File    dbFile,
-                          final boolean applyXInclude,
-                          final boolean validateOnLoad,
-                          final boolean readOnly ) {
+    public <T> boolean openFile( final T       dbFile,
+                                 final boolean applyXInclude,
+                                 final boolean validateOnLoad,
+                                 final boolean readOnly ) {
 
         // in the event that a file is already open, we should attempt to
         // close the file before creating a new database.
@@ -5248,16 +5259,104 @@ public class XTCEViewer extends javax.swing.JFrame {
         // chose to cancel the save and close, leaving the original file open.
 
         if ( xtceDatabaseFile != null ) {
-            return;
+            return false;
         }
 
         try {
 
             logMsg( XTCEFunctions.getMemoryUsageStatistics() );
 
+            final InputStream fileInputStream;
+            final File        filePath;
+
+            if ( dbFile instanceof File ) {
+                fileInputStream = new FileInputStream( (File)dbFile );
+                filePath        = (File)dbFile;
+            } else if ( dbFile instanceof URL ) {
+                fileInputStream = ((URL)dbFile).openStream();
+                filePath        = new File( ((URL)dbFile).getPath() );
+            } else {
+                // incompatible type - should not happen in GUI
+                return false;
+            }
+
+            final ProgressMonitorInputStream progressDialog =
+                new ProgressMonitorInputStream( this,
+                                                filePath.getName(),
+                                                fileInputStream );
+
+            Thread ttt = new Thread( new Runnable() {
+
+                @Override
+                public void run() {
+
+                    performFileLoad( progressDialog,
+                                     filePath,
+                                     ( dbFile instanceof File ),
+                                     applyXInclude,
+                                     validateOnLoad,
+                                     readOnly );
+                }
+
+            } );
+
+            ttt.start();
+
+        } catch ( Exception ex ) {
+
+            logMsg( XTCEFunctions.generalErrorPrefix() +
+                    ex.getLocalizedMessage() );
+
+            return false;
+
+        }
+
+        return true;
+
+    }
+
+    /** Private Method to perform the load XML processing.
+     *
+     * This function is meant to be called in a Thread from the openFile
+     * method.
+     *
+     * @param pDialog ProgressMonitorInputStream that is hosting the dialog
+     * for the progress monitor.
+     *
+     * @param filePath File object in Java to use to open the file.
+     *
+     * @param setCurrentWorkingDir Boolean indicating if the current working
+     * directory should be setup following the load.  This is only for the load
+     * when it is a File object, not a URL object.
+     *
+     * @param applyXInclude Boolean indicating if the file should be opened
+     * with XInclude processing enabled.
+     *
+     * @param validateOnLoad Boolean indicating if the file should be validated
+     * against schema on load.
+     *
+     * @param readOnly Boolean indicating if the file should be opened in
+     * read-only state for performance.
+     *
+     * @return boolean indicating if the stream opened on a found file.
+     *
+     */
+
+    private void performFileLoad( final ProgressMonitorInputStream pDialog,
+                                  final File                       filePath,
+                                  final boolean                    setCurrentWorkingDir,
+                                  final boolean                    applyXInclude,
+                                  final boolean                    validateOnLoad,
+                                  final boolean                    readOnly ) {
+
+        try {
+
             long startTime = System.currentTimeMillis();
 
-            xtceDatabaseFile = new XTCEDatabase( dbFile,
+            InputStream progressIStream = new BufferedInputStream( pDialog );
+
+            xtceDatabaseFile = new XTCEDatabase( progressIStream,
+                                                 filePath,
                                                  validateOnLoad,
                                                  applyXInclude,
                                                  readOnly );
@@ -5272,10 +5371,10 @@ public class XTCEViewer extends javax.swing.JFrame {
             if ( xtceDatabaseFile.getErrorCount() > 0 ) {
                 throw new XTCEDatabaseException( XTCEFunctions.getText( "dialog_unabletoload_text" ) + // NOI18N
                                                  " " + // NOI18N
-                                                 dbFile.getAbsolutePath() );
+                                                 filePath.getAbsolutePath() );
             }
 
-            loadedFilenameLabel.setText( dbFile.getAbsolutePath() );
+            loadedFilenameLabel.setText( filePath.getAbsolutePath() );
 
             if ( validateOnLoad == true ) {
                 loadedSchemaLabel.setText( xtceDatabaseFile.getSchemaFromDocument() );
@@ -5283,8 +5382,9 @@ public class XTCEViewer extends javax.swing.JFrame {
 
             buildSpaceSystemTrees();
 
-            if ( dbFile.getParent() != null ) {
-                prefs.setCurrentWorkingDirectory( dbFile.getParent() );
+            if ( ( setCurrentWorkingDir == true ) &&
+                 ( filePath.getParent() != null ) ) {
+                prefs.setCurrentWorkingDirectory( filePath.getParent() );
             }
 
             detailSpaceSystemTree.setSelectionRow( 0 );
@@ -5293,115 +5393,27 @@ public class XTCEViewer extends javax.swing.JFrame {
             long estimatedTime = System.currentTimeMillis() - startTime;
 
             logMsg( XTCEFunctions.getText( "file_chooser_load_time_text" ) + // NOI18N
-                " " + // NOI18N
-                Long.toString( estimatedTime / 1000 ) +
-                " " + // NOI18N
-                XTCEFunctions.getText( "file_chooser_load_time_unit_text" ) + // NOI18N
-                " " + // NOI18N
-                ( validateOnLoad == true ? "" : " (" + XTCEFunctions.getText( "file_chooser_schema_disable_text" ) + ")" ) ); // NOI18N
+                    " " + // NOI18N
+                    Long.toString( estimatedTime / 1000 ) +
+                    " " + // NOI18N
+                    XTCEFunctions.getText( "file_chooser_load_time_unit_text" ) + // NOI18N
+                    " " + // NOI18N
+                    ( validateOnLoad == true ? "" : " (" + XTCEFunctions.getText( "file_chooser_schema_disable_text" ) + ")" ) ); // NOI18N
 
             logMsg( XTCEFunctions.getMemoryUsageStatistics() );
 
-        } catch ( XTCEDatabaseException ex ) {
+        } catch ( Exception ex ) {
 
             logMsg( XTCEFunctions.generalErrorPrefix() +
                     ex.getLocalizedMessage() );
 
-        }
+        } finally {
 
-    }
-
-    /** Method to load a new XTCE database file, taking into account that one
-     * might already be loaded and offering the user an opportunity to save
-     * this or cancel before closing an already open file.
-     *
-     * @param dbUrl URL file object in Java to use to open the file.
-     *
-     * @param applyXInclude Boolean indicating if the file should be opened
-     * with XInclude processing enabled.
-     *
-     * @param validateOnLoad Boolean indicating if the file should be validated
-     * against schema on load.
-     *
-     * @param readOnly Boolean indicating if the file should be opened in
-     * read-only state for performance.
-     *
-     */
-
-    public void openFile( final URL     dbUrl,
-                          final boolean applyXInclude,
-                          final boolean validateOnLoad,
-                          final boolean readOnly ) {
-
-        // in the event that a file is already open, we should attempt to
-        // close the file before creating a new database.
-
-        if ( xtceDatabaseFile != null ) {
-            mainWindowCloseFileMenuItemActionPerformed( null );
-        }
-
-        // this extra test captures the case where a file is open and the user
-        // chose to cancel the save and close, leaving the original file open.
-
-        if ( xtceDatabaseFile != null ) {
-            return;
-        }
-
-        try {
-
-            logMsg( XTCEFunctions.getMemoryUsageStatistics() );
-
-            long startTime = System.currentTimeMillis();
-
-            xtceDatabaseFile = new XTCEDatabase( dbUrl,
-                                                 validateOnLoad,
-                                                 applyXInclude,
-                                                 readOnly );
-
-            mainWindowEditDocumentMenuItem.setSelected( ! readOnly );
-            mainWindowEditDocumentMenuItemActionPerformed( null );
-
-            for ( String message : xtceDatabaseFile.getDocumentWarnings() ) {
-                logMsg( message );
+            try {
+                pDialog.close();
+            } catch ( Exception ex ) {
+                // do nothing
             }
-
-            if ( xtceDatabaseFile.getErrorCount() > 0 ) {
-                throw new XTCEDatabaseException( XTCEFunctions.getText( "dialog_unabletoload_text" ) +
-                                                 " " +
-                                                 dbUrl.toString() );
-            }
-
-            loadedFilenameLabel.setText( dbUrl.toString() );
-
-            if ( validateOnLoad == true ) {
-                loadedSchemaLabel.setText( xtceDatabaseFile.getSchemaFromDocument() );
-            }
-
-            buildSpaceSystemTrees();
-
-            //if ( dbFile.getParent() != null ) {
-            //    prefs.setCurrentWorkingDirectory( dbFile.getParent() );
-            //}
-
-            detailSpaceSystemTree.setSelectionRow( 0 );
-            mainWindowPrimaryWorkspace.setSelectedIndex( 0 );
-
-            long estimatedTime = System.currentTimeMillis() - startTime;
-
-            logMsg( XTCEFunctions.getText( "file_chooser_load_time_text" ) + // NOI18N
-                " " + // NOI18N
-                Long.toString( estimatedTime / 1000 ) +
-                " " + // NOI18N
-                XTCEFunctions.getText( "file_chooser_load_time_unit_text" ) + // NOI18N
-                " " + // NOI18N
-                ( validateOnLoad == true ? "" : " (" + XTCEFunctions.getText( "file_chooser_schema_disable_text" ) + ")" ) ); // NOI18N
-
-            logMsg( XTCEFunctions.getMemoryUsageStatistics() );
-
-        } catch ( XTCEDatabaseException ex ) {
-
-            logMsg( XTCEFunctions.generalErrorPrefix() +
-                    ex.getLocalizedMessage() );
 
         }
 

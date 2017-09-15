@@ -558,7 +558,9 @@ public abstract class XTCEDatabaseParser {
             return (SpaceSystemType)candidate;
 
         } catch ( UnmarshalException ex ) {
-            throw new XTCEDatabaseException( handler.getMessages() );
+            final List<String> msgs = handler.getMessages();
+            msgs.add( XTCEFunctions.getText( "xml_io_fatal" ) ); // NOI18N
+            throw new XTCEDatabaseException( msgs );
         } catch ( NumberFormatException ex ) {
             String msg = XTCEFunctions.generalErrorPrefix() +
                          XTCEFunctions.getText( "general_numberexception" ) + // NOI18N
@@ -655,7 +657,9 @@ public abstract class XTCEDatabaseParser {
             return (SpaceSystemType)candidate;
 
         } catch ( UnmarshalException ex ) {
-            throw new XTCEDatabaseException( handler.getMessages() );
+            final List<String> msgs = handler.getMessages();
+            msgs.add( XTCEFunctions.getText( "xml_io_fatal" ) ); // NOI18N
+            throw new XTCEDatabaseException( msgs );
         } catch ( NumberFormatException ex ) {
             String msg = XTCEFunctions.generalErrorPrefix() +
                          XTCEFunctions.getText( "general_numberexception" ) + // NOI18N

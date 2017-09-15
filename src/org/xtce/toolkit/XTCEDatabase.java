@@ -122,6 +122,51 @@ public final class XTCEDatabase extends XTCEDatabaseParser {
         cacheArgumentTypes();
 
     }
+    /** Constructor for use with an XTCE database file from a stream.
+     *
+     * Successfully constructing this object means that the XTCE database file
+     * was successfully loaded and methods can be called on the contents.
+     *
+     * @param istream InputStream containing the stream to read the data from.
+     *
+     * @param dbFile File containing the name and path to the XTCE
+     * database file to load and optionally validate.
+     *
+     * @param validateOnLoad boolean indicating if the XSD validation should be
+     * performed during the loading.
+     *
+     * @param applyXIncludes boolean indicating if the XInclude processing for
+     * the loaded file should be applied or ignored.
+     *
+     * @param readOnly boolean indicating if the document should be opened in
+     * a read-only context, which is faster because only the JAXB structure is
+     * created, avoiding the need to build the Document Object Model that is
+     * needed for round trip processing.
+     *
+     * @throws XTCEDatabaseException in the event that the file could not be
+     * successfully loaded in a valid state.  This can be partly bypassed by
+     * not enabling the XSD validation, which is not recommended because it
+     * may de-stabilize the application using this data file.
+     *
+     */
+
+    public XTCEDatabase( InputStream istream,
+                         File        dbFile,
+                         boolean     validateOnLoad,
+                         boolean     applyXIncludes,
+                         boolean     readOnly ) throws XTCEDatabaseException {
+
+        topLevelSpaceSystem = loadDatabase( istream,
+                                            dbFile.getParent(),
+                                            validateOnLoad,
+                                            applyXIncludes,
+                                            readOnly );
+
+        setFilename( dbFile );
+        cacheParameterTypes();
+        cacheArgumentTypes();
+
+    }
 
     /** Constructor for creating a new XTCE database object based on a top
      * level SpaceSystem element name.
