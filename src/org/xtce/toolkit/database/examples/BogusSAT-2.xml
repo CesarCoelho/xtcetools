@@ -1461,13 +1461,13 @@ limitations under the License.
 						<xtce:UnitSet/>
 						<xtce:FloatDataEncoding bitOrder="mostSignificantBitFirst" encoding="IEEE754_1985" sizeInBits="32">
 							<xtce:DefaultCalibrator>
-                                                            <xtce:MathOperationCalibrator>
-                                                                <xtce:ValueOperand>0.5</xtce:ValueOperand>
-                                                                <xtce:ThisParameterOperand/>
-                                                                <xtce:Operator>*</xtce:Operator>
-                                                                <xtce:ValueOperand>1.25</xtce:ValueOperand>
-                                                                <xtce:Operator>+</xtce:Operator>
-                                                            </xtce:MathOperationCalibrator>
+								<xtce:MathOperationCalibrator>
+									<xtce:ValueOperand>0.5</xtce:ValueOperand>
+									<xtce:ThisParameterOperand/>
+									<xtce:Operator>*</xtce:Operator>
+									<xtce:ValueOperand>1.25</xtce:ValueOperand>
+									<xtce:Operator>+</xtce:Operator>
+								</xtce:MathOperationCalibrator>
 							</xtce:DefaultCalibrator>
 						</xtce:FloatDataEncoding>
 					</xtce:FloatParameterType>
@@ -1475,18 +1475,52 @@ limitations under the License.
 						<xtce:UnitSet/>
 						<xtce:FloatDataEncoding bitOrder="mostSignificantBitFirst" encoding="IEEE754_1985" sizeInBits="64">
 							<xtce:DefaultCalibrator>
-                                                            <xtce:MathOperationCalibrator>
-                                                                <!-- Equation in "infix" notation: 64 * log(2)[1.234 * value] also is 64 * (ln[1.234 * value] / ln[2]) -->
-                                                                <xtce:ValueOperand>1.234</xtce:ValueOperand>
-                                                                <xtce:ThisParameterOperand/>
-                                                                <xtce:Operator>*</xtce:Operator>
-                                                                <xtce:Operator>ln</xtce:Operator>
-                                                                <xtce:ValueOperand>2.0</xtce:ValueOperand>
-                                                                <xtce:Operator>ln</xtce:Operator>
-                                                                <xtce:Operator>/</xtce:Operator>
-                                                                <xtce:ValueOperand>64.0</xtce:ValueOperand>
-                                                                <xtce:Operator>*</xtce:Operator>
-                                                            </xtce:MathOperationCalibrator>
+								<xtce:MathOperationCalibrator>
+									<!-- Equation in "infix" notation: 64 * log(2)[1.234 * value] also is 64 * (ln[1.234 * value] / ln[2]) -->
+									<xtce:ValueOperand>1.234</xtce:ValueOperand>
+									<xtce:ThisParameterOperand/>
+									<xtce:Operator>*</xtce:Operator>
+									<xtce:Operator>ln</xtce:Operator>
+									<xtce:ValueOperand>2.0</xtce:ValueOperand>
+									<xtce:Operator>ln</xtce:Operator>
+									<xtce:Operator>/</xtce:Operator>
+									<xtce:ValueOperand>64.0</xtce:ValueOperand>
+									<xtce:Operator>*</xtce:Operator>
+								</xtce:MathOperationCalibrator>
+							</xtce:DefaultCalibrator>
+						</xtce:FloatDataEncoding>
+					</xtce:FloatParameterType>
+					<xtce:FloatParameterType name="Float_MathOpCal_3_Type" sizeInBits="64">
+						<xtce:UnitSet/>
+						<xtce:FloatDataEncoding bitOrder="mostSignificantBitFirst" encoding="IEEE754_1985" sizeInBits="64">
+							<xtce:DefaultCalibrator>
+								<xtce:MathOperationCalibrator>
+									<!-- Equation in "infix" notation: 1 / ( -0.2054 ln(x)^3 + 0.08678 ln(x)^2 - 0.01209 ln(x) + 0.0005638 ) - 273.15 -->
+									<xtce:ValueOperand>-0.2054</xtce:ValueOperand>
+									<xtce:ThisParameterOperand/>
+									<xtce:Operator>ln</xtce:Operator>
+									<xtce:ValueOperand>3.0</xtce:ValueOperand>
+									<xtce:Operator>^</xtce:Operator>
+									<xtce:Operator>*</xtce:Operator>
+									<xtce:ValueOperand>0.08678</xtce:ValueOperand>
+									<xtce:ThisParameterOperand/>
+									<xtce:Operator>ln</xtce:Operator>
+									<xtce:ValueOperand>2.0</xtce:ValueOperand>
+									<xtce:Operator>^</xtce:Operator>
+									<xtce:Operator>*</xtce:Operator>
+									<xtce:Operator>+</xtce:Operator>
+									<xtce:ValueOperand>0.01209</xtce:ValueOperand>
+									<xtce:ThisParameterOperand/>
+									<xtce:Operator>ln</xtce:Operator>
+									<xtce:Operator>*</xtce:Operator>
+									<xtce:Operator>-</xtce:Operator>
+									<xtce:ValueOperand>0.0005638</xtce:ValueOperand>
+									<xtce:Operator>+</xtce:Operator>
+									<xtce:ValueOperand>1.0</xtce:ValueOperand>
+									<xtce:Operator>/</xtce:Operator>
+									<xtce:ValueOperand>273.15</xtce:ValueOperand>
+									<xtce:Operator>-</xtce:Operator>
+								</xtce:MathOperationCalibrator>
 							</xtce:DefaultCalibrator>
 						</xtce:FloatDataEncoding>
 					</xtce:FloatParameterType>
@@ -1630,6 +1664,11 @@ limitations under the License.
 						</xtce:ParameterProperties>
 					</xtce:Parameter>
 					<xtce:Parameter name="Float_MathOpCal_2" parameterTypeRef="Float_MathOpCal_2_Type">
+						<xtce:ParameterProperties dataSource="telemetered" readOnly="true">
+							<xtce:SystemName>NONE</xtce:SystemName>
+						</xtce:ParameterProperties>
+					</xtce:Parameter>
+					<xtce:Parameter name="Float_MathOpCal_3" parameterTypeRef="Float_MathOpCal_3_Type" shortDescription="Ohms to Celcius Calibrator">
 						<xtce:ParameterProperties dataSource="telemetered" readOnly="true">
 							<xtce:SystemName>NONE</xtce:SystemName>
 						</xtce:ParameterProperties>
