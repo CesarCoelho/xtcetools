@@ -5280,12 +5280,17 @@ public class XTCEViewer extends javax.swing.JFrame {
                 return false;
             }
 
+            final String loadText =
+                XTCEFunctions.getText( "file_upgrade_step01" ) +
+                " " + // NOI18N
+                filePath.getName();
+
             final ProgressMonitorInputStream progressDialog =
                 new ProgressMonitorInputStream( this,
-                                                filePath.getName(),
+                                                loadText,
                                                 fileInputStream );
 
-            Thread ttt = new Thread( new Runnable() {
+            final Thread ttt = new Thread( new Runnable() {
 
                 @Override
                 public void run() {
