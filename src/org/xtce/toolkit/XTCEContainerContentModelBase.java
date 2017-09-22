@@ -184,6 +184,30 @@ public abstract class XTCEContainerContentModelBase {
         return totalContainerSize_;
     }
 
+    /** Retrieve the number of bytes necessary to capture the number of bits
+     * in this container.
+     *
+     * When the number of bits is not divisible evenly by 8, then the number of
+     * bytes returned may have 1-7 unused bits at the end.
+     *
+     * @return long containing the minimum number of bytes needed to store the
+     * data bits for this container.
+     *
+     */
+
+    public final long getBytesRequired() {
+
+        long numberOfBits  = getTotalSize();
+        long numberOfBytes = numberOfBits / 8;
+
+        if ( numberOfBits % 8 != 0 ) {
+            numberOfBytes++;
+        }
+
+        return numberOfBytes;
+
+    }
+
     /** Sets the user preference for showing the depth into conditional
      * containers and aggregate members, including repeats, when the entry item
      * is not currently included by the include condition logic.

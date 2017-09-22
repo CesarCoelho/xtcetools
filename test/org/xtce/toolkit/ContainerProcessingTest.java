@@ -1988,7 +1988,7 @@ public class ContainerProcessingTest {
         XTCETMContainer container;
         XTCEContainerContentModel model;
         List<XTCEContainerContentEntry> entries;
-        long sizeInBytes;
+        long sizeInBits;
         long items;
 
         try {
@@ -2025,12 +2025,17 @@ public class ContainerProcessingTest {
 
             model = db_.processContainer( container, values, true );
 
-            sizeInBytes = model.getTotalSize();
+            sizeInBits = model.getTotalSize();
 
             Assert.assertTrue( "Expanded Container size of " + containerName +
                 " is " +
-                Long.toString( sizeInBytes ) + " but should be 300 bits",
-                sizeInBytes == 300 );
+                Long.toString( sizeInBits ) + " but should be 300 bits",
+                sizeInBits == 300 );
+
+            Assert.assertTrue( "Container size of " + containerName + " is " +
+                model.getBytesRequired() + " but should be 38 bytes " +
+                "(bits check ok)",
+                model.getBytesRequired() == 38 );
 
             entries = model.getContentList();
 

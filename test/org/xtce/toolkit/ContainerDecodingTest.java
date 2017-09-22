@@ -87,11 +87,16 @@ public class ContainerDecodingTest {
                 db_.processContainer( container,
                                       readBytesFromFile( binFilename ) );
 
-            long sizeInBytes = model.getTotalSize();
+            long sizeInBits = model.getTotalSize();
 
             Assert.assertTrue( "Container size of " + containerName + " is " +
-                Long.toString( sizeInBytes ) + " but should be 184 bits",
-                sizeInBytes == 184 );
+                Long.toString( sizeInBits ) + " but should be 184 bits",
+                sizeInBits == 184 );
+
+            Assert.assertTrue( "Container size of " + containerName + " is " +
+                model.getBytesRequired() + " but should be 23 bytes " +
+                "(bits check ok)",
+                model.getBytesRequired() == 23 );
 
             List<XTCEContainerContentEntry> entries = model.getContentList();
 
