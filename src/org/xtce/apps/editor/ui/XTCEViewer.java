@@ -34,6 +34,7 @@ import org.xtce.apps.editor.dialogs.XTCEViewerContainerContentDialog;
 import org.xtce.apps.editor.dialogs.XTCEViewerAliasNamespaceDialog;
 import org.xtce.apps.editor.dialogs.XTCEViewerDatabaseMetricsDialog;
 import java.awt.BorderLayout;
+import static java.awt.Frame.MAXIMIZED_BOTH;
 import java.awt.Rectangle;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
@@ -5585,6 +5586,9 @@ public class XTCEViewer extends javax.swing.JFrame {
         msg.append( "   --writable " ); // NOI18N
         msg.append( XTCEFunctions.getText( "usage09" ) ); // NOI18N
         msg.append( System.getProperty( "line.separator" ) ); // NOI18N
+        msg.append( "   --maximize " ); // NOI18N
+        msg.append( XTCEFunctions.getText( "usage11" ) ); // NOI18N
+        msg.append( System.getProperty( "line.separator" ) ); // NOI18N
         msg.append( XTCEFunctions.getText( "usage10" ) ); // NOI18N
         msg.append( System.getProperty( "line.separator" ) ); // NOI18N
         msg.append( "   --timehandlers=CLASS[:solib][,CLASS[:solib],...]" ); // NOI18N
@@ -5661,6 +5665,7 @@ public class XTCEViewer extends javax.swing.JFrame {
                 boolean useXInclude    = true;
                 boolean validateOnLoad = false;
                 boolean readOnly       = true;
+                boolean maxOnStart     = false;
 
                 for ( int iii = 0; iii < args.length; ++iii ) {
 
@@ -5680,6 +5685,8 @@ public class XTCEViewer extends javax.swing.JFrame {
                         applyTimeHandlers( args[iii] );
                     } else if ( args[iii].startsWith( "--file=" ) == true ) {
                         fileToOpen = args[iii].substring( 7 );
+                    } else if ( args[iii].equals( "--maximize" ) == true ) {
+                        maxOnStart = true;
                     } else {
                         System.err.println(
                             XTCEFunctions.getText( "general_unrecognizedarg" ) +
@@ -5710,6 +5717,12 @@ public class XTCEViewer extends javax.swing.JFrame {
 
                 app.setLocationByPlatform( true );
                 app.setVisible( true );
+
+                if ( maxOnStart == true ) {
+                    // this is here because some platforms must do this after
+                    // the setVisible() has been invoked
+                    app.setExtendedState( MAXIMIZED_BOTH );
+                }
 
             }
 
