@@ -1,6 +1,5 @@
-/build/
-/dist/
-/.jacocoverage/
-/jaco*
-/nbproject/private/private.xml
-/cov-int
+/target/
+.settings/
+nb-configuration.xml
+.classpath
+.project
