@@ -74,7 +74,7 @@ public class XTCEViewerTelecommandFindDialog extends javax.swing.JFrame {
         buttonGroup1 = new javax.swing.ButtonGroup();
         containerFindPanel = new javax.swing.JPanel();
         searchTextLabel = new javax.swing.JLabel();
-        searchTextComboBox = new javax.swing.JComboBox();
+        searchTextComboBox = new javax.swing.JComboBox<>();
         optionsPanel = new javax.swing.JPanel();
         containerFindByAliasRadioButton = new javax.swing.JRadioButton();
         containerFindByNameRadioButton = new javax.swing.JRadioButton();
@@ -448,7 +448,7 @@ public class XTCEViewerTelecommandFindDialog extends javax.swing.JFrame {
     private javax.swing.JScrollPane resultsScrollPane;
     private javax.swing.JTable resultsTable;
     private javax.swing.JLabel resultsText;
-    private javax.swing.JComboBox searchTextComboBox;
+    private javax.swing.JComboBox<String> searchTextComboBox;
     private javax.swing.JLabel searchTextLabel;
     // End of variables declaration//GEN-END:variables
 }

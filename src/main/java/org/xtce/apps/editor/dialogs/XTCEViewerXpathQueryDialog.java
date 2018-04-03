@@ -83,7 +83,7 @@ public class XTCEViewerXpathQueryDialog extends javax.swing.JFrame {
         queryTextField = new javax.swing.JTextField();
         executeButton = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
-        queriesListBox = new javax.swing.JComboBox();
+        queriesListBox = new javax.swing.JComboBox<>();
         saveButton = new javax.swing.JButton();
         deleteButton = new javax.swing.JButton();
         resultsScrollPane = new javax.swing.JScrollPane();
@@ -200,7 +200,7 @@ public class XTCEViewerXpathQueryDialog extends javax.swing.JFrame {
         resultsScrollPane.setViewportView(resultsText);
 
         dismissButton.setText(bundle.getString("general_dismiss_text")); // NOI18N
-        dismissButton.setLabel(bundle.getString("general_dismiss_text")); // NOI18N
+        dismissButton.setToolTipText("");
         dismissButton.setMaximumSize(new java.awt.Dimension(150, 25));
         dismissButton.setMinimumSize(new java.awt.Dimension(150, 25));
         dismissButton.setPreferredSize(new java.awt.Dimension(150, 25));
@@ -369,7 +369,7 @@ public class XTCEViewerXpathQueryDialog extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JComboBox queriesListBox;
+    private javax.swing.JComboBox<String> queriesListBox;
     private javax.swing.JTextField queryTextField;
     private javax.swing.JLabel resultsCountLabel;
     private javax.swing.JScrollPane resultsScrollPane;

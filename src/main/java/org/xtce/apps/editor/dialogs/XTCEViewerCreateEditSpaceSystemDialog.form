@@ -225,6 +225,9 @@
     <Component class="javax.swing.JTextField" name="classificationInstructionsText">
     </Component>
     <Component class="javax.swing.JComboBox" name="validationStatusText">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+      </AuxValues>
     </Component>
     <Component class="javax.swing.JButton" name="createButton">
       <Properties>

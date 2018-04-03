@@ -73,7 +73,7 @@ public class XTCEViewerContainerFindDialog extends javax.swing.JFrame {
         findByButtonGroup = new javax.swing.ButtonGroup();
         containerFindPanel = new javax.swing.JPanel();
         searchTextLabel = new javax.swing.JLabel();
-        searchTextComboBox = new javax.swing.JComboBox();
+        searchTextComboBox = new javax.swing.JComboBox<>();
         optionsPanel = new javax.swing.JPanel();
         containerFindByAliasRadioButton = new javax.swing.JRadioButton();
         containerFindByNameRadioButton = new javax.swing.JRadioButton();
@@ -323,7 +323,7 @@ public class XTCEViewerContainerFindDialog extends javax.swing.JFrame {
         searchTextComboBox.removeAllItems();
         List<String> itemList = prefs_.getRecentFindContainerSearches();
         if ( setEmptyRow == true ) {
-            searchTextComboBox.addItem( "" ); // NOI18N
+            searchTextComboBox.addItem("" ); // NOI18N
         }
         for ( String searchItem : itemList ) {
             if ( setEmptyRow == false ) {
@@ -448,7 +448,7 @@ public class XTCEViewerContainerFindDialog extends javax.swing.JFrame {
     private javax.swing.JScrollPane resultsScrollPane;
     private javax.swing.JTable resultsTable;
     private javax.swing.JLabel resultsText;
-    private javax.swing.JComboBox searchTextComboBox;
+    private javax.swing.JComboBox<String> searchTextComboBox;
     private javax.swing.JLabel searchTextLabel;
     // End of variables declaration//GEN-END:variables
 }

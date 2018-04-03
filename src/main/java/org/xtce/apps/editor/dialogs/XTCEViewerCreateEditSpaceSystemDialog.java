@@ -43,7 +43,7 @@ public class XTCEViewerCreateEditSpaceSystemDialog extends javax.swing.JDialog {
      * @param spaceSystem XTCESpaceSystem object to create or edit
      *
      */
-
+    @SuppressWarnings("unchecked")
     public XTCEViewerCreateEditSpaceSystemDialog( java.awt.Frame  parent,
                                                   boolean         modal,
                                                   XTCESpaceSystem spaceSystem ) {
@@ -152,7 +152,7 @@ public class XTCEViewerCreateEditSpaceSystemDialog extends javax.swing.JDialog {
         dateText = new javax.swing.JTextField();
         classificationText = new javax.swing.JTextField();
         classificationInstructionsText = new javax.swing.JTextField();
-        validationStatusText = new javax.swing.JComboBox();
+        validationStatusText = new javax.swing.JComboBox<>();
         createButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
         longDescriptionScrollPane = new javax.swing.JScrollPane();
@@ -334,7 +334,7 @@ public class XTCEViewerCreateEditSpaceSystemDialog extends javax.swing.JDialog {
     private javax.swing.JLabel spaceSystemNameLabel;
     private javax.swing.JTextField spaceSystemNameText;
     private javax.swing.JLabel validationStatusLabel;
-    private javax.swing.JComboBox validationStatusText;
+    private javax.swing.JComboBox<String> validationStatusText;
     private javax.swing.JLabel versionLabel;
     private javax.swing.JTextField versionText;
     // End of variables declaration//GEN-END:variables

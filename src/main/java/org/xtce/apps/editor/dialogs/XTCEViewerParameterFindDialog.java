@@ -78,7 +78,7 @@ public class XTCEViewerParameterFindDialog extends javax.swing.JFrame {
         parameterCategoryButtonGroup = new javax.swing.ButtonGroup();
         parameterFindPanel = new javax.swing.JPanel();
         searchTextLabel = new javax.swing.JLabel();
-        searchTextComboBox = new javax.swing.JComboBox();
+        searchTextComboBox = new javax.swing.JComboBox<>();
         optionsPanel = new javax.swing.JPanel();
         parameterFindByAliasRadioButton = new javax.swing.JRadioButton();
         telemetryParameterRadioButton = new javax.swing.JRadioButton();
@@ -556,7 +556,7 @@ public class XTCEViewerParameterFindDialog extends javax.swing.JFrame {
     private javax.swing.JScrollPane resultsScrollPane;
     private javax.swing.JTable resultsTable;
     private javax.swing.JLabel resultsText;
-    private javax.swing.JComboBox searchTextComboBox;
+    private javax.swing.JComboBox<String> searchTextComboBox;
     private javax.swing.JLabel searchTextLabel;
     private javax.swing.JRadioButton telecommandParameterRadioButton;
     private javax.swing.JRadioButton telemetryParameterRadioButton;

@@ -44,7 +44,7 @@ public class XTCEViewerParameterUsageDialog extends javax.swing.JFrame {
      * @param parameter XTCEParameter object to search containers for.
      *
      */
-
+    @SuppressWarnings("unchecked")
     public XTCEViewerParameterUsageDialog( XTCEViewer    parent,
                                            XTCEDatabase  xtcedb,
                                            XTCEParameter parameter ) {
@@ -89,7 +89,7 @@ public class XTCEViewerParameterUsageDialog extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         containerScrollPane = new javax.swing.JScrollPane();
-        containerList = new javax.swing.JList();
+        containerList = new javax.swing.JList<>();
         resultsText = new javax.swing.JLabel();
         buttonPanel = new javax.swing.JPanel();
         goToSelectedButton = new javax.swing.JButton();
@@ -217,7 +217,7 @@ public class XTCEViewerParameterUsageDialog extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel buttonPanel;
-    private javax.swing.JList containerList;
+    private javax.swing.JList<String> containerList;
     private javax.swing.JScrollPane containerScrollPane;
     private javax.swing.JButton dismissButton;
     private javax.swing.JButton goToSelectedButton;
