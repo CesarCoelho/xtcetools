@@ -569,8 +569,6 @@ public class XTCEItemValue {
     public BitSet getRawFromUncalibrated( final String uncalValue ) {
 
         // TODO Handle Byte order element ByteOrderList in the encoding
-        
-        System.out.println("uncalValue: " + uncalValue);
 
         BigInteger intValue = BigInteger.ZERO;
 
