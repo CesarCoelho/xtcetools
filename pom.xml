@@ -62,7 +62,7 @@
 					<schemaIncludes>
 						<include>SpaceSystemV1.2-27Feb2014-mods.xsd</include>
 					</schemaIncludes>
-					<generateDirectory>target/generated-sources/jaxbCache/XTCE12</generateDirectory>
+					<generateDirectory>target/generated-sources/jaxbCache</generateDirectory>
 					<generatePackage>org.omg.space.xtce</generatePackage>
 				</configuration>
 			</execution>
@@ -89,7 +89,11 @@
 			</execution>
 		</executions>
       </plugin>
-
+	   <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-project-info-reports-plugin</artifactId>
+            <version>2.7</version>
+        </plugin>
     </plugins>
   </build>
   
