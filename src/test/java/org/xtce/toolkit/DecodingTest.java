@@ -20,6 +20,7 @@ package org.xtce.toolkit;
 import java.io.File;
 import java.math.BigInteger;
 import java.util.BitSet;
+import java.util.Iterator;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.After;
@@ -32,6 +33,8 @@ import org.omg.space.xtce.CalibratorType;
 import org.omg.space.xtce.CalibratorType.MathOperationCalibrator;
 import org.omg.space.xtce.ContextCalibratorType;
 import org.omg.space.xtce.MatchCriteriaType;
+import org.omg.space.xtce.ParameterInstanceRefType;
+import org.omg.space.xtce.ParameterRefType;
 import org.xtce.math.MathOperationCalibration;
 
 /**
@@ -1153,22 +1156,6 @@ public class DecodingTest {
             //                     "Float_MathOpCal_2 Non-terminating decimal expansion; no exact representable decimal result." );
 
             getParameterItemValueObj( "/BogusSAT/SC001/BusElectronics",
-                                      "Float_MathOpCal_4" );
-
-            errors += checkFail( 1.0,
-                                 "Float_MathOpCal_4 Unsupported MathOperation element ParameterInstanceRefType" );
-
-            CalibratorType defCalObj = ppp_.getDefaultCalibrator();
-            MathOperationCalibrator mathCalObj = defCalObj.getMathOperationCalibrator();
-            MathOperationCalibration calObj = new MathOperationCalibration( mathCalObj );
-
-            Assert.assertEquals( "3.0 Float_MathOpCal_1.cal * Float_MathOpCal_2.uncal +",
-                                 calObj.toString() );
-
-            Assert.assertEquals( "((3.0 * Float_MathOpCal_1.cal) + Float_MathOpCal_2.uncal)",
-                                 calObj.toInfixString() );
-
-            getParameterItemValueObj( "/BogusSAT/SC001/BusElectronics",
                                       "Float_MathOpCal_5" );
 
             errors += checkFail( 1.0,
@@ -1369,6 +1356,71 @@ public class DecodingTest {
             Assert.fail( "Not all checks passed" );
         }
 
+    }
+
+    @Test
+    public void testFloatParameterTypesWithRawFloatMathOperationCalibrator4() {
+
+        final String methodName =
+            Thread.currentThread().getStackTrace()[1].getMethodName();
+
+        System.out.println( "Test Case: " + methodName + "()" );
+
+        long errors = 0;
+
+        try {
+            System.out.println( "Testing EU Float Raw float MathOperation Calibrator 4" );
+
+            getParameterItemValueObj( "/BogusSAT/SC001/BusElectronics",
+                                      "Float_MathOpCal_4" );
+            
+            CalibratorType calibrator = ppp_.getDefaultCalibrator();
+ 
+            if ((calibrator != null) && (calibrator.getMathOperationCalibrator() != null))
+            {
+                MathOperationCalibrator mco = calibrator.getMathOperationCalibrator();
+                List<Object> lo = mco.getValueOperandOrThisParameterOperandOrParameterInstanceRefOperand();
+                Iterator<Object> it = lo.iterator();
+                while ((it != null) && (it.hasNext())) {
+                    Object o = it.next();
+
+                    if (o instanceof ParameterRefType) {
+                        
+                        if (((ParameterRefType) o).getParameterRef().equals("Float_MathOpCal_1")) {
+                            ParameterInstanceRefType ti = (ParameterInstanceRefType)o;
+                            ti.setInstance( BigInteger.valueOf(2));
+                        }
+
+                        if (((ParameterRefType) o).getParameterRef().equals("Float_MathOpCal_2")) {
+                            
+                            ParameterInstanceRefType ti = (ParameterInstanceRefType)o;
+                            ti.setInstance(BigInteger.valueOf(1));
+                        }
+                    }
+                }
+            }
+            errors += checkPass( "7",
+                                 "0x3fc999999999999a" ); 
+
+            CalibratorType defCalObj = ppp_.getDefaultCalibrator();
+            MathOperationCalibrator mathCalObj = defCalObj.getMathOperationCalibrator();
+            MathOperationCalibration calObj = new MathOperationCalibration( mathCalObj );
+            
+            Assert.assertEquals( "3.0 Float_MathOpCal_1.cal * Float_MathOpCal_2.uncal +",
+                                 calObj.toString() );
+
+            Assert.assertEquals( "((3.0 * Float_MathOpCal_1.cal) + Float_MathOpCal_2.uncal)",
+                                 calObj.toInfixString() );
+
+            System.out.println( "" );
+
+        } catch ( Throwable ex ) {
+            Assert.fail( ex.getLocalizedMessage() );
+        }
+
+        if ( errors != 0 ) {
+            Assert.fail( "Not all checks passed" );
+        }
     }
 
     @Test

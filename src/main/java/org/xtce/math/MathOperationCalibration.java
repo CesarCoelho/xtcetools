@@ -111,11 +111,8 @@ public class MathOperationCalibration implements Calibration {
 
                 // XTCE element ParameterInstanceRefOperand (add later)
                 } else if ( term instanceof ParameterInstanceRefType ) {
-
-                    throw new XTCEDatabaseException(
-                        XTCEFunctions.getText( "error_encdec_unsupported_math_element" ) + // NOI18N
-                        " " + // NOI18N
-                        term.getClass().getSimpleName() );
+        
+                    stack.push(new BigDecimal(((ParameterInstanceRefType) term).getInstance()));
 
                 // XTCE element ThisParameterOperand
                 } else if ( term instanceof Object ) {
@@ -718,5 +715,5 @@ public class MathOperationCalibration implements Calibration {
     // Private Data Members
 
     private final MathOperationCalibrator mathElement_;
-
+    
 }

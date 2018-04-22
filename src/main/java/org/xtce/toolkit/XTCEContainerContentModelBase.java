@@ -17,19 +17,24 @@
 
 package org.xtce.toolkit;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import org.omg.space.xtce.ArrayParameterRefEntryType;
 import org.omg.space.xtce.ArrayParameterRefEntryType.DimensionList;
 import org.omg.space.xtce.BinaryDataEncodingType;
 import org.omg.space.xtce.CalibratorType;
+import org.omg.space.xtce.CalibratorType.MathOperationCalibrator;
 import org.omg.space.xtce.ComparisonType;
 import org.omg.space.xtce.ContextCalibratorType;
 import org.omg.space.xtce.IntegerValueType;
 import org.omg.space.xtce.MatchCriteriaType;
+import org.omg.space.xtce.ParameterInstanceRefType;
+import org.omg.space.xtce.ParameterRefType;
 import org.omg.space.xtce.RepeatType;
 import org.omg.space.xtce.SequenceEntryType;
 import org.xtce.toolkit.XTCEContainerContentEntry.FieldType;
@@ -1083,6 +1088,44 @@ public abstract class XTCEContainerContentModelBase {
 
             CalibratorType calibrator = getMatchingCalibrator( entry );
 
+            // prepare the MathOperationCalibrator to handle ParameterInstanceRefOperand
+            if ((calibrator != null) && (calibrator.getMathOperationCalibrator() != null)) {
+                
+                MathOperationCalibrator mco = calibrator.getMathOperationCalibrator();
+                List<Object> lo = mco.getValueOperandOrThisParameterOperandOrParameterInstanceRefOperand();
+                Iterator<Object> it = lo.iterator();
+                
+                while ((it != null) && (it.hasNext())) {
+                    Object o = it.next();
+                    if (o instanceof ParameterRefType) {
+                        ParameterRefType t = (ParameterRefType)o;
+                        Iterator<XTCEContainerContentEntry> lit = getContentList().iterator();
+                        
+                        // throw a warning in case the parameter is not found
+                        boolean found = false;
+                        
+                        while(lit.hasNext()) {
+                            XTCEContainerContentEntry n = lit.next();
+                            if (n.getName().equals(t.getParameterRef())) {
+                                ParameterInstanceRefType ti = (ParameterInstanceRefType)o;
+                                ti.setInstance(new BigInteger(n.getValue().getUncalibratedValue()));
+                                found = true;
+                            }
+                        }
+                        if (!found)
+                        {
+                            warnings_.add( entry.getName() +
+                                ": " + // NOI18N
+                                XTCEFunctions.getText( "error_encdec_parameterinstanceref_not_found" ) + // NOI18N
+                                " (" + // NOI18N
+                                t.getParameterRef() + 
+                                ")" ); // NOI18N
+                            valid_ = false;
+                        }
+                    }
+                }
+            }
+            
             // what to do in the case of an existing set value?
 
             if ( entry.getEntryType() == FieldType.PARAMETER ) {
