@@ -601,9 +601,21 @@ public abstract class XTCEContainerContentModelBase {
                 //                                     parameterInstance.getName() +
                 //                                     ( useCalValue == true ? "{cal}" : "{uncal}" ) );
 
-                return dynamicCountFromUserValue( parameterInstance,
+                long tmpRet = dynamicCountFromUserValue( parameterInstance,
                                                   ( useCalValue == true ? "Calibrated" : "Uncalibrated" ) ); // NOI18N
-
+                
+                if (dimSizeElement.getDynamicValue().getLinearAdjustment() != null)
+                {
+                    BigInteger intercept = dimSizeElement.
+                                           getDynamicValue().getLinearAdjustment().getIntercept();
+                    
+                    BigInteger slope = dimSizeElement.
+                                           getDynamicValue().getLinearAdjustment().getSlope();
+                    
+                    tmpRet *= slope.longValue();
+                    tmpRet += intercept.longValue();
+                }                
+                return tmpRet;
             } catch ( Exception ex ) {
 
                 warnings_.add( "'DimensionList/Size/DynamicValue' " + // NOI18N
@@ -678,9 +690,23 @@ public abstract class XTCEContainerContentModelBase {
                                                      parameterInstance.getName() +
                                                      ( useCalValue == true ? "{cal}" : "{uncal}" ) ); // NOI18N
 
-                return dynamicCountFromUserValue( parameterInstance,
+                long tmpRet = dynamicCountFromUserValue( parameterInstance,
                                                   ( useCalValue == true ? "Calibrated" : "Uncalibrated" ) ); // NOI18N
-
+                
+                if (repeatElement.getCount().getDynamicValue().getLinearAdjustment() != null)
+                {
+                    BigInteger intercept = repeatElement.
+                                           getCount().
+                                           getDynamicValue().getLinearAdjustment().getIntercept();
+                    
+                    BigInteger slope = repeatElement.
+                                           getCount().
+                                           getDynamicValue().getLinearAdjustment().getSlope();
+                    
+                    tmpRet *= slope.longValue();
+                    tmpRet += intercept.longValue();
+                }                
+                return tmpRet;
             } catch ( Exception ex ) {
 
                 warnings_.add( "'RepeatEntry/DynamicEntry' " + // NOI18N
