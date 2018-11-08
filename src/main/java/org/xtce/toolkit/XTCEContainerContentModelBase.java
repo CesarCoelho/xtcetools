@@ -330,6 +330,20 @@ public abstract class XTCEContainerContentModelBase {
             int    sb  = Integer.parseInt( entry.getStartBit() );
             int    nb  = Integer.parseInt( entry.getRawSizeInBits() );
 
+            if ( entry.getEntryType() == FieldType.CONSTANT ) 
+            {
+                BigInteger bi = new BigInteger(valueObj.getAssignedValue());
+                String base2 = bi.toString(2);
+                raw = new BitSet(nb);
+                for(int i = 0; i < base2.length(); i++)
+                {
+                    if (base2.charAt(i) == '1')
+                    {
+                        raw.set(base2.length() - i - 1);
+                    }
+                }
+            }
+            
             for ( int iii = 0; iii < nb; ++iii ) {
                 rawBits.set( sb + nb - 1 - iii, raw.get( iii ) );
             }
