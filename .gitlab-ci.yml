@@ -14,5 +14,8 @@ verify:
     - mvn verify --batch-mode
   artifacts:
     paths:
-    - target/*.jar
+      - target/*.jar
+    reports:
+      junit: target/surefire-reports/TEST-*.xml
     expire_in: 6 weeks
+
