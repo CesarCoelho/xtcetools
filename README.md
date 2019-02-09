@@ -113,7 +113,7 @@ The following image is a snapshot of the main user interface screen showing a
 possible example representation of a CCSDS TM (Telemetry) Space Packet header.
 
 <br/>
-<img src="src/ui_main_screen.png" alt="Main Window Example Screen"/>
+<img src="src/main/resources/ui_main_screen.png" alt="Main Window Example Screen"/>
 <br/>
 
 ## Building Toolkit and Application ##
@@ -160,6 +160,7 @@ author would also be of interest to you.
   * <a href="http://cosmosrb.com/">Ball Aerospace</a>
 * <a href="http://www.hbird.de/">Hummingbird</a>
 * <a href="http://www.yamcs.org/">Yet Another Mission Control System (YAMCS)</a>
+* <a href="https://github.com/nasa/CCDD">NASA CFS Command and Data Dictionary Tool (CCDDT)</a>
 
 The author is aware of XTCE implementations provided by commercial spacecraft
 command and control vendors.  This list will be updated as the author is made
@@ -169,8 +170,10 @@ experience integrating and using the offerings.  Using this open source XTCE
 toolkit and these products can assure a rapid integration of a spacecraft TT&C
 database.
 
-* <a href="http://itservices.harris.com/oscomet.aspx">
-  Harris Corporation OS/COMET Product</a>
+* <a href="https://www.peraton.com/oscomet-advanced-satellite-ttc/">
+  Peraton OS/COMET Product</a>
 * <a href="http://www2.l-3com.com/trf/incontrol/">
   L-3 Communications InControl Product</a>
-
+* <a href="http://www.kratostts.com/products/satellite-and-space/epoch">
+  Epoch and Quantum Products</a>
+ 

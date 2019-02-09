@@ -1131,7 +1131,7 @@ public class DecodingTest {
                                       "Spline_Quad_Interpolate_Bad" );
 
             errors += checkFail( 1.0,
-                                 "Spline_Quad_Interpolate_Bad Unsupported interpolation order for spline points of '2', Only flat and linear orders 0 and 1 are supported." );
+                                 "Spline_Quad_Interpolate_Bad Unsupported order of approximation for spline points of '2', Only flat and linear orders 0 and 1 are supported." );
 
             getParameterItemValueObj( "/BogusSAT/SC001/BusElectronics",
                                       "Float_MathOpCal_3" );
