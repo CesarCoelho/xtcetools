@@ -3205,7 +3205,7 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     private void mainWindowHelpApiMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mainWindowHelpApiMenuItemActionPerformed
 
-        openHelp( "org/xtce/toolkit/doc/index.html" ); // NOI18
+        openHelp( "apidocs/index.html" ); // NOI18
 
     }//GEN-LAST:event_mainWindowHelpApiMenuItemActionPerformed
 

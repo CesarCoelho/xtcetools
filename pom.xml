@@ -84,17 +84,23 @@
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>
+                        <phase>prepare-package</phase>
                         <goals>
-                            <goal>jar</goal>
+                            <goal>javadoc</goal>
                         </goals>
+                        <configuration>
+                            <reportOutputDirectory>${project.build.directory}/classes/</reportOutputDirectory>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
                 <version>2.7</version>
             </plugin>
+
         </plugins>
     </build>
   
@@ -107,7 +113,7 @@
             </plugin>
         </plugins>
     </reporting>
-  
+
     <dependencies>
     
         <dependency>
