@@ -36,7 +36,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>3.0.2</version>
+                <version>3.1.1</version>
                 <configuration>
                     <archive>
                         <manifest>
@@ -45,6 +45,38 @@
                         </manifest>
                     </archive>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>library</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <configuration>
+                            <classifier>library</classifier>
+                            <includes>
+                                <include>org/omg/space/xtce/*.class</include>
+                                <include>org/xtce/toolkit/**</include>
+                                <include>org/xtce/math/**</include>
+                                <include>*.txt</include>
+                            </includes>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>apidocs</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <configuration>
+                            <classifier>javadoc</classifier>
+                            <classesDirectory>${project.build.outputDirectory}/apidocs/</classesDirectory>
+                            <includes>
+                                <include>**</include>
+                            </includes>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         
             <plugin>
