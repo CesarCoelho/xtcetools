@@ -2954,8 +2954,10 @@ public class XTCEViewer extends javax.swing.JFrame {
         if ( tmContainerDrawingScrollPane.getViewport() != null ) {
             XTCEViewerContainerDrawing drawing = (XTCEViewerContainerDrawing)
                 tmContainerDrawingScrollPane.getViewport().getView();
-            drawing.reOrient( Orientation.LEFT_TO_RIGHT );
-            drawing.repaint();
+            if ( drawing != null ) {
+                drawing.reOrient( Orientation.LEFT_TO_RIGHT );
+                drawing.repaint();
+            }
         }
 
     }//GEN-LAST:event_containerDrawingLeftToRightActionPerformed
@@ -2968,8 +2970,10 @@ public class XTCEViewer extends javax.swing.JFrame {
         if ( tmContainerDrawingScrollPane.getViewport() != null ) {
             XTCEViewerContainerDrawing drawing = (XTCEViewerContainerDrawing)
                 tmContainerDrawingScrollPane.getViewport().getView();
-            drawing.reOrient( Orientation.TOP_TO_BOTTOM );
-            drawing.repaint();
+            if ( drawing != null ) {
+                drawing.reOrient( Orientation.TOP_TO_BOTTOM );
+                drawing.repaint();
+            }
         }
 
     }//GEN-LAST:event_containerDrawingTopToBottomActionPerformed
