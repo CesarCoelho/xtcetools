@@ -136,6 +136,11 @@ The project can be built manually using Maven:
 ```
 mvn package
 ```
+There are 4 Java JAR files emitted from the package goal.  The file named
+xtcetools-version.jar contains everything.  The file
+xtcetools-version-library.jar contains only the toolkit library without the
+UI package.  In addition, a javadoc and sources set of jars is provided for
+supporting IDEs.
 
 ### Execution Manually ###
 
@@ -144,7 +149,21 @@ mvn package
 The jar is self-executable and may be launched simply:
 
 ```
-java -jar target/xtcetools-0.1.jar
+java -jar target/xtcetools-1.1.3.jar
+```
+
+## Maven Central Repository ##
+
+If you choose to use Maven automatic downloads, the xtcetools package can be
+declared in a pom.xml as a dependency without the need to download and build
+the source here.
+
+```
+<dependency>
+    <groupId>org.xtce</groupId>
+    <artifactId>xtcetools</artifactId>
+    <version>1.1.3</version>
+</dependency>
 ```
 
 ## About The Author ##

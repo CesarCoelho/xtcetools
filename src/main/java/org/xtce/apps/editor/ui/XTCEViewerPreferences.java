@@ -22,7 +22,9 @@ import java.awt.event.ActionListener;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.URL;
@@ -395,7 +397,8 @@ public class XTCEViewerPreferences {
      * Note that these files are loaded using the system resource classpath,
      * which may be inside the distributed jar file and not directly visible
      * on the filesystem.  Also, this method presently only selects the files
-     * in the org.omg.space.xtce package/folder with names of "*.xml".
+     * in the org.xtce.toolkit.database.examples package/folder with names of
+     * "*.xml".
      *
      * @param exampleItemsMenu JMenu item on the File Menu that contains the
      * list of example databases.
@@ -406,73 +409,29 @@ public class XTCEViewerPreferences {
 
         final String     exPath = "org/xtce/toolkit/database/examples"; // NOI18N
         final List<File> files  = new ArrayList<>();
-        final URL        dirUrl = ClassLoader.getSystemResource( exPath ); // NOI18N
-
-        if ( dirUrl != null ) {
-
-            try {
-                File dir = new File( dirUrl.toURI() );
-                for ( final File nextFile : dir.listFiles() ) {
-                    if ( ( nextFile.isFile()                     == true ) &&
-                         ( nextFile.getName().endsWith( ".xml" ) == true ) ) { // NOI18N
-                        files.add( nextFile );
-                    }
-                }
-            } catch ( Exception ex ) {
-                // skip it, do nothing for now - "examples" could be file too
-                exampleItemsMenu.removeAll();
-                return;
-            }
-
-        }
 
         exampleItemsMenu.removeAll();
 
-        if ( files.isEmpty() == true ) {
+        files.add( new File( exPath + "/BogusSAT-2.xml" ) ); // NOI18N
+        files.add( new File( exPath + "/GovSat_2_0_1.xml" ) ); // NOI18N
+        files.add( new File( exPath + "/Diagnostic_Log_Packets.xml" ) ); // NOI18N
 
-            final List<URL> examples = new ArrayList<>();
-            examples.add( ClassLoader.getSystemResource( exPath + "/BogusSAT-2.xml" ) ); // NOI18N
-            examples.add( ClassLoader.getSystemResource( exPath + "/GovSat_2_0_1.xml" ) ); // NOI18N
-            examples.add( ClassLoader.getSystemResource( exPath + "/Diagnostic_Log_Packets.xml" ) ); // NOI18N
+        for ( final File example : files ) {
 
-            for ( final URL example : examples ) {
+            JMenuItem item = new JMenuItem( example.getName() );
+            URL url = ClassLoader.getSystemResource( example.getPath() );
 
-                if ( example != null ) {
-
-                    JMenuItem item = new JMenuItem( example.getFile() );
-                    item.addActionListener( new ActionListener() {
-                        @Override
-                        public void actionPerformed( ActionEvent evt ) {
-                            viewer.openFile( example,
-                                             true,
-                                             false,
-                                             false );
-                        }
-                    });
-                    exampleItemsMenu.add( item );
-
+            item.addActionListener( new ActionListener() {
+                @Override
+                public void actionPerformed( ActionEvent evt ) {
+                    viewer.openFile( url,
+                                     false,
+                                     false,
+                                     false );
                 }
+            });
 
-            }
-
-        } else {
-
-            for ( int iii = ( files.size() - 1 ); iii >= 0; --iii ) {
-
-                JMenuItem item = new JMenuItem( files.get( iii ).getName() );
-                final File actionFile = files.get( iii );
-                item.addActionListener( new ActionListener() {
-                    @Override
-                    public void actionPerformed( ActionEvent evt ) {
-                        viewer.openFile( actionFile,
-                                         true,
-                                         false,
-                                         false );
-                    }
-                });
-                exampleItemsMenu.add( item );
-
-            }
+            exampleItemsMenu.add( item );
 
         }
 
