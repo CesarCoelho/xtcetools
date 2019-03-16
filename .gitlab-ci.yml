@@ -1,0 +1,21 @@
+image: maven:3.5.0-jdk-8
+
+before_script:
+- apt-get update && apt-get install -y openjfx
+
+compile:
+  stage: build
+  script:
+    - mvn compile --batch-mode
+
+verify:
+  stage: deploy
+  script:
+    - mvn verify --batch-mode
+  artifacts:
+    paths:
+      - target/*.jar
+    reports:
+      junit: target/surefire-reports/TEST-*.xml
+    expire_in: 6 weeks
+
