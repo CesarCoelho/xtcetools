@@ -2951,9 +2951,19 @@ public class XTCEViewer extends javax.swing.JFrame {
         prefs.setContainerOrientationOption( "LEFT_TO_RIGHT" ); // NOI18N
         containerDrawingLeftToRight.setSelected( true );
         containerDrawingTopToBottom.setSelected( false );
+
         if ( tmContainerDrawingScrollPane.getViewport() != null ) {
             XTCEViewerContainerDrawing drawing = (XTCEViewerContainerDrawing)
                 tmContainerDrawingScrollPane.getViewport().getView();
+            if ( drawing != null ) {
+                drawing.reOrient( Orientation.LEFT_TO_RIGHT );
+                drawing.repaint();
+            }
+        }
+
+        if ( tcContentDrawingScrollPane.getViewport() != null ) {
+            XTCEViewerContainerDrawing drawing = (XTCEViewerContainerDrawing)
+                tcContentDrawingScrollPane.getViewport().getView();
             if ( drawing != null ) {
                 drawing.reOrient( Orientation.LEFT_TO_RIGHT );
                 drawing.repaint();
@@ -2967,9 +2977,19 @@ public class XTCEViewer extends javax.swing.JFrame {
         prefs.setContainerOrientationOption( "TOP_TO_BOTTOM" ); // NOI18N
         containerDrawingLeftToRight.setSelected( false );
         containerDrawingTopToBottom.setSelected( true );
+
         if ( tmContainerDrawingScrollPane.getViewport() != null ) {
             XTCEViewerContainerDrawing drawing = (XTCEViewerContainerDrawing)
                 tmContainerDrawingScrollPane.getViewport().getView();
+            if ( drawing != null ) {
+                drawing.reOrient( Orientation.TOP_TO_BOTTOM );
+                drawing.repaint();
+            }
+        }
+
+        if ( tcContentDrawingScrollPane.getViewport() != null ) {
+            XTCEViewerContainerDrawing drawing = (XTCEViewerContainerDrawing)
+                tcContentDrawingScrollPane.getViewport().getView();
             if ( drawing != null ) {
                 drawing.reOrient( Orientation.TOP_TO_BOTTOM );
                 drawing.repaint();
