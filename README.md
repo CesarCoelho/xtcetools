@@ -121,13 +121,14 @@ possible example representation of a CCSDS TM (Telemetry) Space Packet header.
 ### Maven and Java 8 ###
 
 This project can be built using Maven under Java 8, but Maven support is still 
-experimental. The full source code compiles and all unit tests are OK but integration 
-tests are still not supported.
+experimental. The full source code compiles and all unit tests are OK but
+integration tests are still not supported.
 
 ### Using NetBeans 8.x or Eclipse 4.7.x ###
 
-The build system is based on Maven and the project can be imported in Netbeans or 
-Eclipse. Dependencies are resolved by Maven and no customisation is required.
+The build system is based on Maven and the project can be imported in NetBeans
+or Eclipse. Dependencies are resolved by Maven and no customization is
+required.
 
 ### Building Manually ###
 
@@ -142,6 +143,9 @@ xtcetools-version-library.jar contains only the toolkit library without the
 UI package.  In addition, a javadoc and sources set of jars is provided for
 supporting IDEs.
 
+The JaCoCo Java Code Coverage report is only scoped to the library portion and
+can be found after the build in target/site/jacoco/index.html
+
 ### Execution Manually ###
 
 **Java 8**
@@ -149,7 +153,7 @@ supporting IDEs.
 The jar is self-executable and may be launched simply:
 
 ```
-java -jar target/xtcetools-1.1.3.jar
+java -jar target/xtcetools-1.1.4.jar
 ```
 
 ## Maven Central Repository ##
@@ -162,7 +166,7 @@ the source here.
 <dependency>
     <groupId>org.xtce</groupId>
     <artifactId>xtcetools</artifactId>
-    <version>1.1.3</version>
+    <version>1.1.4</version>
 </dependency>
 ```
 
