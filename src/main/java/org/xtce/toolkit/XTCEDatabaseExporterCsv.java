@@ -344,13 +344,22 @@ public class XTCEDatabaseExporterCsv extends XTCEDatabaseExporter {
 
                     String aliasString = ""; // NOI18N
                     String name        = ""; // NOI18N
-                    if ( entry.getEntryType() == FieldType.PARAMETER ) {
+
+                    if ( entry.getEntryType() == FieldType.PARAMETER )
+                    {
                         aliasString =
                             XTCEFunctions.makeAliasDisplayString( entry.getParameter(),
                                                                   properties_.getProperty( "show_all_alias_namespaces" ).equals( "true" ), // NOI18N
                                                                   properties_.getProperty( "show_alias_namespaces" ).equals( "true" ), // NOI18N
                                                                   properties_.getProperty( "preferred_alias_namespace" ) ); // NOI18N
-                        name = entry.getParameter().getName();
+                    }
+                    else if ( entry.getEntryType() == FieldType.ARGUMENT )
+                    {
+                        aliasString =
+                            XTCEFunctions.makeAliasDisplayString( entry.getArgument(),
+                                                                  properties_.getProperty( "show_all_alias_namespaces" ).equals( "true" ), // NOI18N
+                                                                  properties_.getProperty( "show_alias_namespaces" ).equals( "true" ), // NOI18N
+                                                                  properties_.getProperty( "preferred_alias_namespace" ) ); // NOI18N
                     }
 
                     String containerName = "UNDEFINED"; // NOI18N
@@ -360,17 +369,24 @@ public class XTCEDatabaseExporterCsv extends XTCEDatabaseExporter {
                     String encoding      = ""; // NOI18N
                     String bitOrder      = ""; // NOI18N
 
-                    if ( entry.getEntryType() == FieldType.PARAMETER ) {
+                    if ( entry.getEntryType() == FieldType.PARAMETER )
+                    {
+                        name          = entry.getParameter().getName();
                         containerName = entry.getTelecommand().getName();
                         description   = entry.getParameter().getDescription();
                         engType       = entry.getParameter().getEngineeringType().toString();
                         units         = entry.getParameter().getUnits();
                         encoding      = entry.getParameter().getRawTypeString();
                         bitOrder      = entry.getParameter().getRawBitOrder();
-                    } else if ( entry.getEntryType() == FieldType.CONTAINER ) {
+                    }
+                    else if ( entry.getEntryType() == FieldType.CONTAINER )
+                    {
                         containerName = entry.getTelecommandContainer().getName();
                         description   = entry.getTelecommandContainer().getDescription();
-                    } else if ( entry.getEntryType() == FieldType.ARGUMENT ) {
+                    }
+                    else if ( entry.getEntryType() == FieldType.ARGUMENT )
+                    {
+                        name          = entry.getArgument().getName();
                         containerName = entry.getTelecommand().getName();
                         description   = entry.getArgument().getDescription();
                         engType       = entry.getArgument().getEngineeringType().toString();
