@@ -532,6 +532,7 @@ public abstract class XTCEDatabaseParser {
             //                    XMLConstants.W3C_XML_SCHEMA_NS_URI );
 
             XMLReader reader = parser.getXMLReader();
+            reader.setEntityResolver(new XTCEEntityResolver());
             reader.setErrorHandler( handler );
             um.setEventHandler( handler );
 
