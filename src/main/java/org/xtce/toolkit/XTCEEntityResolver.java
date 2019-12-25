@@ -30,13 +30,12 @@ import org.xml.sax.SAXException;
  */
 public class XTCEEntityResolver implements EntityResolver
 {
-
     @Override
     public InputSource resolveEntity(String publicId, String systemId) throws SAXException 
     {
         try 
         {
-            String filename = Paths.get(new URI(systemId).getPath()).getFileName().toString();
+            String filename = Paths.get(new URI(systemId)).getFileName().toString();
             InputStream is = getClass().getClassLoader().getResourceAsStream("org/omg/space/xtce/schema/" + filename);
             if (is == null)
             {
