@@ -154,13 +154,14 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.9.1</version>
+                <version>3.1.1</version>
                 <configuration>
                     <!-- Exclude the JAXB-generated code from Javadocs: this is	required because 
                     the code is not compatible with Java 8 syntax checker and it generates 
                     compile errors. -->
                     <excludePackageNames>org.omg.space.xtce</excludePackageNames>
                     <overview>${project.build.sourceDirectory}/overview.html</overview>
+                    <source>8</source>
                 </configuration>
                 <executions>
                     <execution>

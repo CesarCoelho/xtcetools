@@ -280,7 +280,7 @@ public class AliasLogicTest {
             Assert.assertTrue( "Alias object equals self is true",
                                aliases1.get( 1 ).equals( aliases1.get( 1 ) ) );
 
-            Long myNumber = new Long( "1" );
+            Long myNumber = Long.valueOf("1" );
 
             Assert.assertFalse( "Alias object equals another object is false",
                                 aliases1.get( 1 ).equals( myNumber ) );

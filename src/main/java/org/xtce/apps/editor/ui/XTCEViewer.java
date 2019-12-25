@@ -5565,7 +5565,7 @@ public class XTCEViewer extends javax.swing.JFrame {
 
             try {
                 XTCEAbsoluteTimeType timeHandler =
-                    (XTCEAbsoluteTimeType)Class.forName( handler ).newInstance();
+                    (XTCEAbsoluteTimeType)Class.forName( handler ).getDeclaredConstructor().newInstance();
                 XTCEFunctions.registerAbsoluteTimeHandler( timeHandler );
             } catch ( Throwable ex ) {
                 System.err.println( "Unable to register requested time handler: " +

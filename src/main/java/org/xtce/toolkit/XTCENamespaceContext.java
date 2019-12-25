@@ -58,7 +58,7 @@ public class XTCENamespaceContext implements NamespaceContext {
      */
 
     @Override
-    public Iterator getPrefixes( String val ) {
+    public Iterator<String> getPrefixes( String val ) {
 
         throw new IllegalAccessError( XTCEFunctions.getText( "general_not_implemented" ) );
 
