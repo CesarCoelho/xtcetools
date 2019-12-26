@@ -1,39 +1,20 @@
 before_script:
-- apt-get update && apt-get install -y openjfx
-
+  - apt-get update && apt-get install -y openjfx
+stage: deploy
+script:
+  - mvn verify --batch-mode
+artifacts:
+  paths:
+    - target/*.jar
+  reports:
+    junit: target/surefire-reports/TEST-*.xml
+  expire_in: 6 weeks
+    
 build_jdk8:
   image: maven:3.5.0-jdk-8
-  stage: deploy
-  script:
-    - mvn verify --batch-mode
-  artifacts:
-    paths:
-      - target/*.jar
-    reports:
-      junit: target/surefire-reports/TEST-*.xml
-    expire_in: 6 weeks
 
 build_jdk11:
   image: maven:3.6.3-jdk-11
-  stage: deploy
-  script:
-    - mvn verify --batch-mode
-  artifacts:
-    paths:
-      - target/*.jar
-    reports:
-      junit: target/surefire-reports/TEST-*.xml
-    expire_in: 6 weeks
 
 build_jdk13:
   image: maven:3.6.3-jdk-13
-  stage: deploy
-  script:
-    - mvn verify --batch-mode
-  artifacts:
-    paths:
-      - target/*.jar
-    reports:
-      junit: target/surefire-reports/TEST-*.xml
-    expire_in: 6 weeks
-
