@@ -154,7 +154,7 @@
                 <version>3.1.1</version>
                 <configuration>
                     <overview>${project.build.sourceDirectory}/overview.html</overview>
-                    <source>8</source>
+                    <source>${java.version}</source>
                 </configuration>
                 <executions>
                     <execution>
