@@ -24,11 +24,13 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
+import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import org.xtce.toolkit.XTCEContainerContentEntry;
@@ -205,6 +207,14 @@ public class XTCEViewerContainerDrawing extends JPanel {
         // for the drawing.
 
         Graphics2D ggg = image.createGraphics();
+        
+        // get the system-specific rendering hints for text
+        Map<?, ?> desktopHints = (Map<?, ?>) Toolkit.getDefaultToolkit().getDesktopProperty("awt.font.desktophints");
+        if (desktopHints != null) 
+        {
+            ggg.setRenderingHints(desktopHints);
+        }
+
         ggg.setBackground( Color.WHITE );
         ggg.setColor( Color.BLACK );
 
