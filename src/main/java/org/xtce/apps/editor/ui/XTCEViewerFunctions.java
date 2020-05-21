@@ -86,7 +86,10 @@ public class XTCEViewerFunctions {
                                                 JTable     table,
                                                 JPopupMenu menu ) {
 
-        if ( SwingUtilities.isRightMouseButton( evt ) == true ) {
+        if (( SwingUtilities.isRightMouseButton( evt ) == true ) || 
+                (System.getProperty("os.name").contains("Mac OS X") && 
+                (evt.getButton() == java.awt.event.MouseEvent.BUTTON1) && 
+                evt.isControlDown())) {
             Point mouseLocation = evt.getPoint();
             int row = table.rowAtPoint( mouseLocation );
             int col = table.columnAtPoint( mouseLocation );

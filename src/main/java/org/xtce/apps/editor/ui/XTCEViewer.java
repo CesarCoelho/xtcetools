@@ -1971,7 +1971,10 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     private void detailSpaceSystemTreeMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_detailSpaceSystemTreeMousePressed
 
-        if ( SwingUtilities.isRightMouseButton( evt ) == true ) {
+        if (( SwingUtilities.isRightMouseButton( evt ) == true ) || 
+                (System.getProperty("os.name").contains("Mac OS X") && 
+                (evt.getButton() == java.awt.event.MouseEvent.BUTTON1) && 
+                evt.isControlDown())) {
             if ( xtceDatabaseFile != null ) {
                spaceSystemDetailPopupMenu.show( detailSpaceSystemTree, evt.getX(), evt.getY() );
             }
@@ -1981,7 +1984,10 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     private void tmContainerTreeMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tmContainerTreeMousePressed
 
-        if ( SwingUtilities.isRightMouseButton( evt ) == true ) {
+        if (( SwingUtilities.isRightMouseButton( evt ) == true ) || 
+                (System.getProperty("os.name").contains("Mac OS X") && 
+                (evt.getButton() == java.awt.event.MouseEvent.BUTTON1) && 
+                evt.isControlDown())) {
             containerTreePopupMenu.show( tmContainerTree,
                                            evt.getX(),
                                            evt.getY() );
@@ -3001,7 +3007,10 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     private void tmContainerDrawingScrollPaneMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tmContainerDrawingScrollPaneMousePressed
 
-        if ( SwingUtilities.isRightMouseButton( evt ) == true ) {
+        if (( SwingUtilities.isRightMouseButton( evt ) == true ) || 
+                (System.getProperty("os.name").contains("Mac OS X") && 
+                (evt.getButton() == java.awt.event.MouseEvent.BUTTON1) && 
+                evt.isControlDown())) {
             if ( xtceDatabaseFile != null ) {
                 containerDrawingPopupMenu.show( tmContainerDrawingScrollPane, evt.getX(), evt.getY() );
             }
@@ -3311,7 +3320,10 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     private void tmStreamTreeMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tmStreamTreeMousePressed
 
-        if ( SwingUtilities.isRightMouseButton( evt ) == true ) {
+        if (( SwingUtilities.isRightMouseButton( evt ) == true ) || 
+                (System.getProperty("os.name").contains("Mac OS X") && 
+                (evt.getButton() == java.awt.event.MouseEvent.BUTTON1) && 
+                evt.isControlDown())) {
             streamTreePopupMenu.show( tmStreamTree,
                                       evt.getX(),
                                       evt.getY() );
@@ -3776,7 +3788,10 @@ public class XTCEViewer extends javax.swing.JFrame {
 
         if ( fileOpenWarning() == true ) return;
 
-        if ( SwingUtilities.isRightMouseButton( evt ) == true ) {
+        if (( SwingUtilities.isRightMouseButton( evt ) == true ) || 
+                (System.getProperty("os.name").contains("Mac OS X") && 
+                (evt.getButton() == java.awt.event.MouseEvent.BUTTON1) && 
+                evt.isControlDown())) {
             telecommandTreePopupMenu.show( tcTree, evt.getX(), evt.getY() );
         }
 
@@ -3784,7 +3799,10 @@ public class XTCEViewer extends javax.swing.JFrame {
 
     private void tcContentDrawingScrollPaneMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tcContentDrawingScrollPaneMousePressed
 
-        if ( SwingUtilities.isRightMouseButton( evt ) == true ) {
+        if (( SwingUtilities.isRightMouseButton( evt ) == true ) || 
+                (System.getProperty("os.name").contains("Mac OS X") && 
+                (evt.getButton() == java.awt.event.MouseEvent.BUTTON1) && 
+                evt.isControlDown())) {
             if ( xtceDatabaseFile != null ) {
                 telecommandDrawingPopupMenu.show( tcContentDrawingScrollPane, evt.getX(), evt.getY() );
             }
