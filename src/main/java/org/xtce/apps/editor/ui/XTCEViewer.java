@@ -2631,6 +2631,7 @@ public class XTCEViewer extends javax.swing.JFrame {
     private void tcDefinitionsSpaceSystemTreeValueChanged(javax.swing.event.TreeSelectionEvent evt) {//GEN-FIRST:event_tcDefinitionsSpaceSystemTreeValueChanged
 
         drawTelecommandTree();
+        updateTelecommandTable( null );
 
     }//GEN-LAST:event_tcDefinitionsSpaceSystemTreeValueChanged
 
