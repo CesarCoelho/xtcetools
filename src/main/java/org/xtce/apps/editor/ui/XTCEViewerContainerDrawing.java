@@ -1020,8 +1020,8 @@ public class XTCEViewerContainerDrawing extends JPanel {
                 return 0;
             }
             DrawingEntry that = (DrawingEntry)rhs;
-            return new Integer( this.itemEntryObj.getStartBit() ).
-                   compareTo( new Integer( that.itemEntryObj.getStartBit() ) );
+            return Integer.valueOf(this.itemEntryObj.getStartBit() ).
+                   compareTo( Integer.valueOf(that.itemEntryObj.getStartBit() ) );
         }
 
     }

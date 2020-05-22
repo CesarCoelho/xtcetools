@@ -113,25 +113,47 @@
                     </execution>
                 </executions>
             </plugin>
-        
-            <plugin>
-                <groupId>org.jvnet.jaxb2.maven2</groupId>
-                <artifactId>maven-jaxb2-plugin</artifactId>
-                <version>0.14.0</version>
+
+            <plugin> 
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.3.0</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>org.xtce.apps.editor.ui.XTCEViewer</mainClass>
+                        </manifest>
+                    </archive>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
                 <executions>
                     <execution>
-                        <id>jaxb-code-generation</id>
+                        <id>assemble-all</id>
+                        <phase>package</phase>
                         <goals>
-                            <goal>generate</goal>
+                            <goal>single</goal>
+                        </goals>                        
+                    </execution>
+                </executions>
+            </plugin>
+            
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jaxb2-maven-plugin</artifactId>
+                <version>2.5.0</version>
+                <executions>
+                    <execution>
+                        <id>xjc</id>
+                        <goals>
+                            <goal>xjc</goal>
                         </goals>
                         <configuration>
-                            <schemaDirectory>src/main/resources/org/omg/space/xtce/schema</schemaDirectory>
-                            <schemaIncludes>
-                                <include>SpaceSystemV1.2-27Feb2014-mods.xsd</include>
-                            </schemaIncludes>
-                            <generateDirectory>target/generated-sources/jaxbCache</generateDirectory>
-                            <generatePackage>org.omg.space.xtce</generatePackage>
-                            <episode>false</episode>
+                            <packageName>org.omg.space.xtce</packageName>
+                            <sources>
+                                <source>src/main/resources/org/omg/space/xtce/schema/SpaceSystemV1.2-27Feb2014-mods.xsd</source>
+                            </sources>
                         </configuration>
                     </execution>
                 </executions>
@@ -154,13 +176,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.9.1</version>
+                <version>3.1.1</version>
                 <configuration>
-                    <!-- Exclude the JAXB-generated code from Javadocs: this is	required because 
-                    the code is not compatible with Java 8 syntax checker and it generates 
-                    compile errors. -->
-                    <excludePackageNames>org.omg.space.xtce</excludePackageNames>
                     <overview>${project.build.sourceDirectory}/overview.html</overview>
+                    <source>${java.version}</source>
                 </configuration>
                 <executions>
                     <execution>
@@ -267,8 +286,7 @@
         </plugins>
     </reporting>
 
-    <dependencies>
-    
+    <dependencies>    
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -288,19 +306,19 @@
             <artifactId>jaxb-runtime</artifactId>
             <version>2.4.0-b180830.0438</version>
         </dependency>
-       
+  
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-swing</artifactId>
             <version>11.0.1</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-web</artifactId>
             <version>11.0.1</version>
-        </dependency>
-
+            <scope>provided</scope>
+        </dependency>   
     </dependencies>
-
 </project>
