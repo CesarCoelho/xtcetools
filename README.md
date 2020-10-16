@@ -160,11 +160,29 @@ If you choose to use Maven automatic downloads, the xtcetools package can be
 declared in a pom.xml as a dependency without the need to download and build
 the source here.
 
+<a href="http://mvnrepository.com/artifact/org.xtce/xtcetools">
+MVN Repository for xtcetools
+</a>
+<br>
+
 ```
 <dependency>
     <groupId>org.xtce</groupId>
     <artifactId>xtcetools</artifactId>
     <version>1.1.5</version>
+</dependency>
+```
+
+When developing an application that only needs the xtcetools library without
+the user interface, the classifier element can be used by Maven to limit the
+dependency.  Additional classifiers include "sources" and "javadoc".
+
+```
+<dependency>
+    <groupId>org.xtce</groupId>
+    <artifactId>xtcetools</artifactId>
+    <version>1.1.5</version>
+    <classifier>library</classifier>
 </dependency>
 ```
 
