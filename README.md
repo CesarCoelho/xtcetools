@@ -13,7 +13,7 @@ documentation are also included.
 ## XML Telemetric and Command Exchange (XTCE) Online Documentation ##
 
 A gitlab wiki recently began to capture user documentation for XTCE and
-this software at [XML Telemetric and Command Exchange (XTCE) Online Documentation](https://gitlab.com/dovereem/xtcetools/-/wikis/XML-Telemetric-and-Command-Exchange-(XTCE)-Online-Documentation)
+this software at [XML Telemetric and Command Exchange (XTCE) Online Documentation](http://gitlab.com/dovereem/xtcetools/-/wikis/XTCE-Online-Documentation)
 
 ## Purpose ##
 
