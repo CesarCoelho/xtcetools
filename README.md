@@ -10,6 +10,11 @@ preferring to be a graphical wrapper around the toolkit package.  To
 supplement this, a number of examples, sample databases, and schema
 documentation are also included.
 
+## XML Telemetric and Command Exchange (XTCE) Online Documentation ##
+
+A gitlab wiki recently began to capture user documentation for XTCE and
+this software at [XML Telemetric and Command Exchange (XTCE) Online Documentation](https://gitlab.com/dovereem/xtcetools/-/wikis/XML-Telemetric-and-Command-Exchange-(XTCE)-Online-Documentation)
+
 ## Purpose ##
 
 The XTCE Toolkit project supports the user community of the XTCE specification
