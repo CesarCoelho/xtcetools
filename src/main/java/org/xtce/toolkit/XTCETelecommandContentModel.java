@@ -649,6 +649,17 @@ public class XTCETelecommandContentModel extends XTCEContainerContentModelBase {
                 return;
             }
 
+            if ( aObj.getTypeReference() == null ) {
+                throw new XTCEDatabaseException( XTCEFunctions.getText( "general_argument" ) + // NOI18N
+                                                 " '" + // NOI18N
+                                                 aObj.getName() +
+                                                 "' " + // NOI18N
+                                                 XTCEFunctions.getText( "error_param_invalid_type" ) + // NOI18N
+                                                 " '" + // NOI18N
+                                                 getName() +
+                                                 "'" ); // NOI18N
+            }
+
             if ( aObj.getTypeReference().getClass() == AggregateDataType.class ) {
                 // doesnt need container start bit because they are always previousEntry & 0
                 addMembers( aObj, currentStartBit, telecommand, content );

@@ -1031,6 +1031,9 @@ public abstract class XTCEContainerContentModelBase {
                 if ( spaceSystem.isTelemetryParameter( parameterName ) == true ) {
                     return spaceSystem.getTelemetryParameter( parameterName );
                 }
+                if ( spaceSystem.isTelecommandParameter( parameterName ) == true ) {
+                    return spaceSystem.getTelecommandParameter( parameterName );
+                }
             }
 
             idx = parameterPath.lastIndexOf( '/' ); // NOI18N
