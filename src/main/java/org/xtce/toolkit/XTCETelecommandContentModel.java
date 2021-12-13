@@ -737,6 +737,17 @@ public class XTCETelecommandContentModel extends XTCEContainerContentModelBase {
                 return;
             }
 
+            if ( pObj.getTypeReference() == null ) {
+                throw new XTCEDatabaseException( XTCEFunctions.getText( "general_parameter" ) + // NOI18N
+                                                 " '" + // NOI18N
+                                                 pObj.getName() +
+                                                 "' " + // NOI18N
+                                                 XTCEFunctions.getText( "error_param_invalid_type" ) + // NOI18N
+                                                 " '" + // NOI18N
+                                                 getName() +
+                                                 "'" ); // NOI18N
+            }
+
             if ( pObj.getTypeReference().getClass() == AggregateDataType.class ) {
                 // doesnt need container start bit because they are always previousEntry & 0
                 addMembers( pObj, currentStartBit, telecommand, content );
@@ -780,6 +791,17 @@ public class XTCETelecommandContentModel extends XTCEContainerContentModelBase {
             //System.out.println( "Identified Parameter Member " + newPath );
 
             XTCEParameter mObj = findParameter( newPath, telecommand );
+
+            if ( mObj.getTypeReference() == null ) {
+                throw new XTCEDatabaseException( XTCEFunctions.getText( "general_parameter" ) + // NOI18N
+                                                 " '" + // NOI18N
+                                                 mObj.getName() +
+                                                 "' " + // NOI18N
+                                                 XTCEFunctions.getText( "error_param_invalid_type" ) + // NOI18N
+                                                 " '" + // NOI18N
+                                                 getName() +
+                                                 "'" ); // NOI18N
+            }
 
             XTCEContainerContentEntry mcontent =
                 new XTCEContainerContentEntry( mObj, telecommand );
@@ -828,6 +850,17 @@ public class XTCETelecommandContentModel extends XTCEContainerContentModelBase {
             //System.out.println( "Identified Argument Member " + newPath );
 
             XTCEArgument aObj = telecommand.getArgument( newPath );
+
+            if ( aObj.getTypeReference() == null ) {
+                throw new XTCEDatabaseException( XTCEFunctions.getText( "general_argument" ) + // NOI18N
+                                                 " '" + // NOI18N
+                                                 aObj.getName() +
+                                                 "' " + // NOI18N
+                                                 XTCEFunctions.getText( "error_param_invalid_type" ) + // NOI18N
+                                                 " '" + // NOI18N
+                                                 getName() +
+                                                 "'" ); // NOI18N
+            }
 
             XTCEContainerContentEntry mcontent =
                 new XTCEContainerContentEntry( aObj, telecommand );
