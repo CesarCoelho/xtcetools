@@ -539,11 +539,28 @@ public class XTCETelecommandContentModel extends XTCEContainerContentModelBase {
                                 List<XTCEContainerEntryValue> includedConditionsList )
         throws XTCEDatabaseException {
 
-        BigInteger value = new BigInteger( fixedEntry.getBinaryValue() );
+        // the byte array manipulation prepends a binary zero byte to the array
+        // so that BigInteger will interpret as unsigned
 
-        if ( value.compareTo( BigInteger.ZERO ) == -1 ) {
-            value = value.negate();
+        final byte[] hexBinary = fixedEntry.getBinaryValue();
+        final int    bytes     = hexBinary.length;
+        final byte[] unsignedArray;
+
+        unsignedArray = new byte[bytes + 1];
+
+        for( int iii = 0; iii <= bytes; ++iii )
+        {
+            if( iii == 0 )
+            {
+                unsignedArray[iii] = 0;
+            }
+            else
+            {
+                unsignedArray[iii] = hexBinary[iii - 1];
+            }
         }
+
+        BigInteger value = new BigInteger( unsignedArray );
 
         XTCEContainerContentEntry content =
             new XTCEContainerContentEntry( fixedEntry.getSizeInBits().toString(),
@@ -553,13 +570,16 @@ public class XTCETelecommandContentModel extends XTCEContainerContentModelBase {
         if ( includedConditionsList != null ) {
             content.setConditionList( includedConditionsList, false );
         }
+
         addIncludeConditions( fixedEntry, telecommand, content );
         evaluateIncludeConditions( content );
+
         if ( content.isCurrentlyInUse() == true ) {
             addStartBit( fixedEntry, content, currentStartBit, containerStartBit );
         }
 
-        long repeatCount = addRepeatEntryDescription( fixedEntry, content );
+        final long repeatCount =
+            addRepeatEntryDescription( fixedEntry, content );
 
         for ( int iii = 0; iii < repeatCount; ++iii ) {
 

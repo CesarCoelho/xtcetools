@@ -32,7 +32,6 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -316,7 +315,7 @@ public class TelecommandDecodingTest {
                     case "":
                         if ( entry.getEntryTypeString().equals( "Constant" ) == true ) {
                             ++items;
-                            checkEntry( entry, "Constant", "8", "56", "==16{cal}", "==16{cal}", "", "" );
+                            checkEntry( entry, "Constant", "8", "56", "==240{cal}", "240", "", "" );
                         }
                         break;
                     case "OUTPUT_POWER":

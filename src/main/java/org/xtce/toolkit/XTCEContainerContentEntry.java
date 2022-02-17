@@ -437,7 +437,7 @@ public class XTCEContainerContentEntry implements Comparable, Cloneable {
             case ARGUMENT:
                 return aReference.getInitialValue();
             case CONSTANT:
-                return entryValue.toStringWithoutParameter();
+                return entryValue.getAssignedValue();
         }
 
         return ""; // NOI18N
