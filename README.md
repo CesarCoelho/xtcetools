@@ -156,7 +156,7 @@ can be found after the build in target/site/jacoco/index.html
 The jar containing the UI is self-executable and may be launched simply:
 
 ```
-java -jar target/xtcetools-1.1.5.jar
+java -jar target/xtcetools-1.1.6.jar
 ```
 
 ## Maven Central Repository ##
@@ -174,7 +174,7 @@ MVN Repository for xtcetools
 <dependency>
     <groupId>org.xtce</groupId>
     <artifactId>xtcetools</artifactId>
-    <version>1.1.5</version>
+    <version>1.1.6</version>
 </dependency>
 ```
 
@@ -186,7 +186,7 @@ dependency.  Additional classifiers include "sources" and "javadoc".
 <dependency>
     <groupId>org.xtce</groupId>
     <artifactId>xtcetools</artifactId>
-    <version>1.1.5</version>
+    <version>1.1.6</version>
     <classifier>library</classifier>
 </dependency>
 ```
