@@ -627,31 +627,29 @@ public class ParameterTest {
 
         List<XTCEParameter> params;
 
-        int expected;
+        int tm_expected = 152;
+        int tc_expected = 1;
 
         params = db_.getTelemetryParameters();
-        expected = 144;
-        if ( params.size() != expected ) {
+        if ( params.size() != tm_expected ) {
             Assert.fail( "Should have seen " +
-                         Integer.toString( expected ) +
+                         Integer.toString( tm_expected ) +
                          " telemetry parameters but received " +
                          Integer.toString( params.size() ) +
                          " instead" );
         }
         params = db_.getTelecommandParameters();
-        expected = 1;
-        if ( params.size() != expected ) {
+        if ( params.size() != tc_expected ) {
             Assert.fail( "Should have seen " +
-                         Integer.toString( expected ) +
+                         Integer.toString( tc_expected ) +
                          " telecommand parameters but received " +
                          Integer.toString( params.size() ) +
                          " instead" );
         }
         params = db_.getParameters();
-        expected = 145;
-        if ( params.size() != expected ) {
+        if ( params.size() != ( tm_expected + tc_expected ) ) {
             Assert.fail( "Should have seen " +
-                         Integer.toString( expected ) +
+                         Integer.toString( ( tm_expected + tc_expected ) ) +
                          " total parameters but received " +
                          Integer.toString( params.size() ) +
                          " instead" );

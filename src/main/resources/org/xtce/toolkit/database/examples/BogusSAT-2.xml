@@ -675,6 +675,25 @@ limitations under the License.
 						</xtce:RestrictionCriteria>
 					</xtce:BaseContainer>
 				</xtce:SequenceContainer>
+				<xtce:SequenceContainer name="ECSS_SpacePacket3">
+					<xtce:EntryList>
+                                            <xtce:ParameterRefEntry parameterRef="BusElectronics/Squib_1_Arm_State"/>
+                                            <xtce:ParameterRefEntry parameterRef="BusElectronics/Squib_2_Arm_State"/>
+                                            <xtce:ParameterRefEntry parameterRef="BusElectronics/Squib_3_Arm_State"/>
+                                            <xtce:ParameterRefEntry parameterRef="BusElectronics/Squib_4_Arm_State"/>
+                                            <xtce:ParameterRefEntry parameterRef="BusElectronics/Squib_1_Fire_State"/>
+                                            <xtce:ParameterRefEntry parameterRef="BusElectronics/Squib_2_Fire_State"/>
+                                            <xtce:ParameterRefEntry parameterRef="BusElectronics/Squib_3_Fire_State"/>
+                                            <xtce:ParameterRefEntry parameterRef="BusElectronics/Squib_4_Fire_State"/>
+					</xtce:EntryList>
+					<xtce:BaseContainer containerRef="ECSS_Service_3_Subservice_25">
+						<xtce:RestrictionCriteria>
+							<xtce:ComparisonList>
+								<xtce:Comparison value="ECSS_SpacePacket3" parameterRef="../PUS_Structure_ID"/>
+							</xtce:ComparisonList>
+						</xtce:RestrictionCriteria>
+					</xtce:BaseContainer>
+				</xtce:SequenceContainer>
 			</xtce:ContainerSet>
 		</xtce:TelemetryMetaData>
 		<xtce:SpaceSystem name="Commanding" shortDescription="Commanding Subsystem Parameters">
@@ -1457,6 +1476,24 @@ limitations under the License.
 							<xtce:Enumeration label="HIGH" value="2"/>
 						</xtce:EnumerationList>
 					</xtce:EnumeratedParameterType>
+					<xtce:EnumeratedParameterType name="Squib_Arm_State_Type" initialValue="DISARMED">
+						<xtce:UnitSet/>
+						<xtce:IntegerDataEncoding sizeInBits="4" encoding="unsigned"/>
+						<xtce:EnumerationList>
+							<xtce:Enumeration label="DISARMED" value="0"/>
+							<xtce:Enumeration label="ARMED" value="1"/>
+						</xtce:EnumerationList>
+					</xtce:EnumeratedParameterType>
+					<xtce:EnumeratedParameterType name="Squib_Fire_State_Type" initialValue="OPEN">
+						<xtce:UnitSet/>
+						<xtce:IntegerDataEncoding sizeInBits="4" encoding="unsigned"/>
+						<xtce:EnumerationList>
+							<xtce:Enumeration label="OPEN" value="0"/>
+							<xtce:Enumeration label="CLOSED" value="1"/>
+                                                        <xtce:Enumeration label="FAILED" value="2"/>
+                                                        <xtce:Enumeration label="ENERGIZED" value="3"/>
+						</xtce:EnumerationList>
+					</xtce:EnumeratedParameterType>
 					<xtce:FloatParameterType name="Float_MathOpCal_1_Type" sizeInBits="32" shortDescription="This is a float parameter with a simple math operation calibrator">
 						<xtce:UnitSet/>
 						<xtce:FloatDataEncoding bitOrder="mostSignificantBitFirst" encoding="IEEE754_1985" sizeInBits="32">
@@ -1529,6 +1566,46 @@ limitations under the License.
 					<xtce:Parameter name="Battery_Charge_Mode" parameterTypeRef="Battery_Charge_Mode_Type">
 						<xtce:ParameterProperties dataSource="telemetered" readOnly="true">
 							<xtce:SystemName>EPS</xtce:SystemName>
+						</xtce:ParameterProperties>
+					</xtce:Parameter>
+					<xtce:Parameter name="Squib_1_Arm_State" parameterTypeRef="Squib_Arm_State_Type">
+						<xtce:ParameterProperties dataSource="telemetered" readOnly="true">
+							<xtce:SystemName>PROP</xtce:SystemName>
+						</xtce:ParameterProperties>
+					</xtce:Parameter>
+					<xtce:Parameter name="Squib_2_Arm_State" parameterTypeRef="Squib_Arm_State_Type">
+						<xtce:ParameterProperties dataSource="telemetered" readOnly="true">
+							<xtce:SystemName>PROP</xtce:SystemName>
+						</xtce:ParameterProperties>
+					</xtce:Parameter>
+					<xtce:Parameter name="Squib_3_Arm_State" parameterTypeRef="Squib_Arm_State_Type">
+						<xtce:ParameterProperties dataSource="telemetered" readOnly="true">
+							<xtce:SystemName>PROP</xtce:SystemName>
+						</xtce:ParameterProperties>
+					</xtce:Parameter>
+					<xtce:Parameter name="Squib_4_Arm_State" parameterTypeRef="Squib_Arm_State_Type">
+						<xtce:ParameterProperties dataSource="telemetered" readOnly="true">
+							<xtce:SystemName>PROP</xtce:SystemName>
+						</xtce:ParameterProperties>
+					</xtce:Parameter>
+					<xtce:Parameter name="Squib_1_Fire_State" parameterTypeRef="Squib_Fire_State_Type">
+						<xtce:ParameterProperties dataSource="telemetered" readOnly="true">
+							<xtce:SystemName>PROP</xtce:SystemName>
+						</xtce:ParameterProperties>
+					</xtce:Parameter>
+					<xtce:Parameter name="Squib_2_Fire_State" parameterTypeRef="Squib_Fire_State_Type">
+						<xtce:ParameterProperties dataSource="telemetered" readOnly="true">
+							<xtce:SystemName>PROP</xtce:SystemName>
+						</xtce:ParameterProperties>
+					</xtce:Parameter>
+					<xtce:Parameter name="Squib_3_Fire_State" parameterTypeRef="Squib_Fire_State_Type">
+						<xtce:ParameterProperties dataSource="telemetered" readOnly="true">
+							<xtce:SystemName>PROP</xtce:SystemName>
+						</xtce:ParameterProperties>
+					</xtce:Parameter>
+					<xtce:Parameter name="Squib_4_Fire_State" parameterTypeRef="Squib_Fire_State_Type">
+						<xtce:ParameterProperties dataSource="telemetered" readOnly="true">
+							<xtce:SystemName>PROP</xtce:SystemName>
 						</xtce:ParameterProperties>
 					</xtce:Parameter>
 					<xtce:Parameter name="boolean_float32" parameterTypeRef="boolean_float32_Type">
@@ -1718,6 +1795,11 @@ limitations under the License.
 						<xtce:IntegerDataEncoding sizeInBits="8" encoding="unsigned"/>
 						<xtce:ValidRange minInclusive="1" maxInclusive="2"/>
 					</xtce:IntegerArgumentType>
+					<xtce:IntegerArgumentType name="SQUIB_ID_Type" shortDescription="ID number of the squib valve">
+						<xtce:UnitSet/>
+						<xtce:IntegerDataEncoding sizeInBits="8" encoding="unsigned"/>
+						<xtce:ValidRange minInclusive="1" maxInclusive="2"/>
+					</xtce:IntegerArgumentType>
 					<xtce:EnumeratedArgumentType name="RW_PWR_STATE_Type" shortDescription="Flag to indicate if power should be turned on or off">
 						<xtce:UnitSet/>
 						<xtce:IntegerDataEncoding sizeInBits="8" encoding="unsigned"/>
@@ -1833,6 +1915,91 @@ limitations under the License.
 								<xtce:ArgumentRefEntry argumentRef="PHASE"/>
 							</xtce:EntryList>
 						</xtce:CommandContainer>
+					</xtce:MetaCommand>
+					<xtce:MetaCommand name="Arm_Squib" shortDescription="Prepare a squib value to fire by first arming it">
+						<xtce:LongDescription>This hardware telecommand directs the hardware to arm one of the squib valves.</xtce:LongDescription>
+						<xtce:AliasSet>
+							<xtce:Alias nameSpace="OPS" alias="ARMSQUIB"/>
+						</xtce:AliasSet>
+						<xtce:BaseMetaCommand metaCommandRef="../../CCSDSDirectTelecommand"/>
+						<xtce:ArgumentList>
+							<xtce:Argument name="SQUIB_ID" argumentTypeRef="SQUIB_ID_Type"/>
+						</xtce:ArgumentList>
+						<xtce:CommandContainer name="Arm_Squib_Container">
+							<xtce:EntryList>
+								<xtce:ArgumentRefEntry argumentRef="SQUIB_ID"/>
+							</xtce:EntryList>
+							<xtce:BaseContainer containerRef="../../CCSDSDirectTelecommand"/>
+						</xtce:CommandContainer>
+                                                <xtce:TransmissionConstraintList>
+                                                    <xtce:TransmissionConstraint>
+                                                        <xtce:Comparison parameterRef="Squib_1_Arm_State" value="OPEN"/>
+                                                    </xtce:TransmissionConstraint>
+                                                </xtce:TransmissionConstraintList>
+					</xtce:MetaCommand>
+					<xtce:MetaCommand name="Fire_Squib_1" shortDescription="Fire squib valve 1">
+						<xtce:LongDescription>This hardware telecommand directs the hardware to fire squib valve 1.</xtce:LongDescription>
+						<xtce:AliasSet>
+							<xtce:Alias nameSpace="OPS" alias="FIRESQUIB1"/>
+						</xtce:AliasSet>
+						<xtce:BaseMetaCommand metaCommandRef="../../CCSDSDirectTelecommand"/>
+						<xtce:CommandContainer name="Fire_Squib_1_Container">
+							<xtce:EntryList>
+								<xtce:FixedValueEntry binaryValue="01" sizeInBits="8"/>
+							</xtce:EntryList>
+							<xtce:BaseContainer containerRef="../../CCSDSDirectTelecommand"/>
+						</xtce:CommandContainer>
+                                                <xtce:TransmissionConstraintList>
+                                                    <xtce:TransmissionConstraint timeOut="PT5S" suspendable="false">
+                                                            <xtce:Comparison parameterRef="Squib_1_Arm_State" value="ARMED"/>
+                                                    </xtce:TransmissionConstraint>
+                                                </xtce:TransmissionConstraintList>
+                                                <xtce:VerifierSet>
+                                                    <xtce:ExecutionVerifier>
+                                                        <xtce:Comparison parameterRef="Squib_1_Fire_State" value="ENERGIZED"/>
+                                                        <xtce:CheckWindow timeToStopChecking="PT5S" timeWindowIsRelativeTo="commandRelease"/>
+                                                    </xtce:ExecutionVerifier>
+                                                    <xtce:CompleteVerifier>
+                                                        <xtce:Comparison parameterRef="Squib_1_Fire_State" value="CLOSED"/>
+                                                        <xtce:CheckWindow timeToStopChecking="PT15S" timeWindowIsRelativeTo="commandRelease"/>
+                                                    </xtce:CompleteVerifier>
+                                                    <xtce:FailedVerifier>
+                                                        <xtce:Comparison parameterRef="Squib_1_Fire_State" value="FAILED"/>
+                                                        <xtce:CheckWindow timeToStopChecking="PT10S" timeWindowIsRelativeTo="timeLastVerifierPassed"/>
+                                                    </xtce:FailedVerifier>
+                                                </xtce:VerifierSet>
+					</xtce:MetaCommand>
+					<xtce:MetaCommand name="Fire_Squib_2" shortDescription="Fire squib valve 2">
+						<xtce:LongDescription>This hardware telecommand directs the hardware to fire squib valve 2.</xtce:LongDescription>
+						<xtce:AliasSet>
+							<xtce:Alias nameSpace="OPS" alias="FIRESQUIB2"/>
+						</xtce:AliasSet>
+						<xtce:BaseMetaCommand metaCommandRef="../../CCSDSDirectTelecommand"/>
+						<xtce:CommandContainer name="Fire_Squib_2_Container">
+							<xtce:EntryList>
+								<xtce:FixedValueEntry binaryValue="02" sizeInBits="8"/>
+							</xtce:EntryList>
+							<xtce:BaseContainer containerRef="../../CCSDSDirectTelecommand"/>
+						</xtce:CommandContainer>
+                                                <xtce:TransmissionConstraintList>
+                                                    <xtce:TransmissionConstraint timeOut="PT5S" suspendable="false">
+                                                            <xtce:Comparison parameterRef="Squib_2_Arm_State" value="ARMED"/>
+                                                    </xtce:TransmissionConstraint>
+                                                </xtce:TransmissionConstraintList>
+                                                <xtce:VerifierSet>
+                                                    <xtce:ExecutionVerifier>
+                                                        <xtce:Comparison parameterRef="Squib_2_Fire_State" value="ENERGIZED"/>
+                                                        <xtce:CheckWindow timeToStopChecking="PT5S" timeWindowIsRelativeTo="commandRelease"/>
+                                                    </xtce:ExecutionVerifier>
+                                                    <xtce:CompleteVerifier>
+                                                        <xtce:Comparison parameterRef="Squib_2_Fire_State" value="CLOSED"/>
+                                                        <xtce:CheckWindow timeToStopChecking="PT15S" timeWindowIsRelativeTo="commandRelease"/>
+                                                    </xtce:CompleteVerifier>
+                                                    <xtce:FailedVerifier>
+                                                        <xtce:Comparison parameterRef="Squib_2_Fire_State" value="FAILED"/>
+                                                        <xtce:CheckWindow timeToStopChecking="PT10S" timeWindowIsRelativeTo="timeLastVerifierPassed"/>
+                                                    </xtce:FailedVerifier>
+                                                </xtce:VerifierSet>
 					</xtce:MetaCommand>
 				</xtce:MetaCommandSet>
 			</xtce:CommandMetaData>

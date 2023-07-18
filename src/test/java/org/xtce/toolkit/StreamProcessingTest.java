@@ -311,7 +311,7 @@ public class StreamProcessingTest {
                 Assert.fail( "Expected root path of '/BogusSAT/CCSDSTelemetryPacket' for 'CCSDS-TM' but got " + stream.getStreamRootContainerPath() );
             }
 
-            long expected = 14;
+            long expected = 15;
             long found    = 0;
 
             List<XTCETMContainer> containers = stream.getContainers();
