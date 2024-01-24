@@ -1,4 +1,4 @@
-/* Copyright 2015 David Overeem (dovereem@cox.net)
+/* Copyright 2015 David Overeem (dovereem@startmail.com)
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -1030,6 +1030,9 @@ public abstract class XTCEContainerContentModelBase {
             if ( spaceSystem != null ) {
                 if ( spaceSystem.isTelemetryParameter( parameterName ) == true ) {
                     return spaceSystem.getTelemetryParameter( parameterName );
+                }
+                if ( spaceSystem.isTelecommandParameter( parameterName ) == true ) {
+                    return spaceSystem.getTelecommandParameter( parameterName );
                 }
             }
 

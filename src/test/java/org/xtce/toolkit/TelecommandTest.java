@@ -1,4 +1,4 @@
-/* Copyright 2015 David Overeem (dovereem@cox.net)
+/* Copyright 2015 David Overeem (dovereem@startmail.com)
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -71,9 +71,9 @@ public class TelecommandTest {
 
             List<XTCETelecommand> telecommands = db_.getTelecommands();
 
-            // this could will definitely be changing
+            // this will definitely be changing
 
-            int expect = 11;
+            int expect = 14;
             int count  = telecommands.size();
 
             Assert.assertTrue( "Should have located " +
@@ -126,8 +126,16 @@ public class TelecommandTest {
 
             List<XTCETelecommand> telecommands = ss.getTelecommands();
 
-            Assert.assertTrue( "Should have located 6 telecommands",
-                               telecommands.size() == 6 );
+            // this will definitely be changing
+
+            int expect = 9;
+            int count  = telecommands.size();
+
+            Assert.assertTrue( "Should have located " +
+                               Integer.toString( expect ) +
+                               " telecommands, but got " +
+                               Integer.toString( count ),
+                               expect == count );
 
             XTCETelecommand telecommand = ss.getTelecommand( "Set_Mission_Phase" );
 

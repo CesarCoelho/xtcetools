@@ -1,4 +1,4 @@
-/* Copyright 2015 David Overeem (dovereem@cox.net)
+/* Copyright 2015 David Overeem (dovereem@startmail.com)
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -539,11 +539,28 @@ public class XTCETelecommandContentModel extends XTCEContainerContentModelBase {
                                 List<XTCEContainerEntryValue> includedConditionsList )
         throws XTCEDatabaseException {
 
-        BigInteger value = new BigInteger( fixedEntry.getBinaryValue() );
+        // the byte array manipulation prepends a binary zero byte to the array
+        // so that BigInteger will interpret as unsigned
 
-        if ( value.compareTo( BigInteger.ZERO ) == -1 ) {
-            value = value.negate();
+        final byte[] hexBinary = fixedEntry.getBinaryValue();
+        final int    bytes     = hexBinary.length;
+        final byte[] unsignedArray;
+
+        unsignedArray = new byte[bytes + 1];
+
+        for( int iii = 0; iii <= bytes; ++iii )
+        {
+            if( iii == 0 )
+            {
+                unsignedArray[iii] = 0;
+            }
+            else
+            {
+                unsignedArray[iii] = hexBinary[iii - 1];
+            }
         }
+
+        BigInteger value = new BigInteger( unsignedArray );
 
         XTCEContainerContentEntry content =
             new XTCEContainerContentEntry( fixedEntry.getSizeInBits().toString(),
@@ -553,13 +570,16 @@ public class XTCETelecommandContentModel extends XTCEContainerContentModelBase {
         if ( includedConditionsList != null ) {
             content.setConditionList( includedConditionsList, false );
         }
+
         addIncludeConditions( fixedEntry, telecommand, content );
         evaluateIncludeConditions( content );
+
         if ( content.isCurrentlyInUse() == true ) {
             addStartBit( fixedEntry, content, currentStartBit, containerStartBit );
         }
 
-        long repeatCount = addRepeatEntryDescription( fixedEntry, content );
+        final long repeatCount =
+            addRepeatEntryDescription( fixedEntry, content );
 
         for ( int iii = 0; iii < repeatCount; ++iii ) {
 
@@ -649,6 +669,17 @@ public class XTCETelecommandContentModel extends XTCEContainerContentModelBase {
                 return;
             }
 
+            if ( aObj.getTypeReference() == null ) {
+                throw new XTCEDatabaseException( XTCEFunctions.getText( "general_argument" ) + // NOI18N
+                                                 " '" + // NOI18N
+                                                 aObj.getName() +
+                                                 "' " + // NOI18N
+                                                 XTCEFunctions.getText( "error_param_invalid_type" ) + // NOI18N
+                                                 " '" + // NOI18N
+                                                 getName() +
+                                                 "'" ); // NOI18N
+            }
+
             if ( aObj.getTypeReference().getClass() == AggregateDataType.class ) {
                 // doesnt need container start bit because they are always previousEntry & 0
                 addMembers( aObj, currentStartBit, telecommand, content );
@@ -726,6 +757,17 @@ public class XTCETelecommandContentModel extends XTCEContainerContentModelBase {
                 return;
             }
 
+            if ( pObj.getTypeReference() == null ) {
+                throw new XTCEDatabaseException( XTCEFunctions.getText( "general_parameter" ) + // NOI18N
+                                                 " '" + // NOI18N
+                                                 pObj.getName() +
+                                                 "' " + // NOI18N
+                                                 XTCEFunctions.getText( "error_param_invalid_type" ) + // NOI18N
+                                                 " '" + // NOI18N
+                                                 getName() +
+                                                 "'" ); // NOI18N
+            }
+
             if ( pObj.getTypeReference().getClass() == AggregateDataType.class ) {
                 // doesnt need container start bit because they are always previousEntry & 0
                 addMembers( pObj, currentStartBit, telecommand, content );
@@ -769,6 +811,17 @@ public class XTCETelecommandContentModel extends XTCEContainerContentModelBase {
             //System.out.println( "Identified Parameter Member " + newPath );
 
             XTCEParameter mObj = findParameter( newPath, telecommand );
+
+            if ( mObj.getTypeReference() == null ) {
+                throw new XTCEDatabaseException( XTCEFunctions.getText( "general_parameter" ) + // NOI18N
+                                                 " '" + // NOI18N
+                                                 mObj.getName() +
+                                                 "' " + // NOI18N
+                                                 XTCEFunctions.getText( "error_param_invalid_type" ) + // NOI18N
+                                                 " '" + // NOI18N
+                                                 getName() +
+                                                 "'" ); // NOI18N
+            }
 
             XTCEContainerContentEntry mcontent =
                 new XTCEContainerContentEntry( mObj, telecommand );
@@ -817,6 +870,17 @@ public class XTCETelecommandContentModel extends XTCEContainerContentModelBase {
             //System.out.println( "Identified Argument Member " + newPath );
 
             XTCEArgument aObj = telecommand.getArgument( newPath );
+
+            if ( aObj.getTypeReference() == null ) {
+                throw new XTCEDatabaseException( XTCEFunctions.getText( "general_argument" ) + // NOI18N
+                                                 " '" + // NOI18N
+                                                 aObj.getName() +
+                                                 "' " + // NOI18N
+                                                 XTCEFunctions.getText( "error_param_invalid_type" ) + // NOI18N
+                                                 " '" + // NOI18N
+                                                 getName() +
+                                                 "'" ); // NOI18N
+            }
 
             XTCEContainerContentEntry mcontent =
                 new XTCEContainerContentEntry( aObj, telecommand );

@@ -1,4 +1,4 @@
-/* Copyright 2015-2016 David Overeem (dovereem@cox.net)
+/* Copyright 2015-2016 David Overeem (dovereem@startmail.com)
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -2731,8 +2731,9 @@ public class XTCEViewer extends javax.swing.JFrame {
 
         Locale currentLocale = prefs.getLanguagePreference();
 
-        Locale[] locales = { new Locale( "en", "US"),    // NOI18N
-                             new Locale( "fr", "FR" ) }; // NOI18N
+        Locale[] locales = { new Locale( "en", "US" ),   // NOI18N - English
+                             new Locale( "fr", "FR" ),   // NOI18N - French
+                             new Locale( "tr", "TR" ) }; // NOI18N - Turkish
 
         List<Locale> xtceViewerLocales = new ArrayList<>();
 
@@ -3927,6 +3928,8 @@ public class XTCEViewer extends javax.swing.JFrame {
         if ( row == -1 ) {
             return;
         }
+
+        // add a case for FixedValueEntry later
 
         try {
             if ( node.getContentModel().getContentList().get( row ).getEntryType() == FieldType.CONTAINER ) {

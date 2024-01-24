@@ -1,4 +1,4 @@
-/* Copyright 2015 David Overeem (dovereem@cox.net)
+/* Copyright 2015 David Overeem (dovereem@startmail.com)
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -437,7 +437,7 @@ public class XTCEContainerContentEntry implements Comparable, Cloneable {
             case ARGUMENT:
                 return aReference.getInitialValue();
             case CONSTANT:
-                return entryValue.toStringWithoutParameter();
+                return entryValue.getAssignedValue();
         }
 
         return ""; // NOI18N

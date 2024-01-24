@@ -1,4 +1,4 @@
-/* Copyright 2015 David Overeem (dovereem@cox.net)
+/* Copyright 2015 David Overeem (dovereem@startmail.com)
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -311,7 +311,7 @@ public class StreamProcessingTest {
                 Assert.fail( "Expected root path of '/BogusSAT/CCSDSTelemetryPacket' for 'CCSDS-TM' but got " + stream.getStreamRootContainerPath() );
             }
 
-            long expected = 14;
+            long expected = 15;
             long found    = 0;
 
             List<XTCETMContainer> containers = stream.getContainers();

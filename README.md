@@ -10,6 +10,11 @@ preferring to be a graphical wrapper around the toolkit package.  To
 supplement this, a number of examples, sample databases, and schema
 documentation are also included.
 
+## XML Telemetric and Command Exchange (XTCE) Online Documentation ##
+
+A gitlab wiki recently began to capture user documentation for XTCE and
+this software at [XML Telemetric and Command Exchange (XTCE) Online Documentation](http://gitlab.com/dovereem/xtcetools/-/wikis/XTCE-Online-Documentation)
+
 ## Purpose ##
 
 The XTCE Toolkit project supports the user community of the XTCE specification
@@ -151,7 +156,7 @@ can be found after the build in target/site/jacoco/index.html
 The jar containing the UI is self-executable and may be launched simply:
 
 ```
-java -jar target/xtcetools-1.1.5.jar
+java -jar target/xtcetools-1.1.6.jar
 ```
 
 ## Maven Central Repository ##
@@ -160,11 +165,29 @@ If you choose to use Maven automatic downloads, the xtcetools package can be
 declared in a pom.xml as a dependency without the need to download and build
 the source here.
 
+<a href="http://mvnrepository.com/artifact/org.xtce/xtcetools">
+MVN Repository for xtcetools
+</a>
+<br>
+
 ```
 <dependency>
     <groupId>org.xtce</groupId>
     <artifactId>xtcetools</artifactId>
-    <version>1.1.5</version>
+    <version>1.1.6</version>
+</dependency>
+```
+
+When developing an application that only needs the xtcetools library without
+the user interface, the classifier element can be used by Maven to limit the
+dependency.  Additional classifiers include "sources" and "javadoc".
+
+```
+<dependency>
+    <groupId>org.xtce</groupId>
+    <artifactId>xtcetools</artifactId>
+    <version>1.1.6</version>
+    <classifier>library</classifier>
 </dependency>
 ```
 
